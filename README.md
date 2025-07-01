@@ -8,7 +8,7 @@ Effusion Labs is a structured, longform digital garden and idea incubation envir
 
 - **Generator**: [Eleventy (11ty)](https://www.11ty.dev/)
 - **Linking**: [`@photogabble/eleventy-plugin-interlinker`](https://github.com/photogabble/eleventy-plugin-interlinker) handles all wikilink and backlink resolution.
-- **Graph Map**: The `/map/` page renders a real-time network of interlinked documents via [`vis.js`](https://visjs.org/) and `src/_data/conceptMapData.js`.
+- **Graph Map**: The `/map/` page renders a real-time network of interlinked documents via [`vis.js`](https://visjs.org/) using dynamic data from Eleventy collections.
 
 ---
 
@@ -60,7 +60,7 @@ You can pull and deploy directly from Portainer using the above GHCR image. It u
 * `/_site/` — Generated output (ignored in repo)
 * `.github/workflows/` — GitHub Actions pipeline
 * `.portainer/` — Docker context: `Dockerfile`, `nginx.conf`, and build output
-* `conceptMapData.js` — Node-edge dataset for knowledge graph
+* Collections-based dataset for knowledge graph
 
 ---
 
