@@ -1,18 +1,15 @@
-#!/bin/bash
+# 1. Confirm the dotfolders aren't ignored
+grep -E '^(\.portainer|\.github)' .gitignore || echo "✅ Not ignored by .gitignore"
 
-# Ensure you're authenticated to GitHub CLI
-gh auth status || gh auth login
+# 2. Explicitly add key files to staging
+git add .portainer/Dockerfile .portainer/nginx.conf
+git add .github/workflows/deploy.yml
 
-# Define repo context
-REPO="$(gh repo view --json nameWithOwner -q .nameWithOwner)"
+# 3. Confirm they're staged
+git status
 
-echo "🔧 Setting default branch to 'main' on $REPO..."
-gh api -X PATCH "repos/$REPO" -f default_branch='main'
+# 4. Commit with explicit message
+git commit -m "Add CI and container config folders (.github, .portainer)"
 
-echo "🧹 Deleting remote 'master' branch on $REPO..."
-gh api -X DELETE "repos/$REPO/git/refs/heads/master"
-
-echo "✅ Pruning local references..."
-git remote prune origin
-
-echo "🎉 Branch switch complete. 'main' is now the sole branch."
+# 5. Push to main
+git push origin main
