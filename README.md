@@ -1,92 +1,102 @@
-# Effusion Labs Knowledge Lab
+# Effusion Labs Digital Garden
 
-Effusion Labs is a structured, longform digital garden and idea incubation environment. Built atop Eleventy and powered by bidirectional linking, it enables recursive exploration of concepts, projects, sparks, and meta-level knowledge maps.
-
----
-
-## 🛠️ Core Technology
-
-- **Generator**: [Eleventy (11ty)](https://www.11ty.dev/)
-- **Linking**: [`@photogabble/eleventy-plugin-interlinker`](https://github.com/photogabble/eleventy-plugin-interlinker) handles all wikilink and backlink resolution.
-- **Graph Map**: The `/map/` page renders a real-time network of interlinked documents via [`vis.js`](https://visjs.org/) using dynamic data from Eleventy collections.
+Effusion Labs is a structured, long-form digital garden built with [Eleventy](https://www.11ty.dev/).  
+The site supports bidirectional linking, knowledge-graph visualisation, and containerised deployment so that ideas can evolve in place while remaining easy to publish.
 
 ---
 
-## 🚀 Getting Started (Local Dev)
+## Repository structure
 
-1. Install dependencies  
-   ```bash
-   npm install
-````
-
-2. Run the Eleventy dev server
-
-   ```bash
-   npx @11ty/eleventy --serve
-   ```
-
-3. Open [http://localhost:8080](http://localhost:8080)
+| Path | Purpose |
+|------|---------|
+| `src/` | Markdown content, Nunjucks templates, and data files |
+| `_site/` | Generated output created by Eleventy (ignored by Git) |
+| `.github/workflows/` | Continuous-integration pipeline |
+| `.portainer/` | Production container context including `Dockerfile` and `nginx.conf` |
 
 ---
 
-## 📦 Production Deployment
+## Core technology stack
 
-This repository includes a GitHub Actions CI pipeline and Docker configuration for automated production deployment via Portainer.
-
-### 🔧 CI/CD Pipeline
-
-On `main` push, the pipeline:
-
-* Builds the Eleventy site
-* Copies `_site/` into the Docker context
-* Builds a Docker image with `nginx` serving static files
-* Pushes to GitHub Container Registry (GHCR)
-
-Image output:
-
-```
-ghcr.io/toxicwind/effusion-labs:latest
-```
-
-### 🔄 Portainer Integration
-
-You can pull and deploy directly from Portainer using the above GHCR image. It uses a hardened `nginx.conf` for static file delivery with caching and fallback.
+* **Site generator**: Eleventy  
+* **Bidirectional linking**: [`@photogabble/eleventy-plugin-interlinker`](https://github.com/photogabble/eleventy-plugin-interlinker)  
+* **Styling**: Tailwind CSS via [`eleventy-plugin-tailwindcss-4`  ](https://github.com/dwkns/eleventy-plugin-tailwindcss-4)
+* **Graph view**: [`vis-network`](https://visjs.org/)
 
 ---
 
-## 🗂 Directory Summary
-
-* `/src/` — Source content files (markdown, templates)
-* `/_site/` — Generated output (ignored in repo)
-* `.github/workflows/` — GitHub Actions pipeline
-* `.portainer/` — Docker context: `Dockerfile`, `nginx.conf`, and build output
-* Collections-based dataset for knowledge graph
-
----
-
-## 🛰️ Deployment Notes
-
-To build and deploy automatically via GitHub:
-
-1. Push to `main` branch
-2. Portainer (with GHCR enabled) will pull `ghcr.io/toxicwind/effusion-labs:latest`
-3. Serve via exposed container port (e.g. `:80`) or reverse proxy
-
----
-
-## 🧪 Optional Local Container Testing
-
-You may run the Docker container locally to preview the production config:
+## Getting started
 
 ```bash
-docker build -t effusion-labs .portainer
-docker run --rm -p 8080:80 effusion-labs
-```
-
-Then open [http://localhost:8080](http://localhost:8080)
+npm install                # install dependencies
+npx @11ty/eleventy --serve # build and watch at http://localhost:8080
+````
 
 ---
 
-## 📄 License
+## Production pipeline
 
-MIT License. See [LICENSE](./LICENSE) for full terms.
+A push to `main` triggers **GitHub Actions**:
+
+1. Run the Eleventy build and copy `_site/` into the container context.
+2. Build an Nginx image and push it to GitHub Container Registry at
+   `ghcr.io/<OWNER>/effusion-labs:latest`.
+
+You can deploy the image with Portainer or any Docker host:
+
+```bash
+docker run --rm -p 8080:80 ghcr.io/<OWNER>/effusion-labs:latest
+```
+
+The bundled `nginx.conf` serves static assets with cache headers and falls back to `index.html` for client-side navigation.
+
+---
+
+## Eleventy configuration highlights
+
+Key customisation is in `.eleventy.js`:
+
+```js
+const interlinker = require("@photogabble/eleventy-plugin-interlinker");
+const navigation  = require("@11ty/eleventy-navigation");
+const tailwind    = require("eleventy-plugin-tailwindcss-4");
+
+module.exports = eleventyConfig => {
+  eleventyConfig.addPlugin(interlinker, { defaultLayout: "layouts/embed.njk" });
+  eleventyConfig.addPlugin(navigation);
+  eleventyConfig.addPlugin(tailwind, {
+    input : "assets/css/tailwind.css",
+    output: "assets/main.css",
+    minify: true
+  });
+
+  ["sparks", "concepts", "projects", "meta"].forEach(group =>
+    eleventyConfig.addCollection(group, api =>
+      api.getFilteredByGlob(`src/content/${group}/**/*.md`)
+    )
+  );
+};
+```
+
+---
+
+## Interactive concept map
+
+`src/map.njk` converts Eleventy collections into a node–edge list consumed by `vis-network`.
+Opening `/map/` reveals how Sparks, Concepts, Projects, and Meta documents interconnect, enabling exploratory browsing.
+
+---
+
+## What to learn next
+
+* **Eleventy collections and layouts**: see `.eleventy.js` and the template files under `src/_includes`.
+* **Wikilinks and backlinks**: explore how `@photogabble/eleventy-plugin-interlinker` resolves `[[wikilink]]` syntax.
+* **Tailwind customisation**: edit `tailwind.config.cjs` and inspect the generated `assets/main.css`.
+* **Graph rendering**: study `src/_data/conceptMapData.js` and `src/map.njk` to understand how the visualisation is built.
+* **CI and container workflow**: review `.github/workflows/deploy.yml` alongside `.portainer/Dockerfile`.
+
+---
+
+## License
+
+This project is released under the MIT License. See [`LICENSE`](./LICENSE) for details.
