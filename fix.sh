@@ -75,8 +75,9 @@ EOF
 
 echo "✅ All Portainer deployment files created."
 echo "✅ Committing and pushing files..."
+git branch -M main 
 git add .
 git commit -m "Add CI deploy pipeline, Dockerfile, and nginx config for Portainer"
-git push origin main
+git push -u origin main
 
 echo "🎉 Done. Portainer can now pull ghcr.io/$(basename $(git remote get-url origin) .git):latest"
