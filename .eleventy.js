@@ -37,10 +37,10 @@ module.exports = function (eleventyConfig) {
     return `${dt.toFormat("MMMM d")}${ordinal}, ${dt.toFormat("yyyy")}`;
   });
 
-  /* ░░ Machine string, still U-S order  →  07-04-2025  ░░ */
+  /* ░░ Machine string, ISO-8601  →  2025-07-04  ░░ */
   eleventyConfig.addFilter("htmlDateString", d =>
     d instanceof Date
-      ? DateTime.fromJSDate(d, { zone: "utc" }).toFormat("MM-dd-yyyy")
+      ? DateTime.fromJSDate(d, { zone: "utc" }).toFormat("yyyy-MM-dd")
       : ""
   );
 
