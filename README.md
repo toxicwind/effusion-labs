@@ -87,16 +87,6 @@ Opening `/map/` reveals how Sparks, Concepts, Projects, and Meta documents inter
 
 ---
 
-## What to learn next
-
-* **Eleventy collections and layouts**: see `.eleventy.js` and the template files under `src/_includes`.
-* **Wikilinks and backlinks**: explore how `@photogabble/eleventy-plugin-interlinker` resolves `[[wikilink]]` syntax.
-* **Tailwind customisation**: edit `tailwind.config.cjs` and inspect the generated `assets/main.css`.
-* **Graph rendering**: study `src/_data/conceptMapData.js` and `src/map.njk` to understand how the visualisation is built.
-* **CI and container workflow**: review `.github/workflows/deploy.yml` alongside `.portainer/Dockerfile`.
-
----
-
 ## License
 
 This project is released under the MIT License. See [`LICENSE`](./LICENSE) for details.
