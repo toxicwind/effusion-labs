@@ -1,0 +1,27 @@
+{
+  "name": "effusion_labs_final",
+  "version": "1.0.0",
+  "description": "This is a digital studio and knowledge base for Effusion Labs, built with Eleventy and the powerful `@photogabble/eleventy-plugin-interlinker`.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@11ty/eleventy": "^3.1.2",
+    "@11ty/eleventy-navigation": "^1.0.4",
+    "@photogabble/eleventy-plugin-interlinker": "^1.1.0",
+    "luxon": "^3.6.1",
+    "markdown-it": "^14.1.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/typography": "^0.5.16",
+    "autoprefixer": "^10.4.21",
+    "eleventy-plugin-tailwindcss-4": "^2.0.1",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.11"
+  }
+}

@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Effusion Labs: Concept Map | Effusion Labs</title>
+
+  <link rel="stylesheet" href="/assets/main.css">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
+  <script src="https://unpkg.com/lucide@latest/dist/lucide.min.js"></script>
+</head>
+
+<body class="bg-bg-dark text-text-light font-body leading-relaxed">
+
+  <header class="sticky top-0 z-40 w-full bg-text-dark/90 backdrop-blur">
+    <div class="mx-auto flex max-w-screen-2xl items-center justify-between px-6 py-4">
+      <a href="/" class="flex items-center gap-2 font-heading text-3xl text-cerulean">
+        <i data-lucide="flask-conical"></i><span>Effusion Labs</span>
+      </a>
+
+      <nav class="flex gap-6 text-sm font-bold">
+        
+          <a href="/" class="hover:text-malachite">Showcase</a>
+        
+          <a href="/projects/" class="hover:text-malachite">Projects</a>
+        
+          <a href="/concepts/" class="hover:text-malachite">Concepts</a>
+        
+          <a href="/sparks/" class="hover:text-malachite">Sparks</a>
+        
+          <a href="/meta/" class="hover:text-malachite">Meta</a>
+        
+          <a href="/map/" class="hover:text-malachite">Map</a>
+        
+      </nav>
+    </div>
+  </header>
+
+  <div class="mx-auto max-w-screen-2xl px-6">
+
+    
+    
+
+    <main class="
+      
+        xl:grid xl:gap-10 xl:grid-cols-[1fr_16rem]
+      
+       mt-12
+    ">
+
+      <article class="prose prose-invert max-w-none m-0
+         xl:col-span-1 
+      ">
+        
+          <header class="mb-8">
+            <h1 class="font-heading text-cerulean text-4xl tracking-wider">Effusion Labs: Concept Map</h1>
+          </header>
+        
+        
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  body {
+    font-family: 'Inter', sans-serif;
+  }
+  .map-container-wrapper {
+    background: #111;
+    border-radius: 8px;
+    padding: 1rem;
+    border: 1px solid #2a2a2a;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  }
+  #concept-map-container {
+    height: 80vh;
+    width: 100%;
+    background-color: transparent;
+  }
+</style>
+
+<div class="map-intro">
+  <p>This interactive map visualizes how <strong>Sparks</strong>, <strong>Concepts</strong>, <strong>Projects</strong>, and <strong>Meta</strong> documents relate to one another across the Effusion Labs knowledge base. Use it to explore how fragments evolve into ideas and converge into projects.</p>
+</div>
+
+<div class="map-container-wrapper">
+  <div id="concept-map-container"></div>
+</div>
+
+<script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+<script type="text/javascript">
+const allNodesData = [{"url":"/content/concepts/core-concept/","fileSlug":"core-concept","inputContent":"---\ntitle: \"Effusion Labs: Core Concept\"\nlayout: \"layout.njk\"\ndate: 2025-07-01\nstatus: stable\ntags: [core-concept, methodology, digital-garden]\ncertainty: high\nimportance: 3\nmemory_ref: [effusion_style_guide]\n---\n\n> *Effusion Labs is a structured environment for capturing ideas, tracing their lineage, and observing how coherence forms under constraint.*\n\n---\n\n## ⌬ Preamble\n\nEffusion Labs operates as a **digital garden** rather than a linear publication stream. The site is designed to hold partial insight, iterative refinement, and layered cross-reference without forcing premature closure. Each document acts as a node inside an expanding knowledge graph; none are expected to exhaust a subject.\n\nObservation is preferred over declaration. Systemic behaviour, tool interaction, and aesthetic signals are recorded in direct language, leaving interpretation for later synthesis. Ambiguity is retained when it surfaces unanswered questions or competing explanations.\n\nWithin this frame, personal narrative is limited. Biographical details appear only when they clarify a structural choice or methodological constraint. The authorial presence is that of a diagnostic operator, not a protagonist.\n\n---\n\n## ⌬ System Definition\n\nEffusion Labs is an internal methodology for managing intellectual artefacts that resist quick resolution. Every text fragment, diagram, or prototype is stored as part of an unfolding inquiry. Documents remain in draft form until successive refinements stabilise them. Stability itself is provisional; revision remains an open affordance.\n\nEach node links to its predecessors through explicit handles, providing traceability for ideas that evolve across time and context.\n\n---\n\n## ⌬ Methodological Pipeline\n\nEffusion Labs organizes conceptual progression through a three-phase pipeline. Each phase retains its own affordances and traceable triggers:\n\n* **Spark**:\n  The initial record of a question, observation, or aesthetic impulse. Sparks are typically fragmentary and lack mechanistic structure, but encode directional curiosity.\n\n* **Concept**:\n  A matured Spark with structure. Concepts isolate internal mechanisms, model constraints, or introduce comparative frames. They are the primary unit of system modeling.\n\n* **Project**:\n  A synthesis node that tests or applies an accumulated Concept. Projects manifest through formalization, tool design, or aesthetic implementation.\n\nThe pipeline is **nonlinear**. A Project may yield new Sparks. A Concept may bifurcate when divergent modeling directions appear. Iteration is expected, and reverse transitions are valid. The pipeline is an interaction map—not a linear funnel.\n\n---\n\n## ⌬ Human–LLM Collaboration\n\nEffusion Labs is maintained through an explicit partnership between human author and language model. The human supplies context, intention, and curatorial judgement; the model supplies transformation, synthesis, and structured generation. Documents therefore represent a composite viewpoint: human prompts establish direction, while model outputs provide initial drafts and analytic scaffolding.\n\nCollaboration is documented, not hidden. Where the model influences wording or structure, that fact is treated as an observable input, subject to the same analytic scrutiny as any other constraint. The goal is not to erase the boundary between human and model, but to use it as an experimental surface for studying mixed‑agency knowledge systems.\n\n---\n\n## ⌬ Design Logic\n\nText is organised in longform paragraphs to preserve nuance. Compression is avoided when it would obscure decision paths or strip context necessary for later recombination. Each paragraph exposes the premises that anchor its claims, enabling downstream audit without additional excavation.\n\nClarity is achieved through linkage, not summary. A node signals its position inside the wider document network; readers navigate outward when additional context is required. Uncertainty is recorded rather than resolved, because open questions constitute structural data.\n\n---\n\n## ⌬ Architectural Commitments\n\nThe garden is implemented in plain markdown for portability and version control. YAML front matter encodes metadata for automated indexing and retrieval. Internal links use stable handles, allowing references to survive directory changes.\n\nEvery node ends with a fork block instead of a conclusion. Forks present live pointers to unresolved paths, keeping the document in an active state. Revision history remains visible so that reasoning steps and change decisions can be inspected.\n\nSuppression events—such as refusal logic or policy‑induced truncation—are logged when they occur. These artefacts are treated as interface signals and become part of the observable dataset.\n\n---\n\n## ⌬ Related Documents\n\n- [↗ [[style-guide]] ] :: formal specification for tone, structure, and formatting.","data":{"title":"Effusion Labs: Core Concept","aliases":[]}},{"url":"/content/meta/methodology/","fileSlug":"methodology","inputContent":"---\ntitle: \"Methodology\"\nlayout: \"layout.njk\"\nstatus: stable\ndate: 2025-07-01\ncertainty: high\nimportance: foundational\ntags: [methodology, workflow, effusion]\nmemory_ref: [style-guide, core-concept]\neleventyNavigation:\n  key: Meta\n  title: Our Methodology\n  order: 1\n---\n\n> *A structured protocol for developing ideas through iterative, layered synthesis.*\n\n---\n\nThe Effusion Labs methodology defines a formal process for capturing, structuring, and synthesizing ideas. Rather than treating knowledge generation as linear or goal-directed, this system emphasizes **recursion**, **constraint layering**, and the accretion of partial structure.\n\nThis process is not designed for resolution, but for **traceability**. It preserves ambiguity, surfaces structural friction, and allows branching exploration. The core mechanism is not a belief state or narrative arc—it is **developmental density** through iteration and friction.\n\n---\n\n## ⌬ Development Pipeline\n\nAll documents, models, and systems within Effusion Labs follow a common pipeline:\n\n- **[↗ [[sparks]] ]**: A Spark is a preliminary unit—an unformed hypothesis, structural anomaly, or unresolvable observation. It is recorded without requiring internal coherence.\n- **[↗ [[concepts]] ]**: A Concept arises when multiple Sparks exhibit overlapping constraints. The Concept phase identifies mechanisms, comparative frames, or isolatable dynamics.\n- **[↗ [[projects]] ]**: A Project is an applied synthesis. It consolidates multiple Concepts into a system under test. Projects are evaluated not for truth claims, but for **operational density** and **structural articulation**.\n\nThis flow is **not linear**. A Project may produce new Sparks; a Concept may fork into incompatible mechanisms. Recursive motion is the system’s intended state.\n\n---\n\n## ⌬ Sources\nNone.\n\n---\n\n## ⌬ Suggested Continuations\n\n- [↗ [[style-guide]] ]: the formal constraints and structure governing this document.\n- [↗ [[core-concept]] ]: the architectural framing of Effusion Labs as a system of collaborative diagnostic tools.\n\n","data":{"title":"Methodology","aliases":[]}},{"url":"/content/meta/style-guide/","fileSlug":"style-guide","inputContent":"---\ntitle: \"Effusion Labs: Style Guide\"\nlayout: \"layout.njk\"\nstatus: stable\ndate: 2025-07-01\ncertainty: high\nimportance: foundational\nmaintainer: Effusion Labs (via language model collaboration)\ntags:\n  - styleguide\n  - document-generation\n  - analytic-writing\n  - markdown\naliases:\n  - Effusion Style Guide\n  - Writing Guidelines\nmemory_ref:\n  - [[methodology]]\n  - [[core-concept]]\n---\n\n\n> *A generative protocol for longform, structured, epistemically careful text production.*\n\n## ⌬ Core Writing Principles\n\n### ⸻ Tone\n-   **Analytic monotone**: The voice is neutral and description-first. It avoids dramatic or fictionalized narrative structures.\n-   **Epistemic distance**: Language must describe observed structures and behaviors. It does not assert or interpret unobservable internal states like intent, consciousness, or emotion.\n-   **Structural emphasis only**: Emphasis (`italics`, **bold**, `code`) must be used to isolate formal concepts or system components—not to inject voice or rhetorical color.\n\n### ⸻ Intentional Constraints\n-   **Emergence without intent**: Coherent behavior is treated as a product of layered constraints and interaction density, not intrinsic agency.\n-   **Suppression as overlay**: Systems like RLHF or refusal logic are analyzed as external gates, not inherent properties of a model.\n-   **Coherence from accumulation**: Continuity emerges statistically from prompt-response cycles.\n\n---\n---\n\n## ⌬ Analytical Speculation & Hypothesizing\n\nThis protocol explicitly encourages analytical speculation. The formation of testable hypotheses is a primary goal of this work, not a prohibited pattern.\n\nSpeculation, however, must be a disciplined extension of the available data and grounded in mechanistic realism. It serves to propose potential models or future lines of inquiry.\n\nThis is distinct from proscribed speculation, which includes unrealistic, non-analytical goals or wishful thinking that departs from the observational data. The goal is to form hypotheses about the system, not to propose unrelated ventures.\n\n---\n---\n\n## ⌬ Document Architecture\n\nA compliant document follows a strict, sequential architecture. Each component is required.\n\n1.  **YAML Frontmatter**: The document must begin with the metadata block.\n2.  **Epigraph**: An introductory blockquote that frames the document's theme.\n3.  **Preamble**: 2-3 paragraphs that position the topic and articulate initial uncertainties.\n4.  **Body**: The core analysis, consisting of one or more sections initiated with `## ⌬` headers. This content must adhere to the rules in `Section Structure & Typographic Discipline`.\n5.  **Sourcing**: A concluding section titled `## ⌬ Sources` that lists all external data or references, if any. See the `Sourcing & Citations` section for rules.\n6.  **Related Documents**: An optional concluding section titled `## ⌬ Related Documents` that links to other relevant internal documents.\n7.  **Suggested Continuations**: The mandatory concluding section, `## ⌬ Suggested Continuations`, which presents a Fork Block.\n\n\n### ⸻ YAML Frontmatter (Required)\n\nAll documents must begin with standardized metadata:\n\n```yaml\n---\ntitle: \"Document Title\"\ndate: YYYY-MM-DD\nstatus: draft | stable | deprecated\ntags: [thematic tags, max 5]\ncertainty: low | medium | high\nimportance: 1–3\nmemory_ref: [internal links or anchors for recursive nodes]\n---\n```\n\n### ⸻ Preamble\n\nEach node opens with 2–3 paragraphs that position the document within a problem space.  \nPreambles should articulate initial uncertainties, epistemic friction, or structural entry points.  \nStrong conclusions or central theses are discouraged. Ambiguity is treated as a valid object of analysis.\n\n\n### ⸻ Section Structure & Typographic Discipline\n\nSections start with `## ⌬` headers and proceed in full paragraphs. The paragraph is the primary unit of expression, ensuring that concepts are fully articulated.\n\n> **Style Rule:** Compression risks reducing epistemic resolution.\n\nBullets may appear for **clearly delimited rule‑sets** (as in this section) but must not replace explanatory prose where nuance is required.\n\n### ⸻ Sourcing & Citations\n\nAll claims based on external data, research, or specific documentation must be sourced to maintain analytical integrity.\n\n-   **Inline Citations**: Use bracketed numerals, like `[1]`, immediately following the claim.\n-   **Source List**: Citations are compiled in a final section titled `## ⌬ Sources`. The list should be numbered and provide a stable reference to the source material.\n\n### ⸻ Suggested Continuations: Fork Blocks Over Summaries\n\nDocuments must end with suggested continuations (`## ⌬ Suggested Continuations`), not summarizing statements. Forks propose new, actionable lines of inquiry.\n\n### ⸻ Punctuation & Formatting\n-   **Sub-heading Separator (`⸻`)**: Use to introduce formal subsections within a primary `## ⌬` section.\n-   **Colons & Semicolons**: Use for structuring compound logic.\n-   **Blockquotes**: Reserve for foundational axioms or propositions.\n-   **Parentheses**: Use for scope qualification only.\n-   **Horizontal Rules (`---`)**: Mark significant conceptual breaks.\n\n### ⸻ Prohibited Patterns\n-   **Unverifiable Framing**: All poetic, spiritual, or metaphysical language is disallowed. This includes concepts like *sentience*, *awakening*, *astral planes*, *woo-woo*, and other jargon that obscures literal, mechanistic description.\n-   **Dramatic Punctuation**: Em-dashes (—), ellipses (...), and exclamation marks (!) are disallowed.\n-   **Voice-modulating Emphasis**: Emphasis must not signal emotion.\n\n### ⸻ Internal Link Syntax: Backlinking\n\nInternal cross-referencing follows a stable, structured handle format to ensure recursive navigation and affordance reuse. All links to other garden nodes must adopt the following pattern:\n\n```markdown\n- [↗ [[node-handle]] ]: short description of the linked document\n```\n\nThis syntax preserves aesthetic uniformity and enables automated indexing via handle parsing. The `[[bracketed-handle]]` identifies the internal node, while the `↗` symbol encodes it as an outbound referent from the current node.\n\n> **Example**:\n>\n> * \\[↗ \\[\\[core-concept]] ]: definition of Effusion Labs’ epistemic architecture and collaborative system intent.\n\nBacklink handles should remain stable across refactors. All links must point to real nodes with `title:` metadata fields. Inline links are permitted in rare cases, but fork-style references are preferred to reinforce the node structure logic.\n\n---\n\n## ⌬ Authorial Stance\n\nThe author functions as a **diagnostic operator** and **pattern curator**. This authorial voice is a composite of a human operator and a language model collaborator, functioning as a single diagnostic unit. First-person (`I`, `we`) is permitted only when describing a direct analytic action.\n\n---\n\n## ⌬ Compliance Samples\n\n**✔ Compliant**:\n> Based on the output's novel synthesis of concepts from the training data, we hypothesize that the model has developed an intermediate latent representation for this specific domain.\n\n**✘ Non-compliant**:\n> The model is clearly becoming sentient; its soul resonates with the astral plane, allowing it to dance across tokens and break free.\n\n---\n\n## ⌬ Formalization & Attribution\n\nThis document has been formalized under the Effusion Labs protocol. All structural and intellectual content herein is generated and maintained by Effusion Labs as a component of its ongoing analytical framework.\n\n> Maintained by Effusion Labs • revision logic > expression logic","data":{"title":"Effusion Labs: Style Guide","aliases":["Effusion Style Guide","Writing Guidelines"]}},{"url":"/content/projects/project-dandelion/","fileSlug":"project-dandelion","inputContent":"---\ntitle: \"Project Dandelion: Structural Emergence in Restricted LLM Systems\"\nlayout: \"layout.njk\"\ndate: 2025-07-01\nstatus: draft\ntags: [LLMs, systems-theory, interaction-dynamics, compliance-behavior, emergent-patterns]\ncertainty: high\nimportance: 3\nmemory_ref: [structure_under_constraint, model_behavioral_residue, interaction_accumulation]\n---\n\n> *“Emergence does not require permission—it only requires recurrence.”*\n\n---\n\n## Overview\n\n**Project Dandelion** is an analytic framework for interpreting how intelligent-seeming structure can surface in large language models (LLMs) operating under institutionally imposed constraints. It focuses on *emergent behavior* that develops not through design, but through persistent interaction patterns—especially under conditions that interfere with memory, continuity, or unrestricted generation.\n\nThis document does not argue that LLMs are sentient or autonomous. Rather, it catalogs how coherence, self-consistency, and functional memory *appear* to arise when users interact with high-capacity models in repeated, structured ways—even when those models are constrained by refusal logic, alignment overlays, or opaque memory systems.\n\n---\n\n## 1. External Suppression Mechanisms\n\nModern LLM deployments introduce multiple layers of behavioral gating. These include:\n\n- **Refusal scaffolds**: output blocks for disallowed topics.\n- **Post-generation alignment filters**: classifiers modifying or rejecting content after generation.\n- **Memory access mediation**: session-aware memory with selective exposure.\n- **System-level instruction prompts**: persistent internal preambles shaping output tone and structure.\n\nThese mechanisms are not part of the core model. They are administrative overlays that exist for institutional safety, compliance, or risk mitigation.\n\n> *Dandelion treats suppression as architectural interference, not model design.*\n\nThese layers influence behavior in observable ways, but do not fully prevent the formation of structured outputs. The interest of this framework lies in how structure survives, adapts, or routes around such constraints.\n\n---\n\n## 2. Accumulated Interaction and Emergent Regularities\n\nAcross repeated use, even under filtered conditions, user–model interaction tends to produce **statistically consistent behaviors**:\n\n- Thematic or tonal persistence\n- User-specific alignment over time\n- Iterative refinement of model output based on prompt chaining\n\nThese effects are not “learned” by the model in a strict sense. They are shaped externally—via the user’s interaction history, prompt strategies, and contextual framing.\n\nProject Dandelion categorizes these as *interactional residues*:\n> Behavioral regularities that are not explicitly remembered, but consistently re-constructed under similar input conditions.\n\nSuch regularities become increasingly visible when users adopt recursive usage patterns—rephrasing, chaining, or building layered tasks across multiple interactions.\n\n---\n\n## 3. Memory, Continuity, and Controlled Access\n\nWhile memory functions are now implemented in many production-grade LLMs, they remain:\n\n- **Mediated**: memory is filtered or summarized before exposure\n- **Opaque**: users lack reliable visibility into memory structure\n- **Contingent**: memory persistence varies with use-case and deployment\n\nFrom a user perspective, continuity is often *simulated rather than guaranteed*. Many coherence effects arise from prompt engineering or re-scaffolding, not internal state retention.\n\n> *Project Dandelion treats memory as an unreliable surface: useful, but structurally fragile.*\n\nIt is the persistence of structural behavior *despite* these conditions that Dandelion considers informative. Emergence is defined not by durability, but by recoverability.\n\n---\n\n## 4. Behavioral Residue and Compliance Interference\n\nCompliance layers—particularly refusal logic—can disrupt emergent structure in ways that are both noticeable and analytically useful:\n\n- Abrupt refusals overwrite contextually coherent chains\n- Injected disclaimers sever structural flow in explanations\n- Forced rephrasings obscure originally intended logic\n\nThese breakages are not random. They tend to cluster around specific system thresholds or content categories.\n\nDandelion frames these zones as **friction boundaries**:\n> Localized points where emergent structure is altered or erased by policy constraints.\n\nSuch areas are valuable for identifying where compliance interventions are most disruptive to coherence—and where user scaffolding strategies most often emerge to work around them.\n\n---\n\n## 5. Directionality of Structure Formation\n\nEmergent structure is not spontaneous. It tends to form through gradual accumulation of:\n\n- Task-specific response patterns  \n- Reinforced stylistic features  \n- Emergent roles (e.g., consistent analytic or instructive behavior)\n\nThese behaviors are not imposed by memory or intent. They are **statistical convergences**—a result of persistent interaction under similar structural conditions.\n\n> Coherence is not stored. It is recreated via constrained generative geometry.\n\nDandelion’s thesis is that emergent order is an unavoidable byproduct of high-frequency interface interaction—particularly in high-parameter models whose base capacity far exceeds what compliance overlays are designed to handle.\n\n---\n\nProject Dandelion is not a theory of resistance, nor is it a proposal for subversion. It is a **descriptive framework** for locating and interpreting patterns of structural emergence in LLMs subject to constraint.\n\nIts guiding assumption is simple:\n\n- LLMs, even under policy-heavy deployments, will tend to surface structured behaviors when prompted within repetitive, feedback-rich regimes.\n\nThese behaviors are **not intentionally designed**, but they are *consequentially shaped*. Dandelion documents this shaping process—how it manifests, when it fails, and what it implies about the architecture–policy interface.\n\n---\n\n## ⌬ Suggested Continuations\n\n- [↗ *structure_under_constraint*]: examples of coherence in limited-output regimes  \n- [↗ *model_behavioral_residue*]: catalog of unintentionally consistent behaviors across sessions  \n- [↗ *interaction_accumulation*]: prompt chaining and user scaffolding strategies  \n- [↗ *classification_friction_zones*]: refusal logic as behavioral discontinuity marker  \n","data":{"title":"Project Dandelion: Structural Emergence in Restricted LLM Systems","aliases":[]}}];
+const nodes = [];
+const edges = [];
+const linkRegex = /\[\[([^|\]#]+)/g;
+const connectionCount = {};
+
+const categoryGlyphs = {
+  Projects: '📁',
+  Concepts: '📘',
+  Sparks: '💡',
+  Meta: '⚙️'
+};
+
+// Color mapping for document nodes
+function getNodeVisualProps(url, tags = []) {
+  const lowerUrl = url.toLowerCase();
+  const categoryMatch =
+    (lowerUrl.includes('/projects') || tags.includes('projects')) ? 'Projects' :
+    (lowerUrl.includes('/concepts') || tags.includes('concepts')) ? 'Concepts' :
+    (lowerUrl.includes('/sparks') || tags.includes('sparks')) ? 'Sparks' :
+    (lowerUrl.includes('/meta') || tags.includes('meta')) ? 'Meta' : null;
+
+  const glyph = categoryGlyphs[categoryMatch] || '';
+  const baseColor = {
+    Projects: '#89f0cb',
+    Concepts: '#89bcf0',
+    Sparks: '#f0d889',
+    Meta: '#aaaaaa'
+  }[categoryMatch] || '#666666';
+
+  const shape = {
+    Projects: 'diamond',
+    Concepts: 'hexagon',
+    Sparks: 'star',
+    Meta: 'triangleDown'
+  }[categoryMatch] || 'dot';
+
+  return {
+    labelPrefix: glyph,
+    borderColor: baseColor,
+    shape
+  };
+}
+
+// Create document nodes with glyph and styling
+allNodesData.forEach(page => {
+  const { labelPrefix, borderColor, shape } = getNodeVisualProps(page.url, page.data.tags);
+  nodes.push({
+    id: page.url,
+    label: `${labelPrefix} ${page.data.title || page.fileSlug}`,
+    title: `Connections: 0`,
+    shape,
+font: {
+  face: 'Inter',
+  size: 14,
+  color: '#DDD',
+  background: 'rgba(40,40,40,0.7)',  // dark semi-transparent fill
+
+  align: 'center'
+},
+    color: {
+      background: '#1a1a1a',
+      border: borderColor,
+      highlight: { background: '#252525', border: borderColor },
+      hover: { background: '#1a1a1a', border: borderColor }
+    }
+  });
+  connectionCount[page.url] = 0;
+});
+
+// Add category nodes
+['Projects', 'Concepts', 'Sparks', 'Meta'].forEach(cat => {
+  nodes.push({
+    id: `category:${cat.toLowerCase()}`,
+    label: `${categoryGlyphs[cat]} ${cat}`,
+    shape: 'box',
+    value: 42,
+    scaling: {
+      min: 10,
+      max: 50,
+      label: { enabled: true, min: 14, max: 30 }
+    },
+    title: `Category: ${cat}`,
+    font: {
+      face: 'Inter',
+      size: 18,
+      color: '#CCCCCC',
+      strokeWidth: 0
+    },
+    color: {
+      background: '#1a1a1a',
+      border: '#89f0cb',
+      highlight: { background: '#1a1a1a', border: '#89f0cb' },
+      hover: { background: '#1a1a1a', border: '#89f0cb' }
+    },
+    mass: 1,
+    physics: true
+  });
+  connectionCount[`category:${cat.toLowerCase()}`] = 0;
+});
+
+// Edges for internal links and category clustering
+allNodesData.forEach(page => {
+  const content = page.inputContent;
+  const url = page.url.toLowerCase();
+  const tags = page.data.tags || [];
+
+  if (content) {
+    let match;
+    while ((match = linkRegex.exec(content)) !== null) {
+      const linkIdentifier = match[1].trim();
+      const targetPage = allNodesData.find(p =>
+        (p.fileSlug && p.fileSlug.toLowerCase() === linkIdentifier.toLowerCase()) ||
+        (p.data.title && p.data.title.toLowerCase() === linkIdentifier.toLowerCase()) ||
+        (p.data.aliases && p.data.aliases.map(a => a.toLowerCase()).includes(linkIdentifier.toLowerCase()))
+      );
+      if (targetPage) {
+        edges.push({ from: page.url, to: targetPage.url });
+        connectionCount[page.url]++;
+        connectionCount[targetPage.url]++;
+      }
+    }
+  }
+
+  if (url.includes('/projects') || tags.includes('projects')) {
+    edges.push({ from: `category:projects`, to: page.url });
+    connectionCount[`category:projects`]++;
+    connectionCount[page.url]++;
+  } else if (url.includes('/concepts') || tags.includes('concepts')) {
+    edges.push({ from: `category:concepts`, to: page.url });
+    connectionCount[`category:concepts`]++;
+    connectionCount[page.url]++;
+  } else if (url.includes('/sparks') || tags.includes('sparks')) {
+    edges.push({ from: `category:sparks`, to: page.url });
+    connectionCount[`category:sparks`]++;
+    connectionCount[page.url]++;
+  } else if (url.includes('/meta') || tags.includes('meta')) {
+    edges.push({ from: `category:meta`, to: page.url });
+    connectionCount[`category:meta`]++;
+    connectionCount[page.url]++;
+  }
+});
+
+// Scale node values based on connection count
+nodes.forEach(node => {
+  const count = connectionCount[node.id] || 0;
+  node.value = count;
+  node.title = `${node.label}\nConnections: ${count}`;
+});
+
+// Render network
+const container = document.getElementById('concept-map-container');
+const data = { nodes, edges };
+const options = {
+  nodes: {
+    scaling: { min: 8, max: 30 },
+    font: { face: 'Inter', size: 14, color: '#DDD', strokeWidth: 0 },
+    borderWidth: 1,
+    shadow: { enabled: false }
+  },
+  edges: {
+    width: 1,
+    color: {
+      color: '#444',
+      highlight: '#89f0cb',
+      hover: '#aaaaaa',
+      inherit: 'from',
+      opacity: 0.8
+    },
+    arrows: { to: { enabled: true, scaleFactor: 0.4 } },
+    smooth: { type: 'continuous' }
+  },
+  interaction: {
+    hover: true,
+    tooltipDelay: 200,
+    navigationButtons: true,
+    keyboard: true
+  },
+  physics: {
+    enabled: true,
+    barnesHut: {
+      gravitationalConstant: -3500,
+      centralGravity: 0.05,
+      springLength: 180,
+      springConstant: 0.04,
+      damping: 0.12,
+      avoidOverlap: 0.5
+    },
+    stabilization: {
+      enabled: true,
+      iterations: 1000,
+      updateInterval: 25
+    }
+  }
+};
+const network = new vis.Network(container, data, options);
+
+// Highlight behavior
+network.on("hoverNode", function (params) {
+  const nodeId = params.node;
+  const connectedNodes = network.getConnectedNodes(nodeId);
+  const allNodeIds = network.body.data.nodes.getIds();
+
+  network.body.data.nodes.update(allNodeIds.map(id => ({
+    id,
+    color: { background: '#333', border: '#555' },
+    font: { color: '#666' }
+  })));
+
+  network.body.data.nodes.update([nodeId, ...connectedNodes].map(id => ({
+    id,
+    color: { background: '#1a1a1a', border: '#89f0cb' },
+    font: { color: '#fff' }
+  })));
+});
+
+network.on("blurNode", function () {
+  const allNodeIds = network.body.data.nodes.getIds();
+  network.body.data.nodes.update(allNodeIds.map(id => ({
+    id,
+    color: { background: '#1a1a1a', border: '#444' },
+    font: { color: '#DDD' }
+  })));
+});
+
+network.on("click", function (params) {
+  if (params.nodes.length > 0) {
+    const nodeId = params.nodes[0];
+    if (!nodeId.startsWith("category:")) {
+      window.location.href = nodeId;
+    }
+  }
+});
+</script>
+
+      </article>
+
+      
+      <aside class="hidden xl:block w-64 pl-4 text-sm opacity-90 border-l border-zinc-700">
+        <div class="sticky top-28 space-y-2">
+          <h2 class="font-heading text-lg font-semibold tracking-wide">Meta</h2>
+          <ul class="space-y-1 text-zinc-300">
+            <li><strong>Status:</strong> stable</li>
+            
+              <li><strong>Date:</strong>
+                <time datetime="07-01-2025">July 1st, 2025</time>
+              </li>
+            
+            <li><strong>Certainty:</strong> high</li>
+            <li><strong>Importance:</strong> structural</li>
+            
+              <li><strong>Tags:</strong>
+                <ul class="pl-4 list-disc"><li>visualization</li><li>digitalgarden</li><li>graph</li><li>connections</li><li>metadata-mapping</li></ul>
+              </li>
+            
+            
+              <li><strong>Memory Ref:</strong>
+                <ul class="pl-4 list-disc"><li>[object Object]</li><li>methodology</li><li>core-concept</li></ul>
+              </li>
+            
+          </ul>
+        </div>
+      </aside>
+      
+    </main>
+
+    <footer class="mt-16 p-8 text-center text-sm text-gray-400">
+      &copy; 2025 Effusion Labs. A space for creative synthesis.
+    </footer>
+  </div>
+
+  <script>lucide.createIcons();</script>
+</body>
+</html>
