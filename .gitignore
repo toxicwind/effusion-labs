@@ -1,0 +1,34 @@
+# Eleventy
+# Default build output folder
+_site/
+
+# Cache files
+.cache/
+
+# Node.js
+# Dependencies and lock files
+node_modules/
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS / Editor
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+
+# VSCode
+.vscode/
+
+# JetBrains
+.idea/
+
+# Misc
+.env
