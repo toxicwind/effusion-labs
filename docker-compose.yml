@@ -1,0 +1,7 @@
+version: '3.8'
+services:
+  effusion-labs:
+    image: ghcr.io/<OWNER>/effusion-labs:latest
+    ports:
+      - "8080:80"
+    restart: unless-stopped
