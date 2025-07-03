@@ -1,2 +1,51 @@
 @config "../../../tailwind.config.cjs";
 @import "tailwindcss";   /* base + components + utilities */
+
+@layer components {
+  .spec-note-soft {
+    @apply italic text-gray-500 border-b border-dotted border-gray-300 cursor-help;
+    /* 
+      • italic            → https://tailwindcss.com/docs/font-style 
+      • text-gray-500      → https://tailwindcss.com/docs/text-color 
+      • border-b           → https://tailwindcss.com/docs/border-style 
+      • border-dotted      → https://tailwindcss.com/docs/border-style 
+      • border-gray-300    → https://tailwindcss.com/docs/border-color 
+      • cursor-help        → https://tailwindcss.com/docs/cursor 
+    */
+  }
+
+  .spec-note-subtle {
+    @apply text-gray-400 border-b border-dashed border-gray-300 cursor-help;
+    /*
+      • text-sm           → https://tailwindcss.com/docs/font-size 
+    */
+  }
+
+  .spec-note-liminal {
+    @apply underline decoration-dotted decoration-gray-400 text-slate-500 italic cursor-help;
+    /*
+      • underline         → https://tailwindcss.com/docs/text-decoration-line 
+      • decoration-dotted → https://tailwindcss.com/docs/text-decoration-style 
+      • decoration-gray-400 → https://tailwindcss.com/docs/text-decoration-color 
+      • text-slate-500    → https://tailwindcss.com/docs/text-color 
+    */
+  }
+
+  .spec-note-archival {
+    @apply uppercase tracking-wide text-xs text-gray-600 border-b border-gray-400 cursor-help;
+    /*
+      • uppercase         → https://tailwindcss.com/docs/text-transform 
+      • tracking-wide     → https://tailwindcss.com/docs/letter-spacing 
+      • text-xs           → https://tailwindcss.com/docs/font-size 
+    */
+  }
+
+  .spec-note-ghost {
+    @apply italic underline decoration-dotted decoration-gray-400 text-gray-400 cursor-help;
+    /*
+      • pl-2, ml-1        → https://tailwindcss.com/docs/padding, https://tailwindcss.com/docs/margin 
+      • border-l-2        → https://tailwindcss.com/docs/border-width 
+    */
+  }
+}
+

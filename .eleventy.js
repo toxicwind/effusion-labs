@@ -101,6 +101,32 @@ module.exports = function (eleventyConfig) {
     server: { baseDir: "_site" }
   });
 
+  /* ░░ Inline Footnote ░░ */
+  const markdownIt = require("markdown-it");
+  const markdownItFootnote = require("markdown-it-footnote");
+
+  eleventyConfig.amendLibrary("md", mdLib =>
+    mdLib.use(markdownItFootnote)
+  );
+
+  /* ░░ specnote ░░ */
+  eleventyConfig.addShortcode("specnote", function (variant, content, tooltip) {
+    const variants = {
+      soft: "spec-note-soft",
+      subtle: "spec-note-subtle",
+      liminal: "spec-note-liminal",
+      archival: "spec-note-archival",
+      ghost: "spec-note-ghost",
+    };
+
+    const safeClass = variants[variant] || "spec-note-soft";
+    const safeTooltip = tooltip ? tooltip.replace(/"/g, "&quot;") : "";
+
+    return `<span class="${safeClass}" title="${safeTooltip}">${content}</span>`;
+  });
+
+
+
   /* ░░ Return directory & engine settings ░░ */
   return {
     dir: {

@@ -96,7 +96,7 @@ Bullets may appear for **clearly delimited rule‑sets** (as in this section) bu
 
 All claims based on external data, research, or specific documentation must be sourced to maintain analytical integrity.
 
--   **Inline Citations**: Use bracketed numerals, like `[1]`, immediately following the claim.
+-   **Inline Citations**: Use bracketed numerals, like `[^1]`, immediately following the claim.
 -   **Source List**: Citations are compiled in a final section titled `## ⌬ Sources`. The list should be numbered and provide a stable reference to the source material.
 
 ### ⸻ Suggested Continuations: Fork Blocks Over Summaries

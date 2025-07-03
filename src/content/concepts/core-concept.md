@@ -33,18 +33,7 @@ Each node links to its predecessors through explicit handles, providing traceabi
 
 ## ⌬ Methodological Pipeline
 
-Effusion Labs organizes conceptual progression through a three-phase pipeline. Each phase retains its own affordances and traceable triggers:
-
-* **Spark**:
-  The initial record of a question, observation, or aesthetic impulse. Sparks are typically fragmentary and lack mechanistic structure, but encode directional curiosity.
-
-* **Concept**:
-  A matured Spark with structure. Concepts isolate internal mechanisms, model constraints, or introduce comparative frames. They are the primary unit of system modeling.
-
-* **Project**:
-  A synthesis node that tests or applies an accumulated Concept. Projects manifest through formalization, tool design, or aesthetic implementation.
-
-The pipeline is **nonlinear**. A Project may yield new Sparks. A Concept may bifurcate when divergent modeling directions appear. Iteration is expected, and reverse transitions are valid. The pipeline is an interaction map—not a linear funnel.
+[↗ [[methodology]] ]
 
 ---
 

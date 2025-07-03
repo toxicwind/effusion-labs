@@ -111,12 +111,3 @@ Its guiding assumption is simple:
 - LLMs, even under policy-heavy deployments, will tend to surface structured behaviors when prompted within repetitive, feedback-rich regimes.
 
 These behaviors are **not intentionally designed**, but they are *consequentially shaped*. Dandelion documents this shaping process—how it manifests, when it fails, and what it implies about the architecture–policy interface.
-
----
-
-## ⌬ Suggested Continuations
-
-- [↗ *structure_under_constraint*]: examples of coherence in limited-output regimes  
-- [↗ *model_behavioral_residue*]: catalog of unintentionally consistent behaviors across sessions  
-- [↗ *interaction_accumulation*]: prompt chaining and user scaffolding strategies  
-- [↗ *classification_friction_zones*]: refusal logic as behavioral discontinuity marker  

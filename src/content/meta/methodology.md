@@ -23,20 +23,20 @@ This process is not designed for resolution, but for **traceability**. It preser
 
 ---
 
-## ⌬ Development Pipeline
+## ⌬ Methodological Pipeline
 
-All documents, models, and systems within Effusion Labs follow a common pipeline:
+Effusion Labs organizes conceptual progression through a three-phase pipeline. Each phase retains its own affordances and traceable triggers:
 
-- **[↗ [[sparks]] ]**: A Spark is a preliminary unit—an unformed hypothesis, structural anomaly, or unresolvable observation. It is recorded without requiring internal coherence.
-- **[↗ [[concepts]] ]**: A Concept arises when multiple Sparks exhibit overlapping constraints. The Concept phase identifies mechanisms, comparative frames, or isolatable dynamics.
-- **[↗ [[projects]] ]**: A Project is an applied synthesis. It consolidates multiple Concepts into a system under test. Projects are evaluated not for truth claims, but for **operational density** and **structural articulation**.
+* **[↗ [[Sparks]] ]**:
+  The initial record of a question, observation, or aesthetic impulse. Sparks are typically fragmentary and lack mechanistic structure, but encode directional curiosity.
 
-This flow is **not linear**. A Project may produce new Sparks; a Concept may fork into incompatible mechanisms. Recursive motion is the system’s intended state.
+* **[↗ [[Concepts]] ]**:
+  A matured Spark with structure. Concepts isolate internal mechanisms, model constraints, or introduce comparative frames. They are the primary unit of system modeling.
 
----
+* **[↗ [[Projects]] ]**:
+  A synthesis node that tests or applies an accumulated Concept. Projects manifest through formalization, tool design, or aesthetic implementation.
 
-## ⌬ Sources
-None.
+The pipeline is **nonlinear**. A Project may yield new Sparks. A Concept may bifurcate when divergent modeling directions appear. Iteration is expected, and reverse transitions are valid. The pipeline is an interaction map—not a linear funnel.
 
 ---
 
