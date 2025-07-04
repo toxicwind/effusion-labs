@@ -94,6 +94,7 @@ module.exports = function (eleventyConfig) {
 
   /* ░░ Static assets ░░ */
   eleventyConfig.addPassthroughCopy("src/assets");
+  eleventyConfig.addPassthroughCopy({ "src/favicon.ico": "favicon.ico" });
 
   /* ░░ Dev-server tweaks ░░ */
   eleventyConfig.setBrowserSyncConfig({
