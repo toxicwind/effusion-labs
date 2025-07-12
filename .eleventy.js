@@ -75,8 +75,7 @@ module.exports = function(eleventyConfig) {
           return true;
         });
       });
-
-    // Markdown links [text](url): prefix ↗, add .external-link
+    // Auto-link prefixing for external links
     const defaultRender = mdLib.renderer.rules.link_open || function(tokens, idx, options, env, self) {
       return self.renderToken(tokens, idx, options);
     };
@@ -84,12 +83,12 @@ module.exports = function(eleventyConfig) {
       const token = tokens[idx];
       token.attrJoin("class", "external-link");
       const nextToken = tokens[idx + 1];
+      // Always replace link text with "↗ source" regardless of original content
       if (nextToken && nextToken.type === "text") {
-        nextToken.content = `↗ ${nextToken.content}`;
+        nextToken.content = "↗ source";
       }
       return defaultRender(tokens, idx, options, env, self);
     };
-
     return mdLib;
   });
 
