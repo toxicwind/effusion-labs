@@ -82,7 +82,7 @@ All sources in the **Annotated Appendix** are classified into one of four **Epis
 
 #### **Inline Referencing**:
 
-Each entry is tagged in-text with `[^*]` and listed sequentially.
+Each entry is tagged in-text with `[^*]` and listed sequentially.[^1][^2][^3][^4]
 
 ---
 
