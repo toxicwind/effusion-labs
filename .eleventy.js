@@ -14,13 +14,16 @@ const interlinkerOptions = {
   resolvingFns: new Map([
     [
       "default",
-      (link, currentPage, il) => {
-        const html = il.defaultResolver(link, currentPage);
-        return html.replace(/^<a /, '<a class="interlink" ');
+      (link) => {
+        // Build a normal anchor but inject class="interlink"
+        const href   = link.href  || link.link;      // href set when target exists, else fallback
+        const label  = link.title || link.name;      // title/alias, else filename
+        return `<a class="interlink" href="${href}">${label}</a>`;
       }
     ]
   ])
 };
+
 
 /* ──────────────────────────  markdown-it extras  ────────────────────────── */
 const markdownIt         = require("markdown-it");
