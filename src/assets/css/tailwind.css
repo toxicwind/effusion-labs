@@ -1,51 +1,78 @@
 @config "../../../tailwind.config.cjs";
-@import "tailwindcss";   /* base + components + utilities */
+@import "tailwindcss";
 
+/* ═══════════════  Core Affordance & Meta Utilities  ═══════════════ */
 @layer components {
-  .spec-note-soft {
-    @apply italic text-gray-500 border-b border-dotted border-gray-300 cursor-help;
-    /* 
-      • italic            → https://tailwindcss.com/docs/font-style 
-      • text-gray-500      → https://tailwindcss.com/docs/text-color 
-      • border-b           → https://tailwindcss.com/docs/border-style 
-      • border-dotted      → https://tailwindcss.com/docs/border-style 
-      • border-gray-300    → https://tailwindcss.com/docs/border-color 
-      • cursor-help        → https://tailwindcss.com/docs/cursor 
-    */
-  }
+  /* Specnote variants */
+  .spec-note-soft     { @apply italic text-gray-500 border-b border-dotted border-gray-300 cursor-help; }
+  .spec-note-subtle   { @apply text-gray-400 border-b border-dashed border-gray-300 cursor-help; }
+  .spec-note-liminal  { @apply underline decoration-dotted decoration-gray-400 text-slate-500 italic cursor-help; }
+  .spec-note-archival { @apply uppercase tracking-wide text-xs text-gray-600 border-b border-gray-400 cursor-help; }
+  .spec-note-ghost    { @apply italic underline decoration-dotted decoration-gray-400 text-gray-400 cursor-help; }
 
-  .spec-note-subtle {
-    @apply text-gray-400 border-b border-dashed border-gray-300 cursor-help;
-    /*
-      • text-sm           → https://tailwindcss.com/docs/font-size 
-    */
-  }
+  /* Meta-citation */
+  .citation           { @apply pl-4 border-l-4; }
+  .citation-fictional { @apply border-red-500 italic; }
+  .citation-real      { @apply border-blue-500; }
 
-  .spec-note-liminal {
-    @apply underline decoration-dotted decoration-gray-400 text-slate-500 italic cursor-help;
-    /*
-      • underline         → https://tailwindcss.com/docs/text-decoration-line 
-      • decoration-dotted → https://tailwindcss.com/docs/text-decoration-style 
-      • decoration-gray-400 → https://tailwindcss.com/docs/text-decoration-color 
-      • text-slate-500    → https://tailwindcss.com/docs/text-color 
-    */
-  }
+  /* Silence, spatial & page breaks */
+  .silence-node { @apply h-screen bg-white; }
+  .push-up      { @apply -mt-20; }
+  .push-left    { @apply -ml-16; }
 
-  .spec-note-archival {
-    @apply uppercase tracking-wide text-xs text-gray-600 border-b border-gray-400 cursor-help;
-    /*
-      • uppercase         → https://tailwindcss.com/docs/text-transform 
-      • tracking-wide     → https://tailwindcss.com/docs/letter-spacing 
-      • text-xs           → https://tailwindcss.com/docs/font-size 
-    */
-  }
-
-  .spec-note-ghost {
-    @apply italic underline decoration-dotted decoration-gray-400 text-gray-400 cursor-help;
-    /*
-      • pl-2, ml-1        → https://tailwindcss.com/docs/padding, https://tailwindcss.com/docs/margin 
-      • border-l-2        → https://tailwindcss.com/docs/border-width 
-    */
-  }
+  /* Rotation & mirroring */
+  .rotate-90 { @apply transform rotate-90 origin-top-left block; }
+  .mirror-x  { @apply transform -scale-x-100 block; }
 }
 
+/* ═══════════════  Typographic & Color Signifiers  ═══════════════ */
+@layer components {
+  /* Grayscale & muted color spectrum */
+  .slate   { @apply text-slate-500; }
+  .gray    { @apply text-gray-500; }
+  .zinc    { @apply text-zinc-500; }
+  .neutral { @apply text-neutral-500; }
+  .stone   { @apply text-stone-500; }
+
+  /* Vibrant color spectrum */
+  .red     { @apply text-red-500; }
+  .orange  { @apply text-orange-500; }
+  .amber   { @apply text-amber-500; }
+  .yellow  { @apply text-yellow-500; }
+  .lime    { @apply text-lime-500; }
+  .green   { @apply text-green-500; }
+  .emerald { @apply text-emerald-500; }
+  .teal    { @apply text-teal-500; }
+  .cyan    { @apply text-cyan-500; }
+  .sky     { @apply text-sky-500; }
+  .blue    { @apply text-blue-500; }
+  .indigo  { @apply text-indigo-500; }
+  .violet  { @apply text-violet-500; }
+  .purple  { @apply text-purple-500; }
+  .fuchsia { @apply text-fuchsia-500; }
+  .pink    { @apply text-pink-500; }
+  .rose    { @apply text-rose-500; }
+  .blackout { @apply text-black bg-black; }
+}
+
+/* ═══════════════  Behavior, Animation, & Embeds  ═══════════════ */
+@layer components {
+  .flicker      { @apply animate-pulse; }
+  .audio-embed  { @apply my-4 block; }
+  .qr-code      { @apply my-4 block w-32 h-32; }
+  .footnote[data-read="false"] { @apply opacity-0 transition-opacity duration-500; }
+  .footnote.visible            { @apply opacity-100; }
+}
+
+/* ═══════════════  Link Visual Affordances (ALWAYS LAST)  ═══════════════ */
+@layer components {
+  .interlink::before {
+    content: "↗ ";
+    margin-right: 0.15rem;
+    color: currentColor;
+    font-size: 0.9em;
+  }
+  .external-link {
+    @apply text-blue-600 underline hover:text-blue-800 transition;
+  }
+}

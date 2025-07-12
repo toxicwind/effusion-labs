@@ -3,86 +3,153 @@ const path        = require("path");
 const fs          = require("fs");
 const { DateTime } = require("luxon");
 
-/* plugins */
+/* ────────────────────────────────  plugins  ─────────────────────────────── */
 const interlinker = require("@photogabble/eleventy-plugin-interlinker");
 const navigation  = require("@11ty/eleventy-navigation");
 const tailwind    = require("eleventy-plugin-tailwindcss-4");
 
-/* ───────────────────────────  main configuration  ────────────────────────── */
-module.exports = function (eleventyConfig) {
+/* ──────────────────────────────  plugin options  ────────────────────────── */
+const interlinkerOptions = {
+  defaultLayout: "layouts/embed.njk",
+  resolvingFns: new Map([
+    [
+      "default",
+      (link, currentPage, il) => {
+        const html = il.defaultResolver(link, currentPage);
+        return html.replace(/^<a /, '<a class="interlink" ');
+      }
+    ]
+  ])
+};
 
-  /* ░░ Plugins ░░ */
-  eleventyConfig.addPlugin(interlinker, { defaultLayout: "layouts/embed.njk" });
+/* ──────────────────────────  markdown-it extras  ────────────────────────── */
+const markdownIt         = require("markdown-it");
+const markdownItFootnote = require("markdown-it-footnote");
+const markdownItAttrs    = require("markdown-it-attrs");
+
+/* ────────────────────────  main configuration  ──────────────────────────── */
+module.exports = function(eleventyConfig) {
+
+  /* ░░ PLUGINS ░░ */
+  eleventyConfig.addPlugin(interlinker, interlinkerOptions);
   eleventyConfig.addPlugin(navigation);
   eleventyConfig.addPlugin(tailwind, {
-    /* the file you created earlier -- src/assets/css/tailwind.css */
-    input : "assets/css/tailwind.css",   // path is relative to dir.input ("src")
-    output: "assets/main.css",           // written to _site/assets/main.css
+    input : "assets/css/tailwind.css",
+    output: "assets/main.css",
     minify: true
   });
 
-  /* ░░ Filters ░░ */
-  /* ░░ Pretty-print, U-S style  →  July 4ᵗʰ 2025  ░░ */
+  /* ░░ MARKDOWN-IT: Footnotes, Attrs, Audio/QR, Auto-Link Prefixing ░░ */
+  eleventyConfig.amendLibrary("md", mdLib => {
+    mdLib
+      .use(markdownItFootnote)
+      .use(markdownItAttrs)
+      // @audio(src)
+      .use(md => {
+        md.inline.ruler.after("emphasis", "audio", (state, silent) => {
+          const match = state.src.slice(state.pos).match(/^@audio\(([^)]+)\)/);
+          if (!match) return false;
+          if (!silent) {
+            state.push({
+              type: "html_inline",
+              content: `<audio controls class="audio-embed" src="${match[1]}"></audio>`
+            });
+          }
+          state.pos += match[0].length;
+          return true;
+        });
+      })
+      // @qr(url)
+      .use(md => {
+        md.inline.ruler.after("audio", "qr", (state, silent) => {
+          const match = state.src.slice(state.pos).match(/^@qr\(([^)]+)\)/);
+          if (!match) return false;
+          if (!silent) {
+            const src = encodeURIComponent(match[1]);
+            state.push({
+              type: "html_inline",
+              content: `<img class="qr-code" src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${src}" alt="QR code">`
+            });
+          }
+          state.pos += match[0].length;
+          return true;
+        });
+      });
+
+    // Markdown links [text](url): prefix ↗, add .external-link
+    const defaultRender = mdLib.renderer.rules.link_open || function(tokens, idx, options, env, self) {
+      return self.renderToken(tokens, idx, options);
+    };
+    mdLib.renderer.rules.link_open = function(tokens, idx, options, env, self) {
+      const token = tokens[idx];
+      token.attrJoin("class", "external-link");
+      const nextToken = tokens[idx + 1];
+      if (nextToken && nextToken.type === "text") {
+        nextToken.content = `↗ ${nextToken.content}`;
+      }
+      return defaultRender(tokens, idx, options, env, self);
+    };
+
+    return mdLib;
+  });
+
+  /* ░░ FILTERS ░░ */
   eleventyConfig.addFilter("readableDate", (d, zone = "utc") => {
     if (!(d instanceof Date)) return "";
-
     const dt = DateTime.fromJSDate(d, { zone });
     const day = dt.day;
-    /* → 1st / 2nd / 3rd / 4th… */
     const ordinal =
       day % 10 == 1 && day % 100 != 11 ? "st" :
       day % 10 == 2 && day % 100 != 12 ? "nd" :
       day % 10 == 3 && day % 100 != 13 ? "rd" : "th";
-
     return `${dt.toFormat("MMMM d")}${ordinal}, ${dt.toFormat("yyyy")}`;
   });
 
-  /* ░░ Machine string, ISO-8601  →  2025-07-04  ░░ */
   eleventyConfig.addFilter("htmlDateString", d =>
     d instanceof Date
       ? DateTime.fromJSDate(d, { zone: "utc" }).toFormat("yyyy-MM-dd")
       : ""
   );
 
-
   eleventyConfig.addFilter("limit", (arr = [], n = 5) =>
     Array.isArray(arr) ? arr.slice(0, n) : []
   );
 
-  /* stringify page list for JS-fronted graphs, avoids circular refs */
   eleventyConfig.addFilter("jsonify", data => {
     if (!Array.isArray(data)) return "[]";
-
-    const safe = data.map(page => {
-      if (!page?.inputPath) return null;
-
-      let raw = "";
-      try { raw = fs.readFileSync(page.inputPath, "utf8"); }
-      catch { raw = `Error loading ${page.inputPath}`; }
-
-      return {
-        url        : page.url,
-        fileSlug   : page.fileSlug,
-        inputContent: raw,
-        data       : {
-          title  : page.data?.title   || "",
-          aliases: page.data?.aliases || []
+    const safe = data
+      .map(page => {
+        if (!page?.inputPath) return null;
+        let raw;
+        try {
+          raw = fs.readFileSync(page.inputPath, "utf8");
+        } catch {
+          raw = `Error loading ${page.inputPath}`;
         }
-      };
-    }).filter(Boolean);
-
+        return {
+          url: page.url,
+          fileSlug: page.fileSlug,
+          inputContent: raw,
+          data: {
+            title: page.data?.title || "",
+            aliases: page.data?.aliases || []
+          }
+        };
+      })
+      .filter(Boolean);
     return JSON.stringify(safe);
   });
 
-  /* ░░ Collections ░░ */
+  /* ░░ COLLECTIONS ░░ */
   const baseContent = "src/content";
   const glob = dir => `${baseContent}/${dir}/**/*.md`;
 
   ["sparks", "concepts", "projects", "meta"].forEach(name =>
-    eleventyConfig.addCollection(name, api => api.getFilteredByGlob(glob(name)))
+    eleventyConfig.addCollection(name, api =>
+      api.getFilteredByGlob(glob(name))
+    )
   );
 
-  /* composite graph for map-view */
   eleventyConfig.addCollection("nodes", api =>
     api.getFilteredByGlob([
       glob("sparks"),
@@ -92,52 +159,40 @@ module.exports = function (eleventyConfig) {
     ])
   );
 
-  /* ░░ Static assets ░░ */
+  /* ░░ STATIC ASSETS ░░ */
   eleventyConfig.addPassthroughCopy("src/assets");
   eleventyConfig.addPassthroughCopy({ "src/favicon.ico": "favicon.ico" });
 
-  /* ░░ Dev-server tweaks ░░ */
+  /* ░░ DEV-SERVER ░░ */
   eleventyConfig.setBrowserSyncConfig({
     index : "index.html",
     server: { baseDir: "_site" }
   });
 
-  /* ░░ Inline Footnote ░░ */
-  const markdownIt = require("markdown-it");
-  const markdownItFootnote = require("markdown-it-footnote");
-
-  eleventyConfig.amendLibrary("md", mdLib =>
-    mdLib.use(markdownItFootnote)
-  );
-
-  /* ░░ specnote ░░ */
-  eleventyConfig.addShortcode("specnote", function (variant, content, tooltip) {
+  /* ░░ SHORTCODES ░░ */
+  eleventyConfig.addShortcode("specnote", (variant, content, tooltip) => {
     const variants = {
       soft: "spec-note-soft",
       subtle: "spec-note-subtle",
       liminal: "spec-note-liminal",
       archival: "spec-note-archival",
-      ghost: "spec-note-ghost",
+      ghost: "spec-note-ghost"
     };
-
     const safeClass = variants[variant] || "spec-note-soft";
     const safeTooltip = tooltip ? tooltip.replace(/"/g, "&quot;") : "";
-
     return `<span class="${safeClass}" title="${safeTooltip}">${content}</span>`;
   });
 
-
-
-  /* ░░ Return directory & engine settings ░░ */
+  /* ░░ DIR & ENGINES ░░ */
   return {
     dir: {
-      input   : "src",
-      output  : "_site",
+      input:    "src",
+      output:   "_site",
       includes: "_includes",
-      data    : "_data"
+      data:     "_data"
     },
     markdownTemplateEngine: "njk",
-    htmlTemplateEngine    : "njk",
-    pathPrefix            : "/"
+    htmlTemplateEngine:     "njk",
+    pathPrefix:             "/"
   };
 };
