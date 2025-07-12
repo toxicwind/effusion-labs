@@ -1,28 +1,33 @@
 ---
 title: "The Unified Referencing Syntax"
+layout: "layout.njk"
 date: 2025-07-12
-status: final
-version: v1.0
+status: Stable
+certainty: codified
+importance: 1
 tags:
-  - syntax
-  - citation
-  - protocol
+  - referencing-protocol
+  - audit-framework
+  - reproducible-research
+  - meta-citation
+  - open-method
   - performative-inquiry
-  - epistemic-audit
-  - documentation
-spark_type: specification
-target: unified-referencing-syntax
-description: >
-  Defines a new citation protocol based on Performative Inquiry. This specification
-  outlines a four-stage process, four distinct source types (Primary, Adversarial,
-  Conceptual, Epistolary), and detailed formatting rules for a final Annotated
-  Appendix that serves as a public record of the intellectual journey.
-key_principles:
-  - Performative Inquiry
-  - Four-Type Epistemic Audit
-  - Multi-Vector Search
-  - Diegetic Artifacts
+  - epistemology
+spark_type: documentation-standard
+target: Cross-Disciplinary Referencing & Audit
+analytic_lens: performative-sourcing, dramaturgical-evidence, adversarial-integrity, multi-type-audit, protocolized-appendix
+memory_ref:
+  - [reproducible-research]
+  - [open-citation]
+  - [dogme-95]
+  - [meta-methodology]
+  - [audit-traceability]
+  - [procedural-rhetoric]
+preamble:
+  classification: "[META] Syntax: Formal Reference & Audit"
+  version: "1.0-urs"
 ---
+
 
 ### 1. Guiding Philosophy: Performative Inquiry
 
