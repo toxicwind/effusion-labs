@@ -46,7 +46,7 @@ It transforms sourcing into a visible, dramaturgical act—**the final Appendix 
 
 #### **Stage II: The Curation & Composition Stage – The Emergent Act**
 
-- **Principle of Unique Citation**: Every `[^\*]` tag in the final text maps to a **unique** source.
+- **Principle of Unique Citation**: Every `[^*]` tag in the final text maps to a **unique** source.
 - The author curates from the initial pool and augments with **Conceptual** and **Epistolary** as argument demands.
 - Structure must **emerge organically**—argument and sourcing evolve together; no pre-imposed outline.
 
@@ -82,7 +82,7 @@ All sources in the **Annotated Appendix** are classified into one of four **Epis
 
 #### **Inline Referencing**:
 
-Each entry is tagged in-text with `[^\*]` and listed sequentially.
+Each entry is tagged in-text with `[^*]` and listed sequentially.
 
 ---
 
