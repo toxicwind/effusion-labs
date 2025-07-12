@@ -9,12 +9,6 @@
   .spec-note-liminal  { @apply underline decoration-dotted decoration-gray-400 text-slate-500 italic cursor-help; }
   .spec-note-archival { @apply uppercase tracking-wide text-xs text-gray-600 border-b border-gray-400 cursor-help; }
   .spec-note-ghost    { @apply italic underline decoration-dotted decoration-gray-400 text-gray-400 cursor-help; }
-
-  /* Meta-citation */
-  .citation           { @apply pl-4 border-l-4; }
-  .citation-fictional { @apply border-red-500 italic; }
-  .citation-real      { @apply border-blue-500; }
-
   /* Silence, spatial & page breaks */
   .silence-node { @apply h-screen bg-white; }
   .push-up      { @apply -mt-20; }
@@ -60,8 +54,6 @@
   .flicker      { @apply animate-pulse; }
   .audio-embed  { @apply my-4 block; }
   .qr-code      { @apply my-4 block w-32 h-32; }
-  .footnote[data-read="false"] { @apply opacity-0 transition-opacity duration-500; }
-  .footnote.visible            { @apply opacity-100; }
 }
 
 /* ═══════════════  Link Visual Affordances (ALWAYS LAST)  ═══════════════ */
