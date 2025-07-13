@@ -96,8 +96,9 @@ To fully parse the implications, we must accept the comedic truth: this article 
 
 And if you’re still reading, you are now implicated in the process by which meaning is manufactured and distributed like so much artisanal marmalade. What began as a modest request ends as a modest spectacle. There is no resolution because there never was a problem.
 
+---
 
-### Open Questions
+## Open Questions
 1. **At what point did the semiotics of egg placement surpass the actual consumption of breakfast in social consequence—and why are we all pretending this isn’t deeply troubling?**
 
 2. **If this article is found centuries from now, will future readers assume it’s satire, encrypted lament, or just evidence of a culture desperate to turn toast into allegory?**
@@ -127,7 +128,7 @@ And if you’re still reading, you are now implicated in the process by which me
 [^4]: **Jonathan Swift's *A Modest Proposal*** – *Suggests Irish children be eaten as a solution to poverty.*
 
 > *Epistemic Note (Adversarial):* An absurd overreaction masquerading as reason. Provides ironic scale against which this breakfast incident can be humorously evaluated.
-> Source: [The Guardian – Examples of Irony](https://www.theguardian.com/lifeandstyle/article/2024/jun/16/readers-reply-what-are-the-best-examples-of-genuine-irony)
+> Source: [Gutenberg - A Modest Proposal](https://www.gutenberg.org/files/1080/1080-h/1080-h.htm)
 
 [^5]: **Emotional Labor** – *The act of managing one's emotions as part of professional performance.*
 
