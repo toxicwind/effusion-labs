@@ -23,9 +23,6 @@ memory_ref:
   - [curatorial-generativism]
   - [serendipity-in-science]
 ---
-
-## The Rhizomatic Protocol: A Corrected Model of the Effusion Labs System
-
 ### 1.0 The Identified Flaw: A Critique of Linear Process Models
 
 Previous attempts to document the Effusion Labs framework relied on a significant and misleading simplification: the modeling of the `Spark -> Concept -> Project` workflow as a "pipeline." While the non-linear *potential* of this pipeline was acknowledged, the very metaphor of a pipeline imposed a directional, sequential, and hierarchical logic that does not align with the operational reality of the system. It implied a clean, factory-like process where raw material (`Sparks`) is refined into theory (`Concepts`) and then stamped into a final product (`Projects`).
