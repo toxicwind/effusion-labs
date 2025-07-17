@@ -22,7 +22,7 @@
         <i data-lucide="flask-conical"></i><span>Effusion Labs</span>
       </a>
 
-      <nav class="flex gap-6 text-sm font-bold">
+      <nav class="flex flex-wrap justify-center gap-4 text-sm font-bold sm:justify-end sm:gap-6">
         {% for n in [
           { url: '/', label: 'Showcase' },
           { url: '/projects/', label: 'Projects' },
@@ -61,8 +61,8 @@
       </article>
 
       {% if hasMeta %}
-      <aside class="hidden xl:block w-64 pl-4 text-sm opacity-90 border-l border-zinc-700">
-        <div class="sticky top-28 space-y-2">
+      <aside class="w-full mt-10 text-sm opacity-90 border-t border-zinc-700 pt-4 xl:mt-0 xl:w-64 xl:pl-4 xl:border-t-0 xl:border-l">
+        <div class="space-y-2 xl:sticky xl:top-28">
           <h2 class="font-heading text-lg font-semibold tracking-wide">Meta</h2>
           <ul class="space-y-1 text-zinc-300">
             {% if status %}<li><strong>Status:</strong> {{ status }}</li>{% endif %}
