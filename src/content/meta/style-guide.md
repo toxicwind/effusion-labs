@@ -120,14 +120,14 @@ Documents must end with suggested continuations (`## ⌬ Suggested Continuations
 Internal cross-referencing follows a stable, structured handle format to ensure recursive navigation and affordance reuse. All links to other garden nodes must adopt the following pattern:
 
 ```markdown
-- [↗ [[node-handle]] ]: short description of the linked document
+- [[node-handle]]: short description of the linked document
 ```
 
 This syntax preserves aesthetic uniformity and enables automated indexing via handle parsing. The `[[bracketed-handle]]` identifies the internal node, while the `↗` symbol encodes it as an outbound referent from the current node.
 
 > **Example**:
 >
-> * \[↗ \[\[core-concept]] ]: definition of Effusion Labs’ epistemic architecture and collaborative system intent.
+> * \\[\[core-concept]]: definition of Effusion Labs’ epistemic architecture and collaborative system intent.
 
 Backlink handles should remain stable across refactors. All links must point to real nodes with `title:` metadata fields. Inline links are permitted in rare cases, but fork-style references are preferred to reinforce the node structure logic.
 

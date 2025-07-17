@@ -33,7 +33,7 @@ Each node links to its predecessors through explicit handles, providing traceabi
 
 ## ⌬ Methodological Pipeline
 
-[↗ [[methodology]] ]
+[[methodology]]
 
 ---
 
@@ -65,4 +65,4 @@ Suppression events—such as refusal logic or policy‑induced truncation—are 
 
 ## ⌬ Related Documents
 
-- [↗ [[style-guide]] ] :: formal specification for tone, structure, and formatting.
+- [[style-guide]] :: formal specification for tone, structure, and formatting.

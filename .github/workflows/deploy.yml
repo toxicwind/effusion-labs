@@ -41,3 +41,9 @@ jobs:
           echo "📦 Building and pushing $IMAGE_ID"
           docker build -t "$IMAGE_ID" -f .portainer/Dockerfile .
           docker push "$IMAGE_ID"
+      - name: Trigger Portainer Webhook Redeployment
+        run: |
+          if ! curl -X POST http://effusionlabs.com:9000/api/stacks/webhooks/d85d48d6-a407-4ac0-8683-a7962bfbb9d3; then
+            echo "Webhook trigger failed!";
+            exit 1;
+          fi
