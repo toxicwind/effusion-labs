@@ -27,7 +27,7 @@ const interlinkerOptions = {
 
 /* ──────────────────────────  markdown-it extras  ────────────────────────── */
 const markdownIt         = require("markdown-it");
-const markdownItFootnote = require("markdown-it-footnote");
+const markdownItAnnotation = require("markdown-it-annotation");
 const markdownItAttrs    = require("markdown-it-attrs");
 
 /* ────────────────────────  main configuration  ──────────────────────────── */
@@ -42,10 +42,10 @@ module.exports = function(eleventyConfig) {
     minify: true
   });
 
-  /* ░░ MARKDOWN-IT: Footnotes, Attrs, Audio/QR, Auto-Link Prefixing ░░ */
+  /* ░░ MARKDOWN-IT: Annotations, Attrs, Audio/QR, Auto-Link Prefixing ░░ */
   eleventyConfig.amendLibrary("md", mdLib => {
     mdLib
-      .use(markdownItFootnote)
+      .use(markdownItAnnotation)
       .use(markdownItAttrs)
       // @audio(src)
       .use(md => {
