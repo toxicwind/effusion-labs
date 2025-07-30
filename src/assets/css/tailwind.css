@@ -3,58 +3,52 @@
 
 /* ═══════════════  Core Affordance & Meta Utilities  ═══════════════ */
 @layer components {
-  /* Specnote variants */
   .spec-note-soft     { @apply italic text-gray-500 border-b border-dotted border-gray-300 cursor-help; }
   .spec-note-subtle   { @apply text-gray-400 border-b border-dashed border-gray-300 cursor-help; }
   .spec-note-liminal  { @apply underline decoration-dotted decoration-gray-400 text-slate-500 italic cursor-help; }
   .spec-note-archival { @apply uppercase tracking-wide text-xs text-gray-600 border-b border-gray-400 cursor-help; }
   .spec-note-ghost    { @apply italic underline decoration-dotted decoration-gray-400 text-gray-400 cursor-help; }
-  /* Silence, spatial & page breaks */
-  .silence-node { @apply h-screen bg-white; }
-  .push-up      { @apply -mt-20; }
-  .push-left    { @apply -ml-16; }
-
-  /* Rotation & mirroring */
-  .rotate-90 { @apply transform rotate-90 origin-top-left block; }
-  .mirror-x  { @apply transform -scale-x-100 block; }
+  .silence-node       { @apply h-screen bg-white; }
+  .push-up            { @apply -mt-20; }
+  .push-left          { @apply -ml-16; }
+  .rotate-90          { @apply transform rotate-90 origin-top-left block; }
+  .mirror-x           { @apply transform -scale-x-100 block; }
 }
 
 /* ═══════════════  Typographic & Color Signifiers  ═══════════════ */
 @layer components {
-  /* Grayscale & muted color spectrum */
-  .slate   { @apply text-slate-500; }
-  .gray    { @apply text-gray-500; }
-  .zinc    { @apply text-zinc-500; }
-  .neutral { @apply text-neutral-500; }
-  .stone   { @apply text-stone-500; }
-
-  /* Vibrant color spectrum */
-  .red     { @apply text-red-500; }
-  .orange  { @apply text-orange-500; }
-  .amber   { @apply text-amber-500; }
-  .yellow  { @apply text-yellow-500; }
-  .lime    { @apply text-lime-500; }
-  .green   { @apply text-green-500; }
-  .emerald { @apply text-emerald-500; }
-  .teal    { @apply text-teal-500; }
-  .cyan    { @apply text-cyan-500; }
-  .sky     { @apply text-sky-500; }
-  .blue    { @apply text-blue-500; }
-  .indigo  { @apply text-indigo-500; }
-  .violet  { @apply text-violet-500; }
-  .purple  { @apply text-purple-500; }
-  .fuchsia { @apply text-fuchsia-500; }
-  .pink    { @apply text-pink-500; }
-  .rose    { @apply text-rose-500; }
+  .slate    { @apply text-slate-500; }
+  .gray     { @apply text-gray-500; }
+  .zinc     { @apply text-zinc-500; }
+  .neutral  { @apply text-neutral-500; }
+  .stone    { @apply text-stone-500; }
+  .red      { @apply text-red-500; }
+  .orange   { @apply text-orange-500; }
+  .amber    { @apply text-amber-500; }
+  .yellow   { @apply text-yellow-500; }
+  .lime     { @apply text-lime-500; }
+  .green    { @apply text-green-500; }
+  .emerald  { @apply text-emerald-500; }
+  .teal     { @apply text-teal-500; }
+  .cyan     { @apply text-cyan-500; }
+  .sky      { @apply text-sky-500; }
+  .blue     { @apply text-blue-500; }
+  .indigo   { @apply text-indigo-500; }
+  .violet   { @apply text-violet-500; }
+  .purple   { @apply text-purple-500; }
+  .fuchsia  { @apply text-fuchsia-500; }
+  .pink     { @apply text-pink-500; }
+  .rose     { @apply text-rose-500; }
   .blackout { @apply text-black bg-black; }
 }
 
 /* ═══════════════  Behavior, Animation, & Embeds  ═══════════════ */
 @layer components {
-  .flicker      { @apply animate-pulse; }
-  .audio-embed  { @apply my-4 block; }
-  .qr-code      { @apply my-4 block w-32 h-32; }
+  .flicker     { @apply animate-pulse; }
+  .audio-embed { @apply my-4 block; }
+  .qr-code     { @apply my-4 block w-32 h-32; }
 }
+
 /* ═══════════════  Footnote Popover & Annotation Affordances  ═══════════════ */
 @layer components {
   .annotation-ref {

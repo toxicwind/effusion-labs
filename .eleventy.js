@@ -10,12 +10,29 @@ const markdownItAttrs = require("markdown-it-attrs");
 /* ── Markdown extensions ───────────────────────────────────────────────────── */
 
 function footnotePopover(md) {
+  const defaultRender = md.renderer.rules.footnote_ref
+    || ((tokens, idx, options, env, self) => {
+         const { id } = tokens[idx].meta;
+         const n = id + 1;
+         return `<sup class="footnote-ref"><a href="#fn${n}" id="fnref${n}">[${n}]</a></sup>`;
+       });
+
   md.renderer.rules.footnote_ref = (tokens, idx, options, env, self) => {
     const { id, label = "" } = tokens[idx].meta;
+    const list = env.footnotes && env.footnotes.list;
+    if (!Array.isArray(list) || !list[id] || !Array.isArray(list[id].tokens)) {
+      return defaultRender(tokens, idx, options, env, self);
+    }
     const n = id + 1;
-    const defHtml = md.renderer.render(env.footnotes.list[id].tokens, options, env).trim();
+    const defHtml = md.renderer.render(list[id].tokens, options, env).trim();
     const refId = `fn${n}`;
-    return `<sup class="annotation-ref relative group${label ? " " + label : ""}"><a href="#fn${n}" id="fnref${n}" class="annotation-anchor px-1 text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-300 decoration-dotted" aria-describedby="popup-${refId}">[${n}]</a><span id="popup-${refId}" role="tooltip" class="annotation-popup group-hover:opacity-100 group-hover:pointer-events-auto group-focus-within:opacity-100 group-focus-within:pointer-events-auto transition pointer-events-none opacity-0 absolute left-1/2 z-50 max-w-xs -translate-x-1/2 top-7 bg-white/95 border border-gray-200 shadow-xl rounded-xl p-4 text-sm text-gray-900">${defHtml}</span></sup>`;
+    return `<sup class="annotation-ref${label ? " " + label : ""}">
+      <a href="#fn${n}" id="fnref${n}" class="annotation-anchor"
+         aria-describedby="popup-${refId}">[${n}]</a>
+      <span id="popup-${refId}" role="tooltip" class="annotation-popup">
+        ${defHtml}
+      </span>
+    </sup>`;
   };
 }
 
@@ -29,19 +46,22 @@ const inlineMacro = (name, after, toHtml) => md => {
   });
 };
 
-const audioEmbed  = inlineMacro("audio", "emphasis", src => `<audio controls class="audio-embed" src="${src}"></audio>`);
-const qrEmbed     = inlineMacro("qr", "audio", s => {
+const audioEmbed = inlineMacro("audio", "emphasis", src =>
+  `<audio controls class="audio-embed" src="${src}"></audio>`
+);
+
+const qrEmbed = inlineMacro("qr", "audio", s => {
   const src = encodeURIComponent(s);
   return `<img class="qr-code" src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${src}" alt="QR code">`;
 });
 
 function externalLinks(md) {
-  const base = md.renderer.rules.link_open || ((t, i, o, e, s) => s.renderToken(t, i, o));
-  md.renderer.rules.link_open = (t, i, o, e, s) => {
-    t[i].attrJoin("class", "external-link");
-    const nxt = t[i + 1];
+  const base = md.renderer.rules.link_open || ((tokens, idx, options, env, self) => self.renderToken(tokens, idx, options));
+  md.renderer.rules.link_open = (tokens, idx, options, env, self) => {
+    tokens[idx].attrJoin("class", "external-link");
+    const nxt = tokens[idx + 1];
     if (nxt?.type === "text") nxt.content = "↗ source";
-    return base(t, i, o, e, s);
+    return base(tokens, idx, options, env, self);
   };
 }
 
@@ -49,34 +69,47 @@ const mdItExtensions = [footnotePopover, audioEmbed, qrEmbed, externalLinks];
 
 /* ── Filters ───────────────────────────────────────────────────────────────── */
 
-const ord = n => (n % 100 >= 11 && n % 100 <= 13) ? "th" : (["th", "st", "nd", "rd"][n % 10] || "th");
+const ord = n =>
+  n % 100 >= 11 && n % 100 <= 13
+    ? "th"
+    : ["th", "st", "nd", "rd"][n % 10] || "th";
 
 const filters = {
   readableDate: (d, zone = "utc") => {
     if (!(d instanceof Date)) return "";
     const dt = DateTime.fromJSDate(d, { zone });
-    const day = dt.day;
-    return `${dt.toFormat("MMMM d")}${ord(day)}, ${dt.toFormat("yyyy")}`;
+    return `${dt.toFormat("MMMM d")}${ord(dt.day)}, ${dt.toFormat("yyyy")}`;
   },
   htmlDateString: d =>
-    d instanceof Date ? DateTime.fromJSDate(d, { zone: "utc" }).toFormat("yyyy-MM-dd") : "",
-  limit: (arr = [], n = 5) => Array.isArray(arr) ? arr.slice(0, n) : [],
+    d instanceof Date
+      ? DateTime.fromJSDate(d, { zone: "utc" }).toFormat("yyyy-MM-dd")
+      : "",
+  limit: (arr = [], n = 5) => (Array.isArray(arr) ? arr.slice(0, n) : []),
   jsonify: data => {
     if (!Array.isArray(data)) return "[]";
-    const out = data.map(page => {
-      const p = page?.inputPath;
-      if (!p) return null;
-      let raw;
-      try { raw = fs.readFileSync(p, "utf8"); }
-      catch { raw = `Error loading ${p}`; }
-      return {
-        url: page.url,
-        fileSlug: page.fileSlug,
-        inputContent: raw,
-        data: { title: page.data?.title || "", aliases: page.data?.aliases || [] }
-      };
-    }).filter(Boolean);
-    return JSON.stringify(out);
+    return JSON.stringify(
+      data
+        .map(page => {
+          const p = page?.inputPath;
+          if (!p) return null;
+          let raw;
+          try {
+            raw = fs.readFileSync(p, "utf8");
+          } catch {
+            raw = `Error loading ${p}`;
+          }
+          return {
+            url: page.url,
+            fileSlug: page.fileSlug,
+            inputContent: raw,
+            data: {
+              title: page.data?.title || "",
+              aliases: page.data?.aliases || []
+            }
+          };
+        })
+        .filter(Boolean)
+    );
   }
 };
 
@@ -89,13 +122,14 @@ const glob = d => `${baseContent}/${d}/**/*.md`;
 /* ── Shortcodes ────────────────────────────────────────────────────────────── */
 
 function specnote(variant, content, tooltip) {
-  const cls = {
+  const clsmap = {
     soft: "spec-note-soft",
     subtle: "spec-note-subtle",
     liminal: "spec-note-liminal",
     archival: "spec-note-archival",
     ghost: "spec-note-ghost"
-  }[variant] || "spec-note-soft";
+  };
+  const cls = clsmap[variant] || clsmap.soft;
   const tip = tooltip ? tooltip.replace(/"/g, "&quot;") : "";
   return `<span class="${cls}" title="${tip}">${content}</span>`;
 }
@@ -107,15 +141,22 @@ module.exports = function (eleventyConfig) {
   eleventyConfig.addPlugin(interlinker, {
     defaultLayout: "layouts/embed.njk",
     resolvingFns: new Map([
-      ["default", link => {
-        const href = link.href || link.link;
-        const label = link.title || link.name;
-        return `<a class="interlink" href="${href}">${label}</a>`;
-      }]
+      [
+        "default",
+        link => {
+          const href = link.href || link.link;
+          const label = link.title || link.name;
+          return `<a class="interlink" href="${href}">${label}</a>`;
+        }
+      ]
     ])
   });
   eleventyConfig.addPlugin(navigation);
-  eleventyConfig.addPlugin(tailwind, { input: "assets/css/tailwind.css", output: "assets/main.css", minify: true });
+  eleventyConfig.addPlugin(tailwind, {
+    input: "assets/css/tailwind.css",
+    output: "assets/main.css",
+    minify: true
+  });
 
   // Markdown library
   eleventyConfig.amendLibrary("md", md => {
@@ -129,18 +170,25 @@ module.exports = function (eleventyConfig) {
   Object.entries(filters).forEach(([k, v]) => eleventyConfig.addFilter(k, v));
 
   // Collections
-  areas.forEach(name => eleventyConfig.addCollection(name, api => api.getFilteredByGlob(glob(name))));
-  eleventyConfig.addCollection("nodes", api => api.getFilteredByGlob(areas.map(glob)));
+  areas.forEach(name =>
+    eleventyConfig.addCollection(name, api => api.getFilteredByGlob(glob(name)))
+  );
+  eleventyConfig.addCollection("nodes", api =>
+    api.getFilteredByGlob(areas.map(glob))
+  );
 
   // Assets / server
   eleventyConfig.addPassthroughCopy("src/assets");
   eleventyConfig.addPassthroughCopy({ "src/favicon.ico": "favicon.ico" });
-  eleventyConfig.setBrowserSyncConfig({ index: "index.html", server: { baseDir: "_site" } });
+  eleventyConfig.setBrowserSyncConfig({
+    index: "index.html",
+    server: { baseDir: "_site" }
+  });
 
   // Shortcodes
   eleventyConfig.addShortcode("specnote", specnote);
 
-  // Output
+  // Output config
   return {
     dir: { input: "src", output: "_site", includes: "_includes", data: "_data" },
     markdownTemplateEngine: "njk",
