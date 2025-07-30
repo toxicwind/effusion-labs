@@ -55,6 +55,23 @@
   .audio-embed  { @apply my-4 block; }
   .qr-code      { @apply my-4 block w-32 h-32; }
 }
+/* ═══════════════  Footnote Popover & Annotation Affordances  ═══════════════ */
+@layer components {
+  .annotation-ref {
+    @apply relative;
+  }
+  .annotation-anchor {
+    @apply px-1 text-blue-700 cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-300 underline decoration-dotted;
+  }
+  .annotation-popup {
+    @apply transition pointer-events-none opacity-0 absolute left-1/2 transform -translate-x-1/2 top-7
+           bg-white/95 border border-gray-200 shadow-xl rounded-xl p-4 text-sm text-gray-900 z-50;
+  }
+  .annotation-ref:hover .annotation-popup,
+  .annotation-ref:focus-within .annotation-popup {
+    @apply opacity-100 pointer-events-auto;
+  }
+}
 
 /* ═══════════════  Link Visual Affordances (ALWAYS LAST)  ═══════════════ */
 @layer components {
