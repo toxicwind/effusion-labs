@@ -9,20 +9,49 @@ const markdownItAttrs = require("markdown-it-attrs");
 
 /* ── Markdown extensions ───────────────────────────────────────────────────── */
 
+function relaxFootnoteBlockquotes(md) {
+  md.core.ruler.before("block", "relax_footnote_bq", state => {
+    const re = /(^\[\^[^\]]+]:[^\n]*\r?\n)((?:>.*(?:\r?\n|$))+)/gm;
+    state.src = state.src.replace(re, (m, head, bqs) => head + bqs.replace(/^>/gm, "    >"));
+  });
+}
+
+function inlineFootnoteDefinitions(md) {
+  const open = (tokens, idx, options, env, slf) => {
+    // map label → id after inline phase populated env.footnotes.refs
+    const label = tokens[idx].meta && tokens[idx].meta.label;
+    let id = 0;
+    if (label && env.footnotes?.refs && typeof env.footnotes.refs[":" + label] === "number") {
+      id = env.footnotes.refs[":" + label];
+    }
+    const n = id + 1;
+    env.__currentFootnoteId = n;
+    return `<div id="fn${n}" class="footnote-item footnote-local">`;
+  };
+  const close = (tokens, idx, options, env) => {
+    const n = env.__currentFootnoteId || "";
+    return ` <a href="#fnref${n}" class="footnote-backref">↩︎</a></div>\n`;
+  };
+
+  // Render the definition where it’s written:
+  md.renderer.rules.footnote_reference_open = open;
+  md.renderer.rules.footnote_reference_close = close;
+}
+
 function footnotePopover(md) {
-  const defaultRender =
+  const fallback =
     md.renderer.rules.footnote_ref ||
     ((tokens, idx) => {
-      const { id } = tokens[idx].meta;
-      const n = id + 1;
+      const { id } = tokens[idx].meta || { id: 0 };
+      const n = (id | 0) + 1;
       return `<sup class="footnote-ref"><a href="#fn${n}" id="fnref${n}">[${n}]</a></sup>`;
     });
 
   md.renderer.rules.footnote_ref = (tokens, idx, options, env, self) => {
-    const { id, label = "" } = tokens[idx].meta;
+    const { id, label = "" } = tokens[idx].meta || { id: 0, label: "" };
     const list = env.footnotes && env.footnotes.list;
     if (!Array.isArray(list) || !list[id] || !Array.isArray(list[id].tokens)) {
-      return defaultRender(tokens, idx, options, env, self);
+      return fallback(tokens, idx, options, env, self);
     }
     const n = id + 1;
     const defHtml = md.renderer.render(list[id].tokens, options, env).trim();
@@ -32,14 +61,6 @@ function footnotePopover(md) {
       <span id="popup-${refId}" role="tooltip" class="annotation-popup">${defHtml}</span>
     </sup>`;
   };
-}
-
-/* Edgecase: treat immediately-following top-level `>` lines as part of the preceding footnote */
-function relaxFootnoteBlockquotes(md) {
-  md.core.ruler.before("block", "relax_footnote_bq", state => {
-    const re = /(^\[\^[^\]]+]:[^\n]*\r?\n)((?:>.*(?:\r?\n|$))+)/gm;
-    state.src = state.src.replace(re, (m, head, bqs) => head + bqs.replace(/^>/gm, "    >"));
-  });
 }
 
 const inlineMacro =
@@ -81,8 +102,7 @@ const mdItExtensions = [footnotePopover, audioEmbed, qrEmbed, externalLinks];
 
 /* ── Filters ───────────────────────────────────────────────────────────────── */
 
-const ord = n =>
-  n % 100 >= 11 && n % 100 <= 13 ? "th" : ["th", "st", "nd", "rd"][n % 10] || "th";
+const ord = n => (n % 100 >= 11 && n % 100 <= 13 ? "th" : ["th", "st", "nd", "rd"][n % 10] || "th");
 
 const filters = {
   readableDate: (d, zone = "utc") => {
@@ -91,9 +111,7 @@ const filters = {
     return `${dt.toFormat("MMMM d")}${ord(dt.day)}, ${dt.toFormat("yyyy")}`;
   },
   htmlDateString: d =>
-    d instanceof Date
-      ? DateTime.fromJSDate(d, { zone: "utc" }).toFormat("yyyy-MM-dd")
-      : "",
+    d instanceof Date ? DateTime.fromJSDate(d, { zone: "utc" }).toFormat("yyyy-MM-dd") : "",
   limit: (arr = [], n = 5) => (Array.isArray(arr) ? arr.slice(0, n) : []),
   jsonify: data => {
     if (!Array.isArray(data)) return "[]";
@@ -165,10 +183,12 @@ module.exports = function (eleventyConfig) {
   });
 
   eleventyConfig.amendLibrary("md", md => {
-    md.use(relaxFootnoteBlockquotes);   // ensure `>` lines after a footnote belong to that footnote
-    md.use(markdownItFootnote);
+    relaxFootnoteBlockquotes(md);         // allow top-level `>` lines to belong to the footnote
+    md.use(markdownItFootnote);           // official parser
+    md.core.ruler.disable("footnote_tail"); // stop adding the bottom list entirely
+    inlineFootnoteDefinitions(md);        // render each [^n]: in-place (open/close wrappers)
     md.use(markdownItAttrs);
-    mdItExtensions.forEach(fn => fn(md));
+    mdItExtensions.forEach(fn => fn(md)); // popover refs + inline macros + link tweaks
     return md;
   });
 
