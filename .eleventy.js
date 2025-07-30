@@ -10,12 +10,13 @@ const markdownItAttrs = require("markdown-it-attrs");
 /* ── Markdown extensions ───────────────────────────────────────────────────── */
 
 function footnotePopover(md) {
-  const defaultRender = md.renderer.rules.footnote_ref
-    || ((tokens, idx, options, env, self) => {
-         const { id } = tokens[idx].meta;
-         const n = id + 1;
-         return `<sup class="footnote-ref"><a href="#fn${n}" id="fnref${n}">[${n}]</a></sup>`;
-       });
+  const defaultRender =
+    md.renderer.rules.footnote_ref ||
+    ((tokens, idx) => {
+      const { id } = tokens[idx].meta;
+      const n = id + 1;
+      return `<sup class="footnote-ref"><a href="#fn${n}" id="fnref${n}">[${n}]</a></sup>`;
+    });
 
   md.renderer.rules.footnote_ref = (tokens, idx, options, env, self) => {
     const { id, label = "" } = tokens[idx].meta;
@@ -27,27 +28,36 @@ function footnotePopover(md) {
     const defHtml = md.renderer.render(list[id].tokens, options, env).trim();
     const refId = `fn${n}`;
     return `<sup class="annotation-ref${label ? " " + label : ""}">
-      <a href="#fn${n}" id="fnref${n}" class="annotation-anchor"
-         aria-describedby="popup-${refId}">[${n}]</a>
-      <span id="popup-${refId}" role="tooltip" class="annotation-popup">
-        ${defHtml}
-      </span>
+      <a href="#fn${n}" id="fnref${n}" class="annotation-anchor" aria-describedby="popup-${refId}">[${n}]</a>
+      <span id="popup-${refId}" role="tooltip" class="annotation-popup">${defHtml}</span>
     </sup>`;
   };
 }
 
-const inlineMacro = (name, after, toHtml) => md => {
-  md.inline.ruler.after(after, name, (state, silent) => {
-    const m = state.src.slice(state.pos).match(new RegExp(`^@${name}\\(([^)]+)\\)`));
-    if (!m) return false;
-    if (!silent) state.push({ type: "html_inline", content: toHtml(m[1]) });
-    state.pos += m[0].length;
-    return true;
+/* Edgecase: treat immediately-following top-level `>` lines as part of the preceding footnote */
+function relaxFootnoteBlockquotes(md) {
+  md.core.ruler.before("block", "relax_footnote_bq", state => {
+    const re = /(^\[\^[^\]]+]:[^\n]*\r?\n)((?:>.*(?:\r?\n|$))+)/gm;
+    state.src = state.src.replace(re, (m, head, bqs) => head + bqs.replace(/^>/gm, "    >"));
   });
-};
+}
 
-const audioEmbed = inlineMacro("audio", "emphasis", src =>
-  `<audio controls class="audio-embed" src="${src}"></audio>`
+const inlineMacro =
+  (name, after, toHtml) =>
+  md => {
+    md.inline.ruler.after(after, name, (state, silent) => {
+      const m = state.src.slice(state.pos).match(new RegExp(`^@${name}\\(([^)]+)\\)`));
+      if (!m) return false;
+      if (!silent) state.push({ type: "html_inline", content: toHtml(m[1]) });
+      state.pos += m[0].length;
+      return true;
+    });
+  };
+
+const audioEmbed = inlineMacro(
+  "audio",
+  "emphasis",
+  src => `<audio controls class="audio-embed" src="${src}"></audio>`
 );
 
 const qrEmbed = inlineMacro("qr", "audio", s => {
@@ -56,7 +66,9 @@ const qrEmbed = inlineMacro("qr", "audio", s => {
 });
 
 function externalLinks(md) {
-  const base = md.renderer.rules.link_open || ((tokens, idx, options, env, self) => self.renderToken(tokens, idx, options));
+  const base =
+    md.renderer.rules.link_open ||
+    ((tokens, idx, options, env, self) => self.renderToken(tokens, idx, options));
   md.renderer.rules.link_open = (tokens, idx, options, env, self) => {
     tokens[idx].attrJoin("class", "external-link");
     const nxt = tokens[idx + 1];
@@ -70,9 +82,7 @@ const mdItExtensions = [footnotePopover, audioEmbed, qrEmbed, externalLinks];
 /* ── Filters ───────────────────────────────────────────────────────────────── */
 
 const ord = n =>
-  n % 100 >= 11 && n % 100 <= 13
-    ? "th"
-    : ["th", "st", "nd", "rd"][n % 10] || "th";
+  n % 100 >= 11 && n % 100 <= 13 ? "th" : ["th", "st", "nd", "rd"][n % 10] || "th";
 
 const filters = {
   readableDate: (d, zone = "utc") => {
@@ -102,10 +112,7 @@ const filters = {
             url: page.url,
             fileSlug: page.fileSlug,
             inputContent: raw,
-            data: {
-              title: page.data?.title || "",
-              aliases: page.data?.aliases || []
-            }
+            data: { title: page.data?.title || "", aliases: page.data?.aliases || [] }
           };
         })
         .filter(Boolean)
@@ -137,7 +144,6 @@ function specnote(variant, content, tooltip) {
 /* ── Eleventy config ───────────────────────────────────────────────────────── */
 
 module.exports = function (eleventyConfig) {
-  // Plugins
   eleventyConfig.addPlugin(interlinker, {
     defaultLayout: "layouts/embed.njk",
     resolvingFns: new Map([
@@ -158,18 +164,16 @@ module.exports = function (eleventyConfig) {
     minify: true
   });
 
-  // Markdown library
   eleventyConfig.amendLibrary("md", md => {
+    md.use(relaxFootnoteBlockquotes);   // ensure `>` lines after a footnote belong to that footnote
     md.use(markdownItFootnote);
     md.use(markdownItAttrs);
     mdItExtensions.forEach(fn => fn(md));
     return md;
   });
 
-  // Filters
   Object.entries(filters).forEach(([k, v]) => eleventyConfig.addFilter(k, v));
 
-  // Collections
   areas.forEach(name =>
     eleventyConfig.addCollection(name, api => api.getFilteredByGlob(glob(name)))
   );
@@ -177,18 +181,12 @@ module.exports = function (eleventyConfig) {
     api.getFilteredByGlob(areas.map(glob))
   );
 
-  // Assets / server
   eleventyConfig.addPassthroughCopy("src/assets");
   eleventyConfig.addPassthroughCopy({ "src/favicon.ico": "favicon.ico" });
-  eleventyConfig.setBrowserSyncConfig({
-    index: "index.html",
-    server: { baseDir: "_site" }
-  });
+  eleventyConfig.setBrowserSyncConfig({ index: "index.html", server: { baseDir: "_site" } });
 
-  // Shortcodes
   eleventyConfig.addShortcode("specnote", specnote);
 
-  // Output config
   return {
     dir: { input: "src", output: "_site", includes: "_includes", data: "_data" },
     markdownTemplateEngine: "njk",
