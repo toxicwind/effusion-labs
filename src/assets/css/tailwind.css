@@ -67,6 +67,17 @@
   }
 }
 
+
+/* Offset anchor scrolling for the sticky header height */
+html { scroll-padding-top: 5rem; } /* adjust if your header is taller (~80px) */
+
+/* Be explicit for footnote targets (anchors live on <a id="fnref…"> inside <sup>) */
+[id^="fn"], [id^="fnref"],
+.footnote-item, .annotation-anchor, .footnote-local {
+  scroll-margin-top: 5rem; /* same value as scroll-padding-top */
+}
+
+
 /* ═══════════════  Link Visual Affordances (ALWAYS LAST)  ═══════════════ */
 @layer components {
   .interlink::before {
