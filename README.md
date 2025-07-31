@@ -21,6 +21,8 @@ The site supports bidirectional linking, knowledge-graph visualisation, and cont
 * **Site generator**: Eleventy  
 * **Bidirectional linking**: [`@photogabble/eleventy-plugin-interlinker`](https://github.com/photogabble/eleventy-plugin-interlinker)  
 * **Styling**: Tailwind CSS via [`eleventy-plugin-tailwindcss-4`  ](https://github.com/dwkns/eleventy-plugin-tailwindcss-4)
+* **Syntax highlighting**: [`@11ty/eleventy-plugin-syntaxhighlight`](https://github.com/11ty/eleventy-plugin-syntaxhighlight)
+* **Sitemap generation**: [`@quasibit/eleventy-plugin-sitemap`](https://github.com/quasibit/eleventy-plugin-sitemap)
 * **Graph view**: [`vis-network`](https://visjs.org/)
 
 ---
@@ -84,6 +86,12 @@ Opening `/map/` reveals how Sparks, Concepts, Projects, and Meta documents inter
 ## RSS feed
 
 A site-wide feed is available at `/feed.xml` for following updates in your preferred reader.
+
+---
+
+## Sitemap
+
+An automatically generated sitemap is produced at `/sitemap.xml` to help search engines discover content.
 
 ---
 
