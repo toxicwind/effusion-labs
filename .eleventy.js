@@ -3,7 +3,7 @@ const markdownItAttrs = require('markdown-it-attrs');
 
 const getPlugins = require('./lib/plugins');
 const filters = require('./lib/filters');
-const { mdItExtensions } = require('./lib/markdown-extensions');
+const { mdItExtensions } = require('./lib/markdown');
 const { specnote } = require('./lib/shortcodes');
 const fs = require('fs');
 const postcss = require('postcss');
