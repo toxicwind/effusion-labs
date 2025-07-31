@@ -1,17 +1,17 @@
 # AGENTS.md — Repository Conventions (Advisory, Emergent, npm-enabled)
 
-This file provides **signals** to coding agents (e.g., OpenAI Codex / ARACA). It is advisory, not authoritative.   
-System / task instructions and executable configuration files outrank this document.
+This file provides **signals** to coding agents (e.g., OpenAI Codex / ARACA). It is authoritative.
 
 ---
 
 ## 0) Scope & Precedence
-* **Scope:** Applies to the directory tree rooted at this file. A deeper `AGENTS.md` may override it for its subtree.  
+* **Scope:** Applies to the directory tree rooted at this file. 
 * **Precedence (high → low):**  
-  1. System / task-level instructions.  
-  2. Executable truth in build / test / type-check configs (`package.json` scripts, `Makefile`, `pyproject.toml`, `tox.ini`, `go.mod`, `Cargo.toml`, `tsconfig.json`, `.tool-versions`, etc.).  
-  3. **This AGENTS.md** (advisory).  
-  4. Other docs (README, comments, commit messages).  
+  1. User Instruction
+  2. System / task-level instructions.  
+  3. Executable truth in build / test / type-check configs (`package.json` scripts, `Makefile`, `pyproject.toml`, `tox.ini`, `go.mod`, `Cargo.toml`, `tsconfig.json`, `.tool-versions`, etc.).  
+  4. **This AGENTS.md** (advisory).  
+  5. Other docs (README, comments, commit messages).  
 * **Conflict rule:** If this file conflicts with configs, prefer the configs. If it conflicts with the active system / task, prefer the system / task.
 
 ---

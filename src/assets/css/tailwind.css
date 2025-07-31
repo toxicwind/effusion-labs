@@ -202,45 +202,42 @@
     }
   }
 }
-/* ═══════════════  Enhanced Footnote Local / Endnote Styling  ═══════════════ */
+
+/* ——— Unified Footnote Aside + Local + Explanation ——— */
 @layer components {
-  /* Local footnote container - matches JavaScript output */
-  .footnote-local {
-    @apply my-4 text-sm leading-snug text-gray-800 border-l-4 border-blue-200 
-           pl-4 bg-blue-50/30 rounded-r-md py-2;
+  /* Container that wraps definition + explanation */
+  .footnote-aside {
+    @apply my-8 text-sm leading-relaxed bg-gray-50 border-l-4 border-gray-300
+           rounded-lg p-4;
   }
-  
-  /* Enhanced content structure within local footnotes */
-  .footnote-local .footnote-content {
-    @apply mb-2;
+
+  /* Inner “local” wrapper for the citation */
+  .footnote-aside .footnote-local {
+    @apply flex justify-between items-start mb-3;
   }
-  
-  /* First paragraph: summary/title of footnote */
-  .footnote-local .footnote-content > p:first-child {
-    @apply mb-2 font-medium text-gray-900;
+
+  /* The actual citation content */
+  .footnote-aside .footnote-content > p {
+    @apply m-0 font-medium text-gray-900;
   }
-  
-  /* Enhanced spacing between summary and blockquote */
-  .footnote-local .footnote-content > p + blockquote {
-    @apply mt-3 pl-3 border-l-2 border-gray-300 bg-gray-50 rounded-md py-2;
+
+  /* Back-reference link */
+  .footnote-aside .footnote-backref {
+    @apply ml-2 text-gray-500 text-xs no-underline hover:text-gray-700
+           transition-colors;
   }
-  
-  /* Tighten blockquote paragraphs */
-  .footnote-local .footnote-content blockquote p {
-    @apply my-1 text-gray-700;
+
+  /* Explanatory blockquote */
+  .footnote-aside .footnote-explanation {
+    @apply mb-0 pl-4 border-l-2 border-dashed border-gray-300 text-gray-700;
   }
-  
-  /* Source paragraph styling in local footnotes */
-  .footnote-local .footnote-source {
-    @apply text-xs text-gray-500 mt-2 pt-2 border-t border-gray-200 font-medium;
-  }
-  
-  /* Enhanced backref styling */
-  .footnote-backref {
-    @apply ml-2 text-gray-400 text-xs no-underline hover:text-gray-700 
-           transition-colors inline-flex items-center;
+
+  /* Footer inside the explanation */
+  .footnote-aside .footnote-explanation footer {
+    @apply mt-2 pt-2 border-t border-gray-200 text-xs text-gray-500;
   }
 }
+
 
 /* ═══════════════  Standard Footnote Enhancement (for hybrid compatibility)  ═══════════════ */
 @layer components {
