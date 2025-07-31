@@ -55,6 +55,9 @@ module.exports = function(eleventyConfig) {
   // Copy raw Tailwind source for direct inspection
   eleventyConfig.addPassthroughCopy({ 'src/assets/css': 'assets/css' });
   eleventyConfig.addPassthroughCopy({ 'src/favicon.ico': 'favicon.ico' });
+  eleventyConfig.addPassthroughCopy({
+    'node_modules/lucide/dist/umd/lucide.min.js': 'assets/js/lucide.min.js'
+  });
 
   eleventyConfig.setBrowserSyncConfig({
     index: 'index.html',
