@@ -4,7 +4,9 @@
   "description": "This is a digital studio and knowledge base for Effusion Labs, built with Eleventy and the powerful `@photogabble/eleventy-plugin-interlinker`.",
   "main": "index.js",
   "scripts": {
-    "test": "node --test"
+    "test": "node --test",
+    "build": "npx @11ty/eleventy",
+    "dev": "npx @11ty/eleventy --serve"
   },
   "keywords": [],
   "author": "",
@@ -17,11 +19,13 @@
     "@photogabble/eleventy-plugin-interlinker": "^1.1.0",
     "luxon": "^3.6.1",
     "markdown-it": "^14.1.0",
-    "markdown-it-footnote": "^4.0.0"
+    "markdown-it-footnote": "^4.0.0",
+    "@11ty/eleventy-plugin-rss": "^2.0.4"
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.16",
     "autoprefixer": "^10.4.21",
+    "daisyui": "^4.10.1",
     "eleventy-plugin-tailwindcss-4": "^2.0.1",
     "markdown-it-attrs": "^4.3.1",
     "postcss": "^8.5.6",
