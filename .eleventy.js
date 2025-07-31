@@ -7,9 +7,27 @@ const tailwind = require('eleventy-plugin-tailwindcss-4');
 const markdownItFootnote = require('markdown-it-footnote');
 const markdownItAttrs = require('markdown-it-attrs');
 
-/* ── Markdown-it extensions ───────────────────────────────────────────────── */
+/* ── Enhanced Footnote System ──────────────────────────────────────────────── */
+
 function hybridFootnoteDefinitions(md) {
-  // Override how footnotes are opened and closed
+  // Store original renderers instead of nullifying them
+  const originalFootnoteOpen = md.renderer.rules.footnote_open || function(tokens, idx, options, env, slf) {
+    let id = slf.rules.footnote_anchor_name(tokens, idx, options, env, slf);
+    if (tokens[idx].meta.subId > 0) id += `:${tokens[idx].meta.subId}`;
+    return `<li id="fn${id}" class="footnote-item">`;
+  };
+
+  const originalFootnoteClose = md.renderer.rules.footnote_close || function() {
+    return '</li>\n';
+  };
+
+  const originalFootnoteAnchor = md.renderer.rules.footnote_anchor || function(tokens, idx, options, env, slf) {
+    let id = slf.rules.footnote_anchor_name(tokens, idx, options, env, slf);
+    if (tokens[idx].meta.subId > 0) id += `:${tokens[idx].meta.subId}`;
+    return ` <a href="#fnref${id}" class="footnote-backref">\u21a9\uFE0E</a>`;
+  };
+
+  // Override footnote definition rendering for local display
   md.renderer.rules.footnote_reference_open = (tokens, idx, _opts, env) => {
     const label = tokens[idx].meta?.label;
     const id = label && env.footnotes?.refs?.hasOwnProperty(':' + label)
@@ -18,78 +36,85 @@ function hybridFootnoteDefinitions(md) {
     const n = id + 1;
     env.__currentFootnoteId = n;
 
-    // Start container with inner .footnote-content
+    // Create local footnote container
     return `<div id="fn${n}" class="footnote-local"><div class="footnote-content">`;
   };
 
   md.renderer.rules.footnote_reference_close = (_t, _i, _o, env) =>
     `</div> <a href="#fnref${env.__currentFootnoteId}" class="footnote-backref">↩︎</a></div>\n`;
 
-  // Override footnote rendering for content
-  const defaultFootnoteInner = md.renderer.renderToken.bind(md.renderer);
+  // Preserve block structure but modify for hybrid display
+  md.renderer.rules.footnote_block_open = () => '<section class="footnotes-hybrid">\n';
+  md.renderer.rules.footnote_block_close = () => '</section>\n';
 
-  md.renderer.rules.footnote_block_open = () => '';
-  md.renderer.rules.footnote_block_close = () => '';
-
-  // Postprocess footnote tokens to detect "Source:" lines
-  md.renderer.rules.footnote_open = (tokens, idx, options, env, self) => {
-    return ''; // already handled in reference_open
+  // Use original renderers for standard footnote items with enhanced styling
+  md.renderer.rules.footnote_open = function(tokens, idx, options, env, slf) {
+    const original = originalFootnoteOpen(tokens, idx, options, env, slf);
+    return original.replace('class="footnote-item"', 'class="footnote-item footnote-enhanced"');
   };
 
-  md.renderer.rules.footnote_close = (tokens, idx, options, env, self) => {
-    return ''; // handled in reference_close
-  };
-
-  md.renderer.rules.footnote_anchor = () => '';
-
-  // Override how footnote body tokens are rendered
-  md.renderer.rules.footnote_body_open = () => '';
-  md.renderer.rules.footnote_body_close = () => '';
-
-  // Process individual tokens in footnote content
-  md.renderer.rules.footnote_caption = () => ''; // skip captions, we use numbers
+  md.renderer.rules.footnote_close = originalFootnoteClose;
+  md.renderer.rules.footnote_anchor = originalFootnoteAnchor;
 
   // Postprocess content: detect "Source:" and auto-split
-  md.renderer.renderFootnoteTokens = function(tokens, options, env) {
-    const html = md.renderer.render(tokens, options, env);
-
-    // Automatically split "Source:" into its own paragraph with class
-    return html.replace(
-      /(?:^|\n)<p>\s*Source:/g,
-      '\n<p class="footnote-source">Source:'
+  const originalRender = md.renderer.render.bind(md.renderer);
+  md.renderer.render = function(tokens, options, env) {
+    let html = originalRender(tokens, options, env);
+    
+    // Auto-split "Source:" in footnote content
+    html = html.replace(
+      /(<div class="footnote-content">[\s\S]*?)<p>\s*Source:/g,
+      '$1<p class="footnote-source">Source:'
     );
+    
+    return html;
   };
 }
 
-
 function footnotePopover(md) {
-  // Capture the original renderer (with its expected signature)
-  const fallback = md.renderer.rules.footnote_ref || function(tokens, idx, options, env, self) {
-    // Delegate back to the core renderer if nothing else
-    return render_footnote_ref(tokens, idx, options, env, self);
-  };
+  // Store the original footnote_ref renderer from markdown-it-footnote
+  const originalFootnoteRef = md.renderer.rules.footnote_ref;
+  
+  if (!originalFootnoteRef) {
+    console.warn('footnotePopover: No original footnote_ref renderer found');
+    return;
+  }
 
-  // Override with exactly 5 params, and call fallback with them
+  // Enhance the original renderer with popover functionality
   md.renderer.rules.footnote_ref = function(tokens, idx, options, env, self) {
     const { id, label = "" } = tokens[idx].meta || {};
     const list = env.footnotes && env.footnotes.list;
+    
+    // If no footnote content available for popover, use original renderer
     if (!Array.isArray(list) || !list[id]?.tokens) {
-      // Pass all five arguments into fallback
-      return fallback(tokens, idx, options, env, self);
+      return originalFootnoteRef(tokens, idx, options, env, self);
     }
 
     const n = id + 1;
-    const defHtml = md.renderer.render(list[id].tokens, options, env).trim();
+    let defHtml = '';
+    
+    // Render footnote content for popover
+    try {
+      defHtml = md.renderer.render(list[id].tokens, options, env).trim();
+      // Clean up the HTML for popover display
+      defHtml = defHtml.replace(/<\/?p>/g, ''); // Remove paragraph tags for inline display
+    } catch (e) {
+      // Fallback to original renderer on error
+      return originalFootnoteRef(tokens, idx, options, env, self);
+    }
+
     const refId = `fn${n}`;
 
     return `<sup class="annotation-ref${label ? " " + label : ""}">
-      <a href="#fn${n}" id="fnref${n}"
+      <a href="#fn${n}" id="fnref${n}" 
          class="annotation-anchor"
          aria-describedby="popup-${refId}">[${n}]</a>
       <span id="popup-${refId}" role="tooltip" class="annotation-popup">${defHtml}</span>
     </sup>`;
   };
 }
+
+/* ── Inline Macro Extensions ───────────────────────────────────────────────── */
 
 const inlineMacro = (name, after, toHtml) => md => {
   md.inline.ruler.after(after, name, (state, silent) => {
@@ -100,7 +125,11 @@ const inlineMacro = (name, after, toHtml) => md => {
     return true;
   });
 };
-const audioEmbed = inlineMacro('audio', 'emphasis', src => `<audio controls class="audio-embed" src="${src}"></audio>`);
+
+const audioEmbed = inlineMacro('audio', 'emphasis', src => 
+  `<audio controls class="audio-embed" src="${src}"></audio>`
+);
+
 const qrEmbed = inlineMacro('qr', 'audio', s => {
   const src = encodeURIComponent(s);
   return `<img class="qr-code" src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${src}" alt="QR code">`;
@@ -143,8 +172,21 @@ const filters = {
     if (!Array.isArray(data)) return '[]';
     return JSON.stringify(data.map(page => {
       const p = page?.inputPath; if (!p) return null;
-      let raw; try { raw = fs.readFileSync(p,'utf8'); } catch { raw = `Error loading ${p}`; }
-      return { url:page.url, fileSlug:page.fileSlug, inputContent:raw, data:{ title:page.data?.title||'', aliases:page.data?.aliases||[] } };
+      let raw; 
+      try { 
+        raw = fs.readFileSync(p,'utf8'); 
+      } catch { 
+        raw = `Error loading ${p}`; 
+      }
+      return { 
+        url: page.url, 
+        fileSlug: page.fileSlug, 
+        inputContent: raw, 
+        data: { 
+          title: page.data?.title || '', 
+          aliases: page.data?.aliases || [] 
+        } 
+      };
     }).filter(Boolean));
   }
 };
@@ -158,39 +200,116 @@ const glob = d => `${baseContent}/${d}/**/*.md`;
 /* ── Shortcodes ────────────────────────────────────────────────────────────── */
 
 function specnote(variant, content, tooltip) {
-  const cls = { soft:'spec-note-soft', subtle:'spec-note-subtle', liminal:'spec-note-liminal', archival:'spec-note-archival', ghost:'spec-note-ghost' }[variant] || 'spec-note-soft';
-  return `<span class="${cls}" title="${tooltip?.replace(/"/g,'&quot;')||''}">${content}</span>`;
+  const cls = { 
+    soft: 'spec-note-soft', 
+    subtle: 'spec-note-subtle', 
+    liminal: 'spec-note-liminal', 
+    archival: 'spec-note-archival', 
+    ghost: 'spec-note-ghost' 
+  }[variant] || 'spec-note-soft';
+  
+  const safeTooltip = tooltip?.replace(/"/g,'&quot;') || '';
+  return `<span class="${cls}" title="${safeTooltip}">${content}</span>`;
 }
 
-/* ── Eleventy config ───────────────────────────────────────────────────────── */
+/* ── Eleventy Configuration ────────────────────────────────────────────────── */
 
 module.exports = function(eleventyConfig) {
-  [
-    [ interlinker, { defaultLayout:'layouts/embed.njk', resolvingFns:new Map([['default', link=>{ const href=link.href||link.link; const label=link.title||link.name; return `<a class="interlink" href="${href}">${label}</a>` }]]) } ],
+  // Plugin Configuration
+  const plugins = [
+    [ 
+      interlinker, 
+      { 
+        defaultLayout: 'layouts/embed.njk', 
+        resolvingFns: new Map([
+          ['default', link => { 
+            const href = link.href || link.link; 
+            const label = link.title || link.name; 
+            return `<a class="interlink" href="${href}">${label}</a>`;
+          }]
+        ]) 
+      } 
+    ],
     [ navigation ],
-    [ tailwind, { input:'assets/css/tailwind.css', output:'assets/main.css', minify:true } ]
-  ].forEach(([plugin, opts={}] ) => eleventyConfig.addPlugin(plugin, opts));
+    [ 
+      tailwind, 
+      { 
+        input: 'assets/css/tailwind.css', 
+        output: 'assets/main.css', 
+        minify: true 
+      } 
+    ]
+  ];
 
+  plugins.forEach(([plugin, opts = {}]) => eleventyConfig.addPlugin(plugin, opts));
+
+  // Markdown Configuration with Enhanced Footnotes
   eleventyConfig.amendLibrary('md', md => {
+    // Apply standard markdown-it plugins first
     md.use(markdownItFootnote);
     md.use(markdownItAttrs);
-    md.core.ruler.disable('footnote_tail');
-    mdItExtensions.forEach(fn => fn(md));
+    
+    // CRITICAL: Don't disable footnote_tail - it's essential for footnote processing
+    // The original issue was caused by: md.core.ruler.disable('footnote_tail');
+    
+    // Apply our enhanced footnote extensions
+    mdItExtensions.forEach(fn => {
+      try {
+        fn(md);
+      } catch (error) {
+        console.error(`Error applying markdown extension: ${error.message}`);
+      }
+    });
+    
     return md;
   });
 
-  Object.entries(filters).forEach(([k,v]) => eleventyConfig.addFilter(k, v));
-  areas.forEach(name => eleventyConfig.addCollection(name, api => api.getFilteredByGlob(glob(name))));
-  eleventyConfig.addCollection('nodes', api => api.getFilteredByGlob(areas.map(glob)));
+  // Filter Registration
+  Object.entries(filters).forEach(([key, value]) => {
+    eleventyConfig.addFilter(key, value);
+  });
+
+  // Collection Configuration
+  areas.forEach(name => {
+    eleventyConfig.addCollection(name, api => api.getFilteredByGlob(glob(name)));
+  });
+  
+  eleventyConfig.addCollection('nodes', api => 
+    api.getFilteredByGlob(areas.map(glob))
+  );
+
+  // Asset and File Handling
   eleventyConfig.addPassthroughCopy('src/assets');
-  eleventyConfig.addPassthroughCopy({ 'src/favicon.ico':'favicon.ico' });
-  eleventyConfig.setBrowserSyncConfig({ index:'index.html', server:{ baseDir:'_site' } });
+  eleventyConfig.addPassthroughCopy({ 'src/favicon.ico': 'favicon.ico' });
+
+  // Browser Sync Configuration
+  eleventyConfig.setBrowserSyncConfig({ 
+    index: 'index.html', 
+    server: { baseDir: '_site' } 
+  });
+
+  // Shortcode Registration
   eleventyConfig.addShortcode('specnote', specnote);
 
+  // Error Handling for Development
+  eleventyConfig.on('eleventy.before', () => {
+    console.log('🚀 Eleventy build starting with enhanced footnote system...');
+  });
+
+  eleventyConfig.on('eleventy.after', ({ results }) => {
+    console.log(`✅ Eleventy build completed. Generated ${results.length} files.`);
+  });
+
+  // Return Configuration Object
   return {
-    dir: { input:'src', output:'_site', includes:'_includes', data:'_data' },
-    markdownTemplateEngine:'njk',
-    htmlTemplateEngine:'njk',
-    pathPrefix:'/'
+    dir: { 
+      input: 'src', 
+      output: '_site', 
+      includes: '_includes', 
+      data: '_data' 
+    },
+    markdownTemplateEngine: 'njk',
+    htmlTemplateEngine: 'njk',
+    pathPrefix: '/'
   };
 };
