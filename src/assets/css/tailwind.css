@@ -1,5 +1,7 @@
 @config "../../../tailwind.config.cjs";
 @import "tailwindcss";
+@plugin "daisyui";
+@plugin "@tailwindcss/typography";
 @import "@11ty/eleventy-plugin-syntaxhighlight/dist/prism.css";
 
 /* ═══════════════  Core Affordance & Meta Utilities  ═══════════════ */
