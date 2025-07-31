@@ -21,6 +21,7 @@ The site supports bidirectional linking, knowledge-graph visualisation, and cont
 * **Site generator**: Eleventy  
 * **Bidirectional linking**: [`@photogabble/eleventy-plugin-interlinker`](https://github.com/photogabble/eleventy-plugin-interlinker)  
 * **Styling**: Tailwind CSS v4 compiled with PostCSS and [daisyUI](https://daisyui.com) v5 components
+* **PostCSS config**: plugins are loaded via `lib/postcssPlugins.js` for reuse
 * **Syntax highlighting**: [`@11ty/eleventy-plugin-syntaxhighlight`](https://github.com/11ty/eleventy-plugin-syntaxhighlight)
 * **Sitemap generation**: [`@quasibit/eleventy-plugin-sitemap`](https://github.com/quasibit/eleventy-plugin-sitemap)
 * **Graph view**: [`vis-network`](https://visjs.org/)
