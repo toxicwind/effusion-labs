@@ -8,6 +8,9 @@
     "build": "npx @11ty/eleventy",
     "dev": "npx @11ty/eleventy --serve"
   },
+  "engines": {
+    "node": ">=20"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",

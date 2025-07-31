@@ -4,6 +4,7 @@ const markdownItAttrs = require('markdown-it-attrs');
 const getPlugins = require('./lib/plugins');
 const filters = require('./lib/filters');
 const { mdItExtensions } = require('./lib/markdown-extensions');
+const { specnote } = require('./lib/shortcodes');
 const fs = require('fs');
 const postcss = require('postcss');
 
@@ -11,18 +12,6 @@ const baseContent = 'src/content';
 const areas = ['sparks','concepts','projects','meta'];
 const glob = d => `${baseContent}/${d}/**/*.md`;
 
-function specnote(variant, content, tooltip) {
-  const cls = {
-    soft: 'spec-note-soft',
-    subtle: 'spec-note-subtle',
-    liminal: 'spec-note-liminal',
-    archival: 'spec-note-archival',
-    ghost: 'spec-note-ghost'
-  }[variant] || 'spec-note-soft';
-
-  const safeTooltip = tooltip?.replace(/"/g,'&quot;') || '';
-  return `<span class="${cls}" title="${safeTooltip}">${content}</span>`;
-}
 
 module.exports = function(eleventyConfig) {
   const plugins = getPlugins();
