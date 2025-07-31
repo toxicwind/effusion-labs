@@ -22,3 +22,12 @@ test('footnotes are not appended to the end of the document', () => {
   const html = md.render('hi[^1]\n\n[^1]: there');
   assert.ok(!html.includes('<section class="footnotes">'));
 });
+
+test('blockquote lines in footnotes preserve line breaks', () => {
+  const md = markdownIt();
+  md.use(markdownItFootnote);
+  md.use(markdownItAttrs);
+  mdItExtensions.forEach(fn => fn(md));
+  const html = md.render('hi[^1]\n\n[^1]: foo\n> bar\n> baz');
+  assert.ok(html.includes('bar<br'));
+});
