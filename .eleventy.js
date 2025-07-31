@@ -19,7 +19,8 @@ function relaxFootnoteBlockquotes(md) {
   });
 }
 
-function inlineFootnoteDefinitions(md) {
+function hybridFootnoteDefinitions(md) {
+  // Override how footnotes are opened and closed
   md.renderer.rules.footnote_reference_open = (tokens, idx, _opts, env) => {
     const label = tokens[idx].meta?.label;
     const id = label && env.footnotes?.refs?.hasOwnProperty(':' + label)
@@ -27,11 +28,50 @@ function inlineFootnoteDefinitions(md) {
       : 0;
     const n = id + 1;
     env.__currentFootnoteId = n;
-    return `<div id="fn${n}" class="footnote-local">`;
+
+    // Start container with inner .footnote-content
+    return `<div id="fn${n}" class="footnote-local"><div class="footnote-content">`;
   };
+
   md.renderer.rules.footnote_reference_close = (_t, _i, _o, env) =>
-    ` <a href="#fnref${env.__currentFootnoteId}" class="footnote-backref">↩︎</a></div>\n`;
+    `</div> <a href="#fnref${env.__currentFootnoteId}" class="footnote-backref">↩︎</a></div>\n`;
+
+  // Override footnote rendering for content
+  const defaultFootnoteInner = md.renderer.renderToken.bind(md.renderer);
+
+  md.renderer.rules.footnote_block_open = () => '';
+  md.renderer.rules.footnote_block_close = () => '';
+
+  // Postprocess footnote tokens to detect "Source:" lines
+  md.renderer.rules.footnote_open = (tokens, idx, options, env, self) => {
+    return ''; // already handled in reference_open
+  };
+
+  md.renderer.rules.footnote_close = (tokens, idx, options, env, self) => {
+    return ''; // handled in reference_close
+  };
+
+  md.renderer.rules.footnote_anchor = () => '';
+
+  // Override how footnote body tokens are rendered
+  md.renderer.rules.footnote_body_open = () => '';
+  md.renderer.rules.footnote_body_close = () => '';
+
+  // Process individual tokens in footnote content
+  md.renderer.rules.footnote_caption = () => ''; // skip captions, we use numbers
+
+  // Postprocess content: detect "Source:" and auto-split
+  md.renderer.renderFootnoteTokens = function(tokens, options, env) {
+    const html = md.renderer.render(tokens, options, env);
+
+    // Automatically split "Source:" into its own paragraph with class
+    return html.replace(
+      /(?:^|\n)<p>\s*Source:/g,
+      '\n<p class="footnote-source">Source:'
+    );
+  };
 }
+
 
 function footnotePopover(md) {
   // Capture the original renderer (with its expected signature)
@@ -90,7 +130,7 @@ function externalLinks(md) {
 
 const mdItExtensions = [
   relaxFootnoteBlockquotes,
-  inlineFootnoteDefinitions,
+  hybridFootnoteDefinitions,
   footnotePopover,
   audioEmbed,
   qrEmbed,

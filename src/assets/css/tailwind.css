@@ -87,6 +87,37 @@
   }
 }
 
+/* ═══════════════  Footnote Local / Endnote Styling  ═══════════════ */
+@layer components {
+  .footnote-local {
+    @apply my-4 text-sm leading-snug text-gray-800;
+  }
+
+  /* First paragraph: summary/title of footnote */
+  .footnote-local > p:first-child {
+    @apply mb-1;
+  }
+
+  /* Add spacing between summary and blockquote (your 3-line style) */
+  .footnote-local > p + blockquote {
+    @apply mt-2 pl-3 border-l-2 border-gray-300 bg-gray-50 rounded-md;
+  }
+
+  /* Tighten blockquote paragraphs */
+  .footnote-local blockquote p {
+    @apply my-1;
+  }
+
+  /* Optional: style the backref (↩︎) */
+  .footnote-backref {
+    @apply ml-1 text-gray-400 text-xs no-underline;
+  }
+  .footnote-backref:hover {
+    @apply text-gray-700;
+  }
+}
+
+
 /* ═══════════════  Link Visual Affordances (ALWAYS LAST)  ═══════════════ */
 @layer components {
   .interlink::before {
