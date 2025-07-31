@@ -8,17 +8,6 @@ const markdownItFootnote = require('markdown-it-footnote');
 const markdownItAttrs = require('markdown-it-attrs');
 
 /* ── Markdown-it extensions ───────────────────────────────────────────────── */
-
-function relaxFootnoteBlockquotes(md) {
-  md.core.ruler.before('block', 'relax_footnote_bq', state => {
-    const re = /(^\[\^[^\]]+]:[^\n]*\r?\n)((?:>.*(?:\r?\n|$))+)/gm;
-    state.src = state.src.replace(
-      re,
-      (m, head, bqs) => head + bqs.replace(/^>/gm, '    >')
-    );
-  });
-}
-
 function hybridFootnoteDefinitions(md) {
   // Override how footnotes are opened and closed
   md.renderer.rules.footnote_reference_open = (tokens, idx, _opts, env) => {
