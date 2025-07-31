@@ -1,5 +1,6 @@
 @config "../../../tailwind.config.cjs";
 @import "tailwindcss";
+@import "@11ty/eleventy-plugin-syntaxhighlight/dist/prism.css";
 
 /* ═══════════════  Core Affordance & Meta Utilities  ═══════════════ */
 @layer components {

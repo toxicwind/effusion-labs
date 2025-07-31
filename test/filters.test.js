@@ -1,4 +1,4 @@
-const { readableDate, htmlDateString, limit, jsonify, readingTime } = require('../lib/filters');
+const { readableDate, htmlDateString, limit, jsonify, readingTime, slugify } = require('../lib/filters');
 const assert = require('node:assert');
 const { test } = require('node:test');
 
@@ -31,4 +31,9 @@ test('jsonify serializes pages', () => {
 test('readingTime estimates minutes', () => {
   const text = 'word '.repeat(450);
   assert.strictEqual(readingTime(text), '3 min read');
+});
+
+test('slugify generates URL-friendly strings', () => {
+  assert.strictEqual(slugify('Hello World!'), 'hello-world');
+  assert.strictEqual(slugify(' Multi   Space '), 'multi-space');
 });
