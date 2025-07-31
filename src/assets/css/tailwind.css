@@ -105,7 +105,7 @@
   /* Mobile-responsive popover positioning */
   @media (max-width: 640px) {
     .annotation-popup {
-      @apply left-0 transform-none max-w-[280px] fixed top-auto bottom-4 right-4;
+      @apply fixed inset-x-4 bottom-4 mx-auto transform-none max-w-[90vw];
     }
   }
 }
