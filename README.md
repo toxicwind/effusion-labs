@@ -57,18 +57,12 @@ The bundled `nginx.conf` serves static assets with cache headers and falls back 
 Key customisation is in `.eleventy.js`:
 
 ```js
-const interlinker = require("@photogabble/eleventy-plugin-interlinker");
-const navigation  = require("@11ty/eleventy-navigation");
-const tailwind    = require("eleventy-plugin-tailwindcss-4");
+const getPlugins = require("./lib/plugins");
+const filters    = require("./lib/filters");
 
 module.exports = eleventyConfig => {
-  eleventyConfig.addPlugin(interlinker, { defaultLayout: "layouts/embed.njk" });
-  eleventyConfig.addPlugin(navigation);
-  eleventyConfig.addPlugin(tailwind, {
-    input : "assets/css/tailwind.css",
-    output: "assets/main.css",
-    minify: true
-  });
+  getPlugins().forEach(([plugin, opts]) => eleventyConfig.addPlugin(plugin, opts));
+  Object.entries(filters).forEach(([name, fn]) => eleventyConfig.addFilter(name, fn));
 
   ["sparks", "concepts", "projects", "meta"].forEach(group =>
     eleventyConfig.addCollection(group, api =>
