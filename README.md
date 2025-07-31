@@ -29,7 +29,7 @@ The site supports bidirectional linking, knowledge-graph visualisation, and cont
 
 ```bash
 npm install                # install dependencies
-npx @11ty/eleventy --serve # build and watch at http://localhost:8080
+npm run dev                # build and watch at http://localhost:8080
 ````
 
 ---
@@ -78,6 +78,12 @@ module.exports = eleventyConfig => {
 
 `src/map.njk` converts Eleventy collections into a node–edge list consumed by `vis-network`.
 Opening `/map/` reveals how Sparks, Concepts, Projects, and Meta documents interconnect, enabling exploratory browsing.
+
+---
+
+## RSS feed
+
+A site-wide feed is available at `/feed.xml` for following updates in your preferred reader.
 
 ---
 

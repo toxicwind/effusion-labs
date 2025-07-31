@@ -1,4 +1,4 @@
-const { readableDate, htmlDateString, limit, jsonify } = require('../lib/filters');
+const { readableDate, htmlDateString, limit, jsonify, readingTime } = require('../lib/filters');
 const assert = require('node:assert');
 const { test } = require('node:test');
 
@@ -26,4 +26,9 @@ test('jsonify serializes pages', () => {
   const json = JSON.parse(jsonify(fake));
   assert.strictEqual(json[0].url, '/x');
   assert.ok(json[0].inputContent.includes('jsonify'));
+});
+
+test('readingTime estimates minutes', () => {
+  const text = 'word '.repeat(450);
+  assert.strictEqual(readingTime(text), '3 min read');
 });
