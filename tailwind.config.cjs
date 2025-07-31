@@ -23,6 +23,17 @@ module.exports = {
     require("daisyui")
   ],
   daisyui: {
-    themes: ["light", "dark"]
+    themes: [
+      {
+        lab: {
+          primary: "#0698e0",
+          secondary: "#60a0cd",
+          accent: "#10ea30",
+          neutral: "#1a1a1a",
+          "base-100": "#0f0f0f"
+        }
+      },
+      "dark"
+    ]
   }
 };

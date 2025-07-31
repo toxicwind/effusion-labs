@@ -20,10 +20,12 @@ The site supports bidirectional linking, knowledge-graph visualisation, and cont
 
 * **Site generator**: Eleventy  
 * **Bidirectional linking**: [`@photogabble/eleventy-plugin-interlinker`](https://github.com/photogabble/eleventy-plugin-interlinker)  
-* **Styling**: Tailwind CSS via [`eleventy-plugin-tailwindcss-4`  ](https://github.com/dwkns/eleventy-plugin-tailwindcss-4)
+* **Styling**: Tailwind CSS via [`eleventy-plugin-tailwindcss-4`  ](https://github.com/dwkns/eleventy-plugin-tailwindcss-4) with [daisyUI](https://daisyui.com) components
 * **Syntax highlighting**: [`@11ty/eleventy-plugin-syntaxhighlight`](https://github.com/11ty/eleventy-plugin-syntaxhighlight)
 * **Sitemap generation**: [`@quasibit/eleventy-plugin-sitemap`](https://github.com/quasibit/eleventy-plugin-sitemap)
 * **Graph view**: [`vis-network`](https://visjs.org/)
+
+The Tailwind setup includes [daisyUI](https://daisyui.com) with a custom theme defined in `tailwind.config.cjs`.
 
 ---
 
