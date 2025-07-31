@@ -34,19 +34,29 @@ function inlineFootnoteDefinitions(md) {
 }
 
 function footnotePopover(md) {
-  const fallback = md.renderer.rules.footnote_ref || ((t, i) => {
-    const n = (t[i].meta?.id ?? 0) + 1;
-    return `<sup class="footnote-ref"><a href="#fn${n}" id="fnref${n}">[${n}]</a></sup>`;
-  });
-  md.renderer.rules.footnote_ref = (tokens, idx, opts, env) => {
-    const { id, label = '' } = tokens[idx].meta || {};
-    const list = env.footnotes?.list;
-    if (!Array.isArray(list) || !list[id]?.tokens) return fallback(tokens, idx, opts, env);
+  // Capture the original renderer (with its expected signature)
+  const fallback = md.renderer.rules.footnote_ref || function(tokens, idx, options, env, self) {
+    // Delegate back to the core renderer if nothing else
+    return render_footnote_ref(tokens, idx, options, env, self);
+  };
+
+  // Override with exactly 5 params, and call fallback with them
+  md.renderer.rules.footnote_ref = function(tokens, idx, options, env, self) {
+    const { id, label = "" } = tokens[idx].meta || {};
+    const list = env.footnotes && env.footnotes.list;
+    if (!Array.isArray(list) || !list[id]?.tokens) {
+      // Pass all five arguments into fallback
+      return fallback(tokens, idx, options, env, self);
+    }
+
     const n = id + 1;
-    const defHtml = md.renderer.render(list[id].tokens, opts, env).trim();
+    const defHtml = md.renderer.render(list[id].tokens, options, env).trim();
     const refId = `fn${n}`;
-    return `<sup class="annotation-ref${label ? ' ' + label : ''}">
-      <a href="#fn${n}" id="fnref${n}" class="annotation-anchor" aria-describedby="popup-${refId}">[${n}]</a>
+
+    return `<sup class="annotation-ref${label ? " " + label : ""}">
+      <a href="#fn${n}" id="fnref${n}"
+         class="annotation-anchor"
+         aria-describedby="popup-${refId}">[${n}]</a>
       <span id="popup-${refId}" role="tooltip" class="annotation-popup">${defHtml}</span>
     </sup>`;
   };
