@@ -1,8 +1,8 @@
 module.exports = [
-  { url: '/', label: 'Showcase' },
-  { url: '/projects/', label: 'Projects' },
-  { url: '/concepts/', label: 'Concepts' },
-  { url: '/sparks/', label: 'Sparks' },
-  { url: '/meta/', label: 'Meta' },
-  { url: '/map/', label: 'Map' }
+  { title: 'Showcase', url: '/' },
+  { title: 'Projects', url: '/projects/' },
+  { title: 'Concepts', url: '/concepts/' },
+  { title: 'Sparks', url: '/sparks/' },
+  { title: 'Meta', url: '/meta/' },
+  { title: 'Map', url: '/map/' }
 ];

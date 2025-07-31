@@ -12,7 +12,7 @@
         </label>
         <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-40">
           {% for n in nav %}
-          <li><a href="{{ n.url }}">{{ n.label }}</a></li>
+          <li><a href="{{ n.url }}">{{ n.title }}</a></li>
           {% endfor %}
         </ul>
       </div>
@@ -20,7 +20,7 @@
     <nav class="flex-none hidden lg:flex">
       <ul class="menu menu-horizontal px-1">
         {% for n in nav %}
-        <li><a href="{{ n.url }}" class="hover:text-malachite">{{ n.label }}</a></li>
+        <li><a href="{{ n.url }}" class="hover:text-malachite">{{ n.title }}</a></li>
         {% endfor %}
       </ul>
     </nav>

@@ -4,6 +4,8 @@ const markdownItAttrs = require('markdown-it-attrs');
 const getPlugins = require('./lib/plugins');
 const filters = require('./lib/filters');
 const { mdItExtensions } = require('./lib/markdown-extensions');
+const fs = require('fs');
+const postcss = require('postcss');
 
 const baseContent = 'src/content';
 const areas = ['sparks','concepts','projects','meta'];
@@ -50,7 +52,8 @@ module.exports = function(eleventyConfig) {
     api.getFilteredByGlob(areas.map(glob))
   );
 
-  eleventyConfig.addPassthroughCopy('src/assets');
+  // Copy raw Tailwind source for direct inspection
+  eleventyConfig.addPassthroughCopy({ 'src/assets/css': 'assets/css' });
   eleventyConfig.addPassthroughCopy({ 'src/favicon.ico': 'favicon.ico' });
 
   eleventyConfig.setBrowserSyncConfig({
@@ -63,8 +66,19 @@ module.exports = function(eleventyConfig) {
   eleventyConfig.on('eleventy.before', () => {
     console.log('🚀 Eleventy build starting with enhanced footnote system...');
   });
-  eleventyConfig.on('eleventy.after', ({ results }) => {
+  eleventyConfig.on('eleventy.after', async ({ results }) => {
     console.log(`✅ Eleventy build completed. Generated ${results.length} files.`);
+
+    const inputPath = 'src/assets/css/tailwind.css';
+    const outputPath = '_site/assets/css/tailwind.css';
+    const css = fs.readFileSync(inputPath, 'utf8');
+    const result = await postcss([
+      require('@tailwindcss/postcss'),
+      require('autoprefixer')
+    ]).process(css, { from: inputPath });
+
+    fs.mkdirSync(require('path').dirname(outputPath), { recursive: true });
+    fs.writeFileSync(outputPath, result.css);
   });
 
   return {

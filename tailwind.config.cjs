@@ -1,6 +1,6 @@
 /*  tailwind.config.cjs  (CommonJS so the plugin’s require() always works) */
 module.exports = {
-  content: ["./src/**/*.{njk,md,html}"],
+  content: ["./src/**/*.{njk,md,html,js}"],
   theme: {
     extend: {
       colors: {
@@ -18,10 +18,7 @@ module.exports = {
       }
     }
   },
-  plugins: [
-    require("@tailwindcss/typography"),
-    require("daisyui")
-  ],
+  // Plugins are loaded via @plugin directives in CSS
   daisyui: {
     themes: [
       {
