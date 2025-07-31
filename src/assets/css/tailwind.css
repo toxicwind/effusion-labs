@@ -58,14 +58,27 @@
     @apply px-1 text-blue-700 cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-300 underline decoration-dotted;
   }
   .annotation-popup {
-    @apply transition pointer-events-none opacity-0 absolute left-1/2 transform -translate-x-1/2 top-7
-           bg-white/95 border border-gray-200 shadow-xl rounded-xl p-4 text-sm text-gray-900 z-50;
+    @apply whitespace-normal transition pointer-events-none opacity-0 absolute left-1/2 transform -translate-x-1/2 top-7
+           bg-white/95 border border-gray-200 shadow-xl rounded-xl p-4 text-sm text-gray-900 z-50 max-w-sm;
+  }
+  .annotation-popup p {
+    @apply mb-3;
+  }
+  .annotation-popup blockquote {
+    @apply pl-4 border-l-4 border-gray-300 italic text-gray-600 mb-3;
+  }
+  .annotation-popup a {
+    @apply text-blue-600 underline hover:text-blue-800;
+  }
+  .annotation-popup code {
+    @apply bg-gray-100 rounded px-1 py-0.5 text-xs font-mono;
   }
   .annotation-ref:hover .annotation-popup,
   .annotation-ref:focus-within .annotation-popup {
     @apply opacity-100 pointer-events-auto;
   }
 }
+
 /* ═══════════════  Footnote Targeting & Scrolling  ═══════════════ */
 @layer components {
   [id^="fn"], [id^="fnref"],
