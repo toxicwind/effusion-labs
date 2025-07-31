@@ -3,14 +3,12 @@ const markdownItAttrs = require('markdown-it-attrs');
 
 const getPlugins = require('./lib/plugins');
 const filters = require('./lib/filters');
-const { mdItExtensions } = require('./lib/markdown');
+const { applyMarkdownExtensions } = require('./lib/markdown');
 const { specnote } = require('./lib/shortcodes');
-const fs = require('fs');
-const postcss = require('postcss');
+const { CONTENT_AREAS, baseContentPath } = require('./lib/constants');
+const runPostcss = require('./lib/postcss');
 
-const baseContent = 'src/content';
-const areas = ['sparks','concepts','projects','meta'];
-const glob = d => `${baseContent}/${d}/**/*.md`;
+const glob = d => `${baseContentPath}/${d}/**/*.md`;
 
 
 module.exports = function(eleventyConfig) {
@@ -20,13 +18,7 @@ module.exports = function(eleventyConfig) {
   eleventyConfig.amendLibrary('md', md => {
     md.use(markdownItFootnote);
     md.use(markdownItAttrs);
-    mdItExtensions.forEach(fn => {
-      try {
-        fn(md);
-      } catch (error) {
-        console.error(`Error applying markdown extension: ${error.message}`);
-      }
-    });
+    applyMarkdownExtensions(md);
     return md;
   });
 
@@ -34,11 +26,11 @@ module.exports = function(eleventyConfig) {
     eleventyConfig.addFilter(key, value);
   });
 
-  areas.forEach(name => {
+  CONTENT_AREAS.forEach(name => {
     eleventyConfig.addCollection(name, api => api.getFilteredByGlob(glob(name)));
   });
   eleventyConfig.addCollection('nodes', api =>
-    api.getFilteredByGlob(areas.map(glob))
+    api.getFilteredByGlob(CONTENT_AREAS.map(glob))
   );
 
   // Copy raw Tailwind source for direct inspection
@@ -60,17 +52,7 @@ module.exports = function(eleventyConfig) {
   });
   eleventyConfig.on('eleventy.after', async ({ results }) => {
     console.log(`✅ Eleventy build completed. Generated ${results.length} files.`);
-
-    const inputPath = 'src/assets/css/tailwind.css';
-    const outputPath = '_site/assets/css/tailwind.css';
-    const css = fs.readFileSync(inputPath, 'utf8');
-    const result = await postcss([
-      require('@tailwindcss/postcss'),
-      require('autoprefixer')
-    ]).process(css, { from: inputPath });
-
-    fs.mkdirSync(require('path').dirname(outputPath), { recursive: true });
-    fs.writeFileSync(outputPath, result.css);
+    await runPostcss('src/assets/css/tailwind.css', '_site/assets/css/tailwind.css');
   });
 
   return {

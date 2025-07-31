@@ -1,8 +1,12 @@
+const { CONTENT_AREAS } = require('../../lib/constants');
+
+const areaLinks = CONTENT_AREAS.map(a => ({
+  title: a.charAt(0).toUpperCase() + a.slice(1),
+  url: `/${a}/`
+}));
+
 module.exports = [
   { title: 'Showcase', url: '/' },
-  { title: 'Projects', url: '/projects/' },
-  { title: 'Concepts', url: '/concepts/' },
-  { title: 'Sparks', url: '/sparks/' },
-  { title: 'Meta', url: '/meta/' },
+  ...areaLinks,
   { title: 'Map', url: '/map/' }
 ];
