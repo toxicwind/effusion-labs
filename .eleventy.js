@@ -129,7 +129,6 @@ function externalLinks(md) {
 }
 
 const mdItExtensions = [
-  relaxFootnoteBlockquotes,
   hybridFootnoteDefinitions,
   footnotePopover,
   audioEmbed,
