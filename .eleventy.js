@@ -1,16 +1,12 @@
 const register = require('./lib/eleventy/register');
+const { dirs } = require('./lib/config');
 
 
 module.exports = function(eleventyConfig) {
   register(eleventyConfig);
 
   return {
-    dir: {
-      input: 'src',
-      output: '_site',
-      includes: '_includes',
-      data: '_data'
-    },
+    dir: dirs,
     markdownTemplateEngine: 'njk',
     htmlTemplateEngine: 'njk',
     pathPrefix: '/'
