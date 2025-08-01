@@ -1,16 +1,17 @@
 [settings]
 idiomatic_version_file_enable_tools = ["node"]
 [tools]
-node = "20"        # always latest 20.x LTS (not 21, not 19)
-npm = "latest"     # always latest npm published to registry
+node = "20"
+npm = "latest"
+
 [tasks.build]
-cmd = "npx @11ty/eleventy"
-desc = "Build Eleventy static site"
+run = "npx @11ty/eleventy"
+description = "Build Eleventy static site"
 
 [tasks.dev]
-cmd = "npx @11ty/eleventy --serve"
-desc = "Start Eleventy dev server"
+run = "npx @11ty/eleventy --serve"
+description = "Start Eleventy dev server"
 
 [tasks.test]
-cmd = "node --test"
-desc = "Run Node.js test suite"
+run = "node --test"
+description = "Run Node.js test suite"
