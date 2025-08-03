@@ -1,0 +1,34 @@
+import { test } from 'node:test';
+import assert from 'node:assert';
+import markdownIt from 'markdown-it';
+import markdownItFootnote from 'markdown-it-footnote';
+import markdownItAttrs from 'markdown-it-attrs';
+import { mdItExtensions } from '../lib/markdown/index.js';
+
+function render(src) {
+  const md = markdownIt();
+  md.use(markdownItFootnote);
+  md.use(markdownItAttrs);
+  mdItExtensions.forEach(fn => fn(md));
+  return md.render(src);
+}
+
+test('no footnotes yields no aside', () => {
+  const html = render('plain text');
+  assert.ok(!html.includes('<aside'));
+});
+
+test('single footnote has expected structure', () => {
+  const html = render('hi[^1]\n\n[^1]: there');
+  assert.match(html, /<aside class="footnote-aside not-prose" role="note">/);
+  assert.match(html, /<div id="fn1" class="footnote-local">/);
+  assert.match(html, /class="footnote-content"/);
+  assert.match(html, /class="footnote-backref"/);
+});
+
+test('nested blockquotes close aside correctly', () => {
+  const html = render('x[^1]\n\n[^1]: outer\n> level1\n>> level2');
+  const open = (html.match(/<aside/g) || []).length;
+  const close = (html.match(/<\/aside>/g) || []).length;
+  assert.equal(open, close);
+});
