@@ -1,0 +1,11 @@
+[
+  {"step":"C0","intended":"Inventory repo assets","observed":"Inventory generated","drift":null,"repair":null,"status":"completed"}
+ ,
+{"step":"C1","intended":"Modernize PostCSS/Tailwind pipeline","observed":"Pipeline updated and build succeeds","drift":null,"repair":null,"status":"completed"}
+ ,
+{"step":"C2","intended":"Reorganize asset structure","observed":"CSS/JS moved to styles/scripts with references updated","drift":null,"repair":null,"status":"completed"}
+ ,
+{"step":"C3","intended":"Harden footnote renderer and CSS theming","observed":"Added semantic role and verified theme-aware styles","drift":null,"repair":null,"status":"completed"}
+ ,
+ {"step":"C4","intended":"Serve and test site","observed":"All tests including build, MIME, inventory, and downwind removal pass","drift":null,"repair":null,"status":"completed"}
+]

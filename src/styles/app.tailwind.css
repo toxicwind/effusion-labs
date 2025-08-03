@@ -1,4 +1,4 @@
-@config "../../../tailwind.config.cjs";
+@config "../../tailwind.config.cjs";
 @import "tailwindcss";
 @plugin "daisyui";
 @plugin "@tailwindcss/typography";
@@ -104,7 +104,7 @@
 /* ——— Footnote card (daisyUI theme + Typography tolerance + Prism-safe) ——— */
 @layer components {
   .footnote-aside{
-    @apply block w-full my-6 rounded-lg border p-4 text-[0.95rem] leading-relaxed not-prose;
+    @apply block w-full my-6 rounded-lg border p-4 text-[0.95rem] leading-relaxed;
     background-color: hsl(var(--b1));
     border-color: hsl(var(--bc)/.14);
     color: hsl(var(--bc));

@@ -1,0 +1,3 @@
+- Removed `@downwindcss/text-decoration` and migrated to native Tailwind `decoration-*` utilities. @source: [downwindcss/text-decoration](https://github.com/downwindcss/text-decoration)
+- Dropped explicit `autoprefixer` since `@tailwindcss/postcss` bundles it. @source: [Tailwind CSS Installation - PostCSS](https://tailwindcss.com/docs/installation#postcss)
+- Added `prismjs` to import `prism-tomorrow.css` theme. @source: [PrismJS Home](https://prismjs.com/)
