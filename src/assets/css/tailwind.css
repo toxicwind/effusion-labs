@@ -51,20 +51,19 @@
   .audio-embed { @apply my-4 block; }
   .qr-code     { @apply my-4 block w-32 h-32; }
 }
-
 /* ═══════════════  Enhanced Footnote Popover & Annotation System  ═══════════════ */
 @layer components {
   /* Core annotation reference container */
   .annotation-ref {
     @apply relative inline-block;
   }
-  
+
   /* Inline footnote anchor styling - matches JavaScript output */
   .annotation-anchor {
     @apply px-1 text-blue-700 cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-300 
            underline decoration-dotted hover:text-blue-900 transition-colors duration-150;
   }
-  
+
   /* Enhanced popover with improved positioning and animation */
   .annotation-popup {
     @apply absolute left-1/2 transform -translate-x-1/2 top-7 z-50 max-w-sm
@@ -73,35 +72,35 @@
            opacity-0 pointer-events-none transition-all duration-200 ease-in-out
            translate-y-1;
   }
-  
+
   /* Popover content styling */
   .annotation-popup p {
     @apply mb-3 last:mb-0;
   }
-  
+
   .annotation-popup blockquote {
     @apply pl-4 border-l-4 border-gray-300 italic text-gray-600 mb-3 bg-gray-50/50 py-2 rounded;
   }
-  
+
   .annotation-popup a {
     @apply text-blue-600 underline hover:text-blue-800 transition-colors;
   }
-  
+
   .annotation-popup code {
     @apply bg-gray-100 rounded px-1 py-0.5 text-xs font-mono text-gray-800;
   }
-  
+
   /* Source paragraph styling in popover */
   .annotation-popup .footnote-source {
     @apply text-xs text-gray-500 mt-2 pt-2 border-t border-gray-200 font-medium;
   }
-  
+
   /* Popover activation states with enhanced animation */
   .annotation-ref:hover .annotation-popup,
   .annotation-ref:focus-within .annotation-popup {
     @apply opacity-100 pointer-events-auto translate-y-0;
   }
-  
+
   /* Mobile-responsive popover positioning */
   @media (max-width: 640px) {
     .annotation-popup {
@@ -116,19 +115,19 @@
   :root {
     --header-height: 5rem; /* Conservative estimate: py-4 (2rem) + text-3xl + nav */
   }
-  
+
   /* Enhanced scroll margin for all footnote-related elements */
   [id^="fn"], [id^="fnref"],
   .footnote-item, .annotation-anchor, .footnote-local,
   .footnote-enhanced, .footnote-ref {
     scroll-margin-top: calc(var(--header-height) + 1rem);
   }
-  
+
   /* Smooth scroll behavior for footnote navigation */
   html {
     scroll-behavior: smooth;
   }
-  
+
   /* Enhanced target highlighting for footnote navigation */
   [id^="fn"]:target,
   [id^="fnref"]:target {
@@ -137,19 +136,19 @@
     animation: footnote-highlight 3s ease-in-out;
     scroll-margin-top: calc(var(--header-height) + 1rem);
   }
-  
+
   @keyframes footnote-highlight {
     0% { background-color: rgb(219 234 254 / 0.8); }
     50% { background-color: rgb(219 234 254 / 0.4); }
     100% { background-color: transparent; }
   }
-  
+
   /* Ensure footnote containers have proper positioning context */
   .footnote-local {
     position: relative;
     scroll-margin-top: calc(var(--header-height) + 1rem);
   }
-  
+
   /* Enhanced backref positioning for better targeting */
   .footnote-backref {
     @apply ml-2 text-gray-400 text-xs no-underline hover:text-gray-700 
@@ -157,30 +156,30 @@
     /* Ensure backref links maintain proper targeting */
     scroll-margin-top: calc(var(--header-height) + 1rem);
   }
-  
+
   /* Responsive header height adjustments */
   @media (max-width: 640px) {
     :root {
       --header-height: 4rem; /* Smaller header on mobile */
     }
   }
-  
+
   @media (min-width: 1280px) {
     :root {
       --header-height: 5.5rem; /* Account for larger text on XL screens */
     }
   }
-  
+
   /* Enhanced footnote section targeting */
   .footnotes-hybrid {
     scroll-margin-top: calc(var(--header-height) + 1rem);
   }
-  
+
   /* Ensure proper targeting for standard footnote lists */
   .footnotes-list li {
     scroll-margin-top: calc(var(--header-height) + 1rem);
   }
-  
+
   /* Focus management for keyboard navigation */
   [id^="fn"]:focus,
   [id^="fnref"]:focus {
@@ -188,13 +187,13 @@
     box-shadow: 0 0 0 2px rgb(96 165 250 / 0.75);
     scroll-margin-top: calc(var(--header-height) + 1rem);
   }
-  
+
   /* Accessibility: Reduced motion support */
   @media (prefers-reduced-motion: reduce) {
     html {
       scroll-behavior: auto;
     }
-    
+
     [id^="fn"]:target,
     [id^="fnref"]:target {
       animation: none;
@@ -203,41 +202,71 @@
   }
 }
 
-/* ——— Unified Footnote Aside + Local + Explanation ——— */
+/* ——— Unified Footnote Aside + Local + Explanation (with polished header) ——— */
 @layer components {
-  /* Container that wraps definition + explanation */
+  /* Card container that wraps definition + explanation */
   .footnote-aside {
-    @apply my-8 text-sm leading-relaxed bg-gray-50 border-l-4 border-gray-300
-           rounded-lg p-4;
+    @apply block w-full my-6 rounded-lg border border-gray-200 bg-gray-50 p-4 text-sm leading-relaxed;
   }
 
-  /* Inner “local” wrapper for the citation */
+  /* Header row: source + backref inline, with a subtle header bar */
   .footnote-aside .footnote-local {
-    @apply flex justify-between items-start mb-3;
+    @apply flex items-start justify-between gap-3 w-full mb-3
+           bg-gray-100/70 rounded-md px-3 py-2;
+  }
+
+  /* Ensure long titles don’t overflow the backref */
+  .footnote-aside .footnote-content {
+    @apply flex-1 min-w-0;
   }
 
   /* The actual citation content */
   .footnote-aside .footnote-content > p {
-    @apply m-0 font-medium text-gray-900;
+    @apply m-0 text-sm font-semibold text-gray-900 break-words;
   }
 
   /* Back-reference link */
   .footnote-aside .footnote-backref {
-    @apply ml-2 text-gray-500 text-xs no-underline hover:text-gray-700
+    @apply flex-none shrink-0 ml-2 text-gray-500 text-xs no-underline hover:text-gray-700
            transition-colors;
   }
 
-  /* Explanatory blockquote */
+  /* Explanatory blockquote: always a full-width next row */
   .footnote-aside .footnote-explanation {
-    @apply mb-0 pl-4 border-l-2 border-dashed border-gray-300 text-gray-700;
+    @apply block w-full clear-both mt-0 pl-4 border-l-2 border-dashed border-gray-300
+           text-gray-800 leading-relaxed;
+  }
+
+  .footnote-aside .footnote-explanation p {
+    @apply mt-0 mb-3 last:mb-0;
+  }
+
+  .footnote-aside .footnote-explanation a {
+    @apply underline text-blue-700 hover:text-blue-900 transition-colors;
   }
 
   /* Footer inside the explanation */
   .footnote-aside .footnote-explanation footer {
-    @apply mt-2 pt-2 border-t border-gray-200 text-xs text-gray-500;
+    @apply mt-3 pt-2 border-t border-gray-200 text-xs text-gray-500;
+  }
+
+  /* If this renders inside .prose without not-prose, defend against Typography overrides */
+  .prose .footnote-aside .footnote-explanation {
+    @apply block w-full clear-both pl-4 border-l-2 border-dashed border-gray-300 text-gray-800;
   }
 }
 
+/* ——— Optional compact variant (left rule, tighter look). Add class "footnote-aside--compact". ——— */
+@layer components {
+  .footnote-aside--compact {
+    @apply border-0 bg-transparent p-0 my-6;
+    @apply border-l-4 border-gray-300 pl-4; /* left rule card look */
+    background-color: transparent; /* ensure no gray fill leaks from parent themes */
+  }
+  .footnote-aside--compact .footnote-local {
+    @apply mb-2 bg-transparent px-0 py-0;
+  }
+}
 
 /* ═══════════════  Standard Footnote Enhancement (for hybrid compatibility)  ═══════════════ */
 @layer components {
@@ -245,22 +274,22 @@
   .footnotes-hybrid {
     @apply mt-8 pt-6 border-t border-gray-200;
   }
-  
+
   /* Enhanced footnote items from JavaScript renderer */
   .footnote-enhanced {
     @apply mb-3 text-sm leading-relaxed;
   }
-  
+
   /* Standard footnote list styling */
   .footnotes-list {
     @apply space-y-2;
   }
-  
+
   /* Standard footnote item enhancements */
   .footnote-item {
     @apply relative pl-2 hover:bg-gray-50 rounded transition-colors;
   }
-  
+
   /* Standard footnote reference link styling */
   .footnote-ref a {
     @apply text-blue-600 hover:text-blue-800 transition-colors;
