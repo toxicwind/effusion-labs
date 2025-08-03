@@ -5,7 +5,6 @@
 │   └── workflows
 │       └── deploy.yml
 ├── .gitignore
-├── .mise.toml
 ├── .nvmrc
 ├── .portainer
 │   ├── Dockerfile
