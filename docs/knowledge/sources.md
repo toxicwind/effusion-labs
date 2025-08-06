@@ -9,3 +9,5 @@
 - [Can I Use: AVIF](https://raw.githubusercontent.com/Fyrd/caniuse/main/features-json/avif.json) — AVIF supported in Chrome 85+, Firefox 93+, Edge 85+, Safari 16+ (retrieved 2025-08-03)
 - [Can I Use: WebP](https://raw.githubusercontent.com/Fyrd/caniuse/main/features-json/webp.json) — WebP supported in Chrome 32+, Edge 18+, Firefox 65+, Safari 14+ (retrieved 2025-08-03)
 - [MDN Responsive Images](https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images) — explains using `<picture>`, `srcset`, and `sizes` for responsive images (retrieved 2025-08-03)
+- [markdown-it-footnote README](https://github.com/markdown-it/markdown-it-footnote) — Footnotes plugin for markdown-it using Pandoc-style syntax (retrieved 2025-08-06)
+- [markdown-it demo](https://markdown-it.github.io/) — Demonstrates pluggable markdown parser with customizable renderer rules (retrieved 2025-08-06)
