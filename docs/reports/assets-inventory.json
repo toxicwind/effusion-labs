@@ -14,6 +14,20 @@
     "importers": []
   },
   {
+    "path": "Untitled-1.html",
+    "size": 485210,
+    "hash": "53a82ce7df21d2f8cc34a6cbb3774a8119e0670129f41b619fb7e95d1a5f106b",
+    "type": "template",
+    "importers": []
+  },
+  {
+    "path": "Untitled-2.html",
+    "size": 316380,
+    "hash": "429ea2560689654da19fa1cc4142234cccd66597f0eab9f1e6e1a43d986b0b30",
+    "type": "template",
+    "importers": []
+  },
+  {
     "path": "lib/config.js",
     "size": 233,
     "hash": "d9fefec9bd765bbabd28192f2d4c455a6f0b15c7dc08089d9aa2e36277dc08bc",
@@ -43,15 +57,15 @@
   },
   {
     "path": "lib/markdown/footnotes.js",
-    "size": 6287,
-    "hash": "484c00aaa4c5ff91b4ef808f8ff1ce9b8dc7dff60134f281988baf9b4c7adb28",
+    "size": 8422,
+    "hash": "548e4c627293a023d5208ecbdcbc2624a8534d74eb4d1bf7be28a449f5cc94d6",
     "type": "js",
     "importers": []
   },
   {
     "path": "lib/markdown/index.js",
-    "size": 1005,
-    "hash": "a094f691d41da8d0ad2ad28bbb3446da7b7c8d26f28e50a01b8def9cb0c815cb",
+    "size": 1093,
+    "hash": "7c3a4010417ea49238b1dbc3ff5fa3f01f17a21a52d38bdb363889bdcca1c583",
     "type": "js",
     "importers": []
   },
@@ -102,6 +116,13 @@
     "size": 963,
     "hash": "51132ee7191fcf7fa320374bdab306bb505f3acdc91f3b59fd54abe010e5cf09",
     "type": "js",
+    "importers": []
+  },
+  {
+    "path": "output.html",
+    "size": 193727,
+    "hash": "29482c41f8236b1791b18a133e361ebc6462955e41c3e4c983bce57ce425985b",
+    "type": "template",
     "importers": []
   },
   {

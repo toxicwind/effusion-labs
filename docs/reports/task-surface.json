@@ -1,0 +1,8 @@
+{
+  "changed": [
+    "lib/markdown/footnotes.js",
+    "test/footnotes.test.mjs"
+  ],
+  "routes": [],
+  "flows": []
+}

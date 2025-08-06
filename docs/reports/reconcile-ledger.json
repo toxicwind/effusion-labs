@@ -104,4 +104,32 @@
     "status": "pass",
     "next": "Commit changes"
   }
+
+  ,{
+    "step": "C0",
+    "intended": "Audit footnote backreference behavior",
+    "observed": "Backref href '#fnref1' missing matching id",
+    "drift": ["footnote backrefs don't scroll to reference"],
+    "repair": [],
+    "status": "fail",
+    "next": "Align anchor ids"
+  },
+  {
+    "step": "C3",
+    "intended": "Align footnote backref ids with markdown-it-footnote",
+    "observed": "Backrefs now target existing 'fnref1' anchors; tests updated",
+    "drift": [],
+    "repair": [],
+    "status": "pass",
+    "next": "Run tests"
+  },
+  {
+    "step": "C4",
+    "intended": "Run test suite and build",
+    "observed": "npm test and npm run build succeed",
+    "drift": [],
+    "repair": [],
+    "status": "pass",
+    "next": "Commit changes"
+  }
 ]
