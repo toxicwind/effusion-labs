@@ -12,3 +12,5 @@
 - [markdown-it-footnote README](https://raw.githubusercontent.com/markdown-it/markdown-it-footnote/master/README.md) — Pandoc-style footnotes for markdown-it (retrieved 2025-08-06)
 - [Markdown Guide – Footnotes](https://www.markdownguide.org/extended-syntax/#footnotes) — explains [^id] references and [^id]: definitions (retrieved 2025-08-06)
 - [markdown-it demo](https://markdown-it.github.io/) — Demonstrates pluggable markdown parser with customizable renderer rules (retrieved 2025-08-06)
+- [HTML Links - Bookmarks](https://www.w3schools.com/html/html_links_bookmarks.asp) — shows linking to same-page anchors via `id` and `href="#C4"` (retrieved 2025-08-06)
+- [markdown-it-footnote index.mjs](https://raw.githubusercontent.com/markdown-it/markdown-it-footnote/master/index.mjs) — `footnote_ref` generates `href="#fn{id}"` with `id="fnref{id}"` (retrieved 2025-08-06)

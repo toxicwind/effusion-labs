@@ -24,8 +24,8 @@ test('single footnote renders popover and aside', () => {
   assert.match(html, /<div class="footnotes-hybrid">/);
   // popover-enabled reference
   assert.match(html, /<sup class="annotation-ref/);
-  assert.match(html, /<a href="#fn1" id="fnreffn1" class="annotation-anchor" aria-describedby="popup-fn1">\[1\]<\/a>/);
-  assert.match(html, /<span id="popup-fn1" role="tooltip" class="annotation-popup"/);
+  assert.match(html, /<a href="#fn1" id="fnref1" class="annotation-anchor" aria-describedby="popup-1">\[1\]<\/a>/);
+  assert.match(html, /<span id="popup-1" role="tooltip" class="annotation-popup"/);
   // footnote card structure
   assert.match(html, /<aside class="footnote-aside not-prose" role="note">/);
   assert.match(html, /<div id="fn1" class="footnote-local">/);

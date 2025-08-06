@@ -45,3 +45,6 @@ _site/
 
 Passthrough changes: ensure only compiled assets output.
 Rollback: move files back to original locations and revert template hrefs.
+
+## Notes
+- 2025-08-06: Fixed footnote backreference IDs; no structural changes required.
