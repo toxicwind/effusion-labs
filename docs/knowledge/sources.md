@@ -11,3 +11,4 @@
 - [MDN Responsive Images](https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images) — explains using `<picture>`, `srcset`, and `sizes` for responsive images (retrieved 2025-08-03)
 - [markdown-it-footnote README](https://raw.githubusercontent.com/markdown-it/markdown-it-footnote/master/README.md) — Pandoc-style footnotes for markdown-it (retrieved 2025-08-06)
 - [Markdown Guide – Footnotes](https://www.markdownguide.org/extended-syntax/#footnotes) — explains [^id] references and [^id]: definitions (retrieved 2025-08-06)
+- [markdown-it demo](https://markdown-it.github.io/) — Demonstrates pluggable markdown parser with customizable renderer rules (retrieved 2025-08-06)

@@ -5,3 +5,4 @@
 - Use AVIF and WebP formats with Sharp since both offer transparent compression and are widely supported in modern browsers. @source: [Sharp Output Formats](https://sharp.pixelplumbing.com/api-output); [Can I Use AVIF](https://raw.githubusercontent.com/Fyrd/caniuse/main/features-json/avif.json); [Can I Use WebP](https://raw.githubusercontent.com/Fyrd/caniuse/main/features-json/webp.json)
 - Follow MDN guidance for responsive images using `srcset`/`sizes` and `<picture>` wrappers. @source: [MDN Responsive Images](https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images)
 - Implemented `collectFootnoteTokens` and revised footnote tests to match hybrid rendering and popover markup. @source: [markdown-it-footnote README](https://raw.githubusercontent.com/markdown-it/markdown-it-footnote/master/README.md); [Markdown Guide – Footnotes](https://www.markdownguide.org/extended-syntax/#footnotes)
+
