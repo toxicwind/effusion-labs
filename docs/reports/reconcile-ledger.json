@@ -1,11 +1,89 @@
 [
-  {"step":"C0","intended":"Inventory repo assets","observed":"Inventory generated","drift":null,"repair":null,"status":"completed"}
- ,
-{"step":"C1","intended":"Modernize PostCSS/Tailwind pipeline","observed":"Pipeline updated and build succeeds","drift":null,"repair":null,"status":"completed"}
- ,
-{"step":"C2","intended":"Reorganize asset structure","observed":"CSS/JS moved to styles/scripts with references updated","drift":null,"repair":null,"status":"completed"}
- ,
-{"step":"C3","intended":"Harden footnote renderer and CSS theming","observed":"Added semantic role and verified theme-aware styles","drift":null,"repair":null,"status":"completed"}
- ,
- {"step":"C4","intended":"Serve and test site","observed":"All tests including build, MIME, inventory, and downwind removal pass","drift":null,"repair":null,"status":"completed"}
+  {
+    "step": "C0",
+    "intended": "Inventory repo assets",
+    "observed": "Inventory generated",
+    "drift": null,
+    "repair": null,
+    "status": "completed"
+  },
+  {
+    "step": "C1",
+    "intended": "Modernize PostCSS/Tailwind pipeline",
+    "observed": "Pipeline updated and build succeeds",
+    "drift": null,
+    "repair": null,
+    "status": "completed"
+  },
+  {
+    "step": "C2",
+    "intended": "Reorganize asset structure",
+    "observed": "CSS/JS moved to styles/scripts with references updated",
+    "drift": null,
+    "repair": null,
+    "status": "completed"
+  },
+  {
+    "step": "C3",
+    "intended": "Harden footnote renderer and CSS theming",
+    "observed": "Added semantic role and verified theme-aware styles",
+    "drift": null,
+    "repair": null,
+    "status": "completed"
+  },
+  {
+    "step": "C4",
+    "intended": "Serve and test site",
+    "observed": "All tests including build, MIME, inventory, and downwind removal pass",
+    "drift": null,
+    "repair": null,
+    "status": "completed"
+  },
+  {
+    "step": "C0",
+    "intended": "Discover asset serving issue and current image pipeline",
+    "observed": "/assets logo.png 404 under dev server",
+    "drift": [
+      "static assets not copied"
+    ],
+    "repair": [],
+    "status": "fail",
+    "next": "Add passthrough and image transform"
+  },
+  {
+    "step": "C1",
+    "intended": "Add passthrough for static assets and reorganize asset folder",
+    "observed": "/assets/logo.png served 200 via passthrough",
+    "drift": [],
+    "repair": [],
+    "status": "pass",
+    "next": "Integrate image transform"
+  },
+  {
+    "step": "C2",
+    "intended": "Integrate Eleventy Image HTML Transform for AVIF/WebP",
+    "observed": "index.html rewrites <img> to <picture> with avif/webp",
+    "drift": [],
+    "repair": [],
+    "status": "pass",
+    "next": "Codemod references and finalize tests"
+  },
+  {
+    "step": "C3",
+    "intended": "Codemod templates/tests for new image pipeline",
+    "observed": "index.njk uses static path; tests cover picture and MIME",
+    "drift": [],
+    "repair": [],
+    "status": "pass",
+    "next": "Run tests & finalize"
+  },
+  {
+    "step": "C4",
+    "intended": "Run test suite and verify image outputs",
+    "observed": "npm test passed with AVIF/WebP served correctly",
+    "drift": [],
+    "repair": [],
+    "status": "pass",
+    "next": "Commit changes"
+  }
 ]

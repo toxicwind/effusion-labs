@@ -4,3 +4,8 @@
 - [PrismJS Home](https://prismjs.com/)
 - [Eleventy Event Hooks](https://www.11ty.dev/docs/config/#event-hooks)
 - [downwindcss/text-decoration](https://github.com/downwindcss/text-decoration)
+- [Eleventy Image Plugin](https://www.11ty.dev/docs/plugins/image/) — HTML Transform rewrites `<img>` into `<picture>` with AVIF/WebP and supports `urlPath`, `outputDir`, `transformOnRequest` (retrieved 2025-08-03)
+- [Sharp Output Formats](https://sharp.pixelplumbing.com/api-output) — AVIF/WebP output with transparency and compression options (retrieved 2025-08-03)
+- [Can I Use: AVIF](https://raw.githubusercontent.com/Fyrd/caniuse/main/features-json/avif.json) — AVIF supported in Chrome 85+, Firefox 93+, Edge 85+, Safari 16+ (retrieved 2025-08-03)
+- [Can I Use: WebP](https://raw.githubusercontent.com/Fyrd/caniuse/main/features-json/webp.json) — WebP supported in Chrome 32+, Edge 18+, Firefox 65+, Safari 14+ (retrieved 2025-08-03)
+- [MDN Responsive Images](https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images) — explains using `<picture>`, `srcset`, and `sizes` for responsive images (retrieved 2025-08-03)
