@@ -7,3 +7,5 @@
 - Implemented `collectFootnoteTokens` and revised footnote tests to match hybrid rendering and popover markup. @source: [markdown-it-footnote README](https://raw.githubusercontent.com/markdown-it/markdown-it-footnote/master/README.md); [Markdown Guide – Footnotes](https://www.markdownguide.org/extended-syntax/#footnotes)
 - Corrected footnote backreference IDs to align with markdown-it-footnote defaults, ensuring backrefs scroll to their references. @source: [HTML Links - Bookmarks](https://www.w3schools.com/html/html_links_bookmarks.asp); [markdown-it-footnote index.mjs](https://raw.githubusercontent.com/markdown-it/markdown-it-footnote/master/index.mjs)
 
+- Replaced green accent with lapis (#0A84FF) to align with Apple HIG color guidance and maintain a consistent blue palette. @source: [Apple HIG - Color](https://developer.apple.com/design/human-interface-guidelines/color)
+- Capped RSS feed at 20 items to avoid overwhelming lists and focus attention. @source: [Apple HIG - Lists](https://developer.apple.com/design/human-interface-guidelines/lists)
