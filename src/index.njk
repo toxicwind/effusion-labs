@@ -13,7 +13,7 @@ showTitle: false
     {%- for p in coll | reverse -%}
       {% if "index" not in p.filePathStem %}
         <li>
-          <a href="{{ p.url }}" class="font-medium hover:text-malachite">{{ p.data.title }}</a>
+          <a href="{{ p.url }}" class="font-medium hover:text-lapis">{{ p.data.title }}</a>
           <time datetime="{{ p.date | htmlDateString }}" class="block text-xs text-gray-400">
             {{ p.date | readableDate }}
           </time>
@@ -42,7 +42,7 @@ showTitle: false
         Where <strong>experimental ideas</strong> meet practical prototypes. 
         Explore the projects, concepts, and sparks shaping tomorrow’s creative technology.
       </p>
-      <a href="#activity" class="inline-block rounded-md bg-cerulean px-8 py-3 font-heading text-lg text-bg-dark transition hover:bg-malachite btn btn-primary">
+      <a href="#activity" class="inline-block rounded-md bg-cerulean px-8 py-3 font-heading text-lg text-bg-dark transition hover:bg-lapis btn btn-primary">
         View Latest Work
       </a>
     </div>
@@ -60,7 +60,7 @@ showTitle: false
     <p class="mx-auto max-w-2xl text-danube sm:text-base">
       Navigate the living knowledge graph that links every spark, concept, and project in the lab. Trace ideas from first curiosity to polished prototype.
     </p>
-    <a href="/map/" class="inline-block rounded-md bg-cerulean px-8 py-3 font-heading text-lg text-bg-dark transition hover:bg-malachite">
+    <a href="/map/" class="inline-block rounded-md bg-cerulean px-8 py-3 font-heading text-lg text-bg-dark transition hover:bg-lapis">
       Launch the Map
     </a>
   </section>
@@ -69,7 +69,7 @@ showTitle: false
     FIX: A larger, standard margin is applied here for a clean separation.
   #}
   <section id="activity" class="mt-20 space-y-10 lg:mt-24">
-    <h2 class="text-center font-heading text-3xl font-bold tracking-wide text-malachite sm:text-4xl">
+    <h2 class="text-center font-heading text-3xl font-bold tracking-wide text-cerulean sm:text-4xl">
       Lab Notebook · Recent Activity
     </h2>
     <div class="grid gap-8 sm:grid-cols-2 xl:grid-cols-4">

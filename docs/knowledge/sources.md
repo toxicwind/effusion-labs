@@ -14,3 +14,8 @@
 - [markdown-it demo](https://markdown-it.github.io/) — Demonstrates pluggable markdown parser with customizable renderer rules (retrieved 2025-08-06)
 - [HTML Links - Bookmarks](https://www.w3schools.com/html/html_links_bookmarks.asp) — shows linking to same-page anchors via `id` and `href="#C4"` (retrieved 2025-08-06)
 - [markdown-it-footnote index.mjs](https://raw.githubusercontent.com/markdown-it/markdown-it-footnote/master/index.mjs) — `footnote_ref` generates `href="#fn{id}"` with `id="fnref{id}"` (retrieved 2025-08-06)
+- [Tailwind CSS v4.1.11 Release](https://api.github.com/repos/tailwindlabs/tailwindcss/releases/latest)
+- [daisyUI v5.0.50 Release](https://api.github.com/repos/saadeghi/daisyui/releases/latest)
+- [PrismJS v1.30.0 Release](https://api.github.com/repos/PrismJS/prism/releases/latest)
+- [Apple HIG - Color](https://developer.apple.com/design/human-interface-guidelines/color)
+- [Apple HIG - Lists](https://developer.apple.com/design/human-interface-guidelines/lists)
