@@ -1,3 +1,6 @@
 - Removed `@downwindcss/text-decoration` and migrated to native Tailwind `decoration-*` utilities. @source: [downwindcss/text-decoration](https://github.com/downwindcss/text-decoration)
 - Dropped explicit `autoprefixer` since `@tailwindcss/postcss` bundles it. @source: [Tailwind CSS Installation - PostCSS](https://tailwindcss.com/docs/installation#postcss)
 - Added `prismjs` to import `prism-tomorrow.css` theme. @source: [PrismJS Home](https://prismjs.com/)
+- Integrate `@11ty/eleventy-img` HTML Transform to auto-generate AVIF/WebP and rewrite `<img>` to `<picture>`. @source: [Eleventy Image Plugin](https://www.11ty.dev/docs/plugins/image/)
+- Use AVIF and WebP formats with Sharp since both offer transparent compression and are widely supported in modern browsers. @source: [Sharp Output Formats](https://sharp.pixelplumbing.com/api-output); [Can I Use AVIF](https://raw.githubusercontent.com/Fyrd/caniuse/main/features-json/avif.json); [Can I Use WebP](https://raw.githubusercontent.com/Fyrd/caniuse/main/features-json/webp.json)
+- Follow MDN guidance for responsive images using `srcset`/`sizes` and `<picture>` wrappers. @source: [MDN Responsive Images](https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images)

@@ -22,7 +22,8 @@ src/
     base.js
     footnote-nav.js
   assets/
-    logo.png
+    static/
+      logo.png
   lib/
     ... (unchanged)
 ```
@@ -40,7 +41,7 @@ _site/
 - `src/assets/css/tailwind.css` → `src/styles/app.tailwind.css`
 - `src/assets/js/base.js` → `src/scripts/base.js`
 - `src/assets/js/footnote-nav.js` → `src/scripts/footnote-nav.js`
-- `src/assets/logo.png` → `src/assets/logo.png` (stay)
+- `src/assets/logo.png` → `src/assets/static/logo.png`
 
 Passthrough changes: ensure only compiled assets output.
 Rollback: move files back to original locations and revert template hrefs.

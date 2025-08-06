@@ -26,6 +26,7 @@
     "markdown-it-footnote": "^4.0.0"
   },
   "devDependencies": {
+    "@11ty/eleventy-img": "^6.0.4",
     "@11ty/eleventy-plugin-syntaxhighlight": "^5.0.1",
     "@quasibit/eleventy-plugin-sitemap": "^2.2.0",
     "@tailwindcss/postcss": "^4.1.11",

@@ -29,8 +29,8 @@
   },
   {
     "path": "lib/eleventy/register.js",
-    "size": 2082,
-    "hash": "d6b9a6f3facafacf9495ba3bf741126b478d7c3b2425638f377e055eced73e11",
+    "size": 2641,
+    "hash": "a0aa2c8a3fe46bc797ebf5a6a5c041af4680a73a3df1b5601e5d9a5f500ee2c4",
     "type": "js",
     "importers": []
   },
@@ -372,8 +372,8 @@
   },
   {
     "path": "src/index.njk",
-    "size": 3268,
-    "hash": "b92b65a361d19b225cc8700c67467ef732fd7de85497957e806f2548b34a85ff",
+    "size": 3275,
+    "hash": "5b5315c0dfe3a382803f84cc8eb6199fafec3a23277a84b003bfd61c906e1312",
     "type": "template",
     "importers": []
   },
