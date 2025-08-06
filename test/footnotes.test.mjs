@@ -20,10 +20,18 @@ test('no footnotes yields no aside', () => {
 
 test('single footnote has expected structure', () => {
   const html = render('hi[^1]\n\n[^1]: there');
+  assert.match(html, /<div class="footnotes-hybrid">/);
   assert.match(html, /<aside class="footnote-aside not-prose" role="note">/);
   assert.match(html, /<div id="fn1" class="footnote-local">/);
   assert.match(html, /class="footnote-content"/);
   assert.match(html, /class="footnote-backref"/);
+});
+
+test('footnote reference includes popover markup', () => {
+  const html = render('hi[^1]\n\n[^1]: there');
+  assert.match(html, /<sup class="annotation-ref[^\"]*">/);
+  assert.match(html, /class="annotation-anchor"/);
+  assert.match(html, /class="annotation-popup">.*there/);
 });
 
 test('nested blockquotes close aside correctly', () => {
@@ -31,4 +39,5 @@ test('nested blockquotes close aside correctly', () => {
   const open = (html.match(/<aside/g) || []).length;
   const close = (html.match(/<\/aside>/g) || []).length;
   assert.equal(open, close);
+  assert.match(html, /<blockquote class="footnote-explanation">/);
 });

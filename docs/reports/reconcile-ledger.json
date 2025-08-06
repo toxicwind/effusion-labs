@@ -85,5 +85,23 @@
     "repair": [],
     "status": "pass",
     "next": "Commit changes"
+  },
+  {
+    "step": "C3",
+    "intended": "Revise footnote system and tests to match code",
+    "observed": "Added token collection plugin and updated tests with popover checks",
+    "drift": [],
+    "repair": [],
+    "status": "pass",
+    "next": "Run full test suite"
+  },
+  {
+    "step": "C4",
+    "intended": "Execute test suite and build",
+    "observed": "npm test and npm run build succeed",
+    "drift": [],
+    "repair": [],
+    "status": "pass",
+    "next": "Commit changes"
   }
 ]
