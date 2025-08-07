@@ -8,12 +8,12 @@ showTitle: false
 {# ... feed macro remains unchanged ... #}
 {% macro feed(label, coll) -%}
 <section class="space-y-4">
-  <h3 class="border-b border-danube pb-2 font-heading text-xl">{{ label }}</h3>
+  <h3 class="border-b border-lapis pb-2 font-heading text-xl">{{ label }}</h3>
   <ul class="space-y-3">
     {%- for p in coll | reverse -%}
       {% if "index" not in p.filePathStem %}
         <li>
-          <a href="{{ p.url }}" class="font-medium hover:text-lapis">{{ p.data.title }}</a>
+          <a href="{{ p.url }}" class="font-medium hover:text-primary">{{ p.data.title }}</a>
           <time datetime="{{ p.date | htmlDateString }}" class="block text-xs text-gray-400">
             {{ p.date | readableDate }}
           </time>
@@ -33,16 +33,16 @@ showTitle: false
 #}
 <main class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:py-6">
 
-  <section class="grid items-center gap-12 lg:grid-cols-2">
+  <section class="grid items-center gap-10 lg:grid-cols-2">
     <div class="space-y-6 text-center lg:text-left">
-      <h1 class="font-heading text-4xl font-bold text-cerulean sm:text-5xl lg:text-6xl">
+      <h1 class="font-heading text-4xl font-bold tracking-tight text-primary sm:text-5xl lg:text-6xl">
         Art · Culture · Innovation
       </h1>
-      <p class="mx-auto max-w-lg text-lg leading-relaxed lg:mx-0">
+      <p class="mx-auto max-w-prose text-lg leading-7 lg:mx-0">
         Where <strong>experimental ideas</strong> meet practical prototypes. 
         Explore the projects, concepts, and sparks shaping tomorrow’s creative technology.
       </p>
-      <a href="#activity" class="inline-block rounded-md bg-cerulean px-8 py-3 font-heading text-lg text-bg-dark transition hover:bg-lapis btn btn-primary">
+      <a href="#activity" class="inline-block min-h-[44px] rounded-md bg-primary px-8 py-3 font-heading text-lg text-bg-dark transition hover:bg-lapis btn btn-primary">
         View Latest Work
       </a>
     </div>
@@ -53,14 +53,14 @@ showTitle: false
     FIX: A smaller top margin is applied here to counteract the empty space
     in the hero section above, creating a more balanced look.
   #}
-  <section class="mt-12 mx-auto max-w-5xl rounded-lg bg-text-dark/80 text-center shadow-lg shadow-black/30 backdrop-blur p-3 pb-13">
-    <h2 class="font-heading text-2xl font-bold text-cerulean sm:text-3xl">
+  <section class="mt-12 mx-auto max-w-5xl rounded-lg bg-text-dark/80 text-center shadow-lg shadow-black/30 backdrop-blur p-6">
+    <h2 class="font-heading text-2xl font-bold text-primary sm:text-3xl">
       Explore the Interactive Concept Map
     </h2>
-    <p class="mx-auto max-w-2xl text-danube sm:text-base">
+    <p class="mx-auto max-w-2xl text-text-light sm:text-base">
       Navigate the living knowledge graph that links every spark, concept, and project in the lab. Trace ideas from first curiosity to polished prototype.
     </p>
-    <a href="/map/" class="inline-block rounded-md bg-cerulean px-8 py-3 font-heading text-lg text-bg-dark transition hover:bg-lapis">
+    <a href="/map/" class="inline-block min-h-[44px] rounded-md bg-primary px-8 py-3 font-heading text-lg text-bg-dark transition hover:bg-lapis">
       Launch the Map
     </a>
   </section>
@@ -69,7 +69,7 @@ showTitle: false
     FIX: A larger, standard margin is applied here for a clean separation.
   #}
   <section id="activity" class="mt-20 space-y-10 lg:mt-24">
-    <h2 class="text-center font-heading text-3xl font-bold tracking-wide text-cerulean sm:text-4xl">
+    <h2 class="text-center font-heading text-3xl font-bold tracking-wide text-primary sm:text-4xl">
       Lab Notebook · Recent Activity
     </h2>
     <div class="grid gap-8 sm:grid-cols-2 xl:grid-cols-4">

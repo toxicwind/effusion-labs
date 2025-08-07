@@ -131,5 +131,50 @@
     "repair": [],
     "status": "pass",
     "next": "Commit changes"
+  },
+  {
+    "step": "C0",
+    "intended": "Audit design system for color and spacing issues",
+    "observed": "Identified outdated color tokens and inconsistent spacing on homepage",
+    "drift": [],
+    "repair": [],
+    "status": "noted",
+    "next": "Apply HIG-driven refinements"
+  },
+  {
+    "step": "C3",
+    "intended": "Harmonize color palette and raise base text size",
+    "observed": "Removed cerulean/danube, set lapis as primary, body text 17px",
+    "drift": [],
+    "repair": [],
+    "status": "pass",
+    "next": "Redesign homepage"
+  },
+  {
+    "step": "C3",
+    "intended": "Redesign homepage layout and spacing",
+    "observed": "Hero and map sections use consistent spacing and 44px buttons",
+    "drift": [],
+    "repair": [],
+    "status": "pass",
+    "next": "Add feed cap test"
+  },
+  {
+    "step": "C3",
+    "intended": "Enforce RSS feed cap via test",
+    "observed": "feed-cap.test.mjs fails if >20 items",
+    "drift": [],
+    "repair": [],
+    "status": "pass",
+    "next": "Run test suite"
+  },
+  {
+    "step": "C4",
+    "intended": "Run test suite",
+    "observed": "npm test passes including new feed cap test",
+    "drift": [],
+    "repair": [],
+    "status": "pass",
+    "next": null
   }
 ]
