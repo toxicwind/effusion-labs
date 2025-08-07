@@ -428,8 +428,8 @@
   },
   {
     "path": "src/styles/app.tailwind.css",
-    "size": 8512,
-    "hash": "99908ca78b52f332d25471b1170eb9744fe7248760bcfc5807b7fcbb6a8da53e",
+    "size": 8663,
+    "hash": "8b7749952c1b6fc156e80f300d392a1e2999e3c88c687f4cb1b9e7993826672b",
     "type": "css",
     "importers": []
   },

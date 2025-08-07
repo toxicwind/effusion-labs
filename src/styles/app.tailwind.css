@@ -4,6 +4,11 @@
 @plugin "@tailwindcss/typography";
 @import "prismjs/themes/prism-tomorrow.css";
 
+@layer base {
+  h1 { @apply font-heading text-[clamp(2rem,4vw+1rem,3rem)]; }
+  h2 { @apply font-heading text-[clamp(1.5rem,3vw+0.75rem,2.25rem)]; }
+}
+
 /* ——— Small utility cluster (unchanged names) ——— */
 @layer components {
   .spec-note-soft     { @apply italic text-gray-500 border-b border-dotted border-gray-300 cursor-help; }

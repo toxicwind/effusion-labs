@@ -13,3 +13,4 @@
 - Raised base body text to 17px and ensured buttons meet 44px minimum touch target for readability and accessibility. @source: [Apple HIG - Typography](https://developer.apple.com/design/human-interface-guidelines/typography)
 - Redesigned homepage hero and map sections with consistent spacing and adaptive layout. @source: [Apple HIG - Layout](https://developer.apple.com/design/human-interface-guidelines/layout)
 - Added test to enforce RSS feed cap of 20 items. @source: [Apple HIG - Lists](https://developer.apple.com/design/human-interface-guidelines/lists)
+- Introduced fluid type scale with CSS clamp for headings, aligning with Apple HIG Dynamic Type guidance and fluid typography trend. @source: [Apple HIG - Typography](https://developer.apple.com/design/human-interface-guidelines/typography); [Web.dev Fluid Typography](https://web.dev/fluid-typography/)
