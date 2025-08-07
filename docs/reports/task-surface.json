@@ -7,7 +7,8 @@
     "tailwind.config.cjs",
     "test/feed-cap.test.mjs",
     "src/styles/app.tailwind.css",
-    "test/fluid-type.test.mjs"
+    "test/fluid-type.test.mjs",
+    "test/skip-link.test.mjs"
   ],
   "routes": ["/", "/404.html"],
   "flows": []

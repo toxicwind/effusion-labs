@@ -14,3 +14,4 @@
 - Redesigned homepage hero and map sections with consistent spacing and adaptive layout. @source: [Apple HIG - Layout](https://developer.apple.com/design/human-interface-guidelines/layout)
 - Added test to enforce RSS feed cap of 20 items. @source: [Apple HIG - Lists](https://developer.apple.com/design/human-interface-guidelines/lists)
 - Introduced fluid type scale with CSS clamp for headings, aligning with Apple HIG Dynamic Type guidance and fluid typography trend. @source: [Apple HIG - Typography](https://developer.apple.com/design/human-interface-guidelines/typography); [Web.dev Fluid Typography](https://web.dev/fluid-typography/)
+- Added skip navigation link and main landmark to meet WCAG 2.1 Bypass Blocks and streamline keyboard access. @source: [WCAG 2.1 - Bypass Blocks](https://www.w3.org/TR/WCAG21/#bypass-blocks); [WebAIM: Skip Navigation Links](https://webaim.org/techniques/skipnav/)

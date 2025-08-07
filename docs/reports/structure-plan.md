@@ -49,3 +49,4 @@ Rollback: move files back to original locations and revert template hrefs.
 ## Notes
 - 2025-08-06: Fixed footnote backreference IDs; no structural changes required.
 - 2025-08-07: Harmonized color tokens and set 17px base text per Apple HIG; homepage sections spacing refined.
+- 2025-08-07: Added skip navigation link targeting `#main` for keyboard users.

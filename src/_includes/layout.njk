@@ -16,6 +16,7 @@
 
 <body class="bg-bg-dark text-text-light font-body leading-relaxed text-[17px]">
 
+  <a href="#main" class="skip-link">Skip to main content</a>
   {% include 'header.njk' %}
 
   <div class="mx-auto max-w-screen-2xl px-6">
@@ -23,7 +24,7 @@
     {% set metaOff = metaDisable == true or metaDisable == 'true' %}
     {% set hasMeta = (status or certainty or importance or tags or memory_ref) and not metaOff %}
 
-    <main class="
+    <main id="main" class="
       {% if not metaOff %}
         xl:grid xl:gap-10 xl:grid-cols-[1fr_16rem]
       {% endif %}
