@@ -441,10 +441,10 @@
     "importers": []
   },
   {
-    "path": "wcag.html",
-    "size": 476496,
-    "hash": "233ac31974ce8575c08932ee1bd71c93879cf9b8426b2bc9b961b3ea8afb8ab6",
-    "type": "template",
+    "path": "src/scripts/theme-toggle.js",
+    "size": 1009,
+    "hash": "d4380aecb1602765c9788d37dd0c0c091d1acd1f8d81730c5630f31b03cac54f",
+    "type": "js",
     "importers": []
   }
 ]
