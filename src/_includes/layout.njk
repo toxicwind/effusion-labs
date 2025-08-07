@@ -1,9 +1,20 @@
 <!DOCTYPE html>
-<html lang="en" class="dark scroll-pt-16">
+<html lang="en" class="scroll-pt-16">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{{ title }} | Effusion Labs</title>
+
+  <meta name="color-scheme" content="dark light">
+  <script>
+    (function () {
+      const stored = localStorage.getItem('theme');
+      const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (stored === 'dark' || (!stored && systemPrefersDark)) {
+        document.documentElement.classList.add('dark');
+      }
+    })();
+  </script>
 
   <link rel="stylesheet" href="/assets/css/app.css">
 
@@ -14,7 +25,7 @@
   <script src="/assets/js/lucide.min.js"></script>
 </head>
 
-<body class="bg-bg-dark text-text-light font-body leading-relaxed text-[17px]">
+<body class="bg-white text-text-dark dark:bg-bg-dark dark:text-text-light font-body leading-relaxed text-[17px]">
 
   <a href="#main" class="skip-link">Skip to main content</a>
   {% include 'header.njk' %}
@@ -31,7 +42,7 @@
       {% if showTitle != false %} mt-12{% endif %}
     ">
 
-      <article class="prose prose-invert max-w-none m-0
+      <article class="prose dark:prose-invert max-w-none m-0
         {% if not metaOff %} xl:col-span-1 {% else %} w-full {% endif %}
       ">
         {% if showTitle != false %}
@@ -43,10 +54,10 @@
       </article>
 
       {% if hasMeta %}
-      <aside class="w-full mt-10 text-sm opacity-90 border-t border-zinc-700 pt-4 xl:mt-0 xl:w-64 xl:pl-4 xl:border-t-0 xl:border-l">
+      <aside class="w-full mt-10 text-sm opacity-90 border-t border-zinc-200 dark:border-zinc-700 pt-4 xl:mt-0 xl:w-64 xl:pl-4 xl:border-t-0 xl:border-l">
         <div class="space-y-2 xl:sticky xl:top-28">
           <h2 class="font-heading text-lg font-semibold tracking-wide">Meta</h2>
-          <ul class="space-y-1 text-zinc-300">
+          <ul class="space-y-1 text-zinc-700 dark:text-zinc-300">
             {% if status %}<li><strong>Status:</strong> {{ status }}</li>{% endif %}
             {% if date %}
               <li><strong>Date:</strong>
@@ -71,12 +82,13 @@
       {% endif %}
     </main>
 
-    <footer class="mt-16 p-8 text-center text-sm text-gray-400">
+    <footer class="mt-16 p-8 text-center text-sm text-gray-600 dark:text-gray-400">
       &copy; 2025 Effusion Labs. A space for creative synthesis.
     </footer>
   </div>
 
   <script>lucide.createIcons();</script>
+  <script src="/assets/js/theme-toggle.js"></script>
   <script src="/assets/js/footnote-nav.js"></script>
 </body>
 </html>
