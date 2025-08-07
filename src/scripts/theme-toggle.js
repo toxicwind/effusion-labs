@@ -6,6 +6,7 @@
   function apply(theme){
     if(theme === 'dark'){
       document.documentElement.classList.add('dark');
+      document.documentElement.dataset.theme = 'dark';
       localStorage.setItem('theme','dark');
       if(sun && moon){
         sun.classList.remove('hidden');
@@ -13,6 +14,7 @@
       }
     }else{
       document.documentElement.classList.remove('dark');
+      document.documentElement.dataset.theme = 'lab';
       localStorage.setItem('theme','light');
       if(sun && moon){
         moon.classList.remove('hidden');
