@@ -119,6 +119,13 @@
     "importers": []
   },
   {
+    "path": "lib/webpageToMarkdown.js",
+    "size": 922,
+    "hash": "9a9914017ab401c6ab91fd3d49e236a77b021643f77f573286bd7703f1edc198",
+    "type": "js",
+    "importers": []
+  },
+  {
     "path": "output.html",
     "size": 193727,
     "hash": "29482c41f8236b1791b18a133e361ebc6462955e41c3e4c983bce57ce425985b",
@@ -148,15 +155,15 @@
   },
   {
     "path": "src/_includes/header.njk",
-    "size": 1088,
-    "hash": "c421374744bdf9adb7bc95dd691435ecd17bac63d8cda4ea131eebe19671e292",
+    "size": 1367,
+    "hash": "08b7b1d82f2698e4063af7597d5384d5dcf81aba2d2824fd7f2d41a210c9eb63",
     "type": "template",
     "importers": []
   },
   {
     "path": "src/_includes/layout.njk",
-    "size": 3136,
-    "hash": "51c91b59fca2a76d4d891f3a22cdfab43302b48a29b040b5df9f06909d144099",
+    "size": 3657,
+    "hash": "bdc75d6d0e81841f787a1381c5caefde996cb89f70bb34bbb40678b9e8879972",
     "type": "template",
     "importers": []
   },
@@ -420,6 +427,13 @@
     "importers": []
   },
   {
+    "path": "src/scripts/theme-toggle.js",
+    "size": 1009,
+    "hash": "d4380aecb1602765c9788d37dd0c0c091d1acd1f8d81730c5630f31b03cac54f",
+    "type": "js",
+    "importers": []
+  },
+  {
     "path": "src/styles/aliases.css",
     "size": 54,
     "hash": "86fa122e297df8ed4efa1d9d6a425095d6d6c9cc6b05e40a3326547fcb359f6f",
@@ -441,9 +455,9 @@
     "importers": []
   },
   {
-    "path": "src/scripts/theme-toggle.js",
-    "size": 1009,
-    "hash": "d4380aecb1602765c9788d37dd0c0c091d1acd1f8d81730c5630f31b03cac54f",
+    "path": "webpage-to-markdown.js",
+    "size": 404,
+    "hash": "b952eb442c46473fb80addfe699a8bf4bd8427d1d7fef329b846ec6118b7cd2d",
     "type": "js",
     "importers": []
   }

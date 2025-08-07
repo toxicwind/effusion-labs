@@ -25,3 +25,5 @@
 - [Eleventy v3.1.2 Release Notes](https://api.github.com/repos/11ty/eleventy/releases/tags/v3.1.2)
 - [WCAG 2.1 - Bypass Blocks](https://www.w3.org/TR/WCAG21/#bypass-blocks)
 - [WebAIM: Skip Navigation Links](https://webaim.org/techniques/skipnav/)
+- [Turndown README](https://raw.githubusercontent.com/mixmark-io/turndown/master/README.md) — Convert HTML into Markdown with JavaScript (retrieved 2025-08-07)
+- [Readability.js README](https://raw.githubusercontent.com/mozilla/readability/master/README.md) — Firefox Reader View parser for extracting main content (retrieved 2025-08-07)
