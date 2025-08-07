@@ -14,7 +14,7 @@
   <script src="/assets/js/lucide.min.js"></script>
 </head>
 
-<body class="bg-bg-dark text-text-light font-body leading-relaxed">
+<body class="bg-bg-dark text-text-light font-body leading-relaxed text-[17px]">
 
   {% include 'header.njk' %}
 
@@ -35,7 +35,7 @@
       ">
         {% if showTitle != false %}
           <header class="mb-8">
-            <h1 class="font-heading text-cerulean text-4xl tracking-wider">{{ title }}</h1>
+            <h1 class="font-heading text-primary text-4xl tracking-wider">{{ title }}</h1>
           </header>
         {% endif %}
         {{ content | safe }}

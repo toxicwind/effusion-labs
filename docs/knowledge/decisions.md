@@ -9,3 +9,7 @@
 
 - Replaced green accent with lapis (#0A84FF) to align with Apple HIG color guidance and maintain a consistent blue palette. @source: [Apple HIG - Color](https://developer.apple.com/design/human-interface-guidelines/color)
 - Capped RSS feed at 20 items to avoid overwhelming lists and focus attention. @source: [Apple HIG - Lists](https://developer.apple.com/design/human-interface-guidelines/lists)
+- Harmonized palette around lapis (#0A84FF) as sole accent to follow Apple's guidance on limited color use. @source: [Apple HIG - Color](https://developer.apple.com/design/human-interface-guidelines/color)
+- Raised base body text to 17px and ensured buttons meet 44px minimum touch target for readability and accessibility. @source: [Apple HIG - Typography](https://developer.apple.com/design/human-interface-guidelines/typography)
+- Redesigned homepage hero and map sections with consistent spacing and adaptive layout. @source: [Apple HIG - Layout](https://developer.apple.com/design/human-interface-guidelines/layout)
+- Added test to enforce RSS feed cap of 20 items. @source: [Apple HIG - Lists](https://developer.apple.com/design/human-interface-guidelines/lists)

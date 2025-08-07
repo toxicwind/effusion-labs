@@ -134,8 +134,8 @@
   },
   {
     "path": "src/404.njk",
-    "size": 306,
-    "hash": "7fecd6ec2c1461c0f7ac4f7a047701985e4cc44b6d2f73f83496874b143fabb8",
+    "size": 305,
+    "hash": "158503ef010fc7d69edd6627899c15f38b58f741d54d5a416d130c3eb6f22846",
     "type": "template",
     "importers": []
   },
@@ -148,15 +148,15 @@
   },
   {
     "path": "src/_includes/header.njk",
-    "size": 1090,
-    "hash": "0d076f939d07d5b1b7b5a7e2ca4461468e6959325d1d0d6d29e1d3e22ffec2f2",
+    "size": 1088,
+    "hash": "c421374744bdf9adb7bc95dd691435ecd17bac63d8cda4ea131eebe19671e292",
     "type": "template",
     "importers": []
   },
   {
     "path": "src/_includes/layout.njk",
-    "size": 3054,
-    "hash": "15d899cbc71cf7527a3b724af226d9e1ad1a7e62afb9980fa6c5da073283edd3",
+    "size": 3065,
+    "hash": "3af050c02b5214f700a6f051e1a45dc87ed95aeb93ac119b079272b215fefc58",
     "type": "template",
     "importers": []
   },
@@ -386,15 +386,15 @@
   },
   {
     "path": "src/feed.njk",
-    "size": 1120,
-    "hash": "263620195ea1ef045a8c1699b0c3c86b0f45efaf3a1ad0b78c6bc9cd1083a90b",
+    "size": 1135,
+    "hash": "503534280fe1feb4c124f2a630d195810980fc88641f94b7da6ae31a4942a7a2",
     "type": "template",
     "importers": []
   },
   {
     "path": "src/index.njk",
-    "size": 3275,
-    "hash": "5b5315c0dfe3a382803f84cc8eb6199fafec3a23277a84b003bfd61c906e1312",
+    "size": 3294,
+    "hash": "699046c309422cd4687e8156bab699c3ef07f905569aa42982966f345a39cd20",
     "type": "template",
     "importers": []
   },
@@ -435,8 +435,8 @@
   },
   {
     "path": "tailwind.config.cjs",
-    "size": 849,
-    "hash": "84fe98adf41371130b30c88743424f5a21fc9423b795d2d7cc9210346ed55e39",
+    "size": 728,
+    "hash": "bc3ecc1ee7f2b84130d53e98501bbd3b8065f5043e8a3a7a23fda1ca081121e6",
     "type": "config",
     "importers": []
   }

@@ -1,8 +1,12 @@
 {
   "changed": [
-    "lib/markdown/footnotes.js",
-    "test/footnotes.test.mjs"
+    "src/index.njk",
+    "src/_includes/layout.njk",
+    "src/_includes/header.njk",
+    "src/404.njk",
+    "tailwind.config.cjs",
+    "test/feed-cap.test.mjs"
   ],
-  "routes": [],
+  "routes": ["/", "/404.html"],
   "flows": []
 }

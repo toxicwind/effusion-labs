@@ -19,3 +19,5 @@
 - [PrismJS v1.30.0 Release](https://api.github.com/repos/PrismJS/prism/releases/latest)
 - [Apple HIG - Color](https://developer.apple.com/design/human-interface-guidelines/color)
 - [Apple HIG - Lists](https://developer.apple.com/design/human-interface-guidelines/lists)
+- [Apple HIG - Typography](https://developer.apple.com/design/human-interface-guidelines/typography)
+- [Apple HIG - Layout](https://developer.apple.com/design/human-interface-guidelines/layout)
