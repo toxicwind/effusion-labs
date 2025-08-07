@@ -1,5 +1,6 @@
+{# src/_includes/layout.njk #}
 <!DOCTYPE html>
-<html lang="en" class="scroll-pt-16" data-theme="lab">
+<html lang="en" class="scroll-pt-16 dark" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,26 +8,25 @@
 
   <meta name="color-scheme" content="dark light">
   <script>
-    (function () {
+    (function(){
       const doc = document.documentElement;
       const stored = localStorage.getItem('theme');
-      const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const mql = window.matchMedia?.('(prefers-color-scheme: dark)');
+      const systemPrefersDark = mql ? mql.matches : false;
 
-      if (stored === 'dark' || (!stored && systemPrefersDark)) {
-        doc.classList.add('dark');
-        doc.setAttribute('data-theme', 'dark');
-      } else {
-        doc.setAttribute('data-theme', 'lab');
+      // if they’ve explicitly chosen “light,” or if (no choice && system prefers light), switch to lab
+      if (stored === 'light' || (!stored && !systemPrefersDark)) {
+        doc.classList.remove('dark');
+        doc.setAttribute('data-theme','lab');
       }
+      // otherwise leave dark (default in markup)
     })();
   </script>
 
   <link rel="stylesheet" href="/assets/css/app.css">
-
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-
   <script src="/assets/js/lucide.min.js"></script>
 </head>
 
