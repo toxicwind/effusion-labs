@@ -177,4 +177,31 @@
     "status": "pass",
     "next": null
   }
+  ,{
+    "step": "C0",
+    "intended": "Assess heading typography responsiveness",
+    "observed": "Headings use fixed font sizes without fluid scaling",
+    "drift": [],
+    "repair": [],
+    "status": "noted",
+    "next": "Add fluid type scale"
+  },
+  {
+    "step": "C3",
+    "intended": "Introduce fluid type scale for headings",
+    "observed": "h1/h2 use clamp-based fonts via Tailwind base layer",
+    "drift": [],
+    "repair": [],
+    "status": "pass",
+    "next": "Run tests"
+  },
+  {
+    "step": "C4",
+    "intended": "Run test suite",
+    "observed": "npm test passes with new fluid-type test",
+    "drift": [],
+    "repair": [],
+    "status": "pass",
+    "next": null
+  }
 ]

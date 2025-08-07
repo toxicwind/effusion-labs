@@ -21,3 +21,4 @@
 - [Apple HIG - Lists](https://developer.apple.com/design/human-interface-guidelines/lists)
 - [Apple HIG - Typography](https://developer.apple.com/design/human-interface-guidelines/typography)
 - [Apple HIG - Layout](https://developer.apple.com/design/human-interface-guidelines/layout)
+- [Web.dev Fluid Typography](https://web.dev/fluid-typography/)

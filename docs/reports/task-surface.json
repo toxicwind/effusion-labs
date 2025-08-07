@@ -5,7 +5,9 @@
     "src/_includes/header.njk",
     "src/404.njk",
     "tailwind.config.cjs",
-    "test/feed-cap.test.mjs"
+    "test/feed-cap.test.mjs",
+    "src/styles/app.tailwind.css",
+    "test/fluid-type.test.mjs"
   ],
   "routes": ["/", "/404.html"],
   "flows": []
