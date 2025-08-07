@@ -9,6 +9,10 @@
   h2 { @apply font-heading text-[clamp(1.5rem,3vw+0.75rem,2.25rem)]; }
 }
 
+@layer components {
+  .skip-link { @apply sr-only focus:not-sr-only fixed top-2 left-2 z-50 rounded bg-primary text-bg-dark px-4 py-2; }
+}
+
 /* ——— Small utility cluster (unchanged names) ——— */
 @layer components {
   .spec-note-soft     { @apply italic text-gray-500 border-b border-dotted border-gray-300 cursor-help; }

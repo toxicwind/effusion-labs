@@ -22,3 +22,6 @@
 - [Apple HIG - Typography](https://developer.apple.com/design/human-interface-guidelines/typography)
 - [Apple HIG - Layout](https://developer.apple.com/design/human-interface-guidelines/layout)
 - [Web.dev Fluid Typography](https://web.dev/fluid-typography/)
+- [Eleventy v3.1.2 Release Notes](https://api.github.com/repos/11ty/eleventy/releases/tags/v3.1.2)
+- [WCAG 2.1 - Bypass Blocks](https://www.w3.org/TR/WCAG21/#bypass-blocks)
+- [WebAIM: Skip Navigation Links](https://webaim.org/techniques/skipnav/)

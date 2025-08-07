@@ -203,5 +203,23 @@
     "repair": [],
     "status": "pass",
     "next": null
+  },
+  {
+    "step": "C3",
+    "intended": "Add skip navigation link for accessibility",
+    "observed": "Inserted skip link and main landmark",
+    "drift": [],
+    "repair": [],
+    "status": "pass",
+    "next": "Run tests"
+  },
+  {
+    "step": "C4",
+    "intended": "Run test suite and build",
+    "observed": "npm test and npm run build succeed",
+    "drift": [],
+    "repair": [],
+    "status": "pass",
+    "next": null
   }
 ]

@@ -155,8 +155,8 @@
   },
   {
     "path": "src/_includes/layout.njk",
-    "size": 3065,
-    "hash": "3af050c02b5214f700a6f051e1a45dc87ed95aeb93ac119b079272b215fefc58",
+    "size": 3136,
+    "hash": "51c91b59fca2a76d4d891f3a22cdfab43302b48a29b040b5df9f06909d144099",
     "type": "template",
     "importers": []
   },
@@ -428,8 +428,8 @@
   },
   {
     "path": "src/styles/app.tailwind.css",
-    "size": 8663,
-    "hash": "8b7749952c1b6fc156e80f300d392a1e2999e3c88c687f4cb1b9e7993826672b",
+    "size": 8803,
+    "hash": "d18d4f42e2301065f21805962c5e20f1947a1ff810122cd9b4949e545662e9d9",
     "type": "css",
     "importers": []
   },
@@ -438,6 +438,13 @@
     "size": 728,
     "hash": "bc3ecc1ee7f2b84130d53e98501bbd3b8065f5043e8a3a7a23fda1ca081121e6",
     "type": "config",
+    "importers": []
+  },
+  {
+    "path": "wcag.html",
+    "size": 476496,
+    "hash": "233ac31974ce8575c08932ee1bd71c93879cf9b8426b2bc9b961b3ea8afb8ab6",
+    "type": "template",
     "importers": []
   }
 ]
