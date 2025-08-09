@@ -37,6 +37,22 @@ npm install                # install dependencies
 npm run dev                # build and watch at http://localhost:8080
 ````
 
+### Webpage to Markdown
+
+Quickly extract readable page content as Markdown using the built-in
+utility inspired by [`andymason/url-to-markdown`](https://github.com/andymason/url-to-markdown).
+
+```bash
+npm run web2md https://example.com/article
+```
+
+The same capability is exposed to templates through the `webpageToMarkdown`
+Eleventy filter:
+
+```njk
+{{ "https://example.com/article" | webpageToMarkdown }}
+```
+
 ---
 
 ## Production pipeline

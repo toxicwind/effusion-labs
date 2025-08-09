@@ -1,60 +1,27 @@
-// test/theme-toggle.test.mjs
+(function() {
+  const btn = document.getElementById('theme-toggle');
+  if (!btn) return;
+  const html = document.documentElement;
+  const sun = btn.querySelector('.lucide-sun');
+  const moon = btn.querySelector('.lucide-moon');
 
-import { test } from 'node:test';
-import assert from 'node:assert';
-import fs from 'node:fs';
-import { execSync } from 'node:child_process';
-import { JSDOM } from 'jsdom';
+  function apply(theme) {
+    html.setAttribute('data-theme', theme);
+    html.classList.toggle('dark', theme === 'dark');
+    if (sun && moon) {
+      sun.classList.toggle('hidden', theme === 'dark');
+      moon.classList.toggle('hidden', theme !== 'dark');
+    }
+  }
 
-function build() {
-  execSync('npx @11ty/eleventy', { stdio: 'inherit' });
-}
+  const stored = localStorage.getItem('theme');
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const initial = stored || (prefersDark ? 'dark' : 'lab');
+  apply(initial);
 
-test('theme toggle present and color-scheme meta applied', () => {
-  build();
-  const html = fs.readFileSync('_site/index.html', 'utf8');
-  assert.match(html, /id="theme-toggle"/, 'theme toggle missing');
-  assert.match(html, /meta name="color-scheme" content="dark light"/);
-  assert.match(html, /prefers-color-scheme/);
-});
-
-test('theme toggle default to dark and toggles to light (unit)', () => {
-  const dom = new JSDOM(`<!DOCTYPE html><html><body>
-    <button id="theme-toggle">
-      <i class="lucide-sun hidden"></i>
-      <i class="lucide-moon"></i>
-    </button>
-  </body></html>`, { url: 'http://localhost', runScripts: 'dangerously' });
-
-  dom.window.matchMedia = () => ({ matches: false, addEventListener(){}, removeEventListener(){} });
-
-  const script = fs.readFileSync('src/scripts/theme-toggle.js', 'utf8');
-  dom.window.eval(script);
-
-  const htmlEl = dom.window.document.documentElement;
-  assert.equal(htmlEl.getAttribute('data-theme'), 'dark');
-
-  dom.window.document.getElementById('theme-toggle').click();
-  assert.equal(htmlEl.getAttribute('data-theme'), 'lab');
-});
-
-test('theme toggle default dark and toggles in built site (integration)', () => {
-  build();
-  const html = fs.readFileSync('_site/index.html', 'utf8');
-  const dom = new JSDOM(html, { runScripts: 'outside-only', url: 'http://localhost' });
-  const { window } = dom;
-
-  window.matchMedia = () => ({ matches: false });
-
-  const script = fs.readFileSync('src/scripts/theme-toggle.js', 'utf8');
-  window.eval(script);
-
-  const docEl = window.document.documentElement;
-  assert.equal(docEl.getAttribute('data-theme'), 'dark');
-  assert.ok(docEl.classList.contains('dark'));
-
-  const btn = window.document.getElementById('theme-toggle');
-  btn.dispatchEvent(new window.Event('click', { bubbles: true }));
-  assert.equal(docEl.getAttribute('data-theme'), 'lab');
-  assert.ok(!docEl.classList.contains('dark'));
-});
+  btn.addEventListener('click', () => {
+    const next = html.getAttribute('data-theme') === 'dark' ? 'lab' : 'dark';
+    localStorage.setItem('theme', next);
+    apply(next);
+  });
+})();
