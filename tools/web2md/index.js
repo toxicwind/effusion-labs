@@ -1,13 +1,11 @@
 const { fetch: undiciFetch, Agent, ProxyAgent } = require('undici');
-const http = require('node:http');
-const https = require('node:https');
+const fetch = require('node-fetch');
+const { HttpsProxyAgent } = require('https-proxy-agent');
 const dns = require('node:dns').promises;
 const { JSDOM } = require('jsdom');
 const { Readability } = require('@mozilla/readability');
 const TurndownService = require('turndown');
 const crypto = require('node:crypto');
-const fs = require('node:fs/promises');
-const path = require('node:path');
 
 function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 function jitter() { return 250 + Math.floor(Math.random()*1250); }
@@ -40,71 +38,81 @@ function normalizeHTML(html,url){
   return md;
 }
 
-const proxy = process.env.HTTPS_PROXY || process.env.HTTP_PROXY;
-const proxyDispatcher = proxy ? new ProxyAgent(proxy) : undefined;
+function buildProxy(host, opts={}){
+  const envEnabled = process.env.OUTBOUND_PROXY_ENABLED === '1';
+  const envUrl = process.env.OUTBOUND_PROXY_URL;
+  const envUser = process.env.OUTBOUND_PROXY_USER;
+  const envPass = process.env.OUTBOUND_PROXY_PASS;
+  const envBypass = (process.env.OUTBOUND_PROXY_NO_PROXY || '').split(',').map(s=>s.trim().toLowerCase()).filter(Boolean);
+  const enabled = opts.forceProxy===true ? true : opts.forceProxy===false ? false : envEnabled;
+  const bypass = (opts.noProxyHosts?opts.noProxyHosts.split(','):envBypass).map(s=>s.trim().toLowerCase()).filter(Boolean);
+  const shouldBypass = bypass.some(h=>host===h || host.endsWith('.'+h));
+  const useProxy = enabled && envUrl && !shouldBypass;
+  const state = { enabled: useProxy, via: envUrl, auth: (envUser&&envPass)?'present':'absent', bypass };
+  if(!useProxy) return { state };
+  const uri = `http://${envUrl}`;
+  const auth = envUser && envPass ? `${envUser}:${envPass}` : undefined;
+  const urlObj = new URL(uri);
+  if(envUser) urlObj.username = envUser;
+  if(envPass) urlObj.password = envPass;
+  const proxyConfig = { uri, auth, urlObj, pw: { server: uri, username: envUser, password: envPass } };
+  return { state, proxyConfig };
+}
 
 async function fetchTier1(url,opts={}){
   const controller = new AbortController();
   const t = setTimeout(()=>controller.abort(), opts.timeout||12000);
   try {
-    const res = await undiciFetch(url,{signal:controller.signal, headers:opts.headers, dispatcher: proxyDispatcher});
+    const dispatcher = opts.proxyConfig ? new ProxyAgent({ uri: opts.proxyConfig.uri, auth: opts.proxyConfig.auth }) : undefined;
+    const res = await undiciFetch(url,{signal:controller.signal, headers:opts.headers, dispatcher});
     const buf = await res.arrayBuffer();
-    return { status: res.status, body: Buffer.from(buf), headers: Object.fromEntries(res.headers), httpVersion: res.httpVersion || 'h2' };
+    return { status: res.status, body: Buffer.from(buf), headers: Object.fromEntries(res.headers), httpVersion: res.httpVersion||'h2' };
   } finally { clearTimeout(t); }
 }
 
 async function fetchTier2(url,opts={}){
   const inner = new Agent({ connect: { ALPNProtocols: ['http/1.1'] } });
-  const agent = proxy ? new ProxyAgent({ uri: proxy, dispatcher: inner }) : inner;
+  const dispatcher = opts.proxyConfig ? new ProxyAgent({ uri: opts.proxyConfig.uri, auth: opts.proxyConfig.auth, dispatcher: inner }) : inner;
   const controller = new AbortController();
   const t = setTimeout(()=>controller.abort(), opts.timeout||12000);
   try {
-    const res = await undiciFetch(url,{signal:controller.signal, dispatcher:agent, headers:opts.headers});
+    const res = await undiciFetch(url,{signal:controller.signal, dispatcher, headers:opts.headers});
     const buf = await res.arrayBuffer();
     return { status: res.status, body: Buffer.from(buf), headers: Object.fromEntries(res.headers), httpVersion: '1.1' };
-  } finally { clearTimeout(t); agent.close(); }
+  } finally { clearTimeout(t); dispatcher.close && dispatcher.close(); }
 }
 
 async function fetchTier3(url,opts={}){
-  const u = new URL(url);
-  const lib = u.protocol==='https:'?https:http;
   const controller = new AbortController();
   const t = setTimeout(()=>controller.abort(), opts.timeout||12000);
-  return new Promise((resolve,reject)=>{
-    const req = lib.request({ hostname:u.hostname, path:u.pathname+u.search, port:u.port, method:'GET', headers:opts.headers, family: opts.family }, res=>{
-      const chunks=[];
-      res.on('data',d=>chunks.push(d));
-      res.on('end',()=>resolve({status:res.statusCode, body:Buffer.concat(chunks), headers:res.headers, httpVersion: res.httpVersion }));
-    });
-    req.on('error',reject);
-    req.on('timeout',()=>{ req.destroy(); reject(new Error('timeout')); });
-    req.end();
-  }).finally(()=>clearTimeout(t));
+  try {
+    const agent = opts.proxyConfig ? new HttpsProxyAgent(opts.proxyConfig.urlObj) : undefined;
+    const res = await fetch(url,{signal:controller.signal, headers:opts.headers, agent});
+    const buf = await res.arrayBuffer();
+    return { status: res.status, body: Buffer.from(buf), headers: Object.fromEntries(res.headers.raw()), httpVersion: '1.1' };
+  } finally { clearTimeout(t); }
 }
 
 async function fetchTier4(url,opts={}){
-  try {
-    const { chromium } = require('playwright-core');
-    const browser = await chromium.launch({ headless: true });
-    const page = await browser.newPage({ extraHTTPHeaders: opts.headers });
-    await page.goto(url,{ waitUntil:'networkidle', timeout: opts.timeout||12000 });
-    const content = await page.content();
-    await browser.close();
-    return { status:200, body:Buffer.from(content), headers:{}, httpVersion:'browser' };
-  } catch(err){
-    throw err;
-  }
+  const { chromium } = require('playwright-core');
+  const browser = await chromium.launch({ headless: true, proxy: opts.proxyConfig ? opts.proxyConfig.pw : undefined });
+  const page = await browser.newPage({ extraHTTPHeaders: opts.headers });
+  await page.goto(url,{ waitUntil:'networkidle', timeout: opts.timeout||12000 });
+  const content = await page.content();
+  await browser.close();
+  return { status:200, body:Buffer.from(content), headers:{}, httpVersion:'browser' };
 }
 
 async function fetchTier5(url,opts={}){
   const ts = new Date();
   const timestamp = ts.getUTCFullYear().toString();
   const api = `https://archive.org/wayback/available?url=${encodeURIComponent(url)}&timestamp=${timestamp}0101`;
-  const res = await undiciFetch(api);
+  const dispatcher = opts.proxyConfig ? new ProxyAgent({ uri: opts.proxyConfig.uri, auth: opts.proxyConfig.auth }) : undefined;
+  const res = await undiciFetch(api,{ dispatcher });
   const data = await res.json();
   if(data.archived_snapshots && data.archived_snapshots.closest){
     const snapshot = data.archived_snapshots.closest.url;
-    const r = await undiciFetch(snapshot,{headers:opts.headers});
+    const r = await undiciFetch(snapshot,{headers:opts.headers, dispatcher});
     const buf = await r.arrayBuffer();
     return { status:r.status, body:Buffer.from(buf), headers:Object.fromEntries(r.headers), httpVersion: r.httpVersion || 'h1' };
   }
@@ -119,7 +127,8 @@ async function fetchWithFallback(url, options={}){
   const family = ipv4Only?4:undefined;
   const host = new URL(url).hostname;
   const dnsInfo = await resolveDNS(host);
-  const diag={ url, host, dns: dnsInfo, attempts: [] };
+  const { state: proxyState, proxyConfig } = buildProxy(host, options);
+  const diag={ url, host, dns: dnsInfo, proxy: proxyState, attempts: [] };
   const startTime = Date.now();
   let lastError;
   const tierOrder = headless? [3]: (noH2? [0,2,3,4]:[0,1,2,3,4]);
@@ -127,7 +136,7 @@ async function fetchWithFallback(url, options={}){
     const tierFn = tiers[idx];
     await sleep(jitter());
     try {
-      const res = await tierFn(url,{headers, family});
+      const res = await tierFn(url,{headers, family, proxyConfig});
       const end = Date.now();
       const okStatus = res.status >=200;
       const raw = res.body.toString('utf8');
@@ -150,3 +159,4 @@ async function fetchWithFallback(url, options={}){
 }
 
 module.exports={ fetchWithFallback };
+
