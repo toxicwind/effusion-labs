@@ -1,0 +1,41 @@
+{
+  "type": "product",
+  "product_id": "pop-mart--the-monsters--zimomo--angel-in-clouds-v2--plush--std--58cm--20241025",
+  "brand": "pop-mart",
+  "line": "the-monsters",
+  "character": "zimomo",
+  "series": "angel-in-clouds-v2",
+  "form": "plush",
+  "variant": "std",
+  "edition": {
+    "kind": "core"
+  },
+  "distribution": {
+    "region_lock": false,
+    "markets": [
+      "US"
+    ]
+  },
+  "size": {
+    "unit": "cm",
+    "h": 58,
+    "w": 33,
+    "d": 25
+  },
+  "release_date": "2024-10-25",
+  "market_listings": [
+    {
+      "market": "US",
+      "currency": "USD",
+      "price": 289.99
+    }
+  ],
+  "availability": {
+    "limited": false,
+    "unit_count": null
+  },
+  "images": [],
+  "provenance_ref": "/content/archives/collectables/designer-toys/pop-mart/the-monsters/provenance/pop-mart--the-monsters--zimomo--angel-in-clouds-v2--plush--std--58cm--20241025.jsonl",
+  "confidence": 0.45,
+  "notes": "Seeded from initial article; requires re-research."
+}

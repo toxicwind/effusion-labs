@@ -21,3 +21,4 @@
 - README regenerated from repository reality; prior README replaced except verified items.
 - Archived official library docs via web2md into docs/vendors.
 - Added initial POP MART 'The Monsters' archive scaffolding with record-per-product model. Used local HTML for provenance due to Node fetch network limitations.
+- Seeded POP MART “The Monsters” products from placeholder seed article; bulk records initialized.

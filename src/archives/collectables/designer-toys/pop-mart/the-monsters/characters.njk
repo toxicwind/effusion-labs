@@ -1,0 +1,10 @@
+---
+layout: "layout.njk"
+pagination:
+  data: collections.monstersCharacters
+  size: 1
+  alias: character
+permalink: "/archives/collectables/designer-toys/pop-mart/the-monsters/characters/{{ character.data.slug }}/index.html"
+---
+<h1 class="text-2xl font-bold mb-2">{{ character.data.name }}</h1>
+<p class="mb-4">{{ character.data.notes }}</p>

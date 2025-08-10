@@ -6,7 +6,7 @@ import addFormats from "ajv-formats";
 const ajv = new Ajv({ allErrors: true });
 addFormats(ajv);
 
-const base = "src/content/collectibles/designer-toys/pop-mart/the-monsters";
+const base = "src/content/archives/collectables/designer-toys/pop-mart/the-monsters";
 const schemas = {
   character: JSON.parse(
     fs.readFileSync("schema/character.schema.json", "utf8"),
@@ -45,9 +45,20 @@ for (const file of filesIn(path.join(base, "series"))) {
 
 // products
 const productIds = new Set();
+const identityMap = new Map();
 for (const file of filesIn(path.join(base, "products"))) {
   const data = JSON.parse(fs.readFileSync(file, "utf8"));
   validate(schemas.product, data, file);
+
+  if (Array.isArray(data.form)) {
+    console.error(`non-merge: form array in ${file}`);
+    process.exitCode = 1;
+  }
+  if (data.size && Array.isArray(data.size.h)) {
+    console.error(`non-merge: size array in ${file}`);
+    process.exitCode = 1;
+  }
+
   const recomputed = [
     data.brand,
     data.line,
@@ -73,4 +84,30 @@ for (const file of filesIn(path.join(base, "products"))) {
     process.exitCode = 1;
   }
   productIds.add(data.product_id);
+
+  const identityKey = [
+    data.brand,
+    data.line,
+    data.character,
+    data.series,
+    data.form,
+    data.variant || "",
+    data.size && data.size.h ? data.size.h : "",
+    data.release_date || "",
+    data.edition && data.edition.kind ? data.edition.kind : "",
+  ].join("|");
+  if (identityMap.has(identityKey)) {
+    const prev = identityMap.get(identityKey);
+    const bothUnlocked =
+      !(prev.distribution && prev.distribution.region_lock) &&
+      !(data.distribution && data.distribution.region_lock);
+    if (bothUnlocked) {
+      console.error(
+        `region-split: ${file} and ${prev.file} differ only by markets`,
+      );
+      process.exitCode = 1;
+    }
+  } else {
+    identityMap.set(identityKey, { file, distribution: data.distribution });
+  }
 }

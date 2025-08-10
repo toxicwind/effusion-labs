@@ -46,3 +46,4 @@
 - [[](https://daisyui.com/)](https://daisyui.com/docs/install/)
 - [*   [Setup](https://github.com/postcss/postcss#usage)](https://postcss.org/)
 - [Labubu Fall in Wild Plush](https://example.com/fall-in-wild)
+- [The Monsters Seed Article](docs/knowledge/sources/the-monsters/seed-article.md)
