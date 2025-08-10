@@ -26,14 +26,27 @@ module.exports = function (eleventyConfig) {
   // POP MART — The Monsters collections
   const monstersBase =
     "content/archives/collectables/designer-toys/pop-mart/the-monsters";
-  eleventyConfig.addCollection("monstersProducts", (api) =>
-    api.getFilteredByGlob(`${monstersBase}/products/*.json`),
+  const fs = require("node:fs");
+  const path = require("node:path");
+
+  function loadJsonCollection(relDir) {
+    const fullDir = path.join("src", relDir);
+    return fs
+      .readdirSync(fullDir)
+      .filter((f) => f.endsWith(".json"))
+      .map((f) => ({
+        data: JSON.parse(fs.readFileSync(path.join(fullDir, f), "utf8")),
+      }));
+  }
+
+  eleventyConfig.addCollection("monstersProducts", () =>
+    loadJsonCollection(`${monstersBase}/products`),
   );
-  eleventyConfig.addCollection("monstersSeries", (api) =>
-    api.getFilteredByGlob(`${monstersBase}/series/*.json`),
+  eleventyConfig.addCollection("monstersSeries", () =>
+    loadJsonCollection(`${monstersBase}/series`),
   );
-  eleventyConfig.addCollection("monstersCharacters", (api) =>
-    api.getFilteredByGlob(`${monstersBase}/characters/*.json`),
+  eleventyConfig.addCollection("monstersCharacters", () =>
+    loadJsonCollection(`${monstersBase}/characters`),
   );
 
   eleventyConfig.addFilter("byCharacter", (items, slug) =>
@@ -42,11 +55,15 @@ module.exports = function (eleventyConfig) {
   eleventyConfig.addFilter("bySeries", (items, slug) =>
     items.filter((p) => p.data.series === slug),
   );
-  eleventyConfig.addFilter("productsSorted", (a, b) => {
-    const ad = a.data.release_date || "";
-    const bd = b.data.release_date || "";
-    return ad.localeCompare(bd);
-  });
+  eleventyConfig.addFilter("productsSorted", (items) =>
+    items
+      .slice()
+      .sort((a, b) => {
+        const ad = a.data.release_date || "";
+        const bd = b.data.release_date || "";
+        return ad.localeCompare(bd);
+      }),
+  );
 
   eleventyConfig.addFilter("seededShuffle", (arr, seed) =>
     seeded.seededShuffle(arr, seed),
