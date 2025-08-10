@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 
-const base = "src/content/collectibles/designer-toys/pop-mart/the-monsters";
+const base = "src/content/archives/collectables/designer-toys/pop-mart/the-monsters";
 const productsDir = path.join(base, "products");
 const provDir = path.join(base, "provenance");
 

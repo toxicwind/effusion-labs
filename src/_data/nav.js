@@ -8,6 +8,5 @@ const areaLinks = CONTENT_AREAS.map((a) => ({
 module.exports = [
   { title: "Showcase", url: "/" },
   ...areaLinks,
-  { title: "Archives", url: "/collectibles/" },
   { title: "Map", url: "/map/" },
 ];

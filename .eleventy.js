@@ -25,7 +25,7 @@ module.exports = function (eleventyConfig) {
 
   // POP MART — The Monsters collections
   const monstersBase =
-    "content/collectibles/designer-toys/pop-mart/the-monsters";
+    "content/archives/collectables/designer-toys/pop-mart/the-monsters";
   eleventyConfig.addCollection("monstersProducts", (api) =>
     api.getFilteredByGlob(`${monstersBase}/products/*.json`),
   );
@@ -35,6 +35,18 @@ module.exports = function (eleventyConfig) {
   eleventyConfig.addCollection("monstersCharacters", (api) =>
     api.getFilteredByGlob(`${monstersBase}/characters/*.json`),
   );
+
+  eleventyConfig.addFilter("byCharacter", (items, slug) =>
+    items.filter((p) => p.data.character === slug),
+  );
+  eleventyConfig.addFilter("bySeries", (items, slug) =>
+    items.filter((p) => p.data.series === slug),
+  );
+  eleventyConfig.addFilter("productsSorted", (a, b) => {
+    const ad = a.data.release_date || "";
+    const bd = b.data.release_date || "";
+    return ad.localeCompare(bd);
+  });
 
   eleventyConfig.addFilter("seededShuffle", (arr, seed) =>
     seededShuffle(arr, seed),
