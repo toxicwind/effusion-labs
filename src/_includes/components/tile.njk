@@ -1,3 +1,4 @@
+{% macro tile(item) %}
 <a href="{{ item.url }}" aria-label="{{ item.data.title }}" class="tile block rounded-lg border border-white/10 p-4 transition hover:-translate-y-0.5 hover:shadow focus:outline-none focus:ring">
   <div class="flex items-center justify-between text-xs text-gray-400">
     <span class="capitalize">{{ item.data.type }}</span>
@@ -5,3 +6,4 @@
   </div>
   <h3 class="mt-2 font-heading text-lg text-gray-100">{{ item.data.title }}</h3>
 </a>
+{% endmacro %}
