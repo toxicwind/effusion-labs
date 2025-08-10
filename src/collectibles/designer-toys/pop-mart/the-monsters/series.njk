@@ -1,0 +1,10 @@
+---
+layout: "layout.njk"
+pagination:
+  data: collections.monstersSeries
+  size: 1
+  alias: series
+permalink: "/collectibles/designer-toys/pop-mart/the-monsters/series/{{ series.data.slug }}/index.html"
+---
+<h1 class="text-2xl font-bold mb-2">{{ series.data.title }}</h1>
+<p class="mb-4">{{ series.data.notes }}</p>
