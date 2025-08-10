@@ -15,7 +15,14 @@ before(async () => {
   avifPath = `/assets/images/${files.find(f => f.endsWith('.avif'))}`;
   webpPath = `/assets/images/${files.find(f => f.endsWith('.webp'))}`;
   srv = spawn('./node_modules/.bin/eleventy', ['--serve'], { stdio: 'ignore', detached: true });
-  await wait(4000);
+  for (let i = 0; i < 20; i++) {
+    try {
+      await fetchFn('http://localhost:8080/');
+      break;
+    } catch {
+      await wait(500);
+    }
+  }
 });
 
 after(() => {

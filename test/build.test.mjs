@@ -7,7 +7,8 @@ function build() {
   execSync('npx @11ty/eleventy', { stdio: 'inherit' });
 }
 
-test('Eleventy build produces compiled CSS', () => {
+test('Eleventy build generates expected assets and pages', () => {
   build();
   assert.ok(fs.existsSync('_site/assets/css/app.css'));
+  assert.ok(fs.existsSync('_site/archives/index.html'));
 });
