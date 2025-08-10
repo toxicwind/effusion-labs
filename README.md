@@ -49,6 +49,9 @@ npm run dev      # start development server with live rebuilds and BrowserSync
 npm run build    # generate static site into _site/
 npm test         # run unit and integration tests offline via node:test
 npm run web2md -- <URL>  # fetch a web page, output Markdown and sha256 hash
+npm run docs:archive   # capture vendor docs via web2md
+npm run docs:reindex   # rebuild vendor docs index
+npm run docs:validate  # verify hashes
 ```
 
 The `dev` command watches templates, Markdown and styles, recompiling Tailwind through PostCSS before each serve cycle and serving `_site/` via BrowserSync. The `build` command performs a one‑off production build. Tests are hermetic and execute without internet access. The `web2md` command is described in detail below.

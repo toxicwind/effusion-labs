@@ -19,3 +19,4 @@
 - Exposed `webpageToMarkdown` as both an Eleventy filter and CLI command to streamline remote content capture. @source: [andymason/url-to-markdown](https://github.com/andymason/url-to-markdown)
 - Updated `web2md` CLI to emit SHA256 hash alongside Markdown.
 - README regenerated from repository reality; prior README replaced except verified items.
+- Archived official library docs via web2md into docs/vendors.

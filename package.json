@@ -7,7 +7,10 @@
     "test": "node --test",
     "build": "npx @11ty/eleventy",
     "dev": "npx @11ty/eleventy --serve",
-    "web2md": "node webpage-to-markdown.js"
+    "web2md": "node webpage-to-markdown.js",
+    "docs:archive": "node tools/archive-docs.js",
+    "docs:validate": "node tools/validate-docs.js",
+    "docs:reindex": "node tools/build-vendor-index.js"
   },
   "engines": {
     "node": ">=20"
