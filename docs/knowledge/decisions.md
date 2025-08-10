@@ -17,3 +17,5 @@
 - Added skip navigation link and main landmark to meet WCAG 2.1 Bypass Blocks and streamline keyboard access. @source: [WCAG 2.1 - Bypass Blocks](https://www.w3.org/TR/WCAG21/#bypass-blocks); [WebAIM: Skip Navigation Links](https://webaim.org/techniques/skipnav/)
 - Introduced `webpageToMarkdown` utility leveraging Readability.js and Turndown for full-page Markdown extraction. @source: [Readability.js README](https://raw.githubusercontent.com/mozilla/readability/master/README.md); [Turndown README](https://raw.githubusercontent.com/mixmark-io/turndown/master/README.md)
 - Exposed `webpageToMarkdown` as both an Eleventy filter and CLI command to streamline remote content capture. @source: [andymason/url-to-markdown](https://github.com/andymason/url-to-markdown)
+- Updated `web2md` CLI to emit SHA256 hash alongside Markdown.
+- README regenerated from repository reality; prior README replaced except verified items.

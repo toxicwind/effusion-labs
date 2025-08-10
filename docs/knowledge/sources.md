@@ -27,3 +27,4 @@
 - [WebAIM: Skip Navigation Links](https://webaim.org/techniques/skipnav/)
 - [Turndown README](https://raw.githubusercontent.com/mixmark-io/turndown/master/README.md) — Convert HTML into Markdown with JavaScript (retrieved 2025-08-07)
 - [Readability.js README](https://raw.githubusercontent.com/mozilla/readability/master/README.md) — Firefox Reader View parser for extracting main content (retrieved 2025-08-07)
+- README regenerated from repository state; no external sources consulted

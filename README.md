@@ -1,119 +1,150 @@
 # Effusion Labs Digital Garden
 
-Effusion Labs is a structured, long-form digital garden built with [Eleventy](https://www.11ty.dev/).  
-The site supports bidirectional linking, knowledge-graph visualisation, and containerised deployment so that ideas can evolve in place while remaining easy to publish.
+Effusion Labs is a long‑form digital garden and studio powered by Eleventy, Nunjucks and Tailwind CSS. It serves as a structured space for developing ideas, capturing research and publishing a static site.
 
----
+## Badges
 
-## Repository structure
+[![License: ISC](https://img.shields.io/badge/license-ISC-blue.svg)](./LICENSE)
 
-| Path | Purpose |
-|------|---------|
-| `src/` | Markdown content, Nunjucks templates, and data files |
-| `_site/` | Generated output created by Eleventy (ignored by Git) |
-| `.github/workflows/` | Continuous-integration pipeline |
-| `.portainer/` | Production container context including `Dockerfile` and `nginx.conf` |
+## Overview
 
----
+This repository contains the source for the Effusion Labs site. The build pipeline combines Eleventy for static generation, Nunjucks templates for layout, and Tailwind CSS (with daisyUI) for styling. Markdown files under `src/content` provide the primary content. The project targets practitioners who want a reproducible digital garden with bidirectional links, a graph view and containerised deployment.
 
-## Core technology stack
+The repository is intentionally self‑describing. Configuration is expressed as code, tests run without network access and every external reference is captured for provenance. Publishing involves compiling Markdown and assets into a static directory that can be served by any HTTP host or bundled into a container image.
 
-* **Site generator**: Eleventy  
-* **Bidirectional linking**: [`@photogabble/eleventy-plugin-interlinker`](https://github.com/photogabble/eleventy-plugin-interlinker)  
-* **Styling**: Tailwind CSS v4 compiled with PostCSS and [daisyUI](https://daisyui.com) v5 components
-* **PostCSS config**: plugins are loaded via `lib/postcssPlugins.js` for reuse
-* **Syntax highlighting**: [`@11ty/eleventy-plugin-syntaxhighlight`](https://github.com/11ty/eleventy-plugin-syntaxhighlight)
-* **Sitemap generation**: [`@quasibit/eleventy-plugin-sitemap`](https://github.com/quasibit/eleventy-plugin-sitemap)
-* **Graph view**: [`vis-network`](https://visjs.org/)
+Content is organised into **Sparks**, **Concepts**, **Projects** and **Meta** areas. Documents can interlink and evolve over time, turning transient notes into durable knowledge while remaining easy to publish.
 
-The Tailwind setup includes [daisyUI](https://daisyui.com) v5 with a custom theme defined in `tailwind.config.cjs`.
+## Features / Capabilities
 
----
+- **Eleventy static site** with configurable collections for Sparks, Concepts, Projects and Meta documents, generated via the shared register module and constants【F:lib/eleventy/register.js†L33-L38】【F:lib/constants.js†L7-L13】
+- **Nunjucks layout** with dark/light theme toggle, skip navigation link and meta sidebar for document metadata. The layout preloads fonts, exposes lucide icons and surfaces status, tags, importance and memory references for each document【F:src/_includes/layout.njk†L33-L80】
+- **Tailwind CSS v4** configured through PostCSS, extended with custom colours and fonts, and themed with daisyUI’s `lab` palette【F:tailwind.config.cjs†L2-L31】【F:postcss.config.cjs†L1-L5】
+- **Bidirectional linking** using `@photogabble/eleventy-plugin-interlinker`, producing annotated `<a class="interlink">` elements for internal references【F:lib/plugins.js†L1-L26】
+- **Syntax highlighting** via `@11ty/eleventy-plugin-syntaxhighlight` and Prism themes loaded through the Tailwind entry file【F:lib/plugins.js†L27-L31】【F:src/styles/app.tailwind.css†L4-L5】
+- **Responsive image transform**: `@11ty/eleventy-img` generates AVIF, WebP and original formats at multiple widths with lazy‑loading and async decoding attributes【F:lib/eleventy/register.js†L40-L52】
+- **Interactive concept map** built with `vis-network`, exposing collections as a node‑edge graph at `/map/` for exploratory browsing【F:src/map.njk†L38-L121】
+- **Webpage ingestion helper** providing both an Eleventy filter and a CLI to convert external pages to Markdown using Readability.js and Turndown【F:lib/filters.js†L1-L5】【F:lib/webpageToMarkdown.js†L1-L26】
+- **PostCSS pipeline** that compiles `src/styles/app.tailwind.css` on each build and copies static assets through to `_site/`【F:lib/eleventy/register.js†L69-L72】
+- **Accessible baseline** including skip‑link, semantic landmarks and footnote enhancements for improved keyboard navigation and readability【F:src/_includes/layout.njk†L33-L75】【F:src/styles/app.tailwind.css†L12-L38】
 
-## Getting started
+## Quickstart
 
-```bash
-npm install                # install dependencies
-npm run dev                # build and watch at http://localhost:8080
-````
+### Prerequisites
 
-### Webpage to Markdown
+- Node.js ≥20【F:package.json†L12-L13】
+- npm (bundled with Node)
 
-Quickly extract readable page content as Markdown using the built-in
-utility inspired by [`andymason/url-to-markdown`](https://github.com/andymason/url-to-markdown).
+### Install
+
+Running `npm install` pulls all project dependencies, including Eleventy, Tailwind tooling and the test suite.
 
 ```bash
-npm run web2md https://example.com/article
+npm install
 ```
 
-The same capability is exposed to templates through the `webpageToMarkdown`
-Eleventy filter:
+### Commands
+
+```bash
+npm run dev      # start development server with live rebuilds and BrowserSync
+npm run build    # generate static site into _site/
+npm test         # run unit and integration tests offline via node:test
+npm run web2md -- <URL>  # fetch a web page, output Markdown and sha256 hash
+```
+
+The `dev` command watches templates, Markdown and styles, recompiling Tailwind through PostCSS before each serve cycle and serving `_site/` via BrowserSync. The `build` command performs a one‑off production build. Tests are hermetic and execute without internet access. The `web2md` command is described in detail below.
+
+No lint or format scripts are defined.
+
+## Configuration
+
+- **Content directories**: Markdown lives under `src/content/{sparks,concepts,projects,meta}`【F:lib/constants.js†L7-L13】
+- **Data files**: `src/_data/` holds global data such as navigation links【F:src/_data/nav.js†L1-L11】
+- **Includes**: Nunjucks layouts and partials reside in `src/_includes/`
+- **Env vars**:
+  - `CASSETTE_DIR` – path to snapshot vault (`docs/cassettes/` by default)
+  - `API_TWIN_DIR` – path to API twin stubs (`tools/api-twin/` by default)
+
+Setting these variables allows custom storage locations for captures or twins when running tests in specialised environments. All other configuration resides in the `lib/` directory as plain JavaScript modules.
+
+## Testing
+
+`npm test` invokes Node’s built‑in test runner and executes all files under `test/`. The suite mixes unit tests for utility functions with integration tests that assert build outputs and runtime behaviour. Integration tests that exercise network calls use the **Live‑Capture‑Lock** policy:
+
+- **Snapshot vault**: Recorded HTTP interactions are stored under `docs/cassettes/`【9ad1e7†L1-L2】
+- **Creating captures**: run the relevant tests with network access; responses are saved as fixtures for replay
+- **Replay**: PR CI replays snapshots and **fails closed** if a test attempts live network access
+- **API twin**: when live capture is unsafe or unavailable, stub the endpoint under `tools/api-twin/` and point tests to the twin【44f46f†L1-L2】
+- **Idempotency**: live probes must be repeatable and safe; destructive flows are simulated via the twin
+
+Snapshots are deterministic: headers and bodies are stored alongside SHA256 hashes. Any attempt to mutate the snapshot store during CI causes the build to fail, ensuring reproducibility. Developers should refresh snapshots only when contract drift breaks replay, committing both the updated fixture and the rationale in the decision log. A new test validates the CLI helper, ensuring the emitted hash matches the Markdown content【F:test/web2md.cli.test.mjs†L1-L29】.
+
+## Web Ingestion Helper
+
+`webpageToMarkdown` converts remote pages into Markdown using `@mozilla/readability` to isolate the article body and `turndown` to convert HTML into Markdown. It powers both an Eleventy filter and the `web2md` CLI:
+
+```bash
+npm run web2md -- https://example.com/article > article.md
+```
+
+The CLI prints the normalized Markdown followed by a `sha256:` line containing the content hash, enabling reproducible references and easy provenance recording【F:webpage-to-markdown.js†L1-L19】. Redirect stdout to a file to capture the article and record the hash alongside other research notes.
+
+Within templates, the filter can ingest content on build:
 
 ```njk
 {{ "https://example.com/article" | webpageToMarkdown }}
 ```
 
----
+## Project Layout
 
-## Production pipeline
+```
+.
+├── .eleventy.js               # Eleventy configuration entry
+├── .github/workflows/deploy.yml
+├── .portainer/                # Dockerfile and nginx.conf for deployment
+├── docs/
+│   ├── cassettes/             # Snapshot vault for recorded HTTP interactions
+│   └── knowledge/             # Decision log, sources and research snapshots
+├── lib/                       # Configuration, plugins, filters, utilities
+├── src/
+│   ├── _data/                 # Global data files
+│   ├── _includes/             # Nunjucks layouts and partials
+│   ├── assets/                # Static assets (copied through)
+│   ├── content/               # Markdown content grouped by area
+│   ├── scripts/               # Client-side JavaScript
+│   └── styles/                # Tailwind entry points
+├── test/                      # Node.js test suite
+├── tools/
+│   └── api-twin/              # Placeholder for API stubs used during offline tests
+└── webpage-to-markdown.js     # CLI for web ingestion
+```
 
-A push to `main` triggers **GitHub Actions**:
+## Deployment / Release
 
-1. Run the Eleventy build and copy `_site/` into the container context.
-2. Build an Nginx image and push it to GitHub Container Registry at
-   `ghcr.io/<OWNER>/effusion-labs:latest`.
+The project builds to static files in `_site/`. A GitHub Actions workflow installs dependencies, runs tests, builds the site and produces an Nginx image pushed to GitHub Container Registry. The container embeds the generated `_site/` output and a tailored `nginx.conf`. Successful pushes to `main` trigger the pipeline and a Portainer webhook redeploys the container on the target host【F:.github/workflows/deploy.yml†L1-L61】【F:.portainer/Dockerfile†L1-L24】.
 
-You can deploy the image with Portainer or any Docker host:
+Local deployment can be tested with:
 
 ```bash
-docker run --rm -p 8080:80 ghcr.io/<OWNER>/effusion-labs:latest
+docker build -t effusion-labs . -f .portainer/Dockerfile
+docker run --rm -p 8080:80 effusion-labs
 ```
 
-The bundled `nginx.conf` serves static assets with cache headers and falls back to `index.html` for client-side navigation.
+The running container serves the static site with caching headers and an SPA fallback defined in `.portainer/nginx.conf`.
 
----
+## Contributing
 
-## Eleventy configuration highlights
-
-Key customisation is in `.eleventy.js`:
-
-```js
-const getPlugins = require("./lib/plugins");
-const filters    = require("./lib/filters");
-
-module.exports = eleventyConfig => {
-  getPlugins().forEach(([plugin, opts]) => eleventyConfig.addPlugin(plugin, opts));
-  Object.entries(filters).forEach(([name, fn]) => eleventyConfig.addFilter(name, fn));
-
-  ["sparks", "concepts", "projects", "meta"].forEach(group =>
-    eleventyConfig.addCollection(group, api =>
-      api.getFilteredByGlob(`src/content/${group}/**/*.md`)
-    )
-  );
-};
-```
-
----
-
-## Interactive concept map
-
-`src/map.njk` converts Eleventy collections into a node–edge list consumed by `vis-network`.
-Opening `/map/` reveals how Sparks, Concepts, Projects, and Meta documents interconnect, enabling exploratory browsing.
-
----
-
-## RSS feed
-
-A site-wide feed is available at `/feed.xml` for following updates in your preferred reader.
-
----
-
-## Sitemap
-
-An automatically generated sitemap is produced at `/sitemap.xml` to help search engines discover content.
-
----
+1. Fork the repository and create a local clone.
+2. Install dependencies with `npm install`.
+3. Create feature branches that keep experimental work behind flags.
+4. Update or add tests alongside code changes; record any new external captures in `docs/knowledge/` and commit snapshots under `docs/cassettes/`.
+5. Run `npm test` to ensure the suite passes and snapshots are replayed without network access.
+6. Submit a pull request describing your changes, snapshot updates and any assumptions.
 
 ## License
 
-This project is released under the MIT License. See [`LICENSE`](./LICENSE) for details.
+This project is licensed under the [ISC License](./LICENSE)【F:LICENSE†L1-L11】
+
+## Links
+
+- [docs/knowledge/](./docs/knowledge/) – decision history and source captures
+- [tools/api-twin/](./tools/api-twin/) – API twin stub location
