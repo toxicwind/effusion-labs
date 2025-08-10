@@ -17,8 +17,8 @@ Content is organised into **Sparks**, **Concepts**, **Projects** and **Meta** ar
 ## Features / Capabilities
 
 - **Eleventy static site** with configurable collections for Sparks, Concepts, Projects and Meta documents, generated via the shared register module and constants【F:lib/eleventy/register.js†L33-L38】【F:lib/constants.js†L7-L13】
-- **Nunjucks layout** with dark/light theme toggle, skip navigation link and meta sidebar for document metadata. The layout preloads fonts, exposes lucide icons and surfaces status, tags, importance and memory references for each document【F:src/_includes/layout.njk†L33-L80】
-- **Tailwind CSS v4** configured through PostCSS, extended with custom colours and fonts, and themed with daisyUI’s `lab` palette【F:tailwind.config.cjs†L2-L31】【F:postcss.config.cjs†L1-L5】
+- **Nunjucks layout** with an accessible dark/light theme toggle (defaulting to dark) driven by CSS variables, skip navigation link and meta sidebar for document metadata【F:src/_includes/layout.njk†L1-L37】【F:src/_includes/header.njk†L20-L27】
+- **Tailwind CSS v4** configured through PostCSS, extended with custom colours and fonts, and wired to theme tokens via daisyUI【F:tailwind.config.cjs†L1-L43】【F:postcss.config.cjs†L1-L5】
 - **Bidirectional linking** using `@photogabble/eleventy-plugin-interlinker`, producing annotated `<a class="interlink">` elements for internal references【F:lib/plugins.js†L1-L26】
 - **Syntax highlighting** via `@11ty/eleventy-plugin-syntaxhighlight` and Prism themes loaded through the Tailwind entry file【F:lib/plugins.js†L27-L31】【F:src/styles/app.tailwind.css†L4-L5】
 - **Responsive image transform**: `@11ty/eleventy-img` generates AVIF, WebP and original formats at multiple widths with lazy‑loading and async decoding attributes【F:lib/eleventy/register.js†L40-L52】

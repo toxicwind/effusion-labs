@@ -1,27 +1,29 @@
-(function() {
+(function(){
+  const storageKey = 'theme';
   const btn = document.getElementById('theme-toggle');
   if (!btn) return;
-  const html = document.documentElement;
+  const doc = document.documentElement;
+  const meta = document.querySelector('meta[name="color-scheme"]');
   const sun = btn.querySelector('.lucide-sun');
   const moon = btn.querySelector('.lucide-moon');
 
-  function apply(theme) {
-    html.setAttribute('data-theme', theme);
-    html.classList.toggle('dark', theme === 'dark');
-    if (sun && moon) {
+  function apply(theme, persist){
+    doc.dataset.theme = theme;
+    doc.classList.toggle('dark', theme === 'dark');
+    meta && (meta.content = theme === 'light' ? 'light dark' : 'dark light');
+    if (persist) localStorage.setItem(storageKey, theme);
+    btn.setAttribute('aria-pressed', theme === 'dark');
+    btn.setAttribute('aria-label', theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme');
+    if(sun && moon){
       sun.classList.toggle('hidden', theme === 'dark');
       moon.classList.toggle('hidden', theme !== 'dark');
     }
   }
 
-  const stored = localStorage.getItem('theme');
-  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-  const initial = stored || (prefersDark ? 'dark' : 'lab');
-  apply(initial);
+  apply(doc.dataset.theme || 'dark', false);
 
   btn.addEventListener('click', () => {
-    const next = html.getAttribute('data-theme') === 'dark' ? 'lab' : 'dark';
-    localStorage.setItem('theme', next);
-    apply(next);
+    const next = doc.dataset.theme === 'dark' ? 'light' : 'dark';
+    apply(next, true);
   });
 })();

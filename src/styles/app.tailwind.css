@@ -1,4 +1,5 @@
 @config "../../tailwind.config.cjs";
+@import "./tokens.css";
 @import "tailwindcss";
 @plugin "daisyui";
 @plugin "@tailwindcss/typography";
@@ -8,10 +9,16 @@
 @layer base {
   h1 { @apply font-heading text-[clamp(2rem,4vw+1rem,3rem)]; }
   h2 { @apply font-heading text-[clamp(1.5rem,3vw+0.75rem,2.25rem)]; }
+
+  pre[class*="language-"],
+  :not(pre) > code {
+    background-color: rgb(var(--color-code-bg));
+    color: rgb(var(--color-code-text));
+  }
 }
 
 @layer components {
-  .skip-link { @apply sr-only focus:not-sr-only fixed top-2 left-2 z-50 rounded bg-primary text-bg-dark px-4 py-2; }
+  .skip-link { @apply sr-only focus:not-sr-only fixed top-2 left-2 z-50 rounded bg-primary text-text px-4 py-2; }
 }
 
 /* ——— Small utility cluster (unchanged names) ——— */

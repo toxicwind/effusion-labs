@@ -3,49 +3,72 @@ layout: "layout.njk"
 metaDisable: true
 showTitle: false
 ---
+
 {% from "components/section.njk" import section %}
+{% from "components/tile.njk" import tile %}
+{% from "components/pathway.njk" import pathway %}
+
 {% include "components/hero.njk" %}
+
 <main class="mx-auto max-w-screen-xl px-6 sm:px-8 space-y-16">
+
   {% call section('Today at the Lab', '/meta/') %}
-    {% for item in todayAtLab %}
-      {% include "components/tile.njk" %}
-    {% endfor %}
+    <div class="grid gap-6 sm:grid-cols-3">
+      {% for item in todayAtLab %}
+        {{ tile(item) }}
+      {% else %}
+        <p class="text-sm text-gray-500">Nothing for today yet.</p>
+      {% endfor %}
+    </div>
   {% endcall %}
 
-  {% call section('Try It Now', '/projects/') %}
-    {% for item in tryItNow %}
-      {% include "components/tile.njk" %}
-    {% endfor %}
-  {% endcall %}
+  {% if tryItNow and tryItNow.length %}
+    {% call section('Try It Now', '/projects/') %}
+      <div class="grid gap-6 sm:grid-cols-3">
+        {% for item in tryItNow %}
+          {{ tile(item) }}
+        {% endfor %}
+      </div>
+    {% endcall %}
+  {% endif %}
 
   {% call section('Idea Pathways', '/concepts/') %}
-    {% for path in ideaPathways %}
-      {% set path = path %}
-      {% include "components/pathway.njk" %}
-    {% endfor %}
+    <div class="space-y-3">
+      {% for p in ideaPathways %}
+        {{ pathway(p) }}
+      {% else %}
+        <p class="text-sm text-gray-500">Pathways will appear as concepts connect.</p>
+      {% endfor %}
+    </div>
   {% endcall %}
 
-  {% call section('Open Questions', '/meta/') %}
-    <ul class="space-y-2">
-      {% for q in openQuestions %}
-        <li class="text-gray-200">{{ q }}</li>
-      {% endfor %}
-    </ul>
-  {% endcall %}
+  {% if openQuestions and openQuestions.length %}
+    {% call section('Open Questions', '/meta/') %}
+      <ul class="space-y-2">
+        {% for q in openQuestions %}
+          <li class="text-gray-200">{{ q }}</li>
+        {% endfor %}
+      </ul>
+    {% endcall %}
+  {% endif %}
 
   {% call section('Lab Notebook (Recent)', '/sparks/') %}
-    {% for item in recentNotebook %}
-      {% include "components/tile.njk" %}
-    {% endfor %}
+    <div class="grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
+      {% for item in recentNotebook %}
+        {{ tile(item) }}
+      {% else %}
+        <p class="text-sm text-gray-500">No recent entries yet.</p>
+      {% endfor %}
+    </div>
   {% endcall %}
 
-  <section class="space-y-4">
-    <h2 class="font-heading text-2xl">Explore More</h2>
-    <ul class="grid gap-2 sm:grid-cols-2 md:grid-cols-4">
-      <li><a href="/projects/" class="block rounded border border-white/10 p-4 hover:bg-white/5 focus:outline-none focus:ring">Projects ({{ counts.projects }})</a></li>
-      <li><a href="/concepts/" class="block rounded border border-white/10 p-4 hover:bg-white/5 focus:outline-none focus:ring">Concepts ({{ counts.concepts }})</a></li>
-      <li><a href="/sparks/" class="block rounded border border-white/10 p-4 hover:bg-white/5 focus:outline-none focus:ring">Sparks ({{ counts.sparks }})</a></li>
-      <li><a href="/meta/" class="block rounded border border-white/10 p-4 hover:bg-white/5 focus:outline-none focus:ring">Meta ({{ counts.meta }})</a></li>
-    </ul>
-  </section>
+  {% call section('Explore More', null) %}
+    <div class="grid gap-4 sm:grid-cols-2 md:grid-cols-4">
+      <a href="/projects/" class="block rounded border border-white/10 p-4 hover:bg-white/5 focus:outline-none focus:ring">Projects ({{ counts.projects }})</a>
+      <a href="/concepts/" class="block rounded border border-white/10 p-4 hover:bg-white/5 focus:outline-none focus:ring">Concepts ({{ counts.concepts }})</a>
+      <a href="/sparks/" class="block rounded border border-white/10 p-4 hover:bg-white/5 focus:outline-none focus:ring">Sparks ({{ counts.sparks }})</a>
+      <a href="/meta/" class="block rounded border border-white/10 p-4 hover:bg-white/5 focus:outline-none focus:ring">Meta ({{ counts.meta }})</a>
+    </div>
+  {% endcall %}
+
 </main>
