@@ -7,40 +7,49 @@ showTitle: false
 {% from "components/section.njk" import section %}
 {% from "components/tile.njk" import tile %}
 {% from "components/pathway.njk" import pathway %}
+{% from "components/kpis.njk" import kpis %}
 
 {% include "components/hero.njk" %}
 
 <main class="mx-auto max-w-screen-xl px-6 sm:px-8 space-y-16">
 
-  {% call section('Today at the Lab', '/meta/') %}
-    <div class="grid gap-6 sm:grid-cols-3">
-      {% for item in todayAtLab %}
-        {{ tile(item) }}
-      {% else %}
-        <p class="text-sm text-gray-500">Nothing for today yet.</p>
-      {% endfor %}
-    </div>
-  {% endcall %}
-
-  {% if tryItNow and tryItNow.length %}
-    {% call section('Try It Now', '/projects/') %}
+  {% if featured %}
+    {% call section('Featured', null) %}
       <div class="grid gap-6 sm:grid-cols-3">
-        {% for item in tryItNow %}
+        {{ tile(featured) }}
+      </div>
+    {% endcall %}
+  {% endif %}
+
+  {% if today and today.length %}
+    {% call section('Today at the Lab', '/meta/') %}
+      <div class="grid gap-6 sm:grid-cols-3">
+        {% for item in today %}
           {{ tile(item) }}
         {% endfor %}
       </div>
     {% endcall %}
   {% endif %}
 
-  {% call section('Idea Pathways', '/concepts/') %}
-    <div class="space-y-3">
-      {% for p in ideaPathways %}
-        {{ pathway(p) }}
-      {% else %}
-        <p class="text-sm text-gray-500">Pathways will appear as concepts connect.</p>
-      {% endfor %}
-    </div>
-  {% endcall %}
+  {% if tryNow and tryNow.length %}
+    {% call section('Try It Now', '/projects/') %}
+      <div class="grid gap-6 sm:grid-cols-3">
+        {% for item in tryNow %}
+          {{ tile(item) }}
+        {% endfor %}
+      </div>
+    {% endcall %}
+  {% endif %}
+
+  {% if ideaPathways and ideaPathways.length %}
+    {% call section('Idea Pathways', '/concepts/') %}
+      <div class="space-y-3">
+        {% for p in ideaPathways %}
+          {{ pathway(p) }}
+        {% endfor %}
+      </div>
+    {% endcall %}
+  {% endif %}
 
   {% if openQuestions and openQuestions.length %}
     {% call section('Open Questions', '/meta/') %}
@@ -52,23 +61,20 @@ showTitle: false
     {% endcall %}
   {% endif %}
 
-  {% call section('Lab Notebook (Recent)', '/sparks/') %}
-    <div class="grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
-      {% for item in recentNotebook %}
-        {{ tile(item) }}
-      {% else %}
-        <p class="text-sm text-gray-500">No recent entries yet.</p>
-      {% endfor %}
-    </div>
-  {% endcall %}
+  {% if notebook and notebook.length %}
+    {% call section('Lab Notebook', '/sparks/') %}
+      <div class="grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
+        {% for item in notebook %}
+          {{ tile(item) }}
+        {% endfor %}
+      </div>
+    {% endcall %}
+  {% endif %}
 
-  {% call section('Explore More', null) %}
-    <div class="grid gap-4 sm:grid-cols-2 md:grid-cols-4">
-      <a href="/projects/" class="block rounded border border-white/10 p-4 hover:bg-white/5 focus:outline-none focus:ring">Projects ({{ counts.projects }})</a>
-      <a href="/concepts/" class="block rounded border border-white/10 p-4 hover:bg-white/5 focus:outline-none focus:ring">Concepts ({{ counts.concepts }})</a>
-      <a href="/sparks/" class="block rounded border border-white/10 p-4 hover:bg-white/5 focus:outline-none focus:ring">Sparks ({{ counts.sparks }})</a>
-      <a href="/meta/" class="block rounded border border-white/10 p-4 hover:bg-white/5 focus:outline-none focus:ring">Meta ({{ counts.meta }})</a>
-    </div>
-  {% endcall %}
+  {% if explore and explore.length %}
+    {% call section('Explore More', null) %}
+      {{ kpis(explore) }}
+    {% endcall %}
+  {% endif %}
 
 </main>

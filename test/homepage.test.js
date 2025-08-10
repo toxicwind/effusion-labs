@@ -1,6 +1,6 @@
 const test = require('node:test');
 const assert = require('node:assert');
-const { dailySeed, seededShuffle } = require('../lib/homepage');
+const { dailySeed, seededShuffle } = require('../lib/seeded');
 
 test('seed override', () => {
   process.env.HOMEPAGE_SEED = 'TEST';
@@ -13,4 +13,9 @@ test('seeded shuffle deterministic', () => {
   const a = seededShuffle(arr, 'abc');
   const b = seededShuffle(arr, 'abc');
   assert.deepStrictEqual(a, b);
+});
+
+test('dailySeed accepts date', () => {
+  const seed = dailySeed('2025-08-09');
+  assert.ok(seed.startsWith('2025-08-09'));
 });
