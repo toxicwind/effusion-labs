@@ -1,9 +1,11 @@
 const register = require("./lib/eleventy/register");
 const { dirs } = require("./lib/config");
 const seeded = require("./lib/seeded");
+const registerArchiveCollections = require("./lib/eleventy/archive-collections");
 
 module.exports = function (eleventyConfig) {
   register(eleventyConfig);
+  eleventyConfig.addTemplateFormats("json");
 
   eleventyConfig.addCollection("featured", (api) =>
     api.getAll().filter((p) => p.data?.featured === true),
@@ -23,18 +25,7 @@ module.exports = function (eleventyConfig) {
     return items;
   });
 
-  // POP MART — The Monsters collections
-  const monstersBase =
-    "content/archives/collectables/designer-toys/pop-mart/the-monsters";
-  eleventyConfig.addCollection("monstersProducts", (api) =>
-    api.getFilteredByGlob(`${monstersBase}/products/*.json`),
-  );
-  eleventyConfig.addCollection("monstersSeries", (api) =>
-    api.getFilteredByGlob(`${monstersBase}/series/*.json`),
-  );
-  eleventyConfig.addCollection("monstersCharacters", (api) =>
-    api.getFilteredByGlob(`${monstersBase}/characters/*.json`),
-  );
+  registerArchiveCollections(eleventyConfig);
 
   eleventyConfig.addFilter("byCharacter", (items, slug) =>
     items.filter((p) => p.data.character === slug),
