@@ -1,6 +1,7 @@
 const test = require('node:test');
 const assert = require('node:assert');
 const { dailySeed, seededShuffle } = require('../lib/seeded');
+const { exploreLinks } = require('../lib/homepage');
 
 test('seed override', () => {
   process.env.HOMEPAGE_SEED = 'TEST';
@@ -18,4 +19,16 @@ test('seeded shuffle deterministic', () => {
 test('dailySeed accepts date', () => {
   const seed = dailySeed('2025-08-09');
   assert.ok(seed.startsWith('2025-08-09'));
+});
+
+test('exploreLinks counts exclude index files', () => {
+  const collections = {
+    projects: [{ filePathStem: 'projects/index' }, { filePathStem: 'projects/a' }],
+    concepts: [{ filePathStem: 'concepts/index' }],
+  };
+  const links = exploreLinks(collections);
+  const proj = links.find((l) => l.title === 'Projects');
+  const concept = links.find((l) => l.title === 'Concepts');
+  assert.strictEqual(proj.count, 1);
+  assert.strictEqual(concept.count, 0);
 });
