@@ -1,0 +1,7 @@
+@layer components {
+  .tile { @apply bg-black/20 hover:bg-black/30; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tile { @apply transition-none hover:translate-y-0 hover:shadow-none; }
+}
