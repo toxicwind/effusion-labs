@@ -91,6 +91,20 @@ npm run web2md -- https://example.com/article > article.md
 
 The CLI prints the normalized Markdown followed by a `sha256:` line containing the content hash, enabling reproducible references and easy provenance recording【F:webpage-to-markdown.js†L1-L19】. Redirect stdout to a file to capture the article and record the hash alongside other research notes.
 
+### Outbound Proxy
+
+`web2md` and `search2serp` honor these environment variables for outbound HTTPS proxying:
+
+```
+OUTBOUND_PROXY_ENABLED=0|1
+OUTBOUND_PROXY_URL=host:port
+OUTBOUND_PROXY_USER=...
+OUTBOUND_PROXY_PASS=...
+OUTBOUND_PROXY_NO_PROXY=domain[,domain]
+```
+
+CLI flags `--proxy`, `--no-proxy`, and `--no-proxy-hosts "host,host"` override enablement and bypass lists but never expose credentials.
+
 Within templates, the filter can ingest content on build:
 
 ```njk
