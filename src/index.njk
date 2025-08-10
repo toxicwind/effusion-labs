@@ -1,83 +1,74 @@
 ---
-title: "Showcase · Art · Culture · Innovation"
 layout: "layout.njk"
 metaDisable: true
 showTitle: false
 ---
 
-{# ... feed macro remains unchanged ... #}
-{% macro feed(label, coll) -%}
-<section class="space-y-4">
-  <h3 class="border-b border-lapis pb-2 font-heading text-xl">{{ label }}</h3>
-  <ul class="space-y-3">
-    {%- for p in coll | reverse -%}
-      {% if "index" not in p.filePathStem %}
-        <li>
-          <a href="{{ p.url }}" class="font-medium hover:text-primary">{{ p.data.title }}</a>
-          <time datetime="{{ p.date | htmlDateString }}" class="block text-xs text-gray-400">
-            {{ p.date | readableDate }}
-          </time>
-        </li>
-      {% endif %}
-    {%- else %}
-      <li class="text-sm text-gray-500">Nothing new yet.</li>
-    {%- endfor %}
-  </ul>
-</section>
-{%- endmacro %}
+{% from "components/section.njk" import section %}
+{% from "components/tile.njk" import tile %}
+{% from "components/pathway.njk" import pathway %}
 
-{# 
-  MAIN CONTAINER
-  The global `space-y-*` utility has been removed. We will now handle
-  margins on a case-by-case basis for better visual control.
-#}
-<main class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:py-6">
+{% include "components/hero.njk" %}
 
-  <section class="grid items-center gap-10 lg:grid-cols-2">
-    <div class="space-y-6 text-center lg:text-left">
-      <h1 class="font-heading text-4xl font-bold tracking-tight text-primary sm:text-5xl lg:text-6xl">
-        Art · Culture · Innovation
-      </h1>
-      <p class="mx-auto max-w-prose text-lg leading-7 lg:mx-0">
-        Where <strong>experimental ideas</strong> meet practical prototypes. 
-        Explore the projects, concepts, and sparks shaping tomorrow’s creative technology.
-      </p>
-      <a href="#activity" class="inline-block min-h-[44px] rounded-md bg-primary px-8 py-3 font-heading text-lg text-text transition hover:bg-lapis btn btn-primary">
-        View Latest Work
-      </a>
+<main class="mx-auto max-w-screen-xl px-6 sm:px-8 space-y-16">
+
+  {% call section('Today at the Lab', '/meta/') %}
+    <div class="grid gap-6 sm:grid-cols-3">
+      {% for item in todayAtLab %}
+        {{ tile(item) }}
+      {% else %}
+        <p class="text-sm text-gray-500">Nothing for today yet.</p>
+      {% endfor %}
     </div>
-    <img src="/assets/static/logo.png" alt="Effusion Labs Logo" class="mx-auto w-full max-w-sm lg:max-w-md" />
-  </section>
+  {% endcall %}
 
-  {#
-    FIX: A smaller top margin is applied here to counteract the empty space
-    in the hero section above, creating a more balanced look.
-  #}
-  <section class="mt-12 mx-auto max-w-5xl rounded-lg bg-surface/80 text-center shadow-lg shadow-black/30 backdrop-blur p-6">
-    <h2 class="font-heading text-2xl font-bold text-primary sm:text-3xl">
-      Explore the Interactive Concept Map
-    </h2>
-    <p class="mx-auto max-w-2xl text-text sm:text-base">
-      Navigate the living knowledge graph that links every spark, concept, and project in the lab. Trace ideas from first curiosity to polished prototype.
-    </p>
-    <a href="/map/" class="inline-block min-h-[44px] rounded-md bg-primary px-8 py-3 font-heading text-lg text-text transition hover:bg-lapis">
-      Launch the Map
-    </a>
-  </section>
+  {% if tryItNow and tryItNow.length %}
+    {% call section('Try It Now', '/projects/') %}
+      <div class="grid gap-6 sm:grid-cols-3">
+        {% for item in tryItNow %}
+          {{ tile(item) }}
+        {% endfor %}
+      </div>
+    {% endcall %}
+  {% endif %}
 
-  {# 
-    FIX: A larger, standard margin is applied here for a clean separation.
-  #}
-  <section id="activity" class="mt-20 space-y-10 lg:mt-24">
-    <h2 class="text-center font-heading text-3xl font-bold tracking-wide text-primary sm:text-4xl">
-      Lab Notebook · Recent Activity
-    </h2>
-    <div class="grid gap-8 sm:grid-cols-2 xl:grid-cols-4">
-      {{ feed('Projects', collections.projects) }}
-      {{ feed('Concepts', collections.concepts) }}
-      {{ feed('Sparks',   collections.sparks) }}
-      {{ feed('Meta',     collections.meta) }}
+  {% call section('Idea Pathways', '/concepts/') %}
+    <div class="space-y-3">
+      {% for p in ideaPathways %}
+        {{ pathway(p) }}
+      {% else %}
+        <p class="text-sm text-gray-500">Pathways will appear as concepts connect.</p>
+      {% endfor %}
     </div>
-  </section>
+  {% endcall %}
+
+  {% if openQuestions and openQuestions.length %}
+    {% call section('Open Questions', '/meta/') %}
+      <ul class="space-y-2">
+        {% for q in openQuestions %}
+          <li class="text-gray-200">{{ q }}</li>
+        {% endfor %}
+      </ul>
+    {% endcall %}
+  {% endif %}
+
+  {% call section('Lab Notebook (Recent)', '/sparks/') %}
+    <div class="grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
+      {% for item in recentNotebook %}
+        {{ tile(item) }}
+      {% else %}
+        <p class="text-sm text-gray-500">No recent entries yet.</p>
+      {% endfor %}
+    </div>
+  {% endcall %}
+
+  {% call section('Explore More', null) %}
+    <div class="grid gap-4 sm:grid-cols-2 md:grid-cols-4">
+      <a href="/projects/" class="block rounded border border-white/10 p-4 hover:bg-white/5 focus:outline-none focus:ring">Projects ({{ counts.projects }})</a>
+      <a href="/concepts/" class="block rounded border border-white/10 p-4 hover:bg-white/5 focus:outline-none focus:ring">Concepts ({{ counts.concepts }})</a>
+      <a href="/sparks/" class="block rounded border border-white/10 p-4 hover:bg-white/5 focus:outline-none focus:ring">Sparks ({{ counts.sparks }})</a>
+      <a href="/meta/" class="block rounded border border-white/10 p-4 hover:bg-white/5 focus:outline-none focus:ring">Meta ({{ counts.meta }})</a>
+    </div>
+  {% endcall %}
 
 </main>

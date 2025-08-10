@@ -4,6 +4,7 @@
 @plugin "daisyui";
 @plugin "@tailwindcss/typography";
 @import "prismjs/themes/prism-tomorrow.css";
+@import "./home.css";
 
 @layer base {
   h1 { @apply font-heading text-[clamp(2rem,4vw+1rem,3rem)]; }
