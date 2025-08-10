@@ -1,18 +1,18 @@
 const register = require("./lib/eleventy/register");
 const { dirs } = require("./lib/config");
-const { dailySeed, seededShuffle } = require("./lib/homepage");
+const seeded = require("./lib/seeded");
 
 module.exports = function (eleventyConfig) {
   register(eleventyConfig);
 
+  eleventyConfig.addCollection("featured", (api) =>
+    api.getAll().filter((p) => p.data?.featured === true),
+  );
+
   eleventyConfig.addCollection("interactive", (api) =>
     api.getAll().filter((p) => {
       const tags = p.data.tags || [];
-      return (
-        tags.includes("prototype") ||
-        tags.includes("demo") ||
-        p.data.interactive === true
-      );
+      return tags.includes("prototype") || p.data.interactive === true;
     }),
   );
 
@@ -49,9 +49,17 @@ module.exports = function (eleventyConfig) {
   });
 
   eleventyConfig.addFilter("seededShuffle", (arr, seed) =>
-    seededShuffle(arr, seed),
+    seeded.seededShuffle(arr, seed),
   );
-  eleventyConfig.addGlobalData("dailySeed", dailySeed);
+  eleventyConfig.addGlobalData("dailySeed", seeded.dailySeed);
+  eleventyConfig.addGlobalData("homepageCaps", {
+    featured: 1,
+    today: 3,
+    tryNow: [1, 3],
+    pathways: 3,
+    questions: 3,
+    notebook: 4,
+  });
 
   return {
     dir: dirs,
