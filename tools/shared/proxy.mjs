@@ -6,10 +6,11 @@ function buildProxyFromEnv(env = process.env){
   if(!truthy(env.OUTBOUND_PROXY_ENABLED)){
     return { state:{ enabled:false } };
   }
-  const url = env.OUTBOUND_PROXY_URL;
+  let url = env.OUTBOUND_PROXY_URL;
   if(!url){
     return { state:{ enabled:false, reason:'missing_url' } };
   }
+  if(!/^https?:\/\//.test(url)) url = 'http://' + url;
   const config = { server:url };
   let auth = 'absent';
   if(env.OUTBOUND_PROXY_USER){
