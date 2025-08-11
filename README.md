@@ -6,6 +6,20 @@ Effusion Labs is a long‑form digital garden and studio powered by Eleventy, Nu
 
 [![License: ISC](https://img.shields.io/badge/license-ISC-blue.svg)](./LICENSE)
 
+## Table of Contents
+
+- [Overview](#overview)
+- [Features / Capabilities](#features--capabilities)
+- [Quickstart](#quickstart)
+- [Configuration](#configuration)
+- [Testing](#testing)
+- [Web Ingestion Helper](#web-ingestion-helper)
+- [Project Layout](#project-layout)
+- [Deployment / Release](#deployment--release)
+- [Contributing](#contributing)
+- [License](#license)
+- [Links](#links)
+
 ## Overview
 
 This repository contains the source for the Effusion Labs site. The build pipeline combines Eleventy for static generation, Nunjucks templates for layout, and Tailwind CSS (with daisyUI) for styling. Markdown files under `src/content` provide the primary content. The project targets practitioners who want a reproducible digital garden with bidirectional links, a graph view and containerised deployment.
@@ -34,24 +48,39 @@ Content is organised into **Sparks**, **Concepts**, **Projects** and **Meta** ar
 - Node.js ≥20【F:package.json†L12-L13】
 - npm (bundled with Node)
 
-### Install
-
-Running `npm install` pulls all project dependencies, including Eleventy, Tailwind tooling and the test suite.
+### Clone and Install
 
 ```bash
+git clone https://github.com/effusion-labs/effusion-labs.git
+cd effusion-labs
 npm install
 ```
 
-### Commands
+### Local Development
 
 ```bash
-npm run dev      # start development server with live rebuilds and BrowserSync
-npm run build    # generate static site into _site/
-npm test         # run unit and integration tests offline via node:test
+npm run dev
+```
+
+### Production Build
+
+```bash
+npm run build
+```
+
+### Run Tests
+
+```bash
+npm test
+```
+
+### Utility Scripts
+
+```bash
 npm run web2md -- <URL>  # fetch a web page, output Markdown and sha256 hash
-npm run docs:archive   # capture vendor docs via web2md
-npm run docs:reindex   # rebuild vendor docs index
-npm run docs:validate  # verify hashes
+npm run docs:archive     # capture vendor docs via web2md
+npm run docs:reindex     # rebuild vendor docs index
+npm run docs:validate    # verify hashes
 ```
 
 The `dev` command watches templates, Markdown and styles, recompiling Tailwind through PostCSS before each serve cycle and serving `_site/` via BrowserSync. The `build` command performs a one‑off production build. Tests are hermetic and execute without internet access. The `web2md` command is described in detail below.
