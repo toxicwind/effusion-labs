@@ -6,9 +6,11 @@ eleventyNavigation:
   key: Concepts
   parent: Showcase
 ---
+{% from "components/tile.njk" import tile %}
+
 <p>This is the central hub for all individual concepts explored within the lab.</p>
-<ul>
+<ul class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
 {% for item in collections.concepts %}
-    {% if item.url != page.url %}<li><a href="{{ item.url }}">{{ item.data.title }}</a></li>{% endif %}
+  {% if item.url != page.url %}<li>{{ tile(item) }}</li>{% endif %}
 {% endfor %}
 </ul>

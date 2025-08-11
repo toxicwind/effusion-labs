@@ -6,10 +6,11 @@ eleventyNavigation:
   key: Meta
   parent: Showcase # Adjust parent as needed for your navigation
 ---
+{% from "components/tile.njk" import tile %}
+
 <p>This section contains information about the lab itself, its purpose, and related administrative details.</p>
-<ul>
-{# Loop through all items in the 'meta' collection, excluding the current page #}
+<ul class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
 {% for item in collections.meta %}
-    {% if item.url != page.url %}<li><a href="{{ item.url }}">{{ item.data.title }}</a></li>{% endif %}
+  {% if item.url != page.url %}<li>{{ tile(item) }}</li>{% endif %}
 {% endfor %}
 </ul>
