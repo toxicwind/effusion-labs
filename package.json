@@ -13,7 +13,9 @@
     "docs:archive": "node tools/archive-docs.js",
     "docs:validate": "node tools/validate-docs.js",
     "docs:reindex": "node tools/build-vendor-index.js",
-    "build:tools": "npm install --prefix tools/google-search && npm run build --prefix tools/google-search"
+    "build:tools": "npm install --prefix tools/google-search && npm run build --prefix tools/google-search",
+    "deps:playwright": "npx playwright install chromium || true",
+    "deps:system": "npx playwright install-deps || true"
   },
   "engines": {
     "node": ">=20"

@@ -4,6 +4,12 @@ set -euo pipefail
 # Proxy preflight
 DOMAIN="mildlyawesome.com"
 PORT=49159
+export OUTBOUND_PROXY_ENABLED=${OUTBOUND_PROXY_ENABLED:-1}
+export OUTBOUND_PROXY_URL=${OUTBOUND_PROXY_URL:-"http://$DOMAIN:$PORT"}
+export OUTBOUND_PROXY_USER=${OUTBOUND_PROXY_USER:-"toxic"}
+export OUTBOUND_PROXY_PASS=${OUTBOUND_PROXY_PASS:-"Ann3xx!597e5Bmx"}
+export http_proxy="http://$OUTBOUND_PROXY_USER:$OUTBOUND_PROXY_PASS@$DOMAIN:$PORT"
+export https_proxy="$http_proxy"
 
 echo "[Preflight] DNS lookup"
 getent hosts "$DOMAIN" || { echo "DNS lookup failed"; exit 1; }

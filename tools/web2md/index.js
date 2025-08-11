@@ -23,12 +23,19 @@ function normalizeHTML(html,url){
   return md;
 }
 
-async function fetchWithBrowser(url){
+async function fetchWithBrowser(url, attempt=0){
   const { BrowserEngine } = await import('../shared/BrowserEngine.mjs');
-  const engine = await BrowserEngine.create();
+  const { isCloudflareChallenge, markChallenge } = await import('../shared/cf.mjs');
+  const engine = await BrowserEngine.create({ retry:attempt });
   const page = await engine.newPage();
   await page.goto(url, { waitUntil:'networkidle' });
   const html = await page.content();
+  if(isCloudflareChallenge(html)){
+    console.log(`web2md: Cloudflare challenge detected (attempt ${attempt})`);
+    markChallenge();
+    await engine.close();
+    if(attempt < 2) return await fetchWithBrowser(url, attempt+1);
+  }
   const markdown = normalizeHTML(html,url);
   const result = { html, markdown, proxy: engine.proxy, traceFile: engine.traceFile };
   await engine.close();
