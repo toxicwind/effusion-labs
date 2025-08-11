@@ -11,10 +11,10 @@ const questions = require('./_data/questions.json');
 module.exports = (data = {}) => {
   const seed = dailySeed();
   const collections = data.collections || {};
-  const caps = data.homepageCaps || { today: 3, pathways: 3, questions: 3, notebook: 4 };
+  const caps = data.homepageCaps || { featured: 3, today: 3, pathways: 3, questions: 3, notebook: 4 };
   const recentAll = collections.recentAll || [];
 
-  const featured = (collections.featured || [])[0] || null;
+  const featured = (collections.featured || []).slice(0, caps.featured || 3);
   const today = getToday(recentAll, { seed, limit: caps.today });
   const tryNow = getTryNow(collections.interactive || [], { limit: caps.tryNow ? caps.tryNow[1] : 3 });
   const ideaPathways = buildIdeaPathways(collections, { seed, limit: caps.pathways });

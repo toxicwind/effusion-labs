@@ -44,7 +44,7 @@ module.exports = function (eleventyConfig) {
   );
   eleventyConfig.addGlobalData("dailySeed", seeded.dailySeed);
   eleventyConfig.addGlobalData("homepageCaps", {
-    featured: 1,
+    featured: 3,
     today: 3,
     tryNow: [1, 3],
     pathways: 3,

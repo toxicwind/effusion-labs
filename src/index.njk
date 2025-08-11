@@ -13,13 +13,15 @@ showTitle: false
 
 <main class="mx-auto max-w-screen-xl px-6 sm:px-8 space-y-16">
 
-  {% if featured %}
-    {% call section('Featured', null) %}
-      <div class="grid gap-6 sm:grid-cols-3">
-        {{ tile(featured) }}
-      </div>
-    {% endcall %}
-  {% endif %}
+{% if featured and featured.length %}
+  {% call section('Featured', null) %}
+    <div class="grid gap-6 sm:grid-cols-3">
+      {% for item in featured %}
+        {{ tile(item) }}
+      {% endfor %}
+    </div>
+  {% endcall %}
+{% endif %}
 
   {% if today and today.length %}
     {% call section('Today at the Lab', '/meta/') %}
