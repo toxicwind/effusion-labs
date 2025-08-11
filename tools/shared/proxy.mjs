@@ -3,12 +3,16 @@ function truthy(value){
 }
 
 function buildProxyFromEnv(env = process.env){
+  const base = env.HTTP_PROXY || env.http_proxy || env.HTTPS_PROXY || env.https_proxy;
   if(!truthy(env.OUTBOUND_PROXY_ENABLED)){
+    if(base){
+      return { config:{ server:base }, state:{ enabled:false, base } };
+    }
     return { state:{ enabled:false } };
   }
   const url = env.OUTBOUND_PROXY_URL;
   if(!url){
-    return { state:{ enabled:false, reason:'missing_url' } };
+    return { state:{ enabled:false, reason:'missing_url', base } };
   }
   const config = { server:url };
   let auth = 'absent';
@@ -21,7 +25,7 @@ function buildProxyFromEnv(env = process.env){
       auth = 'username_only';
     }
   }
-  return { config, state:{ enabled:true, server:url, auth } };
+  return { config, state:{ enabled:true, server:url, auth, base } };
 }
 
 export { buildProxyFromEnv };
