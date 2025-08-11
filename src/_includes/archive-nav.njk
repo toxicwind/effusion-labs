@@ -1,0 +1,10 @@
+{% macro archiveNav(path, nav) %}
+  {% set items = nav[path] or [] %}
+  {% if items.length %}
+  <ul>
+    {% for item in items %}
+    <li><a href="{{ item.url }}">{{ item.title }}</a></li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+{% endmacro %}
