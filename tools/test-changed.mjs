@@ -51,10 +51,39 @@ function relatedTests(changed) {
   return Array.from(set);
 }
 
-function run(files) {
-  const args = ["--test", ...files];
-  const proc = spawn("node", args, { stdio: "inherit" });
-  proc.on("exit", (code) => process.exit(code ?? 1));
+function categorize(files) {
+  const pw = [];
+  const nodeFiles = [];
+  for (const file of files) {
+    const src = fs.readFileSync(file, "utf8");
+    if (src.includes("@playwright/test")) pw.push(file);
+    else nodeFiles.push(file);
+  }
+  return { pw, nodeFiles };
+}
+
+function runNode(files) {
+  return new Promise((resolve) => {
+    const args = ["--test", ...files];
+    const proc = spawn("node", args, { stdio: "inherit" });
+    proc.on("exit", (code) => resolve(code ?? 1));
+  });
+}
+
+function runPw(files) {
+  return new Promise((resolve) => {
+    const args = ["playwright", "test", ...files];
+    const proc = spawn("npx", args, { stdio: "inherit" });
+    proc.on("exit", (code) => resolve(code ?? 1));
+  });
+}
+
+async function run(files) {
+  const { pw, nodeFiles } = categorize(files);
+  const codes = [];
+  if (nodeFiles.length) codes.push(await runNode(nodeFiles));
+  if (pw.length) codes.push(await runPw(pw));
+  process.exit(codes.some((c) => c !== 0) ? 1 : 0);
 }
 
 function main() {

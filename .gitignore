@@ -31,3 +31,5 @@ Thumbs.db
 
 # Misc
 .env
+tools/google-search/
+tools/search2serp/package-lock.json

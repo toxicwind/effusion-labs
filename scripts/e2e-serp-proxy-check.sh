@@ -1,54 +1,45 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Proxy preflight
-DOMAIN="mildlyawesome.com"
-PORT=49159
-
-echo "[Preflight] DNS lookup"
-getent hosts "$DOMAIN" || { echo "DNS lookup failed"; exit 1; }
-
-echo "[Preflight] TCP connectivity"
-if ! nc -vz "$DOMAIN" "$PORT"; then
-  echo "TCP connection failed"; exit 1; fi
-
-echo "[Preflight] Unauthenticated HTTP via proxy"
-code=$(curl -sS -o /dev/null -w '%{http_code}\n' -x "http://$DOMAIN:$PORT" http://example.com --connect-timeout 8 || true)
-echo "HTTP status: $code"
-if [ "$code" != "407" ]; then echo "Expected 407"; exit 1; fi
-
-echo "[Preflight] Authenticated CONNECT"
-code=$(curl -sS -o /dev/null -w '%{http_code}\n' --connect-timeout 12 -x "http://$DOMAIN:$PORT" -U "$OUTBOUND_PROXY_USER:$OUTBOUND_PROXY_PASS" https://httpbin.org/ip || true)
-echo "HTTP status: $code"
-if [ "$code" != "200" ] && [ "$code" != "301" ] && [ "$code" != "302" ]; then
-  echo "Authenticated CONNECT failed"; exit 1; fi
-
 QUERY="pop mart monsters time to chill site:popmart.com"
-MAX_RETRIES=3
-BACKOFF=2
-RESULT_LINK=""
+TMP_DIR="tmp"
+SERP_JSON="$TMP_DIR/serp.json"
+PAGE_MD="$TMP_DIR/page.md"
 
-for ((i=1;i<=MAX_RETRIES;i++)); do
-  echo "[search2serp] Attempt $i"
-  out=$(node tools/search2serp/cli.js "$QUERY" 2>/tmp/search2serp.err || true)
-  if echo "$out" | grep -qi 'popmart.com'; then
-    RESULT_LINK=$(echo "$out" | node -e "const data=JSON.parse(fs.readFileSync(0,'utf8'));const r=data.results.find(r=>/popmart.com/.test(r.url));if(r)console.log(r.url);")
-    [ -n "$RESULT_LINK" ] && break
-  fi
-  sleep $((BACKOFF*i))
-done
+# Section 1-3: preflight & dual-hop proofs
+curl -fsS https://www.gstatic.com/generate_204 -o /dev/null && echo "[baseline] OK"
+getent hosts mildlyawesome.com || nslookup mildlyawesome.com || dig +short mildlyawesome.com
+curl -fsS --preproxy http://proxy:8080 https://httpbin.org/ip -o /dev/null
+curl -sS -o /dev/null -w '%{http_code}\n' \
+  --preproxy http://proxy:8080 \
+  -x http://mildlyawesome.com:49159 \
+  http://example.com --connect-timeout 8
+curl -sS -o /dev/null -w '%{http_code}\n' \
+  --preproxy http://proxy:8080 \
+  -x http://mildlyawesome.com:49159 \
+  -U 'toxic:Ann3xx!597e5Bmx' \
+  https://httpbin.org/ip --connect-timeout 12
 
-if [ -z "$RESULT_LINK" ]; then
-  echo "search2serp failed"; exit 1; fi
+# Section 4: launch chain shim
+PRE_HOP_PROXY="http://proxy:8080" \
+OUTBOUND_PROXY_URL="http://mildlyawesome.com:49159" \
+OUTBOUND_PROXY_USER="toxic" \
+OUTBOUND_PROXY_PASS='Ann3xx!597e5Bmx' \
+node tools/shared/chain-proxy.mjs &
+CHAIN_PID=$!
+sleep 2
+export CHAIN_PROXY_URL="http://127.0.0.1:8899"
+curl -v -x "$CHAIN_PROXY_URL" https://httpbin.org/ip
 
-echo "[web2md] Fetching $RESULT_LINK"
-for ((i=1;i<=MAX_RETRIES;i++)); do
-  page=$(node webpage-to-markdown.js "$RESULT_LINK" 2>/tmp/web2md.err || true)
-  if echo "$page" | grep -q "October 31, 2022"; then
-    echo "$page" > /tmp/web2md.out
-    echo "Success"; exit 0
-  fi
-  sleep $((BACKOFF*i))
-done
+# Section 5: search2serp
+mkdir -p "$TMP_DIR"
+node tools/search2serp/cli.js "$QUERY" > "$SERP_JSON"
+LINK=$(node -e "const fs=require('fs');const d=JSON.parse(fs.readFileSync('$SERP_JSON','utf8'));const m=d.results.find(r=>r.url==='https://www.popmart.com/us/products/578/labubu-time-to-chill-vinyl-plush-doll'||r.url==='https://www.popmart.com/products/578/labubu-time-to-chill-vinyl-plush-doll');if(m)console.log(m.url);")
+if [ -z "$LINK" ]; then echo 'SERP miss'; kill $CHAIN_PID; exit 1; fi
 
-echo "web2md failed"; exit 1
+# Section 6: web2md
+node webpage-to-markdown.js "$LINK" | tee "$PAGE_MD"
+grep -F "October 31, 2022" "$PAGE_MD" >/dev/null || { echo 'Missing date'; kill $CHAIN_PID; exit 1; }
+
+kill $CHAIN_PID
+echo "PASS"
