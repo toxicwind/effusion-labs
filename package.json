@@ -11,7 +11,8 @@
     "proxy:test": "node scripts/outbound-proxy.e2e.mjs",
     "docs:archive": "node tools/archive-docs.js",
     "docs:validate": "node tools/validate-docs.js",
-    "docs:reindex": "node tools/build-vendor-index.js"
+    "docs:reindex": "node tools/build-vendor-index.js",
+    "build:tools": "npm install --prefix tools/google-search && npm run build --prefix tools/google-search"
   },
   "engines": {
     "node": ">=20"
