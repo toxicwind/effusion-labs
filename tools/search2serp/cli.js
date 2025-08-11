@@ -8,9 +8,7 @@ async function main(){
     process.exit(1);
   }
   const res = await search(query);
-  console.log('proxy.state', res.proxy);
-  console.log('traceFile', res.traceFile);
-  console.table(res.results);
+  console.log(JSON.stringify(res, null, 2));
 }
 
 main();
