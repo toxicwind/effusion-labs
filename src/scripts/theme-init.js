@@ -9,10 +9,8 @@
     return m;
   })();
   let theme = stored;
-  if (theme === 'auto') {
+  if (theme !== 'dark' && theme !== 'light') {
     theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-  } else if (theme !== 'dark' && theme !== 'light') {
-    theme = 'dark';
   }
   doc.dataset.theme = theme;
   doc.classList.toggle('dark', theme === 'dark');
