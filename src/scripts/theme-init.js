@@ -10,7 +10,7 @@
   })();
   let theme = stored;
   if (theme !== 'dark' && theme !== 'light') {
-    theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    theme = 'dark';
   }
   doc.dataset.theme = theme;
   doc.classList.toggle('dark', theme === 'dark');
