@@ -31,7 +31,7 @@ Content is organised into **Sparks**, **Concepts**, **Projects** and **Meta** ar
 ## Features / Capabilities
 
 - **Eleventy static site** with configurable collections for Sparks, Concepts, Projects and Meta documents, generated via the shared register module and constants【F:lib/eleventy/register.js†L33-L38】【F:lib/constants.js†L7-L13】
-- **Nunjucks layout** with an accessible dark/light theme toggle (defaulting to dark) driven by CSS variables, skip navigation link and meta sidebar for document metadata【F:src/_includes/layout.njk†L1-L37】【F:src/_includes/header.njk†L20-L27】
+- **Nunjucks layout** with an accessible dark/light theme toggle (defaulting to dark) driven by CSS variables, skip navigation link and meta sidebar for document metadata【F:src/\_includes/layout.njk†L1-L37】【F:src/\_includes/header.njk†L20-L27】
 - **Tailwind CSS v4** configured through PostCSS, extended with custom colours and fonts, and wired to theme tokens via daisyUI【F:tailwind.config.cjs†L1-L43】【F:postcss.config.cjs†L1-L5】
 - **Bidirectional linking** using `@photogabble/eleventy-plugin-interlinker`, producing annotated `<a class="interlink">` elements for internal references【F:lib/plugins.js†L1-L26】
 - **Syntax highlighting** via `@11ty/eleventy-plugin-syntaxhighlight` and Prism themes loaded through the Tailwind entry file【F:lib/plugins.js†L27-L31】【F:src/styles/app.tailwind.css†L4-L5】
@@ -39,7 +39,7 @@ Content is organised into **Sparks**, **Concepts**, **Projects** and **Meta** ar
 - **Interactive concept map** built with `vis-network`, exposing collections as a node‑edge graph at `/map/` for exploratory browsing【F:src/map.njk†L38-L121】
 - **Webpage ingestion helper** providing both an Eleventy filter and a CLI to convert external pages to Markdown using Readability.js and Turndown【F:lib/filters.js†L1-L5】【F:lib/webpageToMarkdown.js†L1-L26】
 - **PostCSS pipeline** that compiles `src/styles/app.tailwind.css` on each build and copies static assets through to `_site/`【F:lib/eleventy/register.js†L69-L72】
-- **Accessible baseline** including skip‑link, semantic landmarks and footnote enhancements for improved keyboard navigation and readability【F:src/_includes/layout.njk†L33-L75】【F:src/styles/app.tailwind.css†L12-L38】
+- **Accessible baseline** including skip‑link, semantic landmarks and footnote enhancements for improved keyboard navigation and readability【F:src/\_includes/layout.njk†L33-L75】【F:src/styles/app.tailwind.css†L12-L38】
 
 ## Quickstart
 
@@ -90,7 +90,7 @@ No lint or format scripts are defined.
 ## Configuration
 
 - **Content directories**: Markdown lives under `src/content/{sparks,concepts,projects,meta}`【F:lib/constants.js†L7-L13】
-- **Data files**: `src/_data/` holds global data such as navigation links【F:src/_data/nav.js†L1-L11】
+- **Data files**: `src/_data/` holds global data such as navigation links【F:src/\_data/nav.js†L1-L11】
 - **Includes**: Nunjucks layouts and partials reside in `src/_includes/`
 - **Env vars**:
   - `CASSETTE_DIR` – path to snapshot vault (`docs/cassettes/` by default)
@@ -100,7 +100,7 @@ Setting these variables allows custom storage locations for captures or twins wh
 
 ## Testing
 
-`npm test` invokes Node’s built‑in test runner and executes all files under `test/`. The suite mixes unit tests for utility functions with integration tests that assert build outputs and runtime behaviour. Integration tests that exercise network calls use the **Live‑Capture‑Lock** policy:
+`npm test` runs an adaptive harness that targets only tests related to your changes. It inspects `git status` to detect modified files and executes matching tests, falling back to the full suite when no direct matches are found. Use `npm run test:all` to force a complete run or when CI sets `CI=true`. Integration tests that exercise network calls use the **Live‑Capture‑Lock** policy:
 
 - **Snapshot vault**: Recorded HTTP interactions are stored under `docs/cassettes/`【9ad1e7†L1-L2】
 - **Creating captures**: run the relevant tests with network access; responses are saved as fixtures for replay
@@ -147,7 +147,13 @@ Example response:
 {
   "query": "effusion labs",
   "results": [
-    { "rank": 1, "title": "Result One", "url": "https://example.com/1", "snippet": "Snippet one", "type": "organic" }
+    {
+      "rank": 1,
+      "title": "Result One",
+      "url": "https://example.com/1",
+      "snippet": "Snippet one",
+      "type": "organic"
+    }
     // ...
   ]
 }
@@ -215,7 +221,7 @@ The running container serves the static site with caching headers and an SPA fal
 2. Install dependencies with `npm install`.
 3. Create feature branches that keep experimental work behind flags.
 4. Update or add tests alongside code changes; record any new external captures in `docs/knowledge/` and commit snapshots under `docs/cassettes/`.
-5. Run `npm test` to ensure the suite passes and snapshots are replayed without network access.
+5. Run `npm test` for fast feedback or `npm run test:all` to execute the entire suite and verify snapshots without network access.
 6. Submit a pull request describing your changes, snapshot updates and any assumptions.
 
 ## License
