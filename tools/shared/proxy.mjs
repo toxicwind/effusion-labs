@@ -3,12 +3,12 @@ function truthy(value){
 }
 
 function buildProxyFromEnv(env = process.env){
-  if(!truthy(env.OUTBOUND_PROXY_ENABLED)){
-    return { state:{ enabled:false } };
-  }
-  let url = env.OUTBOUND_PROXY_URL;
+  let url = env.http_proxy || env.https_proxy || env.OUTBOUND_PROXY_URL;
   if(!url){
-    return { state:{ enabled:false, reason:'missing_url' } };
+    if(truthy(env.OUTBOUND_PROXY_ENABLED)){
+      return { state:{ enabled:false, reason:'missing_url' } };
+    }
+    return { state:{ enabled:false } };
   }
   if(!/^https?:\/\//.test(url)) url = 'http://' + url;
   const config = { server:url };
