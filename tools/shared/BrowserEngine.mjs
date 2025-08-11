@@ -2,23 +2,14 @@ import { chromium } from 'playwright-extra';
 import StealthPlugin from 'puppeteer-extra-plugin-stealth';
 import os from 'os';
 import path from 'path';
+import { buildProxyFromEnv } from './proxy.mjs';
 
 chromium.use(StealthPlugin());
-
-function buildProxy(){
-  const enabled = process.env.OUTBOUND_PROXY_ENABLED === '1';
-  if(!enabled) return { state: { enabled:false } };
-  const server = `http://${process.env.OUTBOUND_PROXY_URL}`;
-  const username = process.env.OUTBOUND_PROXY_USER;
-  const password = process.env.OUTBOUND_PROXY_PASS;
-  const proxy = { server, username, password };
-  return { state: { enabled:true, server, auth: username && password ? 'present':'absent' }, config: proxy };
-}
 
 class BrowserEngine{
   static async create(opts={}){
     const { statePath } = opts;
-    const { state:proxyState, config:proxyConfig } = buildProxy();
+    const { state:proxyState, config:proxyConfig } = buildProxyFromEnv();
     const launchOpts = { headless:true };
     if(proxyConfig) launchOpts.proxy = proxyConfig;
     const browser = await chromium.launch(launchOpts);

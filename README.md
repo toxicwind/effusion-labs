@@ -125,14 +125,46 @@ The CLI prints the normalized Markdown followed by a `sha256:` line containing t
 `web2md` and `search2serp` honor these environment variables for outbound HTTPS proxying:
 
 ```
-OUTBOUND_PROXY_ENABLED=0|1
-OUTBOUND_PROXY_URL=host:port
+OUTBOUND_PROXY_ENABLED=1|true|TRUE
+OUTBOUND_PROXY_URL=http://host:port
 OUTBOUND_PROXY_USER=...
 OUTBOUND_PROXY_PASS=...
-OUTBOUND_PROXY_NO_PROXY=domain[,domain]
 ```
 
-CLI flags `--proxy`, `--no-proxy`, and `--no-proxy-hosts "host,host"` override enablement and bypass lists but never expose credentials.
+Set `OUTBOUND_PROXY_ENABLED` to any other value to disable proxying. Credentials are optional.
+
+### search2serp CLI
+
+Fetch Google results and emit structured JSON:
+
+```bash
+node tools/search2serp/cli.js "effusion labs"
+```
+
+Example response:
+
+```json
+{
+  "query": "effusion labs",
+  "results": [
+    { "rank": 1, "title": "Result One", "url": "https://example.com/1", "snippet": "Snippet one", "type": "organic" }
+    // ...
+  ]
+}
+```
+
+Proxy usage:
+
+```bash
+# direct
+OUTBOUND_PROXY_ENABLED=0 node tools/search2serp/cli.js "kittens"
+
+# via proxy with auth
+OUTBOUND_PROXY_ENABLED=true OUTBOUND_PROXY_URL=http://proxy:8080 OUTBOUND_PROXY_USER=user OUTBOUND_PROXY_PASS=pass \
+  node tools/search2serp/cli.js "kittens"
+```
+
+Troubleshooting: ensure Google consent pages are accepted automatically; repeated redirects often indicate blocked cookies. HTTP 403/429 responses typically mean rate limiting—retry with backoff. Proxy authentication failures surface as Playwright launch errors.
 
 Within templates, the filter can ingest content on build:
 
