@@ -6,11 +6,11 @@ eleventyNavigation:
   key: Projects
   parent: Showcase # If you use parent for navigation hierarchy
 ---
-{% from "components/tile.njk" import tile %}
+{% from "components/list-item.njk" import listItem %}
 
 <p>This is the central hub for all projects explored within the lab.</p>
-<ul class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+<div class="grid gap-6 sm:grid-cols-3">
 {% for item in collections.projects %}
-  {% if item.url != page.url %}<li>{{ tile(item) }}</li>{% endif %}
+  {% if item.url != page.url %}{{ listItem(item) }}{% endif %}
 {% endfor %}
-</ul>
+</div>

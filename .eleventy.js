@@ -8,14 +8,20 @@ module.exports = function (eleventyConfig) {
   eleventyConfig.addTemplateFormats("json");
 
   eleventyConfig.addCollection("featured", (api) =>
-    api.getAll().filter((p) => p.data?.featured === true),
+    api
+      .getAll()
+      .filter((p) => p.data?.featured === true)
+      .sort((a, b) => b.date - a.date),
   );
 
   eleventyConfig.addCollection("interactive", (api) =>
-    api.getAll().filter((p) => {
-      const tags = p.data.tags || [];
-      return tags.includes("prototype") || p.data.interactive === true;
-    }),
+    api
+      .getAll()
+      .filter((p) => {
+        const tags = p.data.tags || [];
+        return tags.includes("prototype") || p.data.interactive === true;
+      })
+      .sort((a, b) => b.date - a.date),
   );
 
   eleventyConfig.addCollection("recentAll", (api) => {
@@ -49,7 +55,7 @@ module.exports = function (eleventyConfig) {
     tryNow: [1, 3],
     pathways: 3,
     questions: 3,
-    notebook: 4,
+    notebook: 3,
   });
 
   return {

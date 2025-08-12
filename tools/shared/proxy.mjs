@@ -6,7 +6,7 @@ function buildProxyFromEnv(env = process.env){
   if(!truthy(env.OUTBOUND_PROXY_ENABLED)){
     return { state:{ enabled:false } };
   }
-  let url = env.OUTBOUND_PROXY_URL;
+  let url = env.CHAIN_PROXY_URL || env.OUTBOUND_PROXY_URL;
   if(!url){
     return { state:{ enabled:false, reason:'missing_url' } };
   }

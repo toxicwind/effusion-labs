@@ -6,11 +6,11 @@ eleventyNavigation:
   key: Sparks
   parent: Showcase # Adjust parent as needed for your navigation
 ---
-{% from "components/tile.njk" import tile %}
+{% from "components/list-item.njk" import listItem %}
 
 <p>Here you'll find nascent ideas, quick notes, and experimental fragments that may one day ignite into full concepts or projects.</p>
-<ul class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+<div class="grid gap-6 sm:grid-cols-3">
 {% for item in collections.sparks %}
-  {% if item.url != page.url %}<li>{{ tile(item) }}</li>{% endif %}
+  {% if item.url != page.url %}{{ listItem(item) }}{% endif %}
 {% endfor %}
-</ul>
+</div>

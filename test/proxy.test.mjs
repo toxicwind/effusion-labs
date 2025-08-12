@@ -8,6 +8,11 @@ test('proxy disabled returns disabled state', () => {
   assert.equal(config, undefined);
 });
 
+test('http_proxy ignored when not explicitly enabled', () => {
+  const { state } = buildProxyFromEnv({ http_proxy:'http://example:8080' });
+  assert.equal(state.enabled, false);
+});
+
 test('proxy enabled without auth', () => {
   const env = { OUTBOUND_PROXY_ENABLED:'1', OUTBOUND_PROXY_URL:'http://example:8080' };
   const { state, config } = buildProxyFromEnv(env);
