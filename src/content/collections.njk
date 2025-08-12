@@ -1,0 +1,15 @@
+---
+layout: "layouts/collection.njk"
+pagination:
+  data: collectionIndexPages
+  size: 1
+  alias: coll
+permalink: "/{{ coll.slug }}/index.html"
+eleventyComputed:
+  title: "{{ coll.title }}"
+  intro: "{{ coll.intro }}"
+  collectionName: "{{ coll.collection }}"
+  eleventyNavigation:
+    key: "{{ coll.eleventyNavigation.key }}"
+    parent: "{{ coll.eleventyNavigation.parent }}"
+---

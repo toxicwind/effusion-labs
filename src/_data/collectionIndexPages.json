@@ -1,0 +1,30 @@
+[
+  {
+    "slug": "concepts",
+    "title": "Concepts",
+    "collection": "concepts",
+    "intro": "This is the central hub for all individual concepts explored within the lab.",
+    "eleventyNavigation": { "key": "Concepts", "parent": "Showcase" }
+  },
+  {
+    "slug": "meta",
+    "title": "Meta",
+    "collection": "meta",
+    "intro": "This section contains information about the lab itself, its purpose, and related administrative details.",
+    "eleventyNavigation": { "key": "Meta", "parent": "Showcase" }
+  },
+  {
+    "slug": "projects",
+    "title": "Projects",
+    "collection": "projects",
+    "intro": "This is the central hub for all projects explored within the lab.",
+    "eleventyNavigation": { "key": "Projects", "parent": "Showcase" }
+  },
+  {
+    "slug": "sparks",
+    "title": "Sparks",
+    "collection": "sparks",
+    "intro": "Here you'll find nascent ideas, quick notes, and experimental fragments that may one day ignite into full concepts or projects.",
+    "eleventyNavigation": { "key": "Sparks", "parent": "Showcase" }
+  }
+]

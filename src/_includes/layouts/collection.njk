@@ -1,0 +1,12 @@
+---
+layout: layout.njk
+---
+{% from "components/list-item.njk" import listItem %}
+<p>{{ intro }}</p>
+<ul class="space-y-4">
+  {% for item in collections[collectionName] %}
+    {% if item.url != page.url %}
+      <li>{{ listItem(item) }}</li>
+    {% endif %}
+  {% endfor %}
+</ul>
