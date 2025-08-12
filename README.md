@@ -132,6 +132,7 @@ OUTBOUND_PROXY_PASS=...
 ```
 
 Set `OUTBOUND_PROXY_ENABLED` to any other value to disable proxying. Credentials are optional.
+System `http_proxy`/`https_proxy` variables are ignored; specify `OUTBOUND_PROXY_URL` explicitly when enabling.
 
 ### search2serp CLI
 

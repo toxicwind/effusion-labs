@@ -2,11 +2,13 @@ import { test, expect } from '@playwright/test';
 import { BrowserEngine } from '../tools/shared/BrowserEngine.mjs';
 import fs from 'fs/promises';
 
+process.env.OUTBOUND_PROXY_ENABLED = '0';
+delete process.env.CHAIN_PROXY_URL;
+
 const popmartUrl = 'https://www.popmart.com/us/products/1061/THE-MONSTERS-FALL-IN-WILD-SERIES-Vinyl-Plush-Doll-Pendant';
 
 // Test 1: Engine Initialization (Proxy Disabled)
 test('Engine initializes without proxy and applies stealth', async () => {
-  process.env.OUTBOUND_PROXY_ENABLED = '0';
   const engine = await BrowserEngine.create();
   expect(engine.proxy.enabled).toBe(false);
   const page = await engine.newPage();
@@ -18,13 +20,20 @@ test('Engine initializes without proxy and applies stealth', async () => {
 
 // Test 2: Engine Initialization (Proxy Enabled)
 test('Engine honors outbound proxy settings', async () => {
-  const original = process.env.OUTBOUND_PROXY_ENABLED;
+  const originalEnabled = process.env.OUTBOUND_PROXY_ENABLED;
+  const originalUrl = process.env.OUTBOUND_PROXY_URL;
+  const originalChain = process.env.CHAIN_PROXY_URL;
+  delete process.env.CHAIN_PROXY_URL;
   process.env.OUTBOUND_PROXY_ENABLED = '1';
+  process.env.OUTBOUND_PROXY_URL = 'example:8080';
   const engine = await BrowserEngine.create();
   expect(engine.proxy.enabled).toBe(true);
-  expect(engine.proxy.server).toBe(`http://${process.env.OUTBOUND_PROXY_URL}`);
+  expect(engine.proxy.server).toBe('http://example:8080');
   await engine.close();
-  process.env.OUTBOUND_PROXY_ENABLED = original;
+  process.env.OUTBOUND_PROXY_ENABLED = originalEnabled;
+  if(originalUrl !== undefined) process.env.OUTBOUND_PROXY_URL = originalUrl;
+  else delete process.env.OUTBOUND_PROXY_URL;
+  if(originalChain !== undefined) process.env.CHAIN_PROXY_URL = originalChain;
 });
 
 // Test 3: Simple Content Retrieval

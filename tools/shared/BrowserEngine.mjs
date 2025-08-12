@@ -3,6 +3,7 @@ import StealthPlugin from 'puppeteer-extra-plugin-stealth';
 import os from 'os';
 import path from 'path';
 import { realisticHeaders, fingerprintOptions } from './cf.mjs';
+import { buildProxyFromEnv } from './proxy.mjs';
 
 chromium.use(StealthPlugin());
 
@@ -10,11 +11,9 @@ class BrowserEngine{
   static async create(opts={}){
     const { statePath, headless=true, jitter=false } = opts;
     const launchOpts = { headless };
-    let proxyState = { enabled:false };
-    const server = process.env.CHAIN_PROXY_URL;
-    if(server){
-      launchOpts.proxy = { server };
-      proxyState = { enabled:true, server };
+    const { state: proxyState, config: proxyConfig } = buildProxyFromEnv();
+    if(proxyState.enabled){
+      launchOpts.proxy = { server: proxyConfig.server };
     }
     const fp = fingerprintOptions(jitter);
     launchOpts.args = ['--disable-blink-features=AutomationControlled'];
