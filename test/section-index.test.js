@@ -21,9 +21,9 @@ function render(section) {
 }
 
 ['projects','concepts','sparks','meta'].forEach(section => {
-  test(`${section} index uses tile grid`, () => {
+  test(`${section} index uses list layout`, () => {
     const html = render(section);
-    assert.match(html, /<ul class="grid/);
-    assert.match(html, /class="tile/);
+    assert.match(html, /<ul class="space-y-4">/);
+    assert.match(html, /class="block rounded-lg/);
   });
 });

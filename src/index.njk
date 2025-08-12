@@ -5,7 +5,7 @@ showTitle: false
 ---
 
 {% from "components/section.njk" import section %}
-{% from "components/tile.njk" import tile %}
+{% from "components/list-item.njk" import listItem %}
 {% from "components/pathway.njk" import pathway %}
 {% from "components/kpis.njk" import kpis %}
 
@@ -17,7 +17,7 @@ showTitle: false
   {% call section('Featured', null) %}
     <div class="grid gap-6 sm:grid-cols-3">
       {% for item in featured %}
-        {{ tile(item) }}
+        {{ listItem(item) }}
       {% endfor %}
     </div>
   {% endcall %}
@@ -27,7 +27,7 @@ showTitle: false
     {% call section('Today at the Lab', '/meta/') %}
       <div class="grid gap-6 sm:grid-cols-3">
         {% for item in today %}
-          {{ tile(item) }}
+          {{ listItem(item) }}
         {% endfor %}
       </div>
     {% endcall %}
@@ -37,7 +37,7 @@ showTitle: false
     {% call section('Try It Now', '/projects/') %}
       <div class="grid gap-6 sm:grid-cols-3">
         {% for item in tryNow %}
-          {{ tile(item) }}
+          {{ listItem(item) }}
         {% endfor %}
       </div>
     {% endcall %}
@@ -67,7 +67,7 @@ showTitle: false
     {% call section('Lab Notebook', '/sparks/') %}
       <div class="grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
         {% for item in notebook %}
-          {{ tile(item) }}
+          {{ listItem(item) }}
         {% endfor %}
       </div>
     {% endcall %}
