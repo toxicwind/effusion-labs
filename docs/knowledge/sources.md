@@ -55,3 +55,4 @@
 - [Let's Checkmate Fandom page missing](https://popmart.fandom.com/wiki/Let%27s_Checkmate)
 - [Labubu Hide and Seek in Singapore Figure (TLS error)](https://global.popmart.com/products/labubu-hide-and-seek-in-singapore-figure)
 - [Hide and Seek in Singapore Fandom page missing](https://popmart.fandom.com/wiki/Hide_and_Seek_in_Singapore)
+- [Human Interface Guidelines (Wikipedia)](https://en.wikipedia.org/wiki/Human_interface_guidelines)
