@@ -1,16 +1,9 @@
 ---
 title: "Projects"
-layout: "layout.njk"
+layout: "layouts/collection.njk"
+section: "projects"
 permalink: "/projects/index.html" # <-- Add or modify this line
 eleventyNavigation:
   key: Projects
   parent: Showcase # If you use parent for navigation hierarchy
 ---
-{% from "components/list-item.njk" import listItem %}
-
-<p>This is the central hub for all projects explored within the lab.</p>
-<div class="grid gap-6 sm:grid-cols-3">
-{% for item in collections.projects %}
-  {% if item.url != page.url %}{{ listItem(item) }}{% endif %}
-{% endfor %}
-</div>
