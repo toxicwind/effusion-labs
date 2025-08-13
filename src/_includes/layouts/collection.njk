@@ -1,0 +1,11 @@
+---
+layout: layout.njk
+---
+{% from "components/list-item.njk" import listItem %}
+
+<p>{{ sections[section].intro }}</p>
+<div class="grid gap-6 sm:grid-cols-3" data-section="{{ section }}">
+  {% for item in collections[section] %}
+    {% if item.url != page.url %}{{ listItem(item) }}{% endif %}
+  {% endfor %}
+</div>

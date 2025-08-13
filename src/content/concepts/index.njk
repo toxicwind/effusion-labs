@@ -1,16 +1,9 @@
 ---
 title: "Concepts"
-layout: "layout.njk"
+layout: "layouts/collection.njk"
+section: "concepts"
 permalink: "/concepts/index.html" # <-- Add or modify this line
 eleventyNavigation:
   key: Concepts
   parent: Showcase
 ---
-{% from "components/list-item.njk" import listItem %}
-
-<p>This is the central hub for all individual concepts explored within the lab.</p>
-<div class="grid gap-6 sm:grid-cols-3">
-{% for item in collections.concepts %}
-  {% if item.url != page.url %}{{ listItem(item) }}{% endif %}
-{% endfor %}
-</div>
