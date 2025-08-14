@@ -6,5 +6,13 @@ pagination:
   alias: character
 permalink: "/archives/collectables/designer-toys/pop-mart/the-monsters/characters/{{ character.data.slug }}/index.html"
 ---
+{% from "components/badge.njk" import badge %}
 <h1 class="text-2xl font-bold mb-2">{{ character.data.name }}</h1>
 <p class="mb-4">{{ character.data.notes }}</p>
+<ul>
+{% for p in collections.monstersProducts %}
+{% if p.data.character == character.data.slug %}
+      <li>{{ badge(p.data.product_id, "/archives/collectables/designer-toys/pop-mart/the-monsters/products/" + p.data.product_id + "/") }}</li>
+  {% endif %}
+{% endfor %}
+</ul>
