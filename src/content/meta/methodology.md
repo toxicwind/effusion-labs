@@ -40,6 +40,12 @@ The pipeline is **nonlinear**. A Project may yield new Sparks. A Concept may bif
 
 ---
 
+## Reference Hook
+
+Anchor demo for internal links.
+
+---
+
 ## ⌬ Suggested Continuations
 
 - [[style-guide]]: the formal constraints and structure governing this document.
