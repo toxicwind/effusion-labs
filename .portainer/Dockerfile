@@ -1,6 +1,9 @@
 # ─── Build stage ──────────────────────────────────────────────────────────────
 FROM node:20-alpine AS builder
 
+# add git so build-info can run `git rev-parse`
+RUN apk add --no-cache git
+
 WORKDIR /app
 
 # Log: node version and env context
