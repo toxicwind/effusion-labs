@@ -1,0 +1,62 @@
+
+> effusion_labs_final@1.0.0 test
+> node tools/test-changed.mjs tests/header-nav-aria.spec.mjs tests/collection-layout.spec.mjs
+
+TAP version 13
+# npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+# 🚀 Eleventy build starting with enhanced footnote system...
+# /*! 🌼 daisyUI 5.0.50 */
+# ✅ Eleventy build completed. Generated 107 files.
+# [@photogabble/wikilinks] WARNING Wikilink (/archives/collectables/designer-toys/pop-mart/the-monsters/products/{{ p.data.product_id }}/) found pointing to to non-existent page in:
+# \\t- ./src/content/sparks/vapor-linked-governance.md
+# [@photogabble/wikilinks] WARNING Wikilink ([[node-handle]]) found pointing to to non-existent page in:
+# \\t- ./src/content/sparks/vapor-linked-governance.md
+# [@photogabble/wikilinks] WARNING Wikilink ([[bracketed-handle]]) found pointing to to non-existent page in:
+# \\t- ./src/content/sparks/vapor-linked-governance.md
+# [11ty] Copied 75 Wrote 107 files in 9.76 seconds (91.2ms each, v3.1.2)
+# Subtest: collection pages expose section metadata
+ok 1 - collection pages expose section metadata
+  ---
+  duration_ms: 11373.530063
+  type: 'test'
+  ...
+# npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+# 🚀 Eleventy build starting with enhanced footnote system...
+# /*! 🌼 daisyUI 5.0.50 */
+# ✅ Eleventy build completed. Generated 107 files.
+# [@photogabble/wikilinks] WARNING Wikilink (/archives/collectables/designer-toys/pop-mart/the-monsters/products/{{ p.data.product_id }}/) found pointing to to non-existent page in:
+# \\t- ./src/content/sparks/vapor-linked-governance.md
+# [@photogabble/wikilinks] WARNING Wikilink ([[node-handle]]) found pointing to to non-existent page in:
+# \\t- ./src/content/sparks/vapor-linked-governance.md
+# [@photogabble/wikilinks] WARNING Wikilink ([[bracketed-handle]]) found pointing to to non-existent page in:
+# \\t- ./src/content/sparks/vapor-linked-governance.md
+# [11ty] Copied 75 Wrote 107 files in 9.89 seconds (92.5ms each, v3.1.2)
+# Subtest: home page header includes primary nav landmark
+not ok 2 - home page header includes primary nav landmark
+  ---
+  duration_ms: 11459.233178
+  type: 'test'
+  location: '/workspace/effusion-labs/tests/header-nav-aria.spec.mjs:14:1'
+  failureType: 'testCodeFailure'
+  error: '0 == 2'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 2
+  actual: 0
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (file:///workspace/effusion-labs/tests/header-nav-aria.spec.mjs:18:10)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.start (node:internal/test_runner/test:944:17)
+    startSubtestAfterBootstrap (node:internal/test_runner/harness:296:17)
+  ...
+1..2
+# tests 2
+# suites 0
+# pass 1
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 11651.715597

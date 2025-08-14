@@ -49,7 +49,7 @@ Collaboration is documented, not hidden. Where the model influences wording or s
 
 Text is organised in longform paragraphs to preserve nuance. Compression is avoided when it would obscure decision paths or strip context necessary for later recombination. Each paragraph exposes the premises that anchor its claims, enabling downstream audit without additional excavation.
 
-Clarity is achieved through linkage, not summary. A node signals its position inside the wider document network; readers navigate outward when additional context is required. Uncertainty is recorded rather than resolved, because open questions constitute structural data.
+Clarity is achieved through linkage, not summary. A node signals its position inside the wider document network; readers navigate outward when additional context is required. Uncertainty is recorded rather than resolved, because unresolved questions constitute structural data.
 
 ---
 

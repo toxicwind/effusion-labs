@@ -1,32 +1,65 @@
+{% set navLabel = 'Primary navigation' %}
 <header class="sticky top-0 z-40 w-full bg-base-100/90 backdrop-blur shadow">
   <div class="navbar mx-auto max-w-screen-2xl px-6">
     {% from "components/nav-items.njk" import navItems %}
+
+    <!-- Brand -->
     <div class="flex-1">
       <a href="/" class="flex items-center gap-2 font-heading text-3xl text-primary">
-        <i data-lucide="flask-conical" class="w-6 h-6"></i><span>Effusion Labs</span>
+        <i data-lucide="flask-conical" class="w-6 h-6" aria-hidden="true"></i>
+        <span>{{ 'Effusion Labs' | shout }}</span>
       </a>
     </div>
-    <nav class="flex-none lg:hidden" aria-label="Main">
-      <div class="dropdown dropdown-end">
-        <label tabindex="0" class="btn btn-ghost btn-square">
-          <i data-lucide="menu" class="w-6 h-6"></i>
+
+    <!-- Mobile nav (hidden on lg+) -->
+    <div class="flex-none lg:hidden">
+      <nav class="dropdown dropdown-end" aria-label="{{ navLabel }}">
+        <label tabindex="0" class="btn btn-ghost btn-square" aria-label="Open menu">
+          <i data-lucide="menu" class="w-6 h-6" aria-hidden="true"></i>
         </label>
-        <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-40">
-          {{ navItems(nav, page.url) }}
+        <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[100] p-2 shadow bg-base-100 rounded-box w-56" role="menu">
+          {# Prefer macro; fallback to inline loop if unavailable #}
+          {% if navItems %}
+            {{ navItems(nav, page.url) }}
+          {% else %}
+            {% for n in nav %}
+            <li role="none">
+              <a role="menuitem" href="{{ n.url }}">
+                {% if n.order %}<span class="opacity-60">{{ n.order }}.</span>{% endif %}
+                <span>{{ n.title | shout }}</span>
+              </a>
+            </li>
+            {% endfor %}
+          {% endif %}
         </ul>
-      </div>
-    </nav>
+      </nav>
+    </div>
+
+    <!-- Right cluster: theme toggle + desktop nav -->
     <div class="flex-none flex items-center gap-2">
       <button id="theme-toggle" class="btn btn-ghost btn-square" aria-label="Switch to light theme" aria-pressed="true">
         <span class="sr-only">Toggle theme</span>
-        <i data-lucide="sun" class="w-6 h-6 hidden"></i>
-        <i data-lucide="moon" class="w-6 h-6"></i>
+        <i data-lucide="sun" class="w-6 h-6 hidden" aria-hidden="true"></i>
+        <i data-lucide="moon" class="w-6 h-6" aria-hidden="true"></i>
       </button>
+
+      <!-- Desktop nav (shown on lg+) -->
+      <nav class="hidden lg:flex" aria-label="{{ navLabel }}">
+        <ul class="menu menu-horizontal px-1">
+          {% if navItems %}
+            {{ navItems(nav, page.url, 'hover:text-primary') }}
+          {% else %}
+            {% for n in nav %}
+            <li>
+              <a href="{{ n.url }}" class="hover:text-primary">
+                {% if n.order %}<span class="opacity-60">{{ n.order }}.</span>{% endif %}
+                <span>{{ n.title | shout }}</span>
+              </a>
+            </li>
+            {% endfor %}
+          {% endif %}
+        </ul>
+      </nav>
     </div>
-    <nav class="flex-none hidden lg:flex" aria-label="Main">
-      <ul class="menu menu-horizontal px-1">
-        {{ navItems(nav, page.url, 'hover:text-primary') }}
-      </ul>
-    </nav>
   </div>
 </header>

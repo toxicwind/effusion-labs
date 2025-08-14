@@ -10,6 +10,8 @@
   h1 { @apply font-heading text-[clamp(2rem,4vw+1rem,3rem)]; }
   h2 { @apply font-heading text-[clamp(1.5rem,3vw+0.75rem,2.25rem)]; }
 
+  .heading-anchor { @apply mr-2 no-underline text-gray-400; }
+
   pre[class*="language-"],
   :not(pre) > code {
     background-color: rgb(var(--color-code-bg));
@@ -94,6 +96,15 @@
     scroll-margin-top: calc(var(--header-height) + 1rem);
   }
   html{ scroll-behavior: smooth; }
+
+  .footnote-highlight{
+    background-color: hsl(var(--p)/.15);
+    border-radius: .375rem;
+    transition: background-color .3s ease-in-out;
+  }
+  @media (prefers-reduced-motion: reduce){
+    .footnote-highlight{ transition: none; }
+  }
 
   [id^="fn"]:target,[id^="fnref"]:target{
     border-radius:.375rem;
