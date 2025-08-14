@@ -48,6 +48,10 @@ memory_ref:
 <div class="map-container-wrapper">
   <div id="concept-map-container"></div>
 </div>
+  <script type="application/ld+json">
+  {{ collections.nodes | conceptMapJSONLD | safe }}
+  </script>
+
 
 <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
 <script type="text/javascript">
