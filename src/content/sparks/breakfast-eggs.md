@@ -98,7 +98,7 @@ And if you’re still reading, you are now implicated in the process by which me
 
 ---
 
-## Open Questions
+## Further Questions
 1. **At what point did the semiotics of egg placement surpass the actual consumption of breakfast in social consequence—and why are we all pretending this isn’t deeply troubling?**
 
 2. **If this article is found centuries from now, will future readers assume it’s satire, encrypted lament, or just evidence of a culture desperate to turn toast into allegory?**
