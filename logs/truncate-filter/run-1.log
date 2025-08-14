@@ -1,0 +1,74 @@
+TAP version 13
+# Subtest: readableDate formats correctly
+ok 1 - readableDate formats correctly
+  ---
+  duration_ms: 31.26245
+  type: 'test'
+  ...
+# Subtest: htmlDateString formats correctly
+ok 2 - htmlDateString formats correctly
+  ---
+  duration_ms: 0.504669
+  type: 'test'
+  ...
+# Subtest: limit returns subset
+ok 3 - limit returns subset
+  ---
+  duration_ms: 1.338395
+  type: 'test'
+  ...
+# Subtest: jsonify serializes pages
+ok 4 - jsonify serializes pages
+  ---
+  duration_ms: 0.957234
+  type: 'test'
+  ...
+# Subtest: readingTime estimates minutes
+ok 5 - readingTime estimates minutes
+  ---
+  duration_ms: 0.334849
+  type: 'test'
+  ...
+# Subtest: slugify generates URL-friendly strings
+ok 6 - slugify generates URL-friendly strings
+  ---
+  duration_ms: 0.393258
+  type: 'test'
+  ...
+# Subtest: truncate shortens strings with ellipsis
+not ok 7 - truncate shortens strings with ellipsis
+  ---
+  duration_ms: 0.422755
+  type: 'test'
+  location: '/workspace/effusion-labs/test/filters.test.js:42:1'
+  failureType: 'testCodeFailure'
+  error: 'truncate is not a function'
+  code: 'ERR_TEST_FAILURE'
+  name: 'TypeError'
+  stack: |-
+    TestContext.<anonymous> (/workspace/effusion-labs/test/filters.test.js:43:22)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: webpageToMarkdown filter fetches and converts HTML
+not ok 8 - webpageToMarkdown filter fetches and converts HTML
+  ---
+  duration_ms: 41.402605
+  type: 'test'
+  location: '/workspace/effusion-labs/test/filters.test.js:47:1'
+  failureType: 'testCodeFailure'
+  error: 'fetch failed'
+  code: 'ERR_TEST_FAILURE'
+  name: 'TypeError'
+  stack: |-
+    node:internal/deps/undici/undici:13510:13
+    process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    async webpageToMarkdown (/workspace/effusion-labs/lib/webpageToMarkdown.js:16:13)
+    async TestContext.<anonymous> (/workspace/effusion-labs/test/filters.test.js:55:14)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
