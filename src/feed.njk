@@ -12,6 +12,7 @@
 ---
 {% set posts = collections.nodes | slice(0, 20) %}
 <?xml version="1.0" encoding="utf-8"?>
+<!-- build: {{ build.hash }} -->
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>{{ metadata.title }}</title>
@@ -19,6 +20,7 @@
     <atom:link href="{{ permalink | htmlBaseUrl(metadata.base) }}" rel="self" type="application/rss+xml" />
     <description>{{ metadata.description }}</description>
     <language>{{ metadata.language }}</language>
+    <lastBuildDate>{{ build.date | dateToRfc822 }}</lastBuildDate>
     {%- for post in posts %}
     {%- set absUrl = post.url | htmlBaseUrl(metadata.base) %}
     <item>

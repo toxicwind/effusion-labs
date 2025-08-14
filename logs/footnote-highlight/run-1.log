@@ -1,0 +1,153 @@
+TAP version 13
+# Error: Not implemented: window.scrollTo
+#     at module.exports (/workspace/effusion-labs/node_modules/jsdom/lib/jsdom/browser/not-implemented.js:9:17)
+#     at /workspace/effusion-labs/node_modules/jsdom/lib/jsdom/browser/Window.js:960:7
+#     at Document.eval (eval at <anonymous> (file:///workspace/effusion-labs/test/footnote-nav.highlight.test.mjs:33:14), <anonymous>:32:14)
+#     at Document.callTheUserObjectsOperation (/workspace/effusion-labs/node_modules/jsdom/lib/jsdom/living/generated/EventListener.js:26:30)
+#     at innerInvokeEventListeners (/workspace/effusion-labs/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:350:25)
+#     at invokeEventListeners (/workspace/effusion-labs/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:286:3)
+#     at HTMLAnchorElementImpl._dispatch (/workspace/effusion-labs/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:233:9)
+#     at HTMLAnchorElementImpl.dispatchEvent (/workspace/effusion-labs/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:104:17)
+#     at HTMLAnchorElement.dispatchEvent (/workspace/effusion-labs/node_modules/jsdom/lib/jsdom/living/generated/EventTarget.js:241:34)
+#     at TestContext.<anonymous> (file:///workspace/effusion-labs/test/footnote-nav.highlight.test.mjs:36:8) undefined
+# Error: Uncaught [TypeError: targetURL.path.join is not a function]
+#     at reportException (/workspace/effusion-labs/node_modules/jsdom/lib/jsdom/living/helpers/runtime-script-errors.js:66:24)
+#     at innerInvokeEventListeners (/workspace/effusion-labs/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:353:9)
+#     at invokeEventListeners (/workspace/effusion-labs/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:286:3)
+#     at HTMLAnchorElementImpl._dispatch (/workspace/effusion-labs/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:233:9)
+#     at HTMLAnchorElementImpl.dispatchEvent (/workspace/effusion-labs/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:104:17)
+#     at HTMLAnchorElement.dispatchEvent (/workspace/effusion-labs/node_modules/jsdom/lib/jsdom/living/generated/EventTarget.js:241:34)
+#     at TestContext.<anonymous> (file:///workspace/effusion-labs/test/footnote-nav.highlight.test.mjs:36:8)
+#     at Test.runInAsyncScope (node:async_hooks:214:14)
+#     at Test.run (node:internal/test_runner/test:1047:25)
+#     at Test.processPendingSubtests (node:internal/test_runner/test:744:18) TypeError: targetURL.path.join is not a function
+#     at canHaveItsURLRewritten (/workspace/effusion-labs/node_modules/jsdom/lib/jsdom/living/window/History-impl.js:143:22)
+#     at HistoryImpl._sharedPushAndReplaceState (/workspace/effusion-labs/node_modules/jsdom/lib/jsdom/living/window/History-impl.js:83:12)
+#     at HistoryImpl.pushState (/workspace/effusion-labs/node_modules/jsdom/lib/jsdom/living/window/History-impl.js:59:10)
+#     at History.pushState (/workspace/effusion-labs/node_modules/jsdom/lib/jsdom/living/generated/History.js:177:34)
+#     at Document.eval (eval at <anonymous> (file:///workspace/effusion-labs/test/footnote-nav.highlight.test.mjs:33:14), <anonymous>:33:15)
+#     at Document.callTheUserObjectsOperation (/workspace/effusion-labs/node_modules/jsdom/lib/jsdom/living/generated/EventListener.js:26:30)
+#     at innerInvokeEventListeners (/workspace/effusion-labs/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:350:25)
+#     at invokeEventListeners (/workspace/effusion-labs/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:286:3)
+#     at HTMLAnchorElementImpl._dispatch (/workspace/effusion-labs/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:233:9)
+#     at HTMLAnchorElementImpl.dispatchEvent (/workspace/effusion-labs/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:104:17)
+# Error: Uncaught [TypeError: targetURL.path.join is not a function]
+#     at reportException (/workspace/effusion-labs/node_modules/jsdom/lib/jsdom/living/helpers/runtime-script-errors.js:66:24)
+#     at innerInvokeEventListeners (/workspace/effusion-labs/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:353:9)
+#     at invokeEventListeners (/workspace/effusion-labs/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:286:3)
+#     at HTMLAnchorElementImpl._dispatch (/workspace/effusion-labs/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:233:9)
+#     at HTMLAnchorElementImpl.dispatchEvent (/workspace/effusion-labs/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:104:17)
+#     at HTMLAnchorElement.dispatchEvent (/workspace/effusion-labs/node_modules/jsdom/lib/jsdom/living/generated/EventTarget.js:241:34)
+#     at TestContext.<anonymous> (file:///workspace/effusion-labs/test/footnote-nav.highlight.test.mjs:58:8)
+#     at Test.runInAsyncScope (node:async_hooks:214:14)
+#     at Test.run (node:internal/test_runner/test:1047:25)
+#     at Test.processPendingSubtests (node:internal/test_runner/test:744:18) TypeError: targetURL.path.join is not a function
+#     at canHaveItsURLRewritten (/workspace/effusion-labs/node_modules/jsdom/lib/jsdom/living/window/History-impl.js:143:22)
+#     at HistoryImpl._sharedPushAndReplaceState (/workspace/effusion-labs/node_modules/jsdom/lib/jsdom/living/window/History-impl.js:83:12)
+#     at HistoryImpl.pushState (/workspace/effusion-labs/node_modules/jsdom/lib/jsdom/living/window/History-impl.js:59:10)
+#     at History.pushState (/workspace/effusion-labs/node_modules/jsdom/lib/jsdom/living/generated/History.js:177:34)
+#     at Document.eval (eval at <anonymous> (file:///workspace/effusion-labs/test/footnote-nav.highlight.test.mjs:55:14), <anonymous>:33:15)
+#     at Document.callTheUserObjectsOperation (/workspace/effusion-labs/node_modules/jsdom/lib/jsdom/living/generated/EventListener.js:26:30)
+#     at innerInvokeEventListeners (/workspace/effusion-labs/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:350:25)
+#     at invokeEventListeners (/workspace/effusion-labs/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:286:3)
+#     at HTMLAnchorElementImpl._dispatch (/workspace/effusion-labs/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:233:9)
+#     at HTMLAnchorElementImpl.dispatchEvent (/workspace/effusion-labs/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:104:17)
+# Subtest: script does not inject inline style for highlight
+not ok 1 - script does not inject inline style for highlight
+  ---
+  duration_ms: 1.385888
+  type: 'test'
+  location: '/workspace/effusion-labs/test/footnote-nav.highlight.test.mjs:11:1'
+  failureType: 'testCodeFailure'
+  error: 'footnote-nav should not create style elements'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (file:///workspace/effusion-labs/test/footnote-nav.highlight.test.mjs:13:3)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.start (node:internal/test_runner/test:944:17)
+    startSubtestAfterBootstrap (node:internal/test_runner/harness:296:17)
+  ...
+# Subtest: css exposes footnote highlight via primary token
+not ok 2 - css exposes footnote highlight via primary token
+  ---
+  duration_ms: 0.258586
+  type: 'test'
+  location: '/workspace/effusion-labs/test/footnote-nav.highlight.test.mjs:17:1'
+  failureType: 'testCodeFailure'
+  error: 'CSS should define footnote-highlight class'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (file:///workspace/effusion-labs/test/footnote-nav.highlight.test.mjs:19:3)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+# Subtest: clicking footnote link adds highlight class
+not ok 3 - clicking footnote link adds highlight class
+  ---
+  duration_ms: 75.043906
+  type: 'test'
+  location: '/workspace/effusion-labs/test/footnote-nav.highlight.test.mjs:23:1'
+  failureType: 'testCodeFailure'
+  error: 'target footnote should receive highlight class'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (file:///workspace/effusion-labs/test/footnote-nav.highlight.test.mjs:39:3)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: reduced motion users get instant scroll
+not ok 4 - reduced motion users get instant scroll
+  ---
+  duration_ms: 19.945674
+  type: 'test'
+  location: '/workspace/effusion-labs/test/footnote-nav.highlight.test.mjs:43:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    'smooth' !== 'auto'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'auto'
+  actual: 'smooth'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///workspace/effusion-labs/test/footnote-nav.highlight.test.mjs:60:10)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+1..4
+# tests 4
+# suites 0
+# pass 0
+# fail 4
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 642.51948
