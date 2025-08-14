@@ -79,7 +79,11 @@ function runPw(files) {
 }
 
 async function run(files) {
-  const { pw, nodeFiles } = categorize(files);
+  let targets = files;
+  if (targets.length === 0) {
+    targets = listAllTests();
+  }
+  const { pw, nodeFiles } = categorize(targets);
   const codes = [];
   if (nodeFiles.length) codes.push(await runNode(nodeFiles));
   if (pw.length) codes.push(await runPw(pw));
