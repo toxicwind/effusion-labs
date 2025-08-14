@@ -1,9 +1,9 @@
 {% macro archiveNav(path, nav) %}
   {% set items = nav[path] or [] %}
   {% if items.length %}
-  <ul>
+  <ul class="list-none pl-0">
     {% for item in items %}
-    <li><a href="{{ item.url }}">{{ item.title }}</a></li>
+    <li class="border-l-4 border-current pl-2"><a href="{{ item.url }}">{{ item.title }}</a> <span class="font-mono text-xs">({{ item.count }})</span></li>
     {% endfor %}
   </ul>
   {% endif %}
