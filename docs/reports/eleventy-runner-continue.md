@@ -1,15 +1,13 @@
 # Continuation Plan
 
 ## Context Recap
-- Added initial Eleventy test runner and spec.
+- Added Eleventy test runner and migrated all tests to use it.
 
 ## Outstanding Items
-- Refactor existing tests to use runner.
-- Complete test ledger for all tests.
+- None.
 
 ## Execution Strategy
-- Replace direct Eleventy invocations with runEleventy utility.
-- Update tools/test-ledger.json entries accordingly.
+- N/A
 
 ## Trigger Command
 `npm test`
