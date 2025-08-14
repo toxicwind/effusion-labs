@@ -1,0 +1,36 @@
+version: '3.9'
+services:
+  gateway:
+    build: .
+    container_name: flare-md-gateway
+    ports:
+      - "${PORT:-49159}:49159"
+    environment:
+      - PORT=${PORT:-49159}
+      - TZ=${TZ:-UTC}
+      - AUTH_USER=${AUTH_USER:-toxic}
+      - AUTH_PASS=${AUTH_PASS:-Ann3xx!5G7e5Bmx}
+      - SOLVER_URL=${SOLVER_URL:-http://solver:8191/v1}
+      - READABILITY_DEFAULT=1
+    depends_on:
+      solver:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:49159/readyz"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  solver:
+    image: ghcr.io/flaresolverr/flaresolverr:latest
+    container_name: flare-md-solver
+    environment:
+      - LOG_LEVEL=info
+      - TZ=${TZ:-UTC}
+    healthcheck:
+      test: ["CMD", "sh", "-lc", "curl -fsS -X POST -H 'Content-Type: application/json' -d '{\"cmd\":\"sessions.list\"}' http://localhost:8191/v1 >/dev/null"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
