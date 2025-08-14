@@ -1,7 +1,7 @@
 const { JSDOM } = require('jsdom');
 const { Readability } = require('@mozilla/readability');
 const TurndownService = require('turndown');
-const { configureProxyFromEnv } = require('../../lib/proxyAgent');
+const { request } = require('../../lib/flareClient');
 
 function stripTracking(u){
   const url = new URL(u);
@@ -25,43 +25,10 @@ function normalizeHTML(html, url){
 }
 
 async function fetchWithFallback(url){
-  await configureProxyFromEnv();
-  const { isCloudflareChallenge, realisticHeaders, persistedStatePath, shouldHeadful, markChallenge } = await import('../shared/cf.mjs');
-  let res = await fetch(url, { headers: realisticHeaders() });
-  let html = await res.text();
-  if(isCloudflareChallenge({ headers: Object.fromEntries(res.headers), body: html })){
-    markChallenge();
-    let retries = 0;
-    while(retries < 3){
-      const headful = shouldHeadful(retries);
-      const jitter = retries === 2;
-      const { BrowserEngine } = await import('../shared/BrowserEngine.mjs');
-      const engine = await BrowserEngine.create({ statePath: persistedStatePath, headless: !headful, jitter });
-      try{
-        const page = await engine.newPage();
-        await page.goto(url, { waitUntil:'networkidle' });
-        html = await page.content();
-        if(isCloudflareChallenge(html)){
-          markChallenge();
-          await engine.close();
-          retries++;
-          continue;
-        }
-        const markdown = normalizeHTML(html, url);
-        const result = { html, markdown, proxy: engine.proxy, traceFile: engine.traceFile };
-        await engine.close();
-        return result;
-      }catch(err){
-        await engine.close();
-        retries++;
-        if(retries >= 3) throw err;
-      }
-    }
-    throw new Error('cloudflare_challenge');
-  }
-  const markdown = normalizeHTML(html, url);
-  return { html, markdown, proxy:{ enabled:!!process.env.CHAIN_PROXY_URL, server: process.env.CHAIN_PROXY_URL || null }, traceFile:null };
+  const { realisticHeaders } = await import('../shared/cf.mjs');
+  const res = await request.get(url, { headers: realisticHeaders() });
+  const markdown = normalizeHTML(res.body, url);
+  return { html: res.body, markdown, proxy:{ enabled:true }, traceFile:null };
 }
 
 module.exports = { fetchWithFallback, fetchWithBrowser: fetchWithFallback, normalizeHTML };
-
