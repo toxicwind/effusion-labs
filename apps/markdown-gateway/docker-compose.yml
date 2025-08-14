@@ -1,0 +1,33 @@
+version: '3.9'
+services:
+  gateway:
+    build: .
+    container_name: markdown-gateway
+    ports:
+      - "${GATEWAY_PORT:-49159}:5000"
+    environment:
+      - GATEWAY_API_KEY=${GATEWAY_API_KEY}
+    depends_on:
+      solver:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - stack-net
+  solver:
+    image: ghcr.io/flaresolverr/flaresolverr:latest
+    container_name: flaresolverr-solver
+    environment:
+      - LOG_LEVEL=${LOG_LEVEL:-info}
+      - TZ=${TZ:-UTC}
+    restart: unless-stopped
+    networks:
+      - stack-net
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "-X", "POST", "-H", "Content-Type: application/json", "-d", "{\"cmd\":\"sessions.list\"}", "http://localhost:8191/v1"]
+      interval: 15s
+      timeout: 10s
+      retries: 3
+      start_period: 45s
+networks:
+  stack-net:
+    name: markdown-stack-net

@@ -1,0 +1,17 @@
+name: Build Gateway
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'apps/markdown-gateway/**'
+      - '.github/workflows/gateway-build.yml'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build Docker image
+        run: docker build -t gateway-test ./apps/markdown-gateway

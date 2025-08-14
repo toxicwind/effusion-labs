@@ -33,3 +33,8 @@ Thumbs.db
 .env
 tools/google-search/
 tools/search2serp/package-lock.json
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
