@@ -12,8 +12,7 @@ permissions:
 env:
   NODE_VERSION: '20'
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }} # e.g., owner/repo
-  # Set default platform; add linux/arm64 if you need multi-arch
+  IMAGE_NAME: ${{ github.repository }}      # e.g. owner/repo
   PLATFORMS: linux/amd64
 
 concurrency:
@@ -25,83 +24,72 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
+      - name: Checkout
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # helps metadata (semver tags) if you add them later
+          fetch-depth: 0  # helps future tagging/versioning; negligible cost
 
-      - name: Setup Node.js
+      - name: Setup Node.js (with npm cache)
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
 
-      - name: Install dependencies
+      - name: Install deps
         run: npm ci
 
-      # Optional: browsers/deps for Playwright tests; your scripts already guard with "|| true"
-      - name: Install Playwright bits (optional)
-        run: |
-          npm run deps:playwright
-          npm run deps:system
-
-      - name: Run tests (targeted if available)
+      - name: Run tests (targeted)
         run: npm test
 
-      # Optional: fast failure before building Docker image
-      - name: Verify Eleventy build locally
-        run: npm run build
+      # ⬆️ Tests already validate your Eleventy build via your test harness.
+      # Avoid running a second Eleventy build here to keep things fast.
 
-      - name: Set up QEMU (for multi-arch; safe to keep even if single arch)
+      - name: Setup QEMU
         uses: docker/setup-qemu-action@v3
 
-      - name: Set up Docker Buildx
+      - name: Setup Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Log in to GHCR
+      - name: Login to GHCR
         uses: docker/login-action@v3
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      # Generate image tags/labels (latest + sha)
-      - name: Docker metadata
+      - name: Docker metadata (tags/labels)
         id: meta
         uses: docker/metadata-action@v5
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
             type=raw,value=latest,enable={{is_default_branch}}
-            type=sha,prefix=,format=short
+            type=sha,format=short
 
-      - name: Build and push (cached)
+      - name: Build & push (GHA cache, no SBOM/provenance)
         uses: docker/build-push-action@v6
         with:
           context: .
           file: ./Dockerfile
-          pull: true
           push: true
+          platforms: ${{ env.PLATFORMS }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          platforms: ${{ env.PLATFORMS }}
-          # Pass commit SHA into image for Eleventy build-info
           build-args: |
             COMMIT_SHA=${{ github.sha }}
-          # BuildKit cache to speed up rebuilds
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          # These shave time if you don't need them:
+          provenance: false
+          sbom: false
 
-      - name: Trigger Portainer Webhook Redeployment
+      - name: Trigger Portainer redeploy
         if: ${{ success() }}
         env:
           PORTAINER_WEBHOOK_URL: ${{ secrets.PORTAINER_WEBHOOK_URL }}
         run: |
           if [ -z "$PORTAINER_WEBHOOK_URL" ]; then
-            echo "PORTAINER_WEBHOOK_URL secret is not set. Skipping redeploy."
+            echo "PORTAINER_WEBHOOK_URL not set; skipping redeploy."
             exit 0
           fi
-          echo "Triggering Portainer redeploy…"
-          curl -fsSL -X POST "$PORTAINER_WEBHOOK_URL" || {
-            echo "Webhook trigger failed"; exit 1;
-          }
+          curl -fsSL -X POST "$PORTAINER_WEBHOOK_URL"
