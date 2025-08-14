@@ -9,11 +9,12 @@ function build() {
 
 test("Eleventy build generates expected assets and pages", () => {
   build();
-  assert.ok(fs.existsSync("_site/assets/css/app.css"));
-  assert.ok(fs.existsSync("_site/archives/index.html"));
-  assert.ok(
-    fs.existsSync(
-      "_site/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--time-to-chill--figure--std--20221031/index.html",
-    ),
-  );
+  const expected = [
+    "_site/assets/css/app.css",
+    "_site/archives/index.html",
+    "_site/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--time-to-chill--plush--std--20221031/index.html",
+  ];
+  for (const file of expected) {
+    assert.ok(fs.existsSync(file), `missing build artifact: ${file}`);
+  }
 });
