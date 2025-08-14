@@ -1,4 +1,4 @@
-const { readableDate, htmlDateString, limit, jsonify, readingTime, slugify, webpageToMarkdown } = require('../lib/filters');
+const { readableDate, htmlDateString, limit, jsonify, readingTime, slugify, webpageToMarkdown, truncate } = require('../lib/filters');
 const assert = require('node:assert');
 const { test } = require('node:test');
 const http = require('node:http');
@@ -37,6 +37,11 @@ test('readingTime estimates minutes', () => {
 test('slugify generates URL-friendly strings', () => {
   assert.strictEqual(slugify('Hello World!'), 'hello-world');
   assert.strictEqual(slugify(' Multi   Space '), 'multi-space');
+});
+
+test('truncate shortens strings with ellipsis', () => {
+  assert.strictEqual(truncate('abcdefghij', 5), 'abcde…');
+  assert.strictEqual(truncate('hi', 5), 'hi');
 });
 
 test('webpageToMarkdown filter fetches and converts HTML', async () => {
