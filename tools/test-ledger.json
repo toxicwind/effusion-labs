@@ -1,0 +1,7 @@
+[
+  {
+    "file": "tests/runner.spec.mjs",
+    "labels": ["shells-eleventy"],
+    "disposition": "kept"
+  }
+]
