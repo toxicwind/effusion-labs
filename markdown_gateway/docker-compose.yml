@@ -1,0 +1,27 @@
+version: "3.9"
+
+services:
+  gateway:
+    build: .
+    ports:
+      - "${GATEWAY_PORT:-49159}:5000"
+    environment:
+      - GATEWAY_API_KEY=${GATEWAY_API_KEY}
+    depends_on:
+      solver:
+        condition: service_healthy
+
+  solver:
+    image: ghcr.io/flaresolverr/flaresolverr:latest
+    # shm_size: 2gb  # Uncomment if shared memory is needed on your host
+    # security_opt:
+    #   - seccomp=unconfined  # Uncomment if seccomp interferes on your host
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "-X", "POST", "http://localhost:8191/v1", "-H", "Content-Type: application/json", "-d", "{\"cmd\":\"request.get\",\"url\":\"https://example.com\"}"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+networks:
+  default:
+    name: markdown_gateway_network
