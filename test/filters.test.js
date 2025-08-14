@@ -56,6 +56,8 @@ test('shout is idempotent', () => {
 });
 
 test('webpageToMarkdown filter fetches and converts HTML', async () => {
+  const prev = process.env.CHAIN_PROXY_URL;
+  delete process.env.CHAIN_PROXY_URL;
   const html = '<!doctype html><html><body><h1>Hi</h1></body></html>';
   const server = http.createServer((req, res) => {
     res.writeHead(200, { 'Content-Type': 'text/html' });
@@ -65,5 +67,25 @@ test('webpageToMarkdown filter fetches and converts HTML', async () => {
   const { port } = server.address();
   const md = await webpageToMarkdown(`http://localhost:${port}/`);
   server.close();
+  process.env.CHAIN_PROXY_URL = prev;
   assert.match(md, /Hi/);
+});
+
+test('webpageToMarkdown bypasses proxy for localhost', async () => {
+  const html = '<!doctype html><html><body><h1>Hi</h1></body></html>';
+  const server = http.createServer((req, res) => {
+    res.writeHead(200, { 'Content-Type': 'text/html' });
+    res.end(html);
+  });
+  await new Promise(resolve => server.listen(0, resolve));
+  const prev = process.env.CHAIN_PROXY_URL;
+  process.env.CHAIN_PROXY_URL = 'http://127.0.0.1:65535';
+  try {
+    const { port } = server.address();
+    const md = await webpageToMarkdown(`http://localhost:${port}/`);
+    assert.match(md, /Hi/);
+  } finally {
+    server.close();
+    process.env.CHAIN_PROXY_URL = prev;
+  }
 });

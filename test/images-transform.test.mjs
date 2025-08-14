@@ -9,6 +9,6 @@ test('HTML transform outputs picture with avif and webp sources', () => {
   assert.match(html, /<picture>/);
   assert.match(html, /type="image\/avif"/);
   assert.match(html, /type="image\/webp"/);
-  assert.match(html, /<img[^>]*loading="lazy"/);
+  assert.match(html, /<img[^>]*loading="eager"/);
   assert.match(html, /decoding="async"/);
 });
