@@ -10,12 +10,19 @@ module.exports = {
         border: "rgb(var(--color-border) / <alpha-value>)",
         codebg: "rgb(var(--color-code-bg) / <alpha-value>)",
         codetext: "rgb(var(--color-code-text) / <alpha-value>)",
-        primary: "#0A84FF",
-        footnote: "hsl(var(--p) / <alpha-value>)"
+        primary: "#2D5BFF", // Electric Blue
+        footnote: "hsl(var(--p) / <alpha-value>)",
+        ink: "#0B0B0B",
+        paper: "#F6F6F6",
+        electric: "#2D5BFF",
+        lime: "#D8FF00",
+        alarm: "#FF2E2E"
       },
       fontFamily: {
-        heading: ["'Bebas Neue'", "sans-serif"],
-        body:    ["'Roboto'",     "sans-serif"]
+        heading: ["'Bricolage Grotesque Variable'", "sans-serif"],
+        body:    ["'Space Grotesk Variable'", "sans-serif"],
+        mono:    ["'JetBrains Mono'", "monospace"],
+        spectral:["'Spectral'", "serif"]
       }
     }
   },

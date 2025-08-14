@@ -17,7 +17,7 @@ function walk(dir, files = []) {
   return files;
 }
 
-test('homepage integrates copy and sections', () => {
+test('homepage hero and sections', () => {
   rmSync(outDir, { recursive: true, force: true });
   execSync(`npx @11ty/eleventy --quiet --input=src --output=${outDir}`, { stdio: 'inherit' });
   const htmlPath = path.join(outDir, 'index.html');
@@ -25,18 +25,20 @@ test('homepage integrates copy and sections', () => {
   const dom = new JSDOM(html);
   const doc = dom.window.document;
 
-  // Copy integration
-  assert.match(html, /Art · Culture · Innovation/);
+  // Hero
+  const h1 = doc.querySelector('h1');
+  assert.equal(h1.textContent.trim(), 'EFFUSION LABS');
   assert.match(html, /Where experimental ideas meet practical prototypes\./);
   assert.match(html, /Explore the projects, concepts, and sparks shaping tomorrow’s creative technology\./);
-  assert.match(html, /Explore the Interactive Concept Map/);
-  assert.match(html, /Navigate the living knowledge graph that links every spark, concept, and project in the lab\./);
 
-  // CTAs
+  // Provenance seam
+  const prov = Array.from(doc.querySelectorAll('div')).find(d => /·/.test(d.textContent) && d.classList.contains('font-mono'));
+  assert(prov);
+  assert.match(prov.textContent.trim(), /^[^·]+ · [0-9a-f]{7} · \d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/);
+
+  // CTA
   const latest = Array.from(doc.querySelectorAll('a[href="/projects/"]')).find(a => a.textContent.trim() === 'View Latest Work');
   assert(latest);
-  const map = Array.from(doc.querySelectorAll('a[href="/map/"]')).find(a => a.textContent.trim() === 'Launch the Map');
-  assert(map);
 
   // Section checks
   const headers = Array.from(doc.querySelectorAll('main h2')).map(h => h.textContent.trim());
