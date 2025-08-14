@@ -1,27 +1,56 @@
-<header class="sticky top-0 z-40 w-full bg-base-100/90 backdrop-blur shadow">
+<header class="sticky top-0 z-40 w-full bg-base-100/90 backdrop-blur shadow border-y-4 border-primary">
   <div class="navbar mx-auto max-w-screen-2xl px-6">
+    <!-- Brand -->
     <div class="flex-1">
       <a href="/" class="flex items-center gap-2 font-heading text-3xl text-primary">
-        <i data-lucide="flask-conical" class="w-6 h-6"></i><span>Effusion Labs</span>
+        <i data-lucide="flask-conical" class="w-6 h-6" aria-hidden="true"></i>
+        <span>{{ 'Effusion Labs' | shout }}</span>
       </a>
     </div>
-    <nav class="flex-none">
-      <ol class="flex flex-wrap gap-4 font-mono text-sm" role="list">
-        {% for n in nav %}
-        <li>
-          <a href="{{ n.url }}" class="hover:underline focus:underline">
-            {{ n.order }}. {{ n.title }}
-          </a>
-        </li>
-        {% endfor %}
-      </ol>
-    </nav>
+
+    <!-- Right cluster: mobile menu, theme toggle, desktop menu -->
     <div class="flex-none flex items-center gap-2">
-      <button id="theme-toggle" class="btn btn-ghost btn-square" aria-label="Switch to light theme" aria-pressed="true">
+      <!-- Mobile nav (hidden on lg+) -->
+      <details class="dropdown dropdown-end lg:hidden">
+        <summary class="btn btn-ghost btn-square" aria-label="Open menu">
+          <i data-lucide="menu" class="w-6 h-6" aria-hidden="true"></i>
+        </summary>
+        <ul class="menu menu-sm dropdown-content mt-3 z-[100] p-2 shadow bg-base-100 rounded-box w-56" role="menu" aria-label="Primary">
+          {% for n in nav %}
+          <li role="none">
+            <a role="menuitem" href="{{ n.url }}">
+              {% if n.order %}
+              <span class="opacity-60">{{ n.order }}.</span>
+              {% endif %}
+              <span>{{ n.title | shout }}</span>
+            </a>
+          </li>
+          {% endfor %}
+        </ul>
+      </details>
+
+      <!-- Theme toggle -->
+      <button id="theme-toggle" class="btn btn-ghost btn-square" aria-label="Switch theme" aria-pressed="true">
         <span class="sr-only">Toggle theme</span>
-        <i data-lucide="sun" class="w-6 h-6 hidden"></i>
-        <i data-lucide="moon" class="w-6 h-6"></i>
+        <i data-lucide="sun" class="w-6 h-6 hidden" aria-hidden="true"></i>
+        <i data-lucide="moon" class="w-6 h-6" aria-hidden="true"></i>
       </button>
+
+      <!-- Desktop nav (hidden below lg) -->
+      <nav class="hidden lg:flex" aria-label="Primary">
+        <ul class="menu menu-horizontal px-1">
+          {% for n in nav %}
+          <li>
+            <a href="{{ n.url }}" class="hover:text-primary">
+              {% if n.order %}
+              <span class="opacity-60">{{ n.order }}.</span>
+              {% endif %}
+              <span>{{ n.title | shout }}</span>
+            </a>
+          </li>
+          {% endfor %}
+        </ul>
+      </nav>
     </div>
   </div>
 </header>

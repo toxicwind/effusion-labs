@@ -2,8 +2,10 @@ const register = require("./lib/eleventy/register");
 const { dirs } = require("./lib/config");
 const seeded = require("./lib/seeded");
 const registerArchiveCollections = require("./lib/eleventy/archive-collections");
+const { getBuildInfo } = require("./lib/build-info");
 
 module.exports = function (eleventyConfig) {
+  const buildTime = new Date().toISOString();
   register(eleventyConfig);
   eleventyConfig.addTemplateFormats("json");
 
@@ -48,6 +50,7 @@ module.exports = function (eleventyConfig) {
   eleventyConfig.addFilter("seededShuffle", (arr, seed) =>
     seeded.seededShuffle(arr, seed),
   );
+  eleventyConfig.addGlobalData("buildTime", buildTime);
   eleventyConfig.addGlobalData("dailySeed", seeded.dailySeed);
   eleventyConfig.addGlobalData("homepageCaps", {
     featured: 3,
@@ -57,6 +60,8 @@ module.exports = function (eleventyConfig) {
     questions: 3,
     notebook: 3,
   });
+  const build = getBuildInfo();
+  eleventyConfig.addGlobalData("build", build);
 
   return {
     dir: dirs,

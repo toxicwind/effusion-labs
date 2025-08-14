@@ -10,7 +10,8 @@ module.exports = {
         border: "rgb(var(--color-border) / <alpha-value>)",
         codebg: "rgb(var(--color-code-bg) / <alpha-value>)",
         codetext: "rgb(var(--color-code-text) / <alpha-value>)",
-        primary: "#0A84FF"
+        primary: "#0A84FF",
+        footnote: "hsl(var(--p) / <alpha-value>)"
       },
       fontFamily: {
         heading: ["'Bebas Neue'", "sans-serif"],
