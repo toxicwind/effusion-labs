@@ -1,7 +1,8 @@
 import { test, before, after } from 'node:test';
 import assert from 'node:assert';
-import { spawn, spawnSync } from 'node:child_process';
-import { setTimeout as wait } from 'node:timers/promises';
+import { spawnSync } from 'node:child_process';
+import http from 'node:http';
+import path from 'node:path';
 import fs from 'node:fs';
 let avifPath;
 let webpPath;
@@ -14,29 +15,42 @@ before(async () => {
   const files = fs.readdirSync('_site/assets/images');
   avifPath = `/assets/images/${files.find(f => f.endsWith('.avif'))}`;
   webpPath = `/assets/images/${files.find(f => f.endsWith('.webp'))}`;
-  srv = spawn('./node_modules/.bin/eleventy', ['--serve'], { stdio: 'ignore', detached: true });
-  for (let i = 0; i < 20; i++) {
-    try {
-      await fetchFn('http://localhost:8080/');
-      break;
-    } catch {
-      await wait(500);
-    }
-  }
+  srv = http
+    .createServer((req, res) => {
+      const file = path.join('_site', req.url);
+      try {
+        const data = fs.readFileSync(file);
+        const ext = path.extname(file);
+        const type =
+          ext === '.png'
+            ? 'image/png'
+            : ext === '.avif'
+            ? 'image/avif'
+            : ext === '.webp'
+            ? 'image/webp'
+            : 'application/octet-stream';
+        res.setHeader('content-type', type);
+        res.end(data);
+      } catch {
+        res.statusCode = 404;
+        res.end();
+      }
+    })
+    .listen(3333);
 });
 
 after(() => {
-  process.kill(-srv.pid, 'SIGKILL');
+  srv.close();
 });
 
 test('logo served from assets', async () => {
-  const res = await fetchFn('http://localhost:8080/assets/logo.png');
+  const res = await fetchFn('http://localhost:3333/assets/logo.png');
   assert.equal(res.status, 200);
 });
 
 test('generated avif and webp have correct MIME', async () => {
-  const avifRes = await fetchFn(`http://localhost:8080${avifPath}`);
+  const avifRes = await fetchFn(`http://localhost:3333${avifPath}`);
   assert.match(avifRes.headers.get('content-type') || '', /image\/avif/);
-  const webpRes = await fetchFn(`http://localhost:8080${webpPath}`);
+  const webpRes = await fetchFn(`http://localhost:3333${webpPath}`);
   assert.match(webpRes.headers.get('content-type') || '', /image\/webp/);
 });

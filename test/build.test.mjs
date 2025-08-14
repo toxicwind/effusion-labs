@@ -13,7 +13,7 @@ test("Eleventy build generates expected assets and pages", () => {
   assert.ok(fs.existsSync("_site/archives/index.html"));
   assert.ok(
     fs.existsSync(
-      "_site/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--time-to-chill--figure--std--20221031/index.html",
+      "_site/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--time-to-chill--plush--std--20221031/index.html",
     ),
   );
 });
