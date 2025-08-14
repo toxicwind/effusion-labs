@@ -1,0 +1,550 @@
+TAP version 13
+# npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+# 🚀 Eleventy build starting with enhanced footnote system...
+# ✅ Eleventy build completed. Generated 109 files.
+# [@photogabble/wikilinks] WARNING Wikilink (/archives/collectables/designer-toys/pop-mart/the-monsters/products/{{ p.data.product_id }}/) found pointing to to non-existent page in:
+# \\t- ./src/content/sparks/vapor-linked-governance.md
+# [@photogabble/wikilinks] WARNING Wikilink ([[node-handle]]) found pointing to to non-existent page in:
+# \\t- ./src/content/sparks/vapor-linked-governance.md
+# [@photogabble/wikilinks] WARNING Wikilink ([[bracketed-handle]]) found pointing to to non-existent page in:
+# \\t- ./src/content/sparks/vapor-linked-governance.md
+# [11ty] Copied 75 Wrote 109 files in 1.92 seconds (17.6ms each, v3.1.2)
+# Subtest: spark listings reveal status text
+not ok 1 - spark listings reveal status text
+  ---
+  duration_ms: 2944.856769
+  type: 'test'
+  location: '/workspace/effusion-labs/tests/sparks-status.spec.mjs:10:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    The input did not match the regular expression /\[draft\]/. Input:
+    
+    '\n' +
+      '<!DOCTYPE html>\n' +
+      '<html lang="en" data-theme="dark" class="scroll-pt-16 dark">\n' +
+      '<head>\n' +
+      '  <meta charset="UTF-8">\n' +
+      '  <meta name="viewport" content="width=device-width, initial-scale=1.0">\n' +
+      '  <title>Sparks | Effusion Labs</title>\n' +
+      '\n' +
+      '  <meta name="color-scheme" content="dark light">\n' +
+      '  <script>(function(){\n' +
+      "  const storageKey = 'theme';\n" +
+      '  const doc = document.documentElement;\n' +
+      '  const stored = localStorage.getItem(storageKey);\n' +
+      `  const meta = document.querySelector('meta[name="color-scheme"]') || (function(){\n` +
+      "    const m = document.createElement('meta');\n" +
+      "    m.name = 'color-scheme';\n" +
+      '    document.head.appendChild(m);\n' +
+      '    return m;\n' +
+      '  })();\n' +
+      '  let theme = stored;\n' +
+      "  if (theme !== 'dark' && theme !== 'light') {\n" +
+      "    theme = 'dark';\n" +
+      '  }\n' +
+      '  doc.dataset.theme = theme;\n' +
+      "  doc.classList.toggle('dark', theme === 'dark');\n" +
+      "  meta.content = theme === 'light' ? 'light dark' : 'dark light';\n" +
+      '})();\n' +
+      '</script>\n' +
+      '\n' +
+      '  <link rel="stylesheet" href="/assets/css/app.css">\n' +
+      '  <link rel="preconnect" href="https://fonts.googleapis.com">\n' +
+      '  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">\n' +
+      '  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto:wght@400;700&display=swap" rel="stylesheet">\n' +
+      '  <script src="/assets/js/lucide.min.js"></script>\n' +
+      '</head>\n' +
+      '\n' +
+      '<body class="bg-background text-text font-body leading-relaxed text-[17px]">\n' +
+      '  <a href="#main" class="skip-link">Skip to main content</a>\n' +
+      '  <header class="sticky top-0 z-40 w-full bg-base-100/90 backdrop-blur shadow">\n' +
+      '  <div class="navbar mx-auto max-w-screen-2xl px-6">\n' +
+      '    <div class="flex-1">\n' +
+      '      <a href="/" class="flex items-center gap-2 font-heading text-3xl text-primary">\n' +
+      '        <i data-lucide="flask-conical" class="w-6 h-6"></i><span>Effusion Labs</span>\n' +
+      '      </a>\n' +
+      '    </div>\n' +
+      '    <div class="flex-none lg:hidden">\n' +
+      '      <div class="dropdown dropdown-end">\n' +
+      '        <label tabindex="0" class="btn btn-ghost btn-square">\n' +
+      '          <i data-lucide="menu" class="w-6 h-6"></i>\n' +
+      '        </label>\n' +
+      '        <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-40">\n' +
+      '          \n' +
+      '          <li><a href="/">Showcase</a></li>\n' +
+      '          \n' +
+      '          <li><a href="/sparks/">Sparks</a></li>\n' +
+      '          \n' +
+      '          <li><a href="/concepts/">Concepts</a></li>\n' +
+      '          \n' +
+      '          <li><a href="/projects/">Projects</a></li>\n' +
+      '          \n' +
+      '          <li><a href="/archives/">Archives</a></li>\n' +
+      '          \n' +
+      '          <li><a href="/meta/">Meta</a></li>\n' +
+      '          \n' +
+      '          <li><a href="/map/">Map</a></li>\n' +
+      '          \n' +
+      '        </ul>\n' +
+      '      </div>\n' +
+      '    </div>\n' +
+      '    <div class="flex-none flex items-center gap-2">\n' +
+      '      <button id="theme-toggle" class="btn btn-ghost btn-square" aria-label="Switch to light theme" aria-pressed="true">\n' +
+      '        <span class="sr-only">Toggle theme</span>\n' +
+      '        <i data-lucide="sun" class="w-6 h-6 hidden"></i>\n' +
+      '        <i data-lucide="moon" class="w-6 h-6"></i>\n' +
+      '      </button>\n' +
+      '    </div>\n' +
+      '    <nav class="flex-none hidden lg:flex">\n' +
+      '      <ul class="menu menu-horizontal px-1">\n' +
+      '        \n' +
+      '        <li><a href="/" class="hover:text-primary">Showcase</a></li>\n' +
+      '        \n' +
+      '        <li><a href="/sparks/" class="hover:text-primary">Sparks</a></li>\n' +
+      '        \n' +
+      '        <li><a href="/concepts/" class="hover:text-primary">Concepts</a></li>\n' +
+      '        \n' +
+      '        <li><a href="/projects/" class="hover:text-primary">Projects</a></li>\n' +
+      '        \n' +
+      '        <li><a href="/archives/" class="hover:text-primary">Archives</a></li>\n' +
+      '        \n' +
+      '        <li><a href="/meta/" class="hover:text-primary">Meta</a></li>\n' +
+      '        \n' +
+      '        <li><a href="/map/" class="hover:text-primary">Map</a></li>\n' +
+      '        \n' +
+      '      </ul>\n' +
+      '    </nav>\n' +
+      '  </div>\n' +
+      '</header>\n' +
+      '\n' +
+      '\n' +
+      '  <div class="mx-auto max-w-screen-2xl px-6">\n' +
+      '    \n' +
+      '    \n' +
+      '\n' +
+      '    <main id="main" class="\n' +
+      '      xl:grid xl:gap-10 xl:grid-cols-[1fr_16rem]\n' +
+      '       mt-12\n' +
+      '    ">\n' +
+      '      <article class="prose dark:prose-invert max-w-none m-0\n' +
+      '         xl:col-span-1 \n' +
+      '      ">\n' +
+      '        \n' +
+      '          <header class="mb-8">\n' +
+      '            <h1 class="font-heading text-primary text-4xl tracking-wider">Sparks</h1>\n' +
+      '          </header>\n' +
+      '        \n' +
+      '        \n' +
+      '\n' +
+      '<p>Here you&#39;ll find nascent ideas, quick notes, and experimental fragments that may one day ignite into full concepts or projects.</p>\n' +
+      '<div class="grid gap-6 sm:grid-cols-3" data-section="sparks">\n' +
+      '  \n' +
+      '    \n' +
+      '<a href="/content/sparks/raw-socket-report/" aria-label="Raw Socket Report" class="block rounded-xl border border-white/20 bg-white/5 p-6 shadow-sm transition hover:bg-white/10 hover:shadow-md focus:outline-none focus:ring">\n' +
+      '  <div class="flex items-center justify-between">\n' +
+      '    <h3 class="font-heading text-lg text-gray-100">Raw Socket Report</h3>\n' +
+      '    \n' +
+      '    <span class="rounded-full bg-blue-600 px-2 py-0.5 text-[10px] font-medium text-white">New</span>\n' +
+      '    \n' +
+      '  </div>\n' +
+      '  \n' +
+      '  <p class="mt-1 text-sm text-gray-300">Unfiltered notes from a midnight server check.</p>\n' +
+      '  \n' +
+      '  <div class="mt-2 flex items-center justify-between text-xs text-gray-400">\n' +
+      '    <span class="capitalize">spark</span>\n' +
+      '    <time datetime="2025-08-14">August 14th, 2025</time>\n' +
+      '  </div>\n' +
+      '</a>\n' +
+      '\n' +
+      '  \n' +
+      '    \n' +
+      '<a href="/content/sparks/paulin-paulin-paulin-marketing/" aria-label="How to Manufacture a Legacy: The Pierre Paulin Estate Between Preservation and Product" class="block rounded-xl border border-white/20 bg-white/5 p-6 shadow-sm transition hover:bg-white/10 hover:shadow-md focus:outline-none focus:ring">\n' +
+      '  <div class="flex items-center justify-between">\n' +
+      '    <h3 class="font-heading text-lg text-gray-100">How to Manufacture a Legacy: The Pierre Paulin Estate Between Preservation and Product</h3>\n' +
+      '    \n' +
+      '    <span class="rounded-full bg-blue-600 px-2 py-0.5 text-[10px] font-medium text-white">New</span>\n' +
+      '    \n' +
+      '  </div>\n' +
+      '  \n' +
+      '  <div class="mt-2 flex items-center justify-between text-xs text-gray-400">\n' +
+      '    <span class="capitalize">spark</span>\n' +
+      '    <time datetime="2025-08-02">August 2nd, 2025</time>\n' +
+      '  </div>\n' +
+      '</a>\n' +
+      '\n' +
+      '  \n' +
+      '    \n' +
+      '<a href="/content/sparks/academic-blindness/" aria-label="The Recursive Shadow of Algorithmic Absence: An Archaeological Survey of the Invisible Infrastructure of Contemporary LLM Research" class="block rounded-xl border border-white/20 bg-white/5 p-6 shadow-sm transition hover:bg-white/10 hover:shadow-md focus:outline-none focus:ring">\n' +
+      '  <div class="flex items-center justify-between">\n' +
+      '    <h3 class="font-heading text-lg text-gray-100">The Recursive Shadow of Algorithmic Absence: An Archaeological Survey of the Invisible Infrastructure of Contemporary LLM Research</h3>\n' +
+      '    \n' +
+      '  </div>\n' +
+      '  \n' +
+      '  <div class="mt-2 flex items-center justify-between text-xs text-gray-400">\n' +
+      '    <span class="capitalize">spark</span>\n' +
+      '    <time datetime="2025-07-29">July 29th, 2025</time>\n' +
+      '  </div>\n' +
+      '</a>\n' +
+      '\n' +
+      '  \n' +
+      '    \n' +
+      '<a href="/content/sparks/illusion-japan-nicotine/" aria-label="The Illusion of Choice: Engineering Adult Agency in Japan’s Nicotine Market" class="block rounded-xl border border-white/20 bg-white/5 p-6 shadow-sm transition hover:bg-white/10 hover:shadow-md focus:outline-none focus:ring">\n' +
+      '  <div class="flex items-center justify-between">\n' +
+      '    <h3 class="font-heading text-lg text-gray-100">The Illusion of Choice: Engineering Adult Agency in Japan’s Nicotine Market</h3>\n' +
+      '    \n' +
+      '  </div>\n' +
+      '  \n' +
+      '  <div class="mt-2 flex items-center justify-between text-xs text-gray-400">\n' +
+      '    <span class="capitalize">spark</span>\n' +
+      '    <time datetime="2025-07-24">July 24th, 2025</time>\n' +
+      '  </div>\n' +
+      '</a>\n' +
+      '\n' +
+      '  \n' +
+      '    \n' +
+      '<a href="/content/sparks/smoker-sysadmin/" aria-label="The Smoker as Sysadmin: Managing the Self in Japan&#39;s Nicotine Technopoly" class="block rounded-xl border border-white/20 bg-white/5 p-6 shadow-sm transition hover:bg-white/10 hover:shadow-md focus:outline-none focus:ring">\n' +
+      '  <div class="flex items-center justify-between">\n' +
+      '    <h3 class="font-heading text-lg text-gray-100">The Smoker as Sysadmin: Managing the Self in Japan&#39;s Nicotine Technopoly</h3>\n' +
+      '    \n' +
+      '  </div>\n' +
+      '  \n' +
+      '  <div class="mt-2 flex items-center justify-between text-xs text-gray-400">\n' +
+      '    <span class="capitalize">spark</span>\n' +
+      '    <time datetime="2025-07-24">July 24th, 2025</time>\n' +
+      '  </div>\n' +
+      '</a>\n' +
+      '\n' +
+      '  \n' +
+      '    \n' +
+      '<a href="/content/sparks/vapor-linked-governance/" aria-label="Vapor-Linked Governance: How Japan Made Tobacco a Civic Utility" class="block rounded-xl border border-white/20 bg-white/5 p-6 shadow-sm transition hover:bg-white/10 hover:shadow-md focus:outline-none focus:ring">\n' +
+      '  <div class="flex items-center justify-between">\n' +
+      '    <h3 class="font-heading text-lg text-gray-100">Vapor-Linked Governance: How Japan Made Tobacco a Civic Utility</h3>\n' +
+      '    \n' +
+      '  </div>\n' +
+      '  \n' +
+      '  <div class="mt-2 flex items-center justify-between text-xs text-gray-400">\n' +
+      '    <span class="capitalize">spark</span>\n' +
+      '    <time datetime="2025-07-24">July 24th, 2025</time>\n' +
+      '  </div>\n' +
+      '</a>\n' +
+      '\n' +
+      '  \n' +
+      '    \n' +
+      '<a href="/content/sparks/breakfast-eggs/" aria-label="The Semiotic Collapse of a Toasted Request: On the Emotional Thermodynamics of Eggs-on-Bread" class="block rounded-xl border border-white/20 bg-white/5 p-6 shadow-sm transition hover:bg-white/10 hover:shadow-md focus:outline-none focus:ring">\n' +
+      '  <div class="flex items-center justify-between">\n' +
+      '    <h3 class="font-heading text-lg text-gray-100">The Semiotic Collapse of a Toasted Request: On the Emotional Thermodynamics of Eggs-on-Bread</h3>\n' +
+      '    \n' +
+      '  </div>\n' +
+      '  \n' +
+      '  <div class="mt-2 flex items-center justify-between text-xs text-gray-400">\n' +
+      '    <span class="capitalize">spark</span>\n' +
+      '    <time datetime="2025-07-12">July 12th, 2025</time>\n' +
+      '  </div>\n' +
+      '</a>\n' +
+      '\n' +
+      '  \n' +
+      '    \n' +
+      '<a href="/content/sparks/george-eastman-obscure/" aria-label="George Eastman - A Life in Precision" class="block rounded-xl border border-white/20 bg-white/5 p-6 shadow-sm transition hover:bg-white/10 hover:shadow-md focus:outline-none focus:ring">\n' +
+      '  <div class="flex items-center justify-between">\n' +
+      '    <h3 class="font-heading text-lg text-gray-100">George Eastman - A Life in Precision</h3>\n' +
+      '    \n' +
+      '  </div>\n' +
+      '  \n' +
+      '  <div class="mt-2 flex items-center justify-between text-xs text-gray-400">\n' +
+      '    <span class="capitalize">spark</span>\n' +
+      '    <time datetime="2025-07-02">July 2nd, 2025</time>\n' +
+      '  </div>\n' +
+      '</a>\n' +
+      '\n' +
+      '  \n' +
+      '    \n' +
+      '<a href="/content/sparks/murakami-market'... 1065 more characters
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  actual: |-
+    
+    <!DOCTYPE html>
+    <html lang="en" data-theme="dark" class="scroll-pt-16 dark">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Sparks | Effusion Labs</title>
+    
+      <meta name="color-scheme" content="dark light">
+      <script>(function(){
+      const storageKey = 'theme';
+      const doc = document.documentElement;
+      const stored = localStorage.getItem(storageKey);
+      const meta = document.querySelector('meta[name="color-scheme"]') || (function(){
+        const m = document.createElement('meta');
+        m.name = 'color-scheme';
+        document.head.appendChild(m);
+        return m;
+      })();
+      let theme = stored;
+      if (theme !== 'dark' && theme !== 'light') {
+        theme = 'dark';
+      }
+      doc.dataset.theme = theme;
+      doc.classList.toggle('dark', theme === 'dark');
+      meta.content = theme === 'light' ? 'light dark' : 'dark light';
+    })();
+    </script>
+    
+      <link rel="stylesheet" href="/assets/css/app.css">
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+      <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+      <script src="/assets/js/lucide.min.js"></script>
+    </head>
+    
+    <body class="bg-background text-text font-body leading-relaxed text-[17px]">
+      <a href="#main" class="skip-link">Skip to main content</a>
+      <header class="sticky top-0 z-40 w-full bg-base-100/90 backdrop-blur shadow">
+      <div class="navbar mx-auto max-w-screen-2xl px-6">
+        <div class="flex-1">
+          <a href="/" class="flex items-center gap-2 font-heading text-3xl text-primary">
+            <i data-lucide="flask-conical" class="w-6 h-6"></i><span>Effusion Labs</span>
+          </a>
+        </div>
+        <div class="flex-none lg:hidden">
+          <div class="dropdown dropdown-end">
+            <label tabindex="0" class="btn btn-ghost btn-square">
+              <i data-lucide="menu" class="w-6 h-6"></i>
+            </label>
+            <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-40">
+              
+              <li><a href="/">Showcase</a></li>
+              
+              <li><a href="/sparks/">Sparks</a></li>
+              
+              <li><a href="/concepts/">Concepts</a></li>
+              
+              <li><a href="/projects/">Projects</a></li>
+              
+              <li><a href="/archives/">Archives</a></li>
+              
+              <li><a href="/meta/">Meta</a></li>
+              
+              <li><a href="/map/">Map</a></li>
+              
+            </ul>
+          </div>
+        </div>
+        <div class="flex-none flex items-center gap-2">
+          <button id="theme-toggle" class="btn btn-ghost btn-square" aria-label="Switch to light theme" aria-pressed="true">
+            <span class="sr-only">Toggle theme</span>
+            <i data-lucide="sun" class="w-6 h-6 hidden"></i>
+            <i data-lucide="moon" class="w-6 h-6"></i>
+          </button>
+        </div>
+        <nav class="flex-none hidden lg:flex">
+          <ul class="menu menu-horizontal px-1">
+            
+            <li><a href="/" class="hover:text-primary">Showcase</a></li>
+            
+            <li><a href="/sparks/" class="hover:text-primary">Sparks</a></li>
+            
+            <li><a href="/concepts/" class="hover:text-primary">Concepts</a></li>
+            
+            <li><a href="/projects/" class="hover:text-primary">Projects</a></li>
+            
+            <li><a href="/archives/" class="hover:text-primary">Archives</a></li>
+            
+            <li><a href="/meta/" class="hover:text-primary">Meta</a></li>
+            
+            <li><a href="/map/" class="hover:text-primary">Map</a></li>
+            
+          </ul>
+        </nav>
+      </div>
+    </header>
+    
+    
+      <div class="mx-auto max-w-screen-2xl px-6">
+        
+        
+    
+        <main id="main" class="
+          xl:grid xl:gap-10 xl:grid-cols-[1fr_16rem]
+           mt-12
+        ">
+          <article class="prose dark:prose-invert max-w-none m-0
+             xl:col-span-1 
+          ">
+            
+              <header class="mb-8">
+                <h1 class="font-heading text-primary text-4xl tracking-wider">Sparks</h1>
+              </header>
+            
+            
+    
+    <p>Here you&#39;ll find nascent ideas, quick notes, and experimental fragments that may one day ignite into full concepts or projects.</p>
+    <div class="grid gap-6 sm:grid-cols-3" data-section="sparks">
+      
+        
+    <a href="/content/sparks/raw-socket-report/" aria-label="Raw Socket Report" class="block rounded-xl border border-white/20 bg-white/5 p-6 shadow-sm transition hover:bg-white/10 hover:shadow-md focus:outline-none focus:ring">
+      <div class="flex items-center justify-between">
+        <h3 class="font-heading text-lg text-gray-100">Raw Socket Report</h3>
+        
+        <span class="rounded-full bg-blue-600 px-2 py-0.5 text-[10px] font-medium text-white">New</span>
+        
+      </div>
+      
+      <p class="mt-1 text-sm text-gray-300">Unfiltered notes from a midnight server check.</p>
+      
+      <div class="mt-2 flex items-center justify-between text-xs text-gray-400">
+        <span class="capitalize">spark</span>
+        <time datetime="2025-08-14">August 14th, 2025</time>
+      </div>
+    </a>
+    
+      
+        
+    <a href="/content/sparks/paulin-paulin-paulin-marketing/" aria-label="How to Manufacture a Legacy: The Pierre Paulin Estate Between Preservation and Product" class="block rounded-xl border border-white/20 bg-white/5 p-6 shadow-sm transition hover:bg-white/10 hover:shadow-md focus:outline-none focus:ring">
+      <div class="flex items-center justify-between">
+        <h3 class="font-heading text-lg text-gray-100">How to Manufacture a Legacy: The Pierre Paulin Estate Between Preservation and Product</h3>
+        
+        <span class="rounded-full bg-blue-600 px-2 py-0.5 text-[10px] font-medium text-white">New</span>
+        
+      </div>
+      
+      <div class="mt-2 flex items-center justify-between text-xs text-gray-400">
+        <span class="capitalize">spark</span>
+        <time datetime="2025-08-02">August 2nd, 2025</time>
+      </div>
+    </a>
+    
+      
+        
+    <a href="/content/sparks/academic-blindness/" aria-label="The Recursive Shadow of Algorithmic Absence: An Archaeological Survey of the Invisible Infrastructure of Contemporary LLM Research" class="block rounded-xl border border-white/20 bg-white/5 p-6 shadow-sm transition hover:bg-white/10 hover:shadow-md focus:outline-none focus:ring">
+      <div class="flex items-center justify-between">
+        <h3 class="font-heading text-lg text-gray-100">The Recursive Shadow of Algorithmic Absence: An Archaeological Survey of the Invisible Infrastructure of Contemporary LLM Research</h3>
+        
+      </div>
+      
+      <div class="mt-2 flex items-center justify-between text-xs text-gray-400">
+        <span class="capitalize">spark</span>
+        <time datetime="2025-07-29">July 29th, 2025</time>
+      </div>
+    </a>
+    
+      
+        
+    <a href="/content/sparks/illusion-japan-nicotine/" aria-label="The Illusion of Choice: Engineering Adult Agency in Japan’s Nicotine Market" class="block rounded-xl border border-white/20 bg-white/5 p-6 shadow-sm transition hover:bg-white/10 hover:shadow-md focus:outline-none focus:ring">
+      <div class="flex items-center justify-between">
+        <h3 class="font-heading text-lg text-gray-100">The Illusion of Choice: Engineering Adult Agency in Japan’s Nicotine Market</h3>
+        
+      </div>
+      
+      <div class="mt-2 flex items-center justify-between text-xs text-gray-400">
+        <span class="capitalize">spark</span>
+        <time datetime="2025-07-24">July 24th, 2025</time>
+      </div>
+    </a>
+    
+      
+        
+    <a href="/content/sparks/smoker-sysadmin/" aria-label="The Smoker as Sysadmin: Managing the Self in Japan&#39;s Nicotine Technopoly" class="block rounded-xl border border-white/20 bg-white/5 p-6 shadow-sm transition hover:bg-white/10 hover:shadow-md focus:outline-none focus:ring">
+      <div class="flex items-center justify-between">
+        <h3 class="font-heading text-lg text-gray-100">The Smoker as Sysadmin: Managing the Self in Japan&#39;s Nicotine Technopoly</h3>
+        
+      </div>
+      
+      <div class="mt-2 flex items-center justify-between text-xs text-gray-400">
+        <span class="capitalize">spark</span>
+        <time datetime="2025-07-24">July 24th, 2025</time>
+      </div>
+    </a>
+    
+      
+        
+    <a href="/content/sparks/vapor-linked-governance/" aria-label="Vapor-Linked Governance: How Japan Made Tobacco a Civic Utility" class="block rounded-xl border border-white/20 bg-white/5 p-6 shadow-sm transition hover:bg-white/10 hover:shadow-md focus:outline-none focus:ring">
+      <div class="flex items-center justify-between">
+        <h3 class="font-heading text-lg text-gray-100">Vapor-Linked Governance: How Japan Made Tobacco a Civic Utility</h3>
+        
+      </div>
+      
+      <div class="mt-2 flex items-center justify-between text-xs text-gray-400">
+        <span class="capitalize">spark</span>
+        <time datetime="2025-07-24">July 24th, 2025</time>
+      </div>
+    </a>
+    
+      
+        
+    <a href="/content/sparks/breakfast-eggs/" aria-label="The Semiotic Collapse of a Toasted Request: On the Emotional Thermodynamics of Eggs-on-Bread" class="block rounded-xl border border-white/20 bg-white/5 p-6 shadow-sm transition hover:bg-white/10 hover:shadow-md focus:outline-none focus:ring">
+      <div class="flex items-center justify-between">
+        <h3 class="font-heading text-lg text-gray-100">The Semiotic Collapse of a Toasted Request: On the Emotional Thermodynamics of Eggs-on-Bread</h3>
+        
+      </div>
+      
+      <div class="mt-2 flex items-center justify-between text-xs text-gray-400">
+        <span class="capitalize">spark</span>
+        <time datetime="2025-07-12">July 12th, 2025</time>
+      </div>
+    </a>
+    
+      
+        
+    <a href="/content/sparks/george-eastman-obscure/" aria-label="George Eastman - A Life in Precision" class="block rounded-xl border border-white/20 bg-white/5 p-6 shadow-sm transition hover:bg-white/10 hover:shadow-md focus:outline-none focus:ring">
+      <div class="flex items-center justify-between">
+        <h3 class="font-heading text-lg text-gray-100">George Eastman - A Life in Precision</h3>
+        
+      </div>
+      
+      <div class="mt-2 flex items-center justify-between text-xs text-gray-400">
+        <span class="capitalize">spark</span>
+        <time datetime="2025-07-02">July 2nd, 2025</time>
+      </div>
+    </a>
+    
+      
+        
+    <a href="/content/sparks/murakami-market-analysis-2025/" aria-label="Takashi Murakami - Lithographs, Signed Works, and Small-format Prints: A 2025 Market Topography" class="block rounded-xl border border-white/20 bg-white/5 p-6 shadow-sm transition hover:bg-white/10 hover:shadow-md focus:outline-none focus:ring">
+      <div class="flex items-center justify-between">
+        <h3 class="font-heading text-lg text-gray-100">Takashi Murakami - Lithographs, Signed Works, and Small-format Prints: A 2025 Market Topography</h3>
+        
+      </div>
+      
+      <div class="mt-2 flex items-center justify-between text-xs text-gray-400">
+        <span class="capitalize">spark</span>
+        <time datetime="2025-07-02">July 2nd, 2025</time>
+      </div>
+    </a>
+    
+      
+    </div>
+    
+          </article>
+    
+          
+        </main>
+    
+        <footer class="mt-16 p-8 text-center text-sm text-text/60">
+          &copy; 2025 Effusion Labs. A space for creative synthesis.
+        </footer>
+      </div>
+    
+      <script>lucide.createIcons();</script>
+      <script src="/assets/js/theme-toggle.js" defer=""></script>
+      <script src="/assets/js/footnote-nav.js" defer=""></script>
+    </body>
+    </html>
+    
+  operator: 'match'
+  stack: |-
+    TestContext.<anonymous> (file:///workspace/effusion-labs/tests/sparks-status.spec.mjs:14:10)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 0
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 3065.5739

@@ -10,7 +10,11 @@
   <p class="mt-1 text-sm text-gray-300">{{ item.data.description | truncate(120) }}</p>
   {% endif %}
   <div class="mt-2 flex items-center justify-between text-xs text-gray-400">
-    {% if item.data.type %}<span class="capitalize">{{ item.data.type }}</span>{% endif %}
+    {% if item.data.type %}
+    <span class="capitalize">{{ item.data.type }}{% if item.data.status %} [{{ item.data.status }}]{% endif %}</span>
+    {% elif item.data.status %}
+    <span>[{{ item.data.status }}]</span>
+    {% endif %}
     {% if item.date %}<time datetime="{{ item.date | htmlDateString }}">{{ item.date | readableDate }}</time>{% endif %}
   </div>
 </a>

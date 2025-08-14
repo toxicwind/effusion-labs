@@ -5,8 +5,10 @@ const areaLinks = CONTENT_AREAS.map((a) => ({
   url: `/${a}/`,
 }));
 
-module.exports = [
+const nav = [
   { title: "Showcase", url: "/" },
   ...areaLinks,
   { title: "Map", url: "/map/" },
-];
+].map((item, idx) => ({ ...item, order: idx + 1 }));
+
+module.exports = nav;

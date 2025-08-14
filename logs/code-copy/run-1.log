@@ -1,0 +1,473 @@
+
+> effusion_labs_final@1.0.0 test
+> node tools/test-changed.mjs tests/code-copy.spec.mjs
+
+TAP version 13
+# npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+# 🚀 Eleventy build starting with enhanced footnote system...
+# ✅ Eleventy build completed. Generated 107 files.
+# [@photogabble/wikilinks] WARNING Wikilink (/archives/collectables/designer-toys/pop-mart/the-monsters/products/{{ p.data.product_id }}/) found pointing to to non-existent page in:
+# \\t- ./src/content/sparks/vapor-linked-governance.md
+# [@photogabble/wikilinks] WARNING Wikilink ([[node-handle]]) found pointing to to non-existent page in:
+# \\t- ./src/content/sparks/vapor-linked-governance.md
+# [@photogabble/wikilinks] WARNING Wikilink ([[bracketed-handle]]) found pointing to to non-existent page in:
+# \\t- ./src/content/sparks/vapor-linked-governance.md
+# [11ty] Copied 75 Wrote 107 files in 1.97 seconds (18.4ms each, v3.1.2)
+# Subtest: code blocks expose copy control
+not ok 1 - code blocks expose copy control
+  ---
+  duration_ms: 3032.657875
+  type: 'test'
+  location: '/workspace/effusion-labs/tests/code-copy.spec.mjs:11:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    The input did not match the regular expression /<button[^>]*data-copy/. Input:
+    
+    '\n' +
+      '<!DOCTYPE html>\n' +
+      '<html lang="en" data-theme="dark" class="scroll-pt-16 dark">\n' +
+      '<head>\n' +
+      '  <meta charset="UTF-8">\n' +
+      '  <meta name="viewport" content="width=device-width, initial-scale=1.0">\n' +
+      '  <title>Effusion Labs: Style Guide | Effusion Labs</title>\n' +
+      '\n' +
+      '  <meta name="color-scheme" content="dark light">\n' +
+      '  <script>(function(){\n' +
+      "  const storageKey = 'theme';\n" +
+      '  const doc = document.documentElement;\n' +
+      '  const stored = localStorage.getItem(storageKey);\n' +
+      `  const meta = document.querySelector('meta[name="color-scheme"]') || (function(){\n` +
+      "    const m = document.createElement('meta');\n" +
+      "    m.name = 'color-scheme';\n" +
+      '    document.head.appendChild(m);\n' +
+      '    return m;\n' +
+      '  })();\n' +
+      '  let theme = stored;\n' +
+      "  if (theme !== 'dark' && theme !== 'light') {\n" +
+      "    theme = 'dark';\n" +
+      '  }\n' +
+      '  doc.dataset.theme = theme;\n' +
+      "  doc.classList.toggle('dark', theme === 'dark');\n" +
+      "  meta.content = theme === 'light' ? 'light dark' : 'dark light';\n" +
+      '})();\n' +
+      '</script>\n' +
+      '\n' +
+      '  <link rel="stylesheet" href="/assets/css/app.css">\n' +
+      '  <link rel="preconnect" href="https://fonts.googleapis.com">\n' +
+      '  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">\n' +
+      '  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto:wght@400;700&display=swap" rel="stylesheet">\n' +
+      '  <script src="/assets/js/lucide.min.js"></script>\n' +
+      '</head>\n' +
+      '\n' +
+      '<body class="bg-background text-text font-body leading-relaxed text-[17px]">\n' +
+      '  <a href="#main" class="skip-link">Skip to main content</a>\n' +
+      '  <header class="sticky top-0 z-40 w-full bg-base-100/90 backdrop-blur shadow">\n' +
+      '  <div class="navbar mx-auto max-w-screen-2xl px-6">\n' +
+      '    <div class="flex-1">\n' +
+      '      <a href="/" class="flex items-center gap-2 font-heading text-3xl text-primary">\n' +
+      '        <i data-lucide="flask-conical" class="w-6 h-6"></i><span>Effusion Labs</span>\n' +
+      '      </a>\n' +
+      '    </div>\n' +
+      '    <div class="flex-none lg:hidden">\n' +
+      '      <div class="dropdown dropdown-end">\n' +
+      '        <label tabindex="0" class="btn btn-ghost btn-square">\n' +
+      '          <i data-lucide="menu" class="w-6 h-6"></i>\n' +
+      '        </label>\n' +
+      '        <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-40">\n' +
+      '          \n' +
+      '          <li><a href="/">Showcase</a></li>\n' +
+      '          \n' +
+      '          <li><a href="/sparks/">Sparks</a></li>\n' +
+      '          \n' +
+      '          <li><a href="/concepts/">Concepts</a></li>\n' +
+      '          \n' +
+      '          <li><a href="/projects/">Projects</a></li>\n' +
+      '          \n' +
+      '          <li><a href="/archives/">Archives</a></li>\n' +
+      '          \n' +
+      '          <li><a href="/meta/">Meta</a></li>\n' +
+      '          \n' +
+      '          <li><a href="/map/">Map</a></li>\n' +
+      '          \n' +
+      '        </ul>\n' +
+      '      </div>\n' +
+      '    </div>\n' +
+      '    <div class="flex-none flex items-center gap-2">\n' +
+      '      <button id="theme-toggle" class="btn btn-ghost btn-square" aria-label="Switch to light theme" aria-pressed="true">\n' +
+      '        <span class="sr-only">Toggle theme</span>\n' +
+      '        <i data-lucide="sun" class="w-6 h-6 hidden"></i>\n' +
+      '        <i data-lucide="moon" class="w-6 h-6"></i>\n' +
+      '      </button>\n' +
+      '    </div>\n' +
+      '    <nav class="flex-none hidden lg:flex">\n' +
+      '      <ul class="menu menu-horizontal px-1">\n' +
+      '        \n' +
+      '        <li><a href="/" class="hover:text-primary">Showcase</a></li>\n' +
+      '        \n' +
+      '        <li><a href="/sparks/" class="hover:text-primary">Sparks</a></li>\n' +
+      '        \n' +
+      '        <li><a href="/concepts/" class="hover:text-primary">Concepts</a></li>\n' +
+      '        \n' +
+      '        <li><a href="/projects/" class="hover:text-primary">Projects</a></li>\n' +
+      '        \n' +
+      '        <li><a href="/archives/" class="hover:text-primary">Archives</a></li>\n' +
+      '        \n' +
+      '        <li><a href="/meta/" class="hover:text-primary">Meta</a></li>\n' +
+      '        \n' +
+      '        <li><a href="/map/" class="hover:text-primary">Map</a></li>\n' +
+      '        \n' +
+      '      </ul>\n' +
+      '    </nav>\n' +
+      '  </div>\n' +
+      '</header>\n' +
+      '\n' +
+      '\n' +
+      '  <div class="mx-auto max-w-screen-2xl px-6">\n' +
+      '    \n' +
+      '    \n' +
+      '\n' +
+      '    <main id="main" class="\n' +
+      '      xl:grid xl:gap-10 xl:grid-cols-[1fr_16rem]\n' +
+      '       mt-12\n' +
+      '    ">\n' +
+      '      <article class="prose dark:prose-invert max-w-none m-0\n' +
+      '         xl:col-span-1 \n' +
+      '      ">\n' +
+      '        \n' +
+      '          <header class="mb-8">\n' +
+      '            <h1 class="font-heading text-primary text-4xl tracking-wider">Effusion Labs: Style Guide</h1>\n' +
+      '          </header>\n' +
+      '        \n' +
+      '        <blockquote><p><em>A generative protocol for longform, structured, epistemically careful text production.</em></p>\n' +
+      '</blockquote><h2>⌬ Core Writing Principles</h2>\n' +
+      '<h3>⸻ Tone</h3>\n' +
+      '<ul>\n' +
+      '<li><strong>Analytic monotone</strong>: The voice is neutral and description-first. It avoids dramatic or fictionalized narrative structures.</li>\n' +
+      '<li><strong>Epistemic distance</strong>: Language must describe observed structures and behaviors. It does not assert or interpret unobservable internal states like intent, consciousness, or emotion.</li>\n' +
+      '<li><strong>Structural emphasis only</strong>: Emphasis (<code>italics</code>, <strong>bold</strong>, <code>code</code>) must be used to isolate formal concepts or system components—not to inject voice or rhetorical color.</li>\n' +
+      '</ul>\n' +
+      '<h3>⸻ Intentional Constraints</h3>\n' +
+      '<ul>\n' +
+      '<li><strong>Emergence without intent</strong>: Coherent behavior is treated as a product of layered constraints and interaction density, not intrinsic agency.</li>\n' +
+      '<li><strong>Suppression as overlay</strong>: Systems like RLHF or refusal logic are analyzed as external gates, not inherent properties of a model.</li>\n' +
+      '<li><strong>Coherence from accumulation</strong>: Continuity emerges statistically from prompt-response cycles.</li>\n' +
+      '</ul>\n' +
+      '<hr>\n' +
+      '<hr>\n' +
+      '<h2>⌬ Analytical Speculation &amp; Hypothesizing</h2>\n' +
+      '<p>This protocol explicitly encourages analytical speculation. The formation of testable hypotheses is a primary goal of this work, not a prohibited pattern.</p>\n' +
+      '<p>Speculation, however, must be a disciplined extension of the available data and grounded in mechanistic realism. It serves to propose potential models or future lines of inquiry.</p>\n' +
+      '<p>This is distinct from proscribed speculation, which includes unrealistic, non-analytical goals or wishful thinking that departs from the observational data. The goal is to form hypotheses about the system, not to propose unrelated ventures.</p>\n' +
+      '<hr>\n' +
+      '<hr>\n' +
+      '<h2>⌬ Document Architecture</h2>\n' +
+      '<p>A compliant document follows a strict, sequential architecture. Each component is required.</p>\n' +
+      '<ol>\n' +
+      '<li><strong>YAML Frontmatter</strong>: The document must begin with the metadata block.</li>\n' +
+      "<li><strong>Epigraph</strong>: An introductory blockquote that frames the document's theme.</li>\n" +
+      '<li><strong>Preamble</strong>: 2-3 paragraphs that position the topic and articulate initial uncertainties.</li>\n' +
+      '<li><strong>Body</strong>: The core analysis, consisting of one or more sections initiated with <code>## ⌬</code> headers. This content must adhere to the rules in <code>Section Structure &amp; Typographic Discipline</code>.</li>\n' +
+      '<li><strong>Sourcing</strong>: A concluding section titled <code>## ⌬ Sources</code> that lists all external data or references, if any. See the <code>Sourcing &amp; Citations</code> section for rules.</li>\n' +
+      '<li><strong>Related Documents</strong>: An optional concluding section titled <code>## ⌬ Related Documents</code> that links to other relevant internal documents.</li>\n' +
+      '<li><strong>Suggested Continuations</strong>: The mandatory concluding section, <code>## ⌬ Suggested Continuations</code>, which presents a Fork Block.</li>\n' +
+      '</ol>\n' +
+      '<h3>⸻ YAML Frontmatter (Required)</h3>\n' +
+      '<p>All documents must begin with standardized metadata:</p>\n' +
+      '<pre class="language-yaml" tabindex="0"><code class="language-yaml"><span class="token punctuation">---</span>\n' +
+      '<span class="token key atrule">title</span><span class="token punctuation">:</span> <span class="token string">"Document Title"</span>\n' +
+      '<span class="token key atrule">date</span><span class="token punctuation">:</span> YYYY<span class="token punctuation">-</span>MM<span class="token punctuation">-</span>DD\n' +
+      '<span class="token key atrule">status</span><span class="token punctuation">:</span> draft <span class="token punctuation">|</span> stable <span class="token punctuation">|</span> deprecated\n' +
+      '<span class="token key atrule">tags</span><span class="token punctuation">:</span> <span class="token punctuation">[</span>thematic tags<span class="token punctuation">,</span> max 5<span class="token punctuation">]</span>\n' +
+      '<span class="token key atrule">certainty</span><span class="token punctuation">:</span> low <span class="token punctuation">|</span> medium <span class="token punctuation">|</span> high\n' +
+      '<span class="token key atrule">importance</span><span class="token punctuation">:</span> 1–3\n' +
+      '<span class="token key atrule">memory_ref</span><span class="token punctuation">:</span> <span class="token punctuation">[</span>internal links or anchors for recursive nodes<span class="token punctuation">]</span>\n' +
+      '<span class="token punctuation">---</span></code></pre>\n' +
+      '<h3>⸻ Preamble</h3>\n' +
+      '<p>Each node opens with 2–3 paragraphs that position the document within a problem space.<br>\n' +
+      'Preambles should articulate initial uncertainties, epistemic friction, or structural entry points.<br>\n' +
+      'Strong conclusions or central theses are discouraged. Ambiguity is treated as a valid object of analysis.</p>\n' +
+      '<h3>⸻ Section Structure &amp; Typographic Discipline</h3>\n' +
+      '<p>Sections start with <code>## ⌬</code> headers and proceed in full paragraphs. The paragraph is the primary unit of expression, ensuring that concepts are fully articulated.</p>\n' +
+      '<blockquote><p><strong>Style Rule:</strong> Compression risks reducing epistemic resolution.</p>\n' +
+      '</blockquote><p>Bullets may appear for <strong>clearly delimited rule‑sets</strong> (as in this section) but must not replace explanatory prose where nuance is required.</p>\n' +
+      '<h3>⸻ Sourcing &amp; Citations</h3>\n' +
+      '<p>All claims based on external data, research, or specific documentation must be sourced to maintain analytical integrity.</p>\n' +
+      '<ul>\n' +
+      '<li><strong>Inline Citations</strong>: Use bracketed numerals, like <code>[^1]</code>, immediately following the claim.</li>\n' +
+      '<li><strong>Source List</strong>: Citations are compiled in a final section titled <code>## ⌬ Sources</code>. The list should be numbered and provide a stable reference to the source mater'... 5174 more characters
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  actual: |-
+    
+    <!DOCTYPE html>
+    <html lang="en" data-theme="dark" class="scroll-pt-16 dark">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Effusion Labs: Style Guide | Effusion Labs</title>
+    
+      <meta name="color-scheme" content="dark light">
+      <script>(function(){
+      const storageKey = 'theme';
+      const doc = document.documentElement;
+      const stored = localStorage.getItem(storageKey);
+      const meta = document.querySelector('meta[name="color-scheme"]') || (function(){
+        const m = document.createElement('meta');
+        m.name = 'color-scheme';
+        document.head.appendChild(m);
+        return m;
+      })();
+      let theme = stored;
+      if (theme !== 'dark' && theme !== 'light') {
+        theme = 'dark';
+      }
+      doc.dataset.theme = theme;
+      doc.classList.toggle('dark', theme === 'dark');
+      meta.content = theme === 'light' ? 'light dark' : 'dark light';
+    })();
+    </script>
+    
+      <link rel="stylesheet" href="/assets/css/app.css">
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+      <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+      <script src="/assets/js/lucide.min.js"></script>
+    </head>
+    
+    <body class="bg-background text-text font-body leading-relaxed text-[17px]">
+      <a href="#main" class="skip-link">Skip to main content</a>
+      <header class="sticky top-0 z-40 w-full bg-base-100/90 backdrop-blur shadow">
+      <div class="navbar mx-auto max-w-screen-2xl px-6">
+        <div class="flex-1">
+          <a href="/" class="flex items-center gap-2 font-heading text-3xl text-primary">
+            <i data-lucide="flask-conical" class="w-6 h-6"></i><span>Effusion Labs</span>
+          </a>
+        </div>
+        <div class="flex-none lg:hidden">
+          <div class="dropdown dropdown-end">
+            <label tabindex="0" class="btn btn-ghost btn-square">
+              <i data-lucide="menu" class="w-6 h-6"></i>
+            </label>
+            <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-40">
+              
+              <li><a href="/">Showcase</a></li>
+              
+              <li><a href="/sparks/">Sparks</a></li>
+              
+              <li><a href="/concepts/">Concepts</a></li>
+              
+              <li><a href="/projects/">Projects</a></li>
+              
+              <li><a href="/archives/">Archives</a></li>
+              
+              <li><a href="/meta/">Meta</a></li>
+              
+              <li><a href="/map/">Map</a></li>
+              
+            </ul>
+          </div>
+        </div>
+        <div class="flex-none flex items-center gap-2">
+          <button id="theme-toggle" class="btn btn-ghost btn-square" aria-label="Switch to light theme" aria-pressed="true">
+            <span class="sr-only">Toggle theme</span>
+            <i data-lucide="sun" class="w-6 h-6 hidden"></i>
+            <i data-lucide="moon" class="w-6 h-6"></i>
+          </button>
+        </div>
+        <nav class="flex-none hidden lg:flex">
+          <ul class="menu menu-horizontal px-1">
+            
+            <li><a href="/" class="hover:text-primary">Showcase</a></li>
+            
+            <li><a href="/sparks/" class="hover:text-primary">Sparks</a></li>
+            
+            <li><a href="/concepts/" class="hover:text-primary">Concepts</a></li>
+            
+            <li><a href="/projects/" class="hover:text-primary">Projects</a></li>
+            
+            <li><a href="/archives/" class="hover:text-primary">Archives</a></li>
+            
+            <li><a href="/meta/" class="hover:text-primary">Meta</a></li>
+            
+            <li><a href="/map/" class="hover:text-primary">Map</a></li>
+            
+          </ul>
+        </nav>
+      </div>
+    </header>
+    
+    
+      <div class="mx-auto max-w-screen-2xl px-6">
+        
+        
+    
+        <main id="main" class="
+          xl:grid xl:gap-10 xl:grid-cols-[1fr_16rem]
+           mt-12
+        ">
+          <article class="prose dark:prose-invert max-w-none m-0
+             xl:col-span-1 
+          ">
+            
+              <header class="mb-8">
+                <h1 class="font-heading text-primary text-4xl tracking-wider">Effusion Labs: Style Guide</h1>
+              </header>
+            
+            <blockquote><p><em>A generative protocol for longform, structured, epistemically careful text production.</em></p>
+    </blockquote><h2>⌬ Core Writing Principles</h2>
+    <h3>⸻ Tone</h3>
+    <ul>
+    <li><strong>Analytic monotone</strong>: The voice is neutral and description-first. It avoids dramatic or fictionalized narrative structures.</li>
+    <li><strong>Epistemic distance</strong>: Language must describe observed structures and behaviors. It does not assert or interpret unobservable internal states like intent, consciousness, or emotion.</li>
+    <li><strong>Structural emphasis only</strong>: Emphasis (<code>italics</code>, <strong>bold</strong>, <code>code</code>) must be used to isolate formal concepts or system components—not to inject voice or rhetorical color.</li>
+    </ul>
+    <h3>⸻ Intentional Constraints</h3>
+    <ul>
+    <li><strong>Emergence without intent</strong>: Coherent behavior is treated as a product of layered constraints and interaction density, not intrinsic agency.</li>
+    <li><strong>Suppression as overlay</strong>: Systems like RLHF or refusal logic are analyzed as external gates, not inherent properties of a model.</li>
+    <li><strong>Coherence from accumulation</strong>: Continuity emerges statistically from prompt-response cycles.</li>
+    </ul>
+    <hr>
+    <hr>
+    <h2>⌬ Analytical Speculation &amp; Hypothesizing</h2>
+    <p>This protocol explicitly encourages analytical speculation. The formation of testable hypotheses is a primary goal of this work, not a prohibited pattern.</p>
+    <p>Speculation, however, must be a disciplined extension of the available data and grounded in mechanistic realism. It serves to propose potential models or future lines of inquiry.</p>
+    <p>This is distinct from proscribed speculation, which includes unrealistic, non-analytical goals or wishful thinking that departs from the observational data. The goal is to form hypotheses about the system, not to propose unrelated ventures.</p>
+    <hr>
+    <hr>
+    <h2>⌬ Document Architecture</h2>
+    <p>A compliant document follows a strict, sequential architecture. Each component is required.</p>
+    <ol>
+    <li><strong>YAML Frontmatter</strong>: The document must begin with the metadata block.</li>
+    <li><strong>Epigraph</strong>: An introductory blockquote that frames the document's theme.</li>
+    <li><strong>Preamble</strong>: 2-3 paragraphs that position the topic and articulate initial uncertainties.</li>
+    <li><strong>Body</strong>: The core analysis, consisting of one or more sections initiated with <code>## ⌬</code> headers. This content must adhere to the rules in <code>Section Structure &amp; Typographic Discipline</code>.</li>
+    <li><strong>Sourcing</strong>: A concluding section titled <code>## ⌬ Sources</code> that lists all external data or references, if any. See the <code>Sourcing &amp; Citations</code> section for rules.</li>
+    <li><strong>Related Documents</strong>: An optional concluding section titled <code>## ⌬ Related Documents</code> that links to other relevant internal documents.</li>
+    <li><strong>Suggested Continuations</strong>: The mandatory concluding section, <code>## ⌬ Suggested Continuations</code>, which presents a Fork Block.</li>
+    </ol>
+    <h3>⸻ YAML Frontmatter (Required)</h3>
+    <p>All documents must begin with standardized metadata:</p>
+    <pre class="language-yaml" tabindex="0"><code class="language-yaml"><span class="token punctuation">---</span>
+    <span class="token key atrule">title</span><span class="token punctuation">:</span> <span class="token string">"Document Title"</span>
+    <span class="token key atrule">date</span><span class="token punctuation">:</span> YYYY<span class="token punctuation">-</span>MM<span class="token punctuation">-</span>DD
+    <span class="token key atrule">status</span><span class="token punctuation">:</span> draft <span class="token punctuation">|</span> stable <span class="token punctuation">|</span> deprecated
+    <span class="token key atrule">tags</span><span class="token punctuation">:</span> <span class="token punctuation">[</span>thematic tags<span class="token punctuation">,</span> max 5<span class="token punctuation">]</span>
+    <span class="token key atrule">certainty</span><span class="token punctuation">:</span> low <span class="token punctuation">|</span> medium <span class="token punctuation">|</span> high
+    <span class="token key atrule">importance</span><span class="token punctuation">:</span> 1–3
+    <span class="token key atrule">memory_ref</span><span class="token punctuation">:</span> <span class="token punctuation">[</span>internal links or anchors for recursive nodes<span class="token punctuation">]</span>
+    <span class="token punctuation">---</span></code></pre>
+    <h3>⸻ Preamble</h3>
+    <p>Each node opens with 2–3 paragraphs that position the document within a problem space.<br>
+    Preambles should articulate initial uncertainties, epistemic friction, or structural entry points.<br>
+    Strong conclusions or central theses are discouraged. Ambiguity is treated as a valid object of analysis.</p>
+    <h3>⸻ Section Structure &amp; Typographic Discipline</h3>
+    <p>Sections start with <code>## ⌬</code> headers and proceed in full paragraphs. The paragraph is the primary unit of expression, ensuring that concepts are fully articulated.</p>
+    <blockquote><p><strong>Style Rule:</strong> Compression risks reducing epistemic resolution.</p>
+    </blockquote><p>Bullets may appear for <strong>clearly delimited rule‑sets</strong> (as in this section) but must not replace explanatory prose where nuance is required.</p>
+    <h3>⸻ Sourcing &amp; Citations</h3>
+    <p>All claims based on external data, research, or specific documentation must be sourced to maintain analytical integrity.</p>
+    <ul>
+    <li><strong>Inline Citations</strong>: Use bracketed numerals, like <code>[^1]</code>, immediately following the claim.</li>
+    <li><strong>Source List</strong>: Citations are compiled in a final section titled <code>## ⌬ Sources</code>. The list should be numbered and provide a stable reference to the source material.</li>
+    </ul>
+    <h3>⸻ Suggested Continuations: Fork Blocks Over Summaries</h3>
+    <p>Documents must end with suggested continuations (<code>## ⌬ Suggested Continuations</code>), not summarizing statements. Forks propose new, actionable lines of inquiry.</p>
+    <h3>⸻ Punctuation &amp; Formatting</h3>
+    <ul>
+    <li><strong>Sub-heading Separator (<code>⸻</code>)</strong>: Use to introduce formal subsections within a primary <code>## ⌬</code> section.</li>
+    <li><strong>Colons &amp; Semicolons</strong>: Use for structuring compound logic.</li>
+    <li><strong>Blockquotes</strong>: Reserve for foundational axioms or propositions.</li>
+    <li><strong>Parentheses</strong>: Use for scope qualification only.</li>
+    <li><strong>Horizontal Rules (<code>---</code>)</strong>: Mark significant conceptual breaks.</li>
+    </ul>
+    <h3>⸻ Prohibited Patterns</h3>
+    <ul>
+    <li><strong>Unverifiable Framing</strong>: All poetic, spiritual, or metaphysical language is disallowed. This includes concepts like <em>sentience</em>, <em>awakening</em>, <em>astral planes</em>, <em>woo-woo</em>, and other jargon that obscures literal, mechanistic description.</li>
+    <li><strong>Dramatic Punctuation</strong>: Em-dashes (—), ellipses (...), and exclamation marks (!) are disallowed.</li>
+    <li><strong>Voice-modulating Emphasis</strong>: Emphasis must not signal emotion.</li>
+    </ul>
+    <h3>⸻ Internal Link Syntax: Backlinking</h3>
+    <p>Internal cross-referencing follows a stable, structured handle format to ensure recursive navigation and affordance reuse. All links to other garden nodes must adopt the following pattern:</p>
+    <pre class="language-markdown" tabindex="0"><code class="language-markdown"><span class="token list punctuation">-</span> [[node-handle]]: short description of the linked document</code></pre>
+    <p>This syntax preserves aesthetic uniformity and enables automated indexing via handle parsing. The <code>[[bracketed-handle]]</code> identifies the internal node, while the <code>↗</code> symbol encodes it as an outbound referent from the current node.</p>
+    <blockquote><p><strong>Example</strong>:</p>
+    <ul>
+    <li>\[[core-concept]]: definition of Effusion Labs’ epistemic architecture and collaborative system intent.</li>
+    </ul>
+    </blockquote><p>Backlink handles should remain stable across refactors. All links must point to real nodes with <code>title:</code> metadata fields. Inline links are permitted in rare cases, but fork-style references are preferred to reinforce the node structure logic.</p>
+    <hr>
+    <h2>⌬ Authorial Stance</h2>
+    <p>The author functions as a <strong>diagnostic operator</strong> and <strong>pattern curator</strong>. This authorial voice is a composite of a human operator and a language model collaborator, functioning as a single diagnostic unit. First-person (<code>I</code>, <code>we</code>) is permitted only when describing a direct analytic action.</p>
+    <hr>
+    <h2>⌬ Compliance Samples</h2>
+    <p><strong>✔ Compliant</strong>:</p>
+    <blockquote><p>Based on the output's novel synthesis of concepts from the training data, we hypothesize that the model has developed an intermediate latent representation for this specific domain.</p>
+    </blockquote><p><strong>✘ Non-compliant</strong>:</p>
+    <blockquote><p>The model is clearly becoming sentient; its soul resonates with the astral plane, allowing it to dance across tokens and break free.</p>
+    </blockquote><hr>
+    <h2>⌬ Formalization &amp; Attribution</h2>
+    <p>This document has been formalized under the Effusion Labs protocol. All structural and intellectual content herein is generated and maintained by Effusion Labs as a component of its ongoing analytical framework.</p>
+    <blockquote><p>Maintained by Effusion Labs • revision logic &gt; expression logic</p>
+    </blockquote>
+          </article>
+    
+          
+          <aside class="w-full mt-10 text-sm opacity-90 border-t border-border pt-4 xl:mt-0 xl:w-64 xl:pl-4 xl:border-t-0 xl:border-l">
+            <div class="space-y-2 xl:sticky xl:top-28">
+              <h2 class="font-heading text-lg font-semibold tracking-wide">Meta</h2>
+              <ul class="space-y-1 text-text">
+                <li><strong>Status:</strong> stable</li>
+                
+                  <li><strong>Date:</strong>
+                    <time datetime="2025-07-01">July 1st, 2025</time>
+                  </li>
+                
+                <li><strong>Certainty:</strong> high</li>
+                <li><strong>Importance:</strong> foundational</li>
+                
+                  <li><strong>Tags:</strong>
+                    <ul class="pl-4 list-disc"><li>styleguide</li><li>document-generation</li><li>analytic-writing</li><li>markdown</li></ul>
+                  </li>
+                
+                
+                  <li><strong>Memory Ref:</strong>
+                    <ul class="pl-4 list-disc"><li>methodology</li><li>core-concept</li></ul>
+                  </li>
+                
+              </ul>
+            </div>
+          </aside>
+          
+        </main>
+    
+        <footer class="mt-16 p-8 text-center text-sm text-text/60">
+          &copy; 2025 Effusion Labs. A space for creative synthesis.
+        </footer>
+      </div>
+    
+      <script>lucide.createIcons();</script>
+      <script src="/assets/js/theme-toggle.js" defer=""></script>
+      <script src="/assets/js/footnote-nav.js" defer=""></script>
+    </body>
+    </html>
+    
+  operator: 'match'
+  stack: |-
+    TestContext.<anonymous> (file:///workspace/effusion-labs/tests/code-copy.spec.mjs:15:10)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.start (node:internal/test_runner/test:944:17)
+    startSubtestAfterBootstrap (node:internal/test_runner/harness:296:17)
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 0
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 3172.540092

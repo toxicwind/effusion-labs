@@ -17,6 +17,13 @@
     updateScrollMargin();
     window.addEventListener('resize', updateScrollMargin);
 
+    function applyHighlight(target) {
+      target.classList.add('footnote-highlight');
+      setTimeout(() => target.classList.remove('footnote-highlight'), 3000);
+      target.setAttribute('tabindex', '-1');
+      target.focus();
+    }
+
     document.addEventListener('click', function(e) {
       const link = e.target.closest('a[href^="#fn"]');
       if (!link) return;
@@ -29,12 +36,13 @@
       const headerHeight = calculateHeaderHeight();
       const targetRect = target.getBoundingClientRect();
       const scrollTop = window.pageYOffset + targetRect.top - headerHeight;
-      window.scrollTo({ top: scrollTop, behavior: 'smooth' });
-      history.pushState(null, null, href);
-      target.classList.add('footnote-highlight');
-      setTimeout(() => target.classList.remove('footnote-highlight'), 3000);
-      target.setAttribute('tabindex', '-1');
-      target.focus();
+      const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const behavior = prefersReduced ? 'auto' : 'smooth';
+      window.scrollTo({ top: scrollTop, behavior });
+      try {
+        history.pushState(null, '', href);
+      } catch (err) {}
+      applyHighlight(target);
     });
 
     function handleInitialHash() {
@@ -46,9 +54,10 @@
             const headerHeight = calculateHeaderHeight();
             const targetRect = target.getBoundingClientRect();
             const scrollTop = window.pageYOffset + targetRect.top - headerHeight;
-            window.scrollTo({ top: scrollTop, behavior: 'smooth' });
-            target.classList.add('footnote-highlight');
-            setTimeout(() => target.classList.remove('footnote-highlight'), 3000);
+            const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            const behavior = prefersReduced ? 'auto' : 'smooth';
+            window.scrollTo({ top: scrollTop, behavior });
+            applyHighlight(target);
           }, 100);
         }
       }
@@ -63,17 +72,4 @@
   }
 
   enhanceFootnoteNavigation();
-
-  const style = document.createElement('style');
-  style.textContent = `
-    .footnote-highlight {
-      background-color: rgba(59, 130, 246, 0.1) !important;
-      border-radius: 0.375rem;
-      transition: background-color 0.3s ease-in-out;
-    }
-    @media (prefers-reduced-motion: reduce) {
-      .footnote-highlight { transition: none; }
-    }
-  `;
-  document.head.appendChild(style);
 })();
