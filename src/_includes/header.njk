@@ -1,8 +1,8 @@
-<header class="sticky top-0 z-40 w-full bg-base-100/90 backdrop-blur shadow">
+<header class="sticky top-0 z-40 w-full bg-base-100/90 backdrop-blur shadow border-y-4 border-primary">
   <div class="navbar mx-auto max-w-screen-2xl px-6">
     <div class="flex-1">
       <a href="/" class="flex items-center gap-2 font-heading text-3xl text-primary">
-        <i data-lucide="flask-conical" class="w-6 h-6"></i><span>Effusion Labs</span>
+        <i data-lucide="flask-conical" class="w-6 h-6"></i><span>{{ 'Effusion Labs' | shout }}</span>
       </a>
     </div>
     <div class="flex-none lg:hidden">
@@ -12,7 +12,7 @@
         </label>
         <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-40">
           {% for n in nav %}
-          <li><a href="{{ n.url }}">{{ n.title }}</a></li>
+          <li><a href="{{ n.url }}">{{ n.title | shout }}</a></li>
           {% endfor %}
         </ul>
       </div>
@@ -27,7 +27,7 @@
     <nav class="flex-none hidden lg:flex">
       <ul class="menu menu-horizontal px-1">
         {% for n in nav %}
-        <li><a href="{{ n.url }}" class="hover:text-primary">{{ n.title }}</a></li>
+        <li><a href="{{ n.url }}" class="hover:text-primary">{{ n.title | shout }}</a></li>
         {% endfor %}
       </ul>
     </nav>
