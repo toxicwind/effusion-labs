@@ -95,6 +95,15 @@
   }
   html{ scroll-behavior: smooth; }
 
+  .footnote-highlight{
+    background-color: hsl(var(--p)/.15);
+    border-radius: .375rem;
+    transition: background-color .3s ease-in-out;
+  }
+  @media (prefers-reduced-motion: reduce){
+    .footnote-highlight{ transition: none; }
+  }
+
   [id^="fn"]:target,[id^="fnref"]:target{
     border-radius:.375rem;
     box-shadow: 0 0 0 2px hsl(var(--in)/.45); /* info color ring */
