@@ -10,6 +10,8 @@
   h1 { @apply font-heading text-[clamp(2rem,4vw+1rem,3rem)]; }
   h2 { @apply font-heading text-[clamp(1.5rem,3vw+0.75rem,2.25rem)]; }
 
+  .heading-anchor { @apply mr-2 no-underline text-gray-400; }
+
   pre[class*="language-"],
   :not(pre) > code {
     background-color: rgb(var(--color-code-bg));
