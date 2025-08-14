@@ -1,0 +1,21 @@
+---
+title: "Block Ledger"
+layout: "layout.njk"
+date: 2025-08-13
+status: draft
+tags: [concept, block]
+certainty: exploratory
+importance: 1
+---
+
+# Blocks as Units
+
+Ledger-style blocks expose structure by refusing polish.
+
+## Reasons
+- plain text keeps edges sharp
+- size jumps map importance
+
+## Links
+- [Core Concept](/content/concepts/core-concept/)
+- [Project Dandelion](/content/projects/project-dandelion/)

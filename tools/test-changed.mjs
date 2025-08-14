@@ -14,9 +14,9 @@ function collectTests(dir, out) {
   }
 }
 
-function listAllTests() {
+function listAllTests(dirs = TEST_DIRS) {
   const files = [];
-  for (const dir of TEST_DIRS) {
+  for (const dir of dirs) {
     if (fs.existsSync(dir)) collectTests(dir, files);
   }
   return files;
@@ -79,7 +79,12 @@ function runPw(files) {
 }
 
 async function run(files) {
-  const { pw, nodeFiles } = categorize(files);
+  let pw = [], nodeFiles = [];
+  if (files.length === 0) {
+    ({ nodeFiles } = categorize(listAllTests(["test"])));
+  } else {
+    ({ pw, nodeFiles } = categorize(files));
+  }
   const codes = [];
   if (nodeFiles.length) codes.push(await runNode(nodeFiles));
   if (pw.length) codes.push(await runPw(pw));

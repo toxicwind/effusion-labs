@@ -1,0 +1,5 @@
+{% macro navItems(nav, pageUrl, linkClass='') -%}
+  {% for n in nav %}
+    <li><a href="{{ n.url }}"{% if linkClass %} class="{{ linkClass }}"{% endif %}{% if n.url == pageUrl %} aria-current="page"{% endif %}>{{ n.title }}</a></li>
+  {% endfor %}
+{%- endmacro %}
