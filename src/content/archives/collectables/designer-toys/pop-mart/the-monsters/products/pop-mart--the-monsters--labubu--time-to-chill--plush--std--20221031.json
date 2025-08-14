@@ -1,11 +1,11 @@
 {
   "type": "product",
-  "product_id": "pop-mart--the-monsters--labubu--time-to-chill--figure--std--20221031",
+  "product_id": "pop-mart--the-monsters--labubu--time-to-chill--plush--std--20221031",
   "brand": "pop-mart",
   "line": "the-monsters",
   "character": "labubu",
   "series": "time-to-chill",
-  "form": "figure",
+  "form": "plush",
   "variant": "std",
   "edition": {
     "kind": "core"
@@ -29,7 +29,7 @@
     "unit_count": null
   },
   "images": [],
-  "provenance_ref": "/content/archives/collectables/designer-toys/pop-mart/the-monsters/provenance/pop-mart--the-monsters--labubu--time-to-chill--figure--std--20221031.jsonl",
+  "provenance_ref": "/content/archives/collectables/designer-toys/pop-mart/the-monsters/provenance/pop-mart--the-monsters--labubu--time-to-chill--plush--std--20221031.jsonl",
   "confidence": 0.45,
   "notes": "Seeded from initial article; requires re-research."
 }
