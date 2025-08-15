@@ -124,15 +124,15 @@ Setting these variables allows custom storage locations for captures or twins wh
 
 ## Testing
 
-`npm test` runs an adaptive harness that targets only tests related to your changes. It inspects `git status` to detect modified files and executes matching tests, falling back to the full suite when no direct matches are found. Use `npm run test:all` to force a complete run or when CI sets `CI=true`. Integration tests that exercise network calls use the **Live‑Capture‑Lock** policy:
+`npm test` runs unit and integration specs using Node's built‑in runner with coverage via `c8`. All HTTP requests are intercepted by Undici's `MockAgent`; unmatched calls fail closed and point to a local mock. Browser‑driven capability checks live under `test/browser/` and execute separately with `npm run test:browser`.
 
-- **Snapshot vault**: Recorded HTTP interactions are stored under `docs/cassettes/`【9ad1e7†L1-L2】
-- **Creating captures**: run the relevant tests with network access; responses are saved as fixtures for replay
-- **Replay**: PR CI replays snapshots and **fails closed** if a test attempts live network access
-- **API twin**: when live capture is unsafe or unavailable, stub the endpoint under `tools/api-twin/` and point tests to the twin【44f46f†L1-L2】
-- **Idempotency**: live probes must be repeatable and safe; destructive flows are simulated via the twin
+Test globs:
 
-Snapshots are deterministic: headers and bodies are stored alongside SHA256 hashes. Any attempt to mutate the snapshot store during CI causes the build to fail, ensuring reproducibility. Developers should refresh snapshots only when contract drift breaks replay, committing both the updated fixture and the rationale in the decision log.
+```
+npm test            # unit + integration
+npm run test:browser
+npm run test:all    # includes browser tests
+```
 
 
 Within templates, the filter can ingest content on build:

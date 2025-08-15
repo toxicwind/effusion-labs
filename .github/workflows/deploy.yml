@@ -19,7 +19,13 @@ jobs:
           node-version: '20'
           cache: 'npm'
       - run: npm ci
-      - run: npm test
+      - run: |
+          NODE_OPTIONS=--import=./test/setup/http.mjs npm test 2>&1 | tee test.log
+      - run: scripts/warn-gate.sh test.log
+      - uses: actions/upload-artifact@v3
+        with:
+          name: coverage
+          path: coverage/lcov.info
 
   build:
     needs: tests
@@ -72,7 +78,7 @@ jobs:
       #   run: |
       #     curl -f -X POST http://effusionlabs.com:9000/api/stacks/webhooks/00000000-0000-0000-0000-000000000000
 
-  browser:
+  browser-checks:
     if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     container: mcr.microsoft.com/playwright:v1.45.2-jammy
@@ -83,4 +89,4 @@ jobs:
           node-version: '20'
           cache: 'npm'
       - run: npm ci
-      - run: npm test
+      - run: NODE_OPTIONS=--import=./test/setup/http.mjs npm run test:browser
