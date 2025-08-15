@@ -3,93 +3,47 @@ name: Build and Deploy to GHCR
 on:
   push:
     branches: [main]
-  workflow_dispatch:
 
 permissions:
   contents: read
-  packages: write
-
-env:
-  NODE_VERSION: '20'
-  REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}      # e.g. owner/repo
-  PLATFORMS: linux/amd64
-
-concurrency:
-  group: build-${{ github.ref }}
-  cancel-in-progress: true
+  packages: write  # ← Enables write access for GHCR
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0  # helps future tagging/versioning; negligible cost
+      - name: Checkout repo
+        uses: actions/checkout@v3
 
-      - name: Setup Node.js (with npm cache)
-        uses: actions/setup-node@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
         with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          node-version: '20'
 
-      - name: Install deps
+      - name: Install dependencies
         run: npm ci
 
-      - name: Run tests (targeted)
-        run: npm test
+      - name: Build Eleventy static files
+        run: npx @11ty/eleventy
 
-      # ⬆️ Tests already validate your Eleventy build via your test harness.
-      # Avoid running a second Eleventy build here to keep things fast.
-
-      - name: Setup QEMU
-        uses: docker/setup-qemu-action@v3
-
-      - name: Setup Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Login to GHCR
+      - name: Log in to GitHub Container Registry
         uses: docker/login-action@v3
         with:
-          registry: ${{ env.REGISTRY }}
+          registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Docker metadata (tags/labels)
-        id: meta
-        uses: docker/metadata-action@v5
-        with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-          tags: |
-            type=raw,value=latest,enable={{is_default_branch}}
-            type=sha,format=short
-
-      - name: Build & push (GHA cache, no SBOM/provenance)
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          file: ./Dockerfile
-          push: true
-          platforms: ${{ env.PLATFORMS }}
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
-          build-args: |
-            COMMIT_SHA=${{ github.sha }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-          # These shave time if you don't need them:
-          provenance: false
-          sbom: false
-
-      - name: Trigger Portainer redeploy
-        if: ${{ success() }}
+      - name: Build and push Docker image
         env:
-          PORTAINER_WEBHOOK_URL: ${{ secrets.PORTAINER_WEBHOOK_URL }}
+          IMAGE_ID: ghcr.io/${{ github.actor }}/effusion-labs:latest
         run: |
-          if [ -z "$PORTAINER_WEBHOOK_URL" ]; then
-            echo "PORTAINER_WEBHOOK_URL not set; skipping redeploy."
-            exit 0
+          echo "📦 Building and pushing $IMAGE_ID"
+          docker build -t "$IMAGE_ID" -f .portainer/Dockerfile .
+          docker push "$IMAGE_ID"
+      - name: Trigger Portainer Webhook Redeployment
+        run: |
+          if ! curl -X POST http://effusionlabs.com:9000/api/stacks/webhooks/d85d48d6-a407-4ac0-8683-a7962bfbb9d3; then
+            echo "Webhook trigger failed!";
+            exit 1;
           fi
-          curl -fsSL -X POST "$PORTAINER_WEBHOOK_URL"
