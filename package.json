@@ -14,7 +14,9 @@
     "build:tools": "npm install --prefix tools/google-search && npm run build --prefix tools/google-search",
     "deps:playwright": "npx playwright install chromium || true",
     "deps:system": "npx playwright install-deps || true",
-    "proxy:chain": "node tools/shared/chain-proxy.mjs"
+    "proxy:chain": "node tools/shared/chain-proxy.mjs",
+    "prepare-docs": "npx rg --version >/dev/null 2>&1 || npm install --save-dev @vscode/ripgrep; npx fd --version >/dev/null 2>&1 || npm install --save-dev fd-find || true",
+    "docs:links": "markdown-link-check -c link-check.config.json README.md"
   },
   "engines": {
     "node": ">=20"
@@ -43,11 +45,14 @@
     "@quasibit/eleventy-plugin-sitemap": "^2.2.0",
     "@tailwindcss/postcss": "^4.1.11",
     "@tailwindcss/typography": "^0.5.16",
+    "@vscode/ripgrep": "^1.15.14",
     "ajv": "^8.17.1",
     "ajv-formats": "^3.0.1",
     "daisyui": "^5.0.50",
+    "fd-find": "^1.2.0",
     "jsdom": "^26.1.0",
     "markdown-it-attrs": "^4.3.1",
+    "markdown-link-check": "^3.13.7",
     "playwright-extra": "^4.3.6",
     "postcss": "^8.5.6",
     "prettier": "^3.3.3",
