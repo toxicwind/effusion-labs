@@ -1,197 +1,99 @@
 # Effusion Labs Digital Garden
 
-Effusion Labs is a long‑form digital garden and studio powered by Eleventy, Nunjucks and Tailwind CSS. It serves as a structured space for developing ideas, capturing research and publishing a static site.
-
-## Badges
-
+[![Build and Deploy to GHCR](https://github.com/effusion-labs/effusion-labs/actions/workflows/deploy.yml/badge.svg)](https://github.com/effusion-labs/effusion-labs/actions/workflows/deploy.yml)
+[![Link Check](https://github.com/effusion-labs/effusion-labs/actions/workflows/link-check.yml/badge.svg)](https://github.com/effusion-labs/effusion-labs/actions/workflows/link-check.yml)
 [![License: ISC](https://img.shields.io/badge/license-ISC-blue.svg)](./LICENSE)
 
 ## Table of Contents
+- [🚀 Project Overview](#-project-overview)
+- [✨ Key Features](#-key-features)
+- [⚡ Quickstart](#-quickstart)
+- [📂 Project Layout](#-project-layout)
+- [🚢 Deployment](#-deployment)
+- [🧪 Quality Assurance](#-quality-assurance)
+- [🤝 Contributing](#-contributing)
+- [📄 License](#-license)
 
-- [Overview](#overview)
-- [Features / Capabilities](#features--capabilities)
-- [Quickstart](#quickstart)
-- [Configuration](#configuration)
-- [Testing](#testing)
-- [Web Ingestion Helper](#web-ingestion-helper)
-- [Project Layout](#project-layout)
-- [Deployment / Release](#deployment--release)
-- [Contributing](#contributing)
-- [License](#license)
-- [Links](#links)
+## 🚀 Project Overview
+Effusion Labs is a static digital garden built with Eleventy, Nunjucks templates and Tailwind CSS. Markdown content in `src/content` feeds Eleventy's collections to generate a fully static site. Node.js 20 powers the build pipeline, and the resulting `_site/` directory can be served directly or packaged into a lightweight Nginx container. GitHub Actions drive tests and deployments to GitHub Container Registry.
 
-## Overview
+## ✨ Key Features
+### npm Scripts
+- `npm run dev` – start Eleventy with live reload.
+- `npm run build` – compile the production site to `_site/`.
+- `npm test` – run tests related to changed files.
+- `npm run test:all` – execute the full test suite.
+- `npm run proxy:health` – check the Markdown proxy service.
+- `npm run docs:validate` – verify documentation hashes.
+- `npm run docs:reindex` – rebuild the vendor documentation index.
+- `npm run build:tools` – install and build utilities in `tools/google-search`.
+- `npm run deps:playwright` – install the Chromium browser for Playwright.
+- `npm run deps:system` – install system dependencies for Playwright.
+- `npm run proxy:chain` – run the proxy chain helper.
+- `npm run prepare-docs` – ensure `rg` and `fd` are installed for repository search.
+- `npm run docs:links` – check this README for broken links.
 
-This repository contains the source for the Effusion Labs site. The build pipeline combines Eleventy for static generation, Nunjucks templates for layout, and Tailwind CSS (with daisyUI) for styling. Markdown files under `src/content` provide the primary content. The project targets practitioners who want a reproducible digital garden with bidirectional links, a graph view and containerised deployment.
+### Eleventy Plugins
+- `@photogabble/eleventy-plugin-interlinker` – renders internal references as annotated links.
+- `@11ty/eleventy-navigation` – builds navigation structures from front matter.
+- `@11ty/eleventy-plugin-syntaxhighlight` – adds Prism-based code highlighting.
+- `@11ty/eleventy-plugin-rss` – generates RSS feeds for collections.
+- `@quasibit/eleventy-plugin-sitemap` – emits `sitemap.xml` with a predefined hostname.
+- `@11ty/eleventy-img` – transforms images to AVIF, WebP and original formats.
 
-The repository is intentionally self‑describing. Configuration is expressed as code, tests run without network access and every external reference is captured for provenance. Publishing involves compiling Markdown and assets into a static directory that can be served by any HTTP host or bundled into a container image.
+### Tailwind Theme
+- Custom colour palette and font families defined in `tailwind.config.cjs` with dark and light themes supplied by DaisyUI.
 
-Content is organised into **Sparks**, **Concepts**, **Projects** and **Meta** areas. Documents can interlink and evolve over time, turning transient notes into durable knowledge while remaining easy to publish.
+### Eleventy Collections
+- `sparks`, `concepts`, `projects`, `archives` and `meta` sourced from `src/content`.
+- `nodes` aggregates all content areas for global queries.
+- `featured`, `interactive` and `recentAll` power home page sections.
+- Archive collections are auto-generated for `products`, `series` and `characters` data.
 
-## Features / Capabilities
+### Services
+- `effusion-labs` container exposed on port `18400:80` via `docker-compose.yml`.
 
-- **Eleventy static site** with configurable collections for Sparks, Concepts, Projects and Meta documents, generated via the shared register module and constants【F:lib/eleventy/register.js†L33-L38】【F:lib/constants.js†L7-L13】
-- **Nunjucks layout** with an accessible dark/light theme toggle (defaulting to dark) driven by CSS variables, skip navigation link and meta sidebar for document metadata【F:src/\_includes/layout.njk†L1-L37】【F:src/\_includes/header.njk†L20-L27】
-- **Tailwind CSS v4** configured through PostCSS, extended with custom colours and fonts, and wired to theme tokens via daisyUI【F:tailwind.config.cjs†L1-L43】【F:postcss.config.cjs†L1-L5】
-- **Bidirectional linking** using `@photogabble/eleventy-plugin-interlinker`, producing annotated `<a class="interlink">` elements for internal references【F:lib/plugins.js†L1-L26】
-- **Syntax highlighting** via `@11ty/eleventy-plugin-syntaxhighlight` and Prism themes loaded through the Tailwind entry file【F:lib/plugins.js†L27-L31】【F:src/styles/app.tailwind.css†L4-L5】
-- **Responsive image transform**: `@11ty/eleventy-img` generates AVIF, WebP and original formats at multiple widths with lazy‑loading and async decoding attributes【F:lib/eleventy/register.js†L40-L52】
-- **Interactive concept map** built with `vis-network`, exposing collections as a node‑edge graph at `/map/` for exploratory browsing【F:src/map.njk†L38-L121】
-- **Webpage ingestion helper** providing both an Eleventy filter and a CLI to convert external pages to Markdown using Readability.js and Turndown【F:lib/filters.js†L1-L5】【F:lib/webpageToMarkdown.js†L1-L26】
-- **PostCSS pipeline** that compiles `src/styles/app.tailwind.css` on each build and copies static assets through to `_site/`【F:lib/eleventy/register.js†L69-L72】
-- **Accessible baseline** including skip‑link, semantic landmarks and footnote enhancements for improved keyboard navigation and readability【F:src/\_includes/layout.njk†L33-L75】【F:src/styles/app.tailwind.css†L12-L38】
-
-## Quickstart
-
-### Prerequisites
-
-- Node.js ≥20【F:package.json†L12-L13】
-- npm (bundled with Node)
-
-### Clone and Install
-
+## ⚡ Quickstart
 ```bash
 git clone https://github.com/effusion-labs/effusion-labs.git
 cd effusion-labs
 npm install
+cp .env.example .env          # OUTBOUND_MARKDOWN_ENABLED, OUTBOUND_MARKDOWN_USER, OUTBOUND_MARKDOWN_PASS, OUTBOUND_MARKDOWN_URL, OUTBOUND_MARKDOWN_PORT, OUTBOUND_MARKDOWN_API_KEY, OUTBOUND_MARKDOWN_TIMEOUT
+npm run prepare-docs          # installs ripgrep & fd if missing
+npm run dev                   # Eleventy + live reload
+npm run build                 # production output in _site/
+npm test                      # run test suite
+docker-compose up --build     # launch services
 ```
 
-### Local Development
-
-```bash
-npm run dev
+## 📂 Project Layout
+```text
+/
+├── .portainer/        # Dockerfile and nginx config for production image
+├── docs/              # cassettes, knowledge and ADRs
+├── lib/               # configuration, plugins and utilities
+├── markdown_gateway/  # web ingestion helper service
+├── scripts/           # maintenance scripts
+├── src/               # templates, assets and Markdown content
+├── test/              # legacy test harness
+├── tests/             # Node.js test suite
+├── tools/             # developer tools and API twin
 ```
 
-### Production Build
+## 🚢 Deployment
+- **GitHub Actions**: the “Build and Deploy to GHCR” workflow runs tests, builds the site and pushes images to GitHub Container Registry.
+- **Docker**: `.portainer/Dockerfile` builds a static Nginx image and `docker-compose.yml` exposes the site on port 18400.
 
-```bash
-npm run build
-```
+## 🧪 Quality Assurance
+- `npm test` runs the Node.js test suite.
+- `npm run docs:links` verifies links in this README.
+- GitHub Actions execute both checks on every push.
 
-### Run Tests
-
-```bash
-npm test
-```
-
-### Utility Scripts
-
-```bash
-npm run docs:reindex     # rebuild vendor docs index
-npm run docs:validate    # verify hashes
-```
-
-The `dev` command watches templates, Markdown and styles, recompiling Tailwind through PostCSS before each serve cycle and serving `_site/` via BrowserSync. The `build` command performs a one‑off production build. Tests are hermetic and execute without internet access.
-
-No lint or format scripts are defined.
-
-## Markdown Gateway Service
-
-### Configuration
-Copy `.env.example` to `.env` and set a secure, random `GATEWAY_API_KEY`.
-
-### Deployment
-Run `docker compose up --build -d` from the `markdown_gateway` directory.
-
-### Usage
-```bash
-curl -X POST http://localhost:49159/convert \
-     -H "Content-Type: application/json" \
-     -H "X-Api-Key: YOUR_SECRET_KEY_FROM_.ENV_FILE" \
-     -d '{"url": "https://example.com"}'
-```
-
-### Environment
-
-Clients communicate with the gateway via these variables:
-
-```
-OUTBOUND_MARKDOWN_URL=http://localhost:49159
-OUTBOUND_MARKDOWN_API_KEY=your_key
-OUTBOUND_MARKDOWN_TIMEOUT=120000 # optional, ms
-```
-
-## Configuration
-
-- **Content directories**: Markdown lives under `src/content/{sparks,concepts,projects,meta}`【F:lib/constants.js†L7-L13】
-- **Data files**: `src/_data/` holds global data such as navigation links【F:src/\_data/nav.js†L1-L11】
-- **Includes**: Nunjucks layouts and partials reside in `src/_includes/`
-- **Env vars**:
-  - `CASSETTE_DIR` – path to snapshot vault (`docs/cassettes/` by default)
-  - `API_TWIN_DIR` – path to API twin stubs (`tools/api-twin/` by default)
-
-Setting these variables allows custom storage locations for captures or twins when running tests in specialised environments. All other configuration resides in the `lib/` directory as plain JavaScript modules.
-
-## Testing
-
-`npm test` runs unit and integration specs using Node's built‑in runner with coverage via `c8`. All HTTP requests are intercepted by Undici's `MockAgent`; unmatched calls fail closed and point to a local mock. Browser‑driven capability checks live under `test/browser/` and execute separately with `npm run test:browser`.
-
-Test globs:
-
-```
-npm test            # unit + integration
-npm run test:browser
-npm run test:all    # includes browser tests
-```
-
-
-Within templates, the filter can ingest content on build:
-
-```njk
-{{ "https://example.com/article" | webpageToMarkdown }}
-```
-
-## Project Layout
-
-```
-.
-├── .eleventy.js               # Eleventy configuration entry
-├── .github/workflows/deploy.yml
-├── .portainer/                # Dockerfile and nginx.conf for deployment
-├── docs/
-│   ├── cassettes/             # Snapshot vault for recorded HTTP interactions
-│   └── knowledge/             # Decision log, sources and research snapshots
-├── lib/                       # Configuration, plugins, filters, utilities
-├── src/
-│   ├── _data/                 # Global data files
-│   ├── _includes/             # Nunjucks layouts and partials
-│   ├── assets/                # Static assets (copied through)
-│   ├── content/               # Markdown content grouped by area
-│   ├── scripts/               # Client-side JavaScript
-│   └── styles/                # Tailwind entry points
-├── test/                      # Node.js test suite
-├── tools/
-│   └── api-twin/              # Placeholder for API stubs used during offline tests
-└── webpage-to-markdown.js     # CLI for web ingestion
-```
-
-## Deployment / Release
-
-The project builds to static files in `_site/`. A GitHub Actions workflow installs dependencies, runs tests, builds the site and produces an Nginx image pushed to GitHub Container Registry. The container embeds the generated `_site/` output and a tailored `nginx.conf`. Successful pushes to `main` trigger the pipeline and a Portainer webhook redeploys the container on the target host【F:.github/workflows/deploy.yml†L1-L61】【F:.portainer/Dockerfile†L1-L24】.
-
-Local deployment can be tested with:
-
-```bash
-docker build -t effusion-labs . -f .portainer/Dockerfile
-docker run --rm -p 8080:80 effusion-labs
-```
-
-The running container serves the static site with caching headers and an SPA fallback defined in `.portainer/nginx.conf`.
-
-## Contributing
-
-1. Fork the repository and create a local clone.
+## 🤝 Contributing
+1. Fork the repository and clone your fork.
 2. Install dependencies with `npm install`.
-3. Create feature branches that keep experimental work behind flags.
-4. Update or add tests alongside code changes; record any new external captures in `docs/knowledge/` and commit snapshots under `docs/cassettes/`.
-5. Run `npm test` for fast feedback or `npm run test:all` to execute the entire suite and verify snapshots without network access.
-6. Submit a pull request describing your changes, snapshot updates and any assumptions.
+3. Create a branch and commit your changes with accompanying tests.
+4. Run `npm test` and `npm run docs:links` before opening a pull request.
 
-## License
-
-This project is licensed under the [ISC License](./LICENSE)【F:LICENSE†L1-L11】
-
-## Links
-
-- [docs/knowledge/](./docs/knowledge/) – decision history and source captures
-- [tools/api-twin/](./tools/api-twin/) – API twin stub location
+## 📄 License
+This project is licensed under the [ISC License](./LICENSE).
