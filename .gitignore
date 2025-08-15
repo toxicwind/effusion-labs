@@ -34,3 +34,4 @@ Thumbs.db
 tools/google-search/
 tools/search2serp/package-lock.json
 tmp/
+coverage/
