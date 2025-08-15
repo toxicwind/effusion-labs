@@ -1,0 +1,7 @@
+Flask
+gunicorn
+requests
+readability-lxml
+markdownify
+beautifulsoup4
+lxml

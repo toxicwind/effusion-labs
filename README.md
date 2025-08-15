@@ -87,6 +87,22 @@ The `dev` command watches templates, Markdown and styles, recompiling Tailwind t
 
 No lint or format scripts are defined.
 
+## Markdown Gateway Service
+
+### Configuration
+Copy `.env.example` to `.env` and set a secure, random `GATEWAY_API_KEY`.
+
+### Deployment
+Run `docker compose up --build -d` from the `markdown_gateway` directory.
+
+### Usage
+```bash
+curl -X POST http://localhost:49159/convert \
+     -H "Content-Type: application/json" \
+     -H "X-Api-Key: YOUR_SECRET_KEY_FROM_.ENV_FILE" \
+     -d '{"url": "https://example.com"}'
+```
+
 ## Configuration
 
 - **Content directories**: Markdown lives under `src/content/{sparks,concepts,projects,meta}`【F:lib/constants.js†L7-L13】
