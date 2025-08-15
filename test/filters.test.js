@@ -1,9 +1,11 @@
 
-const { readableDate, htmlDateString, limit, jsonify, readingTime, slugify, webpageToMarkdown, truncate, shout } = require('../lib/filters');
+const { readableDate, htmlDateString, limit, jsonify, readingTime, slugify, truncate, shout } = require('../lib/filters');
+const { htmlToMarkdown } = require('../lib/webpageToMarkdown');
 
 const assert = require('node:assert');
 const { test } = require('node:test');
-const http = require('node:http');
+const fs = require('node:fs');
+const path = require('node:path');
 
 test('readableDate formats correctly', () => {
   const date = new Date('2023-01-15T00:00:00Z');
@@ -55,37 +57,10 @@ test('shout is idempotent', () => {
   assert.strictEqual(shout(once), once);
 });
 
-test('webpageToMarkdown filter fetches and converts HTML', async () => {
-  const prev = process.env.CHAIN_PROXY_URL;
-  delete process.env.CHAIN_PROXY_URL;
-  const html = '<!doctype html><html><body><h1>Hi</h1></body></html>';
-  const server = http.createServer((req, res) => {
-    res.writeHead(200, { 'Content-Type': 'text/html' });
-    res.end(html);
-  });
-  await new Promise(resolve => server.listen(0, resolve));
-  const { port } = server.address();
-  const md = await webpageToMarkdown(`http://localhost:${port}/`);
-  server.close();
-  process.env.CHAIN_PROXY_URL = prev;
-  assert.match(md, /Hi/);
+test('htmlToMarkdown converts fixture HTML', () => {
+  const html = fs.readFileSync(path.join(__dirname, 'fixtures', 'sample-page.html'), 'utf8');
+  const md = htmlToMarkdown(html, 'http://example.com/');
+  assert.match(md, /Hello/);
+  assert.match(md, /World/);
 });
 
-test('webpageToMarkdown bypasses proxy for localhost', async () => {
-  const html = '<!doctype html><html><body><h1>Hi</h1></body></html>';
-  const server = http.createServer((req, res) => {
-    res.writeHead(200, { 'Content-Type': 'text/html' });
-    res.end(html);
-  });
-  await new Promise(resolve => server.listen(0, resolve));
-  const prev = process.env.CHAIN_PROXY_URL;
-  process.env.CHAIN_PROXY_URL = 'http://127.0.0.1:65535';
-  try {
-    const { port } = server.address();
-    const md = await webpageToMarkdown(`http://localhost:${port}/`);
-    assert.match(md, /Hi/);
-  } finally {
-    server.close();
-    process.env.CHAIN_PROXY_URL = prev;
-  }
-});

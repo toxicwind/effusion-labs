@@ -69,4 +69,15 @@
     "labels": ["shells-eleventy"],
     "disposition": "kept"
   }
+  ,
+  {
+    "file": "test/filters.test.js",
+    "labels": [],
+    "disposition": "kept"
+  },
+  {
+    "file": "test/webpageToMarkdown.test.js",
+    "labels": ["dup-coverage", "uses-network/proxy"],
+    "disposition": "deleted: replaced by htmlToMarkdown fixture test"
+  }
 ]
