@@ -3,7 +3,7 @@ import assert from 'node:assert';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { JSDOM } from 'jsdom';
-import runEleventy from './utils/run-eleventy.mjs';
+import runEleventy from './helpers/eleventy.js';
 
 test('code blocks expose copy control', () => {
   const outDir = runEleventy('code-copy');

@@ -1,22 +1,30 @@
 [
   {
     "file": "tests/archive-nav-count.spec.mjs",
-    "labels": ["shells-eleventy"],
+    "labels": [
+      "shells-eleventy"
+    ],
     "disposition": "kept"
   },
   {
     "file": "tests/build-timestamp.spec.mjs",
-    "labels": ["shells-eleventy"],
+    "labels": [
+      "shells-eleventy"
+    ],
     "disposition": "kept"
   },
   {
     "file": "tests/code-copy.spec.mjs",
-    "labels": ["shells-eleventy"],
+    "labels": [
+      "shells-eleventy"
+    ],
     "disposition": "kept"
   },
   {
     "file": "tests/collection-layout.spec.mjs",
-    "labels": ["shells-eleventy"],
+    "labels": [
+      "shells-eleventy"
+    ],
     "disposition": "kept"
   },
   {
@@ -26,32 +34,44 @@
   },
   {
     "file": "tests/feed-build-meta.spec.mjs",
-    "labels": ["shells-eleventy"],
+    "labels": [
+      "shells-eleventy"
+    ],
     "disposition": "kept"
   },
   {
     "file": "tests/header-nav-aria.spec.mjs",
-    "labels": ["shells-eleventy"],
+    "labels": [
+      "shells-eleventy"
+    ],
     "disposition": "kept"
   },
   {
     "file": "tests/homepage.spec.mjs",
-    "labels": ["shells-eleventy"],
+    "labels": [
+      "shells-eleventy"
+    ],
     "disposition": "kept"
   },
   {
     "file": "tests/markdown-anchor.spec.mjs",
-    "labels": ["shells-eleventy"],
+    "labels": [
+      "shells-eleventy"
+    ],
     "disposition": "kept"
   },
   {
     "file": "tests/monsters-hub.spec.mjs",
-    "labels": ["shells-eleventy"],
+    "labels": [
+      "shells-eleventy"
+    ],
     "disposition": "kept"
   },
   {
     "file": "tests/nav-aria.spec.mjs",
-    "labels": ["shells-eleventy"],
+    "labels": [
+      "shells-eleventy"
+    ],
     "disposition": "kept"
   },
   {
@@ -61,88 +81,158 @@
   },
   {
     "file": "tests/runner.spec.mjs",
-    "labels": ["shells-eleventy"],
+    "labels": [
+      "shells-eleventy"
+    ],
     "disposition": "kept"
   },
   {
     "file": "tests/sparks-status.spec.mjs",
-    "labels": ["shells-eleventy"],
-    "disposition": "kept"
-  }
-  ,
-  {
-    "file": "test/filters.test.js",
-    "labels": [],
+    "labels": [
+      "shells-eleventy"
+    ],
     "disposition": "kept"
   },
   {
     "file": "test/webpageToMarkdown.test.js",
-    "labels": ["dup-coverage", "uses-network/proxy"],
+    "labels": [
+      "dup-coverage",
+      "uses-network/proxy"
+    ],
     "disposition": "deleted: replaced by htmlToMarkdown fixture test"
   },
   {
     "file": "test/build.test.mjs",
-    "labels": ["shells-eleventy", "dup-coverage", "full-build-needed"],
+    "labels": [
+      "shells-eleventy",
+      "dup-coverage",
+      "full-build-needed"
+    ],
     "disposition": "deleted: general build covered elsewhere"
   },
   {
     "file": "test/downwind-removal.test.mjs",
-    "labels": ["shells-eleventy", "dup-coverage"],
+    "labels": [
+      "shells-eleventy",
+      "dup-coverage"
+    ],
     "disposition": "deleted: obsolete plugin check"
   },
   {
     "file": "test/feed-cap.test.mjs",
-    "labels": ["shells-eleventy", "dup-coverage"],
+    "labels": [
+      "shells-eleventy",
+      "dup-coverage"
+    ],
     "disposition": "deleted: assertion merged into tests/feed-build-meta.spec.mjs"
   },
   {
     "file": "test/fluid-type.test.mjs",
-    "labels": ["shells-eleventy", "dup-coverage"],
+    "labels": [
+      "shells-eleventy",
+      "dup-coverage"
+    ],
     "disposition": "deleted: CSS scale verified by source"
   },
   {
     "file": "test/hero-image-priority.test.mjs",
-    "labels": ["shells-eleventy", "dup-coverage"],
+    "labels": [
+      "shells-eleventy",
+      "dup-coverage"
+    ],
     "disposition": "deleted: hero validated in tests/homepage.spec.mjs"
   },
   {
     "file": "test/images-transform.test.mjs",
-    "labels": ["shells-eleventy", "dup-coverage", "full-build-needed"],
+    "labels": [
+      "shells-eleventy",
+      "dup-coverage",
+      "full-build-needed"
+    ],
     "disposition": "deleted: tests eleventy-img plugin"
   },
   {
     "file": "test/inventory-output.test.mjs",
-    "labels": ["shells-eleventy", "dup-coverage", "full-build-needed"],
+    "labels": [
+      "shells-eleventy",
+      "dup-coverage",
+      "full-build-needed"
+    ],
     "disposition": "deleted: image derivatives handled by plugin"
   },
   {
     "file": "test/responsive-sizes.test.mjs",
-    "labels": ["shells-eleventy", "dup-coverage"],
+    "labels": [
+      "shells-eleventy",
+      "dup-coverage"
+    ],
     "disposition": "deleted: responsive dimensions covered elsewhere"
   },
   {
     "file": "test/server-images.test.mjs",
-    "labels": ["shells-eleventy", "uses-network/proxy", "dup-coverage"],
+    "labels": [
+      "shells-eleventy",
+      "uses-network/proxy",
+      "dup-coverage"
+    ],
     "disposition": "deleted: served assets to validate MIME"
   },
   {
     "file": "test/skip-link.test.mjs",
-    "labels": ["shells-eleventy", "dup-coverage"],
+    "labels": [
+      "shells-eleventy",
+      "dup-coverage"
+    ],
     "disposition": "deleted: assertion moved to tests/homepage.spec.mjs"
   },
   {
     "file": "test/theme-toggle.test.mjs",
-    "labels": ["shells-eleventy", "dup-coverage"],
+    "labels": [
+      "shells-eleventy",
+      "dup-coverage"
+    ],
     "disposition": "deleted: exercises client script only"
   },
   {
     "file": "test/mime.test.mjs",
-    "labels": ["uses-network/proxy", "timing-fragile", "dup-coverage"],
+    "labels": [
+      "uses-network/proxy",
+      "timing-fragile",
+      "dup-coverage"
+    ],
     "disposition": "deleted: exercised Eleventy dev server"
   },
   {
-    "file": "test/web2md.cli.test.mjs",
-    "labels": ["uses-network/proxy", "dup-coverage"],
-    "disposition": "deleted: covered by htmlToMarkdown; requires outbound proxy"
+    "file": "test/browser-engine.test.mjs",
+    "labels": [],
+    "disposition": "kept"
+  },
+  {
+    "file": "test/url-builder.test.mjs",
+    "labels": [
+      "legacy"
+    ],
+    "disposition": "deleted: legacy search tool removed"
+  },
+  {
+    "file": "test/parser.test.mjs",
+    "labels": [
+      "legacy"
+    ],
+    "disposition": "deleted: legacy search tool removed"
+  },
+  {
+    "file": "test/consent.test.mjs",
+    "labels": [
+      "legacy"
+    ],
+    "disposition": "deleted: legacy search tool removed"
+  },
+  {
+    "file": "test/flareClient.test.mjs",
+    "labels": [
+      "legacy"
+    ],
+    "disposition": "deleted: superseded by markdownGateway"
   }
 ]

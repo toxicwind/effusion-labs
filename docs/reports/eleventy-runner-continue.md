@@ -3,7 +3,7 @@
 ## Context Recap
 - Added Eleventy test runner and migrated all tests to use it.
 - Replaced network-based webpageToMarkdown tests with fixture-driven htmlToMarkdown check.
-- Removed dev server MIME test and web2md CLI test; suite exits cleanly.
+- Removed dev server MIME test; suite exits cleanly.
 
 ## Outstanding Items
 - Implement environment-first build metadata resolution and integrate into templates.

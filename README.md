@@ -77,13 +77,11 @@ npm test
 ### Utility Scripts
 
 ```bash
-npm run web2md -- <URL>  # fetch a web page, output Markdown and sha256 hash
-npm run docs:archive     # capture vendor docs via web2md
 npm run docs:reindex     # rebuild vendor docs index
 npm run docs:validate    # verify hashes
 ```
 
-The `dev` command watches templates, Markdown and styles, recompiling Tailwind through PostCSS before each serve cycle and serving `_site/` via BrowserSync. The `build` command performs a one‑off production build. Tests are hermetic and execute without internet access. The `web2md` command is described in detail below.
+The `dev` command watches templates, Markdown and styles, recompiling Tailwind through PostCSS before each serve cycle and serving `_site/` via BrowserSync. The `build` command performs a one‑off production build. Tests are hermetic and execute without internet access.
 
 No lint or format scripts are defined.
 
@@ -101,6 +99,16 @@ curl -X POST http://localhost:49159/convert \
      -H "Content-Type: application/json" \
      -H "X-Api-Key: YOUR_SECRET_KEY_FROM_.ENV_FILE" \
      -d '{"url": "https://example.com"}'
+```
+
+### Environment
+
+Clients communicate with the gateway via these variables:
+
+```
+OUTBOUND_MARKDOWN_URL=http://localhost:49159
+OUTBOUND_MARKDOWN_API_KEY=your_key
+OUTBOUND_MARKDOWN_TIMEOUT=120000 # optional, ms
 ```
 
 ## Configuration
@@ -124,70 +132,8 @@ Setting these variables allows custom storage locations for captures or twins wh
 - **API twin**: when live capture is unsafe or unavailable, stub the endpoint under `tools/api-twin/` and point tests to the twin【44f46f†L1-L2】
 - **Idempotency**: live probes must be repeatable and safe; destructive flows are simulated via the twin
 
-Snapshots are deterministic: headers and bodies are stored alongside SHA256 hashes. Any attempt to mutate the snapshot store during CI causes the build to fail, ensuring reproducibility. Developers should refresh snapshots only when contract drift breaks replay, committing both the updated fixture and the rationale in the decision log. A new test validates the CLI helper, ensuring the emitted hash matches the Markdown content【F:test/web2md.cli.test.mjs†L1-L29】.
+Snapshots are deterministic: headers and bodies are stored alongside SHA256 hashes. Any attempt to mutate the snapshot store during CI causes the build to fail, ensuring reproducibility. Developers should refresh snapshots only when contract drift breaks replay, committing both the updated fixture and the rationale in the decision log.
 
-## Web Ingestion Helper
-
-`webpageToMarkdown` converts remote pages into Markdown using `@mozilla/readability` to isolate the article body and `turndown` to convert HTML into Markdown. It powers both an Eleventy filter and the `web2md` CLI:
-
-```bash
-npm run web2md -- https://example.com/article > article.md
-```
-
-The CLI prints the normalized Markdown followed by a `sha256:` line containing the content hash, enabling reproducible references and easy provenance recording【F:webpage-to-markdown.js†L1-L19】. Redirect stdout to a file to capture the article and record the hash alongside other research notes.
-
-### Outbound Proxy
-
-`web2md` and `search2serp` honor these environment variables for outbound HTTPS proxying:
-
-```
-OUTBOUND_PROXY_ENABLED=1|true|TRUE
-OUTBOUND_PROXY_URL=http://host:port
-OUTBOUND_PROXY_USER=...
-OUTBOUND_PROXY_PASS=...
-```
-
-Set `OUTBOUND_PROXY_ENABLED` to any other value to disable proxying. Credentials are optional.
-System `http_proxy`/`https_proxy` variables are ignored; specify `OUTBOUND_PROXY_URL` explicitly when enabling.
-
-### search2serp CLI
-
-Fetch Google results and emit structured JSON:
-
-```bash
-node tools/search2serp/cli.js "effusion labs"
-```
-
-Example response:
-
-```json
-{
-  "query": "effusion labs",
-  "results": [
-    {
-      "rank": 1,
-      "title": "Result One",
-      "url": "https://example.com/1",
-      "snippet": "Snippet one",
-      "type": "organic"
-    }
-    // ...
-  ]
-}
-```
-
-Proxy usage:
-
-```bash
-# direct
-OUTBOUND_PROXY_ENABLED=0 node tools/search2serp/cli.js "kittens"
-
-# via proxy with auth
-OUTBOUND_PROXY_ENABLED=true OUTBOUND_PROXY_URL=http://proxy:8080 OUTBOUND_PROXY_USER=user OUTBOUND_PROXY_PASS=pass \
-  node tools/search2serp/cli.js "kittens"
-```
-
-Troubleshooting: ensure Google consent pages are accepted automatically; repeated redirects often indicate blocked cookies. HTTP 403/429 responses typically mean rate limiting—retry with backoff. Proxy authentication failures surface as Playwright launch errors.
 
 Within templates, the filter can ingest content on build:
 

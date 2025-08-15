@@ -4,7 +4,7 @@ from urllib.parse import urljoin
 
 import requests
 from bs4 import BeautifulSoup
-from flask import Flask, Response, jsonify, request
+from flask import Flask, jsonify, request
 from markdownify import markdownify
 from readability import Document
 
@@ -58,7 +58,7 @@ def convert():
     for tag in soup.find_all(src=True):
         tag["src"] = urljoin(url, tag["src"])
     markdown = markdownify(str(soup))
-    return Response(markdown, mimetype="text/markdown; charset=utf-8")
+    return jsonify({"flareresolver": body, "markdown": markdown})
 
 
 if __name__ == "__main__":
