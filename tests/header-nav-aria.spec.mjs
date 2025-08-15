@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
-import runEleventy from './utils/run-eleventy.mjs';
+import runEleventy from './helpers/eleventy.js';
 
 // Build the site and ensure primary navigation exposes an accessible landmark label
 // This reflects the "Semantics" mode with trait emphasis on meta-as-content and legibility

@@ -3,7 +3,7 @@ import assert from 'node:assert';
 import { readFileSync, readdirSync, statSync } from 'node:fs';
 import path from 'node:path';
 import { JSDOM } from 'jsdom';
-import runEleventy from './utils/run-eleventy.mjs';
+import runEleventy from './helpers/eleventy.js';
 
 function walk(dir, files = []) {
   for (const entry of readdirSync(dir)) {

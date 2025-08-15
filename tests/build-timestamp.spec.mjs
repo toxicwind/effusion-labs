@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
-import runEleventy from './utils/run-eleventy.mjs';
+import runEleventy from './helpers/eleventy.js';
 
 // Build the site and verify the layout exposes a build timestamp.
 test('layout exposes build timestamp', () => {

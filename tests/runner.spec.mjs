@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert';
 import fs from 'node:fs';
-import runEleventy from './utils/run-eleventy.mjs';
+import runEleventy from './helpers/eleventy.js';
 
 // Acceptance: runEleventy sets ELEVENTY_ENV and creates a clean output directory
 // Property: output directory exists and is recreated for each run

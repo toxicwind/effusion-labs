@@ -1,8 +1,8 @@
-import { execSync } from 'node:child_process';
-import fs from 'node:fs';
-import path from 'node:path';
+const { execSync } = require('node:child_process');
+const fs = require('node:fs');
+const path = require('node:path');
 
-export default function runEleventy(
+function runEleventy(
   testName,
   { input = 'src', log = true, images = false } = {},
 ) {
@@ -26,3 +26,4 @@ export default function runEleventy(
   }
   return outDir;
 }
+module.exports = runEleventy;
