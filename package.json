@@ -14,7 +14,8 @@
     "build:tools": "npm install --prefix tools/google-search && npm run build --prefix tools/google-search",
     "deps:playwright": "npx playwright install chromium || true",
     "deps:system": "npx playwright install-deps || true",
-    "proxy:chain": "node tools/shared/chain-proxy.mjs"
+    "proxy:chain": "node tools/shared/chain-proxy.mjs",
+    "docs:links": "npx --yes markdown-link-check README.md --config .markdown-link-check.json && npx --yes markdown-link-check markdown_gateway/README.md --config .markdown-link-check.json"
   },
   "engines": {
     "node": ">=20"
