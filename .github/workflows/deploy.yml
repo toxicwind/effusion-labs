@@ -67,10 +67,10 @@ jobs:
       - name: Trigger effusion-labs redeploy
         run: |
           curl -f -X POST http://effusionlabs.com:9000/api/stacks/webhooks/d85d48d6-a407-4ac0-8683-a7962bfbb9d3
-
-      - name: Trigger markdown_gateway redeploy
-        run: |
-          curl -f -X POST http://effusionlabs.com:9000/api/stacks/webhooks/00000000-0000-0000-0000-000000000000
+      # Disabled for now since markdown_gateway does not have a webhook set up
+      # - name: Trigger markdown_gateway redeploy
+      #   run: |
+      #     curl -f -X POST http://effusionlabs.com:9000/api/stacks/webhooks/00000000-0000-0000-0000-000000000000
 
   browser:
     if: github.event_name == 'workflow_dispatch'
