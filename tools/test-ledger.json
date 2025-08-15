@@ -134,5 +134,15 @@
     "file": "test/theme-toggle.test.mjs",
     "labels": ["shells-eleventy", "dup-coverage"],
     "disposition": "deleted: exercises client script only"
+  },
+  {
+    "file": "test/mime.test.mjs",
+    "labels": ["uses-network/proxy", "timing-fragile", "dup-coverage"],
+    "disposition": "deleted: exercised Eleventy dev server"
+  },
+  {
+    "file": "test/web2md.cli.test.mjs",
+    "labels": ["uses-network/proxy", "dup-coverage"],
+    "disposition": "deleted: covered by htmlToMarkdown; requires outbound proxy"
   }
 ]

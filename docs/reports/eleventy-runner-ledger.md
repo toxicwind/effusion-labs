@@ -4,5 +4,6 @@
 - all existing Eleventy tests migrated to runEleventy utility.
 - tools/test-ledger.json enumerates suite coverage.
 - replaced network-based webpageToMarkdown tests with fixture-driven htmlToMarkdown test; removed duplicate test file.
+- dropped dev server MIME and web2md CLI tests; suite exits cleanly.
 
-Status: 4/4 items captured.
+Status: 5/5 items captured.
