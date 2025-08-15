@@ -3,7 +3,7 @@ import assert from 'node:assert';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { createRequire } from 'module';
-import runEleventy from './utils/run-eleventy.mjs';
+import runEleventy from './helpers/eleventy.js';
 
 const require = createRequire(import.meta.url);
 const dateToRfc822 = require('@11ty/eleventy-plugin-rss/src/dateRfc822.js');

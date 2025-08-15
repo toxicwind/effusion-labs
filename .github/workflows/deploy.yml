@@ -11,6 +11,8 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      DOCKER_BUILDKIT: 1
 
     steps:
       - name: Checkout repo
@@ -34,16 +36,25 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build and push Docker image
+      - name: Set up Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build and push effusion-labs
         env:
           IMAGE_ID: ghcr.io/${{ github.actor }}/effusion-labs:latest
         run: |
-          echo "📦 Building and pushing $IMAGE_ID"
-          docker build -t "$IMAGE_ID" -f .portainer/Dockerfile .
-          docker push "$IMAGE_ID"
-      - name: Trigger Portainer Webhook Redeployment
+          docker buildx build --cache-to type=inline --cache-from type=registry,ref=$IMAGE_ID -t "$IMAGE_ID" -f .portainer/Dockerfile . --push
+
+      - name: Build and push markdown_gateway
+        env:
+          IMAGE_ID: ghcr.io/${{ github.actor }}/markdown_gateway:latest
         run: |
-          if ! curl -X POST http://effusionlabs.com:9000/api/stacks/webhooks/d85d48d6-a407-4ac0-8683-a7962bfbb9d3; then
-            echo "Webhook trigger failed!";
-            exit 1;
-          fi
+          docker buildx build --cache-to type=inline --cache-from type=registry,ref=$IMAGE_ID -t "$IMAGE_ID" markdown_gateway --push
+
+      - name: Trigger effusion-labs redeploy
+        run: |
+          curl -f -X POST http://effusionlabs.com:9000/api/stacks/webhooks/d85d48d6-a407-4ac0-8683-a7962bfbb9d3
+
+      - name: Trigger markdown_gateway redeploy
+        run: |
+          curl -f -X POST http://effusionlabs.com:9000/api/stacks/webhooks/00000000-0000-0000-0000-000000000000

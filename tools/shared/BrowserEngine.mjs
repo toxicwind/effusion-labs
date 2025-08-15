@@ -1,9 +1,12 @@
+import { fetchMarkdown } from '../../lib/markdownGateway.js';
+
 class BrowserEngine{
-  static async create(){
-    throw new Error('BrowserEngine removed; use flareClient instead');
+  static async create(url){
+    return fetchMarkdown(url);
   }
-  static async fromState(){
-    return BrowserEngine.create();
+  static async fromState(url){
+    return BrowserEngine.create(url);
   }
 }
+
 export { BrowserEngine };
