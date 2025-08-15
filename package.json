@@ -10,6 +10,7 @@
     "dev": "npx @11ty/eleventy --serve",
     "web2md": "node webpage-to-markdown.js",
     "proxy:test": "node scripts/outbound-proxy.e2e.mjs",
+    "proxy:health": "node scripts/proxy-health.mjs",
     "docs:archive": "node tools/archive-docs.js",
     "docs:validate": "node tools/validate-docs.js",
     "docs:reindex": "node tools/build-vendor-index.js",

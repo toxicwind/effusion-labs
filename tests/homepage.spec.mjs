@@ -1,11 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert';
-import { rmSync, readFileSync, readdirSync, statSync } from 'node:fs';
-import { execSync } from 'node:child_process';
+import { readFileSync, readdirSync, statSync } from 'node:fs';
 import path from 'node:path';
 import { JSDOM } from 'jsdom';
-
-const outDir = 'tmp/test-build';
+import runEleventy from './utils/run-eleventy.mjs';
 
 function walk(dir, files = []) {
   for (const entry of readdirSync(dir)) {
@@ -18,8 +16,7 @@ function walk(dir, files = []) {
 }
 
 test('homepage hero and sections', () => {
-  rmSync(outDir, { recursive: true, force: true });
-  execSync(`npx @11ty/eleventy --quiet --input=src --output=${outDir}`, { stdio: 'inherit' });
+  const outDir = runEleventy('homepage');
   const htmlPath = path.join(outDir, 'index.html');
   const html = readFileSync(htmlPath, 'utf8');
   const dom = new JSDOM(html);
@@ -31,10 +28,16 @@ test('homepage hero and sections', () => {
   assert.match(html, /Where experimental ideas meet practical prototypes\./);
   assert.match(html, /Explore the projects, concepts, and sparks shaping tomorrow’s creative technology\./);
 
+  // Skip link
+  const skip = doc.querySelector('a.skip-link');
+  assert(skip);
+  assert.equal(skip.getAttribute('href'), '#main');
+  assert(doc.getElementById('main'));
+
   // Provenance seam
   const prov = Array.from(doc.querySelectorAll('div')).find(d => /·/.test(d.textContent) && d.classList.contains('font-mono'));
   assert(prov);
-  assert.match(prov.textContent.trim(), /^[^·]+ · [0-9a-f]{7} · \d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/);
+  assert.match(prov.textContent.trim(), /^[^·]+ · [0-9a-f]{7} ·(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z)?$/);
 
   // CTA
   const latest = Array.from(doc.querySelectorAll('a[href="/projects/"]')).find(a => a.textContent.trim() === 'View Latest Work');

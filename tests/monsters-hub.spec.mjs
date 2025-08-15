@@ -1,19 +1,11 @@
 import test from 'node:test';
 import assert from 'node:assert';
-import { execSync } from 'node:child_process';
-import { readFileSync, rmSync } from 'node:fs';
+import { readFileSync } from 'node:fs';
 import path from 'node:path';
-
-const outDir = 'tmp/monsters-build';
-
-rmSync(outDir, { recursive: true, force: true });
-
-function build() {
-  execSync('npx @11ty/eleventy --quiet --input=src --output=' + outDir, { stdio: 'inherit' });
-}
+import runEleventy from './utils/run-eleventy.mjs';
 
 test('monsters hub lists products and cross-links product and character pages', () => {
-  build();
+  const outDir = runEleventy('monsters-hub');
   const hub = readFileSync(path.join(outDir, 'archives', 'collectables', 'designer-toys', 'pop-mart', 'the-monsters', 'index.html'), 'utf8');
   assert.match(hub, /time-to-chill--plush--std--20221031/);
 
