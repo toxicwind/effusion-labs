@@ -1,0 +1,6 @@
+{
+  "ignorePatterns": [
+    {"pattern": "^https://github.com/effusion-labs/effusion-labs/actions/workflows/"},
+    {"pattern": "badge.svg"}
+  ]
+}
