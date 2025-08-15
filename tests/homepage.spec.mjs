@@ -28,6 +28,12 @@ test('homepage hero and sections', () => {
   assert.match(html, /Where experimental ideas meet practical prototypes\./);
   assert.match(html, /Explore the projects, concepts, and sparks shaping tomorrow’s creative technology\./);
 
+  // Skip link
+  const skip = doc.querySelector('a.skip-link');
+  assert(skip);
+  assert.equal(skip.getAttribute('href'), '#main');
+  assert(doc.getElementById('main'));
+
   // Provenance seam
   const prov = Array.from(doc.querySelectorAll('div')).find(d => /·/.test(d.textContent) && d.classList.contains('font-mono'));
   assert(prov);
