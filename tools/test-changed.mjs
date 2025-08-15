@@ -11,11 +11,11 @@ import { spawn } from "node:child_process";
 import { execSync } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
+import { canRunBrowser } from "./shared/probe-browser.mjs";
 
 const TEST_DIRS = ["test", "tests"];
 const TEST_RE = /\.(test|spec)\.(?:m?js|[cm]?ts)$/i; // js, mjs, cjs, ts, mts, cts
-const PW_HINT_RE = /(?:^|\s|["'])@playwright\/test(?:["'\s]|$)/; // quick sniff
-const SNIFF_BYTES = 8192; // read up to 8KB when categorizing
+const LEDGER_PATH = path.resolve("tools/test-ledger.json");
 
 function collectTests(dir, out) {
   for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
@@ -90,40 +90,30 @@ function relatedTests(changed) {
   return Array.from(set);
 }
 
-function sniffIsPlaywrightTest(file) {
-  // Read a small prefix of the file for sniffing hints to avoid full reads
-  const fd = fs.openSync(file, "r");
+function readLedger() {
   try {
-    const buf = Buffer.allocUnsafe(SNIFF_BYTES);
-    const bytes = fs.readSync(fd, buf, 0, buf.length, 0);
-    const chunk = buf.slice(0, bytes).toString("utf8");
-    return PW_HINT_RE.test(chunk);
+    return JSON.parse(fs.readFileSync(LEDGER_PATH, "utf8"));
   } catch {
-    // On read error, fallback to full read (rare)
-    try {
-      const src = fs.readFileSync(file, "utf8");
-      return PW_HINT_RE.test(src);
-    } catch {
-      return false;
-    }
-  } finally {
-    fs.closeSync(fd);
+    return {};
   }
 }
 
-function categorize(files) {
-  const pw = [];
+function inferCaps(file) {
+  const caps = [];
+  if (/\.browser\./i.test(file)) caps.push("browser");
+  return caps;
+}
+
+function categorize(files, ledger) {
+  const browser = [];
   const nodeFiles = [];
   for (const file of files) {
-    try {
-      if (sniffIsPlaywrightTest(file)) pw.push(file);
-      else nodeFiles.push(file);
-    } catch {
-      // If any issue, default to Node runner to avoid skipping tests
-      nodeFiles.push(file);
-    }
+    const entry = ledger[file] || {};
+    const caps = entry.caps || inferCaps(file);
+    if (caps.includes("browser")) browser.push(file);
+    else nodeFiles.push(file);
   }
-  return { pw, nodeFiles };
+  return { browser, nodeFiles };
 }
 
 function runNode(files) {
@@ -143,19 +133,44 @@ function runPw(files) {
 }
 
 async function run(files) {
-  // If specific files were passed, use them; otherwise, discover all tests
   const targets = files.length === 0 ? listAllTests() : files;
+  const ledger = readLedger();
+  const { browser, nodeFiles } = categorize(targets, ledger);
+  const canBrowser = await canRunBrowser();
 
-  // Split into Node runner vs Playwright
-  const { pw, nodeFiles } = categorize(targets);
-
-  // Run both in parallel for speed; aggregate exit codes
+  const parked = [];
+  let executed = 0;
   const jobs = [];
-  if (nodeFiles.length) jobs.push(runNode(nodeFiles));
-  if (pw.length) jobs.push(runPw(pw));
+
+  if (nodeFiles.length) {
+    executed += nodeFiles.length;
+    jobs.push(runNode(nodeFiles));
+  }
+
+  if (browser.length) {
+    if (canBrowser) {
+      executed += browser.length;
+      jobs.push(runPw(browser));
+    } else {
+      parked.push(...browser);
+    }
+  }
 
   const codes = jobs.length ? await Promise.all(jobs) : [0];
-  process.exit(codes.some((c) => c !== 0) ? 1 : 0);
+  const exitCode = codes.some((c) => c !== 0) ? 1 : 0;
+  printSummary(canBrowser, executed, parked);
+  process.exit(exitCode);
+}
+
+function printSummary(canBrowser, executed, parked) {
+  console.log("Browser capability:", canBrowser ? "available" : "unavailable");
+  console.log(`Executed specs: ${executed}`);
+  if (parked.length) {
+    console.log(`Parked specs: ${parked.length}`);
+    parked.forEach((f) => console.log(`- ${f}`));
+  } else {
+    console.log("Parked specs: none");
+  }
 }
 
 function expandInputs(items) {

@@ -14,6 +14,7 @@ function runEleventy(
   process.env.CI = 'true';
   process.env.COMMIT_SHA = process.env.COMMIT_SHA || 'local';
   if (images) process.env.ELEVENTY_TEST_ENABLE_IMAGES = '1';
+  else delete process.env.ELEVENTY_TEST_ENABLE_IMAGES;
 
   const env = { ...process.env };
   const stdio = log ? 'inherit' : 'pipe';
