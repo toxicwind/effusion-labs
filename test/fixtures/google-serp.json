@@ -1,7 +1,0 @@
-[
-  {"rank":1,"title":"Result One","url":"https://example.com/1","displayedUrl":"example.com","snippet":"Snippet one","type":"organic"},
-  {"rank":2,"title":"Result Two","url":"https://example.com/2","displayedUrl":"example.com","snippet":"Snippet two","type":"organic"},
-  {"rank":3,"title":"Result Three","url":"https://example.com/3","displayedUrl":"example.com","snippet":"Snippet three","type":"organic"},
-  {"rank":4,"title":"Result Four","url":"https://example.com/4","displayedUrl":"example.com","snippet":"Snippet four","type":"organic"},
-  {"rank":5,"title":"Result Five","url":"https://example.com/5","displayedUrl":"example.com","snippet":"Snippet five","type":"organic"}
-]
