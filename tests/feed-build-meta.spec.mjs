@@ -17,4 +17,7 @@ test('feed exposes build metadata', () => {
   const parsed = new Date(dateMatch[1]);
   assert.ok(!isNaN(parsed));
   assert.equal(dateMatch[1], dateToRfc822(parsed));
+
+  const items = (xml.match(/<item>/g) || []).length;
+  assert.ok(items <= 20);
 });

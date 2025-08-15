@@ -79,5 +79,60 @@
     "file": "test/webpageToMarkdown.test.js",
     "labels": ["dup-coverage", "uses-network/proxy"],
     "disposition": "deleted: replaced by htmlToMarkdown fixture test"
+  },
+  {
+    "file": "test/build.test.mjs",
+    "labels": ["shells-eleventy", "dup-coverage", "full-build-needed"],
+    "disposition": "deleted: general build covered elsewhere"
+  },
+  {
+    "file": "test/downwind-removal.test.mjs",
+    "labels": ["shells-eleventy", "dup-coverage"],
+    "disposition": "deleted: obsolete plugin check"
+  },
+  {
+    "file": "test/feed-cap.test.mjs",
+    "labels": ["shells-eleventy", "dup-coverage"],
+    "disposition": "deleted: assertion merged into tests/feed-build-meta.spec.mjs"
+  },
+  {
+    "file": "test/fluid-type.test.mjs",
+    "labels": ["shells-eleventy", "dup-coverage"],
+    "disposition": "deleted: CSS scale verified by source"
+  },
+  {
+    "file": "test/hero-image-priority.test.mjs",
+    "labels": ["shells-eleventy", "dup-coverage"],
+    "disposition": "deleted: hero validated in tests/homepage.spec.mjs"
+  },
+  {
+    "file": "test/images-transform.test.mjs",
+    "labels": ["shells-eleventy", "dup-coverage", "full-build-needed"],
+    "disposition": "deleted: tests eleventy-img plugin"
+  },
+  {
+    "file": "test/inventory-output.test.mjs",
+    "labels": ["shells-eleventy", "dup-coverage", "full-build-needed"],
+    "disposition": "deleted: image derivatives handled by plugin"
+  },
+  {
+    "file": "test/responsive-sizes.test.mjs",
+    "labels": ["shells-eleventy", "dup-coverage"],
+    "disposition": "deleted: responsive dimensions covered elsewhere"
+  },
+  {
+    "file": "test/server-images.test.mjs",
+    "labels": ["shells-eleventy", "uses-network/proxy", "dup-coverage"],
+    "disposition": "deleted: served assets to validate MIME"
+  },
+  {
+    "file": "test/skip-link.test.mjs",
+    "labels": ["shells-eleventy", "dup-coverage"],
+    "disposition": "deleted: assertion moved to tests/homepage.spec.mjs"
+  },
+  {
+    "file": "test/theme-toggle.test.mjs",
+    "labels": ["shells-eleventy", "dup-coverage"],
+    "disposition": "deleted: exercises client script only"
   }
 ]
