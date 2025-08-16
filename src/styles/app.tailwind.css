@@ -55,7 +55,8 @@
 
   .annotation-popup {
     @apply absolute -translate-x-1/2 left-1/2 top-7 z-50 max-w-sm rounded-xl p-4 text-sm leading-relaxed
-           border shadow-xl opacity-0 pointer-events-none transition-all duration-200 ease-in-out translate-y-1;
+           border shadow-xl opacity-0 pointer-events-none transition-all duration-200 ease-in-out translate-y-1
+           text-left overflow-y-auto max-h-72 block;
     background-color: hsl(var(--b1)/.95);
     backdrop-filter: blur(6px);
     border-color: hsl(var(--bc)/.12);
@@ -85,7 +86,7 @@
   }
 
   @media (max-width:640px){
-    .annotation-popup { @apply fixed inset-x-4 bottom-4 mx-auto translate-x-0 transform-none max-w-[90vw]; }
+    .annotation-popup { @apply fixed inset-x-4 bottom-4 mx-auto translate-x-0 transform-none max-w-[90vw] max-h-[70vh]; }
   }
 }
 
