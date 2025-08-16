@@ -40,6 +40,7 @@ Effusion Labs is a static digital garden built with Eleventy, Nunjucks templates
 - `@11ty/eleventy-plugin-syntaxhighlight` – adds Prism-based code highlighting.
 - `@11ty/eleventy-plugin-rss` – generates RSS feeds for collections.
 - `@quasibit/eleventy-plugin-sitemap` – emits `sitemap.xml` with a predefined hostname.
+- `@quasibit/eleventy-plugin-schema` – generates JSON-LD structured data for pages.
 - `@11ty/eleventy-img` – transforms images to AVIF, WebP and original formats.
 
 ### Tailwind Theme
