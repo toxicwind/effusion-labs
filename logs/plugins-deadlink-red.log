@@ -1,0 +1,231 @@
+
+> effusion_labs_final@1.0.0 test
+> c8 --reporter=text-summary --reporter=lcov node tools/runner.mjs
+
+[@photogabble/wikilinks] WARNING Wikilink (/archives/collectables/designer-toys/pop-mart/the-monsters/products/{{ p.data.product_id }}/) found pointing to to non-existent page in:
+	- ./src/content/sparks/vapor-linked-governance.md
+[@photogabble/wikilinks] WARNING Wikilink (/archives/collectables/designer-toys/pop-mart/the-monsters/characters/{{ c.data.slug }}/) found pointing to to non-existent page in:
+	- ./src/content/sparks/vapor-linked-governance.md
+[@photogabble/wikilinks] WARNING Wikilink ([[node-handle]]) found pointing to to non-existent page in:
+	- ./src/content/sparks/vapor-linked-governance.md
+[@photogabble/wikilinks] WARNING Wikilink ([[bracketed-handle]]) found pointing to to non-existent page in:
+	- ./src/content/sparks/vapor-linked-governance.md
+[11ty] Copied 76 Wrote 112 files in 3.18 seconds (28.4ms each, v3.1.2)
+[32m✔ archive nav exposes child counts [90m(3196.44249ms)[39m[39m
+[@photogabble/wikilinks] WARNING Wikilink (/archives/collectables/designer-toys/pop-mart/the-monsters/products/{{ p.data.product_id }}/) found pointing to to non-existent page in:
+	- ./src/content/sparks/vapor-linked-governance.md
+[@photogabble/wikilinks] WARNING Wikilink (/archives/collectables/designer-toys/pop-mart/the-monsters/characters/{{ c.data.slug }}/) found pointing to to non-existent page in:
+	- ./src/content/sparks/vapor-linked-governance.md
+[@photogabble/wikilinks] WARNING Wikilink ([[node-handle]]) found pointing to to non-existent page in:
+	- ./src/content/sparks/vapor-linked-governance.md
+[@photogabble/wikilinks] WARNING Wikilink ([[bracketed-handle]]) found pointing to to non-existent page in:
+	- ./src/content/sparks/vapor-linked-governance.md
+[11ty] Copied 76 Wrote 112 files in 3.21 seconds (28.7ms each, v3.1.2)
+[32m✔ layout exposes build timestamp [90m(3226.82051ms)[39m[39m
+[@photogabble/wikilinks] WARNING Wikilink (/archives/collectables/designer-toys/pop-mart/the-monsters/products/{{ p.data.product_id }}/) found pointing to to non-existent page in:
+	- ./src/content/sparks/vapor-linked-governance.md
+[@photogabble/wikilinks] WARNING Wikilink (/archives/collectables/designer-toys/pop-mart/the-monsters/characters/{{ c.data.slug }}/) found pointing to to non-existent page in:
+	- ./src/content/sparks/vapor-linked-governance.md
+[@photogabble/wikilinks] WARNING Wikilink ([[node-handle]]) found pointing to to non-existent page in:
+	- ./src/content/sparks/vapor-linked-governance.md
+[@photogabble/wikilinks] WARNING Wikilink ([[bracketed-handle]]) found pointing to to non-existent page in:
+	- ./src/content/sparks/vapor-linked-governance.md
+[11ty] Copied 76 Wrote 112 files in 2.78 seconds (24.8ms each, v3.1.2)
+[32m✔ code blocks expose copy control [90m(2969.934665ms)[39m[39m
+[@photogabble/wikilinks] WARNING Wikilink (/archives/collectables/designer-toys/pop-mart/the-monsters/products/{{ p.data.product_id }}/) found pointing to to non-existent page in:
+	- ./src/content/sparks/vapor-linked-governance.md
+[@photogabble/wikilinks] WARNING Wikilink (/archives/collectables/designer-toys/pop-mart/the-monsters/characters/{{ c.data.slug }}/) found pointing to to non-existent page in:
+	- ./src/content/sparks/vapor-linked-governance.md
+[@photogabble/wikilinks] WARNING Wikilink ([[node-handle]]) found pointing to to non-existent page in:
+	- ./src/content/sparks/vapor-linked-governance.md
+[@photogabble/wikilinks] WARNING Wikilink ([[bracketed-handle]]) found pointing to to non-existent page in:
+	- ./src/content/sparks/vapor-linked-governance.md
+[11ty] Copied 76 Wrote 112 files in 3.37 seconds (30.1ms each, v3.1.2)
+[32m✔ collection pages expose section metadata [90m(3407.147417ms)[39m[39m
+[32m✔ concept map JSON-LD export generates @context and @graph [90m(3.744053ms)[39m[39m
+[@photogabble/wikilinks] WARNING Wikilink (/archives/collectables/designer-toys/pop-mart/the-monsters/products/{{ p.data.product_id }}/) found pointing to to non-existent page in:
+	- ./src/content/sparks/vapor-linked-governance.md
+[@photogabble/wikilinks] WARNING Wikilink (/archives/collectables/designer-toys/pop-mart/the-monsters/characters/{{ c.data.slug }}/) found pointing to to non-existent page in:
+	- ./src/content/sparks/vapor-linked-governance.md
+[@photogabble/wikilinks] WARNING Wikilink ([[node-handle]]) found pointing to to non-existent page in:
+	- ./src/content/sparks/vapor-linked-governance.md
+[@photogabble/wikilinks] WARNING Wikilink ([[bracketed-handle]]) found pointing to to non-existent page in:
+	- ./src/content/sparks/vapor-linked-governance.md
+[11ty] Copied 76 Wrote 112 files in 3.31 seconds (29.6ms each, v3.1.2)
+[32m✔ feed exposes build metadata [90m(3325.492556ms)[39m[39m
+[@photogabble/wikilinks] WARNING Wikilink (/archives/collectables/designer-toys/pop-mart/the-monsters/products/{{ p.data.product_id }}/) found pointing to to non-existent page in:
+	- ./src/content/sparks/vapor-linked-governance.md
+[@photogabble/wikilinks] WARNING Wikilink (/archives/collectables/designer-toys/pop-mart/the-monsters/characters/{{ c.data.slug }}/) found pointing to to non-existent page in:
+	- ./src/content/sparks/vapor-linked-governance.md
+[@photogabble/wikilinks] WARNING Wikilink ([[node-handle]]) found pointing to to non-existent page in:
+	- ./src/content/sparks/vapor-linked-governance.md
+[@photogabble/wikilinks] WARNING Wikilink ([[bracketed-handle]]) found pointing to to non-existent page in:
+	- ./src/content/sparks/vapor-linked-governance.md
+[11ty] Copied 76 Wrote 112 files in 3.27 seconds (29.2ms each, v3.1.2)
+[32m✔ home page header includes primary nav landmark [90m(3283.426347ms)[39m[39m
+[@photogabble/wikilinks] WARNING Wikilink (/archives/collectables/designer-toys/pop-mart/the-monsters/products/{{ p.data.product_id }}/) found pointing to to non-existent page in:
+	- ./src/content/sparks/vapor-linked-governance.md
+[@photogabble/wikilinks] WARNING Wikilink (/archives/collectables/designer-toys/pop-mart/the-monsters/characters/{{ c.data.slug }}/) found pointing to to non-existent page in:
+	- ./src/content/sparks/vapor-linked-governance.md
+[@photogabble/wikilinks] WARNING Wikilink ([[node-handle]]) found pointing to to non-existent page in:
+	- ./src/content/sparks/vapor-linked-governance.md
+[@photogabble/wikilinks] WARNING Wikilink ([[bracketed-handle]]) found pointing to to non-existent page in:
+	- ./src/content/sparks/vapor-linked-governance.md
+[11ty] Copied 76 Wrote 112 files in 2.74 seconds (24.4ms each, v3.1.2)
+[32m✔ homepage lists latest entries per section [90m(2863.812366ms)[39m[39m
+[@photogabble/wikilinks] WARNING Wikilink (/archives/collectables/designer-toys/pop-mart/the-monsters/products/{{ p.data.product_id }}/) found pointing to to non-existent page in:
+	- ./src/content/sparks/vapor-linked-governance.md
+[@photogabble/wikilinks] WARNING Wikilink (/archives/collectables/designer-toys/pop-mart/the-monsters/characters/{{ c.data.slug }}/) found pointing to to non-existent page in:
+	- ./src/content/sparks/vapor-linked-governance.md
+[@photogabble/wikilinks] WARNING Wikilink ([[node-handle]]) found pointing to to non-existent page in:
+	- ./src/content/sparks/vapor-linked-governance.md
+[@photogabble/wikilinks] WARNING Wikilink ([[bracketed-handle]]) found pointing to to non-existent page in:
+	- ./src/content/sparks/vapor-linked-governance.md
+[11ty] Copied 76 Wrote 112 files in 2.82 seconds (25.2ms each, v3.1.2)
+[32m✔ homepage hero and sections [90m(3029.012686ms)[39m[39m
+[@photogabble/wikilinks] WARNING Wikilink (/archives/collectables/designer-toys/pop-mart/the-monsters/products/{{ p.data.product_id }}/) found pointing to to non-existent page in:
+	- ./src/content/sparks/vapor-linked-governance.md
+[@photogabble/wikilinks] WARNING Wikilink (/archives/collectables/designer-toys/pop-mart/the-monsters/characters/{{ c.data.slug }}/) found pointing to to non-existent page in:
+	- ./src/content/sparks/vapor-linked-governance.md
+[@photogabble/wikilinks] WARNING Wikilink ([[node-handle]]) found pointing to to non-existent page in:
+	- ./src/content/sparks/vapor-linked-governance.md
+[@photogabble/wikilinks] WARNING Wikilink ([[bracketed-handle]]) found pointing to to non-existent page in:
+	- ./src/content/sparks/vapor-linked-governance.md
+[11ty] Copied 76 Wrote 112 files in 6.90 seconds (61.6ms each, v3.1.2)
+[32m✔ transformed images have slugified filenames [90m(6917.976396ms)[39m[39m
+[@photogabble/wikilinks] WARNING Wikilink (/archives/collectables/designer-toys/pop-mart/the-monsters/products/{{ p.data.product_id }}/) found pointing to to non-existent page in:
+	- ./src/content/sparks/vapor-linked-governance.md
+[@photogabble/wikilinks] WARNING Wikilink (/archives/collectables/designer-toys/pop-mart/the-monsters/characters/{{ c.data.slug }}/) found pointing to to non-existent page in:
+	- ./src/content/sparks/vapor-linked-governance.md
+[@photogabble/wikilinks] WARNING Wikilink ([[node-handle]]) found pointing to to non-existent page in:
+	- ./src/content/sparks/vapor-linked-governance.md
+[@photogabble/wikilinks] WARNING Wikilink ([[bracketed-handle]]) found pointing to to non-existent page in:
+	- ./src/content/sparks/vapor-linked-governance.md
+[11ty] Copied 76 Wrote 112 files in 6.84 seconds (61.1ms each, v3.1.2)
+[32m✔ logo image transforms to avif and webp [90m(6981.331205ms)[39m[39m
+[@photogabble/wikilinks] WARNING Wikilink (/archives/collectables/designer-toys/pop-mart/the-monsters/products/{{ p.data.product_id }}/) found pointing to to non-existent page in:
+	- ./src/content/sparks/vapor-linked-governance.md
+[@photogabble/wikilinks] WARNING Wikilink (/archives/collectables/designer-toys/pop-mart/the-monsters/characters/{{ c.data.slug }}/) found pointing to to non-existent page in:
+	- ./src/content/sparks/vapor-linked-governance.md
+[@photogabble/wikilinks] WARNING Wikilink ([[node-handle]]) found pointing to to non-existent page in:
+	- ./src/content/sparks/vapor-linked-governance.md
+[@photogabble/wikilinks] WARNING Wikilink ([[bracketed-handle]]) found pointing to to non-existent page in:
+	- ./src/content/sparks/vapor-linked-governance.md
+[11ty] Copied 76 Wrote 112 files in 3.99 seconds (35.6ms each, v3.1.2)
+[32m✔ markdown headings include anchor ids [90m(4023.614866ms)[39m[39m
+[@photogabble/wikilinks] WARNING Wikilink (/archives/collectables/designer-toys/pop-mart/the-monsters/products/{{ p.data.product_id }}/) found pointing to to non-existent page in:
+	- ./src/content/sparks/vapor-linked-governance.md
+[@photogabble/wikilinks] WARNING Wikilink (/archives/collectables/designer-toys/pop-mart/the-monsters/characters/{{ c.data.slug }}/) found pointing to to non-existent page in:
+	- ./src/content/sparks/vapor-linked-governance.md
+[@photogabble/wikilinks] WARNING Wikilink ([[node-handle]]) found pointing to to non-existent page in:
+	- ./src/content/sparks/vapor-linked-governance.md
+[@photogabble/wikilinks] WARNING Wikilink ([[bracketed-handle]]) found pointing to to non-existent page in:
+	- ./src/content/sparks/vapor-linked-governance.md
+[11ty] Copied 76 Wrote 112 files in 4.56 seconds (40.7ms each, v3.1.2)
+[32m✔ monsters hub lists products and cross-links product and character pages [90m(4572.044338ms)[39m[39m
+[@photogabble/wikilinks] WARNING Wikilink (/archives/collectables/designer-toys/pop-mart/the-monsters/products/{{ p.data.product_id }}/) found pointing to to non-existent page in:
+	- ./src/content/sparks/vapor-linked-governance.md
+[@photogabble/wikilinks] WARNING Wikilink (/archives/collectables/designer-toys/pop-mart/the-monsters/characters/{{ c.data.slug }}/) found pointing to to non-existent page in:
+	- ./src/content/sparks/vapor-linked-governance.md
+[@photogabble/wikilinks] WARNING Wikilink ([[node-handle]]) found pointing to to non-existent page in:
+	- ./src/content/sparks/vapor-linked-governance.md
+[@photogabble/wikilinks] WARNING Wikilink ([[bracketed-handle]]) found pointing to to non-existent page in:
+	- ./src/content/sparks/vapor-linked-governance.md
+[11ty] Copied 76 Wrote 112 files in 3.37 seconds (30.1ms each, v3.1.2)
+[32m✔ main nav marks current page and is labelled [90m(3419.728893ms)[39m[39m
+[32m✔ navigation items are sequentially ordered [90m(1.22498ms)[39m[39m
+[@photogabble/wikilinks] WARNING Wikilink (/archives/collectables/designer-toys/pop-mart/the-monsters/products/{{ p.data.product_id }}/) found pointing to to non-existent page in:
+	- ./src/content/sparks/vapor-linked-governance.md
+[@photogabble/wikilinks] WARNING Wikilink (/archives/collectables/designer-toys/pop-mart/the-monsters/characters/{{ c.data.slug }}/) found pointing to to non-existent page in:
+	- ./src/content/sparks/vapor-linked-governance.md
+[@photogabble/wikilinks] WARNING Wikilink ([[node-handle]]) found pointing to to non-existent page in:
+	- ./src/content/sparks/vapor-linked-governance.md
+[@photogabble/wikilinks] WARNING Wikilink ([[bracketed-handle]]) found pointing to to non-existent page in:
+	- ./src/content/sparks/vapor-linked-governance.md
+[11ty] Copied 76 Wrote 112 files in 3.19 seconds (28.5ms each, v3.1.2)
+[32m✔ buildLean sets env and output directory [90m(3205.398887ms)[39m[39m
+[@photogabble/wikilinks] WARNING Wikilink (/archives/collectables/designer-toys/pop-mart/the-monsters/products/{{ p.data.product_id }}/) found pointing to to non-existent page in:
+	- ./src/content/sparks/vapor-linked-governance.md
+[@photogabble/wikilinks] WARNING Wikilink (/archives/collectables/designer-toys/pop-mart/the-monsters/characters/{{ c.data.slug }}/) found pointing to to non-existent page in:
+	- ./src/content/sparks/vapor-linked-governance.md
+[@photogabble/wikilinks] WARNING Wikilink ([[node-handle]]) found pointing to to non-existent page in:
+	- ./src/content/sparks/vapor-linked-governance.md
+[@photogabble/wikilinks] WARNING Wikilink ([[bracketed-handle]]) found pointing to to non-existent page in:
+	- ./src/content/sparks/vapor-linked-governance.md
+[11ty] Copied 76 Wrote 112 files in 3.20 seconds (28.6ms each, v3.1.2)
+[32m✔ spark listings reveal status text [90m(3218.206706ms)[39m[39m
+[32m✔ docs:links reports no broken links [90m(1131.444171ms)[39m[39m
+[32m✔ package-lock.json defines lockfileVersion [90m(5.733567ms)[39m[39m
+[31m✖ interlinker disables dead link report [90m(2.181333ms)[39m[39m
+[32m✔ plugin list structure [90m(0.308342ms)[39m[39m
+[31m✖ interlinker options contract [90m(1.773041ms)[39m[39m
+[32m✔ devDependencies omit @vscode/ripgrep [90m(1.138631ms)[39m[39m
+[32m✔ prepare-docs avoids ripgrep install [90m(0.163356ms)[39m[39m
+[32m✔ time to chill includes size with height in cm [90m(1.220022ms)[39m[39m
+[32m✔ time to chill height is positive [90m(0.146575ms)[39m[39m
+[32m✔ GitHub workflows use latest action versions [90m(1.638622ms)[39m[39m
+[34mℹ tests 27[39m
+[34mℹ suites 0[39m
+[34mℹ pass 25[39m
+[34mℹ fail 2[39m
+[34mℹ cancelled 0[39m
+[34mℹ skipped 0[39m
+[34mℹ todo 0[39m
+[34mℹ duration_ms 28593.033913[39m
+
+[31m✖ failing tests:[39m
+
+test at test/unit/plugins-deadlink.test.mjs:6:7
+[31m✖ interlinker disables dead link report [90m(2.181333ms)[39m[39m
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + undefined
+  - 'none'
+  
+      at TestContext.<anonymous> (file:///workspace/effusion-labs/test/unit/plugins-deadlink.test.mjs:9:10)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1047:25)
+      at Test.start (node:internal/test_runner/test:944:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:296:17)
+      at async file:///workspace/effusion-labs/test/unit/plugins-deadlink.test.mjs:6:1 {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: 'none',
+    operator: 'strictEqual'
+  }
+
+test at test/unit/plugins-deadlink.test.mjs:23:7
+[31m✖ interlinker options contract [90m(1.773041ms)[39m[39m
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    {
+  +   deadLinkReport: 'none',
+  -   deadLinkReport: undefined,
+      defaultLayout: 'layouts/embed.njk'
+    }
+  
+      at TestContext.<anonymous> (file:///workspace/effusion-labs/test/unit/plugins-deadlink.test.mjs:25:10)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1047:25)
+      at Test.start (node:internal/test_runner/test:944:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:296:17)
+      at run (node:internal/test_runner/harness:307:12)
+      at test (node:internal/test_runner/harness:316:12)
+      at file:///workspace/effusion-labs/test/unit/plugins-deadlink.test.mjs:23:7 {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: { defaultLayout: 'layouts/embed.njk', deadLinkReport: 'none' },
+    expected: { defaultLayout: 'layouts/embed.njk', deadLinkReport: undefined },
+    operator: 'deepStrictEqual'
+  }
+Executed 22 tests
+
+=============================== Coverage summary ===============================
+Statements   : 84.69% ( 1134/1339 )
+Branches     : 79.65% ( 184/231 )
+Functions    : 76.19% ( 64/84 )
+Lines        : 84.69% ( 1134/1339 )
+================================================================================
