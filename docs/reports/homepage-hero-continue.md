@@ -1,14 +1,13 @@
 # Continuation – Homepage Hero
 
 ## Context Recap
-Homepage hero rebuilt with value proposition, dual CTAs, and a three-tile bento. Legacy logo and provenance line removed.
+Homepage hero extended with unified Work feed filters and animated lab seal flourish.
 
 ## Outstanding Items
-1. Integrate work feed filters into homepage.
-2. Add animated lab seal flourish.
+(none)
 
 ## Execution Strategy
-Implement filter toolbar and badge animation with prefers-reduced-motion safeguard.
+No further actions.
 
 ## Trigger Command
-NODE_OPTIONS=--import=./test/setup/http.mjs node --test test/integration/homepage.spec.mjs
+NODE_OPTIONS=--import=./test/setup/http.mjs node --test test/integration/homepage.spec.mjs test/integration/homepage-latest.spec.mjs

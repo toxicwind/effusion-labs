@@ -1,9 +1,10 @@
 {% macro feedEntry(item) %}
-<li>
-  <a href="{{ item.url }}" class="block rounded-md border border-white/20 bg-white/5 p-4 hover:bg-white/10">
-    <h3 class="font-heading text-lg text-gray-100">{{ item.data.title }}</h3>
+<li data-type="{{ item.type }}">
+  <a href="{{ item.url }}" class="card">
+    <span class="chip">{{ item.type | capitalize }}</span>
+    <h3>{{ item.data.title }}</h3>
     {% if item.data.description %}
-    <p class="mt-1 text-sm text-gray-300">{{ item.data.description | truncate(140, true, '…') }}</p>
+    <p>{{ item.data.description | truncate(140, true, '…') }}</p>
     {% endif %}
   </a>
 </li>

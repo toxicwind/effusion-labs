@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert';
-import { readFileSync, readdirSync, statSync } from 'node:fs';
+import { readFileSync, readdirSync, statSync, existsSync } from 'node:fs';
 import path from 'node:path';
 import { JSDOM } from 'jsdom';
 import { buildLean } from '../helpers/eleventy-env.mjs';
@@ -15,7 +15,7 @@ function walk(dir, files = []) {
   return files;
 }
 
-test('homepage hero and sections', async () => {
+test('homepage hero and work filters', async () => {
   const outDir = await buildLean('homepage');
   const htmlPath = path.join(outDir, 'index.html');
   const html = readFileSync(htmlPath, 'utf8');
@@ -43,23 +43,33 @@ test('homepage hero and sections', async () => {
   assert.equal(skip.getAttribute('href'), '#main');
   assert(doc.getElementById('main'));
 
-  // Section checks
-  const headers = Array.from(doc.querySelectorAll('main h2')).map(h => h.textContent.trim());
-  ['Projects','Concepts','Sparks','Meta'].forEach(name => assert(headers.includes(name)));
-
-  ['Projects','Concepts','Sparks','Meta'].forEach(name => {
-    const h2 = Array.from(doc.querySelectorAll('main h2')).find(h => h.textContent.trim() === name);
-    const section = h2.closest('section');
-    const list = section.querySelector('ul');
-    const items = list.querySelectorAll('li');
-    assert(items.length <= 3);
-    const cls = list.getAttribute('class') || '';
-    assert(!/(?:grid|columns-|col-)/.test(cls));
-    items.forEach(li => {
-      assert.strictEqual(li.querySelectorAll('time').length, 0);
-      assert.strictEqual(li.querySelectorAll('.tag').length, 0);
-    });
+  // Work section with filters
+  const workHeader = Array.from(doc.querySelectorAll('main h2')).find(h => h.textContent.trim() === 'Work');
+  assert(workHeader);
+  const filterButtons = Array.from(doc.querySelectorAll('[data-filter]'));
+  assert.equal(filterButtons.length, 5);
+  assert.deepStrictEqual(filterButtons.map(b => b.dataset.filter), ['all','project','concept','spark','meta']);
+  const list = doc.querySelector('#work-list');
+  assert(list);
+  const items = Array.from(list.querySelectorAll('li'));
+  assert(items.length <= 9 && items.length >= 6);
+  // Property: each item tagged with a valid type and matching chip
+  const valid = ['project','concept','spark','meta'];
+  items.forEach(li => {
+    assert(valid.includes(li.dataset.type));
+    const chip = li.querySelector('.chip');
+    assert(chip);
+    assert.equal(chip.textContent.trim().toLowerCase(), li.dataset.type);
   });
+
+  // Contract: frontend script present
+  const scriptPath = path.join(outDir, 'assets/js/work-filters.js');
+  assert(existsSync(scriptPath));
+  const scriptContent = readFileSync(scriptPath, 'utf8');
+  assert.match(scriptContent, /data-filter/);
+
+  // Lab seal flourish
+  assert(doc.querySelector('.lab-seal'));
 
   // Open Questions absence
   assert(!/Open Questions/i.test(html));

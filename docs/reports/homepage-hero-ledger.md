@@ -1,13 +1,12 @@
-# homepage-hero Ledger (1/1)
+# homepage-hero Ledger (2/2)
 
 ## Criteria & Proofs
-- Failing check before fix (`docs/knowledge/homepage-hero-red.log`, sha256: 2f330543551302674f221894a70c014ff799684e6b86ad29cedd4536750bfccc).
-- Passing check after implementing hero (`docs/knowledge/homepage-hero-green.log`, sha256: e5124c282fc34026d68150d01efd7d6cce60ee5fa0519895fa5b8cbcad815451).
+- Failing check before fix (`docs/knowledge/homepage-hero-red.log`, sha256: 355ca2527fa59f5b8a95afac05afb1814781657b11917fbd428ba1d8f7f2363a).
+- Passing check after implementing filters and lab seal (`docs/knowledge/homepage-hero-green.log`, sha256: 6c742c45ef15ab45e41246804e258340105a70cfb47951cfc2e7f06f8416dc76).
 
 ## Delta Queue
-1. Integrate work feed filters into homepage.
-2. Add animated lab seal flourish.
+(none)
 
 ## Rollback
-- Last safe SHA: 6706e83
-- `git reset --hard 6706e83`
+- Last safe SHA: 0b8c188
+- `git reset --hard 0b8c188`
