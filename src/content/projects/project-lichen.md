@@ -5,6 +5,7 @@ date: 2025-08-02
 status: draft
 tags: [knowledge-graph, adaptive-systems, prototype]
 featured: true
+permalink: /work/drop/
 ---
 
 Project Lichen explores how slow-growing knowledge can be modeled like a living substrate. Inspired by lichen's symbiotic structure, the prototype binds disparate notes into an adaptive graph that thickens where attention accumulates.
