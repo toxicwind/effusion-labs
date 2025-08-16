@@ -1,7 +1,7 @@
 # Continuation – Homepage Hero
 
 ## Context Recap
-Homepage hero extended with unified Work feed filters and animated lab seal flourish.
+Homepage hero now includes branded logo, restored concept map call-to-action and refactored lab seal.
 
 ## Outstanding Items
 (none)

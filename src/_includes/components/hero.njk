@@ -1,6 +1,7 @@
 {% from "components/hero-tile.njk" import heroTile %}
 <header class="hero bg-gradient-to-b from-ink to-electric text-paper">
-  <div class="container mx-auto max-w-screen-xl px-6 py-24 text-center space-y-6">
+  <div class="container mx-auto max-w-screen-2xl px-6 py-32 text-center space-y-6">
+    <img src="{{ branding.logoSrc }}" alt="{{ branding.logoAlt }}" width="{{ branding.logoWidth }}" height="{{ branding.logoHeight }}" class="mx-auto h-16 w-16" />
     <p class="eyebrow font-mono text-sm">Effusion Labs</p>
     <h1 class="font-heading font-semibold text-4xl md:text-5xl">Experimental R&D you can actually use.</h1>
     <p class="lede font-body text-lg">Prototypes, systems, and notes from the lab.</p>
@@ -13,8 +14,6 @@
       {{ heroTile('Concept', 'Block Ledger', 'Auditable knowledge blocks across artifacts.', '/work/block-ledger') }}
       {{ heroTile('Spark', 'Raw Socket Report', 'Unfiltered notes from a midnight server check.', '/work/raw-socket-report') }}
     </div>
-    <div class="mt-8 flex justify-center">
-      <span class="lab-seal"></span>
-    </div>
+    <span class="lab-seal mt-8 block mx-auto"></span>
   </div>
 </header>
