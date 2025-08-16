@@ -36,6 +36,28 @@ test('homepage hero and work filters', async () => {
   assert(bento);
   assert.equal(bento.querySelectorAll('a').length, 3);
   assert(!/· unknown ·/.test(html));
+  // Logo
+  const logo = doc.querySelector('img.hero-logo');
+  assert(logo);
+  assert.equal(logo.getAttribute('src'), '/assets/static/logo.png');
+  assert(!logo.hasAttribute('width'));
+  assert(!logo.hasAttribute('height'));
+  assert.match(logo.getAttribute('class') || '', /w-28/);
+  assert.equal(logo.getAttribute('sizes'), branding.logoSizes);
+  assert.equal(logo.getAttribute('loading'), 'eager');
+  assert.equal(logo.getAttribute('fetchpriority'), 'high');
+
+  // Map CTA
+  const mapHeading = Array.from(doc.querySelectorAll('h2')).find(h => /Interactive Concept Map/i.test(h.textContent));
+  assert(mapHeading);
+  const mapSection = mapHeading.closest('section');
+  assert(mapSection);
+  const mapLink = Array.from(mapSection.querySelectorAll('a')).find(a => /Launch the Map/i.test(a.textContent));
+  assert(mapLink);
+  assert.equal(mapLink.getAttribute('href'), '/map/');
+  // Property: exactly one link within the map section
+  assert.equal(Array.from(mapSection.querySelectorAll('a[href="/map/"]')).length, 1);
+
 
   // Map CTA
   const mapHeading = Array.from(doc.querySelectorAll('h2')).find(h => /Interactive Concept Map/i.test(h.textContent));
