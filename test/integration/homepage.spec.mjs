@@ -73,6 +73,25 @@ test('homepage hero and work filters', async () => {
     assert.equal(chip.textContent.trim().toLowerCase(), li.dataset.type);
   });
 
+  // Acceptance: work list uses grid layout
+  assert(list.className.includes('grid'));
+
+  // Property: each item exposes published date
+  items.forEach(li => {
+    const time = li.querySelector('time');
+    assert(time);
+    assert(time.getAttribute('datetime'));
+  });
+
+  // Contract: card affords hover/focus lift
+  items.forEach(li => {
+    const card = li.querySelector('a.aesthetic-row');
+    assert(card);
+    const cls = card.getAttribute('class');
+    assert(cls.includes('hover:-translate-y-1'));
+    assert(cls.includes('focus:-translate-y-1'));
+  });
+
   // Contract: frontend script present
   const scriptPath = path.join(outDir, 'assets/js/work-filters.js');
   assert(existsSync(scriptPath));
