@@ -10,7 +10,14 @@ from readability import Document
 
 app = Flask(__name__)
 API_KEY = os.environ.get("GATEWAY_API_KEY")
-SOLVER_URL = "http://solver:8191/v1"
+DEFAULT_SOLVER_URL = "http://solver:8191/v1"
+
+
+def get_solver_url() -> str:
+    return os.environ.get("SOLVER_URL", DEFAULT_SOLVER_URL)
+
+
+SOLVER_URL = get_solver_url()
 
 
 def require_api_key(func):

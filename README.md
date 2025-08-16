@@ -54,6 +54,7 @@ Effusion Labs is a static digital garden built with Eleventy, Nunjucks templates
 
 ### Services
 - `effusion-labs` container exposed on port `18400:80` via `docker-compose.yml`.
+- `markdown_gateway` proxies HTML to Markdown via FlareSolverr; override the default solver address with `SOLVER_URL`.
 
 ## ⚡ Quickstart
 ```bash
