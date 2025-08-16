@@ -1,10 +1,12 @@
-module.exports = (data = {}) => {
-  const collections = data.collections || {};
-  const pick = (arr = []) => arr.slice(0, 3);
-  return {
-    projects: pick(collections.projects),
-    concepts: pick(collections.concepts),
-    sparks: pick(collections.sparks),
-    meta: pick(collections.meta),
-  };
+function pick(collection, n = 3) {
+  return (collection || []).slice(0, n);
+}
+
+module.exports = {
+  eleventyComputed: {
+    projects: data => pick(data.collections.projects),
+    concepts: data => pick(data.collections.concepts),
+    sparks: data => pick(data.collections.sparks),
+    meta: data => pick(data.collections.meta)
+  }
 };
