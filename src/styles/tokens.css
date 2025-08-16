@@ -1,20 +1,20 @@
 :root,
 html[data-theme="dark"] {
-  --color-bg: 0 0 0;
-  --color-surface: 26 26 26;
-  --color-text: 240 240 240;
+  --color-bg: 18 18 18;
+  --color-surface: 35 35 35;
+  --color-text: 235 235 235;
   --color-primary: 10 132 255;
-  --color-border: 51 51 51;
-  --color-code-bg: 30 30 30;
-  --color-code-text: 240 240 240;
+  --color-border: 60 60 60;
+  --color-code-bg: 40 40 40;
+  --color-code-text: 235 235 235;
 }
 
 html[data-theme="light"] {
-  --color-bg: 255 255 255;
-  --color-surface: 240 240 240;
-  --color-text: 26 26 26;
+  --color-bg: 245 245 245;
+  --color-surface: 230 230 230;
+  --color-text: 30 30 30;
   --color-primary: 10 132 255;
-  --color-border: 204 204 204;
-  --color-code-bg: 245 245 245;
-  --color-code-text: 26 26 26;
+  --color-border: 200 200 200;
+  --color-code-bg: 235 235 235;
+  --color-code-text: 30 30 30;
 }

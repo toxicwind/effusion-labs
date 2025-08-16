@@ -6,16 +6,18 @@ Effusion Labs ships with a default dark theme and an optional light mode. Theme 
 
 ```css
 html[data-theme="dark"] {
-  --color-bg: 0 0 0;
-  --color-surface: 26 26 26;
-  --color-text: 240 240 240;
+  --color-bg: 18 18 18;
+  --color-surface: 35 35 35;
+  --color-text: 235 235 235;
 }
 html[data-theme="light"] {
-  --color-bg: 255 255 255;
-  --color-surface: 240 240 240;
-  --color-text: 26 26 26;
+  --color-bg: 245 245 245;
+  --color-surface: 230 230 230;
+  --color-text: 30 30 30;
 }
 ```
+
+Headings use the Merriweather typeface while body copy defaults to Inter for improved readability.
 
 Utilities like `bg-background`, `bg-surface` and `text-text` resolve to these variables so the same classes work across themes.
 
