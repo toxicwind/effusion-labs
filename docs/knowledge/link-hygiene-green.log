@@ -1,0 +1,22 @@
+TAP version 13
+# Subtest: removes templated anchor links
+ok 1 - removes templated anchor links
+  ---
+  duration_ms: 1.731461
+  type: 'test'
+  ...
+# Subtest: removes templated wikilinks
+ok 2 - removes templated wikilinks
+  ---
+  duration_ms: 4.782807
+  type: 'test'
+  ...
+1..2
+# tests 2
+# suites 0
+# pass 2
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 185.824591
