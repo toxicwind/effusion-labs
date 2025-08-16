@@ -8,7 +8,8 @@ import branding from '../../src/_data/branding.js';
 
 test('logo image transforms to avif and webp', withImages(async () => {
   const outDir = await buildLean('logo-image');
-  const imageDir = path.join(outDir, 'assets', 'images');
+  const imageDir = path.join('_site', 'assets', 'images');
+  rmSync(imageDir, { recursive: true, force: true });
   const html = readFileSync(path.join(outDir, 'index.html'), 'utf8');
   const dom = new JSDOM(html);
   const picture = dom.window.document.querySelector('picture');

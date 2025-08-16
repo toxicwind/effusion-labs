@@ -1,16 +1,83 @@
-<section class="relative flex flex-col items-center justify-center py-24 text-center text-paper bg-gradient-to-b from-ink to-electric cursor-crosshair">
-  <img
-    class="hero-logo mb-6"
-    src="{{ branding.logoSrc }}"
-    alt="{{ branding.logoAlt }}"
-    width="{{ branding.logoWidth }}"
-    height="{{ branding.logoHeight }}"
-    loading="eager"
-    fetchpriority="high"
-  />
-  <h1 class="font-heading font-black text-[96px] md:text-[128px]">EFFUSION LABS</h1>
-  <p class="font-body text-lg">Where experimental ideas meet practical prototypes.</p>
-  <p class="font-body text-lg">Explore the projects, concepts, and sparks shaping tomorrow’s creative technology.</p>
-  <a href="/projects/" class="mt-6 inline-block rounded-full bg-electric px-8 py-4 font-heading font-bold text-ink transition hover:bg-lime focus:outline-none">View Latest Work</a>
-  <div class="mt-8 w-full border-t border-paper/20 pt-2 font-mono text-xs">{{ build.branch }} · {{ build.hash }} · {{ build.builtAtIso }}</div>
-</section>
+{# components/hero.njk #}
+{% from "components/hero-tile.njk" import heroTile %}
+
+<header class="hero relative mx-auto w-full">
+  <div class="container mx-auto max-w-screen-2xl px-6 py-28 text-center">
+
+    {# logo — brand sentinel #}
+    <img
+      class="hero-logo mx-auto mb-6 w-28 md:w-40"
+      src="{{ branding.logoSrc }}"
+      alt="{{ branding.logoAlt }}"
+      sizes="{{ branding.logoSizes }}"
+      loading="eager"
+      fetchpriority="high"
+    />
+
+    {# eyebrow #}
+    {% if eyebrow %}
+      <p class="eyebrow font-mono text-xs uppercase tracking-[0.18em] opacity-80">
+        {{ eyebrow }}
+      </p>
+    {% endif %}
+
+    {# single, authoritative H1 with fluid size #}
+    <h1 class="font-heading font-black leading-[0.95] tracking-tight
+               text-[clamp(2.75rem,6vw,6.5rem)]">
+      {{ title }}
+    </h1>
+
+    {# lede + optional sublede #}
+    {% if lede %}
+      <p class="lede mx-auto mt-4 max-w-3xl font-body text-base md:text-lg opacity-90">
+        {{ lede }}
+      </p>
+    {% endif %}
+    {% if sublede %}
+      <p class="mx-auto mt-1 max-w-3xl font-body text-base md:text-lg opacity-80">
+        {{ sublede }}
+      </p>
+    {% endif %}
+
+    {# CTAs #}
+    {% if ctas and ctas.length %}
+      <div class="cta-row mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row">
+        {% for c in ctas %}
+          {% set isPrimary = (c.kind or 'primary') == 'primary' %}
+          <a href="{{ c.href }}"
+             class="{% if isPrimary %}btn btn-primary{% else %}btn btn-ghost{% endif %} px-7 py-3 font-heading font-bold">
+             {{ c.label }}
+          </a>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    {# feature tiles (bento) #}
+    {% if tiles and tiles.length %}
+      <div class="bento mt-12 grid gap-4 sm:grid-cols-3">
+        {% for t in tiles %}
+          {{ heroTile(t.k, t.h, t.s, t.url, t.featured or false) }}
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    {# build meta #}
+    <div class="mt-10 border-t border-current/20 pt-2 font-mono text-[11px] opacity-70">
+      {{ build.branch }} · {{ build.hash }} · {{ build.builtAtIso }}
+    </div>
+  </div>
+
+  {# MSCHF mode — optional decals & micro-chaos #}
+  {% if (variant or '') == 'mschf' %}
+    <div class="pointer-events-none absolute inset-x-0 top-[10%] flex justify-center gap-2">
+      <span class="inline-block rotate-[-2deg] rounded px-2 py-1 font-mono text-[11px]
+                   ring-1 ring-current shadow-[4px_4px_0_0_currentColor]">
+        LAB DROP
+      </span>
+      <span class="inline-block rotate-[1.5deg] rounded bg-current px-2 py-1 font-mono text-[11px]
+                   text-[color:var(--paper,#fff)]">
+        DO NOT TRUST
+      </span>
+    </div>
+  {% endif %}
+</header>
