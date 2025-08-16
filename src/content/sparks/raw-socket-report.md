@@ -8,6 +8,7 @@ tags:
   - rough-notes
 spark_type: log
 description: "Unfiltered notes from a midnight server check."
+permalink: /work/raw-socket-report/
 ---
 
 This log fragment intentionally retains its rough edges.
