@@ -1,10 +1,24 @@
 #!/usr/bin/env bash
 # Repo-local node shim: inject keepalive when running tests.
 set -euo pipefail
-case "${*:-}" in
-  *"tools/runner.mjs"*|*" --test "*)
-    export NODE_OPTIONS="${NODE_OPTIONS:-} --import=./test/setup/llm-keepalive.mjs"
-  ;;
-esac
-REAL_NODE="$(command -v -a node | awk 'NR==2{print;exit}')"
-exec "${REAL_NODE:-/usr/bin/node}" "$@"
+
+if [[ "${LLM_HIJACK_DISABLE:-}" != "1" ]]; then
+  case "${*:-}" in
+    *"tools/runner.mjs"*|*" --test "*)
+      extras="--import=./test/setup/http.mjs --import=./test/setup/llm-keepalive.mjs"
+      export NODE_OPTIONS="${NODE_OPTIONS:-} ${extras}"
+    ;;
+  esac
+fi
+
+shim_dir="$(cd "$(dirname "$0")" && pwd)"
+IFS=':' read -r -a path_parts <<< "$PATH"
+real=""
+for d in "${path_parts[@]}"; do
+  [[ "$d" == "$shim_dir" ]] && continue
+  if [[ -x "$d/node" ]]; then
+    real="$d/node"
+    break
+  fi
+done
+exec "${real:-/usr/bin/node}" "$@"

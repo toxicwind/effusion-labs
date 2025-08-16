@@ -24,6 +24,8 @@ This repository operates in an **internal prototype / R&D** mode. Prefer solutio
 - **Experimental Expansion:** Adding new public Node.js/npm libraries to expand capabilities is encouraged. Prefer **additive** changes over rewrites unless a rewrite is required for a core acceptance criterion.
 - **Web Ingestion:** When `OUTBOUND_MARKDOWN_ENABLED` is truthy (`1|true|yes`, case-insensitive), use the repo’s helper tool for capture/normalization and follow the system prompt’s **NETWORK I/O** and **PROVENANCE, LEDGER, CONTINUATION** rules.
 
+Tests must run through the default npm scripts or repo `bin` shims; avoid `npm test > file && tail`. The first `SIGINT` is logged and ignored, the second exits with code `130`. Tune heartbeat and timeout with `LLM_HEARTBEAT_SECS` and `LLM_MAX_MINS`; set `LLM_HIJACK_DISABLE=1` to bypass temporarily.
+
 ---
 
 ## 1.1) npm Package Discovery & Integration (repo rail)
