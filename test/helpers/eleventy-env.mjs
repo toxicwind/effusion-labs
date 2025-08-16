@@ -1,25 +1,25 @@
-import { execSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
+import Eleventy from '@11ty/eleventy';
 
-export function buildEleventy(testName, { input = 'src', images = false, log = false } = {}) {
+export async function buildLean(testName, { input = 'src' } = {}) {
   const outDir = path.join('tmp', testName);
+  const cacheDir = path.join('.cache', testName);
+
   fs.rmSync(outDir, { recursive: true, force: true });
+  fs.rmSync(cacheDir, { recursive: true, force: true });
   fs.mkdirSync(outDir, { recursive: true });
 
-  const env = {
-    ...process.env,
-    ELEVENTY_ENV: 'test',
-    CI: 'true',
-    COMMIT_SHA: process.env.COMMIT_SHA || 'local',
-  };
-  if (images) env.ELEVENTY_TEST_ENABLE_IMAGES = '1';
-  else delete env.ELEVENTY_TEST_ENABLE_IMAGES;
+  process.env.ELEVENTY_ENV = 'test';
+  process.env.CI = 'true';
+  process.env.COMMIT_SHA = process.env.COMMIT_SHA || 'local';
+  process.env.TZ = 'UTC';
+  process.env.ELEVENTY_SEED = '1';
+  process.env.ELEVENTY_CACHE_DIR = cacheDir;
+  process.env.ELEVENTY_TEST_OUTPUT = outDir;
 
-  execSync(`npx @11ty/eleventy --input=${input} --output=${outDir}`, {
-    stdio: log ? 'inherit' : 'pipe',
-    env,
-  });
+  const elev = new Eleventy(input, outDir, { quietMode: true });
+  await elev.write();
   return outDir;
 }
 

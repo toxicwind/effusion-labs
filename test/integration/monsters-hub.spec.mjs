@@ -2,10 +2,10 @@ import test from 'node:test';
 import assert from 'node:assert';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
-import runEleventy from './helpers/eleventy.js';
+import { buildLean } from '../helpers/eleventy-env.mjs';
 
-test('monsters hub lists products and cross-links product and character pages', () => {
-  const outDir = runEleventy('monsters-hub');
+test('monsters hub lists products and cross-links product and character pages', async () => {
+  const outDir = await buildLean('monsters-hub');
   const hub = readFileSync(path.join(outDir, 'archives', 'collectables', 'designer-toys', 'pop-mart', 'the-monsters', 'index.html'), 'utf8');
   assert.match(hub, /time-to-chill--plush--std--20221031/);
 

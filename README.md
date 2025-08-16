@@ -30,7 +30,7 @@ Effusion Labs is a static digital garden built with Eleventy, Nunjucks templates
 - `npm run deps:playwright` – install the Chromium browser for Playwright.
 - `npm run deps:system` – install system dependencies for Playwright.
 - `npm run proxy:chain` – run the proxy chain helper.
-- `npm run prepare-docs` – ensure `rg` and `fd` are installed for repository search.
+- `npm run prepare-docs` – ensure `fd` is installed for repository search; `rg` must be installed separately.
 - `npm run docs:links` – check this README for broken links.
 
 ### Eleventy Plugins
@@ -59,7 +59,7 @@ git clone https://github.com/effusion-labs/effusion-labs.git
 cd effusion-labs
 npm install
 cp .env.example .env          # OUTBOUND_MARKDOWN_ENABLED, OUTBOUND_MARKDOWN_USER, OUTBOUND_MARKDOWN_PASS, OUTBOUND_MARKDOWN_URL, OUTBOUND_MARKDOWN_PORT, OUTBOUND_MARKDOWN_API_KEY, OUTBOUND_MARKDOWN_TIMEOUT
-npm run prepare-docs          # installs ripgrep & fd if missing
+npm run prepare-docs          # installs fd if missing
 npm run dev                   # Eleventy + live reload
 npm run build                 # production output in _site/
 npm test                      # run test suite
