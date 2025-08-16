@@ -4,7 +4,6 @@ import { readFileSync, readdirSync, statSync } from 'node:fs';
 import path from 'node:path';
 import { JSDOM } from 'jsdom';
 import { buildLean } from '../helpers/eleventy-env.mjs';
-import branding from '../../src/_data/branding.js';
 
 function walk(dir, files = []) {
   for (const entry of readdirSync(dir)) {
@@ -25,32 +24,24 @@ test('homepage hero and sections', async () => {
 
   // Hero
   const h1 = doc.querySelector('h1');
-  assert.equal(h1.textContent.trim(), 'EFFUSION LABS');
-  assert.match(html, /Where experimental ideas meet practical prototypes\./);
-  assert.match(html, /Explore the projects, concepts, and sparks shaping tomorrow’s creative technology\./);
-
-  const logo = doc.querySelector('img.hero-logo');
-  assert(logo);
-  assert.equal(logo.getAttribute('src'), '/assets/static/logo.png');
-  assert.equal(logo.getAttribute('width'), String(branding.logoWidth));
-  assert.equal(logo.getAttribute('height'), String(branding.logoHeight));
-  assert.equal(logo.getAttribute('loading'), 'eager');
-  assert.equal(logo.getAttribute('fetchpriority'), 'high');
+  assert.equal(h1.textContent.trim(), 'Experimental R&D you can actually use.');
+  assert.match(html, /Prototypes, systems, and notes from the lab\./);
+  const ctaLatest = Array.from(doc.querySelectorAll('a')).find(a => a.textContent.trim() === 'See the latest drop');
+  assert(ctaLatest);
+  assert.equal(ctaLatest.getAttribute('href'), '/work/latest');
+  const ctaExplore = Array.from(doc.querySelectorAll('a')).find(a => a.textContent.trim() === 'Explore the lab');
+  assert(ctaExplore);
+  assert.equal(ctaExplore.getAttribute('href'), '/work');
+  const bento = doc.querySelector('.bento');
+  assert(bento);
+  assert.equal(bento.querySelectorAll('a').length, 3);
+  assert(!/· unknown ·/.test(html));
 
   // Skip link
   const skip = doc.querySelector('a.skip-link');
   assert(skip);
   assert.equal(skip.getAttribute('href'), '#main');
   assert(doc.getElementById('main'));
-
-  // Provenance seam
-  const prov = Array.from(doc.querySelectorAll('div')).find(d => /·/.test(d.textContent) && d.classList.contains('font-mono'));
-  assert(prov);
-  assert.match(prov.textContent.trim(), /^[^·]+ · [0-9a-f]{7} ·(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z)?$/);
-
-  // CTA
-  const latest = Array.from(doc.querySelectorAll('a[href="/projects/"]')).find(a => a.textContent.trim() === 'View Latest Work');
-  assert(latest);
 
   // Section checks
   const headers = Array.from(doc.querySelectorAll('main h2')).map(h => h.textContent.trim());

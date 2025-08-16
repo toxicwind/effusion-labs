@@ -1,5 +1,7 @@
 @layer components {
   .tile { @apply bg-black/20 hover:bg-black/30; }
+  .chip { @apply inline-block mb-2 rounded-full border border-white/20 px-2 py-0.5 text-xs; }
+  .tile-primary { @apply bg-electric/10 hover:bg-electric/20; }
 }
 
 @media (prefers-reduced-motion: reduce) {

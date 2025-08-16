@@ -1,16 +1,17 @@
-<section class="relative flex flex-col items-center justify-center py-24 text-center text-paper bg-gradient-to-b from-ink to-electric cursor-crosshair">
-  <img
-    class="hero-logo mb-6"
-    src="{{ branding.logoSrc }}"
-    alt="{{ branding.logoAlt }}"
-    width="{{ branding.logoWidth }}"
-    height="{{ branding.logoHeight }}"
-    loading="eager"
-    fetchpriority="high"
-  />
-  <h1 class="font-heading font-black text-[96px] md:text-[128px]">EFFUSION LABS</h1>
-  <p class="font-body text-lg">Where experimental ideas meet practical prototypes.</p>
-  <p class="font-body text-lg">Explore the projects, concepts, and sparks shaping tomorrow’s creative technology.</p>
-  <a href="/projects/" class="mt-6 inline-block rounded-full bg-electric px-8 py-4 font-heading font-bold text-ink transition hover:bg-lime focus:outline-none">View Latest Work</a>
-  <div class="mt-8 w-full border-t border-paper/20 pt-2 font-mono text-xs">{{ build.branch }} · {{ build.hash }} · {{ build.builtAtIso }}</div>
-</section>
+{% from "components/hero-tile.njk" import heroTile %}
+<header class="hero bg-gradient-to-b from-ink to-electric text-paper">
+  <div class="container mx-auto max-w-screen-xl px-6 py-24 text-center space-y-6">
+    <p class="eyebrow font-mono text-sm">Effusion Labs</p>
+    <h1 class="font-heading font-semibold text-4xl md:text-5xl">Experimental R&D you can actually use.</h1>
+    <p class="lede font-body text-lg">Prototypes, systems, and notes from the lab.</p>
+    <div class="cta-row flex flex-col items-center justify-center gap-4 sm:flex-row">
+      <a class="btn btn-primary" href="/work/latest">See the latest drop</a>
+      <a class="btn btn-ghost" href="/work">Explore the lab</a>
+    </div>
+    <div class="bento mt-12 grid gap-4 sm:grid-cols-3">
+      {{ heroTile('Drop', 'Project Lichen: Adaptive Knowledge Graphs', 'Live schema, auto-generated maps, human-in-the-loop.', '/work/drop', true) }}
+      {{ heroTile('Concept', 'Block Ledger', 'Auditable knowledge blocks across artifacts.', '/work/block-ledger') }}
+      {{ heroTile('Spark', 'Raw Socket Report', 'Unfiltered notes from a midnight server check.', '/work/raw-socket-report') }}
+    </div>
+  </div>
+</header>

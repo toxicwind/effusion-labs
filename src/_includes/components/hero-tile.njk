@@ -1,0 +1,7 @@
+{% macro heroTile(type, title, description, href, primary=false) %}
+<a href="{{ href }}" class="tile {% if primary %}tile-primary {% endif %}rounded-lg border border-white/10 p-6 text-left transition hover:-translate-y-0.5 hover:shadow focus:outline-none focus:ring">
+  <span class="chip">{{ type }}</span>
+  <h3 class="mt-2 font-heading text-lg">{{ title }}</h3>
+  <p class="text-sm text-gray-200">{{ description }}</p>
+</a>
+{% endmacro %}
