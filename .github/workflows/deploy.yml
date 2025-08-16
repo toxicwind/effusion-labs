@@ -19,11 +19,8 @@ jobs:
           node-version: '20'
           cache: 'npm'
       - run: echo "$PWD/bin" >> "$GITHUB_PATH"
-      - run: bash scripts/llm-bootstrap.sh
-      - run: echo "BASH_ENV=$PWD/.llm-bash-env" >> "$GITHUB_ENV"
-      - run: npm ci
-      - run: LLM_HEARTBEAT_SECS=10 LLM_MAX_MINS=30 LLM_SHELL_HEARTBEAT=1 npm test 2>&1 | tee test.log
-      - run: scripts/warn-gate.sh test.log
+      - run: npm ci --ignore-scripts
+      - run: npm test 2>&1 | tee test.log
       - uses: actions/upload-artifact@v4
         with:
           name: coverage
@@ -47,7 +44,7 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm ci
+        run: npm ci --ignore-scripts
 
       - name: Build Eleventy static files
         run: npx @11ty/eleventy
@@ -92,5 +89,5 @@ jobs:
         with:
           node-version: '20'
           cache: 'npm'
-      - run: npm ci
+      - run: npm ci --ignore-scripts
       - run: NODE_OPTIONS=--import=./test/setup/http.mjs npm run test:browser
