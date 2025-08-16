@@ -1,3 +1,13 @@
+:root {
+  --step--2: clamp(0.79rem, calc(0.75rem + 0.17vw), 0.94rem);
+  --step--1: clamp(0.89rem, calc(0.84rem + 0.17vw), 1.06rem);
+  --step-0: clamp(1rem, calc(0.94rem + 0.17vw), 1.2rem);
+  --step-1: clamp(1.13rem, calc(1.06rem + 0.27vw), 1.44rem);
+  --step-2: clamp(1.27rem, calc(1.19rem + 0.35vw), 1.73rem);
+  --step-3: clamp(1.42rem, calc(1.33rem + 0.43vw), 2.07rem);
+  --step-4: clamp(1.6rem, calc(1.48rem + 0.52vw), 2.49rem);
+}
+
 :root,
 html[data-theme="dark"] {
   --color-bg: 18 18 18;

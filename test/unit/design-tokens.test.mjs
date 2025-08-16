@@ -39,3 +39,10 @@ test('tailwind exposes readable fonts', () => {
   assert.equal(tailwindConfig.theme.extend.fontFamily.body[0], "'Inter'");
   assert.equal(tailwindConfig.theme.extend.fontFamily.heading[0], "'Merriweather'");
 });
+
+test('includes fluid type scale tokens', () => {
+  const required = ['--step--2', '--step--1', '--step-0', '--step-1', '--step-2', '--step-3', '--step-4'];
+  for (const token of required) {
+    assert.ok(tokens.includes(token), `missing ${token}`);
+  }
+});
