@@ -17,7 +17,7 @@
     "deps:playwright": "npx playwright install chromium || true",
     "deps:system": "npx playwright install-deps || true",
     "proxy:chain": "node tools/shared/chain-proxy.mjs",
-    "prepare-docs": "npx rg --version >/dev/null 2>&1 || npm install --save-dev @vscode/ripgrep; npx fd --version >/dev/null 2>&1 || npm install --save-dev fd-find || true",
+    "prepare-docs": "npm exec fd --version >/dev/null 2>&1 || npm install --save-dev fd-find || true",
     "docs:links": "markdown-link-check -c link-check.config.json README.md"
   },
   "engines": {
@@ -47,7 +47,6 @@
     "@quasibit/eleventy-plugin-sitemap": "^2.2.0",
     "@tailwindcss/postcss": "^4.1.11",
     "@tailwindcss/typography": "^0.5.16",
-    "@vscode/ripgrep": "^1.15.14",
     "ajv": "^8.17.1",
     "ajv-formats": "^3.0.1",
     "c8": "10.1.3",

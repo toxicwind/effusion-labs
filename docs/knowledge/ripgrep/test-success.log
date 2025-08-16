@@ -1,0 +1,22 @@
+
+> effusion_labs_final@1.0.0 test
+> c8 --reporter=text-summary --reporter=lcov node tools/runner.mjs
+
+[32m✔ devDependencies omit @vscode/ripgrep [90m(1.018439ms)[39m[39m
+[32m✔ prepare-docs avoids ripgrep install [90m(0.148982ms)[39m[39m
+[34mℹ tests 2[39m
+[34mℹ suites 0[39m
+[34mℹ pass 2[39m
+[34mℹ fail 0[39m
+[34mℹ cancelled 0[39m
+[34mℹ skipped 0[39m
+[34mℹ todo 0[39m
+[34mℹ duration_ms 265.23742[39m
+Executed 1 tests
+
+=============================== Coverage summary ===============================
+Statements   : 84.69% ( 83/98 )
+Branches     : 68.42% ( 13/19 )
+Functions    : 100% ( 5/5 )
+Lines        : 84.69% ( 83/98 )
+================================================================================
