@@ -1,5 +1,5 @@
 # Context Recap
-Templated link warnings filtered and placeholder wikilinks removed, producing clean builds.
+Templated link warnings filtered with dedicated utility and test content excluded, producing clean builds.
 
 # Outstanding Items
 1. Add broader pattern ignore support.
