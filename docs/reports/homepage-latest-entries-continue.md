@@ -1,7 +1,7 @@
 # Continuation: homepage-latest-entries
 
 ## Context Recap
-Homepage now displays latest entries per section.
+Homepage now uses a `takeLatest` helper to sort each section by date before limiting.
 
 ## Outstanding Items
 1. Resolve failing browser tests.
