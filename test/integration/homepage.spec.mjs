@@ -32,8 +32,10 @@ test('homepage hero and sections', async () => {
   const logo = doc.querySelector('img.hero-logo');
   assert(logo);
   assert.equal(logo.getAttribute('src'), '/assets/static/logo.png');
-  assert.equal(logo.getAttribute('width'), String(branding.logoWidth));
-  assert.equal(logo.getAttribute('height'), String(branding.logoHeight));
+  assert(!logo.hasAttribute('width'));
+  assert(!logo.hasAttribute('height'));
+  assert.match(logo.getAttribute('class') || '', /w-28/);
+  assert.equal(logo.getAttribute('sizes'), branding.logoSizes);
   assert.equal(logo.getAttribute('loading'), 'eager');
   assert.equal(logo.getAttribute('fetchpriority'), 'high');
 
