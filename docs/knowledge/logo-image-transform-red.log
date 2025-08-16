@@ -1,0 +1,49 @@
+TAP version 13
+# [11ty] Problem writing Eleventy templates:
+# [11ty] 1. Having trouble writing to "./tmp/logo-image/index.html" from "./src/index.njk" (via EleventyTemplateError)
+# [11ty] 2. Transform `@11ty/eleventy/html-transformer` encountered an error when transforming ./src/index.njk. (via EleventyTransformError)
+# [11ty] 3. ENOENT: no such file or directory, stat 'src/assets/logo.png'
+# [11ty] 
+# [11ty] Original error stack trace: Error: ENOENT: no such file or directory, stat 'src/assets/logo.png'
+# [11ty]     at Object.statSync (node:fs:1739:25)
+# [11ty]     at Image.getInMemoryCacheKey (/workspace/effusion-labs/node_modules/@11ty/eleventy-img/src/image.js:140:32)
+# [11ty]     at Image.create (/workspace/effusion-labs/node_modules/@11ty/eleventy-img/src/image.js:872:19)
+# [11ty]     at createImage (/workspace/effusion-labs/node_modules/@11ty/eleventy-img/img.js:84:19)
+# [11ty]     at queueImage (/workspace/effusion-labs/node_modules/@11ty/eleventy-img/img.js:104:13)
+# [11ty]     at imageAttributesToPosthtmlNode (/workspace/effusion-labs/node_modules/@11ty/eleventy-img/src/image-attrs-to-posthtml-node.js:91:24)
+# [11ty]     at transformTag (/workspace/effusion-labs/node_modules/@11ty/eleventy-img/src/transform-plugin.js:109:10)
+# [11ty]     at /workspace/effusion-labs/node_modules/@11ty/eleventy-img/src/transform-plugin.js:187:25
+# [11ty]     at /workspace/effusion-labs/node_modules/posthtml/lib/api.js:91:45
+# [11ty]     at traverse (/workspace/effusion-labs/node_modules/posthtml/lib/api.js:105:26)
+# [11ty] Copied 8 Wrote 43 files in 1.71 seconds (39.7ms each, v3.1.2)
+# Subtest: logo image transforms to avif and webp
+not ok 1 - logo image transforms to avif and webp
+  ---
+  duration_ms: 1710.392933
+  type: 'test'
+  location: '/workspace/effusion-labs/test/integration/logo-image.spec.mjs:8:1'
+  failureType: 'testCodeFailure'
+  error: 'Having trouble writing to "./tmp/logo-image/index.html" from "./src/index.njk"'
+  code: 'ERR_TEST_FAILURE'
+  name: 'EleventyTemplateError'
+  stack: |-
+    file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateWriter.js:396:8
+    process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    async Promise.all (index 13)
+    async Promise.all (index 1)
+    async Eleventy.executeBuild (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/Eleventy.js:1438:19)
+    async buildLean (file:///workspace/effusion-labs/test/helpers/eleventy-env.mjs:22:3)
+    async file:///workspace/effusion-labs/test/integration/logo-image.spec.mjs:9:18
+    async TestContext.<anonymous> (file:///workspace/effusion-labs/test/helpers/eleventy-env.mjs:30:14)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 0
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2692.079908
