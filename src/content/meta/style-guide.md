@@ -120,10 +120,10 @@ Documents must end with suggested continuations (`## ⌬ Suggested Continuations
 Internal cross-referencing follows a stable, structured handle format to ensure recursive navigation and affordance reuse. All links to other garden nodes must adopt the following pattern:
 
 ```markdown
-- [[node-handle]]: short description of the linked document
+- node-handle: short description of the linked document
 ```
 
-This syntax preserves aesthetic uniformity and enables automated indexing via handle parsing. The `[[bracketed-handle]]` identifies the internal node, while a prefixed `⇢` symbol marks it as an internal reference. Links that leave the site automatically receive a `↗` prefix to indicate external navigation.
+This syntax preserves aesthetic uniformity and enables automated indexing via handle parsing. The `bracketed-handle` identifies the internal node, while a prefixed `⇢` symbol marks it as an internal reference. Links that leave the site automatically receive a `↗` prefix to indicate external navigation.
 
 > **Example**:
 >
