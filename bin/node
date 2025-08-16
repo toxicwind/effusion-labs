@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# Repo-local node shim: inject keepalive when running tests.
+set -euo pipefail
+case "${*:-}" in
+  *"tools/runner.mjs"*|*" --test "*)
+    export NODE_OPTIONS="${NODE_OPTIONS:-} --import=./test/setup/llm-keepalive.mjs"
+  ;;
+esac
+REAL_NODE="$(command -v -a node | awk 'NR==2{print;exit}')"
+exec "${REAL_NODE:-/usr/bin/node}" "$@"

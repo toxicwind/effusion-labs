@@ -18,6 +18,7 @@ jobs:
         with:
           node-version: '20'
           cache: 'npm'
+      - run: echo "$PWD/bin" >> "$GITHUB_PATH"
       - run: npm ci
       - run: |
           NODE_OPTIONS=--import=./test/setup/http.mjs npm test 2>&1 | tee test.log
