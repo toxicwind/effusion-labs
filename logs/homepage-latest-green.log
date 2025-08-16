@@ -1,0 +1,17 @@
+TAP version 13
+[11ty] Copied 76 Wrote 112 files in 1.62 seconds (14.4ms each, v3.1.2)
+# Subtest: homepage lists latest entries per section
+ok 1 - homepage lists latest entries per section
+  ---
+  duration_ms: 1709.899761
+  type: 'test'
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1715.60584
