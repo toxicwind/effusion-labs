@@ -19,8 +19,8 @@ jobs:
           node-version: '20'
           cache: 'npm'
       - run: echo "$PWD/bin" >> "$GITHUB_PATH"
-      - run: npm ci --ignore-scripts
-      - run: npm test 2>&1 | tee test.log
+      - run: npm ci
+      - run: npm test
       - uses: actions/upload-artifact@v4
         with:
           name: coverage
