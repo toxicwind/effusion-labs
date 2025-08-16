@@ -1,10 +1,15 @@
 # Theming
 
-Effusion Labs ships with a default dark theme and an optional light mode. Theme colors are driven by CSS custom properties declared in `src/styles/tokens.css` and exposed to Tailwind as design tokens.
+Effusion Labs ships with a default dark theme and an optional light mode. Theme colors and typography are driven by CSS custom properties declared in `src/styles/tokens.css` and exposed to Tailwind as design tokens.
 
 ## Tokens
 
 ```css
+:root {
+  --step-0: clamp(1rem, calc(0.94rem + 0.17vw), 1.2rem);
+  --step-1: clamp(1.13rem, calc(1.06rem + 0.27vw), 1.44rem);
+  /* ... */
+}
 html[data-theme="dark"] {
   --color-bg: 18 18 18;
   --color-surface: 35 35 35;
@@ -27,4 +32,4 @@ The header exposes a keyboard-accessible button that switches between dark and l
 
 ## Extending
 
-Add new variables in `tokens.css` and reference them from `tailwind.config.cjs` to create additional color roles.
+Add new variables in `tokens.css` and reference them from `tailwind.config.cjs` to create additional color roles or extend the type scale.
