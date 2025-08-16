@@ -7,8 +7,11 @@
 @import "./home.css";
 
 @layer base {
-  h1 { @apply font-heading text-[clamp(2rem,4vw+1rem,3rem)]; }
-  h2 { @apply font-heading text-[clamp(1.5rem,3vw+0.75rem,2.25rem)]; }
+  body { @apply font-body text-[var(--step-0)] leading-[1.5]; }
+  h1 { @apply font-heading text-[var(--step-4)] mb-8; }
+  h2 { @apply font-heading text-[var(--step-3)] mb-6; }
+  h3 { @apply font-heading text-[var(--step-2)] mb-4; }
+  p, ul, ol, blockquote { @apply mb-4; }
 
   .heading-anchor { @apply mr-2 no-underline text-gray-400; }
 
@@ -221,7 +224,7 @@
 
 /* ——— Link affordances (unchanged names) ——— */
 @layer components {
-  .interlink::before{ content:"↗ "; margin-right:.15rem; color:currentColor; font-size:.9em; }
+  .interlink::before{ content:"⇢ "; margin-right:.15rem; color:currentColor; font-size:.9em; }
   .external-link{ @apply underline transition-colors; color: hsl(var(--p)); }
   .external-link:hover{ color: hsl(var(--pf)); }
 }

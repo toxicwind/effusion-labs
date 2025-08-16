@@ -5,15 +5,12 @@ import path from 'node:path';
 import { JSDOM } from 'jsdom';
 import { buildLean } from '../helpers/eleventy-env.mjs';
 
-test('homepage lists latest entries per section', async () => {
+test('homepage work list mixes types', async () => {
   const outDir = await buildLean('homepage-latest');
   const html = readFileSync(path.join(outDir, 'index.html'), 'utf8');
   const doc = new JSDOM(html).window.document;
-  const sections = ['Projects', 'Concepts', 'Sparks', 'Meta'];
-  sections.forEach(name => {
-    const h2 = Array.from(doc.querySelectorAll('main h2')).find(h => h.textContent.trim() === name);
-    const list = h2.closest('section').querySelector('ul');
-    const items = list.querySelectorAll('li');
-    assert(items.length >= 1 && items.length <= 3);
-  });
+  const items = Array.from(doc.querySelectorAll('#work-list > li'));
+  assert(items.length >= 6 && items.length <= 9);
+  const types = new Set(items.map(li => li.dataset.type));
+  ['project','concept','spark','meta'].forEach(t => assert(types.has(t)));
 });

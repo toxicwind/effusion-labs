@@ -6,6 +6,7 @@ status: draft
 tags: [concept, block]
 certainty: exploratory
 importance: 1
+permalink: /work/block-ledger/
 ---
 
 # Blocks as Units
