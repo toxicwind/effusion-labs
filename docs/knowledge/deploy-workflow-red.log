@@ -1,0 +1,132 @@
+TAP version 13
+# Subtest: deploy workflow does not trigger on pull_request
+not ok 1 - deploy workflow does not trigger on pull_request
+  ---
+  duration_ms: 1.542883
+  type: 'test'
+  location: '/workspace/effusion-labs/test/unit/deploy-workflow.test.mjs:7:1'
+  failureType: 'testCodeFailure'
+  error: 'pull_request trigger should be absent'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  actual: |-
+    name: Build and Deploy to GHCR
+    
+    on:
+      push:
+        branches: [main]
+      pull_request:
+      workflow_dispatch:
+    
+    permissions:
+      contents: read
+      packages: write  # ← Enables write access for GHCR
+    
+    jobs:
+      tests:
+        runs-on: ubuntu-latest
+        steps:
+          - uses: actions/checkout@v4
+          - uses: actions/setup-node@v4
+            with:
+              node-version: '20'
+              cache: 'npm'
+          - run: npm ci
+          - run: |
+              NODE_OPTIONS=--import=./test/setup/http.mjs npm test 2>&1 | tee test.log
+          - run: scripts/warn-gate.sh test.log
+          - uses: actions/upload-artifact@v4
+            with:
+              name: coverage
+              path: coverage/lcov.info
+    
+      build:
+        if: github.event_name == 'push'
+        needs: tests
+        runs-on: ubuntu-latest
+        env:
+          DOCKER_BUILDKIT: 1
+    
+        steps:
+          - name: Checkout repo
+            uses: actions/checkout@v4
+    
+          - name: Setup Node.js
+            uses: actions/setup-node@v4
+            with:
+              node-version: '20'
+              cache: 'npm'
+    
+          - name: Install dependencies
+            run: npm ci
+    
+          - name: Build Eleventy static files
+            run: npx @11ty/eleventy
+    
+          - name: Log in to GitHub Container Registry
+            uses: docker/login-action@v3
+            with:
+              registry: ghcr.io
+              username: ${{ github.actor }}
+              password: ${{ secrets.GITHUB_TOKEN }}
+    
+          - name: Set up Buildx
+            uses: docker/setup-buildx-action@v3
+    
+          - name: Build and push effusion-labs
+            env:
+              IMAGE_ID: ghcr.io/${{ github.actor }}/effusion-labs:latest
+            run: |
+              docker buildx build --cache-to type=inline --cache-from type=registry,ref=$IMAGE_ID -t "$IMAGE_ID" -f .portainer/Dockerfile . --push
+    
+          - name: Build and push markdown_gateway
+            env:
+              IMAGE_ID: ghcr.io/${{ github.actor }}/markdown_gateway:latest
+            run: |
+              docker buildx build --cache-to type=inline --cache-from type=registry,ref=$IMAGE_ID -t "$IMAGE_ID" markdown_gateway --push
+    
+          - name: Trigger effusion-labs redeploy
+            run: |
+              curl -f -X POST http://effusionlabs.com:9000/api/stacks/webhooks/d85d48d6-a407-4ac0-8683-a7962bfbb9d3
+          # Disabled for now since markdown_gateway does not have a webhook set up
+          # - name: Trigger markdown_gateway redeploy
+          #   run: |
+          #     curl -f -X POST http://effusionlabs.com:9000/api/stacks/webhooks/00000000-0000-0000-0000-000000000000
+    
+      browser-checks:
+        if: github.event_name == 'workflow_dispatch'
+        runs-on: ubuntu-latest
+        container: mcr.microsoft.com/playwright:v1.45.2-jammy
+        steps:
+          - uses: actions/checkout@v4
+          - uses: actions/setup-node@v4
+            with:
+              node-version: '20'
+              cache: 'npm'
+          - run: npm ci
+          - run: NODE_OPTIONS=--import=./test/setup/http.mjs npm run test:browser
+    
+  operator: 'doesNotMatch'
+  stack: |-
+    TestContext.<anonymous> (file:///workspace/effusion-labs/test/unit/deploy-workflow.test.mjs:8:10)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.start (node:internal/test_runner/test:944:17)
+    startSubtestAfterBootstrap (node:internal/test_runner/harness:296:17)
+  ...
+# Subtest: build job runs only on push events
+ok 2 - build job runs only on push events
+  ---
+  duration_ms: 0.335595
+  type: 'test'
+  ...
+1..2
+# tests 2
+# suites 0
+# pass 1
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 131.98628

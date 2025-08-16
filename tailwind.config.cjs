@@ -19,10 +19,9 @@ module.exports = {
         alarm: "#FF2E2E"
       },
       fontFamily: {
-        heading: ["'Bricolage Grotesque Variable'", "sans-serif"],
-        body:    ["'Space Grotesk Variable'", "sans-serif"],
-        mono:    ["'JetBrains Mono'", "monospace"],
-        spectral:["'Spectral'", "serif"]
+        heading: ["'Merriweather'", "serif"],
+        body: ["'Inter'", "sans-serif"],
+        mono: ["'Roboto Mono'", "monospace"]
       }
     }
   },

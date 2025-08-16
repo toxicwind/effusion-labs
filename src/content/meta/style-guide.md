@@ -124,7 +124,6 @@ Internal cross-referencing follows a stable, structured handle format to ensure 
 ```
 
 This syntax preserves aesthetic uniformity and enables automated indexing via handle parsing. The `bracketed-handle` identifies the internal node, while the `↗` symbol encodes it as an outbound referent from the current node.
-
 > **Example**:
 >
 > * \\[\[core-concept]]: definition of Effusion Labs’ epistemic architecture and collaborative system intent.

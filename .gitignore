@@ -35,3 +35,4 @@ tools/google-search/
 tools/search2serp/package-lock.json
 tmp/
 coverage/
+.llm-bash-env

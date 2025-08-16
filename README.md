@@ -18,6 +18,8 @@
 Effusion Labs is a static digital garden built with Eleventy, Nunjucks templates and Tailwind CSS. Markdown content in `src/content` feeds Eleventy's collections to generate a fully static site. Node.js 20 powers the build pipeline, and the resulting `_site/` directory can be served directly or packaged into a lightweight Nginx container. GitHub Actions drive tests and deployments to GitHub Container Registry.
 
 ## ✨ Key Features
+- Home page presents a multi-column Work feed with filter toolbar, interactive concept map CTA, and animated lab seal flourish.
+- Dedicated `/work` section aggregates projects, concepts, and sparks with category filters and deep links.
 ### npm Scripts
 - `npm run dev` – start Eleventy with live reload.
 - `npm run build` – compile the production site to `_site/`.
@@ -34,11 +36,12 @@ Effusion Labs is a static digital garden built with Eleventy, Nunjucks templates
 - `npm run docs:links` – check this README for broken links.
 
 ### Eleventy Plugins
-- `@photogabble/eleventy-plugin-interlinker` – renders internal references as annotated links.
+- `@photogabble/eleventy-plugin-interlinker` – renders internal references as annotated links; configured to ignore templated hrefs.
 - `@11ty/eleventy-navigation` – builds navigation structures from front matter.
 - `@11ty/eleventy-plugin-syntaxhighlight` – adds Prism-based code highlighting.
 - `@11ty/eleventy-plugin-rss` – generates RSS feeds for collections.
 - `@quasibit/eleventy-plugin-sitemap` – emits `sitemap.xml` with a predefined hostname.
+- `@quasibit/eleventy-plugin-schema` – generates JSON-LD structured data for pages.
 - `@11ty/eleventy-img` – transforms images to AVIF, WebP and original formats.
 
 ### Tailwind Theme
@@ -52,6 +55,7 @@ Effusion Labs is a static digital garden built with Eleventy, Nunjucks templates
 
 ### Services
 - `effusion-labs` container exposed on port `18400:80` via `docker-compose.yml`.
+- `markdown_gateway` proxies HTML to Markdown via FlareSolverr; override the default solver address with `SOLVER_URL`.
 
 ## ⚡ Quickstart
 ```bash
@@ -85,7 +89,7 @@ docker-compose up --build     # launch services
 - **Docker**: `.portainer/Dockerfile` builds a static Nginx image and `docker-compose.yml` exposes the site on port 18400.
 
 ## 🧪 Quality Assurance
-- `npm test` runs the Node.js test suite.
+  - `npm test` runs the Node.js test suite.
 - `npm run docs:links` verifies links in this README.
 - GitHub Actions execute both checks on every push.
 

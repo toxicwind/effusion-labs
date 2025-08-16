@@ -4,9 +4,11 @@
   "description": "This is a digital studio and knowledge base for Effusion Labs, built with Eleventy and the powerful `@photogabble/eleventy-plugin-interlinker`.",
   "main": "index.js",
   "scripts": {
+    "prepare": "bash scripts/llm-bootstrap.sh || true",
     "test": "c8 --reporter=text-summary --reporter=lcov node tools/runner.mjs",
     "test:all": "c8 --reporter=text-summary --reporter=lcov node tools/runner.mjs --all",
-    "test:browser": "NODE_OPTIONS=--import=./test/setup/http.mjs node --test \"test/browser/**/*.test.mjs\" --test-reporter=spec",
+    "test:guard": "bash scripts/test-with-guardrails.sh",
+    "test:browser": "node --test \"test/browser/**/*.test.mjs\" --test-reporter=spec",
     "coverage:report": "c8 report --reporter=text-summary --reporter=lcov",
     "build": "npx @11ty/eleventy",
     "dev": "npx @11ty/eleventy --serve",
@@ -45,6 +47,7 @@
     "@11ty/eleventy-img": "^6.0.4",
     "@11ty/eleventy-plugin-syntaxhighlight": "^5.0.1",
     "@playwright/test": "^1.54.2",
+    "@quasibit/eleventy-plugin-schema": "1.11.1",
     "@quasibit/eleventy-plugin-sitemap": "^2.2.0",
     "@tailwindcss/postcss": "^4.1.11",
     "@tailwindcss/typography": "^0.5.16",
@@ -62,7 +65,6 @@
     "prism-themes": "^1.9.0",
     "prismjs": "^1.30.0",
     "proxy-chain": "^2.5.0",
-    "puppeteer-extra-plugin-stealth": "^2.11.2",
     "slugify": "1.6.6",
     "tailwindcss": "^4.1.11"
   }

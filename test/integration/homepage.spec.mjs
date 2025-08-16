@@ -4,7 +4,6 @@ import { readFileSync, readdirSync, statSync, existsSync } from 'node:fs';
 import path from 'node:path';
 import { JSDOM } from 'jsdom';
 import { buildLean } from '../helpers/eleventy-env.mjs';
-import branding from '../../src/_data/branding.js';
 
 function walk(dir, files = []) {
   for (const entry of readdirSync(dir)) {
@@ -37,7 +36,7 @@ test('homepage hero and work filters', async () => {
   assert(bento);
   assert.equal(bento.querySelectorAll('a').length, 3);
   assert(!/· unknown ·/.test(html));
-
+  // Logo
   const logo = doc.querySelector('img.hero-logo');
   assert(logo);
   assert.equal(logo.getAttribute('src'), '/assets/static/logo.png');
@@ -47,6 +46,18 @@ test('homepage hero and work filters', async () => {
   assert.equal(logo.getAttribute('sizes'), branding.logoSizes);
   assert.equal(logo.getAttribute('loading'), 'eager');
   assert.equal(logo.getAttribute('fetchpriority'), 'high');
+
+  // Map CTA
+  const mapHeading = Array.from(doc.querySelectorAll('h2')).find(h => /Interactive Concept Map/i.test(h.textContent));
+  assert(mapHeading);
+  const mapSection = mapHeading.closest('section');
+  assert(mapSection);
+  const mapLink = Array.from(mapSection.querySelectorAll('a')).find(a => /Launch the Map/i.test(a.textContent));
+  assert(mapLink);
+  assert.equal(mapLink.getAttribute('href'), '/map/');
+  // Property: exactly one link within the map section
+  assert.equal(Array.from(mapSection.querySelectorAll('a[href="/map/"]')).length, 1);
+
 
   // Map CTA
   const mapHeading = Array.from(doc.querySelectorAll('h2')).find(h => /Interactive Concept Map/i.test(h.textContent));
@@ -74,6 +85,7 @@ test('homepage hero and work filters', async () => {
   const list = doc.querySelector('#work-list');
   assert(list);
   const items = Array.from(list.querySelectorAll('li'));
+  assert(items.length <= 9 && items.length >= 6);
   // Property: each item tagged with a valid type and matching chip
   const valid = ['project','concept','spark','meta'];
   items.forEach(li => {

@@ -1,6 +1,10 @@
+{# components/hero.njk #}
 {% from "components/hero-tile.njk" import heroTile %}
-<header class="hero bg-gradient-to-b from-ink to-electric text-paper">
-  <div class="container mx-auto max-w-screen-2xl px-6 py-32 text-center space-y-6">
+
+<header class="hero relative mx-auto w-full">
+  <div class="container mx-auto max-w-screen-2xl px-6 py-28 text-center">
+
+    {# logo — brand sentinel #}
     <img
       class="hero-logo mx-auto mb-6 w-28 md:w-40"
       src="{{ branding.logoSrc }}"
@@ -9,18 +13,71 @@
       loading="eager"
       fetchpriority="high"
     />
-    <p class="eyebrow font-mono text-sm">Effusion Labs</p>
-    <h1 class="font-heading font-semibold text-4xl md:text-5xl">Experimental R&D you can actually use.</h1>
-    <p class="lede font-body text-lg">Prototypes, systems, and notes from the lab.</p>
-    <div class="cta-row flex flex-col items-center justify-center gap-4 sm:flex-row">
-      <a class="btn btn-primary" href="/work/latest">See the latest drop</a>
-      <a class="btn btn-ghost" href="/work">Explore the lab</a>
+
+    {# eyebrow #}
+    {% if eyebrow %}
+      <p class="eyebrow font-mono text-xs uppercase tracking-[0.18em] opacity-80">
+        {{ eyebrow }}
+      </p>
+    {% endif %}
+
+    {# single, authoritative H1 with fluid size #}
+    <h1 class="font-heading font-black leading-[0.95] tracking-tight
+               text-[clamp(2.75rem,6vw,6.5rem)]">
+      {{ title }}
+    </h1>
+
+    {# lede + optional sublede #}
+    {% if lede %}
+      <p class="lede mx-auto mt-4 max-w-3xl font-body text-base md:text-lg opacity-90">
+        {{ lede }}
+      </p>
+    {% endif %}
+    {% if sublede %}
+      <p class="mx-auto mt-1 max-w-3xl font-body text-base md:text-lg opacity-80">
+        {{ sublede }}
+      </p>
+    {% endif %}
+
+    {# CTAs #}
+    {% if ctas and ctas.length %}
+      <div class="cta-row mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row">
+        {% for c in ctas %}
+          {% set isPrimary = (c.kind or 'primary') == 'primary' %}
+          <a href="{{ c.href }}"
+             class="{% if isPrimary %}btn btn-primary{% else %}btn btn-ghost{% endif %} px-7 py-3 font-heading font-bold">
+             {{ c.label }}
+          </a>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    {# feature tiles (bento) #}
+    {% if tiles and tiles.length %}
+      <div class="bento mt-12 grid gap-4 sm:grid-cols-3">
+        {% for t in tiles %}
+          {{ heroTile(t.k, t.h, t.s, t.url, t.featured or false) }}
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    {# build meta #}
+    <div class="mt-10 border-t border-current/20 pt-2 font-mono text-[11px] opacity-70">
+      {{ build.branch }} · {{ build.hash }} · {{ build.builtAtIso }}
     </div>
-    <div class="bento mt-12 grid gap-4 sm:grid-cols-3">
-      {{ heroTile('Drop', 'Project Lichen: Adaptive Knowledge Graphs', 'Live schema, auto-generated maps, human-in-the-loop.', '/work/drop', true) }}
-      {{ heroTile('Concept', 'Block Ledger', 'Auditable knowledge blocks across artifacts.', '/work/block-ledger') }}
-      {{ heroTile('Spark', 'Raw Socket Report', 'Unfiltered notes from a midnight server check.', '/work/raw-socket-report') }}
-    </div>
-    <span class="lab-seal mt-8 block mx-auto"></span>
   </div>
+
+  {# MSCHF mode — optional decals & micro-chaos #}
+  {% if (variant or '') == 'mschf' %}
+    <div class="pointer-events-none absolute inset-x-0 top-[10%] flex justify-center gap-2">
+      <span class="inline-block rotate-[-2deg] rounded px-2 py-1 font-mono text-[11px]
+                   ring-1 ring-current shadow-[4px_4px_0_0_currentColor]">
+        LAB DROP
+      </span>
+      <span class="inline-block rotate-[1.5deg] rounded bg-current px-2 py-1 font-mono text-[11px]
+                   text-[color:var(--paper,#fff)]">
+        DO NOT TRUST
+      </span>
+    </div>
+  {% endif %}
 </header>

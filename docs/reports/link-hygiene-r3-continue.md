@@ -1,5 +1,6 @@
+
 Run Plan
-========
+
 - **Scope:** Suppress spurious wikilink warnings, normalise tags, clean placeholders.
 - **Steps:**
   1. Baseline build & capture warnings.
@@ -18,3 +19,4 @@ Outstanding Items:
 - Generate landing pages and badges for new taxonomies.
 Execution Strategy: extend tag-normaliser configuration and Eleventy collections.
 Trigger Command: npm run build
+
