@@ -2,7 +2,9 @@
   .tile { @apply bg-black/20 hover:bg-black/30; }
   .chip { @apply inline-block mb-2 rounded-full border border-white/20 px-2 py-0.5 text-xs; }
   .tile-primary { @apply bg-electric/10 hover:bg-electric/20; }
-  .card { @apply block rounded-md border border-white/20 bg-white/5 p-4 hover:bg-white/10 transition-shadow; }
+  .aesthetic-row {
+    @apply block rounded-md border border-white/20 bg-white/5 p-4 transition-all duration-200 hover:bg-white/10 focus:bg-white/10;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

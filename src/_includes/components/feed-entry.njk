@@ -1,10 +1,15 @@
 {% macro feedEntry(item) %}
 <li data-type="{{ item.type }}">
-  <a href="{{ item.url }}" class="card">
-    <span class="chip">{{ item.type | capitalize }}</span>
-    <h3>{{ item.data.title }}</h3>
+  <a href="{{ item.url }}" class="aesthetic-row hover:-translate-y-1 hover:shadow-lg hover:border-electric/50 focus:-translate-y-1 focus:shadow-lg focus:border-electric/50 focus:outline-none">
+    <div class="flex items-start justify-between">
+      <span class="chip">{{ item.type | capitalize }}</span>
+      {% if item.date %}
+      <time datetime="{{ item.date.toISOString() }}" class="text-xs opacity-80">{{ item.date.toISOString().slice(0, 10) }}</time>
+      {% endif %}
+    </div>
+    <h3 class="mt-2">{{ item.data.title }}</h3>
     {% if item.data.description %}
-    <p>{{ item.data.description | truncate(140, true, '…') }}</p>
+    <p class="mt-1">{{ item.data.description | truncate(140, true, '…') }}</p>
     {% endif %}
   </a>
 </li>
