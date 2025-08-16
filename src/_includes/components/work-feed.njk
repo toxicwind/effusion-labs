@@ -8,7 +8,7 @@
     <button class="btn btn-sm" data-filter="spark">Sparks</button>
     <button class="btn btn-sm" data-filter="meta">Meta</button>
   </div>
-  <ul id="work-list" class="space-y-4">
+  <ul id="work-list" class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
     {% for item in work %}
       {{ feedEntry(item) }}
     {% endfor %}

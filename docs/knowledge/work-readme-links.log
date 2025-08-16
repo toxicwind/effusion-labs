@@ -1,0 +1,23 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> effusion_labs_final@1.0.0 docs:links
+> markdown-link-check -c link-check.config.json README.md
+
+
+FILE: README.md
+  [/] https://github.com/effusion-labs/effusion-labs/actions/workflows/deploy.yml
+  [/] https://github.com/effusion-labs/effusion-labs/actions/workflows/link-check.yml
+  [✓] ./LICENSE
+  [✓] #-project-overview
+  [✓] #-key-features
+  [✓] #-quickstart
+  [✓] #-project-layout
+  [✓] #-deployment
+  [✓] #-quality-assurance
+  [✓] #-contributing
+  [✓] #-license
+  [/] https://github.com/effusion-labs/effusion-labs/actions/workflows/deploy.yml/badge.svg
+  [/] https://github.com/effusion-labs/effusion-labs/actions/workflows/link-check.yml/badge.svg
+  [✓] https://img.shields.io/badge/license-ISC-blue.svg
+
+  14 links checked.
