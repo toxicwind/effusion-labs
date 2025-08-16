@@ -3,13 +3,13 @@ import assert from 'node:assert';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { createRequire } from 'module';
-import runEleventy from './helpers/eleventy.js';
+import { buildLean } from '../helpers/eleventy-env.mjs';
 
 const require = createRequire(import.meta.url);
 const dateToRfc822 = require('@11ty/eleventy-plugin-rss/src/dateRfc822.js');
 
-test('feed exposes build metadata', () => {
-  const outDir = runEleventy('feed-build-meta');
+test('feed exposes build metadata', async () => {
+  const outDir = await buildLean('feed-build-meta');
   const xml = readFileSync(path.join(outDir, 'feed.xml'), 'utf8');
   assert.match(xml, /<!-- build: [0-9a-f]{7} -->/);
   const dateMatch = xml.match(/<lastBuildDate>([^<]+)<\/lastBuildDate>/);
