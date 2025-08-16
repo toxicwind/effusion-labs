@@ -37,6 +37,17 @@ test('homepage hero and work filters', async () => {
   assert.equal(bento.querySelectorAll('a').length, 3);
   assert(!/· unknown ·/.test(html));
 
+  // Map CTA
+  const mapHeading = Array.from(doc.querySelectorAll('h2')).find(h => /Interactive Concept Map/i.test(h.textContent));
+  assert(mapHeading);
+  const mapSection = mapHeading.closest('section');
+  assert(mapSection);
+  const mapLink = Array.from(mapSection.querySelectorAll('a')).find(a => /Launch the Map/i.test(a.textContent));
+  assert(mapLink);
+  assert.equal(mapLink.getAttribute('href'), '/map/');
+  // Property: exactly one link within the map section
+  assert.equal(Array.from(mapSection.querySelectorAll('a[href="/map/"]')).length, 1);
+
   // Skip link
   const skip = doc.querySelector('a.skip-link');
   assert(skip);
