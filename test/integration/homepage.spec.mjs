@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert';
-import { readFileSync, readdirSync, statSync } from 'node:fs';
+import { readFileSync, readdirSync, statSync, existsSync } from 'node:fs';
 import path from 'node:path';
 import { JSDOM } from 'jsdom';
 import { buildLean } from '../helpers/eleventy-env.mjs';
@@ -16,7 +16,7 @@ function walk(dir, files = []) {
   return files;
 }
 
-test('homepage hero and sections', async () => {
+test('homepage hero and work filters', async () => {
   const outDir = await buildLean('homepage');
   const htmlPath = path.join(outDir, 'index.html');
   const html = readFileSync(htmlPath, 'utf8');
@@ -25,9 +25,18 @@ test('homepage hero and sections', async () => {
 
   // Hero
   const h1 = doc.querySelector('h1');
-  assert.equal(h1.textContent.trim(), 'EFFUSION LABS');
-  assert.match(html, /Where experimental ideas meet practical prototypes\./);
-  assert.match(html, /Explore the projects, concepts, and sparks shaping tomorrow’s creative technology\./);
+  assert.equal(h1.textContent.trim(), 'Experimental R&D you can actually use.');
+  assert.match(html, /Prototypes, systems, and notes from the lab\./);
+  const ctaLatest = Array.from(doc.querySelectorAll('a')).find(a => a.textContent.trim() === 'See the latest drop');
+  assert(ctaLatest);
+  assert.equal(ctaLatest.getAttribute('href'), '/work/latest');
+  const ctaExplore = Array.from(doc.querySelectorAll('a')).find(a => a.textContent.trim() === 'Explore the lab');
+  assert(ctaExplore);
+  assert.equal(ctaExplore.getAttribute('href'), '/work');
+  const bento = doc.querySelector('.bento');
+  assert(bento);
+  assert.equal(bento.querySelectorAll('a').length, 3);
+  assert(!/· unknown ·/.test(html));
 
   const logo = doc.querySelector('img.hero-logo');
   assert(logo);
@@ -39,38 +48,68 @@ test('homepage hero and sections', async () => {
   assert.equal(logo.getAttribute('loading'), 'eager');
   assert.equal(logo.getAttribute('fetchpriority'), 'high');
 
+  // Map CTA
+  const mapHeading = Array.from(doc.querySelectorAll('h2')).find(h => /Interactive Concept Map/i.test(h.textContent));
+  assert(mapHeading);
+  const mapSection = mapHeading.closest('section');
+  assert(mapSection);
+  const mapLink = Array.from(mapSection.querySelectorAll('a')).find(a => /Launch the Map/i.test(a.textContent));
+  assert(mapLink);
+  assert.equal(mapLink.getAttribute('href'), '/map/');
+  // Property: exactly one link within the map section
+  assert.equal(Array.from(mapSection.querySelectorAll('a[href="/map/"]')).length, 1);
+
   // Skip link
   const skip = doc.querySelector('a.skip-link');
   assert(skip);
   assert.equal(skip.getAttribute('href'), '#main');
   assert(doc.getElementById('main'));
 
-  // Provenance seam
-  const prov = Array.from(doc.querySelectorAll('div')).find(d => /·/.test(d.textContent) && d.classList.contains('font-mono'));
-  assert(prov);
-  assert.match(prov.textContent.trim(), /^[^·]+ · [0-9a-f]{7} ·(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z)?$/);
-
-  // CTA
-  const latest = Array.from(doc.querySelectorAll('a[href="/projects/"]')).find(a => a.textContent.trim() === 'View Latest Work');
-  assert(latest);
-
-  // Section checks
-  const headers = Array.from(doc.querySelectorAll('main h2')).map(h => h.textContent.trim());
-  ['Projects','Concepts','Sparks','Meta'].forEach(name => assert(headers.includes(name)));
-
-  ['Projects','Concepts','Sparks','Meta'].forEach(name => {
-    const h2 = Array.from(doc.querySelectorAll('main h2')).find(h => h.textContent.trim() === name);
-    const section = h2.closest('section');
-    const list = section.querySelector('ul');
-    const items = list.querySelectorAll('li');
-    assert(items.length <= 3);
-    const cls = list.getAttribute('class') || '';
-    assert(!/(?:grid|columns-|col-)/.test(cls));
-    items.forEach(li => {
-      assert.strictEqual(li.querySelectorAll('time').length, 0);
-      assert.strictEqual(li.querySelectorAll('.tag').length, 0);
-    });
+  // Work section with filters
+  const workHeader = Array.from(doc.querySelectorAll('main h2')).find(h => h.textContent.trim() === 'Work');
+  assert(workHeader);
+  const filterButtons = Array.from(doc.querySelectorAll('[data-filter]'));
+  assert.equal(filterButtons.length, 5);
+  assert.deepStrictEqual(filterButtons.map(b => b.dataset.filter), ['all','project','concept','spark','meta']);
+  const list = doc.querySelector('#work-list');
+  assert(list);
+  const items = Array.from(list.querySelectorAll('li'));
+  // Property: each item tagged with a valid type and matching chip
+  const valid = ['project','concept','spark','meta'];
+  items.forEach(li => {
+    assert(valid.includes(li.dataset.type));
+    const chip = li.querySelector('.chip');
+    assert(chip);
+    assert.equal(chip.textContent.trim().toLowerCase(), li.dataset.type);
   });
+
+  // Acceptance: work list uses grid layout
+  assert(list.className.includes('grid'));
+
+  // Property: each item exposes published date
+  items.forEach(li => {
+    const time = li.querySelector('time');
+    assert(time);
+    assert(time.getAttribute('datetime'));
+  });
+
+  // Contract: card affords hover/focus lift
+  items.forEach(li => {
+    const card = li.querySelector('a.aesthetic-row');
+    assert(card);
+    const cls = card.getAttribute('class');
+    assert(cls.includes('hover:-translate-y-1'));
+    assert(cls.includes('focus:-translate-y-1'));
+  });
+
+  // Contract: frontend script present
+  const scriptPath = path.join(outDir, 'assets/js/work-filters.js');
+  assert(existsSync(scriptPath));
+  const scriptContent = readFileSync(scriptPath, 'utf8');
+  assert.match(scriptContent, /data-filter/);
+
+  // Lab seal flourish
+  assert(doc.querySelector('.lab-seal'));
 
   // Open Questions absence
   assert(!/Open Questions/i.test(html));
