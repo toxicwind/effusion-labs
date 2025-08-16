@@ -27,13 +27,19 @@ async function main() {
     return;
   }
 
-  const extraImports = '--import=./test/setup/http.mjs --import=./test/setup/llm-keepalive.mjs';
+  const extraImports =
+    process.env.LLM_KEEPALIVE_IMPORTS ||
+    '--import=./test/setup/http.mjs --import=./test/setup/llm-keepalive.mjs';
   const envNodeOptions = process.env.NODE_OPTIONS
     ? `${process.env.NODE_OPTIONS} ${extraImports}`
     : extraImports;
   const child = spawn(process.execPath, ['--test', '--test-reporter=spec', ...execute], {
     stdio: 'inherit',
-    env: { ...process.env, NODE_OPTIONS: envNodeOptions },
+    env: {
+      ...process.env,
+      NODE_OPTIONS: envNodeOptions,
+      LLM_KEEPALIVE_INJECTED: '1',
+    },
   });
 
   child.on('exit', code => {

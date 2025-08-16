@@ -1,17 +1,21 @@
 #!/usr/bin/env bash
-# Repo-local node shim: inject keepalive when running tests.
+# Repo-local node shim: inject keepalive only for direct node --test invocations.
 set -euo pipefail
 
-if [[ "${LLM_HIJACK_DISABLE:-}" != "1" ]]; then
-  case "${*:-}" in
-    *"tools/runner.mjs"*|*" --test "*)
-      extras="--import=./test/setup/http.mjs --import=./test/setup/llm-keepalive.mjs"
-      export NODE_OPTIONS="${NODE_OPTIONS:-} ${extras}"
-    ;;
-  esac
+shim_dir="$(cd "$(dirname "$0")" && pwd)"
+repo_root="$(cd "$shim_dir/.." && pwd)"
+source "$repo_root/scripts/llm-constants.sh"
+
+if [[ "${LLM_HIJACK_DISABLE:-}" != "1" ]] && [[ "${LLM_KEEPALIVE_INJECTED:-}" != "1" ]]; then
+  for arg in "$@"; do
+    if [[ "$arg" == "--test" ]]; then
+      export NODE_OPTIONS="${NODE_OPTIONS:-} ${LLM_KEEPALIVE_IMPORTS}"
+      export LLM_KEEPALIVE_INJECTED=1
+      break
+    fi
+  done
 fi
 
-shim_dir="$(cd "$(dirname "$0")" && pwd)"
 IFS=':' read -r -a path_parts <<< "$PATH"
 real=""
 for d in "${path_parts[@]}"; do

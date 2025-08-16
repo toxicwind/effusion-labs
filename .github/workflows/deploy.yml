@@ -22,7 +22,7 @@ jobs:
       - run: bash scripts/llm-bootstrap.sh
       - run: echo "BASH_ENV=$PWD/.llm-bash-env" >> "$GITHUB_ENV"
       - run: npm ci
-      - run: npm test 2>&1 | tee test.log
+      - run: LLM_HEARTBEAT_SECS=10 LLM_MAX_MINS=30 LLM_SHELL_HEARTBEAT=1 npm test 2>&1 | tee test.log
       - run: scripts/warn-gate.sh test.log
       - uses: actions/upload-artifact@v4
         with:
