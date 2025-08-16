@@ -1,0 +1,22 @@
+TAP version 13
+# Subtest: deploy workflow triggers on pull_request
+ok 1 - deploy workflow triggers on pull_request
+  ---
+  duration_ms: 1.134133
+  type: 'test'
+  ...
+# Subtest: build job runs only on push events
+ok 2 - build job runs only on push events
+  ---
+  duration_ms: 0.280984
+  type: 'test'
+  ...
+1..2
+# tests 2
+# suites 0
+# pass 2
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 133.272436
