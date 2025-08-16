@@ -4,8 +4,8 @@ import { readFileSync } from 'node:fs';
 
 const workflow = readFileSync(new URL('../../.github/workflows/deploy.yml', import.meta.url), 'utf8');
 
-test('deploy workflow triggers on pull_request', () => {
-  assert.match(workflow, /on:\s*\n(?:[\s\S]*?)pull_request:/, 'pull_request trigger missing');
+test('deploy workflow does not trigger on pull_request', () => {
+  assert.doesNotMatch(workflow, /pull_request:/, 'pull_request trigger should be absent');
 });
 
 test('build job runs only on push events', () => {
