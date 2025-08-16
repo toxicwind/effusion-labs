@@ -6,9 +6,17 @@ function takeLatest(collection, n = 3) {
 
 module.exports = {
   eleventyComputed: {
-    projects: data => takeLatest(data.collections.projects),
-    concepts: data => takeLatest(data.collections.concepts),
-    sparks: data => takeLatest(data.collections.sparks),
-    meta: data => takeLatest(data.collections.meta)
+    work: data => {
+      const normalize = (items = [], type) =>
+        items.map(i => ({ url: i.url, data: i.data, date: i.date, type }));
+      return [
+        ...normalize(data.collections.projects, 'project'),
+        ...normalize(data.collections.concepts, 'concept'),
+        ...normalize(data.collections.sparks, 'spark'),
+        ...normalize(data.collections.meta, 'meta')
+      ]
+        .sort((a, b) => b.date - a.date)
+        .slice(0, 9);
+    }
   }
 };

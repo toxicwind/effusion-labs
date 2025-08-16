@@ -18,6 +18,7 @@
 Effusion Labs is a static digital garden built with Eleventy, Nunjucks templates and Tailwind CSS. Markdown content in `src/content` feeds Eleventy's collections to generate a fully static site. Node.js 20 powers the build pipeline, and the resulting `_site/` directory can be served directly or packaged into a lightweight Nginx container. GitHub Actions drive tests and deployments to GitHub Container Registry.
 
 ## ✨ Key Features
+- Home page presents a unified Work feed with filter toolbar and animated lab seal flourish.
 ### npm Scripts
 - `npm run dev` – start Eleventy with live reload.
 - `npm run build` – compile the production site to `_site/`.
