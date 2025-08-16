@@ -1,14 +1,13 @@
 import test from 'node:test';
 import assert from 'node:assert';
-import { readFileSync, existsSync, rmSync } from 'node:fs';
+import { readFileSync, existsSync } from 'node:fs';
 import path from 'node:path';
 import { JSDOM } from 'jsdom';
 import { withImages, buildLean } from '../helpers/eleventy-env.mjs';
 
 test('logo image transforms to avif and webp', withImages(async () => {
-  const imageDir = path.join('_site', 'assets', 'images');
-  rmSync(imageDir, { recursive: true, force: true });
   const outDir = await buildLean('logo-image');
+  const imageDir = path.join(outDir, 'assets', 'images');
   const html = readFileSync(path.join(outDir, 'index.html'), 'utf8');
   const dom = new JSDOM(html);
   const picture = dom.window.document.querySelector('picture');
