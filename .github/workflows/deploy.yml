@@ -30,6 +30,7 @@ jobs:
           path: coverage/lcov.info
 
   build:
+    if: github.event_name == 'push'
     needs: tests
     runs-on: ubuntu-latest
     env:
