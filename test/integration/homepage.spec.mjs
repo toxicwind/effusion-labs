@@ -3,7 +3,7 @@ import assert from 'node:assert';
 import { readFileSync, readdirSync, statSync } from 'node:fs';
 import path from 'node:path';
 import { JSDOM } from 'jsdom';
-import runEleventy from './helpers/eleventy.js';
+import { buildLean } from '../helpers/eleventy-env.mjs';
 
 function walk(dir, files = []) {
   for (const entry of readdirSync(dir)) {
@@ -15,8 +15,8 @@ function walk(dir, files = []) {
   return files;
 }
 
-test('homepage hero and sections', () => {
-  const outDir = runEleventy('homepage');
+test('homepage hero and sections', async () => {
+  const outDir = await buildLean('homepage');
   const htmlPath = path.join(outDir, 'index.html');
   const html = readFileSync(htmlPath, 'utf8');
   const dom = new JSDOM(html);
