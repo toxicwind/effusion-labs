@@ -1,0 +1,164 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> effusion_labs_final@1.0.0 test
+> c8 --reporter=text-summary --reporter=lcov node tools/runner.mjs --all
+
+[@photogabble/wikilinks] WARNING Wikilink ([[missing-node]]) found pointing to to non-existent page in:
+	- ./src/test/wikilinks-ignore.md
+[11ty] Copied 77 Wrote 113 files in 4.76 seconds (42.1ms each, v3.1.2)
+✔ archive nav exposes child counts (4779.225364ms)
+[11ty] Copied 77 Wrote 113 files in 4.71 seconds (41.7ms each, v3.1.2)
+✔ layout exposes build timestamp (4736.196316ms)
+[@photogabble/wikilinks] WARNING Wikilink ([[missing-node]]) found pointing to to non-existent page in:
+	- ./src/test/wikilinks-ignore.md
+[11ty] Copied 77 Wrote 113 files in 4.06 seconds (36.0ms each, v3.1.2)
+✔ code blocks expose copy control (4364.290471ms)
+[@photogabble/wikilinks] WARNING Wikilink ([[missing-node]]) found pointing to to non-existent page in:
+	- ./src/test/wikilinks-ignore.md
+[11ty] Copied 77 Wrote 113 files in 5.12 seconds (45.3ms each, v3.1.2)
+✔ collection pages expose section metadata (5144.016438ms)
+✔ concept map JSON-LD export generates @context and @graph (4.741159ms)
+[@photogabble/wikilinks] WARNING Wikilink ([[missing-node]]) found pointing to to non-existent page in:
+	- ./src/test/wikilinks-ignore.md
+[11ty] Copied 77 Wrote 113 files in 4.82 seconds (42.7ms each, v3.1.2)
+✔ feed exposes build metadata (4840.545619ms)
+[@photogabble/wikilinks] WARNING Wikilink ([[missing-node]]) found pointing to to non-existent page in:
+	- ./src/test/wikilinks-ignore.md
+[11ty] Copied 77 Wrote 113 files in 4.99 seconds (44.2ms each, v3.1.2)
+✔ home page header includes primary nav landmark (5014.1153ms)
+[@photogabble/wikilinks] WARNING Wikilink ([[missing-node]]) found pointing to to non-existent page in:
+	- ./src/test/wikilinks-ignore.md
+[11ty] Copied 77 Wrote 113 files in 4.00 seconds (35.4ms each, v3.1.2)
+✖ homepage work list mixes types (4218.545835ms)
+[@photogabble/wikilinks] WARNING Wikilink ([[missing-node]]) found pointing to to non-existent page in:
+	- ./src/test/wikilinks-ignore.md
+[11ty] Copied 77 Wrote 113 files in 3.97 seconds (35.1ms each, v3.1.2)
+✔ homepage hero and work filters (4218.413491ms)
+[@photogabble/wikilinks] WARNING Wikilink ([[missing-node]]) found pointing to to non-existent page in:
+	- ./src/test/wikilinks-ignore.md
+[11ty] Copied 77 Wrote 113 files in 4.79 seconds (42.4ms each, v3.1.2)
+✔ markdown headings include anchor ids (4806.214265ms)
+[@photogabble/wikilinks] WARNING Wikilink ([[missing-node]]) found pointing to to non-existent page in:
+	- ./src/test/wikilinks-ignore.md
+[11ty] Copied 77 Wrote 113 files in 4.64 seconds (41.1ms each, v3.1.2)
+✔ monsters hub lists products and cross-links product and character pages (4662.317398ms)
+node:internal/modules/esm/resolve:274
+    throw new ERR_MODULE_NOT_FOUND(
+          ^
+
+Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/workspace/effusion-labs/lib/mschf-seed.mjs' imported from /workspace/effusion-labs/test/integration/mschf-overlay.spec.mjs
+    at finalizeResolution (node:internal/modules/esm/resolve:274:11)
+    at moduleResolve (node:internal/modules/esm/resolve:859:10)
+    at defaultResolve (node:internal/modules/esm/resolve:983:11)
+    at ModuleLoader.defaultResolve (node:internal/modules/esm/loader:783:12)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:707:25)
+    at ModuleLoader.resolve (node:internal/modules/esm/loader:690:38)
+    at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:307:38)
+    at ModuleJob._link (node:internal/modules/esm/module_job:183:49) {
+  code: 'ERR_MODULE_NOT_FOUND',
+  url: 'file:///workspace/effusion-labs/lib/mschf-seed.mjs'
+}
+
+Node.js v22.18.0
+✖ test/integration/mschf-overlay.spec.mjs (604.304889ms)
+[@photogabble/wikilinks] WARNING Wikilink ([[missing-node]]) found pointing to to non-existent page in:
+	- ./src/test/wikilinks-ignore.md
+[11ty] Copied 77 Wrote 113 files in 4.81 seconds (42.6ms each, v3.1.2)
+✔ main nav marks current page and is labelled (4835.7619ms)
+✔ navigation items are sequentially ordered (2.026509ms)
+[@photogabble/wikilinks] WARNING Wikilink ([[missing-node]]) found pointing to to non-existent page in:
+	- ./src/test/wikilinks-ignore.md
+[11ty] Copied 77 Wrote 113 files in 4.75 seconds (42.0ms each, v3.1.2)
+✔ buildLean sets env and output directory (4767.6928ms)
+[@photogabble/wikilinks] WARNING Wikilink ([[missing-node]]) found pointing to to non-existent page in:
+	- ./src/test/wikilinks-ignore.md
+[11ty] Copied 77 Wrote 113 files in 4.53 seconds (40.1ms each, v3.1.2)
+✔ spark listings reveal status text (4534.784378ms)
+[11ty] Copied 77 Wrote 113 files in 4.51 seconds (39.9ms each, v3.1.2)
+✔ wikilinks ignore templated paths (4519.605093ms)
+[@photogabble/wikilinks] WARNING Wikilink ([[missing-node]]) found pointing to to non-existent page in:
+	- ./src/test/wikilinks-ignore.md
+[11ty] Copied 77 Wrote 113 files in 4.65 seconds (41.2ms each, v3.1.2)
+✖ work pages build and latest redirects (4662.067659ms)
+✔ deploy workflow does not trigger on pull_request (1.703612ms)
+✔ build job runs only on push events (0.286843ms)
+✔ defines improved background colors (2.043121ms)
+✔ text contrast meets WCAG AA (0.821162ms)
+✔ tailwind exposes readable fonts (0.152454ms)
+✔ includes fluid type scale tokens (0.180081ms)
+✔ docs:links reports no broken links (1632.522656ms)
+✔ package-lock.json defines lockfileVersion (10.372721ms)
+✔ projects computed picks latest entries by date (2.999265ms)
+✔ keepalive emits heartbeat to stderr (6411.995741ms)
+✔ keepalive ignores first SIGINT (442.843271ms)
+✔ gateway reads SOLVER_URL from environment (3.000152ms)
+✔ gateway retains default solver URL (0.204195ms)
+✔ external link renders with arrow and class (18.219002ms)
+✔ internal link keeps text without external markers (2.439532ms)
+✔ external link starting with arrow does not duplicate (4.750007ms)
+✔ devDependencies omit @vscode/ripgrep (1.490911ms)
+✔ prepare-docs avoids ripgrep install (0.245973ms)
+✔ merges tag-like metadata into unified tags and categories (2.896847ms)
+✔ deduplicates tag values (0.254826ms)
+✔ categories returns empty array when spark_type absent (0.14873ms)
+✔ time to chill includes size with height in cm (1.705382ms)
+✔ time to chill height is positive (0.249595ms)
+✔ filterDeadLinks removes templated links (3.159267ms)
+✔ result has no templated links (0.342061ms)
+✔ filterDeadLinks does not mutate input (9.074268ms)
+✔ GitHub workflows use latest action versions (2.485475ms)
+ℹ tests 45
+ℹ suites 0
+ℹ pass 42
+ℹ fail 3
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 40794.907967
+
+✖ failing tests:
+
+test at test/integration/homepage-latest.spec.mjs:8:1
+✖ homepage work list mixes types (4218.545835ms)
+  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+  
+    assert(types.has(t))
+  
+      at file:///workspace/effusion-labs/test/integration/homepage-latest.spec.mjs:15:53
+      at Array.forEach (<anonymous>)
+      at TestContext.<anonymous> (file:///workspace/effusion-labs/test/integration/homepage-latest.spec.mjs:15:40)
+      at async Test.run (node:internal/test_runner/test:1054:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '=='
+  }
+
+test at test/integration/mschf-overlay.spec.mjs:1:1
+✖ test/integration/mschf-overlay.spec.mjs (604.304889ms)
+  'test failed'
+
+test at test/integration/work-pages.spec.mjs:7:1
+✖ work pages build and latest redirects (4662.067659ms)
+  AssertionError [ERR_ASSERTION]: work/drop/index.html missing
+      at file:///workspace/effusion-labs/test/integration/work-pages.spec.mjs:17:5
+      at Array.forEach (<anonymous>)
+      at TestContext.<anonymous> (file:///workspace/effusion-labs/test/integration/work-pages.spec.mjs:16:9)
+      at async Test.run (node:internal/test_runner/test:1054:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '=='
+  }
+Executed 30 tests
+
+=============================== Coverage summary ===============================
+Statements   : 84.38% ( 1259/1492 )
+Branches     : 79.61% ( 207/260 )
+Functions    : 76.13% ( 67/88 )
+Lines        : 84.38% ( 1259/1492 )
+================================================================================
