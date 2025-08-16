@@ -1,0 +1,64 @@
+TAP version 13
+# Subtest: removes templated anchor links
+not ok 1 - removes templated anchor links
+  ---
+  duration_ms: 3.868352
+  type: 'test'
+  location: '/workspace/effusion-labs/test/unit/templated-link-filter.test.mjs:5:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    + actual - expected
+    
+    + '<a href="/path/{{ id }}">Item</a>'
+    - 'Item'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'Item'
+  actual: '<a href="/path/{{ id }}">Item</a>'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///workspace/effusion-labs/test/unit/templated-link-filter.test.mjs:7:10)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.start (node:internal/test_runner/test:944:17)
+    startSubtestAfterBootstrap (node:internal/test_runner/harness:296:17)
+  ...
+# Subtest: removes templated wikilinks
+not ok 2 - removes templated wikilinks
+  ---
+  duration_ms: 5.538844
+  type: 'test'
+  location: '/workspace/effusion-labs/test/unit/templated-link-filter.test.mjs:10:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    + actual - expected
+    
+    + '[[/path/{{ id }}]]'
+    - ''
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: ''
+  actual: '[[/path/{{ id }}]]'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///workspace/effusion-labs/test/unit/templated-link-filter.test.mjs:12:10)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+1..2
+# tests 2
+# suites 0
+# pass 0
+# fail 2
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 197.973915

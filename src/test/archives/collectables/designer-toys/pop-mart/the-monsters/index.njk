@@ -6,13 +6,21 @@ title: "POP MART — The Monsters"
 <h2 class="text-xl font-semibold mt-4 mb-2">Products</h2>
 <ul>
 {% for p in collections.monstersProducts %}
+  {% if p.data.product_id %}
   <li><a href="/archives/collectables/designer-toys/pop-mart/the-monsters/products/{{ p.data.product_id }}/">{{ p.data.product_id }}</a></li>
+  {% else %}
+  <li>{{ p.data.product_id or p.fileSlug }}</li>
+  {% endif %}
 {% endfor %}
 </ul>
 
 <h2 class="text-xl font-semibold mt-4 mb-2">Characters</h2>
 <ul>
 {% for c in collections.monstersCharacters %}
+  {% if c.data.slug %}
   <li><a href="/archives/collectables/designer-toys/pop-mart/the-monsters/characters/{{ c.data.slug }}/">{{ c.data.slug }}</a></li>
+  {% else %}
+  <li>{{ c.data.slug or c.fileSlug }}</li>
+  {% endif %}
 {% endfor %}
 </ul>
