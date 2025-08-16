@@ -1,0 +1,50 @@
+#mschf-overlay-root {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+}
+
+.mschf-grid {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle at 1px 1px, currentColor 1px, transparent 1.5px);
+  background-size: 18px 18px;
+  opacity: 0.08;
+  mix-blend-mode: difference;
+}
+
+.mschf-crosshair {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 38px;
+  height: 38px;
+  transform: translate(-50%, -50%);
+  opacity: 0.25;
+}
+.mschf-crosshair-ring {
+  position: absolute;
+  inset: 0;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+}
+.mschf-crosshair-v,
+.mschf-crosshair-h {
+  position: absolute;
+  background: currentColor;
+}
+.mschf-crosshair-v {
+  left: 50%;
+  top: 0;
+  width: 1px;
+  height: 100%;
+  transform: translateX(-50%);
+}
+.mschf-crosshair-h {
+  top: 50%;
+  left: 0;
+  height: 1px;
+  width: 100%;
+  transform: translateY(-50%);
+}

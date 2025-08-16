@@ -5,6 +5,7 @@
 @plugin "@tailwindcss/typography";
 @import "prismjs/themes/prism-tomorrow.css";
 @import "./home.css";
+@import "./mschf-overlay.css";
 
 @layer base {
   body { @apply font-body text-[var(--step-0)] leading-[1.5]; }
