@@ -36,7 +36,7 @@ Effusion Labs is a static digital garden built with Eleventy, Nunjucks templates
 - `npm run docs:links` – check this README for broken links.
 
 ### Eleventy Plugins
-- `@photogabble/eleventy-plugin-interlinker` – renders internal references as annotated links.
+- `@photogabble/eleventy-plugin-interlinker` – renders internal references as annotated links; configured to ignore templated hrefs.
 - `@11ty/eleventy-navigation` – builds navigation structures from front matter.
 - `@11ty/eleventy-plugin-syntaxhighlight` – adds Prism-based code highlighting.
 - `@11ty/eleventy-plugin-rss` – generates RSS feeds for collections.
