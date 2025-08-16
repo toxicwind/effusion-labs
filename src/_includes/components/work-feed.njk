@@ -1,0 +1,19 @@
+{% from "components/feed-entry.njk" import feedEntry %}
+<section aria-labelledby="work-heading" class="space-y-4">
+  <h2 id="work-heading" class="text-2xl font-heading">Work</h2>
+  <div class="filters flex flex-wrap gap-2" role="toolbar" aria-label="Filter work">
+    <button class="btn btn-sm" data-filter="all" aria-pressed="true">All</button>
+    <button class="btn btn-sm" data-filter="project">Projects</button>
+    <button class="btn btn-sm" data-filter="concept">Concepts</button>
+    <button class="btn btn-sm" data-filter="spark">Sparks</button>
+    <button class="btn btn-sm" data-filter="meta">Meta</button>
+  </div>
+  <ul id="work-list" class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+    {% for item in work %}
+      {{ feedEntry(item) }}
+    {% endfor %}
+  </ul>
+  <div class="more">
+    <a class="btn btn-secondary" href="/work">Browse all work</a>
+  </div>
+</section>

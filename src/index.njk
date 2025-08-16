@@ -4,13 +4,12 @@ metaDisable: true
 showTitle: false
 ---
 
-{% from "components/feed-section.njk" import feedSection %}
-
 {% include "components/hero.njk" %}
 
-<main class="mx-auto max-w-screen-md px-6 sm:px-8 space-y-16">
-  {{ feedSection('Projects', '/projects/', projects) }}
-  {{ feedSection('Concepts', '/concepts/', concepts) }}
-  {{ feedSection('Sparks', '/sparks/', sparks) }}
-  {{ feedSection('Meta', '/meta/', meta) }}
+{% include "components/map-cta.njk" %}
+
+<main class="mx-auto max-w-screen-xl px-6 sm:px-8 space-y-16">
+  {% include "components/work-feed.njk" %}
 </main>
+
+<script src="/assets/js/work-filters.js" defer></script>
