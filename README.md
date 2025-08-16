@@ -85,7 +85,7 @@ docker-compose up --build     # launch services
 - **Docker**: `.portainer/Dockerfile` builds a static Nginx image and `docker-compose.yml` exposes the site on port 18400.
 
 ## 🧪 Quality Assurance
-- `npm test` runs the Node.js test suite.
+  - `npm test` runs the Node.js test suite and emits periodic keepalive notices.
 - `npm run docs:links` verifies links in this README.
 - GitHub Actions execute both checks on every push.
 

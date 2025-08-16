@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# Repo-local npm shim: inject keepalive for npm test invocations.
+set -euo pipefail
+orig_args=("$@")
+if [[ "${1:-}" == "test" ]] || { [[ "${1:-}" == "run" ]] && [[ "${2:-}" == "test" ]]; }; then
+  export NODE_OPTIONS="${NODE_OPTIONS:-} --import=./test/setup/llm-keepalive.mjs"
+fi
+REAL_NPM="$(command -v -a npm | awk 'NR==2{print;exit}')"
+exec "${REAL_NPM:-/usr/bin/npm}" "${orig_args[@]}"

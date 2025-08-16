@@ -4,9 +4,9 @@
   "description": "This is a digital studio and knowledge base for Effusion Labs, built with Eleventy and the powerful `@photogabble/eleventy-plugin-interlinker`.",
   "main": "index.js",
   "scripts": {
-    "test": "c8 --reporter=text-summary --reporter=lcov node tools/runner.mjs",
-    "test:all": "c8 --reporter=text-summary --reporter=lcov node tools/runner.mjs --all",
-    "test:browser": "NODE_OPTIONS=--import=./test/setup/http.mjs node --test \"test/browser/**/*.test.mjs\" --test-reporter=spec",
+    "test": "NODE_OPTIONS=\"$NODE_OPTIONS --import=./test/setup/http.mjs --import=./test/setup/llm-keepalive.mjs\" c8 --reporter=text-summary --reporter=lcov node tools/runner.mjs",
+    "test:all": "NODE_OPTIONS=\"$NODE_OPTIONS --import=./test/setup/http.mjs --import=./test/setup/llm-keepalive.mjs\" c8 --reporter=text-summary --reporter=lcov node tools/runner.mjs --all",
+    "test:browser": "NODE_OPTIONS=\"--import=./test/setup/http.mjs --import=./test/setup/llm-keepalive.mjs\" node --test \"test/browser/**/*.test.mjs\" --test-reporter=spec",
     "coverage:report": "c8 report --reporter=text-summary --reporter=lcov",
     "build": "npx @11ty/eleventy",
     "dev": "npx @11ty/eleventy --serve",

@@ -27,9 +27,13 @@ async function main() {
     return;
   }
 
+  const extraImports = '--import=./test/setup/http.mjs --import=./test/setup/llm-keepalive.mjs';
+  const envNodeOptions = process.env.NODE_OPTIONS
+    ? `${process.env.NODE_OPTIONS} ${extraImports}`
+    : extraImports;
   const child = spawn(process.execPath, ['--test', '--test-reporter=spec', ...execute], {
     stdio: 'inherit',
-    env: { ...process.env, NODE_OPTIONS: '--import=./test/setup/http.mjs' },
+    env: { ...process.env, NODE_OPTIONS: envNodeOptions },
   });
 
   child.on('exit', code => {
