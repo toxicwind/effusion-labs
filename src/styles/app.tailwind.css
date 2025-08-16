@@ -223,7 +223,7 @@
 
 /* ——— Link affordances (unchanged names) ——— */
 @layer components {
-  .interlink::before{ content:"↗ "; margin-right:.15rem; color:currentColor; font-size:.9em; }
+  .interlink::before{ content:"⇢ "; margin-right:.15rem; color:currentColor; font-size:.9em; }
   .external-link{ @apply underline transition-colors; color: hsl(var(--p)); }
   .external-link:hover{ color: hsl(var(--pf)); }
 }
