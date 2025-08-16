@@ -6,6 +6,7 @@ function takeLatest(collection, n = 3) {
 
 module.exports = {
   eleventyComputed: {
+    projects: data => takeLatest(data.collections.projects),
     work: data => {
       const normalize = (items = [], type) =>
         items.map(i => ({ url: i.url, data: i.data, date: i.date, type }));
