@@ -12,5 +12,8 @@ test('homepage work list mixes types', async () => {
   const items = Array.from(doc.querySelectorAll('#work-list > li'));
   assert(items.length >= 6 && items.length <= 9);
   const types = new Set(items.map(li => li.dataset.type));
-  ['project','concept','spark','meta'].forEach(t => assert(types.has(t)));
+  const valid = ['project','concept','spark','meta'];
+  valid.forEach(t => assert(types.has(t)));
+  // Property: each item tagged with a valid type
+  items.forEach(li => assert(valid.includes(li.dataset.type)));
 });
