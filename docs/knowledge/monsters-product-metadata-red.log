@@ -1,0 +1,60 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> effusion_labs_final@1.0.0 test:guard
+> bash scripts/test-with-guardrails.sh test/integration/monsters-product-metadata.spec.mjs
+
+::notice:: LLM-safe: shell alive @ 2025-08-17T18:57:39Z
+::notice:: LLM-safe: shell alive @ 2025-08-17T18:57:39Z
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> effusion_labs_final@1.0.0 test
+> c8 --reporter=text-summary --reporter=lcov node tools/runner.mjs
+
+[11ty] Copied 78 Wrote 114 files in 4.49 seconds (39.4ms each, v3.1.2)
+✖ product page exposes full metadata (acceptance) (4499.850073ms)
+[@photogabble/wikilinks] WARNING Wikilink ([[missing-node]]) found pointing to to non-existent page in:
+	- ./src/test/wikilinks-ignore.md
+[11ty] Copied 78 Wrote 114 files in 2.39 seconds (21.0ms each, v3.1.2)
+✔ rendered prices use ISO code and two decimals (property) (2411.389888ms)
+[@photogabble/wikilinks] WARNING Wikilink ([[missing-node]]) found pointing to to non-existent page in:
+	- ./src/index.njk
+[11ty] Copied 78 Wrote 114 files in 2.31 seconds (20.2ms each, v3.1.2)
+✖ table and spec semantics hold (contract) (2323.320888ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 1
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 10922.290669
+
+✖ failing tests:
+
+test at test/integration/monsters-product-metadata.spec.mjs:26:1
+✖ product page exposes full metadata (acceptance) (4499.850073ms)
+  AssertionError [ERR_ASSERTION]: spec sheet present
+      at TestContext.<anonymous> (file:///workspace/effusion-labs/test/integration/monsters-product-metadata.spec.mjs:29:10)
+      at async Test.run (node:internal/test_runner/test:1054:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: null,
+    expected: true,
+    operator: '=='
+  }
+
+test at test/integration/monsters-product-metadata.spec.mjs:50:1
+✖ table and spec semantics hold (contract) (2323.320888ms)
+  TypeError [Error]: Cannot read properties of null (reading '0')
+      at TestContext.<anonymous> (file:///workspace/effusion-labs/test/integration/monsters-product-metadata.spec.mjs:52:74)
+      at async Test.run (node:internal/test_runner/test:1054:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+Executed 1 tests
+
+=============================== Coverage summary ===============================
+Statements   : 83.46% ( 1257/1506 )
+Branches     : 79.55% ( 214/269 )
+Functions    : 74.72% ( 68/91 )
+Lines        : 83.46% ( 1257/1506 )
+================================================================================
