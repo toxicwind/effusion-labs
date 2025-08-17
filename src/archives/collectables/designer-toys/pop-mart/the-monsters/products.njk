@@ -10,3 +10,12 @@ permalink: "/archives/collectables/designer-toys/pop-mart/the-monsters/products/
 <h1 class="text-2xl font-bold mb-2">{{ product.data.product_id }}</h1>
 <p class="mb-4">Form: {{ product.data.form }} | Release: {{ product.data.release_date }}</p>
 {{ badge(product.data.character, "/archives/collectables/designer-toys/pop-mart/the-monsters/characters/" + product.data.character + "/") }}
+{% set sources = product.data.provenance_ref | provenanceSources %}
+{% if sources.length %}
+<h2 class="text-xl font-semibold mt-4 mb-2">Provenance</h2>
+<ul class="list-disc pl-5">
+{% for s in sources %}
+  <li><a href="{{ s.url }}" class="text-blue-600 underline">{{ s.url }}</a> <span class="text-sm text-gray-500">({{ s.retrieved_at }})</span></li>
+{% endfor %}
+</ul>
+{% endif %}

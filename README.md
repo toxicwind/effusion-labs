@@ -20,6 +20,7 @@ Effusion Labs is a static digital garden built with Eleventy, Nunjucks templates
 ## ✨ Key Features
 - Home page presents a multi-column Work feed with filter toolbar, interactive concept map CTA, and animated lab seal flourish.
 - Dedicated `/work` section aggregates projects, concepts, and sparks with category filters and deep links.
+- Product pages now surface provenance metadata sourced from bundled JSONL files.
 ### npm Scripts
 - `npm run dev` – start Eleventy with live reload.
 - `npm run build` – compile the production site to `_site/`.
