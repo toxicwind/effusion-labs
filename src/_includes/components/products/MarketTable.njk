@@ -1,0 +1,13 @@
+{% macro marketTable(listings) %}
+<table data-testid="market-table" class="market-table">
+  <caption>Market Listings</caption>
+  <thead>
+    <tr><th scope="col">Market</th><th scope="col">Price</th></tr>
+  </thead>
+  <tbody>
+    {% for l in listings | sort(false, false, 'market') %}
+    <tr><td>{{ l.market }}</td><td>{{ money(l.currency, l.price) }}</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endmacro %}

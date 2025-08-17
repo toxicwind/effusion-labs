@@ -1,0 +1,5 @@
+{% macro badges(items, testid) %}
+  {% for item in items %}
+    <span class="badge-chip" data-testid="{{ testid }}">{{ item }}</span>
+  {% endfor %}
+{% endmacro %}

@@ -36,7 +36,6 @@ test('product page exposes full metadata (acceptance)', async () => {
   assert.ok(block.includes('<dt>Variant:</dt><dd>Single</dd>'));
   assert.ok(block.includes('<dt>Edition:</dt><dd>Collab</dd>'));
   assert.ok(block.includes('<dt>Region Lock:</dt><dd>No</dd>'));
-  assert.ok(html.includes('data-testid="markets"'));
   assert.ok(block.includes('<dt>Release Date:</dt><dd><time datetime="2025-04-25">2025-04-25</time></dd>'));
   assert.ok(block.includes('<dt>Availability:</dt><dd>Standard</dd>'));
 });
@@ -61,4 +60,10 @@ test('table and spec semantics hold (contract)', async () => {
   assert.ok(/<caption>Market Listings<\/caption>/.test(table));
   const rowCount = (table.match(/<tbody>[\s\S]*?<tr/g) || []).length;
   assert.equal(rowCount, product.market_listings.length, 'row count parity');
+});
+
+test('markets render as chips when present (acceptance)', async () => {
+  const html = await buildProduct();
+  const chips = html.match(/data-testid="market-chip"/g) || [];
+  assert.equal(chips.length, product.distribution.markets.length);
 });

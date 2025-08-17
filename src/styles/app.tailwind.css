@@ -229,3 +229,12 @@
   .external-link{ @apply underline transition-colors; color: hsl(var(--p)); }
   .external-link:hover{ color: hsl(var(--pf)); }
 }
+
+@layer components {
+  .spec-sheet { @apply grid gap-2 sm:grid-cols-[max-content_auto]; }
+  .spec-sheet dt { @apply font-semibold pr-2; }
+  .spec-sheet dd { @apply mb-1; }
+  .badge-chip { @apply inline-block border-2 px-2 py-0.5 text-xs mr-1; }
+  .market-table { @apply w-full border-collapse border-2; }
+  .market-table th, .market-table td { @apply border-2 px-2 py-1 text-left; }
+}

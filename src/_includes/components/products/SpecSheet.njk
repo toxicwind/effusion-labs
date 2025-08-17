@@ -1,0 +1,22 @@
+{% from "./Badges.njk" import badges %}
+{% macro specSheet(product) %}
+{% set p = product.data %}
+<dl data-testid="spec-sheet" class="spec-sheet">
+  {% if p.brand %}<dt>Brand:</dt><dd>{{ p.brand | titleizeSlug }}</dd>{% endif %}
+  {% if p.line %}<dt>Line:</dt><dd>{{ p.line | titleizeSlug }}</dd>{% endif %}
+  {% if p.character %}<dt>Character:</dt><dd>{{ p.character | titleizeSlug }}</dd>{% endif %}
+  {% if p.series %}<dt>Series:</dt><dd>{{ p.series | titleizeSlug }}</dd>{% endif %}
+  {% if p.form %}<dt>Form:</dt><dd>{{ p.form | titleizeSlug }}</dd>{% endif %}
+  {% if p.variant %}<dt>Variant:</dt><dd>{{ p.variant | titleizeSlug }}</dd>{% endif %}
+  {% if p.edition.kind %}<dt>Edition:</dt><dd>{{ p.edition.kind | titleizeSlug }}</dd>{% endif %}
+  <dt>Region Lock:</dt><dd>{{ p.distribution.region_lock | yesNo }}</dd>
+    {% if p.distribution.markets and p.distribution.markets.length %}
+      <dt>Markets:</dt><dd>{{ badges(p.distribution.markets, 'market-chip') | safe }}</dd>
+    {% endif %}
+  {% if p.release_date %}<dt>Release Date:</dt><dd>{{ p.release_date | humanDate | safe }}</dd>{% endif %}
+  <dt>Availability:</dt><dd>{{ p.availability.limited ? 'Limited' : 'Standard' }}</dd>
+  {% if p.availability.unit_count %}<dt>Unit Count:</dt><dd>{{ p.availability.unit_count }}</dd>{% endif %}
+  {% if p.confidence %}<dt>Confidence:</dt><dd>{{ p.confidence }}</dd>{% endif %}
+  {% if p.notes %}<dt>Notes:</dt><dd>{{ p.notes }}</dd>{% endif %}
+</dl>
+{% endmacro %}
