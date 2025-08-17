@@ -1,0 +1,367 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> effusion_labs_final@1.0.0 test:guard
+> bash scripts/test-with-guardrails.sh test/integration/monsters-product-metadata.spec.mjs
+
+::notice:: LLM-safe: shell alive @ 2025-08-17T18:03:45Z
+::notice:: LLM-safe: shell alive @ 2025-08-17T18:03:45Z
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> effusion_labs_final@1.0.0 test
+> c8 --reporter=text-summary --reporter=lcov node tools/runner.mjs
+
+[@photogabble/wikilinks] WARNING Wikilink ([[missing-node]]) found pointing to to non-existent page in:
+	- ./src/test/wikilinks-ignore.md
+[11ty] Copied 78 Wrote 114 files in 5.03 seconds (44.1ms each, v3.1.2)
+✔ archive nav exposes child counts (5047.574967ms)
+[@photogabble/wikilinks] WARNING Wikilink ([[missing-node]]) found pointing to to non-existent page in:
+	- ./src/test/wikilinks-ignore.md
+[11ty] Copied 78 Wrote 114 files in 4.92 seconds (43.1ms each, v3.1.2)
+✔ layout exposes build timestamp (4938.708472ms)
+[@photogabble/wikilinks] WARNING Wikilink ([[missing-node]]) found pointing to to non-existent page in:
+	- ./src/test/wikilinks-ignore.md
+[11ty] Copied 78 Wrote 114 files in 4.11 seconds (36.0ms each, v3.1.2)
+✔ code blocks expose copy control (4406.432818ms)
+[@photogabble/wikilinks] WARNING Wikilink ([[missing-node]]) found pointing to to non-existent page in:
+	- ./src/test/wikilinks-ignore.md
+[11ty] Copied 78 Wrote 114 files in 4.65 seconds (40.8ms each, v3.1.2)
+✔ collection pages expose section metadata (4671.649447ms)
+✔ concept map JSON-LD export generates @context and @graph (3.880248ms)
+[@photogabble/wikilinks] WARNING Wikilink ([[missing-node]]) found pointing to to non-existent page in:
+	- ./src/test/wikilinks-ignore.md
+[11ty] Copied 78 Wrote 114 files in 4.59 seconds (40.2ms each, v3.1.2)
+✔ feed exposes build metadata (4605.439005ms)
+[@photogabble/wikilinks] WARNING Wikilink ([[missing-node]]) found pointing to to non-existent page in:
+	- ./src/test/wikilinks-ignore.md
+[11ty] Copied 78 Wrote 114 files in 4.85 seconds (42.6ms each, v3.1.2)
+✔ home page header includes primary nav landmark (4872.555466ms)
+[@photogabble/wikilinks] WARNING Wikilink ([[missing-node]]) found pointing to to non-existent page in:
+	- ./src/test/wikilinks-ignore.md
+[11ty] Copied 78 Wrote 114 files in 4.06 seconds (35.6ms each, v3.1.2)
+✔ homepage work list mixes types (4265.751145ms)
+[@photogabble/wikilinks] WARNING Wikilink ([[missing-node]]) found pointing to to non-existent page in:
+	- ./src/test/wikilinks-ignore.md
+[11ty] Copied 78 Wrote 114 files in 4.04 seconds (35.5ms each, v3.1.2)
+✔ homepage hero and work filters (4295.84476ms)
+::notice:: LLM-safe: tests alive @ 2025-08-17T18:04:10.882Z
+[@photogabble/wikilinks] WARNING Wikilink ([[missing-node]]) found pointing to to non-existent page in:
+	- ./src/test/wikilinks-ignore.md
+[11ty] Copied 78 Wrote 114 files in 9.18 seconds (80.5ms each, v3.1.2)
+✔ logo image transforms to avif and webp (9437.322439ms)
+[@photogabble/wikilinks] WARNING Wikilink ([[missing-node]]) found pointing to to non-existent page in:
+	- ./src/test/wikilinks-ignore.md
+[11ty] Copied 78 Wrote 114 files in 6.20 seconds (54.4ms each, v3.1.2)
+✔ markdown headings include anchor ids (6199.581407ms)
+[@photogabble/wikilinks] WARNING Wikilink ([[missing-node]]) found pointing to to non-existent page in:
+	- ./src/test/wikilinks-ignore.md
+[11ty] Copied 78 Wrote 114 files in 5.73 seconds (50.3ms each, v3.1.2)
+✔ monsters hub lists products and cross-links product and character pages (5736.703895ms)
+[@photogabble/wikilinks] WARNING Wikilink ([[missing-node]]) found pointing to to non-existent page in:
+	- ./src/test/wikilinks-ignore.md
+[11ty] Copied 78 Wrote 114 files in 4.74 seconds (41.5ms each, v3.1.2)
+✖ product page exposes full metadata (acceptance) (4743.796236ms)
+[@photogabble/wikilinks] WARNING Wikilink ([[missing-node]]) found pointing to to non-existent page in:
+	- ./src/test/wikilinks-ignore.md
+[11ty] Copied 78 Wrote 114 files in 2.72 seconds (23.9ms each, v3.1.2)
+✖ price displays with currency and two decimals (property) (2742.537283ms)
+::notice:: LLM-safe: tests alive @ 2025-08-17T18:04:23.423Z
+[@photogabble/wikilinks] WARNING Wikilink ([[missing-node]]) found pointing to to non-existent page in:
+	- ./src/test/wikilinks-ignore.md
+[11ty] Copied 78 Wrote 114 files in 2.52 seconds (22.1ms each, v3.1.2)
+✖ metadata block matches snapshot (contract) (2540.686212ms)
+[@photogabble/wikilinks] WARNING Wikilink ([[missing-node]]) found pointing to to non-existent page in:
+	- ./src/test/wikilinks-ignore.md
+[11ty] Copied 78 Wrote 114 files in 4.07 seconds (35.7ms each, v3.1.2)
+✔ overlay root exists and carries defaults (4301.834551ms)
+✔ seed generation modes (2.352924ms)
+[@photogabble/wikilinks] WARNING Wikilink ([[missing-node]]) found pointing to to non-existent page in:
+	- ./src/index.njk
+[11ty] Copied 78 Wrote 114 files in 4.79 seconds (42.0ms each, v3.1.2)
+✔ main nav marks current page and is labelled (4797.43425ms)
+✔ navigation items are sequentially ordered (1.53542ms)
+[@photogabble/wikilinks] WARNING Wikilink ([[missing-node]]) found pointing to to non-existent page in:
+	- ./src/index.njk
+[11ty] Copied 78 Wrote 114 files in 4.73 seconds (41.5ms each, v3.1.2)
+✔ buildLean sets env and output directory (4736.521861ms)
+[@photogabble/wikilinks] WARNING Wikilink ([[missing-node]]) found pointing to to non-existent page in:
+	- ./src/test/wikilinks-ignore.md
+[11ty] Copied 78 Wrote 114 files in 4.90 seconds (43.0ms each, v3.1.2)
+✔ spark listings reveal status text (4907.618806ms)
+[11ty] Copied 78 Wrote 114 files in 4.81 seconds (42.2ms each, v3.1.2)
+✔ wikilinks ignore templated paths (4809.207001ms)
+[@photogabble/wikilinks] WARNING Wikilink ([[missing-node]]) found pointing to to non-existent page in:
+	- ./src/test/wikilinks-ignore.md
+[11ty] Copied 78 Wrote 114 files in 4.62 seconds (40.5ms each, v3.1.2)
+✔ work pages build and latest redirects (4625.707082ms)
+✔ deploy workflow does not trigger on pull_request (1.629456ms)
+✔ build job runs only on push events (0.264872ms)
+✔ defines improved background colors (2.267918ms)
+✔ text contrast meets WCAG AA (0.873305ms)
+✔ tailwind exposes readable fonts (0.230621ms)
+✔ includes fluid type scale tokens (6.375132ms)
+✔ docs:links reports no broken links (1780.406213ms)
+✔ package-lock.json defines lockfileVersion (7.749864ms)
+✔ footnote popover separates source line (202.143864ms)
+✔ projects computed picks latest entries by date (2.825122ms)
+✔ keepalive emits heartbeat to stderr (6397.651879ms)
+✔ keepalive ignores first SIGINT (453.697874ms)
+✔ gateway reads SOLVER_URL from environment (1.873656ms)
+✔ gateway retains default solver URL (0.210969ms)
+✔ external link renders with arrow and class (17.285379ms)
+✔ internal link keeps text without external markers (2.532916ms)
+✔ external link starting with arrow does not duplicate (4.681381ms)
+✔ provenanceSources parses JSONL provenance files (1.9701ms)
+✔ provenanceSources returns [] when file missing (1.427864ms)
+✔ devDependencies omit @vscode/ripgrep (2.458983ms)
+✔ prepare-docs avoids ripgrep install (0.37836ms)
+✔ merges tag-like metadata into unified tags and categories (3.008834ms)
+✔ deduplicates tag values (0.294615ms)
+✔ categories returns empty array when spark_type absent (0.163612ms)
+✔ time to chill includes size with height in cm (1.756154ms)
+✔ time to chill height is positive (0.229262ms)
+✔ filterDeadLinks removes templated links (3.21669ms)
+✔ result has no templated links (0.35835ms)
+✔ filterDeadLinks does not mutate input (0.33909ms)
+✔ GitHub workflows use latest action versions (1.883022ms)
+ℹ tests 53
+ℹ suites 0
+ℹ pass 50
+ℹ fail 3
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 52275.111931
+
+✖ failing tests:
+
+test at test/integration/monsters-product-metadata.spec.mjs:20:1
+✖ product page exposes full metadata (acceptance) (4743.796236ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /Brand:\s*pop-mart/. Input:
+  
+  '\n' +
+    '<!DOCTYPE html>\n' +
+    '<html lang="en" data-theme="dark" class="scroll-pt-16 dark">\n' +
+    '<head>\n' +
+    '  <meta charset="UTF-8">\n' +
+    '  <meta name="viewport" content="width=device-width, initial-scale=1.0">\n' +
+    '  <title> | Effusion Labs</title>\n' +
+    '\n' +
+    '  <meta name="color-scheme" content="dark light">\n' +
+    '  <script>(function(){\n' +
+    "  const storageKey = 'theme';\n" +
+    '  const doc = document.documentElement;\n' +
+    '  const stored = localStorage.getItem(storageKey);\n' +
+    `  const meta = document.querySelector('meta[name="color-scheme"]') || (function(){\n` +
+    "    const m = document.createElement('meta');\n" +
+    "    m.name = 'color-scheme';\n" +
+    '    document.head.appendChild(m);\n' +
+    '    return m;\n' +
+    '  })();\n' +
+    '  let theme = stored;\n' +
+    "  if (theme !== 'dark' && theme !== 'light') {\n" +
+    "    theme = 'dark';\n" +
+    '  }\n' +
+    '  doc.dataset.theme = theme;\n' +
+    "  doc.classList.toggle('dark', theme === 'dark');\n" +
+    "  meta.content = theme === 'light' ? 'light dark' : 'dark light';\n" +
+    '})();\n' +
+    '</script>\n' +
+    '\n' +
+    '  <link rel="stylesheet" href="/assets/css/app.css">\n' +
+    '  <link rel="preconnect" href="https://fonts.googleapis.com">\n' +
+    '  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n' +
+    '  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Merriweather:wght@400;700&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">\n' +
+    '  <script src="/assets/js/lucide.min.js"></script>\n' +
+    '</head>\n' +
+    '\n' +
+    '<body class="bg-background text-text font-body">\n' +
+    '  <a href="#main" class="skip-link">Skip to main content</a>\n' +
+    '  \n' +
+    '<header class="sticky top-0 z-40 w-full bg-base-100/90 backdrop-blur shadow">\n' +
+    '  <div class="navbar mx-auto max-w-screen-2xl px-6">\n' +
+    '    \n' +
+    '\n' +
+    '    <!-- Brand -->\n' +
+    '    <div class="flex-1">\n' +
+    '      <a href="/" class="flex items-center gap-2 font-heading text-3xl text-primary">\n' +
+    '        <i data-lucide="flask-conical" class="w-6 h-6" aria-hidden="true"></i>\n' +
+    '        <span>EFFUSION LABS</span>\n' +
+    '      </a>\n' +
+    '    </div>\n' +
+    '\n' +
+    '    <!-- Mobile nav (hidden on lg+) -->\n' +
+    '    <div class="flex-none lg:hidden">\n' +
+    '      <nav class="dropdown dropdown-end" aria-label="Primary navigation">\n' +
+    '        <label tabindex="0" class="btn btn-ghost btn-square" aria-label="Open menu">\n' +
+    '          <i data-lucide="menu" class="w-6 h-6" aria-hidden="true"></i>\n' +
+    '        </label>\n' +
+    '        <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[100] p-2 shadow bg-base-100 rounded-box w-56" role="menu">\n' +
+    '          \n' +
+    '          \n' +
+    '            \n' +
+    '    <li><a href="/">Showcase</a></li>\n' +
+    '  \n' +
+    '    <li><a href="/sparks/">Sparks</a></li>\n' +
+    '  \n' +
+    '    <li><a href="/concepts/">Concepts</a></li>\n' +
+    '  \n' +
+    '    <li><a href="/projects/">Projects</a></li>\n' +
+    '  \n' +
+    '    <li><a href="/archives/">Archives</a></li>\n' +
+    '  \n' +
+    '    <li><a href="/meta/">Meta</a></li>\n' +
+    '  \n' +
+    '    <li><a href="/map/">Map</a></li>\n' +
+    '  \n' +
+    '          \n' +
+    '        </ul>\n' +
+    '      </nav>\n' +
+    '    </div>\n' +
+    '\n' +
+    '    <!-- Right cluster: theme toggle + desktop nav -->\n' +
+    '    <div class="flex-none flex items-center gap-2">\n' +
+    '      <button id="theme-toggle" class="btn btn-ghost btn-square" aria-label="Switch to light theme" aria-pressed="true">\n' +
+    '        <span class="sr-only">Toggle theme</span>\n' +
+    '        <i data-lucide="sun" class="w-6 h-6 hidden" aria-hidden="true"></i>\n' +
+    '        <i data-lucide="moon" class="w-6 h-6" aria-hidden="true"></i>\n' +
+    '      </button>\n' +
+    '\n' +
+    '      <!-- Desktop nav (shown on lg+) -->\n' +
+    '      <nav class="hidden lg:flex" aria-label="Primary navigation">\n' +
+    '        <ul class="menu menu-horizontal px-1">\n' +
+    '          \n' +
+    '            \n' +
+    '    <li><a href="/" class="hover:text-primary">Showcase</a></li>\n' +
+    '  \n' +
+    '    <li><a href="/sparks/" class="hover:text-primary">Sparks</a></li>\n' +
+    '  \n' +
+    '    <li><a href="/concepts/" class="hover:text-primary">Concepts</a></li>\n' +
+    '  \n' +
+    '    <li><a href="/projects/" class="hover:text-primary">Projects</a></li>\n' +
+    '  \n' +
+    '    <li><a href="/archives/" class="hover:text-primary">Archives</a></li>\n' +
+    '  \n' +
+    '    <li><a href="/meta/" class="hover:text-primary">Meta</a></li>\n' +
+    '  \n' +
+    '    <li><a href="/map/" class="hover:text-primary">Map</a></li>\n' +
+    '  \n' +
+    '          \n' +
+    '        </ul>\n' +
+    '      </nav>\n' +
+    '    </div>\n' +
+    '  </div>\n' +
+    '</header>\n' +
+    '\n' +
+    '\n' +
+    '  <div class="mx-auto max-w-screen-2xl px-6">\n' +
+    '    \n' +
+    '    \n' +
+    '\n' +
+    '    <main id="main" class="\n' +
+    '      xl:grid xl:gap-10 xl:grid-cols-[1fr_16rem]\n' +
+    '       mt-12\n' +
+    '    ">\n' +
+    '      <article class="prose dark:prose-invert max-w-none m-0\n' +
+    '         xl:col-span-1 \n' +
+    '      ">\n' +
+    '        \n' +
+    '          <header class="mb-8">\n' +
+    '            <h1 class="font-heading text-primary text-4xl tracking-wider"></h1>\n' +
+    '          </header>\n' +
+    '        \n' +
+    '        \n' +
+    '<h1 class="text-2xl font-bold mb-2">pop-mart--the-monsters--labubu--big-into-energy--blind-box--single--20250425</h1>\n' +
+    '<p class="mb-4">Form: blind-box | Release: 2025-04-25</p>\n' +
+    '\n' +
+    '<a href="/archives/collectables/designer-toys/pop-mart/the-monsters/characters/labubu/" class="inline-block border px-2 py-1 text-xs">labubu</a>\n' +
+    '\n' +
+    '\n' +
+    '\n' +
+    '<h2 class="text-xl font-semibold mt-4 mb-2">Provenance</h2>\n' +
+    '<ul class="list-disc pl-5">\n' +
+    '\n' +
+    '  <li><a href="/docs/knowledge/sources/the-monsters/seed-article.md" class="text-blue-600 underline">/docs/knowledge/sources/the-monsters/seed-article.md</a> <span class="text-sm text-gray-500">(2025-08-09T00:00:00Z)</span></li>\n' +
+    '\n' +
+    '</ul>\n' +
+    '\n' +
+    '\n' +
+    '      </article>\n' +
+    '\n' +
+    '      \n' +
+    '      <aside class="w-full mt-10 text-sm opacity-90 border-t border-border pt-4 xl:mt-0 xl:w-64 xl:pl-4 xl:border-t-0 xl:border-l">\n' +
+    '        <div class="space-y-2 xl:sticky xl:top-28">\n' +
+    '          <h2 class="font-heading text-lg font-semibold tracking-wide">Meta</h2>\n' +
+    '          <ul class="space-y-1 text-text">\n' +
+    '            \n' +
+    '            \n' +
+    '            \n' +
+    '            \n' +
+    '            \n' +
+    '              <li><strong>Tags:</strong>\n' +
+    '                <ul class="pl-4 list-disc"></ul>\n' +
+    '              </li>\n' +
+    '            \n' +
+    '            \n' +
+    '          </ul>\n' +
+    '        </div>\n' +
+    '      </aside>\n' +
+    '      \n' +
+    '    </main>\n' +
+    '\n' +
+    '    <footer class="mt-16 p-8 text-center text-sm text-text/60 border-t border-border">\n' +
+    '      <span class="block font-mono text-xs tracking-widest mb-2" data-build="2025-08-17T18:04:14.884Z">2025-08-17T18:04:14.884Z</span>\n' +
+    '      &copy; 2025 Effusion Labs. A space for creative synthesis.\n' +
+    '    </footer>\n' +
+    '  </div>\n' +
+    '\n' +
+    '  <script>lucide.createIcons();</script>\n' +
+    '    <script src="/assets/js/theme-toggle.js" defer></script>\n' +
+    '    <script src="/assets/js/footnote-nav.js" defer></script>\n' +
+    '    <script src="/assets/js/code-copy.js" defer></script>\n' +
+    '  </body>\n' +
+    '</html>\n'
+  
+      at TestContext.<anonymous> (file:///workspace/effusion-labs/test/integration/monsters-product-metadata.spec.mjs:22:10)
+      at async Test.run (node:internal/test_runner/test:1054:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: `\n<!DOCTYPE html>\n<html lang="en" data-theme="dark" class="scroll-pt-16 dark">\n<head>\n  <meta charset="UTF-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1.0">\n  <title> | Effusion Labs</title>\n\n  <meta name="color-scheme" content="dark light">\n  <script>(function(){\n  const storageKey = 'theme';\n  const doc = document.documentElement;\n  const stored = localStorage.getItem(storageKey);\n  const meta = document.querySelector('meta[name="color-scheme"]') || (function(){\n    const m = document.createElement('meta');\n    m.name = 'color-scheme';\n    document.head.appendChild(m);\n    return m;\n  })();\n  let theme = stored;\n  if (theme !== 'dark' && theme !== 'light') {\n    theme = 'dark';\n  }\n  doc.dataset.theme = theme;\n  doc.classList.toggle('dark', theme === 'dark');\n  meta.content = theme === 'light' ? 'light dark' : 'dark light';\n})();\n</script>\n\n  <link rel="stylesheet" href="/assets/css/app.css">\n  <link rel="preconnect" href="https://fonts.googleapis.com">\n  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Merriweather:wght@400;700&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">\n  <script src="/assets/js/lucide.min.js"></script>\n</head>\n\n<body class="bg-background text-text font-body">\n  <a href="#main" class="skip-link">Skip to main content</a>\n  \n<header class="sticky top-0 z-40 w-full bg-base-100/90 backdrop-blur shadow">\n  <div class="navbar mx-auto max-w-screen-2xl px-6">\n    \n\n    <!-- Brand -->\n    <div class="flex-1">\n      <a href="/" class="flex items-center gap-2 font-heading text-3xl text-primary">\n        <i data-lucide="flask-conical" class="w-6 h-6" aria-hidden="true"></i>\n        <span>EFFUSION LABS</span>\n      </a>\n    </div>\n\n    <!-- Mobile nav (hidden on lg+) -->\n    <div class="flex-none lg:hidden">\n      <nav class="dropdown dropdown-end" aria-label="Primary navigation">\n        <label tabindex="0" class="btn btn-ghost btn-square" aria-label="Open menu">\n          <i data-lucide="menu" class="w-6 h-6" aria-hidden="true"></i>\n        </label>\n        <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[100] p-2 shadow bg-base-100 rounded-box w-56" role="menu">\n          \n          \n            \n    <li><a href="/">Showcase</a></li>\n  \n    <li><a href="/sparks/">Sparks</a></li>\n  \n    <li><a href="/concepts/">Concepts</a></li>\n  \n    <li><a href="/projects/">Projects</a></li>\n  \n    <li><a href="/archives/">Archives</a></li>\n  \n    <li><a href="/meta/">Meta</a></li>\n  \n    <li><a href="/map/">Map</a></li>\n  \n          \n        </ul>\n      </nav>\n    </div>\n\n    <!-- Right cluster: theme toggle + desktop nav -->\n    <div class="flex-none flex items-center gap-2">\n      <button id="theme-toggle" class="btn btn-ghost btn-square" aria-label="Switch to light theme" aria-pressed="true">\n        <span class="sr-only">Toggle theme</span>\n        <i data-lucide="sun" class="w-6 h-6 hidden" aria-hidden="true"></i>\n        <i data-lucide="moon" class="w-6 h-6" aria-hidden="true"></i>\n      </button>\n\n      <!-- Desktop nav (shown on lg+) -->\n      <nav class="hidden lg:flex" aria-label="Primary navigation">\n        <ul class="menu menu-horizontal px-1">\n          \n            \n    <li><a href="/" class="hover:text-primary">Showcase</a></li>\n  \n    <li><a href="/sparks/" class="hover:text-primary">Sparks</a></li>\n  \n    <li><a href="/concepts/" class="hover:text-primary">Concepts</a></li>\n  \n    <li><a href="/projects/" class="hover:text-primary">Projects</a></li>\n  \n    <li><a href="/archives/" class="hover:text-primary">Archives</a></li>\n  \n    <li><a href="/meta/" class="hover:text-primary">Meta</a></li>\n  \n    <li><a href="/map/" class="hover:text-primary">Map</a></li>\n  \n          \n        </ul>\n      </nav>\n    </div>\n  </div>\n</header>\n\n\n  <div class="mx-auto max-w-screen-2xl px-6">\n    \n    \n\n    <main id="main" class="\n      xl:grid xl:gap-10 xl:grid-cols-[1fr_16rem]\n       mt-12\n    ">\n      <article class="prose dark:prose-invert max-w-none m-0\n         xl:col-span-1 \n      ">\n        \n          <header class="mb-8">\n            <h1 class="font-heading text-primary text-4xl tracking-wider"></h1>\n          </header>\n        \n        \n<h1 class="text-2xl font-bold mb-2">pop-mart--the-monsters--labubu--big-into-energy--blind-box--single--20250425</h1>\n<p class="mb-4">Form: blind-box | Release: 2025-04-25</p>\n\n<a href="/archives/collectables/designer-toys/pop-mart/the-monsters/characters/labubu/" class="inline-block border px-2 py-1 text-xs">labubu</a>\n\n\n\n<h2 class="text-xl font-semibold mt-4 mb-2">Provenance</h2>\n<ul class="list-disc pl-5">\n\n  <li><a href="/docs/knowledge/sources/the-monsters/seed-article.md" class="text-blue-600 underline">/docs/knowledge/sources/the-monsters/seed-article.md</a> <span class="text-sm text-gray-500">(2025-08-09T00:00:00Z)</span></li>\n\n</ul>\n\n\n      </article>\n\n      \n      <aside class="w-full mt-10 text-sm opacity-90 border-t border-border pt-4 xl:mt-0 xl:w-64 xl:pl-4 xl:border-t-0 xl:border-l">\n        <div class="space-y-2 xl:sticky xl:top-28">\n          <h2 class="font-heading text-lg font-semibold tracking-wide">Meta</h2>\n          <ul class="space-y-1 text-text">\n            \n            \n            \n            \n            \n              <li><strong>Tags:</strong>\n                <ul class="pl-4 list-disc"></ul>\n              </li>\n            \n            \n          </ul>\n        </div>\n      </aside>\n      \n    </main>\n\n    <footer class="mt-16 p-8 text-center text-sm text-text/60 border-t border-border">\n      <span class="block font-mono text-xs tracking-widest mb-2" data-build="2025-08-17T18:04:14.884Z">2025-08-17T18:04:14.884Z</span>\n      &copy; 2025 Effusion Labs. A space for creative synthesis.\n    </footer>\n  </div>\n\n  <script>lucide.createIcons();</script>\n    <script src="/assets/js/theme-toggle.js" defer></script>\n    <script src="/assets/js/footnote-nav.js" defer></script>\n    <script src="/assets/js/code-copy.js" defer></script>\n  </body>\n</html>\n`,
+    expected: /Brand:\s*pop-mart/,
+    operator: 'match'
+  }
+
+test at test/integration/monsters-product-metadata.spec.mjs:32:1
+✖ price displays with currency and two decimals (property) (2742.537283ms)
+  AssertionError [ERR_ASSERTION]: price format with two decimals
+      at TestContext.<anonymous> (file:///workspace/effusion-labs/test/integration/monsters-product-metadata.spec.mjs:35:10)
+      at async Test.run (node:internal/test_runner/test:1054:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:744:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: null,
+    expected: true,
+    operator: '=='
+  }
+
+test at test/integration/monsters-product-metadata.spec.mjs:39:1
+✖ metadata block matches snapshot (contract) (2540.686212ms)
+  AssertionError [ERR_ASSERTION]: metadata block exists
+      at TestContext.<anonymous> (file:///workspace/effusion-labs/test/integration/monsters-product-metadata.spec.mjs:42:10)
+      at async Test.run (node:internal/test_runner/test:1054:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:744:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: null,
+    expected: true,
+    operator: '=='
+  }
+Executed 34 tests
+::notice:: LLM-safe: shell alive @ 2025-08-17T18:04:45Z
+
+=============================== Coverage summary ===============================
+Statements   : 86.47% ( 1368/1582 )
+Branches     : 81.16% ( 237/292 )
+Functions    : 77.65% ( 73/94 )
+Lines        : 86.47% ( 1368/1582 )
+================================================================================

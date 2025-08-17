@@ -1,0 +1,88 @@
+version: 2
+
+updates:
+  # ── 1) NPM deps (root)
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "America/Denver"
+    # App repo → bump package.json constraints; don't do lockfile-only
+    versioning-strategy: increase
+    # Keep noise in check; Dependabot defaults to 5 if you omit this
+    open-pull-requests-limit: 10
+    # Cooldown slows churn if packages release multiple times a week
+    cooldown:
+      days: 2
+    groups:
+      # Group safe updates for fast merges
+      npm-prod-minor-patch:
+        patterns: ["*"]
+        dependency-type: "production"
+        update-types: ["minor", "patch"]
+      npm-dev-minor-patch:
+        patterns: ["*"]
+        dependency-type: "development"
+        update-types: ["minor", "patch"]
+      # Keep majors isolated so they’re easy to review/revert
+      npm-all-majors:
+        patterns: ["*"]
+        update-types: ["major"]
+      # If a security alert fires, batch those small bumps together
+      npm-security:
+        applies-to: "security-updates"
+        patterns: ["*"]
+        update-types: ["patch", "minor"]
+
+  # ── 2) GitHub Actions (workflow files under /.github/workflows)
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:15"
+      timezone: "America/Denver"
+    open-pull-requests-limit: 5
+    groups:
+      gha-minor-patch:
+        patterns: ["*"]
+        update-types: ["minor", "patch"]
+      gha-majors:
+        patterns: ["*"]
+        update-types: ["major"]
+
+  # ── 3) Docker base images — .portainer/Dockerfile
+  - package-ecosystem: "docker"
+    directory: "/.portainer"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:30"
+      timezone: "America/Denver"
+    open-pull-requests-limit: 5
+    groups:
+      docker-minor-patch:
+        patterns: ["*"]
+        update-types: ["minor", "patch"]
+      docker-majors:
+        patterns: ["*"]
+        update-types: ["major"]
+
+  # ── 4) Docker base images — markdown_gateway/Dockerfile
+  - package-ecosystem: "docker"
+    directory: "/markdown_gateway"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:35"
+      timezone: "America/Denver"
+    open-pull-requests-limit: 5
+    groups:
+      docker-minor-patch:
+        patterns: ["*"]
+        update-types: ["minor", "patch"]
+      docker-majors:
+        patterns: ["*"]
+        update-types: ["major"]
