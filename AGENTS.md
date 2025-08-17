@@ -22,15 +22,12 @@ This repository operates in an **internal prototype / R\&D** mode. Prefer soluti
 -----
 
 ## Guardrail Activation
+To make the current shell session safe, run the following command **once**. It will install all protections and they will remain active for the life of the shell.
 
-After reading this file, bootstrap the repository's LLM guardrails so they monitor subsequent commands:
-
+**Activation Command:**
 ```bash
-bash scripts/llm-bootstrap.sh
-export BASH_ENV="$PWD/.llm-bash-env"
+source scripts/llm-bootstrap.sh
 ```
-
-Run tests under guardrails with `npm run test:guard`. This wraps the test runner with heartbeat monitoring and warning gating. The first Ctrl+C (SIGINT) is ignored; the second exits with code `130`.
 
 -----
 
