@@ -4,39 +4,19 @@ pagination:
   data: collections.monstersProducts
   size: 1
   alias: product
-permalink: "/archives/collectables/designer-toys/pop-mart/the-monsters/products/{{ product.data.product_id }}/index.html"
+permalink: /archives/collectables/designer-toys/pop-mart/the-monsters/products/{{ product.data.product_id }}/index.html
 ---
-{% from "components/badge.njk" import badge %}
+{% from "components/products/SpecSheet.njk" import specSheet %}
+{% from "components/products/MarketTable.njk" import marketTable %}
+{% from "components/products/ProvenanceList.njk" import provenanceList %}
+{% from "components/products/MetaNotes.njk" import metaNotes %}
+{% from "components/products/Badges.njk" import characterBadge %}
 <h1 class="text-2xl font-bold mb-2">{{ product.data.product_id }}</h1>
-<dl class="grid grid-cols-2 gap-1">
-  <dt>Brand:</dt><dd>{{ product.data.brand }}</dd>
-  <dt>Line:</dt><dd>{{ product.data.line }}</dd>
-  <dt>Character:</dt><dd>{{ product.data.character }}</dd>
-  <dt>Series:</dt><dd>{{ product.data.series }}</dd>
-  <dt>Form:</dt><dd>{{ product.data.form }}</dd>
-  <dt>Variant:</dt><dd>{{ product.data.variant }}</dd>
-  <dt>Edition:</dt><dd>{{ product.data.edition.kind }}</dd>
-  <dt>Region Lock:</dt><dd>{{ product.data.distribution.region_lock }}</dd>
-  {% set markets = product.data.distribution.markets | join(', ') %}
-  <dt>Markets:</dt><dd>{{ markets }}</dd>
-  <dt>Release Date:</dt><dd>{{ product.data.release_date }}</dd>
-  {% for listing in product.data.market_listings %}
-    <dt>Price:</dt><dd>{{ listing.currency }} {{ listing.price }}</dd>
-  {% endfor %}
-  <dt>Limited:</dt><dd>{{ product.data.availability.limited }}</dd>
-  {% if product.data.availability.unit_count %}
-    <dt>Unit Count:</dt><dd>{{ product.data.availability.unit_count }}</dd>
-  {% endif %}
-  <dt>Confidence:</dt><dd>{{ product.data.confidence }}</dd>
-  <dt>Notes:</dt><dd>{{ product.data.notes }}</dd>
-</dl>
-{{ badge(product.data.character, "/archives/collectables/designer-toys/pop-mart/the-monsters/characters/" + product.data.character + "/") }}
-{% set sources = product.data.provenance_ref | provenanceSources %}
-{% if sources.length %}
-<h2 class="text-xl font-semibold mt-4 mb-2">Provenance</h2>
-<ul class="list-disc pl-5">
-{% for s in sources %}
-  <li><a href="{{ s.url }}" class="text-blue-600 underline">{{ s.url }}</a> <span class="text-sm text-gray-500">({{ s.retrieved_at }})</span></li>
-{% endfor %}
-</ul>
+{{ characterBadge(product.data.character) }}
+{{ specSheet(product.data) | safe }}
+{% if product.data.market_listings %}
+  {{ marketTable(product.data.market_listings) | safe }}
 {% endif %}
+{{ metaNotes(product.data) | safe }}
+{% set sources = product.data.provenance_ref | provenanceSources %}
+{{ provenanceList(sources) | safe }}

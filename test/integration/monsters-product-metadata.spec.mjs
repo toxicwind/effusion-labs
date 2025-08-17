@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
+import { JSDOM } from 'jsdom';
 import { buildLean } from '../helpers/eleventy-env.mjs';
 
 const productSlug = 'pop-mart--the-monsters--labubu--big-into-energy--blind-box--single--20250425';
@@ -17,33 +18,54 @@ async function buildProduct() {
   return readFileSync(file, 'utf8');
 }
 
+function dom(html) {
+  return new JSDOM(html).window.document;
+}
+
 test('product page exposes full metadata (acceptance)', async () => {
   const html = await buildProduct();
-  const block = html.match(/<dl[^>]*>([\s\S]*?)<\/dl>/)[0];
-  assert.ok(block.includes('<dt>Brand:</dt><dd>pop-mart</dd>'));
-  assert.ok(block.includes('<dt>Line:</dt><dd>the-monsters</dd>'));
-  assert.ok(block.includes('<dt>Character:</dt><dd>labubu</dd>'));
-  assert.ok(block.includes('<dt>Series:</dt><dd>big-into-energy</dd>'));
-  assert.ok(block.includes('<dt>Variant:</dt><dd>single</dd>'));
-  assert.ok(block.includes('<dt>Markets:</dt><dd>US</dd>'));
-  assert.ok(block.includes('<dt>Price:</dt><dd>USD 27.99</dd>'));
-  assert.ok(block.includes('<dt>Limited:</dt><dd>false</dd>'));
+  const document = dom(html);
+  const dl = document.querySelector('[data-testid="spec-sheet"]');
+  assert.ok(dl, 'spec sheet rendered');
+  const entries = Array.from(dl.querySelectorAll('dt')).map(dt => dt.textContent.trim());
+  assert.ok(entries.includes('Brand'), 'brand label present');
+  assert.ok(entries.includes('Line'), 'line label present');
+  assert.ok(entries.includes('Character'), 'character label present');
+  assert.ok(entries.includes('Series'), 'series label present');
+  assert.ok(entries.includes('Form'), 'form label present');
+  assert.ok(entries.includes('Variant'), 'variant label present');
+  assert.ok(entries.includes('Edition'), 'edition label present');
+  const chips = dl.querySelectorAll('[data-market]');
+  assert.ok(chips.length > 0, 'market chips render');
 });
 
-test('price displays with currency and two decimals (property)', async () => {
+test('price cells are formatted and table parity holds (property)', async () => {
   const html = await buildProduct();
-  const block = html.match(/<dl[^>]*>([\s\S]*?)<\/dl>/)[0];
-  const priceMatch = block.match(/Price:<\/dt><dd>USD\s*(\d+\.\d{2})/);
-  assert.ok(priceMatch, 'price format with two decimals');
+  const document = dom(html);
+  const table = document.querySelector('[data-testid="market-table"]');
+  assert.ok(table, 'market listings table rendered');
+  const rows = table.querySelectorAll('tbody tr');
+  assert.equal(rows.length, 1, 'row count matches listings length');
+  for (const row of rows) {
+    const price = row.querySelector('td:nth-child(2)').textContent.trim();
+    assert.match(price, /\b[A-Z]{3}\s+\d+\.\d{2}\b/, 'price format');
+  }
 });
 
-
-test('metadata block matches snapshot (contract)', async () => {
+test('semantic invariants hold (contract)', async () => {
   const html = await buildProduct();
-  const m = html.match(/<dl[^>]*>([\s\S]*?)<\/dl>/);
-  assert.ok(m, 'metadata block exists');
-  const block = m[0].replace(/\s+/g, ' ').trim();
-  const expected = '<dl class="grid grid-cols-2 gap-1"> <dt>Brand:</dt><dd>pop-mart</dd> <dt>Line:</dt><dd>the-monsters</dd> <dt>Character:</dt><dd>labubu</dd> <dt>Series:</dt><dd>big-into-energy</dd> <dt>Form:</dt><dd>blind-box</dd> <dt>Variant:</dt><dd>single</dd> <dt>Edition:</dt><dd>collab</dd> <dt>Region Lock:</dt><dd>false</dd> <dt>Markets:</dt><dd>US</dd> <dt>Release Date:</dt><dd>2025-04-25</dd> <dt>Price:</dt><dd>USD 27.99</dd> <dt>Limited:</dt><dd>false</dd> <dt>Confidence:</dt><dd>0.45</dd> <dt>Notes:</dt><dd>Seeded from initial article; requires re-research.</dd> </dl>';
-  assert.equal(block, expected);
+  const document = dom(html);
+  const dl = document.querySelector('[data-testid="spec-sheet"]');
+  assert.ok(dl);
+  const dts = dl.querySelectorAll('dt');
+  const dds = dl.querySelectorAll('dd');
+  assert.equal(dts.length, dds.length, 'definition list pairs');
+  const region = Array.from(dts).find(dt => dt.textContent.trim() === 'Region Lock');
+  assert.ok(region, 'region lock label');
+  assert.equal(region.nextElementSibling.textContent.trim(), 'No', 'boolean rendered as Yes/No');
+  const limited = Array.from(dts).find(dt => dt.textContent.trim() === 'Limited');
+  assert.ok(limited, 'limited label present');
+  assert.equal(limited.nextElementSibling.textContent.trim(), 'Standard', 'availability uses Standard/Limited');
+  const caption = document.querySelector('[data-testid="market-table"] caption');
+  assert.match(caption.textContent, /Market Listings/, 'caption contains label');
 });
-
