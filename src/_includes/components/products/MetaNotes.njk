@@ -1,0 +1,17 @@
+{% macro metaNotes(p) %}
+{% if p.notes or p.product_id %}
+<div class="meta-notes border-4 p-4 mt-4" data-testid="meta-notes">
+  {% if p.notes %}<p>{{ p.notes }}</p>{% endif %}
+  {% if p.product_id %}
+  <div class="mt-2 flex items-center gap-2">
+    <code class="font-mono">{{ p.product_id }}</code>
+    <button type="button" class="border-2 px-2 py-1 text-sm" data-copy="{{ p.product_id }}" aria-label="Copy product ID">Copy</button>
+    <span class="sr-only" aria-live="polite"></span>
+  </div>
+  <script>
+    document.addEventListener('click',function(e){const b=e.target.closest('[data-copy]');if(b){const id=b.getAttribute('data-copy');navigator.clipboard.writeText(id).then(()=>{const s=b.nextElementSibling;if(s){s.textContent='Copied';setTimeout(()=>s.textContent='',2000);}});}});
+  </script>
+  {% endif %}
+</div>
+{% endif %}
+{% endmacro %}

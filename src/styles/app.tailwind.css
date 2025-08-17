@@ -229,3 +229,14 @@
   .external-link{ @apply underline transition-colors; color: hsl(var(--p)); }
   .external-link:hover{ color: hsl(var(--pf)); }
 }
+
+@layer components {
+  .spec-sheet{ @apply border-4 p-4; }
+  .spec-sheet dt{ @apply font-semibold tracking-tight pr-4; }
+  .spec-sheet dd{ @apply break-words hyphens-auto; }
+  .market-table{ @apply border-collapse mt-4; }
+  .market-table th,.market-table td{ @apply border-2; }
+  .badge-chip{ @apply inline-block border-2 px-2 py-1 text-xs mr-1 mb-1; }
+  .provenance-list{ @apply list-disc pl-5; }
+  .meta-notes{ @apply bg-warning/20; }
+}

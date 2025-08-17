@@ -1,0 +1,216 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> effusion_labs_final@1.0.0 test:guard
+> bash scripts/test-with-guardrails.sh test/integration/monsters-product-metadata.spec.mjs
+
+::notice:: LLM-safe: shell alive @ 2025-08-17T18:57:45Z
+::notice:: LLM-safe: shell alive @ 2025-08-17T18:57:45Z
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> effusion_labs_final@1.0.0 test
+> c8 --reporter=text-summary --reporter=lcov node tools/runner.mjs
+
+[@photogabble/wikilinks] WARNING Wikilink ([[missing-node]]) found pointing to to non-existent page in:
+	- ./src/test/wikilinks-ignore.md
+[11ty] Copied 78 Wrote 114 files in 5.27 seconds (46.3ms each, v3.1.2)
+✔ archive nav exposes child counts (5276.012257ms)
+[@photogabble/wikilinks] WARNING Wikilink ([[missing-node]]) found pointing to to non-existent page in:
+	- ./src/test/wikilinks-ignore.md
+[11ty] Copied 78 Wrote 114 files in 5.25 seconds (46.0ms each, v3.1.2)
+✔ layout exposes build timestamp (5252.092758ms)
+[11ty] Copied 78 Wrote 114 files in 4.32 seconds (37.9ms each, v3.1.2)
+✔ code blocks expose copy control (4550.467791ms)
+[@photogabble/wikilinks] WARNING Wikilink ([[missing-node]]) found pointing to to non-existent page in:
+	- ./src/test/wikilinks-ignore.md
+[11ty] Copied 78 Wrote 114 files in 4.83 seconds (42.4ms each, v3.1.2)
+✔ collection pages expose section metadata (4832.030833ms)
+✔ concept map JSON-LD export generates @context and @graph (5.957281ms)
+[@photogabble/wikilinks] WARNING Wikilink ([[missing-node]]) found pointing to to non-existent page in:
+	- ./src/test/wikilinks-ignore.md
+[11ty] Copied 78 Wrote 114 files in 4.79 seconds (42.0ms each, v3.1.2)
+✔ feed exposes build metadata (4791.920912ms)
+[@photogabble/wikilinks] WARNING Wikilink ([[missing-node]]) found pointing to to non-existent page in:
+	- ./src/test/wikilinks-ignore.md
+[11ty] Copied 78 Wrote 114 files in 5.14 seconds (45.1ms each, v3.1.2)
+✔ home page header includes primary nav landmark (5144.886856ms)
+[@photogabble/wikilinks] WARNING Wikilink ([[missing-node]]) found pointing to to non-existent page in:
+	- ./src/test/wikilinks-ignore.md
+[11ty] Copied 78 Wrote 114 files in 3.86 seconds (33.8ms each, v3.1.2)
+✔ homepage work list mixes types (4049.851653ms)
+[@photogabble/wikilinks] WARNING Wikilink ([[missing-node]]) found pointing to to non-existent page in:
+	- ./src/test/wikilinks-ignore.md
+[11ty] Copied 78 Wrote 114 files in 4.02 seconds (35.3ms each, v3.1.2)
+✔ homepage hero and work filters (4225.575099ms)
+::notice:: LLM-safe: tests alive @ 2025-08-17T18:58:10.937Z
+[@photogabble/wikilinks] WARNING Wikilink ([[missing-node]]) found pointing to to non-existent page in:
+	- ./src/test/wikilinks-ignore.md
+[11ty] Copied 78 Wrote 114 files in 9.09 seconds (79.8ms each, v3.1.2)
+✔ logo image transforms to avif and webp (9368.098739ms)
+[@photogabble/wikilinks] WARNING Wikilink ([[missing-node]]) found pointing to to non-existent page in:
+	- ./src/test/wikilinks-ignore.md
+[11ty] Copied 78 Wrote 114 files in 6.64 seconds (58.3ms each, v3.1.2)
+✔ markdown headings include anchor ids (6652.6416ms)
+[@photogabble/wikilinks] WARNING Wikilink ([[missing-node]]) found pointing to to non-existent page in:
+	- ./src/test/wikilinks-ignore.md
+[11ty] Copied 78 Wrote 114 files in 6.39 seconds (56.0ms each, v3.1.2)
+✔ monsters hub lists products and cross-links product and character pages (6392.154754ms)
+[@photogabble/wikilinks] WARNING Wikilink ([[missing-node]]) found pointing to to non-existent page in:
+	- ./src/test/wikilinks-ignore.md
+[11ty] Copied 78 Wrote 114 files in 4.38 seconds (38.4ms each, v3.1.2)
+✖ product page exposes full metadata (acceptance) (4544.629347ms)
+[@photogabble/wikilinks] WARNING Wikilink ([[missing-node]]) found pointing to to non-existent page in:
+	- ./src/test/wikilinks-ignore.md
+[11ty] Copied 78 Wrote 114 files in 2.82 seconds (24.8ms each, v3.1.2)
+✖ price cells are formatted and table parity holds (property) (2884.095897ms)
+::notice:: LLM-safe: tests alive @ 2025-08-17T18:58:23.837Z
+[@photogabble/wikilinks] WARNING Wikilink ([[missing-node]]) found pointing to to non-existent page in:
+	- ./src/test/wikilinks-ignore.md
+[11ty] Copied 78 Wrote 114 files in 2.49 seconds (21.8ms each, v3.1.2)
+✖ semantic invariants hold (contract) (2563.593663ms)
+[@photogabble/wikilinks] WARNING Wikilink ([[missing-node]]) found pointing to to non-existent page in:
+	- ./src/test/wikilinks-ignore.md
+[11ty] Copied 78 Wrote 114 files in 4.30 seconds (37.7ms each, v3.1.2)
+✔ overlay root exists and carries defaults (4513.694797ms)
+✔ seed generation modes (2.722782ms)
+[@photogabble/wikilinks] WARNING Wikilink ([[missing-node]]) found pointing to to non-existent page in:
+	- ./src/test/wikilinks-ignore.md
+[11ty] Copied 78 Wrote 114 files in 5.05 seconds (44.3ms each, v3.1.2)
+✔ main nav marks current page and is labelled (5050.664832ms)
+✔ navigation items are sequentially ordered (1.418934ms)
+[@photogabble/wikilinks] WARNING Wikilink ([[missing-node]]) found pointing to to non-existent page in:
+	- ./src/index.njk
+[11ty] Copied 78 Wrote 114 files in 4.86 seconds (42.6ms each, v3.1.2)
+✔ buildLean sets env and output directory (4860.618773ms)
+[@photogabble/wikilinks] WARNING Wikilink ([[missing-node]]) found pointing to to non-existent page in:
+	- ./src/test/wikilinks-ignore.md
+[11ty] Copied 78 Wrote 114 files in 5.02 seconds (44.0ms each, v3.1.2)
+✔ spark listings reveal status text (5023.691227ms)
+[11ty] Copied 78 Wrote 114 files in 4.85 seconds (42.6ms each, v3.1.2)
+✔ wikilinks ignore templated paths (4858.631409ms)
+[@photogabble/wikilinks] WARNING Wikilink ([[missing-node]]) found pointing to to non-existent page in:
+	- ./src/test/wikilinks-ignore.md
+[11ty] Copied 78 Wrote 114 files in 4.35 seconds (38.2ms each, v3.1.2)
+✔ work pages build and latest redirects (4354.493239ms)
+✖ deploy workflow does not trigger on pull_request (2.429081ms)
+✖ build job runs only on push events (0.454118ms)
+✔ defines improved background colors (1.931086ms)
+✔ text contrast meets WCAG AA (0.753892ms)
+✔ tailwind exposes readable fonts (0.18599ms)
+✔ includes fluid type scale tokens (0.166119ms)
+✔ docs:links reports no broken links (1732.061988ms)
+✔ package-lock.json defines lockfileVersion (7.343689ms)
+✔ footnote popover separates source line (183.243932ms)
+✔ projects computed picks latest entries by date (2.878665ms)
+✔ keepalive emits heartbeat to stderr (6379.939104ms)
+✔ keepalive ignores first SIGINT (419.337987ms)
+✔ gateway reads SOLVER_URL from environment (1.807692ms)
+✔ gateway retains default solver URL (0.204049ms)
+✔ external link renders with arrow and class (16.715181ms)
+✔ internal link keeps text without external markers (3.559639ms)
+✔ external link starting with arrow does not duplicate (4.568134ms)
+✔ provenanceSources parses JSONL provenance files (2.339388ms)
+✔ provenanceSources returns [] when file missing (1.70874ms)
+✔ devDependencies omit @vscode/ripgrep (1.517941ms)
+✔ prepare-docs avoids ripgrep install (0.19617ms)
+✔ merges tag-like metadata into unified tags and categories (3.60228ms)
+✔ deduplicates tag values (0.240581ms)
+✔ categories returns empty array when spark_type absent (0.221678ms)
+✔ time to chill includes size with height in cm (2.198504ms)
+✔ time to chill height is positive (0.322238ms)
+✔ filterDeadLinks removes templated links (3.627051ms)
+✔ result has no templated links (0.679423ms)
+✔ filterDeadLinks does not mutate input (5.469237ms)
+✔ GitHub workflows use latest action versions (2.029518ms)
+ℹ tests 53
+ℹ suites 0
+ℹ pass 48
+ℹ fail 5
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 53047.704973
+
+✖ failing tests:
+
+test at test/integration/monsters-product-metadata.spec.mjs:25:1
+✖ product page exposes full metadata (acceptance) (4544.629347ms)
+  AssertionError [ERR_ASSERTION]: spec sheet rendered
+      at TestContext.<anonymous> (file:///workspace/effusion-labs/test/integration/monsters-product-metadata.spec.mjs:29:10)
+      at async Test.run (node:internal/test_runner/test:1054:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: null,
+    expected: true,
+    operator: '=='
+  }
+
+test at test/integration/monsters-product-metadata.spec.mjs:40:1
+✖ price cells are formatted and table parity holds (property) (2884.095897ms)
+  AssertionError [ERR_ASSERTION]: market listings table rendered
+      at TestContext.<anonymous> (file:///workspace/effusion-labs/test/integration/monsters-product-metadata.spec.mjs:44:10)
+      at async Test.run (node:internal/test_runner/test:1054:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:744:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: null,
+    expected: true,
+    operator: '=='
+  }
+
+test at test/integration/monsters-product-metadata.spec.mjs:53:1
+✖ semantic invariants hold (contract) (2563.593663ms)
+  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+  
+    assert.ok(dl)
+  
+      at TestContext.<anonymous> (file:///workspace/effusion-labs/test/integration/monsters-product-metadata.spec.mjs:57:10)
+      at async Test.run (node:internal/test_runner/test:1054:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:744:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: null,
+    expected: true,
+    operator: '=='
+  }
+
+test at test/unit/deploy-workflow.test.mjs:7:1
+✖ deploy workflow does not trigger on pull_request (2.429081ms)
+  AssertionError [ERR_ASSERTION]: pull_request trigger should be absent
+      at TestContext.<anonymous> (file:///workspace/effusion-labs/test/unit/deploy-workflow.test.mjs:8:10)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1047:25)
+      at Test.start (node:internal/test_runner/test:944:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:296:17) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 'name: Build, Scan, and Deploy to GHCR\n\non:\n  push:\n    branches: [main]\n  pull_request:\n    branches: [main]\n  workflow_dispatch:\n\n# Cancel superseded runs (keeps things snappy for solo dev)\nconcurrency:\n  group: ${{ github.workflow }}-${{ github.ref }}\n  cancel-in-progress: true\n\n# Default least privilege; jobs bump as needed\npermissions:\n  contents: read\n\njobs:\n  tests:\n    name: Unit tests (Node ${{ matrix.node }})\n    runs-on: ubuntu-latest\n    timeout-minutes: 12\n    strategy:\n      fail-fast: false\n      matrix:\n        node: [\'20\', \'22\']   # current + next LTS\n    permissions:\n      contents: read\n    steps:\n      - name: Checkout\n        uses: actions/checkout@v4\n      - name: Setup Node\n        uses: actions/setup-node@v4\n        with:\n          node-version: ${{ matrix.node }}\n          cache: \'npm\'\n          cache-dependency-path: |\n            package-lock.json\n            tools/**/package-lock.json\n      - run: echo "$PWD/bin" >> "$GITHUB_PATH"\n      - run: npm ci --no-audit --no-fund\n      - run: npm test\n      - name: Upload coverage\n        uses: actions/upload-artifact@v4\n        with:\n          name: coverage-${{ matrix.node }}\n          path: coverage/lcov.info\n          retention-days: 7\n          if-no-files-found: ignore\n\n  build_and_deploy:\n    name: Build → SBOM/Provenance → Scan → Deploy\n    if: github.event_name == \'push\'\n    needs: tests\n    runs-on: ubuntu-latest\n    timeout-minutes: 25\n    # This DOES NOT require reviewers by itself; it only takes effect if you ever add rules later.\n    environment:\n      name: production\n    permissions:\n      contents: read\n      packages: write       # push to GHCR\n      id-token: write       # needed for provenance from buildx\n    env:\n      DOCKER_BUILDKIT: 1\n      OWNER_SLUG: ${{ github.repository_owner }}\n    steps:\n      - name: Checkout\n        uses: actions/checkout@v4\n\n      - name: Setup Node\n        uses: actions/setup-node@v4\n        with:\n          node-version: \'20\'\n          cache: \'npm\'\n\n      - name: Install deps\n        run: npm ci --ignore-scripts --no-audit --no-fund\n\n      - name: Build Eleventy\n        run: npx @11ty/eleventy\n\n      - name: Login to GHCR\n        uses: docker/login-action@v3\n        with:\n          registry: ghcr.io\n          username: ${{ github.actor }}\n          password: ${{ secrets.GITHUB_TOKEN }}\n\n      - name: Setup Buildx\n        uses: docker/setup-buildx-action@v3\n\n      - name: Compute image prefix (lowercase)\n        id: slug\n        shell: bash\n        run: |\n          owner_lc="$(echo "${OWNER_SLUG}" | tr \'[:upper:]\' \'[:lower:]\')"\n          echo "prefix=ghcr.io/${owner_lc}" >> "$GITHUB_OUTPUT"\n\n      # ---------- Build & push image 1 (with SBOM + provenance) ----------\n      - name: Build & push effusion-labs\n        id: eff\n        uses: docker/build-push-action@v6\n        with:\n          context: .\n          file: ./.portainer/Dockerfile\n          push: true\n          platforms: linux/amd64\n          tags: ${{ steps.slug.outputs.prefix }}/effusion-labs:latest\n          cache-from: type=registry,ref=${{ steps.slug.outputs.prefix }}/effusion-labs:cache\n          cache-to:   type=registry,ref=${{ steps.slug.outputs.prefix }}/effusion-labs:cache,mode=max\n          sbom: true\n          provenance: true\n\n      # ---------- Build & push image 2 (with SBOM + provenance) ----------\n      - name: Build & push markdown_gateway\n        id: mdgw\n        uses: docker/build-push-action@v6\n        with:\n          context: ./markdown_gateway\n          push: true\n          platforms: linux/amd64\n          tags: ${{ steps.slug.outputs.prefix }}/markdown_gateway:latest\n          cache-from: type=registry,ref=${{ steps.slug.outputs.prefix }}/markdown_gateway:cache\n          cache-to:   type=registry,ref=${{ steps.slug.outputs.prefix }}/markdown_gateway:cache,mode=max\n          sbom: true\n          provenance: true\n\n      # ---------- Repo-level SBOM artifact (optional but handy) ----------\n      - name: Generate SBOM (workspace)\n        uses: anchore/sbom-action@v0\n        with:\n          format: spdx-json\n          artifact-name: workspace-sbom.spdx.json\n          upload-artifact: true\n\n      # ---------- Vulnerability scans (fail on HIGH/CRIT) ----------\n      - name: Scan effusion-labs image\n        uses: aquasecurity/trivy-action@0.32.0\n        with:\n          image-ref: ${{ steps.slug.outputs.prefix }}/effusion-labs@${{ steps.eff.outputs.digest }}\n          severity: HIGH,CRITICAL\n          ignore-unfixed: true\n          format: table\n          exit-code: \'1\'\n      - name: Scan markdown_gateway image\n        uses: aquasecurity/trivy-action@0.32.0\n        with:\n          image-ref: ${{ steps.slug.outputs.prefix }}/markdown_gateway@${{ steps.mdgw.outputs.digest }}\n          severity: HIGH,CRITICAL\n          ignore-unfixed: true\n          format: table\n          exit-code: \'1\'\n\n      # ---------- Deploy via Portainer webhook ----------\n      - name: Trigger effusion-labs redeploy (Portainer)\n        env:\n          HOOK: ${{ secrets.PORTAINER_WEBHOOK_EFFUSION }}\n        run: |\n          curl --fail --retry 5 --retry-all-errors --retry-delay 2 -X POST "$HOOK"\n\n  browser-checks:\n    if: github.event_name == \'workflow_dispatch\'\n    runs-on: ubuntu-latest\n    timeout-minutes: 15\n    permissions:\n      contents: read\n    container:\n      image: mcr.microsoft.com/playwright:v1.45.2-jammy\n    steps:\n      - uses: actions/checkout@v4\n      - uses: actions/setup-node@v4\n        with:\n          node-version: \'20\'\n          cache: \'npm\'\n      - run: npm ci --ignore-scripts --no-audit --no-fund\n      - run: NODE_OPTIONS=--import=./test/setup/http.mjs npm run test:browser\n',
+    expected: /pull_request:/,
+    operator: 'doesNotMatch'
+  }
+
+test at test/unit/deploy-workflow.test.mjs:11:1
+✖ build job runs only on push events (0.454118ms)
+  AssertionError [ERR_ASSERTION]: build job missing push-only condition
+      at TestContext.<anonymous> (file:///workspace/effusion-labs/test/unit/deploy-workflow.test.mjs:12:10)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1047:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+      at Test.postRun (node:internal/test_runner/test:1173:19)
+      at Test.run (node:internal/test_runner/test:1101:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 'name: Build, Scan, and Deploy to GHCR\n\non:\n  push:\n    branches: [main]\n  pull_request:\n    branches: [main]\n  workflow_dispatch:\n\n# Cancel superseded runs (keeps things snappy for solo dev)\nconcurrency:\n  group: ${{ github.workflow }}-${{ github.ref }}\n  cancel-in-progress: true\n\n# Default least privilege; jobs bump as needed\npermissions:\n  contents: read\n\njobs:\n  tests:\n    name: Unit tests (Node ${{ matrix.node }})\n    runs-on: ubuntu-latest\n    timeout-minutes: 12\n    strategy:\n      fail-fast: false\n      matrix:\n        node: [\'20\', \'22\']   # current + next LTS\n    permissions:\n      contents: read\n    steps:\n      - name: Checkout\n        uses: actions/checkout@v4\n      - name: Setup Node\n        uses: actions/setup-node@v4\n        with:\n          node-version: ${{ matrix.node }}\n          cache: \'npm\'\n          cache-dependency-path: |\n            package-lock.json\n            tools/**/package-lock.json\n      - run: echo "$PWD/bin" >> "$GITHUB_PATH"\n      - run: npm ci --no-audit --no-fund\n      - run: npm test\n      - name: Upload coverage\n        uses: actions/upload-artifact@v4\n        with:\n          name: coverage-${{ matrix.node }}\n          path: coverage/lcov.info\n          retention-days: 7\n          if-no-files-found: ignore\n\n  build_and_deploy:\n    name: Build → SBOM/Provenance → Scan → Deploy\n    if: github.event_name == \'push\'\n    needs: tests\n    runs-on: ubuntu-latest\n    timeout-minutes: 25\n    # This DOES NOT require reviewers by itself; it only takes effect if you ever add rules later.\n    environment:\n      name: production\n    permissions:\n      contents: read\n      packages: write       # push to GHCR\n      id-token: write       # needed for provenance from buildx\n    env:\n      DOCKER_BUILDKIT: 1\n      OWNER_SLUG: ${{ github.repository_owner }}\n    steps:\n      - name: Checkout\n        uses: actions/checkout@v4\n\n      - name: Setup Node\n        uses: actions/setup-node@v4\n        with:\n          node-version: \'20\'\n          cache: \'npm\'\n\n      - name: Install deps\n        run: npm ci --ignore-scripts --no-audit --no-fund\n\n      - name: Build Eleventy\n        run: npx @11ty/eleventy\n\n      - name: Login to GHCR\n        uses: docker/login-action@v3\n        with:\n          registry: ghcr.io\n          username: ${{ github.actor }}\n          password: ${{ secrets.GITHUB_TOKEN }}\n\n      - name: Setup Buildx\n        uses: docker/setup-buildx-action@v3\n\n      - name: Compute image prefix (lowercase)\n        id: slug\n        shell: bash\n        run: |\n          owner_lc="$(echo "${OWNER_SLUG}" | tr \'[:upper:]\' \'[:lower:]\')"\n          echo "prefix=ghcr.io/${owner_lc}" >> "$GITHUB_OUTPUT"\n\n      # ---------- Build & push image 1 (with SBOM + provenance) ----------\n      - name: Build & push effusion-labs\n        id: eff\n        uses: docker/build-push-action@v6\n        with:\n          context: .\n          file: ./.portainer/Dockerfile\n          push: true\n          platforms: linux/amd64\n          tags: ${{ steps.slug.outputs.prefix }}/effusion-labs:latest\n          cache-from: type=registry,ref=${{ steps.slug.outputs.prefix }}/effusion-labs:cache\n          cache-to:   type=registry,ref=${{ steps.slug.outputs.prefix }}/effusion-labs:cache,mode=max\n          sbom: true\n          provenance: true\n\n      # ---------- Build & push image 2 (with SBOM + provenance) ----------\n      - name: Build & push markdown_gateway\n        id: mdgw\n        uses: docker/build-push-action@v6\n        with:\n          context: ./markdown_gateway\n          push: true\n          platforms: linux/amd64\n          tags: ${{ steps.slug.outputs.prefix }}/markdown_gateway:latest\n          cache-from: type=registry,ref=${{ steps.slug.outputs.prefix }}/markdown_gateway:cache\n          cache-to:   type=registry,ref=${{ steps.slug.outputs.prefix }}/markdown_gateway:cache,mode=max\n          sbom: true\n          provenance: true\n\n      # ---------- Repo-level SBOM artifact (optional but handy) ----------\n      - name: Generate SBOM (workspace)\n        uses: anchore/sbom-action@v0\n        with:\n          format: spdx-json\n          artifact-name: workspace-sbom.spdx.json\n          upload-artifact: true\n\n      # ---------- Vulnerability scans (fail on HIGH/CRIT) ----------\n      - name: Scan effusion-labs image\n        uses: aquasecurity/trivy-action@0.32.0\n        with:\n          image-ref: ${{ steps.slug.outputs.prefix }}/effusion-labs@${{ steps.eff.outputs.digest }}\n          severity: HIGH,CRITICAL\n          ignore-unfixed: true\n          format: table\n          exit-code: \'1\'\n      - name: Scan markdown_gateway image\n        uses: aquasecurity/trivy-action@0.32.0\n        with:\n          image-ref: ${{ steps.slug.outputs.prefix }}/markdown_gateway@${{ steps.mdgw.outputs.digest }}\n          severity: HIGH,CRITICAL\n          ignore-unfixed: true\n          format: table\n          exit-code: \'1\'\n\n      # ---------- Deploy via Portainer webhook ----------\n      - name: Trigger effusion-labs redeploy (Portainer)\n        env:\n          HOOK: ${{ secrets.PORTAINER_WEBHOOK_EFFUSION }}\n        run: |\n          curl --fail --retry 5 --retry-all-errors --retry-delay 2 -X POST "$HOOK"\n\n  browser-checks:\n    if: github.event_name == \'workflow_dispatch\'\n    runs-on: ubuntu-latest\n    timeout-minutes: 15\n    permissions:\n      contents: read\n    container:\n      image: mcr.microsoft.com/playwright:v1.45.2-jammy\n    steps:\n      - uses: actions/checkout@v4\n      - uses: actions/setup-node@v4\n        with:\n          node-version: \'20\'\n          cache: \'npm\'\n      - run: npm ci --ignore-scripts --no-audit --no-fund\n      - run: NODE_OPTIONS=--import=./test/setup/http.mjs npm run test:browser\n',
+    expected: /build:\n\s+if: github\.event_name == 'push'/,
+    operator: 'match'
+  }
+Executed 34 tests
+::notice:: LLM-safe: shell alive @ 2025-08-17T18:58:45Z
+
+=============================== Coverage summary ===============================
+Statements   : 86.47% ( 1368/1582 )
+Branches     : 81.56% ( 239/293 )
+Functions    : 77.65% ( 73/94 )
+Lines        : 86.47% ( 1368/1582 )
+================================================================================
