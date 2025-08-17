@@ -9,15 +9,13 @@ updates:
       day: "monday"
       time: "09:00"
       timezone: "America/Denver"
-    # App repo → bump package.json constraints; don't do lockfile-only
     versioning-strategy: increase
-    # Keep noise in check; Dependabot defaults to 5 if you omit this
     open-pull-requests-limit: 10
-    # Cooldown slows churn if packages release multiple times a week
     cooldown:
       days: 2
+    rebase-strategy: "disabled"
+    labels: ["deps", "automerge-candidate"]
     groups:
-      # Group safe updates for fast merges
       npm-prod-minor-patch:
         patterns: ["*"]
         dependency-type: "production"
@@ -26,11 +24,9 @@ updates:
         patterns: ["*"]
         dependency-type: "development"
         update-types: ["minor", "patch"]
-      # Keep majors isolated so they’re easy to review/revert
       npm-all-majors:
         patterns: ["*"]
         update-types: ["major"]
-      # If a security alert fires, batch those small bumps together
       npm-security:
         applies-to: "security-updates"
         patterns: ["*"]
@@ -45,6 +41,8 @@ updates:
       time: "09:15"
       timezone: "America/Denver"
     open-pull-requests-limit: 5
+    rebase-strategy: "disabled"
+    labels: ["deps", "automerge-candidate"]
     groups:
       gha-minor-patch:
         patterns: ["*"]
@@ -62,6 +60,8 @@ updates:
       time: "09:30"
       timezone: "America/Denver"
     open-pull-requests-limit: 5
+    rebase-strategy: "disabled"
+    labels: ["deps", "automerge-candidate"]
     groups:
       docker-minor-patch:
         patterns: ["*"]
@@ -79,6 +79,8 @@ updates:
       time: "09:35"
       timezone: "America/Denver"
     open-pull-requests-limit: 5
+    rebase-strategy: "disabled"
+    labels: ["deps", "automerge-candidate"]
     groups:
       docker-minor-patch:
         patterns: ["*"]

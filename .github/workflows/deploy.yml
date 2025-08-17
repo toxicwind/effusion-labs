@@ -1,78 +1,94 @@
-name: Build and Deploy to GHCR
+name: Build, Scan, and Deploy to GHCR
 
 on:
   push:
     branches: [main]
   pull_request:
-    branches: [main]      # run tests on PRs too
+    branches: [main]
   workflow_dispatch:
 
-# Cancel superseded runs for this ref (saves time/compute)
+# Cancel superseded runs (keeps things snappy for solo dev)
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
-# Safe default; jobs escalate only if needed
+# Default least privilege; jobs bump as needed
 permissions:
   contents: read
 
 jobs:
   tests:
+    name: Unit tests (Node ${{ matrix.node }})
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 12
+    strategy:
+      fail-fast: false
+      matrix:
+        node: ['20', '22']   # current + next LTS
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: ${{ matrix.node }}
           cache: 'npm'
+          cache-dependency-path: |
+            package-lock.json
+            tools/**/package-lock.json
       - run: echo "$PWD/bin" >> "$GITHUB_PATH"
       - run: npm ci --no-audit --no-fund
       - run: npm test
-      - uses: actions/upload-artifact@v4
+      - name: Upload coverage
+        uses: actions/upload-artifact@v4
         with:
-          name: coverage
+          name: coverage-${{ matrix.node }}
           path: coverage/lcov.info
           retention-days: 7
           if-no-files-found: ignore
 
-  build:
+  build_and_deploy:
+    name: Build → SBOM/Provenance → Scan → Deploy
     if: github.event_name == 'push'
     needs: tests
     runs-on: ubuntu-latest
     timeout-minutes: 25
+    # This DOES NOT require reviewers by itself; it only takes effect if you ever add rules later.
+    environment:
+      name: production
     permissions:
       contents: read
-      packages: write          # needed to push to GHCR
+      packages: write       # push to GHCR
+      id-token: write       # needed for provenance from buildx
     env:
       DOCKER_BUILDKIT: 1
       OWNER_SLUG: ${{ github.repository_owner }}
     steps:
-      - name: Checkout repo
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
+      - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'npm'
 
-      - name: Install dependencies
+      - name: Install deps
         run: npm ci --ignore-scripts --no-audit --no-fund
 
-      - name: Build Eleventy static files
+      - name: Build Eleventy
         run: npx @11ty/eleventy
 
-      - name: Log in to GitHub Container Registry
+      - name: Login to GHCR
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Set up Buildx
+      - name: Setup Buildx
         uses: docker/setup-buildx-action@v3
 
       - name: Compute image prefix (lowercase)
@@ -82,26 +98,62 @@ jobs:
           owner_lc="$(echo "${OWNER_SLUG}" | tr '[:upper:]' '[:lower:]')"
           echo "prefix=ghcr.io/${owner_lc}" >> "$GITHUB_OUTPUT"
 
-      - name: Build + push effusion-labs (cached)
-        run: |
-          IMAGE="${{ steps.slug.outputs.prefix }}/effusion-labs:latest"
-          CACHE="${{ steps.slug.outputs.prefix }}/effusion-labs:cache"
-          docker buildx build \
-            --platform linux/amd64 \
-            --cache-from type=registry,ref=${CACHE} \
-            --cache-to   type=registry,ref=${CACHE},mode=max \
-            -t "${IMAGE}" -f ./.portainer/Dockerfile . --push
+      # ---------- Build & push image 1 (with SBOM + provenance) ----------
+      - name: Build & push effusion-labs
+        id: eff
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./.portainer/Dockerfile
+          push: true
+          platforms: linux/amd64
+          tags: ${{ steps.slug.outputs.prefix }}/effusion-labs:latest
+          cache-from: type=registry,ref=${{ steps.slug.outputs.prefix }}/effusion-labs:cache
+          cache-to:   type=registry,ref=${{ steps.slug.outputs.prefix }}/effusion-labs:cache,mode=max
+          sbom: true
+          provenance: true
 
-      - name: Build + push markdown_gateway (cached)
-        run: |
-          IMAGE="${{ steps.slug.outputs.prefix }}/markdown_gateway:latest"
-          CACHE="${{ steps.slug.outputs.prefix }}/markdown_gateway:cache"
-          docker buildx build \
-            --platform linux/amd64 \
-            --cache-from type=registry,ref=${CACHE} \
-            --cache-to   type=registry,ref=${CACHE},mode=max \
-            -t "${IMAGE}" ./markdown_gateway --push
+      # ---------- Build & push image 2 (with SBOM + provenance) ----------
+      - name: Build & push markdown_gateway
+        id: mdgw
+        uses: docker/build-push-action@v6
+        with:
+          context: ./markdown_gateway
+          push: true
+          platforms: linux/amd64
+          tags: ${{ steps.slug.outputs.prefix }}/markdown_gateway:latest
+          cache-from: type=registry,ref=${{ steps.slug.outputs.prefix }}/markdown_gateway:cache
+          cache-to:   type=registry,ref=${{ steps.slug.outputs.prefix }}/markdown_gateway:cache,mode=max
+          sbom: true
+          provenance: true
 
+      # ---------- Repo-level SBOM artifact (optional but handy) ----------
+      - name: Generate SBOM (workspace)
+        uses: anchore/sbom-action@v0
+        with:
+          format: spdx-json
+          artifact-name: workspace-sbom.spdx.json
+          upload-artifact: true
+
+      # ---------- Vulnerability scans (fail on HIGH/CRIT) ----------
+      - name: Scan effusion-labs image
+        uses: aquasecurity/trivy-action@0.32.0
+        with:
+          image-ref: ${{ steps.slug.outputs.prefix }}/effusion-labs@${{ steps.eff.outputs.digest }}
+          severity: HIGH,CRITICAL
+          ignore-unfixed: true
+          format: table
+          exit-code: '1'
+      - name: Scan markdown_gateway image
+        uses: aquasecurity/trivy-action@0.32.0
+        with:
+          image-ref: ${{ steps.slug.outputs.prefix }}/markdown_gateway@${{ steps.mdgw.outputs.digest }}
+          severity: HIGH,CRITICAL
+          ignore-unfixed: true
+          format: table
+          exit-code: '1'
+
+      # ---------- Deploy via Portainer webhook ----------
       - name: Trigger effusion-labs redeploy (Portainer)
         env:
           HOOK: ${{ secrets.PORTAINER_WEBHOOK_EFFUSION }}
@@ -114,7 +166,8 @@ jobs:
     timeout-minutes: 15
     permissions:
       contents: read
-    container: mcr.microsoft.com/playwright:v1.45.2-jammy
+    container:
+      image: mcr.microsoft.com/playwright:v1.45.2-jammy
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
