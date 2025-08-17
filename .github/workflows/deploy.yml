@@ -3,15 +3,25 @@ name: Build and Deploy to GHCR
 on:
   push:
     branches: [main]
+  pull_request:
+    branches: [main]      # run tests on PRs too
   workflow_dispatch:
 
+# Cancel superseded runs for this ref (saves time/compute)
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+# Safe default; jobs escalate only if needed
 permissions:
   contents: read
-  packages: write  # ← Enables write access for GHCR
 
 jobs:
   tests:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -19,20 +29,26 @@ jobs:
           node-version: '20'
           cache: 'npm'
       - run: echo "$PWD/bin" >> "$GITHUB_PATH"
-      - run: npm ci
+      - run: npm ci --no-audit --no-fund
       - run: npm test
       - uses: actions/upload-artifact@v4
         with:
           name: coverage
           path: coverage/lcov.info
+          retention-days: 7
+          if-no-files-found: ignore
 
   build:
     if: github.event_name == 'push'
     needs: tests
     runs-on: ubuntu-latest
+    timeout-minutes: 25
+    permissions:
+      contents: read
+      packages: write          # needed to push to GHCR
     env:
       DOCKER_BUILDKIT: 1
-
+      OWNER_SLUG: ${{ github.repository_owner }}
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
@@ -44,7 +60,7 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm ci --ignore-scripts
+        run: npm ci --ignore-scripts --no-audit --no-fund
 
       - name: Build Eleventy static files
         run: npx @11ty/eleventy
@@ -59,29 +75,45 @@ jobs:
       - name: Set up Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Build and push effusion-labs
-        env:
-          IMAGE_ID: ghcr.io/${{ github.actor }}/effusion-labs:latest
+      - name: Compute image prefix (lowercase)
+        id: slug
+        shell: bash
         run: |
-          docker buildx build --cache-to type=inline --cache-from type=registry,ref=$IMAGE_ID -t "$IMAGE_ID" -f .portainer/Dockerfile . --push
+          owner_lc="$(echo "${OWNER_SLUG}" | tr '[:upper:]' '[:lower:]')"
+          echo "prefix=ghcr.io/${owner_lc}" >> "$GITHUB_OUTPUT"
 
-      - name: Build and push markdown_gateway
-        env:
-          IMAGE_ID: ghcr.io/${{ github.actor }}/markdown_gateway:latest
+      - name: Build + push effusion-labs (cached)
         run: |
-          docker buildx build --cache-to type=inline --cache-from type=registry,ref=$IMAGE_ID -t "$IMAGE_ID" markdown_gateway --push
+          IMAGE="${{ steps.slug.outputs.prefix }}/effusion-labs:latest"
+          CACHE="${{ steps.slug.outputs.prefix }}/effusion-labs:cache"
+          docker buildx build \
+            --platform linux/amd64 \
+            --cache-from type=registry,ref=${CACHE} \
+            --cache-to   type=registry,ref=${CACHE},mode=max \
+            -t "${IMAGE}" -f ./.portainer/Dockerfile . --push
 
-      - name: Trigger effusion-labs redeploy
+      - name: Build + push markdown_gateway (cached)
         run: |
-          curl -f -X POST http://effusionlabs.com:9000/api/stacks/webhooks/d85d48d6-a407-4ac0-8683-a7962bfbb9d3
-      # Disabled for now since markdown_gateway does not have a webhook set up
-      # - name: Trigger markdown_gateway redeploy
-      #   run: |
-      #     curl -f -X POST http://effusionlabs.com:9000/api/stacks/webhooks/00000000-0000-0000-0000-000000000000
+          IMAGE="${{ steps.slug.outputs.prefix }}/markdown_gateway:latest"
+          CACHE="${{ steps.slug.outputs.prefix }}/markdown_gateway:cache"
+          docker buildx build \
+            --platform linux/amd64 \
+            --cache-from type=registry,ref=${CACHE} \
+            --cache-to   type=registry,ref=${CACHE},mode=max \
+            -t "${IMAGE}" ./markdown_gateway --push
+
+      - name: Trigger effusion-labs redeploy (Portainer)
+        env:
+          HOOK: ${{ secrets.PORTAINER_WEBHOOK_EFFUSION }}
+        run: |
+          curl --fail --retry 5 --retry-all-errors --retry-delay 2 -X POST "$HOOK"
 
   browser-checks:
     if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
     container: mcr.microsoft.com/playwright:v1.45.2-jammy
     steps:
       - uses: actions/checkout@v4
@@ -89,5 +121,5 @@ jobs:
         with:
           node-version: '20'
           cache: 'npm'
-      - run: npm ci --ignore-scripts
+      - run: npm ci --ignore-scripts --no-audit --no-fund
       - run: NODE_OPTIONS=--import=./test/setup/http.mjs npm run test:browser
