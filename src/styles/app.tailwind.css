@@ -231,12 +231,54 @@
 }
 
 @layer components {
-  .spec-sheet{ @apply border-4 p-4; }
-  .spec-sheet dt{ @apply font-semibold tracking-tight pr-4; }
-  .spec-sheet dd{ @apply break-words hyphens-auto; }
-  .market-table{ @apply border-collapse mt-4; }
-  .market-table th,.market-table td{ @apply border-2; }
-  .badge-chip{ @apply inline-block border-2 px-2 py-1 text-xs mr-1 mb-1; }
-  .provenance-list{ @apply list-disc pl-5; }
-  .meta-notes{ @apply bg-warning/20; }
+  /*-- Specification Sheet ---------------------------------------------------*/
+  /* A two-column layout for displaying key-value data. */
+
+  .spec-sheet {
+    @apply grid gap-2 rounded-lg border-4 p-4 sm:grid-cols-[max-content_auto];
+  }
+
+  .spec-sheet dt {
+    @apply font-semibold tracking-tight pr-4;
+  }
+
+  .spec-sheet dd {
+    @apply mb-1 break-words hyphens-auto;
+  }
+
+  /*-- Market Data Table -----------------------------------------------------*/
+  /* A standard table for displaying structured data. */
+
+  .market-table {
+    @apply mt-4 w-full border-2 border-collapse;
+  }
+
+  .market-table th,
+  .market-table td {
+    @apply border-2 px-2 py-1 text-left;
+  }
+
+  /* Suggestion: Add a distinct style for the table header for better hierarchy. */
+  .market-table th {
+    @apply bg-slate-100 font-semibold dark:bg-slate-800;
+  }
+
+  /*-- Reusable Components ---------------------------------------------------*/
+
+  /* A small, pill-shaped badge for tags or statuses. */
+  .badge-chip {
+    @apply mb-1 mr-1 inline-block rounded-full border-2 px-2 py-1 text-xs font-medium;
+  }
+
+  /* A standard bulleted list for provenance or feature lists. */
+  .provenance-list {
+    @apply list-disc space-y-1 pl-5;
+  }
+
+  /*-- Notes & Metadata ------------------------------------------------------*/
+  /* A styled container for important notes or warnings. */
+
+  .meta-notes {
+    @apply rounded-md bg-yellow-100 p-3 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-200;
+  }
 }

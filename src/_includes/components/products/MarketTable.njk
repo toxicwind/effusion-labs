@@ -1,21 +1,13 @@
 {% macro marketTable(listings) %}
-{% if listings and listings.length %}
-<table class="market-table w-full border-4" data-testid="market-table">
-  <caption class="font-bold text-left">Market Listings</caption>
+<table data-testid="market-table" class="market-table">
+  <caption>Market Listings</caption>
   <thead>
-    <tr>
-      <th scope="col" class="border-2 p-2">Market</th>
-      <th scope="col" class="border-2 p-2">Price</th>
-    </tr>
+    <tr><th scope="col">Market</th><th scope="col">Price</th></tr>
   </thead>
   <tbody>
-  {% for l in listings | sort(false, 'market') %}
-    <tr>
-      <td class="border-2 p-2">{{ l.market }}</td>
-      <td class="border-2 p-2">{{ money(l.currency, l.price) }}</td>
-    </tr>
-  {% endfor %}
+    {% for l in listings | sort(false, false, 'market') %}
+    <tr><td>{{ l.market }}</td><td>{{ money(l.currency, l.price) }}</td></tr>
+    {% endfor %}
   </tbody>
 </table>
-{% endif %}
 {% endmacro %}
