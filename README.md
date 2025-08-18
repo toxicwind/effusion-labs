@@ -27,6 +27,7 @@ Effusion Labs is a static digital garden built with Eleventy, Nunjucks templates
 - `npm run build` – compile the production site to `_site/`.
 - `npm test` – run tests related to changed files.
 - `npm run test:all` – execute the full test suite.
+- `npm run format` – format repository with Prettier.
 - `npm run proxy:health` – check the Markdown proxy service.
 - `npm run docs:validate` – verify documentation hashes.
 - `npm run docs:reindex` – rebuild the vendor documentation index.
@@ -91,7 +92,7 @@ docker-compose up --build     # launch services
 - **Docker**: `.portainer/Dockerfile` builds a static Nginx image and `docker-compose.yml` exposes the site on port 18400.
 
 ## 🧪 Quality Assurance
-  - `npm test` runs the Node.js test suite.
+  - `npm test` runs the Node.js test suite. A local `bin/node` shim injects keepalive imports without external scripts.
 - `npm run docs:links` verifies links in this README.
 - GitHub Actions execute both checks on every push.
 

@@ -1,0 +1,12 @@
+{% macro provenanceList(sources) %}
+{% if sources and sources.length %}
+<ul class="provenance-list" data-testid="provenance">
+  {% for s in sources %}
+    <li>
+      <a href="{{ s.url }}" title="{{ s.url }}">{{ s.url | hostname }}</a>
+      {% if s.retrieved_at %}<time datetime="{{ s.retrieved_at }}">{{ s.retrieved_at | humanDate | safe }}</time>{% endif %}
+    </li>
+  {% endfor %}
+</ul>
+{% endif %}
+{% endmacro %}

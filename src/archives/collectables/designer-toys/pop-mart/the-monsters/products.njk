@@ -4,7 +4,7 @@ pagination:
   data: collections.monstersProducts
   size: 1
   alias: product
-permalink: "/archives/collectables/designer-toys/pop-mart/the-monsters/products/{{ product.data.product_id }}/index.html"
+permalink: "{{ '/archives/collectables/designer-toys/pop-mart/the-monsters/products/' + product.data.product_id + '/index.html' }}"
 ---
 {% from "components/products/SpecSheet.njk" import specSheet %}
 {% from "components/products/MarketTable.njk" import marketTable %}
