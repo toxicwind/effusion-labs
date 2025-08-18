@@ -26,6 +26,7 @@ Effusion Labs is a static digital garden built with Eleventy, Nunjucks templates
 - `npm run build` – compile the production site to `_site/`.
 - `npm test` – run tests related to changed files.
 - `npm run test:all` – execute the full test suite.
+- `npm run test:guard` – run the test suite with guardrails.
 - `npm run proxy:health` – check the Markdown proxy service.
 - `npm run docs:validate` – verify documentation hashes.
 - `npm run docs:reindex` – rebuild the vendor documentation index.
