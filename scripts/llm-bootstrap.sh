@@ -21,7 +21,7 @@ else
     DEPS_HASH_FILE="$repo_root/tmp/.llm_deps_hash"
     mkdir -p "$repo_root/tmp"
 
-    current_hash=$(cat "$repo_root/package-lock.json" "$repo_root/markdown_gateway/requirements.txt" 2>/dev/null | sha256sum | awk '{print $1}')
+    current_hash=$(cat "$repo_root/package-lock.json" "$repo_root/markdown_gateway/requirements.txt" | sha256sum | awk '{print $1}')
     stored_hash=""
     if [ -f "$DEPS_HASH_FILE" ]; then
         stored_hash=$(cat "$DEPS_HASH_FILE")
@@ -63,7 +63,7 @@ smart_cat() {
         yml|yaml) parser="yaml" ;;
         *) command cat -vt "$file_path" | fold -w 100 -s; return ;;
     esac
-    if command -v npx &> /dev/null; then
+    if command -v npx; then
         command cat "$file_path" | npx --no-install prettier --parser "$parser" --print-width 100
     else
         command cat -vt "$file_path" | fold -w 100 -s
@@ -98,8 +98,8 @@ export -f llm_shell_hb
 export -f _llm_hijack
 
 if [[ "${CI:-}" == "true" || "${LLM_SHELL_HEARTBEAT:-}" == "1" ]]; then
-  if [[ -z "${_LLM_HB_PID:-}" ]] || ! kill -0 "$_LLM_HB_PID" 2>/dev/null; then
-    llm_shell_hb &; export _LLM_HB_PID=$!; trap 'kill "$_LLM_HB_PID" 2>/dev/null' EXIT;
+  if [[ -z "${_LLM_HB_PID:-}" ]] || ! kill -0 "$_LLM_HB_PID"; then
+    llm_shell_hb &; export _LLM_HB_PID=$!; trap 'kill "$_LLM_HB_PID"' EXIT;
   fi
 fi
 trap _llm_hijack DEBUG
@@ -113,7 +113,7 @@ for hook in post-checkout post-merge; do
 #!/usr/bin/env bash
 # Auto-restores LLM guardrails. To apply to your current shell, run:
 # source scripts/llm-bootstrap.sh
-bash scripts/llm-bootstrap.sh >/dev/null 2>&1
+bash scripts/llm-bootstrap.sh 
 EOH
   chmod +x "$hook_path"
 done
@@ -157,7 +157,7 @@ smart_cat() {
         yml|yaml) parser="yaml" ;;
         *) command cat -vt "$file_path" | fold -w 100 -s; return ;;
     esac
-    if command -v npx &> /dev/null; then
+    if command -v npx; then
         command cat "$file_path" | npx --no-install prettier --parser "$parser" --print-width 100
     else
         command cat -vt "$file_path" | fold -w 100 -s
@@ -192,8 +192,8 @@ export -f llm_shell_hb
 export -f _llm_hijack
 
 if [[ "${CI:-}" == "true" || "${LLM_SHELL_HEARTBEAT:-}" == "1" ]]; then
-  if [[ -z "${_LLM_HB_PID:-}" ]] || ! kill -0 "$_LLM_HB_PID" 2>/dev/null; then
-    llm_shell_hb &; export _LLM_HB_PID=$!; trap 'kill "$_LLM_HB_PID" 2>/dev/null' EXIT;
+  if [[ -z "${_LLM_HB_PID:-}" ]] || ! kill -0 "$_LLM_HB_PID"; then
+    llm_shell_hb &; export _LLM_HB_PID=$!; trap 'kill "$_LLM_HB_PID"' EXIT;
   fi
 fi
 trap _llm_hijack DEBUG
@@ -207,7 +207,7 @@ for hook in post-checkout post-merge; do
 #!/usr/bin/env bash
 # Auto-restores LLM guardrails. To apply to your current shell, run:
 # source scripts/llm-bootstrap.sh
-bash scripts/llm-bootstrap.sh >/dev/null 2>&1
+bash scripts/llm-bootstrap.sh 
 EOH
   chmod +x "$hook_path"
 done
@@ -243,7 +243,7 @@ for hook in post-checkout post-merge; do
 #!/usr/bin/env bash
 # Auto-restores LLM guardrails. To apply to your current shell, run:
 # source scripts/llm-bootstrap.sh
-bash scripts/llm-bootstrap.sh >/dev/null 2>&1
+bash scripts/llm-bootstrap.sh 
 EOH
   chmod +x "$hook_path"
 done
@@ -282,8 +282,8 @@ printf "\n\n"
 }
 
 if [[ "${CI:-}" == "true" || "${LLM_SHELL_HEARTBEAT:-}" == "1" ]]; then
-  if [[ -z "${_LLM_HB_PID:-}" ]] || ! kill -0 "$_LLM_HB_PID" 2>/dev/null; then
-    llm_shell_hb &; export _LLM_HB_PID=$!; trap 'kill "$_LLM_HB_PID" 2>/dev/null' EXIT;
+  if [[ -z "${_LLM_HB_PID:-}" ]] || ! kill -0 "$_LLM_HB_PID"; then
+    llm_shell_hb &; export _LLM_HB_PID=$!; trap 'kill "$_LLM_HB_PID"' EXIT;
   fi
 fi
 trap _llm_hijack DEBUG
@@ -297,7 +297,7 @@ for hook in post-checkout post-merge; do
 #!/usr/bin/env bash
 # Auto-restores LLM guardrails. To apply to your current shell, run:
 # source scripts/llm-bootstrap.sh
-bash scripts/llm-bootstrap.sh >/dev/null 2>&1
+bash scripts/llm-bootstrap.sh 
 EOH
   chmod +x "$hook_path"
 done

@@ -18,7 +18,7 @@
     "deps:playwright": "npx playwright install chromium || true",
     "deps:system": "npx playwright install-deps || true",
     "proxy:chain": "node tools/shared/chain-proxy.mjs",
-    "prepare-docs": "npm exec fd --version >/dev/null 2>&1 || npm install --save-dev fd-find || true",
+    "prepare-docs": "npm exec fd --version || npm install --save-dev fd-find --progress || true",
     "docs:links": "markdown-link-check -c link-check.config.json README.md",
     "format": "prettier -w ."
   },
