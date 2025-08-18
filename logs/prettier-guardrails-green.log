@@ -1,0 +1,44 @@
+TAP version 13
+# Subtest: repository contains no legacy test-with-guardrails script
+ok 1 - repository contains no legacy test-with-guardrails script
+  ---
+  duration_ms: 35.695031
+  type: 'test'
+  ...
+# Subtest: prettier pinned version and format script
+ok 2 - prettier pinned version and format script
+  ---
+  duration_ms: 1.95359
+  type: 'test'
+  ...
+1..2
+# tests 2
+# suites 0
+# pass 2
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 226.985518
+TAP version 13
+# Subtest: repository contains no legacy test-with-guardrails script
+ok 1 - repository contains no legacy test-with-guardrails script
+  ---
+  duration_ms: 30.965698
+  type: 'test'
+  ...
+# Subtest: prettier pinned version and format script
+ok 2 - prettier pinned version and format script
+  ---
+  duration_ms: 1.791077
+  type: 'test'
+  ...
+1..2
+# tests 2
+# suites 0
+# pass 2
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 219.275413
