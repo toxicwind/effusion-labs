@@ -1,0 +1,66 @@
+TAP version 13
+# bin/node: line 7: /workspace/effusion-labs/scripts/llm-constants.sh: No such file or directory
+# Subtest: node shim version matches system node
+not ok 1 - node shim version matches system node
+  ---
+  duration_ms: 54.269031
+  type: 'test'
+  location: '/workspace/effusion-labs/test/unit/node-shim.test.mjs:9:28'
+  failureType: 'testCodeFailure'
+  error: |-
+    Command failed: bin/node --version
+    bin/node: line 7: /workspace/effusion-labs/scripts/llm-constants.sh: No such file or directory
+    
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    genericNodeError (node:internal/errors:983:15)
+    wrappedFn (node:internal/errors:537:14)
+    checkExecSyncError (node:child_process:915:11)
+    execSync (node:child_process:987:15)
+    TestContext.<anonymous> (file:///workspace/effusion-labs/test/unit/node-shim.test.mjs:11:18)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.start (node:internal/test_runner/test:944:17)
+    startSubtestAfterBootstrap (node:internal/test_runner/harness:296:17)
+  ...
+# Subtest: node shim is executable
+ok 2 - node shim is executable
+  ---
+  duration_ms: 0.676471
+  type: 'test'
+  ...
+# Subtest: node shim lacks llm-constants reference
+not ok 3 - node shim lacks llm-constants reference
+  ---
+  duration_ms: 9.720833
+  type: 'test'
+  location: '/workspace/effusion-labs/test/unit/node-shim.test.mjs:22:29'
+  failureType: 'testCodeFailure'
+  error: |-
+    The expression evaluated to a falsy value:
+    
+      assert.ok(!content.includes('llm-constants.sh'))
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (file:///workspace/effusion-labs/test/unit/node-shim.test.mjs:24:10)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+1..3
+# tests 3
+# suites 0
+# pass 1
+# fail 2
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 184.710721

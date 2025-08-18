@@ -4,7 +4,8 @@ set -euo pipefail
 
 shim_dir="$(cd "$(dirname "$0")" && pwd)"
 repo_root="$(cd "$shim_dir/.." && pwd)"
-source "$repo_root/scripts/llm-constants.sh"
+
+LLM_KEEPALIVE_IMPORTS=${LLM_KEEPALIVE_IMPORTS:-"--import=$repo_root/test/setup/http.mjs --import=$repo_root/test/setup/llm-keepalive.mjs"}
 
 if [[ "${LLM_HIJACK_DISABLE:-}" != "1" ]] && [[ "${LLM_KEEPALIVE_INJECTED:-}" != "1" ]]; then
   for arg in "$@"; do
@@ -24,5 +25,6 @@ for d in "${path_parts[@]}"; do
     real="$d/node"
     break
   fi
+
 done
 exec "${real:-/usr/bin/node}" "$@"
