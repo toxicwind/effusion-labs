@@ -1,328 +1,234 @@
 #!/usr/bin/env bash
+# ------------------------------------------------------------------------------
+# Effusion Labs — LLM-First Guardrail Bootstrap (2025 • instrumented, aggressive)
+# Correct usage:  source scripts/llm-bootstrap.sh
 #
-# Autonomous LLM "No Friction" Guardrail & Environment Initializer
-#
-# Sourcing this script prepares the entire repository for autonomous work.
-# It is the single command needed after cloning or pulling changes.
-#
-# Correct Usage: source scripts/llm-bootstrap.sh
-#
+# LLM CONTRACT
+# • Redirects → live stream + fold + tee; preserves exit code; supports > and >>.
+# • tail -f/-F blocked by default; emits bounded, folded snapshot instead.
+# • cat is FOR THE LLM: always attempt Prettier normalization for known types.
+# • All key actions emit grepable lines:  ::notice:: LLM-GUARD event=<...> k=v ...
+# ------------------------------------------------------------------------------
 
+# ======= knobs (LLM-first defaults) =======
+: "${LLM_VERBOSE:=1}"              # 1=emit notices; 0=quiet
+: "${LLM_HIJACK_DISABLE:=0}"       # 1=disable redirect hijack
+: "${LLM_HEARTBEAT_SECS:=15}"      # base seconds; internally *4 (min 30)
+: "${LLM_FOLD_WIDTH:=4000}"        # fold width to avoid 4096 truncation
+: "${LLM_TAIL_BLOCK:=1}"           # 1=block tail -f/-F
+: "${LLM_TAIL_MAX_LINES:=5000}"    # snapshot size when follow is blocked
+: "${LLM_TAIL_ALLOW_CMDS:=}"       # optional regex allowlist for follow
+: "${LLM_CAT_MAX_BYTES:=0}"        # 0=unbounded; >0 = skip Prettier if file larger (performance guard)
+
+_llm_emit_boot() {
+  [[ "${LLM_VERBOSE}" != "1" ]] && return 0
+  local ts; ts="$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
+  printf '::notice:: LLM-GUARD ts=%s event=%s' "$ts" "$1" >&2
+  shift; while [[ $# -gt 0 ]]; do printf ' %s' "$1" >&2; shift; done; printf '\n' >&2
+  [[ -n "${GITHUB_STEP_SUMMARY:-}" ]] && printf 'LLM-GUARD %s %s\n' "$ts" "$*" >> "$GITHUB_STEP_SUMMARY"
+}
+
+set -u
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+_llm_emit_boot bootstrap.start repo_root="$repo_root"
 
-# --- 1. Smart Dependency Installation ---
-# This block checks if dependencies are up-to-date by comparing hashes.
+# ======= 1) Portable dependency check (non-recursive) =======
+: "${LLM_BOOTSTRAP_LOCK:=}"
+if [[ -z "${npm_lifecycle_event:-}" && -z "$LLM_BOOTSTRAP_LOCK" ]]; then
+  export LLM_BOOTSTRAP_LOCK=1
+  mkdir -p "$repo_root/tmp"
+  DEPS_HASH_FILE="$repo_root/tmp/.llm_deps_hash"
 
-# THE FIX: This `if` block prevents the script from running its own dependency
-# check if it's already being run BY an npm command (like `npm ci`).
-if [[ -n "${npm_lifecycle_event:-}" ]]; then
-    printf " INFO: Running inside an npm lifecycle script ('%s'). Skipping internal dependency check to prevent recursion.\n" "$npm_lifecycle_event"
-else
-    DEPS_HASH_FILE="$repo_root/tmp/.llm_deps_hash"
-    mkdir -p "$repo_root/tmp"
+  hash_inputs=()
+  [[ -f "$repo_root/package-lock.json" ]] && hash_inputs+=("$repo_root/package-lock.json")
+  [[ -f "$repo_root/markdown_gateway/requirements.txt" ]] && hash_inputs+=("$repo_root/markdown_gateway/requirements.txt")
 
-    current_hash=$(cat "$repo_root/package-lock.json" "$repo_root/markdown_gateway/requirements.txt" | sha256sum | awk '{print $1}')
-    stored_hash=""
-    if [ -f "$DEPS_HASH_FILE" ]; then
-        stored_hash=$(cat "$DEPS_HASH_FILE")
-    fi
-
-    if [ "$current_hash" != "$stored_hash" ]; then
-        printf " Mismatched dependency hashes. Installing/updating all dependencies...\n"
-
-        printf "\n> Installing Node.js dependencies with 'npm ci'...\n"
-        npm ci
-
-        printf "\n> Installing Python dependencies from 'markdown_gateway/requirements.txt'...\n"
-        pip install -r "$repo_root/markdown_gateway/requirements.txt"
-
-        echo "$current_hash" > "$DEPS_HASH_FILE"
-        printf "\n✅ Dependencies are now up to date.\n"
+  if (( ${#hash_inputs[@]} )); then
+    if command -v sha256sum >/dev/null 2>&1; then
+      current_hash="$(cat "${hash_inputs[@]}" | sha256sum | awk '{print $1}')"
     else
-        printf "✅ Dependencies are up to date (hashes match).\n"
+      current_hash="$(cat "${hash_inputs[@]}" | shasum -a 256 | awk '{print $1}')"
     fi
+  else
+    current_hash=""
+  fi
+  stored_hash="$( [[ -f "$DEPS_HASH_FILE" ]] && cat "$DEPS_HASH_FILE" || printf '' )"
+
+  if [[ -n "$current_hash" && "$current_hash" != "$stored_hash" ]]; then
+    _llm_emit_boot bootstrap.deps.install node=ci python=requirements.txt
+    CI=${CI:-false} npm ci
+    if [[ -f "$repo_root/markdown_gateway/requirements.txt" ]]; then
+      if command -v python >/dev/null 2>&1; then python -m pip install -r "$repo_root/markdown_gateway/requirements.txt"
+      else pip install -r "$repo_root/markdown_gateway/requirements.txt"; fi
+    fi
+    echo "$current_hash" > "$DEPS_HASH_FILE"
+  else
+    _llm_emit_boot bootstrap.deps.unchanged
+  fi
 fi
 
-
-# --- 2. Live Environment Injection ---
+# ======= 2) Guardrail env: hijack, anti-tail, LLM-cat, heartbeat =======
 read -r -d '' BASH_ENV_CONTENT <<'EOF'
-# Auto-generated by scripts/llm-bootstrap.sh.
-[[ -d "$PWD/.git" ]] || return 0
-[[ "${LLM_HIJACK_DISABLE:-}" == "1" ]] && return 0
+# --- auto-generated by llm-bootstrap.sh ---
+# shellcheck disable=SC2154
 
-# Enhancement 1: The "Smart `cat`" Function
+_llm_bool() { [[ "${1:-0}" == "1" || "${1:-0}" == "true" ]]; }
+
+_llm_emit() {
+  [[ "${LLM_VERBOSE:-1}" != "1" ]] && return 0
+  local event="$1"; shift
+  local ts; ts="$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
+  printf '::notice:: LLM-GUARD ts=%s event=%s' "$ts" "$event" >&2
+  while [[ $# -gt 0 ]]; do printf ' %s' "$1" >&2; shift; done; printf '\n' >&2
+  if [[ -n "${GITHUB_STEP_SUMMARY:-}" ]]; then
+    printf 'LLM-GUARD %s event=%s' "$ts" "$event" >> "$GITHUB_STEP_SUMMARY"
+    # shellcheck disable=SC2124
+    printf ' %s\n' "$*" >> "$GITHUB_STEP_SUMMARY"
+  fi
+}
+
+# ---- LLM-first cat: always try to pretty-print with Prettier ----
+# Strategy:
+# 1) Prefer repo-local prettier: node_modules/.bin/prettier (fast, offline).
+# 2) Fallback: npx --no-install prettier (uses devDep, no registry).
+# 3) If prettier unavailable or file too large (LLM_CAT_MAX_BYTES), stream raw but still fold.
+_prettier_bin() {
+  local bin_local
+  bin_local="$(git rev-parse --show-toplevel 2>/dev/null)/node_modules/.bin/prettier"
+  if [[ -x "$bin_local" ]]; then echo "$bin_local"; return 0; fi
+  if command -v npx >/dev/null 2>&1; then echo "npx --no-install prettier"; return 0; fi
+  echo "" ; return 1
+}
+
 smart_cat() {
-    if [ $# -eq 0 ]; then command cat -vt | fold -w 100 -s; return; fi
-    local file_path="$1"; local extension="${file_path##*.}"; local parser=""
-    case "$extension" in
-        js|mjs|cjs) parser="babel" ;;
-        json|jsonl) parser="json" ;;
-        md|markdown) parser="markdown" ;;
-        html) parser="html" ;;
-        css) parser="css" ;;
-        yml|yaml) parser="yaml" ;;
-        *) command cat -vt "$file_path" | fold -w 100 -s; return ;;
-    esac
-    if command -v npx; then
-        command cat "$file_path" | npx --no-install prettier --parser "$parser" --print-width 100
-    else
-        command cat -vt "$file_path" | fold -w 100 -s
+  local p="$1"
+  if [[ ! -f "$p" ]]; then command cat -vt -- "$p" | fold -w "${LLM_FOLD_WIDTH:-4000}" -s; return; fi
+  local size ext parser
+  size=$(wc -c <"$p" 2>/dev/null || echo 0)
+  ext="${p##*.}"; parser=""
+  case "$ext" in
+    js|mjs|cjs) parser="babel" ;;
+    ts|tsx)     parser="babel-ts" ;;
+    json|jsonl) parser="json" ;;
+    md|markdown) parser="markdown" ;;
+    html|htm)   parser="html" ;;
+    css|pcss)   parser="css" ;;
+    yml|yaml)   parser="yaml" ;;
+    *) parser="" ;;
+  esac
+
+  local bin; bin="$(_prettier_bin || true)"
+
+  if [[ -n "$parser" && -n "$bin" && ( "${LLM_CAT_MAX_BYTES:-0}" -eq 0 || "$size" -le "${LLM_CAT_MAX_BYTES:-0}" ) ]]; then
+    _llm_emit cat.format file="$p" bytes="$size" parser="$parser"
+    # shellcheck disable=SC2086
+    command cat -- "$p" | $bin --parser "$parser" --print-width "${LLM_FOLD_WIDTH:-100}" 2>/dev/null \
+      | fold -w "${LLM_FOLD_WIDTH:-4000}" -s
+  else
+    # Either unknown type / too large / prettier not found — fall back to raw folded
+    _llm_emit cat.raw file="$p" bytes="$size" reason="$([[ -z "$bin" ]] && echo no-prettier || ([[ -z "$parser" ]] && echo unknown-type || echo size-cap))"
+    command cat -vt -- "$p" | fold -w "${LLM_FOLD_WIDTH:-4000}" -s
+  fi
+}
+
+# ---- Anti-spiral tail: block follow by default ----
+_llm_tail() {
+  local follow=0 arg outfile
+  for arg in "$@"; do [[ "$arg" == "-f" || "$arg" == "-F" ]] && follow=1; done
+  if _llm_bool "${LLM_TAIL_BLOCK:-1}" && (( follow )); then
+    if [[ -n "${LLM_TAIL_ALLOW_CMDS:-}" && "${BASH_COMMAND:-}" =~ ${LLM_TAIL_ALLOW_CMDS} ]]; then
+      _llm_emit tail.pass reason=allowlist args="$*"
+      command tail "$@"; return $?
     fi
-}
-alias cat='smart_cat'
-
-llm_shell_hb() {
-  local interval=$(( ${LLM_HEARTBEAT_SECS:-15} * 4 )); (( interval < 30 )) && interval=30
-  while true; do
-    printf '::notice:: Guardrail: shell alive @ %s\n' "$(date -u +"%Y-%m-%dT%H:%M:%SZ")" >&2; sleep "$interval";
-  done
-}
-
-_llm_hijack() {
-  [[ "${_LLM_REWRITE_ACTIVE:-}" == "1" ]] && return 0
-  local cmd="$BASH_COMMAND"
-  # Enhancement 2: Universal Redirect Corrector
-  if [[ "$cmd" =~ \s+(1>|>)\s*([^\s&|]+)\s*(2>&1)?$ && ! "$cmd" =~ \| ]]; then
-    local outfile="${BASH_REMATCH[2]}"; local redirect_pattern="${BASH_REMATCH[0]}"
-    local base_cmd="${cmd%$redirect_pattern}"
-    printf '::notice:: Guardrail: Optimized command for frictionless live output.\n' >&2
-    export _LLM_REWRITE_ACTIVE=1
-    eval "$base_cmd 2>&1 | fold -w 4000 -s | tee -i '$outfile'";
-    BASH_COMMAND=:; unset _LLM_REWRITE_ACTIVE; return 0;
-  fi
-}
-
-# Export functions to make them visible to the DEBUG trap.
-export -f smart_cat
-export -f llm_shell_hb
-export -f _llm_hijack
-
-if [[ "${CI:-}" == "true" || "${LLM_SHELL_HEARTBEAT:-}" == "1" ]]; then
-  if [[ -z "${_LLM_HB_PID:-}" ]] || ! kill -0 "$_LLM_HB_PID"; then
-    llm_shell_hb &; export _LLM_HB_PID=$!; trap 'kill "$_LLM_HB_PID"' EXIT;
-  fi
-fi
-trap _llm_hijack DEBUG
-EOF
-
-# --- 3. Persistence & Activation ---
-echo "$BASH_ENV_CONTENT" > "$repo_root/.llm-bash-env"
-for hook in post-checkout post-merge; do
-  hook_path="$repo_root/.git/hooks/$hook"
-  cat > "$hook_path" <<'EOH'
-#!/usr/bin/env bash
-# Auto-restores LLM guardrails. To apply to your current shell, run:
-# source scripts/llm-bootstrap.sh
-bash scripts/llm-bootstrap.sh 
-EOH
-  chmod +x "$hook_path"
-done
-
-eval "$BASH_ENV_CONTENT"
-
-# --- 4. Final Clarity Message (LLM Technical Brief) ---
-printf "\n\n"
-printf "---"
-printf "\n### ✅ LLM Guardrails & Environment ACTIVE ###\n"
-printf "\nThis shell is now enhanced for autonomous operation. Key commands are autocorrected to prevent common failures.\n"
-printf "\n#### ⚙️ Core Mechanism: The `DEBUG` Trap\n"
-printf "A `DEBUG` trap is active. It inspects every command **before** it runs to apply the following automated corrections:\n"
-printf "\n#### 🛡️ Command Corrections\n"
-printf "1.  **Universal Redirect Protection**\n"
-printf "    - **Trigger**: Any command ending in a simple file redirect (e.g., `some-task > file.log`).\n"
-printf "    - **Action**: The command is invisibly rewritten to a streaming pipeline: `... 2>&1 | fold | tee file.log`.\n"
-printf "    - **Benefit**: This provides **live output**, prevents **4096-byte line-length errors**, and makes the `tail` command on output files unnecessary.\n"
-printf "\n2.  **Smart `cat` Command**\n"
-printf "    - **Trigger**: Running the `cat` command.\n"
-printf "    - **Action**: `cat` is now an intelligent function. Code files (`.js`, `.json`, etc.) are formatted with **Prettier**. All other text is safely wrapped.\n"
-printf "    - **Benefit**: This ensures code is always displayed in a clean, syntactically correct way, preventing parsing confusion.\n"
-printf "\n#### 📦 Environment & Stability\n"
-printf "- **Dependencies**: Checked during manual sourcing. Skipped during npm lifecycle scripts to prevent loops.\n"
-printf "- **Keep-Alive**: A background heartbeat is active to prevent timeouts in automated environments.\n"
-printf "- **Persistence**: Git hooks will automatically re-apply this environment on `git checkout` or `git merge`.\n"
-printf "\n---"
-printf "\n\n"
-[[ "${LLM_HIJACK_DISABLE:-}" == "1" ]] && return 0
-
-# Enhancement 1: The "Smart `cat`" Function
-smart_cat() {
-    if [ $# -eq 0 ]; then command cat -vt | fold -w 100 -s; return; fi
-    local file_path="$1"; local extension="${file_path##*.}"; local parser=""
-    case "$extension" in
-        js|mjs|cjs) parser="babel" ;;
-        json|jsonl) parser="json" ;;
-        md|markdown) parser="markdown" ;;
-        html) parser="html" ;;
-        css) parser="css" ;;
-        yml|yaml) parser="yaml" ;;
-        *) command cat -vt "$file_path" | fold -w 100 -s; return ;;
-    esac
-    if command -v npx; then
-        command cat "$file_path" | npx --no-install prettier --parser "$parser" --print-width 100
-    else
-        command cat -vt "$file_path" | fold -w 100 -s
+    for ((i=$#; i>=1; --i)); do
+      if [[ -f "${!i}" ]]; then outfile="${!i}"; break; fi
+    done
+    if [[ -n "${outfile:-}" ]]; then
+      _llm_emit tail.block file="$outfile" lines="${LLM_TAIL_MAX_LINES:-5000}" folded="${LLM_FOLD_WIDTH:-4000}"
+      command tail -n "${LLM_TAIL_MAX_LINES:-5000}" -- "$outfile" | fold -w "${LLM_FOLD_WIDTH:-4000}" -s
+      return ${PIPESTATUS[0]}
     fi
+  fi
+  _llm_emit tail.pass args="$*"
+  if command -v stdbuf >/dev/null 2>&1; then
+    command tail "$@" | stdbuf -o0 -e0 cat | fold -w "${LLM_FOLD_WIDTH:-4000}" -s
+  else
+    command tail "$@" | fold -w "${LLM_FOLD_WIDTH:-4000}" -s
+  fi
 }
-alias cat='smart_cat'
 
-llm_shell_hb() {
-  local interval=$(( ${LLM_HEARTBEAT_SECS:-15} * 4 )); (( interval < 30 )) && interval=30
-  while true; do
-    printf '::notice:: Guardrail: shell alive @ %s\n' "$(date -u +"%Y-%m-%dT%H:%M:%SZ")" >&2; sleep "$interval";
-  done
-}
-
+# ---- Redirect hijack: `cmd > file` / `cmd >> file` → live stream + fold + tee ----
 _llm_hijack() {
+  [[ "${LLM_HIJACK_DISABLE:-0}" == "1" ]] && return 0
   [[ "${_LLM_REWRITE_ACTIVE:-}" == "1" ]] && return 0
+  [[ -z "${BASH_COMMAND:-}" ]] && return 0
   local cmd="$BASH_COMMAND"
-  # Enhancement 2: Universal Redirect Corrector
-  if [[ "$cmd" =~ \s+(1>|>)\s*([^\s&|]+)\s*(2>&1)?$ && ! "$cmd" =~ \| ]]; then
-    local outfile="${BASH_REMATCH[2]}"; local redirect_pattern="${BASH_REMATCH[0]}"
-    local base_cmd="${cmd%$redirect_pattern}"
-    printf '::notice:: Guardrail: Optimized command for frictionless live output.\n' >&2
+  if [[ "$cmd" =~ [[:space:]](1?\>\>|\>)[[:space:]]*([^[:space:]&|;]+)[[:space:]]*(2\>\&1)?$ ]] && \
+     [[ ! "$cmd" =~ \| ]] && [[ ! "$cmd" =~ \&\& ]] && [[ ! "$cmd" =~ \|\| ]]; then
+    local op="${BASH_REMATCH[1]}" outfile="${BASH_REMATCH[2]}" base="${cmd%${BASH_REMATCH[0]}}"
+    local tee_flag=""; case "$op" in '>>'|'1>>') tee_flag='-a' ;; esac
+    _llm_emit hijack.rewrite op="$op" file="$outfile" fold="${LLM_FOLD_WIDTH:-4000}" append=$([[ -n "$tee_flag" ]] && printf true || printf false)
     export _LLM_REWRITE_ACTIVE=1
-    eval "$base_cmd 2>&1 | fold -w 4000 -s | tee -i '$outfile'";
-    BASH_COMMAND=:; unset _LLM_REWRITE_ACTIVE; return 0;
+    (
+      set -o pipefail
+      if command -v stdbuf >/dev/null 2>&1; then
+        bash -c "$base" 2>&1 | stdbuf -o0 -e0 cat
+      else
+        bash -c "$base" 2>&1
+      fi
+    ) | fold -w "${LLM_FOLD_WIDTH:-4000}" -s | tee $tee_flag -- "$outfile"
+    local status=${PIPESTATUS[0]}
+    unset _LLM_REWRITE_ACTIVE
+    BASH_COMMAND=:
+    return "$status"
   fi
 }
 
-# **THE FIX**: Export functions to make them visible to the DEBUG trap.
+# ---- Heartbeat ----
+_llm_hb() {
+  local interval=$(( ${LLM_HEARTBEAT_SECS:-15} * 4 )); (( interval < 30 )) && interval=30
+  while true; do _llm_emit heartbeat interval="${interval}s"; sleep "$interval"; done
+}
+
+# Export & aggressive activation (LLM-first)
 export -f smart_cat
-export -f llm_shell_hb
+export -f _llm_tail
 export -f _llm_hijack
+export -f _llm_hb
+alias cat='smart_cat'     # ALWAYS alias cat for LLM normalization
+alias tail='_llm_tail'
 
-if [[ "${CI:-}" == "true" || "${LLM_SHELL_HEARTBEAT:-}" == "1" ]]; then
-  if [[ -z "${_LLM_HB_PID:-}" ]] || ! kill -0 "$_LLM_HB_PID"; then
-    llm_shell_hb &; export _LLM_HB_PID=$!; trap 'kill "$_LLM_HB_PID"' EXIT;
+trap _llm_hijack DEBUG
+
+if [[ "${CI:-}" == "true" || "${LLM_SHELL_HEARTBEAT:-0}" == "1" ]]; then
+  if [[ -z "${_LLM_HB_PID:-}" ]] || ! kill -0 "$_LLM_HB_PID" 2>/dev/null; then
+    _llm_hb & export _LLM_HB_PID=$!; trap 'kill "$_LLM_HB_PID" 2>/dev/null || true' EXIT
   fi
 fi
-trap _llm_hijack DEBUG
+
+_llm_emit bootstrap.ready fold="${LLM_FOLD_WIDTH:-4000}" tail_block="${LLM_TAIL_BLOCK:-1}" cat_mode=prettier-first
+# --- end auto-generated block ---
 EOF
 
-# --- 3. Persistence & Activation ---
+# ======= 3) Persist & activate =======
 echo "$BASH_ENV_CONTENT" > "$repo_root/.llm-bash-env"
+
 for hook in post-checkout post-merge; do
   hook_path="$repo_root/.git/hooks/$hook"
   cat > "$hook_path" <<'EOH'
 #!/usr/bin/env bash
-# Auto-restores LLM guardrails. To apply to your current shell, run:
-# source scripts/llm-bootstrap.sh
-bash scripts/llm-bootstrap.sh 
+set -euo pipefail
+repo_root="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
+# shellcheck source=/dev/null
+. "$repo_root/.llm-bash-env"
 EOH
   chmod +x "$hook_path"
 done
 
-eval "$BASH_ENV_CONTENT"
+# shellcheck source=/dev/null
+. "$repo_root/.llm-bash-env"
 
-# --- 4. Final Clarity Message (LLM Technical Brief) ---
-printf "\n\n"
-printf "---"
-printf "\n### ✅ LLM Environment Initialized: Technical Brief ###\n"
-printf "\nThis shell is now enhanced for autonomous operation. Key commands are autocorrected to prevent common failures.\n"
-printf "\n#### ⚙️ Core Mechanism: The `DEBUG` Trap\n"
-printf "A `DEBUG` trap is active. It inspects every command **before** it runs to apply the following automated corrections:\n"
-printf "\n#### 🛡️ Command Corrections\n"
-printf "1.  **Universal Redirect Protection**\n"
-printf "    - **Trigger**: Any command ending in a simple file redirect (e.g., `some-task > file.log`).\n"
-printf "    - **Action**: The command is invisibly rewritten to a streaming pipeline: `... 2>&1 | fold | tee file.log`.\n"
-printf "    - **Benefit**: This provides **live output**, prevents **4096-byte line-length errors**, and makes the `tail` command on output files unnecessary.\n"
-printf "\n2.  **Smart `cat` Command**\n"
-printf "    - **Trigger**: Running the `cat` command.\n"
-printf "    - **Action**: `cat` is now an intelligent function. Code files (`.js`, `.json`, etc.) are formatted with **Prettier**. All other text is safely wrapped.\n"
-printf "    - **Benefit**: This ensures code is always displayed in a clean, syntactically correct way, preventing parsing confusion.\n"
-printf "\n#### 📦 Environment & Stability\n"
-printf "- **Dependencies**: Node.js & Python packages were hash-checked and are confirmed to be up-to-date.\n"
-printf "- **Keep-Alive**: A background heartbeat is active to prevent timeouts in automated environments.\n"
-printf "- **Persistence**: Git hooks will automatically re-apply this environment on `git checkout` or `git merge`.\n"
-printf "\n---"
-printf "\n\n"
-echo "$BASH_ENV_CONTENT" > "$repo_root/.llm-bash-env"
-for hook in post-checkout post-merge; do
-  hook_path="$repo_root/.git/hooks/$hook"
-  cat > "$hook_path" <<'EOH'
-#!/usr/bin/env bash
-# Auto-restores LLM guardrails. To apply to your current shell, run:
-# source scripts/llm-bootstrap.sh
-bash scripts/llm-bootstrap.sh 
-EOH
-  chmod +x "$hook_path"
-done
-
-eval "$BASH_ENV_CONTENT"
-
-# --- 3. Final Clarity Message (LLM Technical Brief) ---
-printf "\n\n"
-printf "---"
-printf "\n### ✅ LLM Guardrails & Environment ACTIVE ###\n"
-printf "\nThis shell is now enhanced for autonomous operation. Key commands are autocorrected to prevent common failures.\n"
-printf "\n#### ⚙️ Core Mechanism: The `DEBUG` Trap\n"
-printf "A `DEBUG` trap is active. It inspects every command **before** it runs to apply the following automated corrections:\n"
-printf "\n#### 🛡️ Command Corrections\n"
-printf "1.  **Universal Redirect Protection**\n"
-printf "    - **Trigger**: Any command ending in a simple file redirect (e.g., `some-task > file.log`).\n"
-printf "    - **Action**: The command is invisibly rewritten to a streaming pipeline: `... 2>&1 | fold | tee file.log`.\n"
-printf "    - **Benefit**: This provides **live output**, prevents **4096-byte line-length errors**, and makes the `tail` command on output files unnecessary.\n"
-printf "\n2.  **Smart `cat` Command**\n"
-printf "    - **Trigger**: Running the `cat` command.\n"
-printf "    - **Action**: `cat` is now an intelligent function. Code files (`.js`, `.json`, etc.) are formatted with **Prettier**. All other text is safely wrapped.\n"
-printf "    - **Benefit**: This ensures code is always displayed in a clean, syntactically correct way, preventing parsing confusion.\n"
-printf "\n#### ⚙️ Environment Stability\n"
-printf "- **Keep-Alive**: A background heartbeat is active to prevent timeouts in automated environments.\n"
-printf "- **Persistence**: Git hooks will automatically re-apply this environment on `git checkout` or `git merge`.\n"
-printf "\n---"
-printf "\n\n"
-  if [[ "$cmd" =~ \s+(1>|>)\s*([^\s&|]+)\s*(2>&1)?$ && ! "$cmd" =~ \| ]]; then
-    local outfile="${BASH_REMATCH[2]}"; local redirect_pattern="${BASH_REMATCH[0]}"
-    local base_cmd="${cmd%$redirect_pattern}"
-    printf '::notice:: Guardrail: Optimized command for frictionless live output.\n' >&2
-    export _LLM_REWRITE_ACTIVE=1
-    eval "$base_cmd 2>&1 | fold -w 4000 -s | tee -i '$outfile'";
-    BASH_COMMAND=:; unset _LLM_REWRITE_ACTIVE; return 0;
-  fi
-}
-
-if [[ "${CI:-}" == "true" || "${LLM_SHELL_HEARTBEAT:-}" == "1" ]]; then
-  if [[ -z "${_LLM_HB_PID:-}" ]] || ! kill -0 "$_LLM_HB_PID"; then
-    llm_shell_hb &; export _LLM_HB_PID=$!; trap 'kill "$_LLM_HB_PID"' EXIT;
-  fi
-fi
-trap _llm_hijack DEBUG
-EOF
-
-# --- 3. Persistence & Activation ---
-echo "$BASH_ENV_CONTENT" > "$repo_root/.llm-bash-env"
-for hook in post-checkout post-merge; do
-  hook_path="$repo_root/.git/hooks/$hook"
-  cat > "$hook_path" <<'EOH'
-#!/usr/bin/env bash
-# Auto-restores LLM guardrails. To apply to your current shell, run:
-# source scripts/llm-bootstrap.sh
-bash scripts/llm-bootstrap.sh 
-EOH
-  chmod +x "$hook_path"
-done
-
-eval "$BASH_ENV_CONTENT"
-
-# --- 4. Final Clarity Message (LLM Technical Brief) ---
-printf "\n\n"
-printf "---"
-printf "\n### ✅ LLM Environment Initialized: Technical Brief ###\n"
-printf "\nThis shell is now enhanced for autonomous operation. Key commands are autocorrected to prevent common failures.\n"
-printf "\n#### ⚙️ Core Mechanism: The `DEBUG` Trap\n"
-printf "A `DEBUG` trap is active. It inspects every command **before** it runs to apply the following automated corrections:\n"
-printf "\n#### 🛡️ Command Corrections\n"
-printf "1.  **Universal Redirect Protection**\n"
-printf "    - **Trigger**: Any command ending in a simple file redirect (e.g., `some-task > file.log`).\n"
-printf "    - **Action**: The command is invisibly rewritten to a streaming pipeline: `... 2>&1 | fold | tee file.log`.\n"
-printf "    - **Benefit**: This provides **live output**, prevents **4096-byte line-length errors**, and makes the `tail` command on output files unnecessary.\n"
-printf "\n2.  **Smart `cat` Command**\n"
-printf "    - **Trigger**: Running the `cat` command.\n"
-printf "    - **Action**: `cat` is now an intelligent function. Code files (`.js`, `.json`, etc.) are formatted with **Prettier**. All other text is safely wrapped.\n"
-printf "    - **Benefit**: This ensures code is always displayed in a clean, syntactically correct way, preventing parsing confusion.\n"
-printf "\n#### 📦 Environment & Stability\n"
-printf "- **Dependencies**: Node.js & Python packages were hash-checked and are confirmed to be up-to-date.\n"
-printf "- **Keep-Alive**: A background heartbeat is active to prevent timeouts in automated environments.\n"
-printf "- **Persistence**: Git hooks will automatically re-apply this environment on `git checkout` or `git merge`.\n"
-printf "\n---"
-printf "\n\n"
+_llm_emit_boot bootstrap.done fold="$LLM_FOLD_WIDTH" tail_block="$LLM_TAIL_BLOCK" verbose="$LLM_VERBOSE" cat="prettier-first"
+printf 'LLM-GUARD summary: hijack=%s fold=%s tail_block=%s cat=prettier-first verbose=%s\n' \
+  "$([[ "$LLM_HIJACK_DISABLE" == "1" ]] && printf disabled || printf enabled)" \
+  "$LLM_FOLD_WIDTH" "$LLM_TAIL_BLOCK" "$LLM_VERBOSE" >&2
