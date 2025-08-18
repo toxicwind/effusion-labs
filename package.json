@@ -4,7 +4,7 @@
   "description": "This is a digital studio and knowledge base for Effusion Labs, built with Eleventy and the powerful `@photogabble/eleventy-plugin-interlinker`.",
   "main": "index.js",
   "scripts": {
-    "prepare": "bash scripts/llm-bootstrap.sh || true",
+    "prepare": "[ -z \"$CI\" ] && bash scripts/llm-bootstrap.sh || true",
     "test": "c8 --reporter=text-summary --reporter=lcov node tools/runner.mjs",
     "test:all": "c8 --reporter=text-summary --reporter=lcov node tools/runner.mjs --all",
     "test:browser": "node --test \"test/browser/**/*.test.mjs\" --test-reporter=spec",
