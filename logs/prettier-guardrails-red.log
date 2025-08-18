@@ -1,0 +1,1244 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> effusion_labs_final@1.0.0 test
+> c8 --reporter=text-summary --reporter=lcov node tools/runner.mjs
+
+[11ty] Problem writing Eleventy templates:
+[11ty] 1. Having trouble rendering njk template ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk (via TemplateContentRenderError)
+[11ty] 2. (./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk) [Line 5, Column 104]
+[11ty]   expected variable end (via Template render error)
+[11ty] 
+[11ty] Original error stack trace: Error: expected variable end
+[11ty]     at new TemplateError (/workspace/effusion-labs/node_modules/nunjucks/src/lib.js:74:17)
+[11ty]     at Parser.error (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:63:12)
+[11ty]     at Parser.fail (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:66:16)
+[11ty]     at Parser.advanceAfterVariableEnd (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:122:12)
+[11ty]     at Parser.parseNodes (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:990:14)
+[11ty]     at Parser.parse (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:1002:42)
+[11ty]     at Parser.parseUntilBlocks (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:952:20)
+[11ty]     at Parser.parseIf (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:339:22)
+[11ty]     at Parser.parseStatement (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:466:21)
+[11ty]     at Parser.parseNodes (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:982:22)
+[11ty] Copied 12 Wrote 0 files in 4.79 seconds (v3.1.2)
+✖ archive nav exposes child counts (4792.125015ms)
+[11ty] Problem writing Eleventy templates:
+[11ty] 1. Having trouble rendering njk template ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk (via TemplateContentRenderError)
+[11ty] 2. (./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk) [Line 5, Column 104]
+[11ty]   expected variable end (via Template render error)
+[11ty] 
+[11ty] Original error stack trace: Error: expected variable end
+[11ty]     at new TemplateError (/workspace/effusion-labs/node_modules/nunjucks/src/lib.js:74:17)
+[11ty]     at Parser.error (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:63:12)
+[11ty]     at Parser.fail (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:66:16)
+[11ty]     at Parser.advanceAfterVariableEnd (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:122:12)
+[11ty]     at Parser.parseNodes (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:990:14)
+[11ty]     at Parser.parse (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:1002:42)
+[11ty]     at Parser.parseUntilBlocks (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:952:20)
+[11ty]     at Parser.parseIf (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:339:22)
+[11ty]     at Parser.parseStatement (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:466:21)
+[11ty]     at Parser.parseNodes (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:982:22)
+[11ty] Copied 78 Wrote 0 files in 4.59 seconds (v3.1.2)
+✖ layout exposes build timestamp (4591.859063ms)
+[11ty] Problem writing Eleventy templates:
+[11ty] 1. Having trouble rendering njk template ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk (via TemplateContentRenderError)
+[11ty] 2. (./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk) [Line 5, Column 104]
+[11ty]   expected variable end (via Template render error)
+[11ty] 
+[11ty] Original error stack trace: Error: expected variable end
+[11ty]     at new TemplateError (/workspace/effusion-labs/node_modules/nunjucks/src/lib.js:74:17)
+[11ty]     at Parser.error (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:63:12)
+[11ty]     at Parser.fail (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:66:16)
+[11ty]     at Parser.advanceAfterVariableEnd (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:122:12)
+[11ty]     at Parser.parseNodes (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:990:14)
+[11ty]     at Parser.parse (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:1002:42)
+[11ty]     at Parser.parseUntilBlocks (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:952:20)
+[11ty]     at Parser.parseIf (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:339:22)
+[11ty]     at Parser.parseStatement (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:466:21)
+[11ty]     at Parser.parseNodes (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:982:22)
+[11ty] Copied 77 Wrote 0 files in 3.92 seconds (v3.1.2)
+✖ code blocks expose copy control (3922.847642ms)
+[11ty] Problem writing Eleventy templates:
+[11ty] 1. Having trouble rendering njk template ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk (via TemplateContentRenderError)
+[11ty] 2. (./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk) [Line 5, Column 104]
+[11ty]   expected variable end (via Template render error)
+[11ty] 
+[11ty] Original error stack trace: Error: expected variable end
+[11ty]     at new TemplateError (/workspace/effusion-labs/node_modules/nunjucks/src/lib.js:74:17)
+[11ty]     at Parser.error (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:63:12)
+[11ty]     at Parser.fail (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:66:16)
+[11ty]     at Parser.advanceAfterVariableEnd (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:122:12)
+[11ty]     at Parser.parseNodes (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:990:14)
+[11ty]     at Parser.parse (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:1002:42)
+[11ty]     at Parser.parseUntilBlocks (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:952:20)
+[11ty]     at Parser.parseIf (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:339:22)
+[11ty]     at Parser.parseStatement (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:466:21)
+[11ty]     at Parser.parseNodes (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:982:22)
+[11ty] Copied 78 Wrote 0 files in 4.53 seconds (v3.1.2)
+✖ collection pages expose section metadata (4531.453318ms)
+✔ concept map JSON-LD export generates @context and @graph (4.155929ms)
+[11ty] Problem writing Eleventy templates:
+[11ty] 1. Having trouble rendering njk template ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk (via TemplateContentRenderError)
+[11ty] 2. (./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk) [Line 5, Column 104]
+[11ty]   expected variable end (via Template render error)
+[11ty] 
+[11ty] Original error stack trace: Error: expected variable end
+[11ty]     at new TemplateError (/workspace/effusion-labs/node_modules/nunjucks/src/lib.js:74:17)
+[11ty]     at Parser.error (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:63:12)
+[11ty]     at Parser.fail (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:66:16)
+[11ty]     at Parser.advanceAfterVariableEnd (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:122:12)
+[11ty]     at Parser.parseNodes (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:990:14)
+[11ty]     at Parser.parse (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:1002:42)
+[11ty]     at Parser.parseUntilBlocks (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:952:20)
+[11ty]     at Parser.parseIf (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:339:22)
+[11ty]     at Parser.parseStatement (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:466:21)
+[11ty]     at Parser.parseNodes (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:982:22)
+[11ty] Copied 10 Wrote 0 files in 4.64 seconds (v3.1.2)
+✖ feed exposes build metadata (4639.371688ms)
+[11ty] Problem writing Eleventy templates:
+[11ty] 1. Having trouble rendering njk template ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk (via TemplateContentRenderError)
+[11ty] 2. (./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk) [Line 5, Column 104]
+[11ty]   expected variable end (via Template render error)
+[11ty] 
+[11ty] Original error stack trace: Error: expected variable end
+[11ty]     at new TemplateError (/workspace/effusion-labs/node_modules/nunjucks/src/lib.js:74:17)
+[11ty]     at Parser.error (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:63:12)
+[11ty]     at Parser.fail (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:66:16)
+[11ty]     at Parser.advanceAfterVariableEnd (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:122:12)
+[11ty]     at Parser.parseNodes (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:990:14)
+[11ty]     at Parser.parse (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:1002:42)
+[11ty]     at Parser.parseUntilBlocks (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:952:20)
+[11ty]     at Parser.parseIf (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:339:22)
+[11ty]     at Parser.parseStatement (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:466:21)
+[11ty]     at Parser.parseNodes (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:982:22)
+[11ty] Copied 75 Wrote 0 files in 4.51 seconds (v3.1.2)
+✖ home page header includes primary nav landmark (4510.000402ms)
+[11ty] Problem writing Eleventy templates:
+[11ty] 1. Having trouble rendering njk template ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk (via TemplateContentRenderError)
+[11ty] 2. (./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk) [Line 5, Column 104]
+[11ty]   expected variable end (via Template render error)
+[11ty] 
+[11ty] Original error stack trace: Error: expected variable end
+[11ty]     at new TemplateError (/workspace/effusion-labs/node_modules/nunjucks/src/lib.js:74:17)
+[11ty]     at Parser.error (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:63:12)
+[11ty]     at Parser.fail (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:66:16)
+[11ty]     at Parser.advanceAfterVariableEnd (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:122:12)
+[11ty]     at Parser.parseNodes (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:990:14)
+[11ty]     at Parser.parse (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:1002:42)
+[11ty]     at Parser.parseUntilBlocks (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:952:20)
+[11ty]     at Parser.parseIf (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:339:22)
+[11ty]     at Parser.parseStatement (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:466:21)
+[11ty]     at Parser.parseNodes (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:982:22)
+[11ty] Copied 77 Wrote 0 files in 3.83 seconds (v3.1.2)
+✖ homepage work list mixes types (3833.78647ms)
+[11ty] Problem writing Eleventy templates:
+[11ty] 1. Having trouble rendering njk template ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk (via TemplateContentRenderError)
+[11ty] 2. (./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk) [Line 5, Column 104]
+[11ty]   expected variable end (via Template render error)
+[11ty] 
+[11ty] Original error stack trace: Error: expected variable end
+[11ty]     at new TemplateError (/workspace/effusion-labs/node_modules/nunjucks/src/lib.js:74:17)
+[11ty]     at Parser.error (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:63:12)
+[11ty]     at Parser.fail (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:66:16)
+[11ty]     at Parser.advanceAfterVariableEnd (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:122:12)
+[11ty]     at Parser.parseNodes (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:990:14)
+[11ty]     at Parser.parse (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:1002:42)
+[11ty]     at Parser.parseUntilBlocks (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:952:20)
+[11ty]     at Parser.parseIf (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:339:22)
+[11ty]     at Parser.parseStatement (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:466:21)
+[11ty]     at Parser.parseNodes (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:982:22)
+[11ty] Copied 78 Wrote 0 files in 3.89 seconds (v3.1.2)
+✖ homepage hero and work filters (3895.873415ms)
+[11ty] Problem writing Eleventy templates:
+[11ty] 1. Having trouble rendering njk template ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk (via TemplateContentRenderError)
+[11ty] 2. (./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk) [Line 5, Column 104]
+[11ty]   expected variable end (via Template render error)
+[11ty] 
+[11ty] Original error stack trace: Error: expected variable end
+[11ty]     at new TemplateError (/workspace/effusion-labs/node_modules/nunjucks/src/lib.js:74:17)
+[11ty]     at Parser.error (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:63:12)
+[11ty]     at Parser.fail (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:66:16)
+[11ty]     at Parser.advanceAfterVariableEnd (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:122:12)
+[11ty]     at Parser.parseNodes (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:990:14)
+[11ty]     at Parser.parse (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:1002:42)
+[11ty]     at Parser.parseUntilBlocks (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:952:20)
+[11ty]     at Parser.parseIf (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:339:22)
+[11ty]     at Parser.parseStatement (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:466:21)
+[11ty]     at Parser.parseNodes (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:982:22)
+[11ty] Copied 10 Wrote 0 files in 3.98 seconds (v3.1.2)
+✖ logo image transforms to avif and webp (3978.308892ms)
+[11ty] Problem writing Eleventy templates:
+[11ty] 1. Having trouble rendering njk template ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk (via TemplateContentRenderError)
+[11ty] 2. (./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk) [Line 5, Column 104]
+[11ty]   expected variable end (via Template render error)
+[11ty] 
+[11ty] Original error stack trace: Error: expected variable end
+[11ty]     at new TemplateError (/workspace/effusion-labs/node_modules/nunjucks/src/lib.js:74:17)
+[11ty]     at Parser.error (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:63:12)
+[11ty]     at Parser.fail (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:66:16)
+[11ty]     at Parser.advanceAfterVariableEnd (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:122:12)
+[11ty]     at Parser.parseNodes (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:990:14)
+[11ty]     at Parser.parse (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:1002:42)
+[11ty]     at Parser.parseUntilBlocks (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:952:20)
+[11ty]     at Parser.parseIf (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:339:22)
+[11ty]     at Parser.parseStatement (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:466:21)
+[11ty]     at Parser.parseNodes (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:982:22)
+[11ty] Copied 75 Wrote 0 files in 4.61 seconds (v3.1.2)
+✖ markdown headings include anchor ids (4612.339295ms)
+[11ty] Problem writing Eleventy templates:
+[11ty] 1. Having trouble rendering njk template ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk (via TemplateContentRenderError)
+[11ty] 2. (./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk) [Line 5, Column 104]
+[11ty]   expected variable end (via Template render error)
+[11ty] 
+[11ty] Original error stack trace: Error: expected variable end
+[11ty]     at new TemplateError (/workspace/effusion-labs/node_modules/nunjucks/src/lib.js:74:17)
+[11ty]     at Parser.error (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:63:12)
+[11ty]     at Parser.fail (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:66:16)
+[11ty]     at Parser.advanceAfterVariableEnd (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:122:12)
+[11ty]     at Parser.parseNodes (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:990:14)
+[11ty]     at Parser.parse (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:1002:42)
+[11ty]     at Parser.parseUntilBlocks (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:952:20)
+[11ty]     at Parser.parseIf (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:339:22)
+[11ty]     at Parser.parseStatement (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:466:21)
+[11ty]     at Parser.parseNodes (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:982:22)
+[11ty] Copied 75 Wrote 0 files in 4.61 seconds (v3.1.2)
+✖ monsters hub lists products and cross-links product and character pages (4616.599752ms)
+[11ty] Problem writing Eleventy templates:
+[11ty] 1. Having trouble rendering njk template ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk (via TemplateContentRenderError)
+[11ty] 2. (./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk) [Line 5, Column 104]
+[11ty]   expected variable end (via Template render error)
+[11ty] 
+[11ty] Original error stack trace: Error: expected variable end
+[11ty]     at new TemplateError (/workspace/effusion-labs/node_modules/nunjucks/src/lib.js:74:17)
+[11ty]     at Parser.error (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:63:12)
+[11ty]     at Parser.fail (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:66:16)
+[11ty]     at Parser.advanceAfterVariableEnd (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:122:12)
+[11ty]     at Parser.parseNodes (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:990:14)
+[11ty]     at Parser.parse (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:1002:42)
+[11ty]     at Parser.parseUntilBlocks (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:952:20)
+[11ty]     at Parser.parseIf (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:339:22)
+[11ty]     at Parser.parseStatement (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:466:21)
+[11ty]     at Parser.parseNodes (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:982:22)
+[11ty] Copied 78 Wrote 0 files in 3.95 seconds (v3.1.2)
+✖ product page exposes full metadata (acceptance) (3951.895183ms)
+[11ty] Problem writing Eleventy templates:
+[11ty] 1. Having trouble rendering njk template ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk (via TemplateContentRenderError)
+[11ty] 2. (./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk) [Line 5, Column 104]
+[11ty]   expected variable end (via Template render error)
+[11ty] 
+[11ty] Original error stack trace: Error: expected variable end
+[11ty]     at new TemplateError (/workspace/effusion-labs/node_modules/nunjucks/src/lib.js:74:17)
+[11ty]     at Parser.error (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:63:12)
+[11ty]     at Parser.fail (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:66:16)
+[11ty]     at Parser.advanceAfterVariableEnd (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:122:12)
+[11ty]     at Parser.parseNodes (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:990:14)
+[11ty]     at Parser.parse (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:1002:42)
+[11ty]     at Parser.parseUntilBlocks (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:952:20)
+[11ty]     at Parser.parseIf (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:339:22)
+[11ty]     at Parser.parseStatement (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:466:21)
+[11ty]     at Parser.parseNodes (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:982:22)
+[11ty] Wrote 0 files in 2.27 seconds (v3.1.2)
+✖ price cells are formatted and table parity holds (property) (2278.787392ms)
+[11ty] Problem writing Eleventy templates:
+[11ty] 1. Having trouble rendering njk template ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk (via TemplateContentRenderError)
+[11ty] 2. (./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk) [Line 5, Column 104]
+[11ty]   expected variable end (via Template render error)
+[11ty] 
+[11ty] Original error stack trace: Error: expected variable end
+[11ty]     at new TemplateError (/workspace/effusion-labs/node_modules/nunjucks/src/lib.js:74:17)
+[11ty]     at Parser.error (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:63:12)
+[11ty]     at Parser.fail (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:66:16)
+[11ty]     at Parser.advanceAfterVariableEnd (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:122:12)
+[11ty]     at Parser.parseNodes (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:990:14)
+[11ty]     at Parser.parse (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:1002:42)
+[11ty]     at Parser.parseUntilBlocks (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:952:20)
+[11ty]     at Parser.parseIf (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:339:22)
+[11ty]     at Parser.parseStatement (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:466:21)
+[11ty]     at Parser.parseNodes (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:982:22)
+[11ty] Wrote 0 files in 2.35 seconds (v3.1.2)
+✖ semantic invariants hold (contract) (2347.758279ms)
+[11ty] Problem writing Eleventy templates:
+[11ty] 1. Having trouble rendering njk template ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk (via TemplateContentRenderError)
+[11ty] 2. (./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk) [Line 5, Column 104]
+[11ty]   expected variable end (via Template render error)
+[11ty] 
+[11ty] Original error stack trace: Error: expected variable end
+[11ty]     at new TemplateError (/workspace/effusion-labs/node_modules/nunjucks/src/lib.js:74:17)
+[11ty]     at Parser.error (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:63:12)
+[11ty]     at Parser.fail (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:66:16)
+[11ty]     at Parser.advanceAfterVariableEnd (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:122:12)
+[11ty]     at Parser.parseNodes (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:990:14)
+[11ty]     at Parser.parse (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:1002:42)
+[11ty]     at Parser.parseUntilBlocks (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:952:20)
+[11ty]     at Parser.parseIf (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:339:22)
+[11ty]     at Parser.parseStatement (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:466:21)
+[11ty]     at Parser.parseNodes (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:982:22)
+[11ty] Wrote 0 files in 2.29 seconds (v3.1.2)
+✖ rendered prices use ISO code and two decimals (property) (2292.820746ms)
+[11ty] Problem writing Eleventy templates:
+[11ty] 1. Having trouble rendering njk template ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk (via TemplateContentRenderError)
+[11ty] 2. (./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk) [Line 5, Column 104]
+[11ty]   expected variable end (via Template render error)
+[11ty] 
+[11ty] Original error stack trace: Error: expected variable end
+[11ty]     at new TemplateError (/workspace/effusion-labs/node_modules/nunjucks/src/lib.js:74:17)
+[11ty]     at Parser.error (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:63:12)
+[11ty]     at Parser.fail (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:66:16)
+[11ty]     at Parser.advanceAfterVariableEnd (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:122:12)
+[11ty]     at Parser.parseNodes (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:990:14)
+[11ty]     at Parser.parse (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:1002:42)
+[11ty]     at Parser.parseUntilBlocks (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:952:20)
+[11ty]     at Parser.parseIf (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:339:22)
+[11ty]     at Parser.parseStatement (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:466:21)
+[11ty]     at Parser.parseNodes (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:982:22)
+[11ty] Wrote 0 files in 2.20 seconds (v3.1.2)
+✖ table and spec semantics hold (contract) (2199.984642ms)
+ℹ Error: Test "price cells are formatted and table parity holds (property)" at test/integration/monsters-product-metadata.spec.mjs:49:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './node_modules/lucide/dist/umd/lucide.min.js'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "price cells are formatted and table parity holds (property)" at test/integration/monsters-product-metadata.spec.mjs:49:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--good-lucky-to-you-thailand--figure--std--20241220--reg-th.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "price cells are formatted and table parity holds (property)" at test/integration/monsters-product-metadata.spec.mjs:49:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--happy-halloween-party-sitting-pumpkin--pendant--sitting-pumpkin--20241025.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "price cells are formatted and table parity holds (property)" at test/integration/monsters-product-metadata.spec.mjs:49:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--have-a-seat--blind-box--single--15cm--20240712.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "price cells are formatted and table parity holds (property)" at test/integration/monsters-product-metadata.spec.mjs:49:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--have-a-seat--blind-box-set--sealed--15cm--20240712.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "price cells are formatted and table parity holds (property)" at test/integration/monsters-product-metadata.spec.mjs:49:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--hide-and-seek-in-singapore--figure--std--17.5cm--reg-sg.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "price cells are formatted and table parity holds (property)" at test/integration/monsters-product-metadata.spec.mjs:49:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--jump-for-joy--plush--std--20230525.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "price cells are formatted and table parity holds (property)" at test/integration/monsters-product-metadata.spec.mjs:49:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--lets-checkmate--pendant--std--17cm--20250207.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "price cells are formatted and table parity holds (property)" at test/integration/monsters-product-metadata.spec.mjs:49:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--lets-checkmate--plush-doll--std--37cm--20250207.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "price cells are formatted and table parity holds (property)" at test/integration/monsters-product-metadata.spec.mjs:49:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--pronounce-be-fancy-now--plush--std--20240315.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "price cells are formatted and table parity holds (property)" at test/integration/monsters-product-metadata.spec.mjs:49:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--pronounce-wings-of-fortune--pendant--std--20241004.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "price cells are formatted and table parity holds (property)" at test/integration/monsters-product-metadata.spec.mjs:49:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--time-to-chill--plush--std--20221031.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "price cells are formatted and table parity holds (property)" at test/integration/monsters-product-metadata.spec.mjs:49:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--pronounce-wings-of-fantasy--plush--std--20241004.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "price cells are formatted and table parity holds (property)" at test/integration/monsters-product-metadata.spec.mjs:49:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--wacky-mart-china--figure--std--20250612--reg-cn.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "price cells are formatted and table parity holds (property)" at test/integration/monsters-product-metadata.spec.mjs:49:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--walk-by-fortune--plush--std--20231229.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "price cells are formatted and table parity holds (property)" at test/integration/monsters-product-metadata.spec.mjs:49:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--mokoko--blue-diamond--pendant--std--17cm--20240618.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "price cells are formatted and table parity holds (property)" at test/integration/monsters-product-metadata.spec.mjs:49:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--mokoko--close-to-sweet-v1--pendant--std--17cm.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "price cells are formatted and table parity holds (property)" at test/integration/monsters-product-metadata.spec.mjs:49:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--mokoko--close-to-sweet-v1--plush--std.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "price cells are formatted and table parity holds (property)" at test/integration/monsters-product-metadata.spec.mjs:49:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--mokoko--fall-into-spring--pendant--std--17cm--20240308.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "price cells are formatted and table parity holds (property)" at test/integration/monsters-product-metadata.spec.mjs:49:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--mokoko--fall-into-spring--plush--std--20240308.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "price cells are formatted and table parity holds (property)" at test/integration/monsters-product-metadata.spec.mjs:49:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--mokoko--magic-of-pumpkin--pendant--std--17cm--20241027.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "price cells are formatted and table parity holds (property)" at test/integration/monsters-product-metadata.spec.mjs:49:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--zimomo--angel-in-clouds-v2--plush--std--58cm--20241025.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "price cells are formatted and table parity holds (property)" at test/integration/monsters-product-metadata.spec.mjs:49:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--mokoko--twinkly-fairy-tale--pendant--std--17cm--20241128.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "price cells are formatted and table parity holds (property)" at test/integration/monsters-product-metadata.spec.mjs:49:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--zimomo--i-found-you-v1--plush--std--58cm--20231215.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "price cells are formatted and table parity holds (property)" at test/integration/monsters-product-metadata.spec.mjs:49:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/series/best-of-luck.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "price cells are formatted and table parity holds (property)" at test/integration/monsters-product-metadata.spec.mjs:49:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/series/angel-in-clouds-v2.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "price cells are formatted and table parity holds (property)" at test/integration/monsters-product-metadata.spec.mjs:49:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/series/big-into-energy.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "price cells are formatted and table parity holds (property)" at test/integration/monsters-product-metadata.spec.mjs:49:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/series/blue-diamond.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "price cells are formatted and table parity holds (property)" at test/integration/monsters-product-metadata.spec.mjs:49:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/series/close-to-sweet-v1.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "price cells are formatted and table parity holds (property)" at test/integration/monsters-product-metadata.spec.mjs:49:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/series/coca-cola.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "price cells are formatted and table parity holds (property)" at test/integration/monsters-product-metadata.spec.mjs:49:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/series/exciting-macaron.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "price cells are formatted and table parity holds (property)" at test/integration/monsters-product-metadata.spec.mjs:49:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/series/fall-into-spring.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "price cells are formatted and table parity holds (property)" at test/integration/monsters-product-metadata.spec.mjs:49:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/series/flip-with-me.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "price cells are formatted and table parity holds (property)" at test/integration/monsters-product-metadata.spec.mjs:49:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/series/forest-fairy-tale-china.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "price cells are formatted and table parity holds (property)" at test/integration/monsters-product-metadata.spec.mjs:49:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/series/dress-be-latte.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "price cells are formatted and table parity holds (property)" at test/integration/monsters-product-metadata.spec.mjs:49:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/series/good-lucky-to-you-thailand.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "price cells are formatted and table parity holds (property)" at test/integration/monsters-product-metadata.spec.mjs:49:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/series/have-a-seat.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "price cells are formatted and table parity holds (property)" at test/integration/monsters-product-metadata.spec.mjs:49:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/series/hide-and-seek-in-singapore.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "price cells are formatted and table parity holds (property)" at test/integration/monsters-product-metadata.spec.mjs:49:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/series/i-found-you-v1.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "price cells are formatted and table parity holds (property)" at test/integration/monsters-product-metadata.spec.mjs:49:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/series/jump-for-joy.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "price cells are formatted and table parity holds (property)" at test/integration/monsters-product-metadata.spec.mjs:49:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/series/magic-of-pumpkin.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "price cells are formatted and table parity holds (property)" at test/integration/monsters-product-metadata.spec.mjs:49:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/series/lets-checkmate.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "price cells are formatted and table parity holds (property)" at test/integration/monsters-product-metadata.spec.mjs:49:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/series/happy-halloween-party-sitting-pumpkin.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "price cells are formatted and table parity holds (property)" at test/integration/monsters-product-metadata.spec.mjs:49:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/series/pronounce-be-fancy-now.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "price cells are formatted and table parity holds (property)" at test/integration/monsters-product-metadata.spec.mjs:49:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/series/pronounce-wings-of-fortune.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "price cells are formatted and table parity holds (property)" at test/integration/monsters-product-metadata.spec.mjs:49:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/series/time-to-chill.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "price cells are formatted and table parity holds (property)" at test/integration/monsters-product-metadata.spec.mjs:49:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/series/pronounce-wings-of-fantasy.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "price cells are formatted and table parity holds (property)" at test/integration/monsters-product-metadata.spec.mjs:49:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/series/twinkly-fairy-tale.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "price cells are formatted and table parity holds (property)" at test/integration/monsters-product-metadata.spec.mjs:49:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/series/walk-by-fortune.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "price cells are formatted and table parity holds (property)" at test/integration/monsters-product-metadata.spec.mjs:49:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/series/wacky-mart-china.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "price cells are formatted and table parity holds (property)" at test/integration/monsters-product-metadata.spec.mjs:49:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/series/fall-in-wild.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "semantic invariants hold (contract)" at test/integration/monsters-product-metadata.spec.mjs:62:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--best-of-luck--plush--std--20231230--reg-cn.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "semantic invariants hold (contract)" at test/integration/monsters-product-metadata.spec.mjs:62:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/series/angel-in-clouds-v2.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "semantic invariants hold (contract)" at test/integration/monsters-product-metadata.spec.mjs:62:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/i18n/zh/products/pop-mart--the-monsters--labubu--fall-in-wild--plush-doll--std--40cm--20240712.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "semantic invariants hold (contract)" at test/integration/monsters-product-metadata.spec.mjs:62:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/i18n/zh/series/fall-in-wild.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "semantic invariants hold (contract)" at test/integration/monsters-product-metadata.spec.mjs:62:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--big-into-energy--blind-box--single--20250425.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "semantic invariants hold (contract)" at test/integration/monsters-product-metadata.spec.mjs:62:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/characters/zimomo.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "semantic invariants hold (contract)" at test/integration/monsters-product-metadata.spec.mjs:62:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--coca-cola--blind-box--single--20250124.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "semantic invariants hold (contract)" at test/integration/monsters-product-metadata.spec.mjs:62:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/characters/labubu.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "semantic invariants hold (contract)" at test/integration/monsters-product-metadata.spec.mjs:62:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--big-into-energy--blind-box-set--sealed--20250425.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "semantic invariants hold (contract)" at test/integration/monsters-product-metadata.spec.mjs:62:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--exciting-macaron--blind-box-set--sealed--20241027.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "semantic invariants hold (contract)" at test/integration/monsters-product-metadata.spec.mjs:62:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--fall-in-wild--pendant--std--17cm--20240712.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "semantic invariants hold (contract)" at test/integration/monsters-product-metadata.spec.mjs:62:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--coca-cola--blind-box-set--sealed--20250124.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "semantic invariants hold (contract)" at test/integration/monsters-product-metadata.spec.mjs:62:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--fall-in-wild--plush-doll--std--40cm--20240712.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "semantic invariants hold (contract)" at test/integration/monsters-product-metadata.spec.mjs:62:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--forest-fairy-tale-china--figure--std--20250526--reg-cn.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "semantic invariants hold (contract)" at test/integration/monsters-product-metadata.spec.mjs:62:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--exciting-macaron--blind-box--single--20241027.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "semantic invariants hold (contract)" at test/integration/monsters-product-metadata.spec.mjs:62:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--have-a-seat--blind-box--single--15cm--20240712.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "semantic invariants hold (contract)" at test/integration/monsters-product-metadata.spec.mjs:62:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--good-lucky-to-you-thailand--figure--std--20241220--reg-th.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "semantic invariants hold (contract)" at test/integration/monsters-product-metadata.spec.mjs:62:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--flip-with-me--plush--std--40cm--20240712.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "semantic invariants hold (contract)" at test/integration/monsters-product-metadata.spec.mjs:62:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--happy-halloween-party-sitting-pumpkin--pendant--sitting-pumpkin--20241025.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "semantic invariants hold (contract)" at test/integration/monsters-product-metadata.spec.mjs:62:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--hide-and-seek-in-singapore--figure--std--17.5cm--reg-sg.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "semantic invariants hold (contract)" at test/integration/monsters-product-metadata.spec.mjs:62:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--have-a-seat--blind-box-set--sealed--15cm--20240712.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "semantic invariants hold (contract)" at test/integration/monsters-product-metadata.spec.mjs:62:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--jump-for-joy--plush--std--20230525.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "semantic invariants hold (contract)" at test/integration/monsters-product-metadata.spec.mjs:62:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--lets-checkmate--pendant--std--17cm--20250207.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "semantic invariants hold (contract)" at test/integration/monsters-product-metadata.spec.mjs:62:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--lets-checkmate--plush-doll--std--37cm--20250207.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "semantic invariants hold (contract)" at test/integration/monsters-product-metadata.spec.mjs:62:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--pronounce-wings-of-fortune--pendant--std--20241004.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "semantic invariants hold (contract)" at test/integration/monsters-product-metadata.spec.mjs:62:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--time-to-chill--plush--std--20221031.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "semantic invariants hold (contract)" at test/integration/monsters-product-metadata.spec.mjs:62:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--wacky-mart-china--figure--std--20250612--reg-cn.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "semantic invariants hold (contract)" at test/integration/monsters-product-metadata.spec.mjs:62:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--mokoko--close-to-sweet-v1--pendant--std--17cm.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "semantic invariants hold (contract)" at test/integration/monsters-product-metadata.spec.mjs:62:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--pronounce-wings-of-fantasy--plush--std--20241004.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "semantic invariants hold (contract)" at test/integration/monsters-product-metadata.spec.mjs:62:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--walk-by-fortune--plush--std--20231229.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "semantic invariants hold (contract)" at test/integration/monsters-product-metadata.spec.mjs:62:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--mokoko--twinkly-fairy-tale--pendant--std--17cm--20241128.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "semantic invariants hold (contract)" at test/integration/monsters-product-metadata.spec.mjs:62:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--mokoko--magic-of-pumpkin--pendant--std--17cm--20241027.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "semantic invariants hold (contract)" at test/integration/monsters-product-metadata.spec.mjs:62:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--mokoko--blue-diamond--pendant--std--17cm--20240618.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "semantic invariants hold (contract)" at test/integration/monsters-product-metadata.spec.mjs:62:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--zimomo--angel-in-clouds-v2--plush--std--58cm--20241025.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "semantic invariants hold (contract)" at test/integration/monsters-product-metadata.spec.mjs:62:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--mokoko--fall-into-spring--pendant--std--17cm--20240308.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "semantic invariants hold (contract)" at test/integration/monsters-product-metadata.spec.mjs:62:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--dress-be-latte--plush--std--20231026.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "semantic invariants hold (contract)" at test/integration/monsters-product-metadata.spec.mjs:62:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/series/best-of-luck.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "semantic invariants hold (contract)" at test/integration/monsters-product-metadata.spec.mjs:62:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/series/blue-diamond.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "semantic invariants hold (contract)" at test/integration/monsters-product-metadata.spec.mjs:62:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--zimomo--i-found-you-v1--plush--std--58cm--20231215.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "semantic invariants hold (contract)" at test/integration/monsters-product-metadata.spec.mjs:62:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--mokoko--fall-into-spring--plush--std--20240308.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "semantic invariants hold (contract)" at test/integration/monsters-product-metadata.spec.mjs:62:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--pronounce-be-fancy-now--plush--std--20240315.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "semantic invariants hold (contract)" at test/integration/monsters-product-metadata.spec.mjs:62:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/series/coca-cola.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "semantic invariants hold (contract)" at test/integration/monsters-product-metadata.spec.mjs:62:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/series/close-to-sweet-v1.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "semantic invariants hold (contract)" at test/integration/monsters-product-metadata.spec.mjs:62:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/series/dress-be-latte.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "semantic invariants hold (contract)" at test/integration/monsters-product-metadata.spec.mjs:62:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/series/flip-with-me.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "semantic invariants hold (contract)" at test/integration/monsters-product-metadata.spec.mjs:62:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/series/big-into-energy.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "semantic invariants hold (contract)" at test/integration/monsters-product-metadata.spec.mjs:62:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/series/have-a-seat.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "semantic invariants hold (contract)" at test/integration/monsters-product-metadata.spec.mjs:62:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/series/exciting-macaron.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "semantic invariants hold (contract)" at test/integration/monsters-product-metadata.spec.mjs:62:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/series/hide-and-seek-in-singapore.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "semantic invariants hold (contract)" at test/integration/monsters-product-metadata.spec.mjs:62:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/series/happy-halloween-party-sitting-pumpkin.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "semantic invariants hold (contract)" at test/integration/monsters-product-metadata.spec.mjs:62:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/series/lets-checkmate.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "semantic invariants hold (contract)" at test/integration/monsters-product-metadata.spec.mjs:62:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/series/forest-fairy-tale-china.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "semantic invariants hold (contract)" at test/integration/monsters-product-metadata.spec.mjs:62:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/series/fall-into-spring.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "semantic invariants hold (contract)" at test/integration/monsters-product-metadata.spec.mjs:62:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/series/jump-for-joy.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "semantic invariants hold (contract)" at test/integration/monsters-product-metadata.spec.mjs:62:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/series/pronounce-be-fancy-now.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "semantic invariants hold (contract)" at test/integration/monsters-product-metadata.spec.mjs:62:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/series/good-lucky-to-you-thailand.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "semantic invariants hold (contract)" at test/integration/monsters-product-metadata.spec.mjs:62:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/series/fall-in-wild.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "semantic invariants hold (contract)" at test/integration/monsters-product-metadata.spec.mjs:62:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/series/i-found-you-v1.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "semantic invariants hold (contract)" at test/integration/monsters-product-metadata.spec.mjs:62:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/series/twinkly-fairy-tale.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "semantic invariants hold (contract)" at test/integration/monsters-product-metadata.spec.mjs:62:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/series/pronounce-wings-of-fantasy.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "semantic invariants hold (contract)" at test/integration/monsters-product-metadata.spec.mjs:62:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/series/walk-by-fortune.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "semantic invariants hold (contract)" at test/integration/monsters-product-metadata.spec.mjs:62:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/series/time-to-chill.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "semantic invariants hold (contract)" at test/integration/monsters-product-metadata.spec.mjs:62:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/series/wacky-mart-china.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "semantic invariants hold (contract)" at test/integration/monsters-product-metadata.spec.mjs:62:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/series/pronounce-wings-of-fortune.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "semantic invariants hold (contract)" at test/integration/monsters-product-metadata.spec.mjs:62:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/i18n/zh/characters/labubu.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "semantic invariants hold (contract)" at test/integration/monsters-product-metadata.spec.mjs:62:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/series/magic-of-pumpkin.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "semantic invariants hold (contract)" at test/integration/monsters-product-metadata.spec.mjs:62:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--mokoko--close-to-sweet-v1--plush--std.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "price cells are formatted and table parity holds (property)" at test/integration/monsters-product-metadata.spec.mjs:49:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/i18n/zh/products/pop-mart--the-monsters--labubu--fall-in-wild--plush-doll--std--40cm--20240712.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "price cells are formatted and table parity holds (property)" at test/integration/monsters-product-metadata.spec.mjs:49:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/i18n/zh/characters/labubu.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+ℹ Error: Test "price cells are formatted and table parity holds (property)" at test/integration/monsters-product-metadata.spec.mjs:49:1 generated asynchronous activity after the test ended. This activity created the error "TemplatePassthroughManagerCopyError: Having trouble copying './src/content/archives/collectables/designer-toys/pop-mart/the-monsters/i18n/zh/series/fall-in-wild.json'" and would have caused the test to fail, but instead triggered an unhandledRejection event.
+[11ty] Problem writing Eleventy templates:
+[11ty] 1. Having trouble rendering njk template ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk (via TemplateContentRenderError)
+[11ty] 2. (./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk) [Line 5, Column 104]
+[11ty]   expected variable end (via Template render error)
+[11ty] 
+[11ty] Original error stack trace: Error: expected variable end
+[11ty]     at new TemplateError (/workspace/effusion-labs/node_modules/nunjucks/src/lib.js:74:17)
+[11ty]     at Parser.error (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:63:12)
+[11ty]     at Parser.fail (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:66:16)
+[11ty]     at Parser.advanceAfterVariableEnd (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:122:12)
+[11ty]     at Parser.parseNodes (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:990:14)
+[11ty]     at Parser.parse (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:1002:42)
+[11ty]     at Parser.parseUntilBlocks (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:952:20)
+[11ty]     at Parser.parseIf (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:339:22)
+[11ty]     at Parser.parseStatement (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:466:21)
+[11ty]     at Parser.parseNodes (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:982:22)
+[11ty] Copied 10 Wrote 0 files in 3.90 seconds (v3.1.2)
+✖ overlay root exists and carries defaults (3908.641679ms)
+✔ seed generation modes (4.390977ms)
+[11ty] Problem writing Eleventy templates:
+[11ty] 1. Having trouble rendering njk template ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk (via TemplateContentRenderError)
+[11ty] 2. (./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk) [Line 5, Column 104]
+[11ty]   expected variable end (via Template render error)
+[11ty] 
+[11ty] Original error stack trace: Error: expected variable end
+[11ty]     at new TemplateError (/workspace/effusion-labs/node_modules/nunjucks/src/lib.js:74:17)
+[11ty]     at Parser.error (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:63:12)
+[11ty]     at Parser.fail (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:66:16)
+[11ty]     at Parser.advanceAfterVariableEnd (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:122:12)
+[11ty]     at Parser.parseNodes (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:990:14)
+[11ty]     at Parser.parse (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:1002:42)
+[11ty]     at Parser.parseUntilBlocks (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:952:20)
+[11ty]     at Parser.parseIf (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:339:22)
+[11ty]     at Parser.parseStatement (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:466:21)
+[11ty]     at Parser.parseNodes (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:982:22)
+[11ty] Copied 77 Wrote 0 files in 4.57 seconds (v3.1.2)
+✖ main nav marks current page and is labelled (4576.659799ms)
+✔ navigation items are sequentially ordered (2.357068ms)
+[11ty] Problem writing Eleventy templates:
+[11ty] 1. Having trouble rendering njk template ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk (via TemplateContentRenderError)
+[11ty] 2. (./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk) [Line 5, Column 104]
+[11ty]   expected variable end (via Template render error)
+[11ty] 
+[11ty] Original error stack trace: Error: expected variable end
+[11ty]     at new TemplateError (/workspace/effusion-labs/node_modules/nunjucks/src/lib.js:74:17)
+[11ty]     at Parser.error (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:63:12)
+[11ty]     at Parser.fail (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:66:16)
+[11ty]     at Parser.advanceAfterVariableEnd (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:122:12)
+[11ty]     at Parser.parseNodes (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:990:14)
+[11ty]     at Parser.parse (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:1002:42)
+[11ty]     at Parser.parseUntilBlocks (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:952:20)
+[11ty]     at Parser.parseIf (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:339:22)
+[11ty]     at Parser.parseStatement (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:466:21)
+[11ty]     at Parser.parseNodes (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:982:22)
+[11ty] Copied 65 Wrote 0 files in 4.52 seconds (v3.1.2)
+✖ buildLean sets env and output directory (4526.315804ms)
+[11ty] Problem writing Eleventy templates:
+[11ty] 1. Having trouble rendering njk template ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk (via TemplateContentRenderError)
+[11ty] 2. (./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk) [Line 5, Column 104]
+[11ty]   expected variable end (via Template render error)
+[11ty] 
+[11ty] Original error stack trace: Error: expected variable end
+[11ty]     at new TemplateError (/workspace/effusion-labs/node_modules/nunjucks/src/lib.js:74:17)
+[11ty]     at Parser.error (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:63:12)
+[11ty]     at Parser.fail (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:66:16)
+[11ty]     at Parser.advanceAfterVariableEnd (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:122:12)
+[11ty]     at Parser.parseNodes (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:990:14)
+[11ty]     at Parser.parse (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:1002:42)
+[11ty]     at Parser.parseUntilBlocks (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:952:20)
+[11ty]     at Parser.parseIf (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:339:22)
+[11ty]     at Parser.parseStatement (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:466:21)
+[11ty]     at Parser.parseNodes (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:982:22)
+[11ty] Copied 77 Wrote 0 files in 4.36 seconds (v3.1.2)
+✖ spark listings reveal status text (4359.0792ms)
+[11ty] Problem writing Eleventy templates:
+[11ty] 1. Having trouble rendering njk template ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk (via TemplateContentRenderError)
+[11ty] 2. (./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk) [Line 5, Column 104]
+[11ty]   expected variable end (via Template render error)
+[11ty] 
+[11ty] Original error stack trace: Error: expected variable end
+[11ty]     at new TemplateError (/workspace/effusion-labs/node_modules/nunjucks/src/lib.js:74:17)
+[11ty]     at Parser.error (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:63:12)
+[11ty]     at Parser.fail (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:66:16)
+[11ty]     at Parser.advanceAfterVariableEnd (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:122:12)
+[11ty]     at Parser.parseNodes (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:990:14)
+[11ty]     at Parser.parse (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:1002:42)
+[11ty]     at Parser.parseUntilBlocks (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:952:20)
+[11ty]     at Parser.parseIf (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:339:22)
+[11ty]     at Parser.parseStatement (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:466:21)
+[11ty]     at Parser.parseNodes (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:982:22)
+[11ty] Copied 75 Wrote 0 files in 4.26 seconds (v3.1.2)
+✖ wikilinks ignore templated paths (4266.306493ms)
+[11ty] Problem writing Eleventy templates:
+[11ty] 1. Having trouble rendering njk template ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk (via TemplateContentRenderError)
+[11ty] 2. (./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk) [Line 5, Column 104]
+[11ty]   expected variable end (via Template render error)
+[11ty] 
+[11ty] Original error stack trace: Error: expected variable end
+[11ty]     at new TemplateError (/workspace/effusion-labs/node_modules/nunjucks/src/lib.js:74:17)
+[11ty]     at Parser.error (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:63:12)
+[11ty]     at Parser.fail (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:66:16)
+[11ty]     at Parser.advanceAfterVariableEnd (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:122:12)
+[11ty]     at Parser.parseNodes (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:990:14)
+[11ty]     at Parser.parse (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:1002:42)
+[11ty]     at Parser.parseUntilBlocks (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:952:20)
+[11ty]     at Parser.parseIf (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:339:22)
+[11ty]     at Parser.parseStatement (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:466:21)
+[11ty]     at Parser.parseNodes (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:982:22)
+[11ty] Copied 12 Wrote 0 files in 4.21 seconds (v3.1.2)
+✖ work pages build and latest redirects (4214.23331ms)
+✖ deploy workflow does not trigger on pull_request (2.732723ms)
+✖ build job runs only on push events (0.395097ms)
+✔ defines improved background colors (1.917861ms)
+✔ text contrast meets WCAG AA (0.761547ms)
+✔ tailwind exposes readable fonts (0.167018ms)
+✔ includes fluid type scale tokens (0.16428ms)
+✔ docs:links reports no broken links (1682.694017ms)
+✔ package-lock.json defines lockfileVersion (7.180627ms)
+✔ footnote popover separates source line (212.340589ms)
+✔ projects computed picks latest entries by date (3.345986ms)
+✔ keepalive emits heartbeat to stderr (6356.403691ms)
+✔ keepalive ignores first SIGINT (424.313826ms)
+✔ gateway reads SOLVER_URL from environment (1.823784ms)
+✔ gateway retains default solver URL (0.208509ms)
+✔ external link renders with arrow and class (21.169996ms)
+✔ internal link keeps text without external markers (2.242976ms)
+✔ external link starting with arrow does not duplicate (4.157119ms)
+✔ repository contains no legacy test-with-guardrails script (32.786302ms)
+✖ prettier pinned version and format script (4.347632ms)
+✔ provenanceSources parses JSONL provenance files (2.851757ms)
+✔ provenanceSources returns [] when file missing (1.695445ms)
+✔ devDependencies omit @vscode/ripgrep (1.52013ms)
+✔ prepare-docs avoids ripgrep install (0.202572ms)
+✔ merges tag-like metadata into unified tags and categories (3.044737ms)
+✔ deduplicates tag values (0.259887ms)
+✔ categories returns empty array when spark_type absent (0.173158ms)
+✔ time to chill includes size with height in cm (1.65502ms)
+✔ time to chill height is positive (0.268943ms)
+✔ ordinalSuffix(1) returns st (1.597501ms)
+✔ ordinalSuffix emits valid suffix for 1..31 (0.684449ms)
+✔ ordinalSuffix handles teens with th (0.282953ms)
+✔ filterDeadLinks removes templated links (3.31123ms)
+✔ result has no templated links (0.341491ms)
+✔ filterDeadLinks does not mutate input (0.349146ms)
+✔ GitHub workflows use latest action versions (1.766775ms)
+ℹ tests 60
+ℹ suites 0
+ℹ pass 35
+ℹ fail 25
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 48473.84945
+
+✖ failing tests:
+
+test at test/integration/archive-nav-count.spec.mjs:7:1
+✖ archive nav exposes child counts (4792.125015ms)
+  Error [TemplateContentRenderError]: Having trouble rendering njk template ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk
+      at Template._render (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateContent.js:660:6)
+      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+      at async file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateMap.js:390:9
+      at async Promise.all (index 0)
+      at async TemplateMap.populateContentDataInMap (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateMap.js:380:4)
+      at async TemplateMap.cache (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateMap.js:291:3)
+      at async TemplateWriter._createTemplateMap (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateWriter.js:352:3)
+      at async TemplateWriter.generateTemplates (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateWriter.js:382:3)
+      at async TemplateWriter.write (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateWriter.js:430:38)
+      at async Eleventy.executeBuild (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/Eleventy.js:1438:19) {
+    originalError: Error: expected variable end
+        at new TemplateError (/workspace/effusion-labs/node_modules/nunjucks/src/lib.js:74:17)
+        at Parser.error (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:63:12)
+        at Parser.fail (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:66:16)
+        at Parser.advanceAfterVariableEnd (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:122:12)
+        at Parser.parseNodes (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:990:14)
+        at Parser.parse (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:1002:42)
+        at Parser.parseUntilBlocks (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:952:20)
+        at Parser.parseIf (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:339:22)
+        at Parser.parseStatement (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:466:21)
+        at Parser.parseNodes (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:982:22) {
+      [cause]: undefined
+    }
+  }
+
+test at test/integration/build-timestamp.spec.mjs:8:1
+✖ layout exposes build timestamp (4591.859063ms)
+  Error [TemplateContentRenderError]: Having trouble rendering njk template ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk
+      at Template._render (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateContent.js:660:6)
+      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+      at async file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateMap.js:390:9
+      at async Promise.all (index 0)
+      at async TemplateMap.populateContentDataInMap (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateMap.js:380:4)
+      at async TemplateMap.cache (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateMap.js:291:3)
+      at async TemplateWriter._createTemplateMap (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateWriter.js:352:3)
+      at async TemplateWriter.generateTemplates (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateWriter.js:382:3)
+      at async TemplateWriter.write (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateWriter.js:430:38)
+      at async Eleventy.executeBuild (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/Eleventy.js:1438:19) {
+    originalError: Error: expected variable end
+        at new TemplateError (/workspace/effusion-labs/node_modules/nunjucks/src/lib.js:74:17)
+        at Parser.error (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:63:12)
+        at Parser.fail (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:66:16)
+        at Parser.advanceAfterVariableEnd (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:122:12)
+        at Parser.parseNodes (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:990:14)
+        at Parser.parse (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:1002:42)
+        at Parser.parseUntilBlocks (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:952:20)
+        at Parser.parseIf (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:339:22)
+        at Parser.parseStatement (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:466:21)
+        at Parser.parseNodes (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:982:22) {
+      [cause]: undefined
+    }
+  }
+
+test at test/integration/code-copy.spec.mjs:8:1
+✖ code blocks expose copy control (3922.847642ms)
+  Error [TemplateContentRenderError]: Having trouble rendering njk template ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk
+      at Template._render (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateContent.js:660:6)
+      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+      at async file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateMap.js:390:9
+      at async Promise.all (index 0)
+      at async TemplateMap.populateContentDataInMap (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateMap.js:380:4)
+      at async TemplateMap.cache (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateMap.js:291:3)
+      at async TemplateWriter._createTemplateMap (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateWriter.js:352:3)
+      at async TemplateWriter.generateTemplates (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateWriter.js:382:3)
+      at async TemplateWriter.write (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateWriter.js:430:38)
+      at async Eleventy.executeBuild (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/Eleventy.js:1438:19) {
+    originalError: Error: expected variable end
+        at new TemplateError (/workspace/effusion-labs/node_modules/nunjucks/src/lib.js:74:17)
+        at Parser.error (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:63:12)
+        at Parser.fail (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:66:16)
+        at Parser.advanceAfterVariableEnd (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:122:12)
+        at Parser.parseNodes (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:990:14)
+        at Parser.parse (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:1002:42)
+        at Parser.parseUntilBlocks (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:952:20)
+        at Parser.parseIf (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:339:22)
+        at Parser.parseStatement (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:466:21)
+        at Parser.parseNodes (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:982:22) {
+      [cause]: undefined
+    }
+  }
+
+test at test/integration/collection-layout.spec.mjs:9:1
+✖ collection pages expose section metadata (4531.453318ms)
+  Error [TemplateContentRenderError]: Having trouble rendering njk template ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk
+      at Template._render (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateContent.js:660:6)
+      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+      at async file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateMap.js:390:9
+      at async Promise.all (index 0)
+      at async TemplateMap.populateContentDataInMap (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateMap.js:380:4)
+      at async TemplateMap.cache (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateMap.js:291:3)
+      at async TemplateWriter._createTemplateMap (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateWriter.js:352:3)
+      at async TemplateWriter.generateTemplates (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateWriter.js:382:3)
+      at async TemplateWriter.write (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateWriter.js:430:38)
+      at async Eleventy.executeBuild (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/Eleventy.js:1438:19) {
+    originalError: Error: expected variable end
+        at new TemplateError (/workspace/effusion-labs/node_modules/nunjucks/src/lib.js:74:17)
+        at Parser.error (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:63:12)
+        at Parser.fail (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:66:16)
+        at Parser.advanceAfterVariableEnd (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:122:12)
+        at Parser.parseNodes (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:990:14)
+        at Parser.parse (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:1002:42)
+        at Parser.parseUntilBlocks (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:952:20)
+        at Parser.parseIf (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:339:22)
+        at Parser.parseStatement (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:466:21)
+        at Parser.parseNodes (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:982:22) {
+      [cause]: undefined
+    }
+  }
+
+test at test/integration/feed-build-meta.spec.mjs:11:1
+✖ feed exposes build metadata (4639.371688ms)
+  Error [TemplateContentRenderError]: Having trouble rendering njk template ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk
+      at Template._render (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateContent.js:660:6)
+      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+      at async file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateMap.js:390:9
+      at async Promise.all (index 0)
+      at async TemplateMap.populateContentDataInMap (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateMap.js:380:4)
+      at async TemplateMap.cache (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateMap.js:291:3)
+      at async TemplateWriter._createTemplateMap (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateWriter.js:352:3)
+      at async TemplateWriter.generateTemplates (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateWriter.js:382:3)
+      at async TemplateWriter.write (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateWriter.js:430:38)
+      at async Eleventy.executeBuild (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/Eleventy.js:1438:19) {
+    originalError: Error: expected variable end
+        at new TemplateError (/workspace/effusion-labs/node_modules/nunjucks/src/lib.js:74:17)
+        at Parser.error (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:63:12)
+        at Parser.fail (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:66:16)
+        at Parser.advanceAfterVariableEnd (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:122:12)
+        at Parser.parseNodes (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:990:14)
+        at Parser.parse (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:1002:42)
+        at Parser.parseUntilBlocks (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:952:20)
+        at Parser.parseIf (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:339:22)
+        at Parser.parseStatement (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:466:21)
+        at Parser.parseNodes (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:982:22) {
+      [cause]: undefined
+    }
+  }
+
+test at test/integration/header-nav-aria.spec.mjs:10:1
+✖ home page header includes primary nav landmark (4510.000402ms)
+  Error [TemplateContentRenderError]: Having trouble rendering njk template ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk
+      at Template._render (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateContent.js:660:6)
+      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+      at async file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateMap.js:390:9
+      at async Promise.all (index 0)
+      at async TemplateMap.populateContentDataInMap (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateMap.js:380:4)
+      at async TemplateMap.cache (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateMap.js:291:3)
+      at async TemplateWriter._createTemplateMap (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateWriter.js:352:3)
+      at async TemplateWriter.generateTemplates (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateWriter.js:382:3)
+      at async TemplateWriter.write (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateWriter.js:430:38)
+      at async Eleventy.executeBuild (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/Eleventy.js:1438:19) {
+    originalError: Error: expected variable end
+        at new TemplateError (/workspace/effusion-labs/node_modules/nunjucks/src/lib.js:74:17)
+        at Parser.error (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:63:12)
+        at Parser.fail (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:66:16)
+        at Parser.advanceAfterVariableEnd (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:122:12)
+        at Parser.parseNodes (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:990:14)
+        at Parser.parse (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:1002:42)
+        at Parser.parseUntilBlocks (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:952:20)
+        at Parser.parseIf (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:339:22)
+        at Parser.parseStatement (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:466:21)
+        at Parser.parseNodes (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:982:22) {
+      [cause]: undefined
+    }
+  }
+
+test at test/integration/homepage-latest.spec.mjs:8:1
+✖ homepage work list mixes types (3833.78647ms)
+  Error [TemplateContentRenderError]: Having trouble rendering njk template ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk
+      at Template._render (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateContent.js:660:6)
+      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+      at async file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateMap.js:390:9
+      at async Promise.all (index 0)
+      at async TemplateMap.populateContentDataInMap (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateMap.js:380:4)
+      at async TemplateMap.cache (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateMap.js:291:3)
+      at async TemplateWriter._createTemplateMap (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateWriter.js:352:3)
+      at async TemplateWriter.generateTemplates (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateWriter.js:382:3)
+      at async TemplateWriter.write (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateWriter.js:430:38)
+      at async Eleventy.executeBuild (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/Eleventy.js:1438:19) {
+    originalError: Error: expected variable end
+        at new TemplateError (/workspace/effusion-labs/node_modules/nunjucks/src/lib.js:74:17)
+        at Parser.error (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:63:12)
+        at Parser.fail (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:66:16)
+        at Parser.advanceAfterVariableEnd (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:122:12)
+        at Parser.parseNodes (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:990:14)
+        at Parser.parse (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:1002:42)
+        at Parser.parseUntilBlocks (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:952:20)
+        at Parser.parseIf (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:339:22)
+        at Parser.parseStatement (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:466:21)
+        at Parser.parseNodes (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:982:22) {
+      [cause]: undefined
+    }
+  }
+
+test at test/integration/homepage.spec.mjs:19:1
+✖ homepage hero and work filters (3895.873415ms)
+  Error [TemplateContentRenderError]: Having trouble rendering njk template ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk
+      at Template._render (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateContent.js:660:6)
+      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+      at async file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateMap.js:390:9
+      at async Promise.all (index 0)
+      at async TemplateMap.populateContentDataInMap (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateMap.js:380:4)
+      at async TemplateMap.cache (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateMap.js:291:3)
+      at async TemplateWriter._createTemplateMap (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateWriter.js:352:3)
+      at async TemplateWriter.generateTemplates (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateWriter.js:382:3)
+      at async TemplateWriter.write (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateWriter.js:430:38)
+      at async Eleventy.executeBuild (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/Eleventy.js:1438:19) {
+    originalError: Error: expected variable end
+        at new TemplateError (/workspace/effusion-labs/node_modules/nunjucks/src/lib.js:74:17)
+        at Parser.error (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:63:12)
+        at Parser.fail (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:66:16)
+        at Parser.advanceAfterVariableEnd (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:122:12)
+        at Parser.parseNodes (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:990:14)
+        at Parser.parse (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:1002:42)
+        at Parser.parseUntilBlocks (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:952:20)
+        at Parser.parseIf (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:339:22)
+        at Parser.parseStatement (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:466:21)
+        at Parser.parseNodes (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:982:22) {
+      [cause]: undefined
+    }
+  }
+
+test at test/integration/logo-image.spec.mjs:9:1
+✖ logo image transforms to avif and webp (3978.308892ms)
+  Error [TemplateContentRenderError]: Having trouble rendering njk template ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk
+      at Template._render (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateContent.js:660:6)
+      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+      at async file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateMap.js:390:9
+      at async Promise.all (index 0)
+      at async TemplateMap.populateContentDataInMap (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateMap.js:380:4)
+      at async TemplateMap.cache (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateMap.js:291:3)
+      at async TemplateWriter._createTemplateMap (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateWriter.js:352:3)
+      at async TemplateWriter.generateTemplates (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateWriter.js:382:3)
+      at async TemplateWriter.write (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateWriter.js:430:38)
+      at async Eleventy.executeBuild (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/Eleventy.js:1438:19) {
+    originalError: Error: expected variable end
+        at new TemplateError (/workspace/effusion-labs/node_modules/nunjucks/src/lib.js:74:17)
+        at Parser.error (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:63:12)
+        at Parser.fail (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:66:16)
+        at Parser.advanceAfterVariableEnd (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:122:12)
+        at Parser.parseNodes (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:990:14)
+        at Parser.parse (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:1002:42)
+        at Parser.parseUntilBlocks (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:952:20)
+        at Parser.parseIf (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:339:22)
+        at Parser.parseStatement (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:466:21)
+        at Parser.parseNodes (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:982:22) {
+      [cause]: undefined
+    }
+  }
+
+test at test/integration/markdown-anchor.spec.mjs:8:1
+✖ markdown headings include anchor ids (4612.339295ms)
+  Error [TemplateContentRenderError]: Having trouble rendering njk template ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk
+      at Template._render (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateContent.js:660:6)
+      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+      at async file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateMap.js:390:9
+      at async Promise.all (index 0)
+      at async TemplateMap.populateContentDataInMap (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateMap.js:380:4)
+      at async TemplateMap.cache (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateMap.js:291:3)
+      at async TemplateWriter._createTemplateMap (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateWriter.js:352:3)
+      at async TemplateWriter.generateTemplates (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateWriter.js:382:3)
+      at async TemplateWriter.write (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateWriter.js:430:38)
+      at async Eleventy.executeBuild (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/Eleventy.js:1438:19) {
+    originalError: Error: expected variable end
+        at new TemplateError (/workspace/effusion-labs/node_modules/nunjucks/src/lib.js:74:17)
+        at Parser.error (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:63:12)
+        at Parser.fail (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:66:16)
+        at Parser.advanceAfterVariableEnd (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:122:12)
+        at Parser.parseNodes (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:990:14)
+        at Parser.parse (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:1002:42)
+        at Parser.parseUntilBlocks (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:952:20)
+        at Parser.parseIf (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:339:22)
+        at Parser.parseStatement (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:466:21)
+        at Parser.parseNodes (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:982:22) {
+      [cause]: undefined
+    }
+  }
+
+test at test/integration/monsters-hub.spec.mjs:7:1
+✖ monsters hub lists products and cross-links product and character pages (4616.599752ms)
+  Error [TemplateContentRenderError]: Having trouble rendering njk template ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk
+      at Template._render (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateContent.js:660:6)
+      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+      at async file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateMap.js:390:9
+      at async Promise.all (index 0)
+      at async TemplateMap.populateContentDataInMap (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateMap.js:380:4)
+      at async TemplateMap.cache (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateMap.js:291:3)
+      at async TemplateWriter._createTemplateMap (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateWriter.js:352:3)
+      at async TemplateWriter.generateTemplates (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateWriter.js:382:3)
+      at async TemplateWriter.write (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateWriter.js:430:38)
+      at async Eleventy.executeBuild (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/Eleventy.js:1438:19) {
+    originalError: Error: expected variable end
+        at new TemplateError (/workspace/effusion-labs/node_modules/nunjucks/src/lib.js:74:17)
+        at Parser.error (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:63:12)
+        at Parser.fail (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:66:16)
+        at Parser.advanceAfterVariableEnd (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:122:12)
+        at Parser.parseNodes (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:990:14)
+        at Parser.parse (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:1002:42)
+        at Parser.parseUntilBlocks (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:952:20)
+        at Parser.parseIf (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:339:22)
+        at Parser.parseStatement (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:466:21)
+        at Parser.parseNodes (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:982:22) {
+      [cause]: undefined
+    }
+  }
+
+test at test/integration/monsters-product-metadata.spec.mjs:31:1
+✖ product page exposes full metadata (acceptance) (3951.895183ms)
+  Error [TemplateContentRenderError]: Having trouble rendering njk template ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk
+      at Template._render (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateContent.js:660:6)
+      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+      at async file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateMap.js:390:9
+      at async Promise.all (index 0)
+      at async TemplateMap.populateContentDataInMap (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateMap.js:380:4)
+      at async TemplateMap.cache (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateMap.js:291:3)
+      at async TemplateWriter._createTemplateMap (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateWriter.js:352:3)
+      at async TemplateWriter.generateTemplates (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateWriter.js:382:3)
+      at async TemplateWriter.write (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateWriter.js:430:38)
+      at async Eleventy.executeBuild (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/Eleventy.js:1438:19) {
+    originalError: Error: expected variable end
+        at new TemplateError (/workspace/effusion-labs/node_modules/nunjucks/src/lib.js:74:17)
+        at Parser.error (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:63:12)
+        at Parser.fail (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:66:16)
+        at Parser.advanceAfterVariableEnd (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:122:12)
+        at Parser.parseNodes (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:990:14)
+        at Parser.parse (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:1002:42)
+        at Parser.parseUntilBlocks (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:952:20)
+        at Parser.parseIf (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:339:22)
+        at Parser.parseStatement (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:466:21)
+        at Parser.parseNodes (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:982:22) {
+      [cause]: undefined
+    }
+  }
+
+test at test/integration/monsters-product-metadata.spec.mjs:49:1
+✖ price cells are formatted and table parity holds (property) (2278.787392ms)
+  Error [TemplateContentRenderError]: Having trouble rendering njk template ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk
+      at Template._render (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateContent.js:660:6)
+      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+      at async file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateMap.js:390:9
+      at async Promise.all (index 0)
+      at async TemplateMap.populateContentDataInMap (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateMap.js:380:4)
+      at async TemplateMap.cache (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateMap.js:291:3)
+      at async TemplateWriter._createTemplateMap (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateWriter.js:352:3)
+      at async TemplateWriter.generateTemplates (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateWriter.js:382:3)
+      at async TemplateWriter.write (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateWriter.js:430:38)
+      at async Eleventy.executeBuild (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/Eleventy.js:1438:19) {
+    originalError: Error: expected variable end
+        at new TemplateError (/workspace/effusion-labs/node_modules/nunjucks/src/lib.js:74:17)
+        at Parser.error (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:63:12)
+        at Parser.fail (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:66:16)
+        at Parser.advanceAfterVariableEnd (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:122:12)
+        at Parser.parseNodes (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:990:14)
+        at Parser.parse (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:1002:42)
+        at Parser.parseUntilBlocks (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:952:20)
+        at Parser.parseIf (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:339:22)
+        at Parser.parseStatement (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:466:21)
+        at Parser.parseNodes (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:982:22) {
+      [cause]: undefined
+    }
+  }
+
+test at test/integration/monsters-product-metadata.spec.mjs:62:1
+✖ semantic invariants hold (contract) (2347.758279ms)
+  Error [TemplateContentRenderError]: Having trouble rendering njk template ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk
+      at Template._render (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateContent.js:660:6)
+      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+      at async file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateMap.js:390:9
+      at async Promise.all (index 0)
+      at async TemplateMap.populateContentDataInMap (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateMap.js:380:4)
+      at async TemplateMap.cache (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateMap.js:291:3)
+      at async TemplateWriter._createTemplateMap (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateWriter.js:352:3)
+      at async TemplateWriter.generateTemplates (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateWriter.js:382:3)
+      at async TemplateWriter.write (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateWriter.js:430:38)
+      at async Eleventy.executeBuild (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/Eleventy.js:1438:19) {
+    originalError: Error: expected variable end
+        at new TemplateError (/workspace/effusion-labs/node_modules/nunjucks/src/lib.js:74:17)
+        at Parser.error (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:63:12)
+        at Parser.fail (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:66:16)
+        at Parser.advanceAfterVariableEnd (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:122:12)
+        at Parser.parseNodes (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:990:14)
+        at Parser.parse (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:1002:42)
+        at Parser.parseUntilBlocks (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:952:20)
+        at Parser.parseIf (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:339:22)
+        at Parser.parseStatement (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:466:21)
+        at Parser.parseNodes (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:982:22) {
+      [cause]: undefined
+    }
+  }
+
+test at test/integration/monsters-product-metadata.spec.mjs:94:1
+✖ rendered prices use ISO code and two decimals (property) (2292.820746ms)
+  Error [TemplateContentRenderError]: Having trouble rendering njk template ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk
+      at Template._render (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateContent.js:660:6)
+      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+      at async file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateMap.js:390:9
+      at async Promise.all (index 0)
+      at async TemplateMap.populateContentDataInMap (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateMap.js:380:4)
+      at async TemplateMap.cache (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateMap.js:291:3)
+      at async TemplateWriter._createTemplateMap (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateWriter.js:352:3)
+      at async TemplateWriter.generateTemplates (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateWriter.js:382:3)
+      at async TemplateWriter.write (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateWriter.js:430:38)
+      at async Eleventy.executeBuild (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/Eleventy.js:1438:19) {
+    originalError: Error: expected variable end
+        at new TemplateError (/workspace/effusion-labs/node_modules/nunjucks/src/lib.js:74:17)
+        at Parser.error (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:63:12)
+        at Parser.fail (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:66:16)
+        at Parser.advanceAfterVariableEnd (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:122:12)
+        at Parser.parseNodes (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:990:14)
+        at Parser.parse (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:1002:42)
+        at Parser.parseUntilBlocks (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:952:20)
+        at Parser.parseIf (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:339:22)
+        at Parser.parseStatement (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:466:21)
+        at Parser.parseNodes (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:982:22) {
+      [cause]: undefined
+    }
+  }
+
+test at test/integration/monsters-product-metadata.spec.mjs:100:1
+✖ table and spec semantics hold (contract) (2199.984642ms)
+  Error [TemplateContentRenderError]: Having trouble rendering njk template ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk
+      at Template._render (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateContent.js:660:6)
+      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+      at async file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateMap.js:390:9
+      at async Promise.all (index 0)
+      at async TemplateMap.populateContentDataInMap (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateMap.js:380:4)
+      at async TemplateMap.cache (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateMap.js:291:3)
+      at async TemplateWriter._createTemplateMap (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateWriter.js:352:3)
+      at async TemplateWriter.generateTemplates (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateWriter.js:382:3)
+      at async TemplateWriter.write (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateWriter.js:430:38)
+      at async Eleventy.executeBuild (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/Eleventy.js:1438:19) {
+    originalError: Error: expected variable end
+        at new TemplateError (/workspace/effusion-labs/node_modules/nunjucks/src/lib.js:74:17)
+        at Parser.error (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:63:12)
+        at Parser.fail (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:66:16)
+        at Parser.advanceAfterVariableEnd (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:122:12)
+        at Parser.parseNodes (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:990:14)
+        at Parser.parse (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:1002:42)
+        at Parser.parseUntilBlocks (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:952:20)
+        at Parser.parseIf (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:339:22)
+        at Parser.parseStatement (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:466:21)
+        at Parser.parseNodes (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:982:22) {
+      [cause]: undefined
+    }
+  }
+
+test at test/integration/mschf-overlay.spec.mjs:9:1
+✖ overlay root exists and carries defaults (3908.641679ms)
+  Error [TemplateContentRenderError]: Having trouble rendering njk template ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk
+      at Template._render (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateContent.js:660:6)
+      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+      at async file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateMap.js:390:9
+      at async Promise.all (index 0)
+      at async TemplateMap.populateContentDataInMap (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateMap.js:380:4)
+      at async TemplateMap.cache (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateMap.js:291:3)
+      at async TemplateWriter._createTemplateMap (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateWriter.js:352:3)
+      at async TemplateWriter.generateTemplates (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateWriter.js:382:3)
+      at async TemplateWriter.write (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateWriter.js:430:38)
+      at async Eleventy.executeBuild (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/Eleventy.js:1438:19) {
+    originalError: Error: expected variable end
+        at new TemplateError (/workspace/effusion-labs/node_modules/nunjucks/src/lib.js:74:17)
+        at Parser.error (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:63:12)
+        at Parser.fail (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:66:16)
+        at Parser.advanceAfterVariableEnd (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:122:12)
+        at Parser.parseNodes (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:990:14)
+        at Parser.parse (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:1002:42)
+        at Parser.parseUntilBlocks (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:952:20)
+        at Parser.parseIf (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:339:22)
+        at Parser.parseStatement (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:466:21)
+        at Parser.parseNodes (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:982:22) {
+      [cause]: undefined
+    }
+  }
+
+test at test/integration/nav-aria.spec.mjs:7:1
+✖ main nav marks current page and is labelled (4576.659799ms)
+  Error [TemplateContentRenderError]: Having trouble rendering njk template ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk
+      at Template._render (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateContent.js:660:6)
+      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+      at async file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateMap.js:390:9
+      at async Promise.all (index 0)
+      at async TemplateMap.populateContentDataInMap (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateMap.js:380:4)
+      at async TemplateMap.cache (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateMap.js:291:3)
+      at async TemplateWriter._createTemplateMap (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateWriter.js:352:3)
+      at async TemplateWriter.generateTemplates (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateWriter.js:382:3)
+      at async TemplateWriter.write (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateWriter.js:430:38)
+      at async Eleventy.executeBuild (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/Eleventy.js:1438:19) {
+    originalError: Error: expected variable end
+        at new TemplateError (/workspace/effusion-labs/node_modules/nunjucks/src/lib.js:74:17)
+        at Parser.error (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:63:12)
+        at Parser.fail (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:66:16)
+        at Parser.advanceAfterVariableEnd (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:122:12)
+        at Parser.parseNodes (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:990:14)
+        at Parser.parse (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:1002:42)
+        at Parser.parseUntilBlocks (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:952:20)
+        at Parser.parseIf (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:339:22)
+        at Parser.parseStatement (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:466:21)
+        at Parser.parseNodes (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:982:22) {
+      [cause]: undefined
+    }
+  }
+
+test at test/integration/runner.spec.mjs:10:1
+✖ buildLean sets env and output directory (4526.315804ms)
+  Error [TemplateContentRenderError]: Having trouble rendering njk template ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk
+      at Template._render (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateContent.js:660:6)
+      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+      at async file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateMap.js:390:9
+      at async Promise.all (index 0)
+      at async TemplateMap.populateContentDataInMap (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateMap.js:380:4)
+      at async TemplateMap.cache (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateMap.js:291:3)
+      at async TemplateWriter._createTemplateMap (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateWriter.js:352:3)
+      at async TemplateWriter.generateTemplates (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateWriter.js:382:3)
+      at async TemplateWriter.write (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateWriter.js:430:38)
+      at async Eleventy.executeBuild (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/Eleventy.js:1438:19) {
+    originalError: Error: expected variable end
+        at new TemplateError (/workspace/effusion-labs/node_modules/nunjucks/src/lib.js:74:17)
+        at Parser.error (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:63:12)
+        at Parser.fail (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:66:16)
+        at Parser.advanceAfterVariableEnd (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:122:12)
+        at Parser.parseNodes (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:990:14)
+        at Parser.parse (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:1002:42)
+        at Parser.parseUntilBlocks (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:952:20)
+        at Parser.parseIf (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:339:22)
+        at Parser.parseStatement (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:466:21)
+        at Parser.parseNodes (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:982:22) {
+      [cause]: undefined
+    }
+  }
+
+test at test/integration/sparks-status.spec.mjs:7:1
+✖ spark listings reveal status text (4359.0792ms)
+  Error [TemplateContentRenderError]: Having trouble rendering njk template ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk
+      at Template._render (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateContent.js:660:6)
+      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+      at async file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateMap.js:390:9
+      at async Promise.all (index 0)
+      at async TemplateMap.populateContentDataInMap (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateMap.js:380:4)
+      at async TemplateMap.cache (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateMap.js:291:3)
+      at async TemplateWriter._createTemplateMap (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateWriter.js:352:3)
+      at async TemplateWriter.generateTemplates (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateWriter.js:382:3)
+      at async TemplateWriter.write (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateWriter.js:430:38)
+      at async Eleventy.executeBuild (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/Eleventy.js:1438:19) {
+    originalError: Error: expected variable end
+        at new TemplateError (/workspace/effusion-labs/node_modules/nunjucks/src/lib.js:74:17)
+        at Parser.error (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:63:12)
+        at Parser.fail (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:66:16)
+        at Parser.advanceAfterVariableEnd (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:122:12)
+        at Parser.parseNodes (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:990:14)
+        at Parser.parse (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:1002:42)
+        at Parser.parseUntilBlocks (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:952:20)
+        at Parser.parseIf (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:339:22)
+        at Parser.parseStatement (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:466:21)
+        at Parser.parseNodes (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:982:22) {
+      [cause]: undefined
+    }
+  }
+
+test at test/integration/wikilinks-ignore-template.spec.mjs:8:1
+✖ wikilinks ignore templated paths (4266.306493ms)
+  Error [TemplateContentRenderError]: Having trouble rendering njk template ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk
+      at Template._render (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateContent.js:660:6)
+      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+      at async file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateMap.js:390:9
+      at async Promise.all (index 0)
+      at async TemplateMap.populateContentDataInMap (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateMap.js:380:4)
+      at async TemplateMap.cache (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateMap.js:291:3)
+      at async TemplateWriter._createTemplateMap (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateWriter.js:352:3)
+      at async TemplateWriter.generateTemplates (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateWriter.js:382:3)
+      at async TemplateWriter.write (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateWriter.js:430:38)
+      at async Eleventy.executeBuild (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/Eleventy.js:1438:19) {
+    originalError: Error: expected variable end
+        at new TemplateError (/workspace/effusion-labs/node_modules/nunjucks/src/lib.js:74:17)
+        at Parser.error (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:63:12)
+        at Parser.fail (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:66:16)
+        at Parser.advanceAfterVariableEnd (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:122:12)
+        at Parser.parseNodes (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:990:14)
+        at Parser.parse (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:1002:42)
+        at Parser.parseUntilBlocks (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:952:20)
+        at Parser.parseIf (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:339:22)
+        at Parser.parseStatement (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:466:21)
+        at Parser.parseNodes (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:982:22) {
+      [cause]: undefined
+    }
+  }
+
+test at test/integration/work-pages.spec.mjs:7:1
+✖ work pages build and latest redirects (4214.23331ms)
+  Error [TemplateContentRenderError]: Having trouble rendering njk template ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk
+      at Template._render (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateContent.js:660:6)
+      at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+      at async file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateMap.js:390:9
+      at async Promise.all (index 0)
+      at async TemplateMap.populateContentDataInMap (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateMap.js:380:4)
+      at async TemplateMap.cache (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateMap.js:291:3)
+      at async TemplateWriter._createTemplateMap (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateWriter.js:352:3)
+      at async TemplateWriter.generateTemplates (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateWriter.js:382:3)
+      at async TemplateWriter.write (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/TemplateWriter.js:430:38)
+      at async Eleventy.executeBuild (file:///workspace/effusion-labs/node_modules/@11ty/eleventy/src/Eleventy.js:1438:19) {
+    originalError: Error: expected variable end
+        at new TemplateError (/workspace/effusion-labs/node_modules/nunjucks/src/lib.js:74:17)
+        at Parser.error (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:63:12)
+        at Parser.fail (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:66:16)
+        at Parser.advanceAfterVariableEnd (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:122:12)
+        at Parser.parseNodes (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:990:14)
+        at Parser.parse (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:1002:42)
+        at Parser.parseUntilBlocks (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:952:20)
+        at Parser.parseIf (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:339:22)
+        at Parser.parseStatement (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:466:21)
+        at Parser.parseNodes (/workspace/effusion-labs/node_modules/nunjucks/src/parser.js:982:22) {
+      [cause]: undefined
+    }
+  }
+
+test at test/unit/deploy-workflow.test.mjs:7:1
+✖ deploy workflow does not trigger on pull_request (2.732723ms)
+  AssertionError [ERR_ASSERTION]: pull_request trigger should be absent
+      at TestContext.<anonymous> (file:///workspace/effusion-labs/test/unit/deploy-workflow.test.mjs:8:10)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1047:25)
+      at Test.start (node:internal/test_runner/test:944:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:296:17) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 'name: Build, Scan, and Deploy to GHCR\n\non:\n  push:\n    branches: [main]\n  pull_request:\n    branches: [main]\n  workflow_dispatch:\n\n# Cancel superseded runs (keeps things snappy for solo dev)\nconcurrency:\n  group: ${{ github.workflow }}-${{ github.ref }}\n  cancel-in-progress: true\n\n# Default least privilege; jobs bump as needed\npermissions:\n  contents: read\n\njobs:\n  tests:\n    name: Unit tests (Node ${{ matrix.node }})\n    runs-on: ubuntu-latest\n    timeout-minutes: 12\n    strategy:\n      fail-fast: false\n      matrix:\n        node: [\'20\', \'22\']   # current + next LTS\n    permissions:\n      contents: read\n    steps:\n      - name: Checkout\n        uses: actions/checkout@v4\n      - name: Setup Node\n        uses: actions/setup-node@v4\n        with:\n          node-version: ${{ matrix.node }}\n          cache: \'npm\'\n          cache-dependency-path: |\n            package-lock.json\n            tools/**/package-lock.json\n      - run: echo "$PWD/bin" >> "$GITHUB_PATH"\n      - run: npm ci --no-audit --no-fund\n      - run: npm test\n      - name: Upload coverage\n        uses: actions/upload-artifact@v4\n        with:\n          name: coverage-${{ matrix.node }}\n          path: coverage/lcov.info\n          retention-days: 7\n          if-no-files-found: ignore\n\n  build_and_deploy:\n    name: Build → SBOM/Provenance → Scan → Deploy\n    if: github.event_name == \'push\'\n    needs: tests\n    runs-on: ubuntu-latest\n    timeout-minutes: 25\n    # This DOES NOT require reviewers by itself; it only takes effect if you ever add rules later.\n    environment:\n      name: production\n    permissions:\n      contents: read\n      packages: write       # push to GHCR\n      id-token: write       # needed for provenance from buildx\n    env:\n      DOCKER_BUILDKIT: 1\n      OWNER_SLUG: ${{ github.repository_owner }}\n    steps:\n      - name: Checkout\n        uses: actions/checkout@v4\n\n      - name: Setup Node\n        uses: actions/setup-node@v4\n        with:\n          node-version: \'20\'\n          cache: \'npm\'\n\n      - name: Install deps\n        run: npm ci --ignore-scripts --no-audit --no-fund\n\n      - name: Build Eleventy\n        run: npx @11ty/eleventy\n\n      - name: Login to GHCR\n        uses: docker/login-action@v3\n        with:\n          registry: ghcr.io\n          username: ${{ github.actor }}\n          password: ${{ secrets.GITHUB_TOKEN }}\n\n      - name: Setup Buildx\n        uses: docker/setup-buildx-action@v3\n\n      - name: Compute image prefix (lowercase)\n        id: slug\n        shell: bash\n        run: |\n          owner_lc="$(echo "${OWNER_SLUG}" | tr \'[:upper:]\' \'[:lower:]\')"\n          echo "prefix=ghcr.io/${owner_lc}" >> "$GITHUB_OUTPUT"\n\n      # ---------- Build & push image 1 (with SBOM + provenance) ----------\n      - name: Build & push effusion-labs\n        id: eff\n        uses: docker/build-push-action@v6\n        with:\n          context: .\n          file: ./.portainer/Dockerfile\n          push: true\n          platforms: linux/amd64\n          tags: ${{ steps.slug.outputs.prefix }}/effusion-labs:latest\n          cache-from: type=registry,ref=${{ steps.slug.outputs.prefix }}/effusion-labs:cache\n          cache-to:   type=registry,ref=${{ steps.slug.outputs.prefix }}/effusion-labs:cache,mode=max\n          sbom: true\n          provenance: true\n\n      # ---------- Build & push image 2 (with SBOM + provenance) ----------\n      - name: Build & push markdown_gateway\n        id: mdgw\n        uses: docker/build-push-action@v6\n        with:\n          context: ./markdown_gateway\n          push: true\n          platforms: linux/amd64\n          tags: ${{ steps.slug.outputs.prefix }}/markdown_gateway:latest\n          cache-from: type=registry,ref=${{ steps.slug.outputs.prefix }}/markdown_gateway:cache\n          cache-to:   type=registry,ref=${{ steps.slug.outputs.prefix }}/markdown_gateway:cache,mode=max\n          sbom: true\n          provenance: true\n\n      # ---------- Repo-level SBOM artifact (optional but handy) ----------\n      - name: Generate SBOM (workspace)\n        uses: anchore/sbom-action@v0\n        with:\n          format: spdx-json\n          artifact-name: workspace-sbom.spdx.json\n          upload-artifact: true\n\n      # ---------- Vulnerability scans (fail on HIGH/CRIT) ----------\n      - name: Scan effusion-labs image\n        uses: aquasecurity/trivy-action@0.32.0\n        with:\n          image-ref: ${{ steps.slug.outputs.prefix }}/effusion-labs@${{ steps.eff.outputs.digest }}\n          severity: HIGH,CRITICAL\n          ignore-unfixed: true\n          format: table\n          exit-code: \'1\'\n      - name: Scan markdown_gateway image\n        uses: aquasecurity/trivy-action@0.32.0\n        with:\n          image-ref: ${{ steps.slug.outputs.prefix }}/markdown_gateway@${{ steps.mdgw.outputs.digest }}\n          severity: HIGH,CRITICAL\n          ignore-unfixed: true\n          format: table\n          exit-code: \'1\'\n\n      # ---------- Deploy via Portainer webhook ----------\n      - name: Trigger effusion-labs redeploy (Portainer)\n        env:\n          HOOK: ${{ secrets.PORTAINER_WEBHOOK_EFFUSION }}\n        run: |\n          curl --fail --retry 5 --retry-all-errors --retry-delay 2 -X POST "$HOOK"\n\n  browser-checks:\n    if: github.event_name == \'workflow_dispatch\'\n    runs-on: ubuntu-latest\n    timeout-minutes: 15\n    permissions:\n      contents: read\n    container:\n      image: mcr.microsoft.com/playwright:v1.45.2-jammy\n    steps:\n      - uses: actions/checkout@v4\n      - uses: actions/setup-node@v4\n        with:\n          node-version: \'20\'\n          cache: \'npm\'\n      - run: npm ci --ignore-scripts --no-audit --no-fund\n      - run: NODE_OPTIONS=--import=./test/setup/http.mjs npm run test:browser\n',
+    expected: /pull_request:/,
+    operator: 'doesNotMatch'
+  }
+
+test at test/unit/deploy-workflow.test.mjs:11:1
+✖ build job runs only on push events (0.395097ms)
+  AssertionError [ERR_ASSERTION]: build job missing push-only condition
+      at TestContext.<anonymous> (file:///workspace/effusion-labs/test/unit/deploy-workflow.test.mjs:12:10)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1047:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+      at Test.postRun (node:internal/test_runner/test:1173:19)
+      at Test.run (node:internal/test_runner/test:1101:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 'name: Build, Scan, and Deploy to GHCR\n\non:\n  push:\n    branches: [main]\n  pull_request:\n    branches: [main]\n  workflow_dispatch:\n\n# Cancel superseded runs (keeps things snappy for solo dev)\nconcurrency:\n  group: ${{ github.workflow }}-${{ github.ref }}\n  cancel-in-progress: true\n\n# Default least privilege; jobs bump as needed\npermissions:\n  contents: read\n\njobs:\n  tests:\n    name: Unit tests (Node ${{ matrix.node }})\n    runs-on: ubuntu-latest\n    timeout-minutes: 12\n    strategy:\n      fail-fast: false\n      matrix:\n        node: [\'20\', \'22\']   # current + next LTS\n    permissions:\n      contents: read\n    steps:\n      - name: Checkout\n        uses: actions/checkout@v4\n      - name: Setup Node\n        uses: actions/setup-node@v4\n        with:\n          node-version: ${{ matrix.node }}\n          cache: \'npm\'\n          cache-dependency-path: |\n            package-lock.json\n            tools/**/package-lock.json\n      - run: echo "$PWD/bin" >> "$GITHUB_PATH"\n      - run: npm ci --no-audit --no-fund\n      - run: npm test\n      - name: Upload coverage\n        uses: actions/upload-artifact@v4\n        with:\n          name: coverage-${{ matrix.node }}\n          path: coverage/lcov.info\n          retention-days: 7\n          if-no-files-found: ignore\n\n  build_and_deploy:\n    name: Build → SBOM/Provenance → Scan → Deploy\n    if: github.event_name == \'push\'\n    needs: tests\n    runs-on: ubuntu-latest\n    timeout-minutes: 25\n    # This DOES NOT require reviewers by itself; it only takes effect if you ever add rules later.\n    environment:\n      name: production\n    permissions:\n      contents: read\n      packages: write       # push to GHCR\n      id-token: write       # needed for provenance from buildx\n    env:\n      DOCKER_BUILDKIT: 1\n      OWNER_SLUG: ${{ github.repository_owner }}\n    steps:\n      - name: Checkout\n        uses: actions/checkout@v4\n\n      - name: Setup Node\n        uses: actions/setup-node@v4\n        with:\n          node-version: \'20\'\n          cache: \'npm\'\n\n      - name: Install deps\n        run: npm ci --ignore-scripts --no-audit --no-fund\n\n      - name: Build Eleventy\n        run: npx @11ty/eleventy\n\n      - name: Login to GHCR\n        uses: docker/login-action@v3\n        with:\n          registry: ghcr.io\n          username: ${{ github.actor }}\n          password: ${{ secrets.GITHUB_TOKEN }}\n\n      - name: Setup Buildx\n        uses: docker/setup-buildx-action@v3\n\n      - name: Compute image prefix (lowercase)\n        id: slug\n        shell: bash\n        run: |\n          owner_lc="$(echo "${OWNER_SLUG}" | tr \'[:upper:]\' \'[:lower:]\')"\n          echo "prefix=ghcr.io/${owner_lc}" >> "$GITHUB_OUTPUT"\n\n      # ---------- Build & push image 1 (with SBOM + provenance) ----------\n      - name: Build & push effusion-labs\n        id: eff\n        uses: docker/build-push-action@v6\n        with:\n          context: .\n          file: ./.portainer/Dockerfile\n          push: true\n          platforms: linux/amd64\n          tags: ${{ steps.slug.outputs.prefix }}/effusion-labs:latest\n          cache-from: type=registry,ref=${{ steps.slug.outputs.prefix }}/effusion-labs:cache\n          cache-to:   type=registry,ref=${{ steps.slug.outputs.prefix }}/effusion-labs:cache,mode=max\n          sbom: true\n          provenance: true\n\n      # ---------- Build & push image 2 (with SBOM + provenance) ----------\n      - name: Build & push markdown_gateway\n        id: mdgw\n        uses: docker/build-push-action@v6\n        with:\n          context: ./markdown_gateway\n          push: true\n          platforms: linux/amd64\n          tags: ${{ steps.slug.outputs.prefix }}/markdown_gateway:latest\n          cache-from: type=registry,ref=${{ steps.slug.outputs.prefix }}/markdown_gateway:cache\n          cache-to:   type=registry,ref=${{ steps.slug.outputs.prefix }}/markdown_gateway:cache,mode=max\n          sbom: true\n          provenance: true\n\n      # ---------- Repo-level SBOM artifact (optional but handy) ----------\n      - name: Generate SBOM (workspace)\n        uses: anchore/sbom-action@v0\n        with:\n          format: spdx-json\n          artifact-name: workspace-sbom.spdx.json\n          upload-artifact: true\n\n      # ---------- Vulnerability scans (fail on HIGH/CRIT) ----------\n      - name: Scan effusion-labs image\n        uses: aquasecurity/trivy-action@0.32.0\n        with:\n          image-ref: ${{ steps.slug.outputs.prefix }}/effusion-labs@${{ steps.eff.outputs.digest }}\n          severity: HIGH,CRITICAL\n          ignore-unfixed: true\n          format: table\n          exit-code: \'1\'\n      - name: Scan markdown_gateway image\n        uses: aquasecurity/trivy-action@0.32.0\n        with:\n          image-ref: ${{ steps.slug.outputs.prefix }}/markdown_gateway@${{ steps.mdgw.outputs.digest }}\n          severity: HIGH,CRITICAL\n          ignore-unfixed: true\n          format: table\n          exit-code: \'1\'\n\n      # ---------- Deploy via Portainer webhook ----------\n      - name: Trigger effusion-labs redeploy (Portainer)\n        env:\n          HOOK: ${{ secrets.PORTAINER_WEBHOOK_EFFUSION }}\n        run: |\n          curl --fail --retry 5 --retry-all-errors --retry-delay 2 -X POST "$HOOK"\n\n  browser-checks:\n    if: github.event_name == \'workflow_dispatch\'\n    runs-on: ubuntu-latest\n    timeout-minutes: 15\n    permissions:\n      contents: read\n    container:\n      image: mcr.microsoft.com/playwright:v1.45.2-jammy\n    steps:\n      - uses: actions/checkout@v4\n      - uses: actions/setup-node@v4\n        with:\n          node-version: \'20\'\n          cache: \'npm\'\n      - run: npm ci --ignore-scripts --no-audit --no-fund\n      - run: NODE_OPTIONS=--import=./test/setup/http.mjs npm run test:browser\n',
+    expected: /build:\n\s+if: github\.event_name == 'push'/,
+    operator: 'match'
+  }
+
+test at test/unit/prettier-package.test.mjs:7:1
+✖ prettier pinned version and format script (4.347632ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  '^3.3.3' !== '3.3.3'
+  
+      at TestContext.<anonymous> (file:///workspace/effusion-labs/test/unit/prettier-package.test.mjs:9:10)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1047:25)
+      at Test.start (node:internal/test_runner/test:944:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:296:17) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '^3.3.3',
+    expected: '3.3.3',
+    operator: 'strictEqual'
+  }
+Executed 37 tests
+
+=============================== Coverage summary ===============================
+Statements   : 83.71% ( 1373/1640 )
+Branches     : 82.04% ( 233/284 )
+Functions    : 70.7% ( 70/99 )
+Lines        : 83.71% ( 1373/1640 )
+================================================================================
