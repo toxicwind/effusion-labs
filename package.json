@@ -7,7 +7,6 @@
     "prepare": "bash scripts/llm-bootstrap.sh || true",
     "test": "c8 --reporter=text-summary --reporter=lcov node tools/runner.mjs",
     "test:all": "c8 --reporter=text-summary --reporter=lcov node tools/runner.mjs --all",
-    "test:guard": "bash scripts/test-with-guardrails.sh",
     "test:browser": "node --test \"test/browser/**/*.test.mjs\" --test-reporter=spec",
     "coverage:report": "c8 report --reporter=text-summary --reporter=lcov",
     "build": "npx @11ty/eleventy",
