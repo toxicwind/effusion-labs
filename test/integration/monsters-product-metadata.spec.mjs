@@ -34,7 +34,7 @@ test('product page exposes full metadata (acceptance)', async () => {
   const document = dom(html);
   const dl = document.querySelector('[data-testid="spec-sheet"]');
   assert.ok(dl, 'spec sheet rendered');
-  const entries = Array.from(dl.querySelectorAll('dt')).map(dt => dt.textContent.trim());
+  const entries = Array.from(dl.querySelectorAll('dt')).map(dt => dt.textContent.trim().replace(/:$/,''));
   assert.ok(entries.includes('Brand'), 'brand label present');
   assert.ok(entries.includes('Line'), 'line label present');
   assert.ok(entries.includes('Character'), 'character label present');
@@ -67,12 +67,12 @@ test('semantic invariants hold (contract)', async () => {
   const dts = dl.querySelectorAll('dt');
   const dds = dl.querySelectorAll('dd');
   assert.equal(dts.length, dds.length, 'definition list pairs');
-  const region = Array.from(dts).find(dt => dt.textContent.trim() === 'Region Lock');
+  const region = Array.from(dts).find(dt => dt.textContent.trim().replace(/:$/,'') === 'Region Lock');
   assert.ok(region, 'region lock label');
   assert.equal(region.nextElementSibling.textContent.trim(), 'No', 'boolean rendered as Yes/No');
-  const limited = Array.from(dts).find(dt => dt.textContent.trim() === 'Limited');
-  assert.ok(limited, 'limited label present');
-  assert.equal(limited.nextElementSibling.textContent.trim(), 'Standard', 'availability uses Standard/Limited');
+  const availability = Array.from(dts).find(dt => dt.textContent.trim().replace(/:$/,'') === 'Availability');
+  assert.ok(availability, 'availability label present');
+  assert.equal(availability.nextElementSibling.textContent.trim(), 'Standard', 'availability uses Standard/Limited');
   const caption = document.querySelector('[data-testid="market-table"] caption');
   assert.match(caption.textContent, /Market Listings/, 'caption contains label');
   const dlMatch = html.match(/<dl[^>]*data-testid="spec-sheet"[\s\S]*?<\/dl>/);
@@ -80,7 +80,7 @@ test('semantic invariants hold (contract)', async () => {
   const block = dlMatch[0];
   assert.ok(block.includes('<dt>Brand:</dt><dd>Pop Mart</dd>'));
   assert.ok(block.includes('<dt>Line:</dt><dd>The Monsters</dd>'));
-  assert.ok(block.includes('<dt>Character:</dt><dd>Labubu</dd>'));
+  assert.ok(block.includes('<dt>Character:</dt><dd><a href="/archives/collectables/designer-toys/pop-mart/the-monsters/characters/labubu/">Labubu</a></dd>'));
   assert.ok(block.includes('<dt>Series:</dt><dd>Big Into Energy</dd>'));
   assert.ok(block.includes('<dt>Form:</dt><dd>Blind Box</dd>'));
   assert.ok(block.includes('<dt>Variant:</dt><dd>Single</dd>'));

@@ -6,7 +6,7 @@
   </thead>
   <tbody>
     {% for l in listings | sort(false, false, 'market') %}
-    <tr><td>{{ l.market }}</td><td>{{ money(l.currency, l.price) }}</td></tr>
+    <tr><td>{{ l.market }}</td><td>{{ l.price | money(l.currency) }}</td></tr>
     {% endfor %}
   </tbody>
 </table>

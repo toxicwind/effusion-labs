@@ -1,5 +1,0 @@
-{% from "components/badge.njk" import badge %}
-{% macro characterBadge(char) %}{% if char %}{{ badge(titleizeSlug(char), '/archives/collectables/designer-toys/pop-mart/the-monsters/characters/' + char + '/') }}{% endif %}{% endmacro %}
-{% macro marketBadges(markets) %}{% if markets %}{% for m in markets %}<span class="badge-chip" data-market>{{ m }}</span>{% endfor %}{% endif %}{% endmacro %}
-{% macro editionBadge(kind) %}{% if kind %}<span class="badge-chip">{{ titleizeSlug(kind) }}</span>{% endif %}{% endmacro %}
-{% macro availabilityBadge(limited) %}{% if limited != undefined %}<span class="badge-chip">{{ limited ? 'Limited' : 'Standard' }}</span>{% endif %}{% endmacro %}
