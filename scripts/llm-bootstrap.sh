@@ -63,19 +63,29 @@ llm_cat(){
 export -f llm_cat
 [[ "${LLM_ALIAS_CAT}" == "1" ]] && alias cat='llm_cat'
 
-tail(){
+tail() {
   local follow=0 file="" args=()
   for a in "$@"; do [[ "$a" == "-f" || "$a" == "-F" ]] && follow=1; args+=("$a"); [[ -f "$a" ]] && file="$a"; done
   if _llm_on "${LLM_TAIL_BLOCK:-1}" && (( follow )); then
     if [[ -n "${LLM_TAIL_ALLOW_CMDS:-}" && "${BASH_COMMAND:-}" =~ ${LLM_TAIL_ALLOW_CMDS} ]]; then
-      _llm_emit event=tail.pass reason=allowlist args="$(printf '%q ' "$@")"; command tail "$@" | _llm_fold
-    else
-      local n="${LLM_TAIL_MAX_LINES:-5000}"; _llm_emit event=tail.block file="$file" lines="$n"; command tail -n "$n" -- "$file" | _llm_fold
+      _llm_emit event=tail.pass reason=allowlist args="$(printf '%q ' "$@")"
+      command tail "$@" | _llm_fold
+      local status=${PIPESTATUS[0]}; _llm_emit event=tail.complete status="$status"; return $status
     fi
-  else
-    _llm_emit event=tail.pass args="$(printf '%q ' "$@")"
-    if _llm_has stdbuf; then command tail "${args[@]}" | stdbuf -o0 -e0 cat | _llm_fold; else command tail "${args[@]}" | _llm_fold; fi
+    if [[ -n "$file" ]]; then
+      local n="${LLM_TAIL_MAX_LINES:-5000}"
+      _llm_emit event=tail.block file="$file" lines="$n" folded="${LLM_FOLD_WIDTH:-4000}"
+      command tail -n "$n" -- "$file" | _llm_fold
+      local status=${PIPESTATUS}; _llm_emit event=tail.complete file="$file" status="$status"; return $status
+    fi
   fi
+  _llm_emit event=tail.pass args="$(printf '%q ' "$@")"
+  if _llm_has stdbuf; then
+    command tail "${args[@]}" | stdbuf -o0 -e0 cat | _llm_fold
+  else
+    command tail "${args[@]}" | _llm_fold
+  fi
+  local status=${PIPESTATUS}; _llm_emit event=tail.complete args="$(printf '%q ' "$@")" status="$status"; return $status
 }
 export -f tail
 
