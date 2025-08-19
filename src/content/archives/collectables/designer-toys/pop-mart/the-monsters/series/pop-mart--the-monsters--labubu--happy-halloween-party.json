@@ -1,60 +1,80 @@
 {
-  "product_id": "LAB013",
-  "brand": "POP MART",
-  "line": "The Monsters",
-  "character": "Labubu",
-  "series": "Happy Halloween Party",
-  "product_title": "HAPPY HALLOWEEN PARTY Series – Sitting Pumpkin Vinyl Plush Pendant",
-  "variant_name": "Orange pumpkin body with green stem hat, sitting pose, carved-face motif",
-  "form": "Vinyl plush pendant (keychain)",
-  "sku": "1505",
-  "size": {
-    "height_cm": null,
-    "dimensions_cm": "8×7×15",
-    "weight_kg": null,
-    "pendant_height_cm": null,
-    "sitting_height_cm": null
-  },
-  "materials": {
-    "shell": "PVC, soft plush fabric",
-    "plush": null,
-    "stuffing": null
-  },
-  "packaging": {
-    "type": "Window display color box",
-    "dimensions_cm": null
-  },
-  "release_info": {
-    "release_date": "2024-09-27",
-    "edition_type": "Seasonal limited",
-    "edition_size": null
-  },
-  "pricing": {
-    "original_msrp": {
-      "AUD": 50
-    },
-    "current_status": "Sold out rapidly post-launch",
-    "secondary_market_range": {
-      "AUD": "75-90"
-    }
-  },
-  "availability": {
-    "regions": [
-      "AU",
-      "US",
-      "CN",
-      "Global"
-    ],
-    "channels": [
-      "POP MART official sites",
-      "selected stores"
-    ],
-    "stock_status": "Sold out"
-  },
-  "designer": "Kasing Lung (龙家升)",
-  "accessories": [
-    "Keychain loop"
-  ],
-  "articulation": "Fixed sitting pose",
-  "colorway": "Bright orange and green"
+  "title": "Happy Halloween Party",
+  "date": "2024-09-27",
+  "price": "AU\\$ 50 (keychain pendant)",
+  "body": "Identity \\& taxonomy:\nBrand: POP MART.\nLine: The Monsters.\nCharacter: Labubu.\nSeries: Happy Halloween Party.\nProduct title (marketing + normalized): HAPPY HALLOWEEN PARTY Series – Sitting Pumpkin Vinyl Plush Pendant.\nVariant name (colorway, pose, outfit): Orange pumpkin body with green stem hat, sitting pose, carved-face motif.\nForm: Vinyl plush pendant (keychain).\nDeterministic product_id components: SKU 1505.\nAliases \\& search tokens (EN/中文): Happy Halloween Party Labubu, 万圣派对 (inferred).\nParent/child relations: Seasonal Halloween edition, no reissue noted.\nPhysical spec:\nSize (h/w/d): 8×7×15 cm.\nWeight: Unknown.\nMaterials: PVC, soft plush fabric.\nFinish: Soft flocked plush body with vinyl face.\nArticulation/motion: Fixed sitting pose.\nAccessories in box: Keychain loop.\nColorway notes: Bright orange and green.\nPackaging \\& in-box contents:\nPackaging type: Window display color box.\nPackaging dimensions \\& weight: Unknown.\nBox contents bill: Plush pendant, authenticity card (inferred).\nAuthenticity marker: QR code sticker (inferred).\nFactory/QA code: Unknown.\nEdition \\& run info:\nEdition.kind: Seasonal limited.\nEdition size: Unknown.\nChase/rarity ratio: Not applicable.\nStaff/member perks: Unknown.\nCredits:\nDesigner/artist: Kasing Lung (龙家升).\nSculpt/model: POP MART design team.\nCollaboration partner: None.\nLicensing owner: POP MART.\nRelease \\& distribution:\nAnnounced date: September 24 2024.\nRelease date: September 27 2024.\nDrop windows: POP MART official sites, selected stores.\nPurchase limits: Unknown.\nQueues/mechanics: Standard launch.\nRestock dates: Unknown.\nEnd-of-life: Sold out rapidly post-launch.\nRegional policy:\nRegion_lock: False.\nRegions: AU, US, CN, global.\nPackaging differences: Local language stickers.\nMarket listings:\nRegion: AU; Channel: POP MART AU; Launch MSRP: AU\\$ 50.\nSubsequent price changes: Not recorded.\nStock snapshots: Sold out in first week.\nPurchase limit: Unknown.\nBlind-box specifics:\nNot blind-box.\nCompliance \\& safety:\nAge rating: Not for <15.\nWarnings: Choking hazard for small parts.\nCompliance marks: CE.\nHS category: Unknown.\nCommerce \\& logistics:\nSKU: 1505.\nBarcode/EAN: Unknown.\nShipping box: Unknown.\nReturn policy: 15-day returns.\nWarranty/support: Unknown.\nMedia \\& assets:\nHero image: Sitting pumpkin pendant.\nOrthographics: Front view.\nPackaging flats: Display box art.\nVideos: TikTok/Instagram reels.\nImage rights: POP MART.\nProvenance \\& research:\nPrimary: POP MART product page [^6_1].\nSecondary: Instagram reels [^6_2][^6_3].\nRetrieved: 2025-08-13.\nDeltas: None.\nQueries: \"POP MART Happy Halloween Party keychain 2024-10-25\",\"POP MART Happy Halloween Party AU\\$50\".\ni18n \\& nomenclature:\nLocalized title: HAPPY HALLOWEEN PARTY 系列 (CN inferred).\nTransliteration: Labubu 拉布布.\nRelations \\& graph edges:\nPredecessor/successor: Seasonal Halloween series.\nLateral variants: Magic of Pumpkin pendant.\nGraph hub: POP MART seasonal.\nMarket intelligence (optional):\nPrice history: AU\\$ 50 launch, no official adjustments.\nSecondary range: AU\\$ 75–AU\\$ 90.\nScarcity: High collector demand, sold out first day.\nProvenance URLs:\nhttps://m.popmart.com/us/products/1505/happy-halloween-party-series-sitting-pumpkin-vinyl-plush-pendant\nhttps://www.instagram.com/p/C4P8fNkqjZC/?hl=en\nhttps://www.instagram.com/p/C4dCMPovGfa/",
+  "deltas": "None.",
+  "source": "COMPLETED SEEDS.txt",
+  "brand": "POP MART.",
+  "line": "The Monsters.",
+  "character": "Labubu.",
+  "series": "Happy Halloween Party.",
+  "product_title_(marketing_+_normalized)": "HAPPY HALLOWEEN PARTY Series – Sitting Pumpkin Vinyl Plush Pendant.",
+  "variant_name_(colorway,_pose,_outfit)": "Orange pumpkin body with green stem hat, sitting pose, carved-face motif.",
+  "form": "Vinyl plush pendant (keychain).",
+  "deterministic_product_id_components": "SKU 1505.",
+  "aliases_\\&_search_tokens_(en/中文)": "Happy Halloween Party Labubu, 万圣派对 (inferred).",
+  "parent/child_relations": "Seasonal Halloween edition, no reissue noted.",
+  "size_(h/w/d)": "8×7×15 cm.",
+  "weight": "Unknown.",
+  "materials": "PVC, soft plush fabric.",
+  "finish": "Soft flocked plush body with vinyl face.",
+  "articulation/motion": "Fixed sitting pose.",
+  "accessories_in_box": "Keychain loop.",
+  "colorway_notes": "Bright orange and green.",
+  "packaging_type": "Window display color box.",
+  "packaging_dimensions_\\&_weight": "Unknown.",
+  "box_contents_bill": "Plush pendant, authenticity card (inferred).",
+  "authenticity_marker": "QR code sticker (inferred).",
+  "factory/qa_code": "Unknown.",
+  "edition.kind": "Seasonal limited.",
+  "edition_size": "Unknown.",
+  "chase/rarity_ratio": "Not applicable.",
+  "staff/member_perks": "Unknown.",
+  "designer/artist": "Kasing Lung (龙家升).",
+  "sculpt/model": "POP MART design team.",
+  "collaboration_partner": "None.",
+  "licensing_owner": "POP MART.",
+  "announced_date": "September 24 2024.",
+  "release_date": "September 27 2024.",
+  "drop_windows": "POP MART official sites, selected stores.",
+  "purchase_limits": "Unknown.",
+  "queues/mechanics": "Standard launch.",
+  "restock_dates": "Unknown.",
+  "end-of-life": "Sold out rapidly post-launch.",
+  "region_lock": "False.",
+  "regions": "AU, US, CN, global.",
+  "packaging_differences": "Local language stickers.",
+  "region": "AU; Channel: POP MART AU; Launch MSRP: AU\\$ 50.",
+  "subsequent_price_changes": "Not recorded.",
+  "stock_snapshots": "Sold out in first week.",
+  "purchase_limit": "Unknown.",
+  "age_rating": "Not for <15.",
+  "warnings": "Choking hazard for small parts.",
+  "compliance_marks": "CE.",
+  "hs_category": "Unknown.",
+  "sku": "1505.",
+  "barcode/ean": "Unknown.",
+  "shipping_box": "Unknown.",
+  "return_policy": "15-day returns.",
+  "warranty/support": "Unknown.",
+  "hero_image": "Sitting pumpkin pendant.",
+  "orthographics": "Front view.",
+  "packaging_flats": "Display box art.",
+  "videos": "TikTok/Instagram reels.",
+  "image_rights": "POP MART.",
+  "primary": "POP MART product page [^6_1].",
+  "secondary": "Instagram reels [^6_2][^6_3].",
+  "retrieved": "2025-08-13.",
+  "queries": "\"POP MART Happy Halloween Party keychain 2024-10-25\",\"POP MART Happy Halloween Party AU\\$50\".",
+  "localized_title": "HAPPY HALLOWEEN PARTY 系列 (CN inferred).",
+  "transliteration": "Labubu 拉布布.",
+  "predecessor/successor": "Seasonal Halloween series.",
+  "lateral_variants": "Magic of Pumpkin pendant.",
+  "graph_hub": "POP MART seasonal.",
+  "price_history": "AU\\$ 50 launch, no official adjustments.",
+  "secondary_range": "AU\\$ 75–AU\\$ 90.",
+  "scarcity": "High collector demand, sold out first day.",
+  "https": "//www.instagram.com/p/C4dCMPovGfa/",
+  "Deltas": []
 }

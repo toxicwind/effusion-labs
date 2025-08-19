@@ -1,19 +1,13 @@
 #!/usr/bin/env node
-// tools/audit-identity.mjs
-// Identity-key auditor with case-insensitive + diacritic-safe normalization,
-// field aliasing, value synonyms, near-duplicate clustering, and optional
-// phonetic equivalence (Double/Single Metaphone if a lib is present).
+// tools/audit-identity-v2.mjs
+// A more robust identity-key auditor that uses a heuristic to prioritize
+// semantically meaningful fields and penalize unreliable ones.
 //
 // Usage:
-//   node tools/audit-identity.mjs --file=<path>
-//       [--max-combo=3] [--top=5] [--similar=0.88]
-//       [--json] [--verbose] [--show-clusters] [--sample=3]
-//       [--synonyms=path/to/synonyms.json] [--use-phonetic]
-//
-// Optional dev deps for --use-phonetic:
-//   npm i -D natural        # prefers DoubleMetaphone/Metaphone
-//   # or
-//   npm i -D double-metaphone
+//   node tools/audit-identity-v2.mjs --file=<path>
+//       [--max-combo=4] [--top=10] [--similar=0.90]
+//       [--json] [--verbose] [--show-clusters] [--sample=5]
+//       [--synonyms=path/to/synonyms.json]
 
 import fs from 'node:fs';
 import path from 'node:path';
@@ -24,22 +18,21 @@ const requireCjs = createRequire(import.meta.url);
 function parseArgs(argv) {
   const out = {
     file: null,
-    maxCombo: 3,
-    top: 5,
-    similar: 0.88,
+    maxCombo: 4,
+    top: 10,
+    similar: 0.90,
     json: false,
     verbose: false,
     showClusters: false,
-    sample: 3,
+    sample: 5,
     synonymsPath: null,
-    usePhonetic: false,
+    usePhonetic: false, // Removed for simplicity and better focus on semantic keys
   };
   for (let i = 2; i < argv.length; i++) {
     const a = argv[i];
     if (a === '--json') out.json = true;
     else if (a === '--verbose') out.verbose = true;
     else if (a === '--show-clusters') out.showClusters = true;
-    else if (a === '--use-phonetic') out.usePhonetic = true;
     else if (a.startsWith('--file=')) out.file = a.slice(7);
     else if (a === '--file') out.file = argv[++i];
     else if (a.startsWith('--max-combo=')) out.maxCombo = parseInt(a.slice(12), 10);
@@ -57,38 +50,8 @@ function parseArgs(argv) {
 }
 const args = parseArgs(process.argv);
 if (!args.file) {
-  console.log('Usage: node tools/audit-identity.mjs --file=<path> [--max-combo=3] [--top=5] [--json] [--verbose] [--show-clusters] [--sample=3] [--similar=0.88] [--synonyms=path] [--use-phonetic]');
+  console.log('Usage: node tools/audit-identity-v2.mjs --file=<path> [--max-combo=4] [--top=10] [--json] [--verbose] [--show-clusters] [--sample=5] [--similar=0.90] [--synonyms=path]');
   process.exit(1);
-}
-
-// -------------- optional phonetic --------------
-let phonetic = null; // function(word) -> string|string[]
-if (args.usePhonetic) {
-  try {
-    const natural = requireCjs('natural');
-    if (natural?.DoubleMetaphone) {
-      if (typeof natural.DoubleMetaphone.process === 'function') {
-        phonetic = (w) => natural.DoubleMetaphone.process(w);        // -> [primary, secondary]
-      } else if (typeof natural.DoubleMetaphone === 'function') {
-        phonetic = (w) => natural.DoubleMetaphone(w);                 // -> [primary, secondary]
-      }
-    }
-    if (!phonetic && natural?.Metaphone) {
-      if (typeof natural.Metaphone.process === 'function') {
-        phonetic = (w) => natural.Metaphone.process(w);               // -> string
-      } else if (typeof natural.Metaphone === 'function') {
-        phonetic = (w) => natural.Metaphone(w);                       // -> string
-      }
-    }
-  } catch {}
-  if (!phonetic) {
-    try {
-      const dm = requireCjs('double-metaphone');                      // -> [primary, secondary]
-      phonetic = (w) => dm(w);
-    } catch {
-      console.warn('[audit-identity] "--use-phonetic" requested but no phonetic lib found. Install "natural" or "double-metaphone". Skipping phonetic step.');
-    }
-  }
 }
 
 // ---------------- normalization ----------------
@@ -116,14 +79,11 @@ const tokenized = (s) => {
 
 // ---------------- synonyms ----------------
 const defaultSynonyms = {
-  'angel in clouds': [
-    'angel in the clouds', 'angel-in-clouds', 'angel-in-the-clouds',
-    'aic', 'angel clouds', '天使在云端', 'angel in clouds v2', 'angel in the clouds v2',
-    'angel in clouds (v2)', 'angel in the clouds (v2)'
-  ],
-  'time to chill': ['time-to-chill', 'time2chill', 'time 2 chill', 'ttc'],
-  'best of luck': ['best-of-luck', '好运连连', 'good luck to you (overseas)', 'good lucky to you (overseas)'],
-  'walk by fortune': ['walk-by-fortune', 'walk with fortune', '行运', 'walk of fortune'],
+  'plush doll': ['vinyl plush doll', 'vinyl face plush doll', 'plush'],
+  'hanging card': ['vinyl plush hanging card', 'vinyl-plush hanging card', 'pendant', 'keychain pendant'],
+  'blind box': ['vinyl face blind-box figures', 'vinyl face blind box', 'blind box figures'],
+  'the monsters': ['the monsters x pronounce', 'the monsters x coca-cola'],
+  'i found you': ['zimomo i found you'],
 };
 let userSynonyms = {};
 if (args.synonymsPath) {
@@ -157,25 +117,15 @@ function equivalenceKey(raw, field, opts) {
   const bn = baseNorm(raw);
   if (!bn) return '';
   let syn = bn;
-  // full phrase
   if (opts.synonymsCanonMap.has(bn)) syn = opts.synonymsCanonMap.get(bn);
-  // token-level
   if (syn === bn) {
     const toks = tokenized(bn).map(t => opts.synonymsCanonMap.get(t) || t);
     syn = toks.join(' ');
   }
-  // phonetic
-  if (opts.usePhonetic && typeof phonetic === 'function') {
-    const toks = syn.split(/\s+/).filter(Boolean).map(t => {
-      const codes = phonetic(t);
-      return Array.isArray(codes) ? codes.filter(Boolean).join('-') : (codes || t);
-    });
-    syn = toks.join(' ');
-  }
   return syn.replace(/\s+/g, ' ').trim();
 }
-const joinKey = (vals, opts, fieldName) =>
-  vals.map(v => equivalenceKey(v, fieldName, opts)).filter(Boolean).join(' | ');
+const joinKey = (vals, opts) =>
+  vals.map(v => equivalenceKey(v, null, opts)).filter(Boolean).join(' | ');
 
 function globLast(pattern) {
   const dir = path.dirname(pattern);
@@ -187,7 +137,7 @@ function globLast(pattern) {
   return path.join(dir, files[files.length - 1]);
 }
 
-// Jaro-Winkler + token Jaccard
+// Jaro-Winkler + token Jaccard (unchanged)
 function jaroWinkler(a, b) {
   a = a || ''; b = b || '';
   if (!a || !b) return 0;
@@ -226,7 +176,7 @@ function jaccard(a, b) {
   return union ? inter / union : 0;
 }
 
-// Union-Find
+// Union-Find (unchanged)
 class UF {
   constructor(n) { this.p = Array.from({ length: n }, (_, i) => i); this.r = new Array(n).fill(0); }
   find(x){ return this.p[x]===x?x:this.p[x]=this.find(this.p[x]); }
@@ -239,19 +189,42 @@ class UF {
 
 // Field aliasing
 const ALIAS_GROUPS = [
-  ['title', 'product_title', 'product', 'product_title_(marketing_title_+_normalized_title)', 'product_title_(marketing_+_normalized)', 'product_title_(marketing_+_normalized_title)'],
-  ['variant', 'variant_name', 'variant_name_(colorway,_pose,_outfit)'],
-  ['series', 'collection', 'series_hub_link'],
-  ['line'],
-  ['brand'],
-  ['character'],
-  ['product_id', 'deterministic_id', 'sku', 'sku/model_code', 'sku/model', 'product_code', 'deterministic_product_id_components', 'barcode', 'barcode/ean/upc'],
+  { canonical: 'title', aliases: ['product_title', 'title', 'product', 'product_title_(marketing_title_+_normalized_title)', 'product_title_(marketing_+_normalized)', 'product_title_(marketing_+_normalized_title)'] },
+  { canonical: 'variant', aliases: ['variant_name', 'variant', 'variant_name_(colorway,_pose,_outfit)'] },
+  { canonical: 'series', aliases: ['series', 'collection', 'series_hub_link'] },
+  { canonical: 'line', aliases: ['line'] },
+  { canonical: 'brand', aliases: ['brand'] },
+  { canonical: 'character', aliases: ['character'] },
+  { canonical: 'form', aliases: ['form', 'type'] },
+  { canonical: 'sku', aliases: ['product_id', 'deterministic_id', 'sku', 'sku/model_code', 'sku/model', 'product_code', 'deterministic_product_id_components', 'barcode', 'barcode/ean/upc'] },
+  { canonical: 'accessories', aliases: ['accessories', 'accessories_in_box', 'accessories_contents'] },
+  { canonical: 'articulation', aliases: ['articulation', 'articulation/motion'] },
+  { canonical: 'release_info', aliases: ['release_date', 'date'] },
+  { canonical: 'pricing', aliases: ['price', 'msrp', 'msrp_currency'] },
 ];
+
 const canonicalFieldName = (field) => {
   const f = field.toLowerCase();
-  for (const g of ALIAS_GROUPS) if (g.some(x => x.toLowerCase() === f)) return g[0];
+  for (const g of ALIAS_GROUPS) if (g.aliases.some(x => x.toLowerCase() === f)) return g.canonical;
   return field;
 };
+const FIELD_CATEGORIES = {
+    // Primary - strong identity keys
+    'title': 'primary',
+    'form': 'primary',
+    // Secondary - good supporting keys
+    'series': 'secondary',
+    'line': 'secondary',
+    'character': 'secondary',
+    'variant': 'secondary',
+    // Weak - poor identity keys
+    'accessories': 'weak',
+    'articulation': 'weak',
+    'release_info': 'weak',
+    'pricing': 'weak',
+    'sku': 'weak',
+};
+
 function expandFieldSet(canonFields, allKeys) {
   const set = new Set(canonFields.map(canonicalFieldName));
   const expanded = new Set();
@@ -262,27 +235,7 @@ function expandFieldSet(canonFields, allKeys) {
   return Array.from(expanded);
 }
 
-// --------------- data load ---------------
-const fileArg = args.file.includes('*') ? (globLast(args.file) || args.file) : args.file;
-const filePath = path.resolve(fileArg);
-if (!fs.existsSync(filePath)) { console.error(`File not found: ${filePath}`); process.exit(1); }
-let records;
-try {
-  records = JSON.parse(fs.readFileSync(filePath, 'utf8'));
-  if (!Array.isArray(records)) throw new Error('root should be an array');
-} catch (e) {
-  console.error('Failed to parse JSON:', e.message);
-  process.exit(1);
-}
-const N = records.length;
-
 // --------------- scoring ---------------
-const allFields = Array.from(
-  records.reduce((s, r) => { Object.keys(r || {}).forEach(k => s.add(k)); return s; }, new Set())
-).sort();
-
-const opts = { synonymsCanonMap, usePhonetic: !!(args.usePhonetic && phonetic) };
-
 function coverageAndUniques(fieldList, opts) {
   const seen = new Set(); let covered = 0;
   for (const r of records) {
@@ -291,30 +244,48 @@ function coverageAndUniques(fieldList, opts) {
   }
   return { coverage: covered / N, uniques: seen.size };
 }
+
 function scoreIdentity(fieldList, opts) {
   const { coverage, uniques } = coverageAndUniques(fieldList, opts);
   const uniqueness = uniques / N;
+  let score = (coverage * 0.55 + uniqueness * 0.45);
+
+  // Heuristic-based penalties and boosts for better scoring
+  let fieldCategoryPenalty = 0;
+  let hasPrimaryField = false;
+  let hasSecondaryField = false;
+
+  for (const field of fieldList) {
+    const canonical = canonicalFieldName(field);
+    const category = FIELD_CATEGORIES[canonical];
+    if (category === 'primary') hasPrimaryField = true;
+    if (category === 'secondary') hasSecondaryField = true;
+    if (category === 'weak') {
+        if (fieldList.length === 1) {
+             fieldCategoryPenalty += 0.7; // Heavy penalty for single weak fields
+        } else {
+             fieldCategoryPenalty += 0.2; // Minor penalty for weak fields in combinations
+        }
+    }
+  }
+
+  // Boost for having a good key combination
+  if (hasPrimaryField) {
+      score *= 1.2;
+  } else if (hasSecondaryField) {
+      score *= 1.1;
+  }
+
+  score -= fieldCategoryPenalty;
+  score = Math.max(0, score);
+  
   const sizePenalty = 1 - (fieldList.length - 1) * 0.07;
-  const score = (coverage * 0.55 + uniqueness * 0.45) * Math.max(0.6, sizePenalty);
+  score *= Math.max(0.6, sizePenalty);
+
   return { score, coverage, uniques };
 }
-const canonicalTop = Array.from(new Set(allFields.map(canonicalFieldName)));
-const candidates = [];
-for (const f of canonicalTop) {
-  const expanded = expandFieldSet([f], allFields);
-  if (!expanded.length) continue;
-  const m = scoreIdentity(expanded, opts);
-  candidates.push({ fields: expanded, canonical: [f], ...m });
-}
-for (let k = 2; k <= Math.max(2, args.maxCombo); k++) {
-  for (const comboCanonical of combinations(canonicalTop, k)) {
-    const expanded = expandFieldSet(comboCanonical, allFields);
-    if (!expanded.length) continue;
-    const m = scoreIdentity(expanded, opts);
-    candidates.push({ fields: expanded, canonical: comboCanonical, ...m });
-  }
-}
-candidates.sort((a, b) => b.score - a.score);
+
+// ... (rest of the script remains unchanged)
 
 // --------------- stats ---------------
 function duplicationStats() {
@@ -428,8 +399,9 @@ function buildClustersFor(fields, similar, sample) {
 
 function crossFieldNearDupes(similar, sample) {
   const out = [];
+  const canonicalFields = ALIAS_GROUPS.map(g => g.canonical);
   for (const group of ALIAS_GROUPS) {
-    const present = group.filter(g => allFields.includes(g));
+    const present = group.aliases.filter(g => allFields.includes(g));
     if (present.length < 2) continue;
 
     const vals = [], recIdxs = [];
@@ -478,94 +450,148 @@ function crossFieldNearDupes(similar, sample) {
   return out;
 }
 
-// ---------------- compute & output ----------------
-const dupStats = duplicationStats();
-const topCandidates = candidates.slice(0, args.top);
-const best = topCandidates[0] || null;
+// --------------- data load and main execution ---------------
+let records = [];
+let N = 0;
+let allFields = [];
+let canonicalTop = [];
+let candidates = [];
+let dupStats = [];
+let topCandidates = [];
+let best = null;
 
-const result = {
-  file: path.relative(process.cwd(), filePath),
-  records: N,
-  options: {
-    similar: args.similar,
-    usePhonetic: !!(args.usePhonetic && phonetic),
-    synonymsLoaded: args.synonymsPath ? path.relative(process.cwd(), path.resolve(args.synonymsPath)) : '(default only)'
-  },
-  suggestedIdentity: best ? {
-    canonical: best.canonical,
-    fields: best.fields,
-    coverage: best.coverage,
-    uniques: best.uniques,
-    score: Number(best.score.toFixed(4))
-  } : null,
-  candidates: topCandidates.map(c => ({
-    canonical: c.canonical,
-    fields: c.fields,
-    coverage: c.coverage,
-    uniques: c.uniques,
-    score: Number(c.score.toFixed(4)),
-  })),
-  highlyDuplicatedFields: dupStats.slice(0, 14).map(d => ({
-    field: d.field,
-    coveragePct: Number((d.coverage * 100).toFixed(1)),
-    uniques: d.uniques,
-    majoritySharePct: Number((d.majority * 100).toFixed(1))
-  })),
-};
-
-if (args.showClusters && best) {
-  result.duplicateClustersForBest = buildClustersFor(best.fields, args.similar, args.sample);
-  result.crossFieldNearDuplicates = crossFieldNearDupes(args.similar, args.sample);
-}
-
-function pct(x) { return (x * 100).toFixed(1) + '%'; }
-
-if (args.json) {
-  console.log(JSON.stringify(result, null, 2));
-} else {
-  console.log(`Golden used: ${result.file}`);
-  console.log(`Records: ${result.records}`);
-  console.log(`Options: similar=${args.similar} usePhonetic=${!!(args.usePhonetic && phonetic)} synonyms=${result.options.synonymsLoaded}\n`);
-
-  if (result.suggestedIdentity) {
-    const s = result.suggestedIdentity;
-    console.log(`Best identity: ${JSON.stringify(s.canonical)}\n  fields=${s.fields.join(', ')}\n  coverage=${pct(s.coverage)} uniques=${s.uniques}/${N} score=${s.score}\n`);
-  } else {
-    console.log('No identity suggestion could be made.\n');
+async function main() {
+  const fileArg = args.file.includes('*') ? (globLast(args.file) || args.file) : args.file;
+  const filePath = path.resolve(fileArg);
+  if (!fs.existsSync(filePath)) {
+    console.error(`File not found: ${filePath}`);
+    process.exit(1);
   }
-
-  console.log('Top candidates:');
-  for (const c of result.candidates) {
-    console.log(`  - ${JSON.stringify(c.canonical)} (fields:${c.fields.length}) coverage=${pct(c.coverage)} uniques=${c.uniques}/${N} score=${c.score}`);
+  try {
+    records = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+    if (!Array.isArray(records)) throw new Error('root should be an array');
+  } catch (e) {
+    console.error('Failed to parse JSON:', e.message);
+    process.exit(1);
   }
+  N = records.length;
 
-  console.log('\nHighly duplicated fields (poor identity):');
-  for (const d of result.highlyDuplicatedFields) {
-    console.log(`  - ${d.field} (majority=${d.majoritySharePct}%, coverage=${d.coveragePct}%, uniques=${d.uniques})`);
+  allFields = Array.from(
+    records.reduce((s, r) => { Object.keys(r || {}).forEach(k => s.add(k)); return s; }, new Set())
+  ).sort();
+  
+  const opts = { synonymsCanonMap };
+  
+  canonicalTop = Array.from(new Set(allFields.map(canonicalFieldName)));
+  candidates = [];
+  for (const f of canonicalTop) {
+    const expanded = expandFieldSet([f], allFields);
+    if (!expanded.length) continue;
+    const m = scoreIdentity(expanded, opts);
+    candidates.push({ fields: expanded, canonical: [f], ...m });
   }
+  for (let k = 2; k <= Math.max(2, args.maxCombo); k++) {
+    for (const comboCanonical of combinations(canonicalTop, k)) {
+      const expanded = expandFieldSet(comboCanonical, allFields);
+      if (!expanded.length) continue;
+      const m = scoreIdentity(expanded, opts);
+      candidates.push({ fields: expanded, canonical: comboCanonical, ...m });
+    }
+  }
+  candidates.sort((a, b) => b.score - a.score);
+
+  dupStats = duplicationStats();
+  topCandidates = candidates.slice(0, args.top);
+  best = topCandidates[0] || null;
+
+  const result = {
+    file: path.relative(process.cwd(), filePath),
+    records: N,
+    options: {
+      similar: args.similar,
+      synonymsLoaded: args.synonymsPath ? path.relative(process.cwd(), path.resolve(args.synonymsPath)) : '(default only)'
+    },
+    suggestedIdentity: best ? {
+      canonical: best.canonical,
+      fields: best.fields,
+      coverage: best.coverage,
+      uniques: best.uniques,
+      score: Number(best.score.toFixed(4))
+    } : null,
+    candidates: topCandidates.map(c => ({
+      canonical: c.canonical,
+      fields: c.fields,
+      coverage: c.coverage,
+      uniques: c.uniques,
+      score: Number(c.score.toFixed(4)),
+    })),
+    highlyDuplicatedFields: dupStats.slice(0, 14).map(d => ({
+      field: d.field,
+      coveragePct: Number((d.coverage * 100).toFixed(1)),
+      uniques: d.uniques,
+      majoritySharePct: Number((d.majority * 100).toFixed(1))
+    })),
+  };
 
   if (args.showClusters && best) {
-    console.log(`\nDuplicate clusters for best (${best.fields.join(' + ')}):`);
-    const cl = result.duplicateClustersForBest || [];
-    if (!cl.length) console.log('  (none)');
-    for (const g of cl) {
-      console.log(`  * size=${g.size} avgSim=${g.avgSimilarity} rep="${g.representative}"`);
-      for (const s of g.sample) {
-        console.log(`      · [#${s.recIndex}] ${s.rawTitle ?? '(no title)'}  key="${s.key}"`);
-      }
+    result.duplicateClustersForBest = buildClustersFor(best.fields, args.similar, args.sample);
+    result.crossFieldNearDuplicates = crossFieldNearDupes(args.similar, args.sample);
+  }
+
+  function pct(x) { return (x * 100).toFixed(1) + '%'; }
+
+  if (args.json) {
+    console.log(JSON.stringify(result, null, 2));
+  } else {
+    console.log(`Golden used: ${result.file}`);
+    console.log(`Records: ${result.records}`);
+    console.log(`Options: similar=${args.similar} synonyms=${result.options.synonymsLoaded}\n`);
+
+    if (result.suggestedIdentity) {
+      const s = result.suggestedIdentity;
+      console.log(`Best identity: ${JSON.stringify(s.canonical)}\n  fields=${s.fields.join(', ')}\n  coverage=${pct(s.coverage)} uniques=${s.uniques}/${N} score=${s.score}\n`);
+    } else {
+      console.log('No identity suggestion could be made.\n');
     }
 
-    console.log('\nCross-field near-duplicates (by alias groups):');
-    const x = result.crossFieldNearDuplicates || [];
-    if (!x.length) console.log('  (none)');
-    for (const block of x) {
-      console.log(`  Group: [${block.aliasGroup.join(', ')}]`);
-      for (const g of block.clusters.slice(0, 8)) {
-        console.log(`    - size=${g.size} avgSim=${g.avgSimilarity} rep="${g.representative}"`);
+    console.log('Top candidates:');
+    for (const c of result.candidates) {
+      console.log(`  - ${JSON.stringify(c.canonical)} (fields:${c.fields.length}) coverage=${pct(c.coverage)} uniques=${c.uniques}/${N} score=${c.score}`);
+    }
+
+    console.log('\nHighly duplicated fields (poor identity):');
+    for (const d of result.highlyDuplicatedFields) {
+      console.log(`  - ${d.field} (majority=${d.majoritySharePct}%, coverage=${d.coveragePct}%, uniques=${d.uniques})`);
+    }
+
+    if (args.showClusters && best) {
+      console.log(`\nDuplicate clusters for best (${best.fields.join(' + ')}):`);
+      const cl = result.duplicateClustersForBest || [];
+      if (!cl.length) console.log('  (none)');
+      for (const g of cl) {
+        console.log(`  * size=${g.size} avgSim=${g.avgSimilarity} rep="${g.representative}"`);
         for (const s of g.sample) {
-          console.log(`        · [#${s.recIndex}] ${s.title ?? '(no title)'}  "${s.value}"`);
+          console.log(`      · [#${s.recIndex}] ${s.rawTitle ?? '(no title)'}  key="${s.key}"`);
+        }
+      }
+
+      console.log('\nCross-field near-duplicates (by alias groups):');
+      const x = result.crossFieldNearDuplicates || [];
+      if (!x.length) console.log('  (none)');
+      for (const block of x) {
+        console.log(`  Group: [${block.aliasGroup.join(', ')}]`);
+        for (const g of block.clusters.slice(0, 8)) {
+          console.log(`    - size=${g.size} avgSim=${g.avgSimilarity} rep="${g.representative}"`);
+          for (const s of g.sample) {
+            console.log(`        · [#${s.recIndex}] ${s.title ?? '(no title)'}  "${s.value}"`);
+          }
         }
       }
     }
   }
 }
+
+main().catch(e => {
+  console.error(e);
+  process.exit(1);
+});
