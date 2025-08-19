@@ -1,0 +1,122 @@
+{
+  "type": "product",
+  "product_id": "pop-mart--the-monsters--labubu--walk-by-fortune--plush--std--20231229",
+  "brand": "pop-mart",
+  "line": "the-monsters",
+  "character": "labubu",
+  "series": "walk-by-fortune",
+  "form": "Vinyl plush doll",
+  "variant": "std",
+  "edition": {
+    "kind": "core"
+  },
+  "distribution": {
+    "region_lock": false,
+    "markets": [
+      "CN"
+    ]
+  },
+  "release_date": "2023-12-29",
+  "market_listings": [
+    {
+      "market": "CN",
+      "currency": "CNY",
+      "price": 499
+    }
+  ],
+  "availability": {
+    "limited": true,
+    "unit_count": 3000
+  },
+  "images": [],
+  "provenance_ref": "/content/archives/collectables/designer-toys/pop-mart/the-monsters/provenance/pop-mart--the-monsters--labubu--walk-by-fortune--plush--std--20231229.jsonl",
+  "confidence": 0.45,
+  "notes": "Seeded from initial article; requires re-research.",
+  "product_title": "Walk by Fortune Vinyl Plush Doll",
+  "variant_name": "Chinese New Year theme with traditional red outfit, sitting pose",
+  "size": {
+    "height_cm": 40,
+    "dimensions_cm": null,
+    "weight_kg": null,
+    "pendant_height_cm": null,
+    "sitting_height_cm": null
+  },
+  "materials": {
+    "shell": "PLUSH+PVC",
+    "plush": "polyester",
+    "stuffing": "100% Polyester Fiber"
+  },
+  "packaging": {
+    "type": "CNY-themed packaging with fortune/prosperity artwork",
+    "dimensions_cm": null
+  },
+  "release_info": {
+    "release_date": "2023-12-29",
+    "edition_type": "Limited edition",
+    "edition_size": 3000
+  },
+  "pricing": {
+    "original_msrp": {
+      "CNY": 499
+    },
+    "current_status": "Sold out",
+    "secondary_market_range": {
+      "USD": "1169.22+"
+    }
+  },
+  "designer": "Kasing Lung (龙家升)",
+  "accessories": [
+    "Fortune-themed outfit and accessories"
+  ],
+  "colorway": "Traditional red Chinese New Year theme",
+  "Deltas": [
+    {
+      "field": "product_id",
+      "from": "pop-mart--the-monsters--labubu--walk-by-fortune--plush--std--20231229",
+      "to": "pop-mart--the-monsters--labubu--walk-by-fortune--plush--std--20231229",
+      "reason": "kept-existing"
+    },
+    {
+      "field": "brand",
+      "from": "pop-mart",
+      "to": "pop-mart",
+      "reason": "kept-existing"
+    },
+    {
+      "field": "line",
+      "from": "the-monsters",
+      "to": "the-monsters",
+      "reason": "kept-existing"
+    },
+    {
+      "field": "character",
+      "from": "labubu",
+      "to": "labubu",
+      "reason": "kept-existing"
+    },
+    {
+      "field": "series",
+      "from": "walk-by-fortune",
+      "to": "walk-by-fortune",
+      "reason": "kept-existing"
+    },
+    {
+      "field": "form",
+      "from": "plush",
+      "to": "Vinyl plush doll",
+      "reason": "specificity"
+    },
+    {
+      "field": "availability",
+      "from": {
+        "limited": true,
+        "unit_count": 3000
+      },
+      "to": {
+        "limited": true,
+        "unit_count": 3000
+      },
+      "reason": "same"
+    }
+  ]
+}

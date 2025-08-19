@@ -1,0 +1,63 @@
+{
+  "product_id": "LAB012",
+  "brand": "POP MART × Pronounce",
+  "line": "The Monsters",
+  "character": "Labubu",
+  "series": "Wings of Fantasy",
+  "product_title": "LABUBU × PRONOUNCE – WINGS OF FANTASY Vinyl Plush Doll",
+  "variant_name": "Lavender fur with translucent butterfly wings, golden crown, star-patterned vest",
+  "form": "Vinyl plush doll",
+  "sku": "1580",
+  "size": {
+    "height_cm": 38,
+    "dimensions_cm": "24×15×38",
+    "weight_kg": null
+  },
+  "materials": {
+    "shell": "66% polyester, 25% PVC, 9% ABS",
+    "plush": null,
+    "stuffing": "95% polyester, 5% iron wire"
+  },
+  "packaging": {
+    "type": "Window display color box",
+    "dimensions_cm": "30×20×15"
+  },
+  "release_info": {
+    "release_date": "2024-10-04",
+    "edition_type": "Collaboration limited edition",
+    "edition_size": 10000
+  },
+  "pricing": {
+    "original_msrp": {
+      "USD": 119.99,
+      "CAD": 149.99,
+      "SGD": 129.9
+    },
+    "current_status": "Out of stock",
+    "secondary_market_range": {
+      "USD": "180-240"
+    }
+  },
+  "availability": {
+    "regions": [
+      "US",
+      "CA",
+      "CN",
+      "EU",
+      "APAC"
+    ],
+    "channels": [
+      "POP MART US",
+      "POP MART CA",
+      "POP MART CN"
+    ],
+    "stock_status": "Out of stock"
+  },
+  "designer": "Kasing Lung (龙家升)",
+  "accessories": [
+    "Translucent butterfly wings",
+    "Golden crown"
+  ],
+  "articulation": "Fixed figure",
+  "colorway": "Pastel lavender with glitter accents"
+}

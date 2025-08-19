@@ -1,0 +1,128 @@
+{
+  "type": "product",
+  "product_id": "pop-mart--the-monsters--labubu--jump-for-joy--plush--std--20230525",
+  "brand": "pop-mart",
+  "line": "the-monsters",
+  "character": "labubu",
+  "series": "jump-for-joy",
+  "form": "Vinyl plush doll",
+  "variant": "std",
+  "edition": {
+    "kind": "core"
+  },
+  "distribution": {
+    "region_lock": false,
+    "markets": [
+      "CN"
+    ]
+  },
+  "release_date": "2023-05-25",
+  "market_listings": [
+    {
+      "market": "CN",
+      "currency": "CNY",
+      "price": 499
+    }
+  ],
+  "availability": {
+    "limited": false,
+    "unit_count": null
+  },
+  "images": [],
+  "provenance_ref": "/content/archives/collectables/designer-toys/pop-mart/the-monsters/provenance/pop-mart--the-monsters--labubu--jump-for-joy--plush--std--20230525.jsonl",
+  "confidence": 0.45,
+  "notes": "Seeded from initial article; requires re-research.",
+  "product_title": "Jump for Joy Vinyl Plush Doll",
+  "variant_name": "Galaxy grey coat with bomber jacket, cargo pants, and boots",
+  "size": {
+    "height_cm": 40,
+    "dimensions_cm": "18×16×38",
+    "weight_kg": null,
+    "pendant_height_cm": null,
+    "sitting_height_cm": null
+  },
+  "materials": {
+    "shell": "PLUSH+PVC",
+    "plush": null,
+    "stuffing": null
+  },
+  "packaging": {
+    "type": "Color box",
+    "dimensions_cm": null
+  },
+  "release_info": {
+    "release_date": "2023-05-25",
+    "edition_type": "Standard edition",
+    "edition_size": null
+  },
+  "pricing": {
+    "original_msrp": {
+      "CNY": 499
+    },
+    "current_status": "Sold out",
+    "secondary_market_range": {
+      "USD": "2400+",
+      "SGD": "109-978"
+    }
+  },
+  "designer": "Kasing Lung (龙家升)",
+  "accessories": [
+    "Removable winter clothing",
+    "furry hat",
+    "scarf",
+    "sweater",
+    "snow shoes"
+  ],
+  "articulation": "Posable hands",
+  "colorway": "Grey fur with urban outfit accents",
+  "Deltas": [
+    {
+      "field": "product_id",
+      "from": "pop-mart--the-monsters--labubu--jump-for-joy--plush--std--20230525",
+      "to": "pop-mart--the-monsters--labubu--jump-for-joy--plush--std--20230525",
+      "reason": "kept-existing"
+    },
+    {
+      "field": "brand",
+      "from": "pop-mart",
+      "to": "pop-mart",
+      "reason": "kept-existing"
+    },
+    {
+      "field": "line",
+      "from": "the-monsters",
+      "to": "the-monsters",
+      "reason": "kept-existing"
+    },
+    {
+      "field": "character",
+      "from": "labubu",
+      "to": "labubu",
+      "reason": "kept-existing"
+    },
+    {
+      "field": "series",
+      "from": "jump-for-joy",
+      "to": "jump-for-joy",
+      "reason": "kept-existing"
+    },
+    {
+      "field": "form",
+      "from": "plush",
+      "to": "Vinyl plush doll",
+      "reason": "specificity"
+    },
+    {
+      "field": "availability",
+      "from": {
+        "limited": false,
+        "unit_count": null
+      },
+      "to": {
+        "limited": false,
+        "unit_count": null
+      },
+      "reason": "same"
+    }
+  ]
+}

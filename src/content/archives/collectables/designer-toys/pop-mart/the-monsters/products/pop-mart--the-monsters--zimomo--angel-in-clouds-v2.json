@@ -1,0 +1,140 @@
+{
+  "type": "product",
+  "product_id": "pop-mart--the-monsters--zimomo--angel-in-clouds-v2--plush--std--58cm--20241025",
+  "brand": "pop-mart",
+  "line": "the-monsters",
+  "character": "zimomo",
+  "series": "ANGEL IN CLOUDS (v2)",
+  "form": "Large-format vinyl face plush doll",
+  "variant": "std",
+  "edition": {
+    "kind": "core"
+  },
+  "distribution": {
+    "region_lock": false,
+    "markets": [
+      "US"
+    ]
+  },
+  "size": {
+    "unit": "cm",
+    "h": 58,
+    "w": 33,
+    "d": 25
+  },
+  "release_date": "2024-10-25",
+  "market_listings": [
+    {
+      "market": "US",
+      "currency": "USD",
+      "price": 289.99
+    }
+  ],
+  "availability": {
+    "limited": false,
+    "unit_count": null
+  },
+  "images": [],
+  "provenance_ref": "/content/archives/collectables/designer-toys/pop-mart/the-monsters/provenance/pop-mart--the-monsters--zimomo--angel-in-clouds-v2--plush--std--58cm--20241025.jsonl",
+  "confidence": 0.45,
+  "notes": "Seeded from initial article; requires re-research.",
+  "product_title": "THE MONSTERS \"Angel in Clouds\"",
+  "materials": {
+    "shell": "36% Polyester, 35% PVC, 29% ABS",
+    "plush": "Premium white synthetic fur with gray-silver tips",
+    "stuffing": "70% Polyester, 27% POM (polyoxymethylene), 2% Rubber, 1% Sponge"
+  },
+  "packaging": {
+    "type": "Custom pop-open box with cloud-themed artwork",
+    "dimensions_cm": null
+  },
+  "release_info": {
+    "release_date": "2024-10-25",
+    "edition_type": "Second major Zimomo standalone doll",
+    "edition_size": null
+  },
+  "pricing": {
+    "original_msrp": {
+      "USD": 289.99
+    },
+    "current_status": "Out of stock",
+    "secondary_market_range": {
+      "USD": "350+"
+    }
+  },
+  "designer": "Kasing Lung",
+  "accessories": [
+    "Removable halo headband",
+    "detachable wing attachments",
+    "certificate of authenticity card",
+    "branded cloud-pattern cotton tote bag"
+  ],
+  "articulation": "Articulated soft vinyl face; poseable bat/gargoyle wings, moveable tail, flip-eye mechanism",
+  "colorway": "Pure white plush body with silvery-gray wings, metallic silver halo accent, and translucent PVC wing inserts",
+  "Deltas": [
+    {
+      "field": "product_id",
+      "from": "pop-mart--the-monsters--zimomo--angel-in-clouds-v2--plush--std--58cm--20241025",
+      "to": "pop-mart--the-monsters--zimomo--angel-in-clouds-v2--plush--std--58cm--20241025",
+      "reason": "kept-existing"
+    },
+    {
+      "field": "brand",
+      "from": "pop-mart",
+      "to": "pop-mart",
+      "reason": "kept-existing"
+    },
+    {
+      "field": "line",
+      "from": "the-monsters",
+      "to": "the-monsters",
+      "reason": "kept-existing"
+    },
+    {
+      "field": "character",
+      "from": "zimomo",
+      "to": "zimomo",
+      "reason": "kept-existing"
+    },
+    {
+      "field": "series",
+      "from": "angel-in-clouds-v2",
+      "to": "ANGEL IN CLOUDS (v2)",
+      "reason": "specificity"
+    },
+    {
+      "field": "form",
+      "from": "plush",
+      "to": "Large-format vinyl face plush doll",
+      "reason": "specificity"
+    },
+    {
+      "field": "size",
+      "from": {
+        "unit": "cm",
+        "h": 58,
+        "w": 33,
+        "d": 25
+      },
+      "to": {
+        "unit": "cm",
+        "h": 58,
+        "w": 33,
+        "d": 25
+      },
+      "reason": "same"
+    },
+    {
+      "field": "availability",
+      "from": {
+        "limited": false,
+        "unit_count": null
+      },
+      "to": {
+        "limited": false,
+        "unit_count": null
+      },
+      "reason": "same"
+    }
+  ]
+}

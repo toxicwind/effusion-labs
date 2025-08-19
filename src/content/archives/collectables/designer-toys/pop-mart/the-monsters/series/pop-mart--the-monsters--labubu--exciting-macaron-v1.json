@@ -1,0 +1,58 @@
+{
+  "product_id": "LAB015",
+  "brand": "POP MART",
+  "line": "The Monsters",
+  "character": "Labubu",
+  "series": "Exciting Macaron (V1)",
+  "product_title": "THE MONSTERS – Exciting Macaron Vinyl Face Blind Box",
+  "variant_name": "6 standard + 1 secret edition (“Chestnut Cocoa”)",
+  "form": "Vinyl face blind-box pendant",
+  "sku": "675",
+  "size": {
+    "height_cm": 6,
+    "dimensions_cm": null,
+    "weight_kg": 0.03,
+    "pendant_height_cm": null,
+    "sitting_height_cm": null
+  },
+  "materials": {
+    "shell": "PVC",
+    "plush": "Flocked plush face",
+    "stuffing": "Polyester"
+  },
+  "packaging": {
+    "type": "Blind-box foil bag",
+    "dimensions_cm": null
+  },
+  "release_info": {
+    "release_date": "2024-10-27",
+    "edition_type": "Blind-box series",
+    "edition_size": null
+  },
+  "pricing": {
+    "original_msrp": {
+      "USD_box": 21.99,
+      "USD_set": 131.94
+    },
+    "current_status": "Sold out, intermittent restocks",
+    "secondary_market_range": {
+      "USD_box": "35-50"
+    }
+  },
+  "availability": {
+    "regions": [
+      "Global"
+    ],
+    "channels": [
+      "POP MART official online",
+      "physical stores"
+    ],
+    "stock_status": "Sold out"
+  },
+  "designer": "Kasing Lung (龙家升)",
+  "accessories": [
+    "Keychain clip"
+  ],
+  "articulation": "None",
+  "colorway": "Pastel macaron tones matching flavor names"
+}

@@ -45,6 +45,5 @@ install_node_pkg() {
 }
 
 install_node_pkg "markdown-it"
-install_node_pkg "danfojs-node"
 install_node_pkg "ajv"
 install_node_pkg "pandas"

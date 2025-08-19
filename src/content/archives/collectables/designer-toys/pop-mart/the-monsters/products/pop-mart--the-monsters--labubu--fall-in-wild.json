@@ -1,0 +1,153 @@
+{
+  "type": "product",
+  "product_id": "pop-mart--the-monsters--labubu--fall-in-wild--plush-doll--std--40cm--20240712",
+  "brand": "pop-mart",
+  "line": "the-monsters",
+  "character": "labubu",
+  "series": "fall-in-wild",
+  "form": "Vinyl plush doll and keychain pendant",
+  "variant": "std",
+  "edition": {
+    "kind": "core"
+  },
+  "distribution": {
+    "region_lock": false,
+    "markets": [
+      "CN",
+      "US"
+    ]
+  },
+  "size": {
+    "unit": "cm",
+    "h": 40,
+    "w": 20,
+    "d": 15
+  },
+  "release_date": "2024-07-12",
+  "market_listings": [
+    {
+      "market": "CN",
+      "currency": "CNY",
+      "price": 499
+    },
+    {
+      "market": "US",
+      "currency": "USD",
+      "price": 84.99
+    }
+  ],
+  "availability": {
+    "limited": false,
+    "unit_count": null
+  },
+  "images": [],
+  "provenance_ref": "/content/archives/collectables/designer-toys/pop-mart/the-monsters/provenance/pop-mart--the-monsters--labubu--fall-in-wild--plush-doll--std--40cm--20240712.jsonl",
+  "confidence": 0.45,
+  "notes": "Seeded from initial article; requires re-research.",
+  "product_title": "Fall in Wild Series",
+  "variant_name": "Khaki bucket hat, denim overalls with 'LOVE BOO' buckles, orange boots, flower accessory",
+  "materials": {
+    "shell": "42% Cotton, 18% PVC, 15% ABS, 13% Polyester Fiber, 12% TPR",
+    "plush": null,
+    "stuffing": "90% Polyester Fiber, 10% PE Pellets"
+  },
+  "packaging": {
+    "type": "Color box with window display and handles",
+    "dimensions_cm": "35×20×17"
+  },
+  "release_info": {
+    "release_date": "2024-07-12",
+    "edition_type": "Standard edition",
+    "edition_size": null
+  },
+  "pricing": {
+    "original_msrp": {
+      "USD": 84.99,
+      "SGD": 109.9
+    },
+    "current_status": "Frequently sold out",
+    "secondary_market_range": {
+      "USD": "157.95-195"
+    },
+    "pendant_msrp": {
+      "USD": 30.99,
+      "SGD": 37.9
+    }
+  },
+  "designer": "Kasing Lung (龙家升)",
+  "accessories": [
+    "Removable bucket hat",
+    "Flower accessory",
+    "Boots",
+    "White shirt",
+    "denim overalls"
+  ],
+  "articulation": "Posable hands, removable hat and clothing",
+  "colorway": "Tan fur with khaki hat, denim overalls, orange boots",
+  "Deltas": [
+    {
+      "field": "product_id",
+      "from": "pop-mart--the-monsters--labubu--fall-in-wild--plush-doll--std--40cm--20240712",
+      "to": "pop-mart--the-monsters--labubu--fall-in-wild--plush-doll--std--40cm--20240712",
+      "reason": "kept-existing"
+    },
+    {
+      "field": "brand",
+      "from": "pop-mart",
+      "to": "pop-mart",
+      "reason": "kept-existing"
+    },
+    {
+      "field": "line",
+      "from": "the-monsters",
+      "to": "the-monsters",
+      "reason": "kept-existing"
+    },
+    {
+      "field": "character",
+      "from": "labubu",
+      "to": "labubu",
+      "reason": "kept-existing"
+    },
+    {
+      "field": "series",
+      "from": "fall-in-wild",
+      "to": "fall-in-wild",
+      "reason": "kept-existing"
+    },
+    {
+      "field": "form",
+      "from": "plush-doll",
+      "to": "Vinyl plush doll and keychain pendant",
+      "reason": "specificity"
+    },
+    {
+      "field": "size",
+      "from": {
+        "unit": "cm",
+        "h": 40,
+        "w": 20,
+        "d": 15
+      },
+      "to": {
+        "unit": "cm",
+        "h": 40,
+        "w": 20,
+        "d": 15
+      },
+      "reason": "same"
+    },
+    {
+      "field": "availability",
+      "from": {
+        "limited": false,
+        "unit_count": null
+      },
+      "to": {
+        "limited": false,
+        "unit_count": null
+      },
+      "reason": "same"
+    }
+  ]
+}

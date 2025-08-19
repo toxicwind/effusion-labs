@@ -1,0 +1,56 @@
+{
+  "product_id": "LAB021",
+  "brand": "POP MART",
+  "line": "The Monsters",
+  "character": "Mokoko",
+  "series": "Magic of Pumpkin (Halloween)",
+  "product_title": "Magic of Pumpkin (Halloween)",
+  "variant_name": null,
+  "form": "Keychain pendant",
+  "sku": null,
+  "size": {
+    "height_cm": null,
+    "dimensions_cm": null,
+    "weight_kg": null,
+    "pendant_height_cm": 17,
+    "sitting_height_cm": null
+  },
+  "materials": {
+    "shell": "PVC",
+    "plush": "Polyester",
+    "stuffing": null
+  },
+  "packaging": {
+    "type": "Halloween pumpkin packaging",
+    "dimensions_cm": null
+  },
+  "release_info": {
+    "release_date": "2024-10-27",
+    "edition_type": "Seasonal release",
+    "edition_size": null
+  },
+  "pricing": {
+    "original_msrp": {
+      "CNY": 159
+    },
+    "current_status": "In stock",
+    "secondary_market_range": "Seasonal demand drives slight premiums",
+    "pendant_msrp": null
+  },
+  "availability": {
+    "regions": [
+      "Global"
+    ],
+    "channels": [
+      "POP MART channels"
+    ],
+    "stock_status": "Available"
+  },
+  "designer": "Kasing Lung",
+  "accessories": [
+    "Keychain",
+    "pumpkin elements"
+  ],
+  "articulation": null,
+  "colorway": "Pumpkin orange"
+}

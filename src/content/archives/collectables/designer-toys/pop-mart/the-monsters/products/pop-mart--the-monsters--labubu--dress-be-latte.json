@@ -1,0 +1,123 @@
+{
+  "type": "product",
+  "product_id": "pop-mart--the-monsters--labubu--dress-be-latte--plush--std--20231026",
+  "brand": "pop-mart",
+  "line": "the-monsters",
+  "character": "labubu",
+  "series": "dress-be-latte",
+  "form": "Vinyl plush doll",
+  "variant": "std",
+  "edition": {
+    "kind": "core"
+  },
+  "distribution": {
+    "region_lock": false,
+    "markets": [
+      "CN"
+    ]
+  },
+  "release_date": "2023-10-26",
+  "market_listings": [
+    {
+      "market": "CN",
+      "currency": "CNY",
+      "price": 499
+    }
+  ],
+  "availability": {
+    "limited": false,
+    "unit_count": null
+  },
+  "images": [],
+  "provenance_ref": "/content/archives/collectables/designer-toys/pop-mart/the-monsters/provenance/pop-mart--the-monsters--labubu--dress-be-latte--plush--std--20231026.jsonl",
+  "confidence": 0.45,
+  "notes": "Seeded from initial article; requires re-research.",
+  "product_title": "Dress be Latte Vinyl Plush Doll",
+  "variant_name": "Latte shades with furry bucket hat, knit shirt, scarf, pants, shoulder bag, shoes",
+  "size": {
+    "height_cm": 37.9,
+    "dimensions_cm": "22 x 15 x 38 cm",
+    "weight_kg": null,
+    "pendant_height_cm": null,
+    "sitting_height_cm": null
+  },
+  "materials": {
+    "shell": "ABS/PVC face",
+    "plush": "80% polyester fiber, 20% cotton",
+    "stuffing": "90% polyester filling, 10% PP rubber components"
+  },
+  "packaging": {
+    "type": "Color box",
+    "dimensions_cm": null
+  },
+  "release_info": {
+    "release_date": "2023-10-27",
+    "edition_type": "Standard edition",
+    "edition_size": null
+  },
+  "pricing": {
+    "original_msrp": {
+      "CNY": 499
+    },
+    "current_status": "Sold out",
+    "secondary_market_range": {
+      "USD": "950-1250"
+    }
+  },
+  "designer": "Kasing Lung (龙家升)",
+  "accessories": [
+    "Removable bucket hat",
+    "Scarf"
+  ],
+  "colorway": "Latte-toned outfit with fluffy accents",
+  "Deltas": [
+    {
+      "field": "product_id",
+      "from": "pop-mart--the-monsters--labubu--dress-be-latte--plush--std--20231026",
+      "to": "pop-mart--the-monsters--labubu--dress-be-latte--plush--std--20231026",
+      "reason": "kept-existing"
+    },
+    {
+      "field": "brand",
+      "from": "pop-mart",
+      "to": "pop-mart",
+      "reason": "kept-existing"
+    },
+    {
+      "field": "line",
+      "from": "the-monsters",
+      "to": "the-monsters",
+      "reason": "kept-existing"
+    },
+    {
+      "field": "character",
+      "from": "labubu",
+      "to": "labubu",
+      "reason": "kept-existing"
+    },
+    {
+      "field": "series",
+      "from": "dress-be-latte",
+      "to": "dress-be-latte",
+      "reason": "kept-existing"
+    },
+    {
+      "field": "form",
+      "from": "plush",
+      "to": "Vinyl plush doll",
+      "reason": "specificity"
+    },
+    {
+      "field": "availability",
+      "from": {
+        "limited": false,
+        "unit_count": null
+      },
+      "to": {
+        "limited": false,
+        "unit_count": null
+      },
+      "reason": "same"
+    }
+  ]
+}

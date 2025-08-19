@@ -1,0 +1,1538 @@
+[
+  {
+    "product_id": "LAB001",
+    "brand": "POP MART",
+    "line": "The Monsters",
+    "character": "Labubu",
+    "series": "Time to Chill",
+    "product_title": "Time to Chill Vinyl Plush Doll",
+    "variant_name": "Cozy denim dungarees and pastel blue top, relaxed pose",
+    "form": "Vinyl plush doll",
+    "sku": null,
+    "size": {
+      "height_cm": 37,
+      "dimensions_cm": "20×16.4×37.5",
+      "weight_kg": null,
+      "pendant_height_cm": null,
+      "sitting_height_cm": null
+    },
+    "materials": {
+      "shell": "PP/Polyester/Cotton mixture",
+      "plush": "95% Polyester Fiber, 5% Cotton",
+      "stuffing": "90% Polyester Fiber, 10% PP particles"
+    },
+    "packaging": {
+      "type": "Color box",
+      "dimensions_cm": "20×16.4×37.5"
+    },
+    "release_info": {
+      "release_date": "2022-10-31",
+      "edition_type": "Standard edition",
+      "edition_size": null
+    },
+    "pricing": {
+      "original_msrp": {
+        "USD": 69.99
+      },
+      "current_status": "Sold out",
+      "secondary_market_range": {
+        "USD": "760-7399"
+      }
+    },
+    "availability": {
+      "regions": [
+        "Global"
+      ],
+      "channels": [
+        "POP MART official stores",
+        "Online platforms"
+      ],
+      "stock_status": "Sold out"
+    },
+    "designer": "Kasing Lung (龙家升)",
+    "accessories": [
+      "Cozy denim dungarees",
+      "pastel blue top",
+      "authentication card",
+      "original packaging"
+    ],
+    "articulation": "Movable eyes and articulated features",
+    "colorway": "Blue denim with pastel accents"
+  },
+  {
+    "product_id": "LAB002",
+    "brand": "POP MART",
+    "line": "The Monsters",
+    "character": "Labubu",
+    "series": "Jump for Joy",
+    "product_title": "Jump for Joy Vinyl Plush Doll",
+    "variant_name": "Galaxy grey coat with bomber jacket, cargo pants, and boots",
+    "form": "Vinyl plush doll",
+    "sku": null,
+    "size": {
+      "height_cm": 40,
+      "dimensions_cm": "18×16×38",
+      "weight_kg": null,
+      "pendant_height_cm": null,
+      "sitting_height_cm": null
+    },
+    "materials": {
+      "shell": "PLUSH+PVC",
+      "plush": null,
+      "stuffing": null
+    },
+    "packaging": {
+      "type": "Color box",
+      "dimensions_cm": null
+    },
+    "release_info": {
+      "release_date": "2023-05-25",
+      "edition_type": "Standard edition",
+      "edition_size": null
+    },
+    "pricing": {
+      "original_msrp": {
+        "CNY": 499
+      },
+      "current_status": "Sold out",
+      "secondary_market_range": {
+        "USD": "2400+",
+        "SGD": "109-978"
+      }
+    },
+    "availability": {
+      "regions": [
+        "China",
+        "Global"
+      ],
+      "channels": [
+        "POP MART official stores",
+        "online platforms"
+      ],
+      "stock_status": "Sold out"
+    },
+    "designer": "Kasing Lung (龙家升)",
+    "accessories": [
+      "Removable winter clothing",
+      "furry hat",
+      "scarf",
+      "sweater",
+      "snow shoes"
+    ],
+    "articulation": "Posable hands",
+    "colorway": "Grey fur with urban outfit accents"
+  },
+  {
+    "product_id": "LAB003",
+    "brand": "POP MART",
+    "line": "The Monsters",
+    "character": "Labubu",
+    "series": "Dress be Latte",
+    "product_title": "Dress be Latte Vinyl Plush Doll",
+    "variant_name": "Latte shades with furry bucket hat, knit shirt, scarf, pants, shoulder bag, shoes",
+    "form": "Vinyl plush doll",
+    "sku": null,
+    "size": {
+      "height_cm": 37.9,
+      "dimensions_cm": "22 x 15 x 38 cm",
+      "weight_kg": null,
+      "pendant_height_cm": null,
+      "sitting_height_cm": null
+    },
+    "materials": {
+      "shell": "ABS/PVC face",
+      "plush": "80% polyester fiber, 20% cotton",
+      "stuffing": "90% polyester filling, 10% PP rubber components"
+    },
+    "packaging": {
+      "type": "Color box",
+      "dimensions_cm": null
+    },
+    "release_info": {
+      "release_date": "2023-10-27",
+      "edition_type": "Standard edition",
+      "edition_size": null
+    },
+    "pricing": {
+      "original_msrp": {
+        "CNY": 499
+      },
+      "current_status": "Sold out",
+      "secondary_market_range": {
+        "USD": "950-1250"
+      }
+    },
+    "availability": {
+      "regions": [
+        "Global"
+      ],
+      "channels": [
+        "POP MART official stores"
+      ],
+      "stock_status": "Sold out"
+    },
+    "designer": "Kasing Lung (龙家升)",
+    "accessories": [
+      "Removable bucket hat",
+      "Scarf"
+    ],
+    "articulation": null,
+    "colorway": "Latte-toned outfit with fluffy accents"
+  },
+  {
+    "product_id": "LAB004",
+    "brand": "POP MART",
+    "line": "The Monsters",
+    "character": "Labubu",
+    "series": "Walk by Fortune",
+    "product_title": "Walk by Fortune Vinyl Plush Doll",
+    "variant_name": "Chinese New Year theme with traditional red outfit, sitting pose",
+    "form": "Vinyl plush doll",
+    "sku": null,
+    "size": {
+      "height_cm": 40,
+      "dimensions_cm": null,
+      "weight_kg": null,
+      "pendant_height_cm": null,
+      "sitting_height_cm": null
+    },
+    "materials": {
+      "shell": "PLUSH+PVC",
+      "plush": "polyester",
+      "stuffing": "100% Polyester Fiber"
+    },
+    "packaging": {
+      "type": "CNY-themed packaging with fortune/prosperity artwork",
+      "dimensions_cm": null
+    },
+    "release_info": {
+      "release_date": "2023-12-29",
+      "edition_type": "Limited edition",
+      "edition_size": 3000
+    },
+    "pricing": {
+      "original_msrp": {
+        "CNY": 499
+      },
+      "current_status": "Sold out",
+      "secondary_market_range": {
+        "USD": "1169.22+"
+      }
+    },
+    "availability": {
+      "regions": [
+        "China"
+      ],
+      "channels": [
+        "POP MART official stores"
+      ],
+      "stock_status": "Sold out"
+    },
+    "designer": "Kasing Lung (龙家升)",
+    "accessories": [
+      "Fortune-themed outfit and accessories"
+    ],
+    "articulation": null,
+    "colorway": "Traditional red Chinese New Year theme"
+  },
+  {
+    "product_id": "LAB005",
+    "brand": "POP MART",
+    "line": "The Monsters",
+    "character": "Labubu",
+    "series": "Best of Luck (海外限定)",
+    "product_title": "Best of Luck Vinyl Plush Doll (Overseas Exclusive)",
+    "variant_name": "Chinese New Year theme with cream/beige outfit, casual sweater, pants, and shoes (all removable)",
+    "form": "Vinyl plush doll",
+    "sku": "1505",
+    "size": {
+      "height_cm": 40,
+      "dimensions_cm": null,
+      "weight_kg": 1.5,
+      "pendant_height_cm": null,
+      "sitting_height_cm": null
+    },
+    "materials": {
+      "shell": "PLUSH+PVC",
+      "plush": null,
+      "stuffing": "100% Polyester Fiber"
+    },
+    "packaging": {
+      "type": "Color box",
+      "dimensions_cm": null
+    },
+    "release_info": {
+      "release_date": "2023-12-30",
+      "edition_type": "Limited overseas exclusive edition",
+      "edition_size": 3000
+    },
+    "pricing": {
+      "original_msrp": {
+        "CNY": 499
+      },
+      "current_status": "Sold out",
+      "secondary_market_range": {
+        "USD": "1808.51+"
+      }
+    },
+    "availability": {
+      "regions": [
+        "Overseas markets (non-CN)"
+      ],
+      "channels": [
+        "POP MART overseas stores"
+      ],
+      "stock_status": "Sold out"
+    },
+    "designer": "Kasing Lung (龙家升)",
+    "accessories": [
+      "Removable sweater",
+      "Removable pants",
+      "Removable shoes",
+      "CNY-themed accessories"
+    ],
+    "articulation": "Removable clothes and shoes",
+    "colorway": "Cream/beige colored outfit with casual streetwear styling"
+  },
+  {
+    "product_id": "LAB006",
+    "brand": "POP MART × Pronounce",
+    "line": "The Monsters × Pronounce",
+    "character": "Labubu",
+    "series": "Be Fancy Now",
+    "product_title": "Be Fancy Now Vinyl Plush Doll",
+    "variant_name": "Purple fur with gold rope motifs, yellow toes, starry face accents, fashion week inspired outfit",
+    "form": "Vinyl plush doll",
+    "sku": "1012",
+    "size": {
+      "height_cm": 38,
+      "dimensions_cm": "22 x 15 x 40 cm",
+      "weight_kg": 1.8,
+      "pendant_height_cm": null,
+      "sitting_height_cm": null
+    },
+    "materials": {
+      "shell": "25% Polyester, 18% Cotton, 18% PVC, 15% ABS, 12% Acrylic, 7% Wool, 5% Viscose Fiber",
+      "plush": null,
+      "stuffing": "100% Polyester"
+    },
+    "packaging": {
+      "type": "Rigid color box with window",
+      "dimensions_cm": "45×30×20"
+    },
+    "release_info": {
+      "release_date": "2024-03-15",
+      "edition_type": "Collaboration limited",
+      "edition_size": 6458
+    },
+    "pricing": {
+      "original_msrp": {
+        "CNY": 599,
+        "CAD": 120
+      },
+      "current_status": "Sold out",
+      "secondary_market_range": {
+        "CNY": "1800-2500",
+        "USD": "3974-3999"
+      }
+    },
+    "availability": {
+      "regions": [
+        "CN",
+        "US",
+        "EU",
+        "APAC"
+      ],
+      "channels": [
+        "POP MART official",
+        "Pronounce flagship stores"
+      ],
+      "stock_status": "Sold out"
+    },
+    "designer": "Kasing Lung (龙家升)",
+    "accessories": [
+      "Removable Infinity Rope accessory",
+      "fashion-forward styling elements"
+    ],
+    "articulation": null,
+    "colorway": "Vibrant purple with yellow and blue details"
+  },
+  {
+    "product_id": "LAB007",
+    "brand": "POP MART",
+    "line": "The Monsters",
+    "character": "Labubu",
+    "series": "Fall in Wild",
+    "product_title": "Fall in Wild Series",
+    "variant_name": "Khaki bucket hat, denim overalls with 'LOVE BOO' buckles, orange boots, flower accessory",
+    "form": "Vinyl plush doll and keychain pendant",
+    "sku": null,
+    "size": {
+      "height_cm": 40,
+      "dimensions_cm": "40×20×15",
+      "weight_kg": 2,
+      "pendant_height_cm": 17,
+      "sitting_height_cm": null
+    },
+    "materials": {
+      "shell": "42% Cotton, 18% PVC, 15% ABS, 13% Polyester Fiber, 12% TPR",
+      "plush": null,
+      "stuffing": "90% Polyester Fiber, 10% PE Pellets"
+    },
+    "packaging": {
+      "type": "Color box with window display and handles",
+      "dimensions_cm": "35×20×17"
+    },
+    "release_info": {
+      "release_date": "2024-07-12",
+      "edition_type": "Standard edition",
+      "edition_size": null
+    },
+    "pricing": {
+      "original_msrp": {
+        "USD": 84.99,
+        "SGD": 109.9
+      },
+      "current_status": "Frequently sold out",
+      "secondary_market_range": {
+        "USD": "157.95-195"
+      },
+      "pendant_msrp": {
+        "USD": 30.99,
+        "SGD": 37.9
+      }
+    },
+    "availability": {
+      "regions": [
+        "US",
+        "CN",
+        "AU",
+        "Global"
+      ],
+      "channels": [
+        "POP MART official stores"
+      ],
+      "stock_status": "Frequently sold out"
+    },
+    "designer": "Kasing Lung (龙家升)",
+    "accessories": [
+      "Removable bucket hat",
+      "Flower accessory",
+      "Boots",
+      "White shirt",
+      "denim overalls"
+    ],
+    "articulation": "Posable hands, removable hat and clothing",
+    "colorway": "Tan fur with khaki hat, denim overalls, orange boots"
+  },
+  {
+    "product_id": "LAB008",
+    "brand": "POP MART",
+    "line": "The Monsters",
+    "character": "Labubu",
+    "series": "Flip with Me",
+    "product_title": "Flip with Me Vinyl Plush Doll",
+    "variant_name": "Blue and white striped button-down shirt, dark denim jeans, black and white sneakers, glasses",
+    "form": "Vinyl plush doll",
+    "sku": "12401040004",
+    "size": {
+      "height_cm": 40,
+      "dimensions_cm": "20×15×40",
+      "weight_kg": 5,
+      "pendant_height_cm": null,
+      "sitting_height_cm": null
+    },
+    "materials": {
+      "shell": "40% Cotton, 17% PVC, 16% Polyester, 15% ABS, 12% TPR",
+      "plush": null,
+      "stuffing": "90% Polyester, 10% PE Particles"
+    },
+    "packaging": {
+      "type": "Color box with handle",
+      "dimensions_cm": "30×22×45"
+    },
+    "release_info": {
+      "release_date": "2024-07-12",
+      "edition_type": "Standard edition",
+      "edition_size": null
+    },
+    "pricing": {
+      "original_msrp": {
+        "USD": 84.99,
+        "CAD": 134.99,
+        "SGD": 109.9
+      },
+      "current_status": "Frequently sold out",
+      "secondary_market_range": {
+        "USD": "182-226"
+      }
+    },
+    "availability": {
+      "regions": [
+        "US",
+        "CA",
+        "CN",
+        "Global"
+      ],
+      "channels": [
+        "POP MART official stores"
+      ],
+      "stock_status": "Frequently sold out"
+    },
+    "designer": "Kasing Lung (龙家升)",
+    "accessories": [
+      "Removable glasses"
+    ],
+    "articulation": "Movable eyes with flip feature (spiral eyes), posable hands and head",
+    "colorway": "Cream-colored fur with blue striped shirt and denim pants"
+  },
+  {
+    "product_id": "LAB009",
+    "brand": "POP MART",
+    "line": "The Monsters",
+    "character": "Labubu",
+    "series": "Let's Checkmate",
+    "product_title": "Let's Checkmate Series Vinyl Plush Doll",
+    "variant_name": "Brown fur with crown, white ruffle collar, red cape with white fur trim, holding ring box",
+    "form": "Vinyl plush doll",
+    "sku": null,
+    "size": {
+      "height_cm": 37,
+      "sitting_height_cm": 33,
+      "dimensions_cm": null,
+      "weight_kg": null
+    },
+    "materials": {
+      "shell": "59% PVC, 41% Polyester",
+      "plush": "Brown fuzzy exterior",
+      "stuffing": "100% Polyester"
+    },
+    "packaging": {
+      "type": "Large format packaging",
+      "dimensions_cm": null
+    },
+    "release_info": {
+      "release_date": "2025-02-07",
+      "edition_type": "Standard edition",
+      "edition_size": null
+    },
+    "pricing": {
+      "original_msrp": {
+        "USD": 114.99,
+        "SGD": 109.9
+      },
+      "current_status": "Out of stock",
+      "secondary_market_range": null
+    },
+    "availability": {
+      "regions": [
+        "US",
+        "Singapore",
+        "Global"
+      ],
+      "channels": [
+        "POP MART official stores"
+      ],
+      "stock_status": "Out of stock"
+    },
+    "designer": "Kasing Lung (龙家升)",
+    "accessories": [
+      "Functional red LABUBU ring box",
+      "Removable crown",
+      "Removable red cape with white fur trim"
+    ],
+    "articulation": "Adjustable legs for sitting/standing display, movable eyes",
+    "colorway": "Brown fur with red cape and white accents"
+  },
+  {
+    "product_id": "LAB010",
+    "brand": "POP MART",
+    "line": "The Monsters",
+    "character": "Labubu",
+    "series": "Let's Checkmate",
+    "product_title": "Let's Checkmate Series Vinyl Plush Hanging Card",
+    "variant_name": "Chess-themed pendant format with yellow fur, pink crown and heart accessory",
+    "form": "Vinyl plush hanging card (pendant)",
+    "sku": null,
+    "size": {
+      "height_cm": 17,
+      "dimensions_cm": null,
+      "weight_kg": null
+    },
+    "materials": {
+      "shell": "59% PVC, 41% Polyester",
+      "plush": "Yellow fur",
+      "stuffing": "100% Polyester"
+    },
+    "packaging": {
+      "type": "Standard hanging card packaging",
+      "dimensions_cm": null
+    },
+    "release_info": {
+      "release_date": "2025-02-07",
+      "edition_type": "Standard edition",
+      "edition_size": null
+    },
+    "pricing": {
+      "original_msrp": {
+        "USD": 39.99,
+        "SGD": 37.9
+      },
+      "current_status": "Out of stock",
+      "secondary_market_range": null
+    },
+    "availability": {
+      "regions": [
+        "US",
+        "Singapore",
+        "Global"
+      ],
+      "channels": [
+        "POP MART official stores"
+      ],
+      "stock_status": "Out of stock"
+    },
+    "designer": "Kasing Lung (龙家升)",
+    "accessories": [
+      "Removable pink crown with heart details",
+      "Pink plush heart",
+      "Light blue ribbon wrapping",
+      "Yellow ring clasp"
+    ],
+    "articulation": null,
+    "colorway": "Yellow fur, heart-detailed pink crown, pink plush heart accessory"
+  },
+  {
+    "product_id": "LAB011",
+    "brand": "POP MART × Pronounce",
+    "line": "The Monsters × Pronounce",
+    "character": "Labubu",
+    "series": "Wings of Fortune",
+    "product_title": "Wings of Fortune Vinyl Plush Hanging Card",
+    "variant_name": "Yellow fur with silver metallic wings, pearl crown, star motif",
+    "form": "Vinyl plush hanging card (pendant)",
+    "sku": "1584",
+    "size": {
+      "height_cm": 22,
+      "dimensions_cm": "11×8×22",
+      "weight_kg": 0.2
+    },
+    "materials": {
+      "shell": "66% polyester, 25% PVC, 9% ABS",
+      "plush": null,
+      "stuffing": "95% polyester, 5% iron wire"
+    },
+    "packaging": {
+      "type": "Blister card with hanging peg",
+      "dimensions_cm": "20×12×9"
+    },
+    "release_info": {
+      "release_date": "2024-10-04",
+      "edition_type": "Collaboration limited",
+      "edition_size": null
+    },
+    "pricing": {
+      "original_msrp": {
+        "USD": 43.99,
+        "SGD": 39.9
+      },
+      "current_status": "Out of stock",
+      "secondary_market_range": {
+        "USD": "65-90"
+      }
+    },
+    "availability": {
+      "regions": [
+        "Global"
+      ],
+      "channels": [
+        "POP MART US",
+        "Global"
+      ],
+      "stock_status": "Out of stock"
+    },
+    "designer": "Kasing Lung (龙家升)",
+    "accessories": [
+      "Hanging loop hardware"
+    ],
+    "articulation": "Fixed",
+    "colorway": "Pastel yellow with silver accents"
+  },
+  {
+    "product_id": "LAB012",
+    "brand": "POP MART × Pronounce",
+    "line": "The Monsters",
+    "character": "Labubu",
+    "series": "Wings of Fantasy",
+    "product_title": "LABUBU × PRONOUNCE – WINGS OF FANTASY Vinyl Plush Doll",
+    "variant_name": "Lavender fur with translucent butterfly wings, golden crown, star-patterned vest",
+    "form": "Vinyl plush doll",
+    "sku": "1580",
+    "size": {
+      "height_cm": 38,
+      "dimensions_cm": "24×15×38",
+      "weight_kg": null
+    },
+    "materials": {
+      "shell": "66% polyester, 25% PVC, 9% ABS",
+      "plush": null,
+      "stuffing": "95% polyester, 5% iron wire"
+    },
+    "packaging": {
+      "type": "Window display color box",
+      "dimensions_cm": "30×20×15"
+    },
+    "release_info": {
+      "release_date": "2024-10-04",
+      "edition_type": "Collaboration limited edition",
+      "edition_size": 10000
+    },
+    "pricing": {
+      "original_msrp": {
+        "USD": 119.99,
+        "CAD": 149.99,
+        "SGD": 129.9
+      },
+      "current_status": "Out of stock",
+      "secondary_market_range": {
+        "USD": "180-240"
+      }
+    },
+    "availability": {
+      "regions": [
+        "US",
+        "CA",
+        "CN",
+        "EU",
+        "APAC"
+      ],
+      "channels": [
+        "POP MART US",
+        "POP MART CA",
+        "POP MART CN"
+      ],
+      "stock_status": "Out of stock"
+    },
+    "designer": "Kasing Lung (龙家升)",
+    "accessories": [
+      "Translucent butterfly wings",
+      "Golden crown"
+    ],
+    "articulation": "Fixed figure",
+    "colorway": "Pastel lavender with glitter accents"
+  },
+  {
+    "product_id": "LAB013",
+    "brand": "POP MART",
+    "line": "The Monsters",
+    "character": "Labubu",
+    "series": "Happy Halloween Party",
+    "product_title": "HAPPY HALLOWEEN PARTY Series – Sitting Pumpkin Vinyl Plush Pendant",
+    "variant_name": "Orange pumpkin body with green stem hat, sitting pose, carved-face motif",
+    "form": "Vinyl plush pendant (keychain)",
+    "sku": "1505",
+    "size": {
+      "height_cm": null,
+      "dimensions_cm": "8×7×15",
+      "weight_kg": null,
+      "pendant_height_cm": null,
+      "sitting_height_cm": null
+    },
+    "materials": {
+      "shell": "PVC, soft plush fabric",
+      "plush": null,
+      "stuffing": null
+    },
+    "packaging": {
+      "type": "Window display color box",
+      "dimensions_cm": null
+    },
+    "release_info": {
+      "release_date": "2024-09-27",
+      "edition_type": "Seasonal limited",
+      "edition_size": null
+    },
+    "pricing": {
+      "original_msrp": {
+        "AUD": 50
+      },
+      "current_status": "Sold out rapidly post-launch",
+      "secondary_market_range": {
+        "AUD": "75-90"
+      }
+    },
+    "availability": {
+      "regions": [
+        "AU",
+        "US",
+        "CN",
+        "Global"
+      ],
+      "channels": [
+        "POP MART official sites",
+        "selected stores"
+      ],
+      "stock_status": "Sold out"
+    },
+    "designer": "Kasing Lung (龙家升)",
+    "accessories": [
+      "Keychain loop"
+    ],
+    "articulation": "Fixed sitting pose",
+    "colorway": "Bright orange and green"
+  },
+  {
+    "product_id": "LAB014",
+    "brand": "POP MART × Coca-Cola",
+    "line": "The Monsters × Coca-Cola",
+    "character": "Labubu & Zimomo",
+    "series": "Coca-Cola",
+    "product_title": "THE MONSTERS Coca-Cola Series – Vinyl Face Blind Box",
+    "variant_name": "10 standard figures + 1 secret edition (“Labubu Express”)",
+    "form": "Vinyl face blind-box figures",
+    "sku": "6931571026271",
+    "size": {
+      "height_cm": 15.5,
+      "dimensions_cm": "15.5×17 cm",
+      "weight_kg": 0.1,
+      "pendant_height_cm": null,
+      "sitting_height_cm": null
+    },
+    "materials": {
+      "shell": "Polyester/ABS/PVC",
+      "plush": "Plush-textured body",
+      "stuffing": "Polyester/iron wire"
+    },
+    "packaging": {
+      "type": "Blind-box carton",
+      "dimensions_cm": null
+    },
+    "release_info": {
+      "release_date": "2025-01-24",
+      "edition_type": "Blind-box series",
+      "edition_size": null
+    },
+    "pricing": {
+      "original_msrp": {
+        "USD_box": 39.99,
+        "USD_set": 239.94
+      },
+      "current_status": "Sold out",
+      "secondary_market_range": {
+        "USD_box": "60-100",
+        "USD_secret_edition": "3000-5000"
+      }
+    },
+    "availability": {
+      "regions": [
+        "Global",
+        "US",
+        "CN",
+        "SG",
+        "UK",
+        "AU"
+      ],
+      "channels": [
+        "POP MART official online store",
+        "in-store EQL drops"
+      ],
+      "stock_status": "Sold out"
+    },
+    "designer": "Kasing Lung (龙家升)",
+    "accessories": [
+      "Happy Factor: removable red knitted scarf and Coca-Cola can prop",
+      "Surprise Shake: Christmas hat and Coca-Cola bottle prop",
+      "Secret \"Mysterious Guest\": LABUBU emerging from Coca-Cola can"
+    ],
+    "articulation": "Fixed",
+    "colorway": "Themed ski and winter outfits with Coca-Cola branding"
+  },
+  {
+    "product_id": "LAB015",
+    "brand": "POP MART",
+    "line": "The Monsters",
+    "character": "Labubu",
+    "series": "Exciting Macaron (V1)",
+    "product_title": "THE MONSTERS – Exciting Macaron Vinyl Face Blind Box",
+    "variant_name": "6 standard + 1 secret edition (“Chestnut Cocoa”)",
+    "form": "Vinyl face blind-box pendant",
+    "sku": "675",
+    "size": {
+      "height_cm": 6,
+      "dimensions_cm": null,
+      "weight_kg": 0.03,
+      "pendant_height_cm": null,
+      "sitting_height_cm": null
+    },
+    "materials": {
+      "shell": "PVC",
+      "plush": "Flocked plush face",
+      "stuffing": "Polyester"
+    },
+    "packaging": {
+      "type": "Blind-box foil bag",
+      "dimensions_cm": null
+    },
+    "release_info": {
+      "release_date": "2024-10-27",
+      "edition_type": "Blind-box series",
+      "edition_size": null
+    },
+    "pricing": {
+      "original_msrp": {
+        "USD_box": 21.99,
+        "USD_set": 131.94
+      },
+      "current_status": "Sold out, intermittent restocks",
+      "secondary_market_range": {
+        "USD_box": "35-50"
+      }
+    },
+    "availability": {
+      "regions": [
+        "Global"
+      ],
+      "channels": [
+        "POP MART official online",
+        "physical stores"
+      ],
+      "stock_status": "Sold out"
+    },
+    "designer": "Kasing Lung (龙家升)",
+    "accessories": [
+      "Keychain clip"
+    ],
+    "articulation": "None",
+    "colorway": "Pastel macaron tones matching flavor names"
+  },
+  {
+    "product_id": "LAB016",
+    "brand": "POP MART",
+    "line": "The Monsters",
+    "character": "Zimomo",
+    "series": "I FOUND YOU (v1)",
+    "product_title": "ZIMOMO I FOUND YOU",
+    "variant_name": null,
+    "form": "Large-format vinyl plush doll",
+    "sku": null,
+    "size": {
+      "height_cm": 58,
+      "dimensions_cm": "30 × 25 × 58 cm",
+      "weight_kg": 5.4,
+      "pendant_height_cm": null,
+      "sitting_height_cm": null
+    },
+    "materials": {
+      "shell": "PVC vinyl face, ABS plastic details",
+      "plush": "polyester/cotton plush",
+      "stuffing": "polyester plush stuffing with internal wire posability"
+    },
+    "packaging": {
+      "type": "Large custom box with full-color artwork",
+      "dimensions_cm": null
+    },
+    "release_info": {
+      "release_date": "2023-12-15",
+      "edition_type": "Limited edition",
+      "edition_size": 1999
+    },
+    "pricing": {
+      "original_msrp": {
+        "USD": 179.99,
+        "CNY": 999
+      },
+      "current_status": "Out of Stock",
+      "secondary_market_range": {
+        "USD": "300-450"
+      }
+    },
+    "availability": {
+      "regions": [
+        "Global"
+      ],
+      "channels": [
+        "POP MART official channels and authorized resellers"
+      ],
+      "stock_status": "Out of stock"
+    },
+    "designer": "Kasing Lung",
+    "accessories": [
+      "Removable tote bag",
+      "authenticity certificate",
+      "leather collar with metal tag",
+      "bunny costume with ears"
+    ],
+    "articulation": "Movable hands, eyes, and posable tail",
+    "colorway": "Chocolate-brown fur, blue eyes"
+  },
+  {
+    "product_id": "LAB017",
+    "brand": "POP MART",
+    "line": "The Monsters",
+    "character": "Zimomo",
+    "series": "ANGEL IN CLOUDS (v2)",
+    "product_title": "THE MONSTERS \"Angel in Clouds\"",
+    "variant_name": null,
+    "form": "Large-format vinyl face plush doll",
+    "sku": null,
+    "size": {
+      "height_cm": 58,
+      "dimensions_cm": "33 × 25 × 58 cm",
+      "weight_kg": 1.5,
+      "pendant_height_cm": null,
+      "sitting_height_cm": null
+    },
+    "materials": {
+      "shell": "36% Polyester, 35% PVC, 29% ABS",
+      "plush": "Premium white synthetic fur with gray-silver tips",
+      "stuffing": "70% Polyester, 27% POM (polyoxymethylene), 2% Rubber, 1% Sponge"
+    },
+    "packaging": {
+      "type": "Custom pop-open box with cloud-themed artwork",
+      "dimensions_cm": null
+    },
+    "release_info": {
+      "release_date": "2024-10-25",
+      "edition_type": "Second major Zimomo standalone doll",
+      "edition_size": null
+    },
+    "pricing": {
+      "original_msrp": {
+        "USD": 289.99
+      },
+      "current_status": "Out of stock",
+      "secondary_market_range": {
+        "USD": "350+"
+      }
+    },
+    "availability": {
+      "regions": [
+        "Global"
+      ],
+      "channels": [
+        "POP MART official channels and authorized resellers"
+      ],
+      "stock_status": "Out of stock"
+    },
+    "designer": "Kasing Lung",
+    "accessories": [
+      "Removable halo headband",
+      "detachable wing attachments",
+      "certificate of authenticity card",
+      "branded cloud-pattern cotton tote bag"
+    ],
+    "articulation": "Articulated soft vinyl face; poseable bat/gargoyle wings, moveable tail, flip-eye mechanism",
+    "colorway": "Pure white plush body with silvery-gray wings, metallic silver halo accent, and translucent PVC wing inserts"
+  },
+  {
+    "product_id": "LAB018",
+    "brand": "POP MART",
+    "line": "The Monsters",
+    "character": "Mokoko",
+    "series": "Close to Sweet (v1)",
+    "product_title": "Close to Sweet (v1)",
+    "variant_name": null,
+    "form": "Plush doll / Keychain pendant",
+    "sku": null,
+    "size": {
+      "height_cm": 37,
+      "dimensions_cm": null,
+      "weight_kg": null,
+      "pendant_height_cm": 15,
+      "sitting_height_cm": null
+    },
+    "materials": {
+      "shell": "PVC/ABS face components",
+      "plush": "Polyester plush",
+      "stuffing": null
+    },
+    "packaging": {
+      "type": "Sweet-themed packaging with princess aesthetic",
+      "dimensions_cm": null
+    },
+    "release_info": {
+      "release_date": "2023-09-xx",
+      "edition_type": "Series",
+      "edition_size": null
+    },
+    "pricing": {
+      "original_msrp": {
+        "CNY": 599
+      },
+      "current_status": "Available",
+      "secondary_market_range": "Moderate appreciation with plush listings at 150-300% markup",
+      "pendant_msrp": {
+        "CNY": 159
+      }
+    },
+    "availability": {
+      "regions": [
+        "Global"
+      ],
+      "channels": [
+        "POP MART official stores and online platforms"
+      ],
+      "stock_status": "High initial demand"
+    },
+    "designer": "Kasing Lung",
+    "accessories": [
+      "Princess-style dress options with floral scents",
+      "Keychain hardware for pendant"
+    ],
+    "articulation": null,
+    "colorway": "Primary pink colorway"
+  },
+  {
+    "product_id": "LAB019",
+    "brand": "POP MART",
+    "line": "The Monsters",
+    "character": "Mokoko",
+    "series": "Fall into Spring",
+    "product_title": "Fall into Spring",
+    "variant_name": null,
+    "form": "Plush doll / Keychain pendant",
+    "sku": null,
+    "size": {
+      "height_cm": 40,
+      "dimensions_cm": null,
+      "weight_kg": null,
+      "pendant_height_cm": 17,
+      "sitting_height_cm": null
+    },
+    "materials": {
+      "shell": "Polyester, PVC, ABS",
+      "plush": null,
+      "stuffing": null
+    },
+    "packaging": {
+      "type": "Spring-themed packaging with floral artwork",
+      "dimensions_cm": null
+    },
+    "release_info": {
+      "release_date": "2024-03-08",
+      "edition_type": "Seasonal release",
+      "edition_size": null
+    },
+    "pricing": {
+      "original_msrp": {
+        "CNY": 599
+      },
+      "current_status": "In stock",
+      "secondary_market_range": "Stable with slight premiums for complete sets",
+      "pendant_msrp": {
+        "CNY": 159
+      }
+    },
+    "availability": {
+      "regions": [
+        "Global"
+      ],
+      "channels": [
+        "POP MART official channels internationally"
+      ],
+      "stock_status": "Good stock levels"
+    },
+    "designer": "Kasing Lung",
+    "accessories": [
+      "Floral accessories",
+      "keychain for pendant version"
+    ],
+    "articulation": null,
+    "colorway": "Spring floral colorway"
+  },
+  {
+    "product_id": "LAB020",
+    "brand": "POP MART",
+    "line": "The Monsters",
+    "character": "Mokoko",
+    "series": "Blue Diamond",
+    "product_title": "Blue Diamond",
+    "variant_name": null,
+    "form": "Keychain pendant",
+    "sku": null,
+    "size": {
+      "height_cm": null,
+      "dimensions_cm": null,
+      "weight_kg": null,
+      "pendant_height_cm": 17,
+      "sitting_height_cm": null
+    },
+    "materials": {
+      "shell": "PVC",
+      "plush": "Polyester plush",
+      "stuffing": null
+    },
+    "packaging": {
+      "type": "Gem-themed packaging",
+      "dimensions_cm": null
+    },
+    "release_info": {
+      "release_date": "2024-06-18",
+      "edition_type": "Pendant series",
+      "edition_size": null
+    },
+    "pricing": {
+      "original_msrp": {
+        "CNY": 159
+      },
+      "current_status": "In stock",
+      "secondary_market_range": "Minimal markup",
+      "pendant_msrp": null
+    },
+    "availability": {
+      "regions": [
+        "Global"
+      ],
+      "channels": [
+        "POP MART online and retail"
+      ],
+      "stock_status": "Widely available"
+    },
+    "designer": "Kasing Lung",
+    "accessories": [
+      "Keychain hardware",
+      "diamond accents"
+    ],
+    "articulation": null,
+    "colorway": "Blue diamond colorway"
+  },
+  {
+    "product_id": "LAB021",
+    "brand": "POP MART",
+    "line": "The Monsters",
+    "character": "Mokoko",
+    "series": "Magic of Pumpkin (Halloween)",
+    "product_title": "Magic of Pumpkin (Halloween)",
+    "variant_name": null,
+    "form": "Keychain pendant",
+    "sku": null,
+    "size": {
+      "height_cm": null,
+      "dimensions_cm": null,
+      "weight_kg": null,
+      "pendant_height_cm": 17,
+      "sitting_height_cm": null
+    },
+    "materials": {
+      "shell": "PVC",
+      "plush": "Polyester",
+      "stuffing": null
+    },
+    "packaging": {
+      "type": "Halloween pumpkin packaging",
+      "dimensions_cm": null
+    },
+    "release_info": {
+      "release_date": "2024-10-27",
+      "edition_type": "Seasonal release",
+      "edition_size": null
+    },
+    "pricing": {
+      "original_msrp": {
+        "CNY": 159
+      },
+      "current_status": "In stock",
+      "secondary_market_range": "Seasonal demand drives slight premiums",
+      "pendant_msrp": null
+    },
+    "availability": {
+      "regions": [
+        "Global"
+      ],
+      "channels": [
+        "POP MART channels"
+      ],
+      "stock_status": "Available"
+    },
+    "designer": "Kasing Lung",
+    "accessories": [
+      "Keychain",
+      "pumpkin elements"
+    ],
+    "articulation": null,
+    "colorway": "Pumpkin orange"
+  },
+  {
+    "product_id": "LAB022",
+    "brand": "POP MART",
+    "line": "The Monsters",
+    "character": "Mokoko",
+    "series": "Twinkly Fairy Tale",
+    "product_title": "Twinkly Fairy Tale",
+    "variant_name": null,
+    "form": "Keychain pendant",
+    "sku": null,
+    "size": {
+      "height_cm": null,
+      "dimensions_cm": null,
+      "weight_kg": null,
+      "pendant_height_cm": 17,
+      "sitting_height_cm": null
+    },
+    "materials": {
+      "shell": "PVC",
+      "plush": "Polyester",
+      "stuffing": null
+    },
+    "packaging": {
+      "type": "Fairy tale themed",
+      "dimensions_cm": null
+    },
+    "release_info": {
+      "release_date": "2024-11-28",
+      "edition_type": "Series",
+      "edition_size": null
+    },
+    "pricing": {
+      "original_msrp": {
+        "CNY": 159
+      },
+      "current_status": "In stock",
+      "secondary_market_range": null,
+      "pendant_msrp": null
+    },
+    "availability": {
+      "regions": [
+        "Global"
+      ],
+      "channels": [
+        "POP MART official"
+      ],
+      "stock_status": "Available"
+    },
+    "designer": "Kasing Lung",
+    "accessories": [
+      "Card holder feature"
+    ],
+    "articulation": null,
+    "colorway": "Twinkly fairy colorway"
+  },
+  {
+    "product_id": "LAB023",
+    "brand": "POP MART",
+    "line": "The Monsters",
+    "character": "Labubu",
+    "series": "Hide and Seek in Singapore",
+    "product_title": "Hide and Seek in Singapore",
+    "variant_name": "Merbubu",
+    "form": "Keychain pendant",
+    "sku": null,
+    "size": {
+      "height_cm": 17.5,
+      "dimensions_cm": "10×10×17.5 cm",
+      "weight_kg": null,
+      "pendant_height_cm": null,
+      "sitting_height_cm": null
+    },
+    "materials": {
+      "shell": "62% polyester, 38% PVC",
+      "plush": "95% polyester",
+      "stuffing": "5% ABS"
+    },
+    "packaging": {
+      "type": "Premium magnetic-seal box with Merlion artwork",
+      "dimensions_cm": null
+    },
+    "release_info": {
+      "release_date": "2025-06-19",
+      "edition_type": "Regional exclusive",
+      "edition_size": null
+    },
+    "pricing": {
+      "original_msrp": {
+        "SGD": 39.9
+      },
+      "current_status": "Sold out",
+      "secondary_market_range": "SGD 60–200",
+      "pendant_msrp": null
+    },
+    "availability": {
+      "regions": [
+        "Singapore"
+      ],
+      "channels": [
+        "POP MART Singapore EQL platform"
+      ],
+      "stock_status": "Sold out"
+    },
+    "designer": "Kasing Lung",
+    "accessories": [
+      "Keychain hardware",
+      "authentication card",
+      "collector’s guide"
+    ],
+    "articulation": null,
+    "colorway": "Second-generation: lighter blue fur, white label, blue Pop Mart logo"
+  },
+  {
+    "product_id": "LAB024",
+    "brand": "POP MART",
+    "line": "The Monsters",
+    "character": "Labubu",
+    "series": "GOOD LUCKY TO YOU (Thailand)",
+    "product_title": "GOOD LUCKY TO YOU (Thailand)",
+    "variant_name": null,
+    "form": "Pendant",
+    "sku": null,
+    "size": {
+      "height_cm": 18,
+      "dimensions_cm": "10×10×18 cm",
+      "weight_kg": null,
+      "pendant_height_cm": null,
+      "sitting_height_cm": null
+    },
+    "materials": {
+      "shell": "PVC/ABS face",
+      "plush": "Polyester plush body",
+      "stuffing": null
+    },
+    "packaging": {
+      "type": "Festive packaging with Thai motifs",
+      "dimensions_cm": null
+    },
+    "release_info": {
+      "release_date": "2024-12-20",
+      "edition_type": "Regional exclusive",
+      "edition_size": null
+    },
+    "pricing": {
+      "original_msrp": {
+        "THB": 1050
+      },
+      "current_status": "Sold out",
+      "secondary_market_range": "THB 1,200–2,000",
+      "pendant_msrp": null
+    },
+    "availability": {
+      "regions": [
+        "Thailand"
+      ],
+      "channels": [
+        "POP MART Thailand online and app"
+      ],
+      "stock_status": "Sold out"
+    },
+    "designer": "Kasing Lung",
+    "accessories": [
+      "Keychain attachment",
+      "mini canvas tote in some pre-order bundles"
+    ],
+    "articulation": null,
+    "colorway": "Brown fur with gold accents reflecting Thai prosperity symbols"
+  },
+  {
+    "product_id": "LAB025",
+    "brand": "POP MART",
+    "line": "The Monsters",
+    "character": "Labubu",
+    "series": "Forest Fairy Tale",
+    "product_title": "Forest Fairy Tale",
+    "variant_name": null,
+    "form": "Vinyl-Plush Hanging Card",
+    "sku": null,
+    "size": {
+      "height_cm": 22,
+      "dimensions_cm": "11 × 8 × 22 cm",
+      "weight_kg": null,
+      "pendant_height_cm": null,
+      "sitting_height_cm": null
+    },
+    "materials": {
+      "shell": "66% polyester, 25% PVC, 9% ABS",
+      "plush": null,
+      "stuffing": "95% polyester, 5% iron wire"
+    },
+    "packaging": {
+      "type": "Vinyl-plush hanging card format with integrated key-clip and backing card",
+      "dimensions_cm": null
+    },
+    "release_info": {
+      "release_date": "2025-05-26",
+      "edition_type": "Member points exclusive",
+      "edition_size": null
+    },
+    "pricing": {
+      "original_msrp": {
+        "points": 5000
+      },
+      "current_status": "Out of stock",
+      "secondary_market_range": {
+        "CNY": "600-1200",
+        "USD": "80-165"
+      },
+      "pendant_msrp": null
+    },
+    "availability": {
+      "regions": [
+        "Mainland-China"
+      ],
+      "channels": [
+        "POP MART China Points Mall"
+      ],
+      "stock_status": "Out of stock"
+    },
+    "designer": "Kasing Lung",
+    "accessories": [
+      "Key-clip hardware and credit-card backing"
+    ],
+    "articulation": null,
+    "colorway": "White plush “duck” suit with orange beak visor"
+  },
+  {
+    "product_id": "LAB026",
+    "brand": "POP MART",
+    "line": "The Monsters",
+    "character": "Labubu",
+    "series": "Wacky Mart",
+    "product_title": "Wacky Mart",
+    "variant_name": null,
+    "form": "Vinyl-plush",
+    "sku": null,
+    "size": {
+      "height_cm": 15,
+      "dimensions_cm": null,
+      "weight_kg": null,
+      "pendant_height_cm": 17,
+      "sitting_height_cm": null
+    },
+    "materials": {
+      "shell": "polyester/plush body; face: PVC/ABS",
+      "plush": null,
+      "stuffing": null
+    },
+    "packaging": {
+      "type": "Convenience store-themed packaging resembling snack boxes",
+      "dimensions_cm": null
+    },
+    "release_info": {
+      "release_date": "2025-06-12",
+      "edition_type": "Pop-up store exclusive",
+      "edition_size": null
+    },
+    "pricing": {
+      "original_msrp": {
+        "CNY": 199
+      },
+      "current_status": "In stock (at pop-up)",
+      "secondary_market_range": "Minimal premiums (~20–50%)",
+      "pendant_msrp": null
+    },
+    "availability": {
+      "regions": [
+        "China"
+      ],
+      "channels": [
+        "Wacky Mart pop-up locations"
+      ],
+      "stock_status": "Available at pop-up locations"
+    },
+    "designer": "Kasing Lung",
+    "accessories": [
+      "Keychain hardware",
+      "collectible receipt-style authentication card",
+      "collectible poster map"
+    ],
+    "articulation": null,
+    "colorway": "Multiple variants themed after snack/drink brands"
+  }
+]

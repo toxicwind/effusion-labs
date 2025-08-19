@@ -1,0 +1,63 @@
+{
+  "product_id": "LAB006",
+  "brand": "POP MART × Pronounce",
+  "line": "The Monsters × Pronounce",
+  "character": "Labubu",
+  "series": "Be Fancy Now",
+  "product_title": "Be Fancy Now Vinyl Plush Doll",
+  "variant_name": "Purple fur with gold rope motifs, yellow toes, starry face accents, fashion week inspired outfit",
+  "form": "Vinyl plush doll",
+  "sku": "1012",
+  "size": {
+    "height_cm": 38,
+    "dimensions_cm": "22 x 15 x 40 cm",
+    "weight_kg": 1.8,
+    "pendant_height_cm": null,
+    "sitting_height_cm": null
+  },
+  "materials": {
+    "shell": "25% Polyester, 18% Cotton, 18% PVC, 15% ABS, 12% Acrylic, 7% Wool, 5% Viscose Fiber",
+    "plush": null,
+    "stuffing": "100% Polyester"
+  },
+  "packaging": {
+    "type": "Rigid color box with window",
+    "dimensions_cm": "45×30×20"
+  },
+  "release_info": {
+    "release_date": "2024-03-15",
+    "edition_type": "Collaboration limited",
+    "edition_size": 6458
+  },
+  "pricing": {
+    "original_msrp": {
+      "CNY": 599,
+      "CAD": 120
+    },
+    "current_status": "Sold out",
+    "secondary_market_range": {
+      "CNY": "1800-2500",
+      "USD": "3974-3999"
+    }
+  },
+  "availability": {
+    "regions": [
+      "CN",
+      "US",
+      "EU",
+      "APAC"
+    ],
+    "channels": [
+      "POP MART official",
+      "Pronounce flagship stores"
+    ],
+    "stock_status": "Sold out"
+  },
+  "designer": "Kasing Lung (龙家升)",
+  "accessories": [
+    "Removable Infinity Rope accessory",
+    "fashion-forward styling elements"
+  ],
+  "articulation": null,
+  "colorway": "Vibrant purple with yellow and blue details"
+}

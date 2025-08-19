@@ -1,0 +1,60 @@
+{
+  "product_id": "LAB013",
+  "brand": "POP MART",
+  "line": "The Monsters",
+  "character": "Labubu",
+  "series": "Happy Halloween Party",
+  "product_title": "HAPPY HALLOWEEN PARTY Series – Sitting Pumpkin Vinyl Plush Pendant",
+  "variant_name": "Orange pumpkin body with green stem hat, sitting pose, carved-face motif",
+  "form": "Vinyl plush pendant (keychain)",
+  "sku": "1505",
+  "size": {
+    "height_cm": null,
+    "dimensions_cm": "8×7×15",
+    "weight_kg": null,
+    "pendant_height_cm": null,
+    "sitting_height_cm": null
+  },
+  "materials": {
+    "shell": "PVC, soft plush fabric",
+    "plush": null,
+    "stuffing": null
+  },
+  "packaging": {
+    "type": "Window display color box",
+    "dimensions_cm": null
+  },
+  "release_info": {
+    "release_date": "2024-09-27",
+    "edition_type": "Seasonal limited",
+    "edition_size": null
+  },
+  "pricing": {
+    "original_msrp": {
+      "AUD": 50
+    },
+    "current_status": "Sold out rapidly post-launch",
+    "secondary_market_range": {
+      "AUD": "75-90"
+    }
+  },
+  "availability": {
+    "regions": [
+      "AU",
+      "US",
+      "CN",
+      "Global"
+    ],
+    "channels": [
+      "POP MART official sites",
+      "selected stores"
+    ],
+    "stock_status": "Sold out"
+  },
+  "designer": "Kasing Lung (龙家升)",
+  "accessories": [
+    "Keychain loop"
+  ],
+  "articulation": "Fixed sitting pose",
+  "colorway": "Bright orange and green"
+}

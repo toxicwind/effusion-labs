@@ -20,10 +20,11 @@
     "deps:system": "playwright install-deps || true",
     "proxy:health": "node scripts/proxy-health.mjs",
     "deps:provision": "bash scripts/provision-env.sh",
-    "data:merge-sections": "node tools/merge-sections.mjs",
-    "data:synthesize": "node tools/synthesize.mjs",
-    "data:merge-golden": "node tools/merge-golden.mjs",
-    "data:all": "npm run data:merge-sections && npm run data:synthesize && npm run data:merge-golden"
+    "data:merge-sections": "node tools/merge-sections.mjs  --verbose",
+    "data:synthesize": "node tools/synthesize.mjs --verbose",
+    "data:merge-golden": "node tools/merge-golden.mjs --verbose",
+    "data:all": "npm run data:merge-sections && npm run data:synthesize && npm run data:merge-golden",
+    "audit:golden": "node tools/audit-identity.mjs --file src/content/archives/golden_record_20250819T081755Z.json --max-combo=3 --top=5 --verbose"
   },
   "engines": {
     "node": ">=20"
@@ -63,6 +64,7 @@
     "markdown-it": "14.1.0",
     "markdown-it-attrs": "^4.3.1",
     "markdown-link-check": "^3.13.7",
+    "natural": "^8.1.0",
     "npm-registry-fetch": "19.0.0",
     "playwright-extra": "^4.3.6",
     "postcss": "^8.5.6",

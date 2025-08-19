@@ -1,0 +1,208 @@
+{
+  "product_id": "LAB009",
+  "brand": "POP MART",
+  "line": "The Monsters",
+  "character": "Labubu",
+  "series": "Let's Checkmate",
+  "product_title": "Let's Checkmate Series Vinyl Plush Hanging Card",
+  "variant_name": "Brown fur with crown, white ruffle collar, red cape with white fur trim, holding ring box",
+  "form": "Vinyl plush hanging card (pendant)",
+  "sku": null,
+  "size": {
+    "height_cm": 37,
+    "sitting_height_cm": 33,
+    "dimensions_cm": null,
+    "weight_kg": null
+  },
+  "materials": {
+    "shell": "59% PVC, 41% Polyester",
+    "plush": "Brown fuzzy exterior",
+    "stuffing": "100% Polyester"
+  },
+  "packaging": {
+    "type": "Large format packaging",
+    "dimensions_cm": null
+  },
+  "release_info": {
+    "release_date": "2025-02-07",
+    "edition_type": "Standard edition",
+    "edition_size": null
+  },
+  "pricing": {
+    "original_msrp": {
+      "USD": 114.99,
+      "SGD": 109.9
+    },
+    "current_status": "Out of stock",
+    "secondary_market_range": null
+  },
+  "availability": {
+    "regions": [
+      "US",
+      "Singapore",
+      "Global"
+    ],
+    "channels": [
+      "POP MART official stores"
+    ],
+    "stock_status": "Out of stock"
+  },
+  "designer": "Kasing Lung (龙家升)",
+  "accessories": [
+    "Removable pink crown with heart details",
+    "Pink plush heart",
+    "Light blue ribbon wrapping",
+    "Yellow ring clasp"
+  ],
+  "articulation": "Adjustable legs for sitting/standing display, movable eyes",
+  "colorway": "Yellow fur, heart-detailed pink crown, pink plush heart accessory",
+  "Deltas": [
+    {
+      "field": "product_id",
+      "from": "LAB009",
+      "to": "LAB009",
+      "reason": "kept-existing"
+    },
+    {
+      "field": "product_title",
+      "from": "Let's Checkmate Series Vinyl Plush Doll",
+      "to": "Let's Checkmate Series Vinyl Plush Hanging Card",
+      "reason": "specificity"
+    },
+    {
+      "field": "variant_name",
+      "from": "Brown fur with crown, white ruffle collar, red cape with white fur trim, holding ring box",
+      "to": "Brown fur with crown, white ruffle collar, red cape with white fur trim, holding ring box",
+      "reason": "kept-existing"
+    },
+    {
+      "field": "form",
+      "from": "Vinyl plush doll",
+      "to": "Vinyl plush hanging card (pendant)",
+      "reason": "specificity"
+    },
+    {
+      "field": "size",
+      "from": {
+        "height_cm": 37,
+        "sitting_height_cm": 33,
+        "dimensions_cm": null,
+        "weight_kg": null
+      },
+      "to": {
+        "height_cm": 37,
+        "sitting_height_cm": 33,
+        "dimensions_cm": null,
+        "weight_kg": null
+      },
+      "reason": "same"
+    },
+    {
+      "field": "materials",
+      "from": {
+        "shell": "59% PVC, 41% Polyester",
+        "plush": "Brown fuzzy exterior",
+        "stuffing": "100% Polyester"
+      },
+      "to": {
+        "shell": "59% PVC, 41% Polyester",
+        "plush": "Brown fuzzy exterior",
+        "stuffing": "100% Polyester"
+      },
+      "reason": "same"
+    },
+    {
+      "field": "packaging",
+      "from": {
+        "type": "Large format packaging",
+        "dimensions_cm": null
+      },
+      "to": {
+        "type": "Large format packaging",
+        "dimensions_cm": null
+      },
+      "reason": "same"
+    },
+    {
+      "field": "release_info",
+      "from": {
+        "release_date": "2025-02-07",
+        "edition_type": "Standard edition",
+        "edition_size": null
+      },
+      "to": {
+        "release_date": "2025-02-07",
+        "edition_type": "Standard edition",
+        "edition_size": null
+      },
+      "reason": "same"
+    },
+    {
+      "field": "pricing",
+      "from": {
+        "original_msrp": {
+          "USD": 114.99,
+          "SGD": 109.9
+        },
+        "current_status": "Out of stock",
+        "secondary_market_range": null
+      },
+      "to": {
+        "original_msrp": {
+          "USD": 114.99,
+          "SGD": 109.9
+        },
+        "current_status": "Out of stock",
+        "secondary_market_range": null
+      },
+      "reason": "same"
+    },
+    {
+      "field": "availability",
+      "from": {
+        "regions": [
+          "US",
+          "Singapore",
+          "Global"
+        ],
+        "channels": [
+          "POP MART official stores"
+        ],
+        "stock_status": "Out of stock"
+      },
+      "to": {
+        "regions": [
+          "US",
+          "Singapore",
+          "Global"
+        ],
+        "channels": [
+          "POP MART official stores"
+        ],
+        "stock_status": "Out of stock"
+      },
+      "reason": "same"
+    },
+    {
+      "field": "accessories",
+      "from": [
+        "Functional red LABUBU ring box",
+        "Removable crown",
+        "Removable red cape with white fur trim"
+      ],
+      "to": [
+        "Removable pink crown with heart details",
+        "Pink plush heart",
+        "Light blue ribbon wrapping",
+        "Yellow ring clasp"
+      ],
+      "reason": "specificity"
+    },
+    {
+      "field": "colorway",
+      "from": "Brown fur with red cape and white accents",
+      "to": "Yellow fur, heart-detailed pink crown, pink plush heart accessory",
+      "reason": "specificity"
+    }
+  ]
+}
