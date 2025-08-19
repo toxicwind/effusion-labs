@@ -10,7 +10,6 @@ set -u
 : "${LLM_IDLE_SECS:=${LLM_HEARTBEAT_SECS:-7}}"
 : "${LLM_CAT_MAX_BYTES:=0}"
 : "${LLM_DEPS_AUTOINSTALL:=1}"
-: "${LLM_ALIAS_CAT:=1}"               # alias only in interactive TTY
 : "${LLM_GIT_HOOKS:=1}"
 : "${LLM_GLOBAL_HEARTBEAT:=1}"
 : "${LLM_GLOBAL_HB_TIMEOUT_S:=600}"
@@ -20,6 +19,7 @@ set -u
 : "${LLM_IDLE_FAIL_AFTER_SECS:=300}"
 : "${LLM_HEAD_MAX_LINES:=2000}"
 
+# ---- utils ----
 _llm_ts(){ date -u +"%Y-%m-%dT%H:%M:%SZ"; }
 _llm_has(){ command -v "$1" >/dev/null 2>&1; }
 _llm_on(){ [[ "${1:-1}" == "1" || "${1:-1}" == "true" ]]; }
@@ -33,8 +33,9 @@ _llm_emit(){
   [[ -n "${GITHUB_STEP_SUMMARY:-}" ]] && { printf 'LLM-GUARD %s ' "$ts" >>"$GITHUB_STEP_SUMMARY"; printf '%s ' "$@" >>"$GITHUB_STEP_SUMMARY"; printf '\n' >>"$GITHUB_STEP_SUMMARY"; }
 }
 
-# venv guard for pip
-_llm_in_venv(){ python - <<'PY' 2>/dev/null || exit 1
+# Detect Python venv (guard pip install)
+_llm_in_venv(){
+  python - <<'PY' 2>/dev/null || return 1
 import sys
 print(int(hasattr(sys, "real_prefix") or (getattr(sys, "base_prefix", sys.prefix) != sys.prefix)))
 PY
@@ -43,23 +44,28 @@ PY
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd 2>/dev/null || pwd)"
 _llm_emit event=bootstrap.start repo_root="$repo_root" fold="$LLM_FOLD_WIDTH"
 
-# deps autoinstall (hash-based)
+# ---- deps autoinstall (hash-based) ----
 if [[ "${LLM_DEPS_AUTOINSTALL}" == "1" ]]; then
   mkdir -p "$repo_root/tmp"; DEPS_HASH_FILE="$repo_root/tmp/.llm_deps_hash"
-  hash_inputs=(); [[ -f "$repo_root/package-lock.json" ]] && hash_inputs+=("$repo_root/package-lock.json")
+  hash_inputs=()
+  [[ -f "$repo_root/package-lock.json" ]] && hash_inputs+=("$repo_root/package-lock.json")
   [[ -f "$repo_root/markdown_gateway/requirements.txt" ]] && hash_inputs+=("$repo_root/markdown_gateway/requirements.txt")
   if (( ${#hash_inputs[@]} )); then
-    if _llm_has sha256sum; then current_hash="$(cat "${hash_inputs[@]}" | sha256sum | awk '{print $1}')"; else current_hash="$(cat "${hash_inputs[@]}" | shasum -a 256 | awk '{print $1}')"; fi
+    if _llm_has sha256sum; then
+      current_hash="$(cat "${hash_inputs[@]}" | sha256sum | awk '{print $1}')"
+    else
+      current_hash="$(cat "${hash_inputs[@]}" | shasum -a 256 | awk '{print $1}')"
+    fi
     stored_hash="$( [[ -f "$DEPS_HASH_FILE" ]] && cat "$DEPS_HASH_FILE" || printf '' )"
     if [[ -n "$current_hash" && "$current_hash" != "$stored_hash" ]]; then
       _llm_emit event=bootstrap.deps.install node=ci python=requirements.txt
       CI=${CI:-false} npm ci || true
       if [[ -f "$repo_root/markdown_gateway/requirements.txt" ]]; then
-        if [[ "$(_llm_in_venv || echo 0)" != "1" ]]; then
-          _llm_emit event=deps.skip reason=no-venv path="$repo_root/markdown_gateway/requirements.txt"
-        else
+        if _llm_in_venv; then
           if _llm_has python; then python -m pip install -r "$repo_root/markdown_gateway/requirements.txt" || true
           else pip install -r "$repo_root/markdown_gateway/requirements.txt" || true; fi
+        else
+          _llm_emit event=deps.skip reason=no-venv path="$repo_root/markdown_gateway/requirements.txt"
         fi
       fi
       echo "$current_hash" > "$DEPS_HASH_FILE"
@@ -69,6 +75,7 @@ if [[ "${LLM_DEPS_AUTOINSTALL}" == "1" ]]; then
   fi
 fi
 
+# ---- pretty cat (llm_cat) ----
 _prettier_bin(){
   local bin_local; bin_local="$(git rev-parse --show-toplevel 2>/dev/null)/node_modules/.bin/prettier"
   [[ -x "$bin_local" ]] && { echo "$bin_local"; return 0; }
@@ -76,10 +83,19 @@ _prettier_bin(){
   echo ""; return 1
 }
 llm_cat(){
-  local p="$1"
+  local p="${1:-}"
+  if [[ -z "$p" ]]; then command cat | _llm_fold; return; fi
   if [[ ! -f "$p" ]]; then command cat -vt -- "$p" | _llm_fold; return; fi
   local size ext parser bin; size=$(wc -c <"$p" 2>/dev/null || echo 0); ext="${p##*.}"; parser=""
-  case "$ext" in js|mjs|cjs) parser="babel";; ts|tsx) parser="babel-ts";; json|jsonl) parser="json";; md|markdown) parser="markdown";; html|htm) parser="html";; css|pcss) parser="css";; yml|yaml) parser="yaml";; esac
+  case "$ext" in
+    js|mjs|cjs) parser="babel" ;;
+    ts|tsx)     parser="babel-ts" ;;
+    json|jsonl) parser="json" ;;
+    md|markdown) parser="markdown" ;;
+    html|htm)   parser="html" ;;
+    css|pcss)   parser="css" ;;
+    yml|yaml)   parser="yaml" ;;
+  esac
   bin="$(_prettier_bin || true)"
   if [[ -n "$parser" && -n "$bin" && ( "$LLM_CAT_MAX_BYTES" -eq 0 || "$size" -le "$LLM_CAT_MAX_BYTES" ) ]]; then
     _llm_emit cat.format file="$p" bytes="$size" parser="$parser"
@@ -90,15 +106,23 @@ llm_cat(){
   fi
 }
 export -f llm_cat
-if [[ "${LLM_ALIAS_CAT}" == "1" && $- == *i* && -t 1 ]]; then alias cat='llm_cat'; fi
 
-# tail guard
+# Make cat a default wrapper (use "command cat" for raw)
+cat(){ llm_cat "$@"; }
+export -f cat
+
+# ---- tail guard (default wrapper; use "command tail" to bypass) ----
 tail(){
-  local follow=0 file="" args=()
-  for a in "$@"; do [[ "$a" == "-f" || "$a" == "-F" ]] && follow=1; args+=("$a"); [[ -f "$a" ]] && file="$a"; done
+  local follow=0 file="" args=() full="tail"
+  for a in "$@"; do
+    [[ "$a" == "-f" || "$a" == "-F" ]] && follow=1
+    args+=("$a")
+    full+=" $(printf '%q' "$a")"
+    [[ -f "$a" ]] && file="$a"
+  done
   if _llm_on "${LLM_TAIL_BLOCK:-1}" && (( follow )); then
-    if [[ -n "${LLM_TAIL_ALLOW_CMDS:-}" && "${BASH_COMMAND:-}" =~ ${LLM_TAIL_ALLOW_CMDS} ]]; then
-      _llm_emit event=tail.pass reason=allowlist args="$(printf '%q ' "$@")"
+    if [[ -n "${LLM_TAIL_ALLOW_CMDS:-}" && "$full" =~ ${LLM_TAIL_ALLOW_CMDS} ]]; then
+      _llm_emit event=tail.pass reason=allowlist args="$full"
       command tail "$@" | _llm_fold
     else
       local n="${LLM_TAIL_MAX_LINES:-5000}"
@@ -106,13 +130,15 @@ tail(){
       command tail -n "$n" -- "$file" | _llm_fold
     fi
   else
-    _llm_emit event=tail.pass args="$(printf '%q ' "$@")"
-    if _llm_has stdbuf; then command tail "${args[@]}" | stdbuf -o0 -e0 cat | _llm_fold; else command tail "${args[@]}" | _llm_fold; fi
+    _llm_emit event=tail.pass args="$full"
+    if _llm_has stdbuf; then command tail "${args[@]}" | stdbuf -o0 -e0 cat | _llm_fold
+    else command tail "${args[@]}" | _llm_fold
+    fi
   fi
 }
 export -f tail
 
-# head guard (interactive-only alias below)
+# ---- head guard (default wrapper; use "command head" to bypass) ----
 llm_head(){
   local args=("$@") file="" n_req=""
   local i
@@ -135,16 +161,19 @@ llm_head(){
   command head "$@" | _llm_fold
 }
 export -f llm_head
-if [[ $- == *i* && -t 1 ]]; then alias head='llm_head'; fi
 
-# stream filter
+# Make head a default wrapper (use "command head" for raw)
+head(){ llm_head "$@"; }
+export -f head
+
+# ---- stream filter for noisy lines ----
 _llm_stream_filter(){
   if [[ -z "${LLM_SUPPRESS_PATTERNS}" ]]; then cat
   else awk -v pat="$LLM_SUPPRESS_PATTERNS" 'pat==""{print;next} { if ($0 ~ pat) next; print }'
   fi
 }
 
-# PID-scoped runner
+# ---- PID-scoped runner ----
 llm_run(){
   local out="/tmp/llm-run.$$.log" idle="${LLM_IDLE_SECS:-7}" id="r$$-$(date +%s)-$RANDOM" tail_on_complete=0
   while [[ $# -gt 0 ]]; do
@@ -204,7 +233,7 @@ llm_run(){
     sleep 2
     _llm_emit event=run.tail id='"$id"' lines=80
     command tail -n 80 -- "'"$out"'" | _llm_fold
-    kill '"$reader $wd"' 2>/dev/null || true
+    kill '"$reader"' '"$wd"' 2>/dev/null || true
     rm -f "'"$pipe"'" "'"$lock"'"
     exit 130
   ' INT
@@ -224,15 +253,19 @@ llm_run(){
 }
 export -f llm_run
 
-# redirect/chain rewrite trap
+# ---- redirect/chain rewrite trap (robust EREs; no \b) ----
 _llm_rewrite(){
   [[ "${LLM_HIJACK_DISABLE:-0}" == "1" ]] && return 0
   [[ -z "${BASH_COMMAND:-}" ]] && return 0
   [[ "${_LLM_REWRITE_ACTIVE:-}" == "1" ]] && return 0
+
   local c="$BASH_COMMAND"
+  local re_chain='^[[:space:]]*(.+)[[:space:]]>[> ]*[[:space:]]*([^[:space:];&|]+)[[:space:]]*(2>&1)?[[:space:]]*&&[[:space:]]*(tail|head)([[:space:]]|$)'
+  local re_redirect='[[:space:]]((1>>|1>|>>|>))[[:space:]]*([^[:space:]&|;]+)[[:space:]]*(2>&1)?[[:space:]]*$'
+  local re_has_pipe='[|]'
 
   # "<cmd> > file && (tail|head) ..."
-  if [[ "$c" =~ ^[[:space:]]*(.+)[[:space:]]\>[\> ]*[[:space:]]*([^[:space:];&\|]+)[[:space:]]*((2\>\&1)*)[[:space:]]*&&[[:space:]]*(tail|head)\b ]]; then
+  if [[ $c =~ $re_chain ]]; then
     local base="${BASH_REMATCH[1]}" out="${BASH_REMATCH[2]}"
     if [[ "${LLM_STRICT}" == "1" ]]; then
       _llm_emit event=rewrite.reject reason=">+tail/head disallowed" suggest="llm_run --out $(printf %q "$out") -- $base"
@@ -244,14 +277,16 @@ _llm_rewrite(){
     return 0
   fi
 
-  # "<cmd> > file" / ">> file"
-  if [[ "$c" =~ [[:space:]](1?\>\>|\>)[[:space:]]*([^[:space:]&|;]+)[[:space:]]*(2\>\&1)?[[:space:]]*$ ]] && [[ ! "$c" =~ \| ]] && [[ ! "$c" =~ \&\& ]] && [[ ! "$c" =~ \|\| ]]; then
-    local op="${BASH_REMATCH[1]}" outfile="${BASH_REMATCH[2]}" base="${c%${BASH_REMATCH[0]}}"
+  # Simple redirects: "<cmd> > file" / ">> file" (optionally with 1>)
+  if [[ $c =~ $re_redirect ]] && [[ ! $c =~ $re_has_pipe ]] && [[ $c != *'&&'* ]] && [[ $c != *'||'* ]]; then
+    local op="${BASH_REMATCH[1]}" outfile="${BASH_REMATCH[3]}"
+    local base="${c%${BASH_REMATCH[0]}}"
     if [[ "${LLM_STRICT}" == "1" ]]; then
       _llm_emit event=rewrite.reject reason="redirection disallowed" suggest="llm_run --out $(printf %q "$outfile") -- $base"
       BASH_COMMAND="false"; return 0
     fi
-    local tee_flag=""; case "$op" in '>>'|'1>>') tee_flag='-a';; esac
+    local tee_flag=''
+    [[ "$op" == *">>"* ]] && tee_flag='-a'
     _LLM_REWRITE_ACTIVE=1
     _llm_emit event=rewrite.redirect op="$op" file="$outfile"
     (
@@ -267,7 +302,7 @@ _llm_rewrite(){
 trap _llm_rewrite DEBUG
 export -f _llm_rewrite
 
-# git hooks
+# ---- git hooks (persist activation on branch moves) ----
 if [[ "${LLM_GIT_HOOKS:-0}" == "1" ]]; then
   for hook in post-checkout post-merge; do
     hp="$repo_root/.git/hooks/$hook"
@@ -279,7 +314,7 @@ if [[ "${LLM_GIT_HOOKS:-0}" == "1" ]]; then
   _llm_emit event=hooks.installed hooks="post-checkout,post-merge"
 fi
 
-# scoped global heartbeat (quiet while llm_run lock exists)
+# ---- scoped global heartbeat (quiet while llm_run lock exists) ----
 _llm_hb_global(){
   local interval=$(( ${LLM_IDLE_SECS:-7} * 4 )); (( interval < 30 )) && interval=30
   local stop_after="${LLM_GLOBAL_HB_TIMEOUT_S:-600}" start=$(date +%s)
@@ -298,17 +333,21 @@ if [[ "${LLM_GLOBAL_HEARTBEAT:-0}" == "1" ]]; then
   fi
 fi
 
+# ---- final notices ----
 _llm_emit event=tip text='Prefer: llm_run --out /tmp/unit.log -- <cmd>; Avoid: <cmd> >/tmp/unit.log && (tail|head) …'
 _llm_emit event=bootstrap.ready fold="$LLM_FOLD_WIDTH" idle="$LLM_IDLE_SECS" tail_block="$LLM_TAIL_BLOCK" hijack="$LLM_HIJACK_DISABLE"
-_llm_emit event=bootstrap.done summary="llm_run; rewrites(strict=${LLM_STRICT}); tail/head guards; deps:auto=${LLM_DEPS_AUTOINSTALL}; hooks=${LLM_GIT_HOOKS}; hb.global=${LLM_GLOBAL_HEARTBEAT}; presets=${LLM_TEST_PRESETS}; suppress='${LLM_SUPPRESS_PATTERNS}'"
+_llm_emit event=bootstrap.done summary="llm_run; rewrites(strict=${LLM_STRICT}); tail/head/cat wrappers; deps:auto=${LLM_DEPS_AUTOINSTALL}; hooks=${LLM_GIT_HOOKS}; hb.global=${LLM_GLOBAL_HEARTBEAT}; presets=${LLM_TEST_PRESETS}; suppress='${LLM_SUPPRESS_PATTERNS}'"
+
 printf 'LLM-GUARD summary: fold=%s idle=%s tail_block=%s hijack=%s hooks=%s hb_global=%s presets=%s strict=%s\n' \
   "$LLM_FOLD_WIDTH" "$LLM_IDLE_SECS" "$LLM_TAIL_BLOCK" "$LLM_HIJACK_DISABLE" "$LLM_GIT_HOOKS" "$LLM_GLOBAL_HEARTBEAT" "$LLM_TEST_PRESETS" "$LLM_STRICT" >&2
 printf 'LLM-GUARD suppress_patterns: %s\n' "${LLM_SUPPRESS_PATTERNS:-}" >&2
+
 if [[ -n "${GITHUB_STEP_SUMMARY:-}" ]]; then
   printf 'LLM-GUARD summary: fold=%s idle=%s tail_block=%s hijack=%s hooks=%s hb_global=%s presets=%s strict=%s\n' \
     "$LLM_FOLD_WIDTH" "$LLM_IDLE_SECS" "$LLM_TAIL_BLOCK" "$LLM_HIJACK_DISABLE" "$LLM_GIT_HOOKS" "$LLM_GLOBAL_HEARTBEAT" "$LLM_TEST_PRESETS" "$LLM_STRICT" >>"$GITHUB_STEP_SUMMARY"
   printf 'LLM-GUARD suppress_patterns: %s\n' "${LLM_SUPPRESS_PATTERNS:-}" >>"$GITHUB_STEP_SUMMARY"
 fi
+
 if [[ -n "${GITHUB_OUTPUT:-}" ]]; then
   printf 'llm_run_pid=%s\n' "$$" >>"$GITHUB_OUTPUT"
   printf 'llm_run_out=/tmp/llm-run.%s.log\n' "$$" >>"$GITHUB_OUTPUT"
