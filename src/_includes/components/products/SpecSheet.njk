@@ -66,7 +66,13 @@
     <div class="stats stats-vertical sm:stats-horizontal w-full bg-base-200/40 rounded-xl border border-base-300/50">
       <div class="stat">
         <div class="stat-title opacity-70">Release</div>
-        <div class="stat-value text-xl">{{ releaseDate ? (releaseDate | humanDate | safe) : 'TBD' }}</div>
+        <div class="stat-value text-xl">
+          {% if releaseDate %}
+            {{ releaseDate | humanDate | safe }}
+          {% else %}
+            TBD
+          {% endif %}
+        </div>
         {% if p.size and (p.size.h or p.size.w or p.size.d) %}
           <div class="stat-desc">
             {{ p.size.h }}
@@ -84,14 +90,18 @@
             {{ primaryMarket.currency }} {{ primaryMarket.price }}
           {% elseif msrpMap %}
             {% for ccy, amt in msrpMap %}
-              {{ ccy }} {{ amt }}{% break %}
+              {% if loop.first %}
+                {{ ccy }} {{ amt }}
+              {% endif %}
             {% endfor %}
           {% else %}—{% endif %}
         </div>
         {% if secRange %}
           <div class="stat-desc">
             {% for ccy, rng in secRange %}
-              Secondary: {{ ccy }} {{ rng }}{% break %}
+              {% if loop.first %}
+                Secondary: {{ ccy }} {{ rng }}
+              {% endif %}
             {% endfor %}
           </div>
         {% endif %}
