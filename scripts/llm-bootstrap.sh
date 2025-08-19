@@ -198,6 +198,9 @@ export -f _llm_hb
 alias cat='smart_cat'     # ALWAYS alias cat for LLM normalization
 alias tail='_llm_tail'
 
+_llm_emit bootstrap.alias cat=smart_cat tail=_llm_tail tail_block="${LLM_TAIL_BLOCK:-1}"
+printf 'llm-bootstrap: cat -> smart_cat (prettier-first); tail -> _llm_tail (tail -f/-F blocked). Use "command cat" or "command tail" for raw commands.\n' >&2
+
 trap _llm_hijack DEBUG
 
 if [[ "${CI:-}" == "true" || "${LLM_SHELL_HEARTBEAT:-0}" == "1" ]]; then
