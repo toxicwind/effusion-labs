@@ -54,10 +54,7 @@ All subsequent commands are governed by the guardrails below.
 
 ## Core Mandate: Package Search Before Implementation
 
-- On every task, the agent MUST search the npm registry first.
-
-  - `npm search <keyword>`
-  - `npm view <pkg> --json`
+- On every task, the agent MUST verify npm packages with `node scripts/npm-utils.js <package>` which searches the registry and prints the latest version via `libnpmsearch` and `npm-registry-fetch`.
 
 - Default outcome: integrate an existing package.
 - Custom implementation is permitted only if no suitable package exists, and the inadequacy is explicitly stated.
