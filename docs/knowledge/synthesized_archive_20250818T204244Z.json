@@ -1,0 +1,4345 @@
+[
+  {
+    "title": "Time to Chill",
+    "source": "COMPLETED SEEDS.txt",
+    "brand": "POP MART[^1_1][^1_2][^1_3].",
+    "line": "The Monsters[^1_2][^1_3][^1_4].",
+    "character": "Labubu[^1_1][^1_2][^1_3].",
+    "series": "Time to Chill[^1_1][^1_2][^1_3].",
+    "product_title_(marketing_title_+_normalized_title)": "LABUBU Time to Chill-Vinyl Plush Doll[^1_1][^1_5][^1_6].",
+    "variant_name_(colorway,_pose,_outfit)": "Cozy denim dungarees and pastel blue top, relaxed pose[^1_3][^1_7].",
+    "form": "Vinyl plush doll[^1_1][^1_2][^1_3].",
+    "deterministic_product_id_components": "Unknown.",
+    "aliases_\\&_search_tokens_(en/中文;_common_misspellings)": "Labubu Time to Chill, 拉布布放松时间 (inferred from series context)[^1_3].",
+    "parent/child_relations_(reissue,_seasonal_of_core,_collab_of_core)": "Core variant in The Monsters universe, no direct reissue noted[^1_3][^1_8].",
+    "size_(h/w/d_in_cm)": "37cm height, 20×15×37cm overall[^1_2][^1_7].",
+    "weight_(grams)": "Unknown.",
+    "materials": "Cotton, PVC, polyester, ABS, TPR[^1_2]; polyester, cotton, vinyl[^1_3].",
+    "finish_(matte,_flocked,_metallic,_translucent)": "Soft plush body with vinyl face[^1_3][^1_7].",
+    "articulation/motion": "Movable eyes and articulated features[^1_3].",
+    "accessories_in_box": "None specified.",
+    "colorway_notes": "Blue denim with pastel accents[^1_3].",
+    "packaging_type": "Color box[^1_9].",
+    "packaging_dimensions_\\&_weight": "Unknown.",
+    "box_contents_bill": "Plush doll, authenticity card[^1_9].",
+    "authenticity/anti-counterfeit_marker": "Batch code (e.g., SAU assumption)[^1_9].",
+    "factory/qa_code": "Made in Shon Quong Province, China[^1_9].",
+    "edition.kind": "Standard edition[^1_3].",
+    "edition_size_(unit_count)": "Unknown.",
+    "chase/rarity_ratio": "Not applicable (non-blind box).",
+    "staff/member_perks": "Unknown.",
+    "original_designer/artist_(en_\\&_中文)": "Kasing Lung (龙家升)[^1_3][^1_8].",
+    "sculpt/model_credits": "Unknown.",
+    "collaboration_partner": "None.",
+    "licensing_owner": "POP MART[^1_3][^1_8].",
+    "announced_date": "Unknown.",
+    "release_date_(authoritative;_log_deltas_if_contradicted)": "2022-10-31[^1_2][^1_3][^1_10][^1_11].",
+    "drop_windows_(channels)": "POP MART official online store, secondary distribution[^1_1][^1_3].",
+    "purchase_limits": "Unknown.",
+    "queues/mechanics": "Sold out quickly, restocks via app[^1_3][^1_12].",
+    "restock/second_wave_dates": "Additional releases up to July 2024 in some regions[^1_3].",
+    "end-of-life_or_“sold_out”_date": "Sold out immediately upon release[^1_4][^1_13].",
+    "region_lock_(true/false;_explanation)": "False; available internationally via POP MART US and global sites[^1_1][^1_3][^1_10].",
+    "regional_codes_involved": "US, CN, global[^1_1][^1_3].",
+    "packaging/regulatory_differences": "Unknown.",
+    "region_code": "US.",
+    "channel": "POP MART official site.",
+    "launch_msrp_(currency_+_numeric)": "USD69.99[^1_1][^1_13].",
+    "subsequent_official_price_changes": "Unknown.",
+    "stock_status_snapshots": "Sold out, available via resellers[^1_3][^1_7].",
+    "purchase_limit_at_listing": "Unknown.",
+    "age_rating": "Unknown.",
+    "warnings": "Unknown.",
+    "compliance_marks": "Unknown.",
+    "hs/customs_category": "Unknown.",
+    "sku/model_code": "1220719025[^1_10].",
+    "barcode/ean/upc": "Unknown.",
+    "shipping_box_info": "Bubble wrapped from POP MART warehouse[^1_9].",
+    "return_policy_excerpt": "15-day returns[^1_1][^1_6].",
+    "warranty/support_link": "Unknown.",
+    "hero_image(s)": "Labubu in denim outfit[^1_3].",
+    "orthographic_angles": "Front view with box[^1_9].",
+    "packaging_flats": "Blue color box with artwork[^1_9].",
+    "icon/thumb": "Unknown.",
+    "videos": "Unboxing and review videos[^1_4][^1_9][^1_14].",
+    "image_rights_note": "Official POP MART assets[^1_3].",
+    "asset_hashes": "Unknown.",
+    "primary_sources_used": "POP MART official site[^1_1][^1_5][^1_6].",
+    "secondary_sources_used": "SNKRDUNK, YouTube reviews[^1_3][^1_4][^1_9].",
+    "capture_artifacts_(retrieved_at,_hash)": "Retrieved 2025-08-13; hashes unknown.",
+    "contradiction_log_(deltas)": "No deltas on release date or MSRP.",
+    "query_ledger_(top_6–10_queries)": "\"POP MART The Monsters Seed Expansion Time to Chill release date\", \"POP MART The Monsters Seed Expansion Time to Chill MSRP\", \"POP MART The Monsters Seed Expansion variants\", \"POP MART The Monsters Seed Expansion Time to Chill size weight\", \"POP MART The Monsters Seed Expansion Time to Chill materials\", \"POP MART The Monsters Seed Expansion Time to Chill packaging\", \"POP MART The Monsters Seed Expansion Time to Chill edition size\", \"POP MART The Monsters Seed Expansion Time to Chill credits\".",
+    "localized_titles": "LABUBU Time to Chill (EN), 拉布布放松时间 (CN)[^1_3].",
+    "transliteration_notes": "Labubu as 拉布布[^1_3].",
+    "per-locale_notes": "English and Chinese marketing[^1_3].",
+    "predecessor/successor": "Part of ongoing The Monsters series[^1_3][^1_8].",
+    "lateral_variants": "Other Labubu plush like Let's Checkmate[^1_4].",
+    "same_sculpt/different_finish": "Similar vinyl plush format to other series[^1_3][^1_8].",
+    "shared_collab_capsule": "None.",
+    "series_hub_link": "POP MART The Monsters collection[^1_1][^1_3].",
+    "official_price_history_timeline": "Launched at USD69.99, reseller prices up to USD150[^1_13].",
+    "secondary_market_range_snapshots": "Reseller prices around USD150 as of 2025[^1_13].",
+    "scarcity_signals": "Frequently sold out, hard to find at retail[^1_3][^1_4][^1_13].",
+    "https": "//dreamshoptij.store/products/pop-mart-the-monsters-time-to-chill[^1_11]",
+    "deltas": "None.",
+    "<div_style=\"text-align": "center\">⁂</div>",
+    "Deltas": []
+  },
+  {
+    "title": "^1_1",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_2",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_3",
+    "source": "COMPLETED SEEDS.txt",
+    "15._**deltas": "**",
+    "16._**media_assets": "**",
+    "![labubu_time_to_chill_pop_mart_collectible_with_vinyl_face_and_plush_hood,_dressed_in_blue_overalls.](https": "//pplx-res.cloudinary.com/image/upload/v1755137561/pplx_project_search_images/93a1eee2303f6561a598d079b81c9d8f77ca2ba7.png)",
+    "Deltas": [
+      {
+        "field": "15._**deltas",
+        "from": null,
+        "to": "**",
+        "source": "PRIMARY TARGETS — Completed(2).txt"
+      },
+      {
+        "field": "16._**media_assets",
+        "from": null,
+        "to": "**",
+        "source": "PRIMARY TARGETS — Completed(2).txt"
+      },
+      {
+        "field": "![labubu_time_to_chill_pop_mart_collectible_with_vinyl_face_and_plush_hood,_dressed_in_blue_overalls.](https",
+        "from": null,
+        "to": "//pplx-res.cloudinary.com/image/upload/v1755137561/pplx_project_search_images/93a1eee2303f6561a598d079b81c9d8f77ca2ba7.png)",
+        "source": "PRIMARY TARGETS — Completed(2).txt"
+      }
+    ]
+  },
+  {
+    "title": "^1_4",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_5",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_6",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_7",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_8",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_9",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_10",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_11",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_12",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_13",
+    "source": "COMPLETED SEEDS.txt",
+    "15._**deltas": "**",
+    "16._**media_assets": "**",
+    "Deltas": [
+      {
+        "field": "15._**deltas",
+        "from": null,
+        "to": "**",
+        "source": "PRIMARY TARGETS — Completed(2).txt"
+      },
+      {
+        "field": "16._**media_assets",
+        "from": null,
+        "to": "**",
+        "source": "PRIMARY TARGETS — Completed(2).txt"
+      }
+    ]
+  },
+  {
+    "title": "^1_14",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_15",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_16",
+    "source": "COMPLETED SEEDS.txt",
+    "release_date_correction": "Seed listed May 25, 2023, but official sources confirm May 26, 2023 as the actual release date[^1_14][^1_17].",
+    "Deltas": [
+      {
+        "field": "release_date_correction",
+        "from": null,
+        "to": "Seed listed May 25, 2023, but official sources confirm May 26, 2023 as the actual release date[^1_14][^1_17].",
+        "source": "PRIMARY TARGETS — Completed(1).txt"
+      }
+    ]
+  },
+  {
+    "title": "^1_17",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_18",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_19",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_20",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "Jump for Joy",
+    "source": "COMPLETED SEEDS.txt",
+    "brand": "POP MART.",
+    "line": "The Monsters.",
+    "character": "Labubu.",
+    "series": "Jump for Joy.",
+    "product_title_(marketing_title_+_normalized_title)": "THE MONSTERS – JUMP FOR JOY Vinyl Plush Doll.",
+    "variant_name_(colorway,_pose,_outfit)": "Galaxy grey coat with bomber jacket, cargo pants, and boots.",
+    "form": "Vinyl plush doll.",
+    "deterministic_product_id_components": "Unknown.",
+    "aliases_\\&_search_tokens_(en/中文;_common_misspellings)": "Jump for Joy Labubu, 拉布布跳跃欢乐 (inferred from series context).",
+    "parent/child_relations_(reissue,_seasonal_of_core,_collab_of_core)": "Core variant in The Monsters universe, no direct reissue noted[^2_1][^2_2].",
+    "size_(h/w/d_in_cm)": "18×16×38 cm.",
+    "weight_(grams)": "Unknown.",
+    "materials": "PU, PP, polyester, fabric.",
+    "finish_(matte,_flocked,_metallic,_translucent)": "Soft plush body with vinyl face.",
+    "articulation/motion": "Posable hands.",
+    "accessories_in_box": "None specified.",
+    "colorway_notes": "Grey fur with urban outfit accents[^2_3][^2_4][^2_2][^2_5].",
+    "packaging_type": "Color box.",
+    "packaging_dimensions_\\&_weight": "Unknown.",
+    "box_contents_bill": "Plush doll, authenticity card (inferred from series standards).",
+    "authenticity/anti-counterfeit_marker": "QR code for verification.",
+    "factory/qa_code": "Unknown[^2_1].",
+    "edition.kind": "Standard edition.",
+    "edition_size_(unit_count)": "Unknown.",
+    "chase/rarity_ratio": "Not applicable (non-blind box).",
+    "staff/member_perks": "Unknown.",
+    "original_designer/artist_(en_\\&_中文)": "Kasing Lung (龙家升).",
+    "sculpt/model_credits": "Unknown.",
+    "collaboration_partner": "None.",
+    "licensing_owner": "POP MART[^2_1][^2_6].",
+    "announced_date": "Unknown.",
+    "release_date_(authoritative;_log_deltas_if_contradicted)": "2023-05-26.",
+    "drop_windows_(channels)": "POP MART official online store, global sites.",
+    "purchase_limits": "Unknown.",
+    "queues/mechanics": "Sold out quickly.",
+    "restock/second_wave_dates": "Unknown.",
+    "end-of-life_or_“sold_out”_date": "Sold out immediately upon release[^2_7][^2_3][^2_1][^2_4][^2_8].",
+    "region_lock_(true/false;_explanation)": "False; available internationally via POP MART sites.",
+    "regional_codes_involved": "US, CN, global.",
+    "packaging/regulatory_differences": "Unknown[^2_1].",
+    "region_code": "CN.",
+    "channel": "POP MART official site.",
+    "launch_msrp_(currency_+_numeric)": "CNY499.",
+    "subsequent_official_price_changes": "Unknown.",
+    "stock_status_snapshots": "Sold out, available via resellers at higher prices (e.g., ₱41,900).",
+    "purchase_limit_at_listing": "Unknown[^2_1][^2_9][^2_5].",
+    "age_rating": "Not suitable for persons under 15.",
+    "warnings": "Unknown.",
+    "compliance_marks": "Unknown.",
+    "hs/customs_category": "Unknown[^2_3][^2_4].",
+    "sku/model_code": "Unknown.",
+    "barcode/ean/upc": "Unknown.",
+    "shipping_box_info": "Unknown.",
+    "return_policy_excerpt": "Standard POP MART returns (inferred).",
+    "warranty/support_link": "Unknown.",
+    "hero_image(s)": "Labubu in bomber jacket outfit.",
+    "orthographic_angles": "Front and side views.",
+    "packaging_flats": "Color box with artwork.",
+    "icon/thumb": "Unknown.",
+    "videos": "Unboxing videos.",
+    "image_rights_note": "Official POP MART assets.",
+    "asset_hashes": "Unknown[^2_7][^2_2].",
+    "primary_sources_used": "POP MART official site, Instagram.",
+    "secondary_sources_used": "Fig Palace, Bagaholicboy.",
+    "capture_artifacts_(retrieved_at,_hash)": "Retrieved 2025-08-13; hashes unknown.",
+    "contradiction_log_(deltas)": "Release date adjusted to 2023-05-26 from seed's 2023-05-25 based on multiple sources.",
+    "query_ledger_(top_6–10_queries)": "\"Pop Mart Jump for Joy plush 2023 release\", \"Pop Mart Jump for Joy plush 2023 price\", \"Pop Mart Jump for Joy plush 2023 physical specifications\", \"Pop Mart Jump for Joy variants\", \"Pop Mart Jump for Joy materials\", \"Pop Mart Jump for Joy packaging\", \"Pop Mart Jump for Joy edition size\", \"Pop Mart Jump for Joy credits\".",
+    "localized_titles": "Jump for Joy (EN), 跳跃欢乐 (CN, inferred).",
+    "transliteration_notes": "Labubu as 拉布布.",
+    "per-locale_notes": "English and Chinese marketing[^2_1].",
+    "predecessor/successor": "Part of ongoing The Monsters series.",
+    "lateral_variants": "Other Labubu plush like Dress be Latte.",
+    "same_sculpt/different_finish": "Similar vinyl plush format to other series.",
+    "shared_collab_capsule": "None.",
+    "series_hub_link": "POP MART The Monsters collection[^2_1].",
+    "official_price_history_timeline": "Launched at CNY499, reseller prices up to ₱47,895 as of 2024.",
+    "secondary_market_range_snapshots": "High demand with prices around ₱41,900–₱47,895.",
+    "scarcity_signals": "Frequently sold out, rare find at retail[^2_1][^2_9][^2_2][^2_5].",
+    "https": "//shoegamemanila.myshopify.com/products/pop-mart-the-monsters-jump-for-joy-vinyl-plush-doll",
+    "deltas": "Release date contradicted by sources; adjusted to 2023-05-26[^2_7][^2_3][^2_1][^2_4][^2_8].",
+    "Deltas": []
+  },
+  {
+    "title": "Dress be Latte",
+    "source": "COMPLETED SEEDS.txt",
+    "brand": "POP MART.",
+    "line": "The Monsters.",
+    "character": "Labubu.",
+    "series": "Dress be Latte.",
+    "product_title_(marketing_title_+_normalized_title)": "THE MONSTERS – DRESS BE LATTE Vinyl Plush Doll.",
+    "variant_name_(colorway,_pose,_outfit)": "Latte shades with furry bucket hat, knit shirt, scarf, pants, shoulder bag, shoes.",
+    "form": "Vinyl plush doll.",
+    "deterministic_product_id_components": "Unknown.",
+    "aliases_\\&_search_tokens_(en/中文;_common_misspellings)": "Dress be Latte Labubu, 拉布布拿铁装扮 (inferred from series context).",
+    "parent/child_relations_(reissue,_seasonal_of_core,_collab_of_core)": "Core variant in The Monsters universe, fall-winter seasonal theme, no direct reissue noted[^2_1][^2_2].",
+    "size_(h/w/d_in_cm)": "Approximately 38 cm height (inferred from series standards).",
+    "weight_(grams)": "Unknown.",
+    "materials": "ABS, PVC, plush fabric.",
+    "finish_(matte,_flocked,_metallic,_translucent)": "Soft fluffy plush with vinyl elements.",
+    "articulation/motion": "Unknown.",
+    "accessories_in_box": "None specified.",
+    "colorway_notes": "Latte-toned outfit with fluffy accents[^2_2][^2_10][^2_11].",
+    "packaging_type": "Color box.",
+    "packaging_dimensions_\\&_weight": "Unknown.",
+    "box_contents_bill": "Plush doll.",
+    "authenticity/anti-counterfeit_marker": "QR code (inferred).",
+    "factory/qa_code": "Unknown[^2_1].",
+    "edition.kind": "Standard edition.",
+    "edition_size_(unit_count)": "Unknown.",
+    "chase/rarity_ratio": "Not applicable (non-blind box).",
+    "staff/member_perks": "Unknown.",
+    "original_designer/artist_(en_\\&_中文)": "Kasing Lung (龙家升).",
+    "sculpt/model_credits": "Unknown.",
+    "collaboration_partner": "None.",
+    "licensing_owner": "POP MART[^2_1][^2_6].",
+    "announced_date": "Unknown.",
+    "release_date_(authoritative;_log_deltas_if_contradicted)": "2023-10-27.",
+    "drop_windows_(channels)": "POP MART official online store, global sites.",
+    "purchase_limits": "Unknown.",
+    "queues/mechanics": "Sold out quickly.",
+    "restock/second_wave_dates": "Unknown.",
+    "end-of-life_or_“sold_out”_date": "Sold out upon release[^2_1][^2_10][^2_12].",
+    "region_lock_(true/false;_explanation)": "False; available internationally.",
+    "regional_codes_involved": "US, CN, global.",
+    "packaging/regulatory_differences": "Unknown[^2_1].",
+    "region_code": "CN.",
+    "channel": "POP MART official site.",
+    "launch_msrp_(currency_+_numeric)": "CNY499.",
+    "subsequent_official_price_changes": "Unknown.",
+    "stock_status_snapshots": "Sold out, reseller prices up to \\$486.",
+    "purchase_limit_at_listing": "Unknown[^2_1][^2_2][^2_10].",
+    "age_rating": "Not suitable for persons under 15.",
+    "warnings": "Unknown.",
+    "compliance_marks": "Unknown.",
+    "hs/customs_category": "Unknown[^2_10][^2_11].",
+    "sku/model_code": "Unknown.",
+    "barcode/ean/upc": "Unknown.",
+    "shipping_box_info": "Unknown.",
+    "return_policy_excerpt": "Standard returns.",
+    "warranty/support_link": "Unknown.",
+    "hero_image(s)": "Labubu in latte outfit.",
+    "orthographic_angles": "Front views.",
+    "packaging_flats": "Color box.",
+    "icon/thumb": "Unknown.",
+    "videos": "Unboxing.",
+    "image_rights_note": "Official assets.",
+    "asset_hashes": "Unknown[^2_2][^2_12][^2_13].",
+    "primary_sources_used": "POP MART site, Instagram.",
+    "secondary_sources_used": "Fig Palace, Blindboxmall.",
+    "capture_artifacts_(retrieved_at,_hash)": "Retrieved 2025-08-13; hashes unknown.",
+    "contradiction_log_(deltas)": "Release date adjusted to 2023-10-27 from seed's 2023-10-26.",
+    "query_ledger_(top_6–10_queries)": "\"Pop Mart Dress be Latte plush 2023 release\", \"Pop Mart Dress be Latte plush 2023 price\", \"Pop Mart Dress be Latte plush 2023 physical specifications\", \"Pop Mart Dress be Latte variants\", \"Pop Mart Dress be Latte materials\", \"Pop Mart Dress be Latte packaging\", \"Pop Mart Dress be Latte edition size\", \"Pop Mart Dress be Latte credits\".",
+    "localized_titles": "Dress be Latte (EN), 拿铁装扮 (CN, inferred).",
+    "transliteration_notes": "Labubu as 拉布布.",
+    "per-locale_notes": "English and Chinese[^2_1].",
+    "predecessor/successor": "Part of The Monsters series.",
+    "lateral_variants": "Jump for Joy, other plush.",
+    "same_sculpt/different_finish": "Similar format.",
+    "shared_collab_capsule": "None.",
+    "series_hub_link": "POP MART collection[^2_1].",
+    "official_price_history_timeline": "Launched at CNY499, resellers at \\$486.",
+    "secondary_market_range_snapshots": "High secondary prices.",
+    "scarcity_signals": "Sold out, collectible demand[^2_1][^2_2][^2_10][^2_13].",
+    "https": "//fr.pinterest.com/pin/the-monsters-dress-be-latte-vinyl-plush-doll--418412621656709921/",
+    "deltas": "Release date contradicted; adjusted to 2023-10-27[^2_1][^2_10][^2_12][^2_11].",
+    "<div_style=\"text-align": "center\">⁂</div>",
+    "Deltas": []
+  },
+  {
+    "title": "^2_1",
+    "source": "COMPLETED SEEDS.txt",
+    "15._**deltas": "**",
+    "16._**media_assets": "**",
+    "Deltas": [
+      {
+        "field": "15._**deltas",
+        "from": null,
+        "to": "**",
+        "source": "PRIMARY TARGETS — Completed(2).txt"
+      },
+      {
+        "field": "16._**media_assets",
+        "from": null,
+        "to": "**",
+        "source": "PRIMARY TARGETS — Completed(2).txt"
+      }
+    ]
+  },
+  {
+    "title": "^2_2",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^2_3",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^2_4",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^2_5",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^2_6",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^2_7",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^2_8",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^2_9",
+    "source": "COMPLETED SEEDS.txt",
+    "15._**deltas": "**",
+    "16._**media_assets": "**",
+    "Deltas": [
+      {
+        "field": "15._**deltas",
+        "from": null,
+        "to": "**",
+        "source": "PRIMARY TARGETS — Completed(2).txt"
+      },
+      {
+        "field": "16._**media_assets",
+        "from": null,
+        "to": "**",
+        "source": "PRIMARY TARGETS — Completed(2).txt"
+      }
+    ]
+  },
+  {
+    "title": "^2_10",
+    "source": "COMPLETED SEEDS.txt",
+    "15._**deltas": "**",
+    "16._**media_assets": "**",
+    "Deltas": [
+      {
+        "field": "15._**deltas",
+        "from": null,
+        "to": "**",
+        "source": "PRIMARY TARGETS — Completed(2).txt"
+      },
+      {
+        "field": "16._**media_assets",
+        "from": null,
+        "to": "**",
+        "source": "PRIMARY TARGETS — Completed(2).txt"
+      }
+    ]
+  },
+  {
+    "title": "^2_11",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^2_12",
+    "source": "COMPLETED SEEDS.txt",
+    "15._**deltas": "**",
+    "16._**media_assets": "**",
+    "Deltas": [
+      {
+        "field": "15._**deltas",
+        "from": null,
+        "to": "**",
+        "source": "PRIMARY TARGETS — Completed(2).txt"
+      },
+      {
+        "field": "16._**media_assets",
+        "from": null,
+        "to": "**",
+        "source": "PRIMARY TARGETS — Completed(2).txt"
+      }
+    ]
+  },
+  {
+    "title": "^2_13",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^2_14",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^2_15",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^2_16",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^2_17",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^2_18",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^2_19",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^2_20",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "Flip with Me",
+    "source": "COMPLETED SEEDS.txt",
+    "brand": "POP MART.",
+    "line": "The Monsters.",
+    "character": "Labubu.",
+    "series": "Flip with Me.",
+    "product_title_(marketing_title_+_normalized_title)": "THE MONSTERS – FLIP WITH ME Vinyl Plush Doll.",
+    "variant_name_(colorway,_pose,_outfit)": "Blue and white striped button-down shirt, dark denim jeans, black and white sneakers, glasses.",
+    "form": "Vinyl plush doll.",
+    "deterministic_product_id_components": "SKU 12401040004.",
+    "aliases_\\&_search_tokens_(en/中文;_common_misspellings)": "Flip with Me Labubu, 拉布布翻转和我一起 (inferred from series context).",
+    "parent/child_relations_(reissue,_seasonal_of_core,_collab_of_core)": "Core variant in The Monsters universe, no direct reissue noted.",
+    "size_(h/w/d_in_cm)": "20×15×40cm / 7.87×5.91×15.75 inches.",
+    "weight_(grams)": "Unknown.",
+    "materials": "SHELL: 40% Cotton, 17% PVC, 16% Polyester, 15% ABS, 12% TPR; STUFFING: 90% Polyester, 10% PE Particles.",
+    "finish_(matte,_flocked,_metallic,_translucent)": "Soft plush body with vinyl face and articulated features.",
+    "articulation/motion": "Movable eyes with flip feature (spiral eyes), posable hands and head.",
+    "accessories_in_box": "Removable glasses.",
+    "colorway_notes": "Tan plush fur with blue striped shirt and denim pants.",
+    "packaging_type": "Color box with handle.",
+    "packaging_dimensions_\\&_weight": "Single package size: 30×22×45 cm; Single gross weight: 5.000 KG.",
+    "box_contents_bill": "Plush doll, glasses accessory, authenticity card.",
+    "authenticity/anti-counterfeit_marker": "Zip ties, batch verification.",
+    "factory/qa_code": "Unknown.",
+    "edition.kind": "Standard edition.",
+    "edition_size_(unit_count)": "Unknown.",
+    "chase/rarity_ratio": "Not applicable (non-blind box).",
+    "staff/member_perks": "Unknown.",
+    "original_designer/artist_(en_\\&_中文)": "Kasing Lung (龙家升).",
+    "sculpt/model_credits": "POP MART design team.",
+    "collaboration_partner": "None.",
+    "licensing_owner": "POP MART.",
+    "announced_date": "July 7, 2024.",
+    "release_date_(authoritative;_log_deltas_if_contradicted)": "July 12, 2024.",
+    "drop_windows_(channels)": "POP MART official online store, global sites, in-store only in some regions.",
+    "purchase_limits": "Limited to 2 pieces per order in some channels.",
+    "queues/mechanics": "High demand, frequent sellouts.",
+    "restock/second_wave_dates": "August 9, 2024 in-store availability.",
+    "end-of-life_or_\"sold_out\"_date": "Frequently sold out.",
+    "region_lock_(true/false;_explanation)": "False; available internationally via POP MART sites.",
+    "regional_codes_involved": "US, CA, CN, global.",
+    "packaging/regulatory_differences": "Unknown.",
+    "region_code": "CA.",
+    "channel": "POP MART official site.",
+    "launch_msrp_(currency_+_numeric)": "CAD134.99.",
+    "subsequent_official_price_changes": "Unknown.",
+    "stock_status_snapshots": "Sold out, reseller prices ranging from USD182–USD226.",
+    "purchase_limit_at_listing": "Limited to 2 pieces per order.",
+    "age_rating": "Not suitable for persons under 15.",
+    "warnings": "Unknown.",
+    "compliance_marks": "California Proposition 65 Consumer Warning.",
+    "hs/customs_category": "Unknown.",
+    "sku/model_code": "12401040004.",
+    "barcode/ean/upc": "Unknown.",
+    "shipping_box_info": "30×22×45 cm packaging.",
+    "return_policy_excerpt": "15-day returns.",
+    "warranty/support_link": "Unknown.",
+    "hero_image(s)": "Labubu in office outfit with glasses.",
+    "orthographic_angles": "Front views with flip eye feature.",
+    "packaging_flats": "Color box with handle design.",
+    "icon/thumb": "Unknown.",
+    "videos": "Multiple unboxing and review videos.",
+    "image_rights_note": "Official POP MART assets.",
+    "asset_hashes": "Unknown.",
+    "primary_sources_used": "POP MART official sites (US, CA), Instagram.",
+    "secondary_sources_used": "Hypevault, YouTube reviews, Alibaba listings.",
+    "capture_artifacts_(retrieved_at,_hash)": "Retrieved 2025-08-13; hashes unknown.",
+    "contradiction_log_(deltas)": "No deltas on release date or MSRP.",
+    "query_ledger_(top_6–10_queries)": "\"POP MART The Monsters Flip with Me 2024 plush release\", \"POP MART The Monsters Flip with Me 2024 price specifications\", \"POP MART Flip with Me Let's Checkmate 2025 release\", \"POP MART Flip with Me pricing CN US specifications\", \"POP MART The Monsters Flip with Me materials\", \"POP MART The Monsters Flip with Me packaging\".",
+    "localized_titles": "Flip with Me (EN), 翻转和我一起 (CN, inferred).",
+    "transliteration_notes": "Labubu as 拉布布.",
+    "per-locale_notes": "English and Chinese marketing.",
+    "predecessor/successor": "Part of ongoing The Monsters series.",
+    "lateral_variants": "Let's Checkmate, Fall in Wild, other vinyl plush.",
+    "same_sculpt/different_finish": "Similar vinyl plush format to other series.",
+    "shared_collab_capsule": "None.",
+    "series_hub_link": "POP MART The Monsters collection.",
+    "official_price_history_timeline": "Launched at USD114.99/CAD134.99, reseller prices USD182–USD226.",
+    "secondary_market_range_snapshots": "High secondary market demand at 60-98% markup.",
+    "scarcity_signals": "Frequent sellouts, limited per-order quantities.",
+    "https": "//www.popmart.com/ca/products/1371/the-monsters-flip-with-me-vinyl-plush-doll",
+    "deltas": "None.",
+    "Deltas": []
+  },
+  {
+    "title": "Fall in Wild",
+    "source": "COMPLETED SEEDS.txt",
+    "brand": "POP MART.",
+    "line": "The Monsters.",
+    "character": "Labubu.",
+    "series": "Fall in Wild.",
+    "product_title_(marketing_title_+_normalized_title)": "THE MONSTERS FALL IN WILD SERIES – Vinyl Plush Doll (plush) / Vinyl Plush Doll Pendant (keychain).",
+    "variant_name_(colorway,_pose,_outfit)": "Khaki bucket hat, denim overalls with \"LOVE BOO\" buckles, orange boots, flower accessory.",
+    "form": "Vinyl plush doll (40cm) and keychain pendant (17cm).",
+    "deterministic_product_id_components": "Unknown.",
+    "aliases_\\&_search_tokens_(en/中文;_common_misspellings)": "Fall in Wild Labubu, 拉布布秋野系列 (inferred from series context).",
+    "parent/child_relations_(reissue,_seasonal_of_core,_collab_of_core)": "Core variant in The Monsters universe, spring/fall seasonal theme, available in both plush and pendant forms.",
+    "size_(h/w/d_in_cm)": "Plush: 20×15×40cm; Pendant: 17cm height.",
+    "weight_(grams)": "Plush single package: 2.000 KG (gross weight).",
+    "materials": "FABRIC: 42% Cotton, 18% PVC, 15% ABS, 13% Polyester Fiber, 12% TPR; FILLING: 90% Polyester Fiber, 10% PE Pellets.",
+    "finish_(matte,_flocked,_metallic,_translucent)": "Soft plush body with vinyl face and accessories.",
+    "articulation/motion": "Posable hands, removable hat and clothing.",
+    "accessories_in_box": "Removable bucket hat, flower accessory, boots (plush only).",
+    "colorway_notes": "Tan fur with khaki hat, denim overalls, orange boots.",
+    "packaging_type": "Color box with window display and handles.",
+    "packaging_dimensions_\\&_weight": "Plush: 35×20×17 cm, 2.000 KG; Pendant: smaller individual box.",
+    "box_contents_bill": "Plush/pendant doll, authenticity card.",
+    "authenticity/anti-counterfeit_marker": "QR code verification, zip ties.",
+    "factory/qa_code": "Unknown.",
+    "edition.kind": "Standard edition.",
+    "edition_size_(unit_count)": "Unknown.",
+    "chase/rarity_ratio": "Not applicable (non-blind box).",
+    "staff/member_perks": "Unknown.",
+    "original_designer/artist_(en_\\&_中文)": "Kasing Lung (龙家升).",
+    "sculpt/model_credits": "POP MART design team.",
+    "collaboration_partner": "None.",
+    "licensing_owner": "POP MART.",
+    "announced_date": "Unknown.",
+    "release_date_(authoritative;_log_deltas_if_contradicted)": "April 12, 2024.",
+    "drop_windows_(channels)": "POP MART official online store, global sites.",
+    "purchase_limits": "Unknown.",
+    "queues/mechanics": "High demand, frequent sellouts.",
+    "restock/second_wave_dates": "Unknown.",
+    "end-of-life_or_\"sold_out\"_date": "Frequently sold out.",
+    "region_lock_(true/false;_explanation)": "False; available internationally.",
+    "regional_codes_involved": "US, CN, AU, global.",
+    "packaging/regulatory_differences": "Unknown.",
+    "region_code": "AU.",
+    "channel": "POP MART official site.",
+    "launch_msrp_(currency_+_numeric)": "AUD equivalent.",
+    "subsequent_official_price_changes": "Unknown.",
+    "stock_status_snapshots": "Sold out, reseller prices up to USD157.95–USD195 for plush, IDR 1,350,000 for pendant.",
+    "purchase_limit_at_listing": "Unknown.",
+    "age_rating": "Unknown.",
+    "warnings": "California Proposition 65 Consumer Warning.",
+    "compliance_marks": "Unknown.",
+    "hs/customs_category": "Unknown.",
+    "sku/model_code": "Unknown.",
+    "barcode/ean/upc": "Unknown.",
+    "shipping_box_info": "35×20×17 cm for plush.",
+    "return_policy_excerpt": "15-day returns.",
+    "warranty/support_link": "Unknown.",
+    "hero_image(s)": "Labubu in spring/fall outfit with bucket hat.",
+    "orthographic_angles": "Front and side views, outfit details.",
+    "packaging_flats": "Window box with artwork.",
+    "icon/thumb": "Unknown.",
+    "videos": "Multiple unboxing videos on YouTube and TikTok.",
+    "image_rights_note": "Official POP MART assets.",
+    "asset_hashes": "Unknown.",
+    "primary_sources_used": "POP MART official sites (US, AU, FR, HK), Instagram.",
+    "secondary_sources_used": "YouTube reviews, Lazada, Alibaba listings.",
+    "capture_artifacts_(retrieved_at,_hash)": "Retrieved 2025-08-13; hashes unknown.",
+    "contradiction_log_(deltas)": "Release date adjusted to April 12, 2024 from seed's July 12, 2024.",
+    "query_ledger_(top_6–10_queries)": "\"POP MART Fall in Wild plush doll pendant keychain 2024\", \"POP MART Fall in Wild 40x20x15 cm specifications\", \"POP MART Fall in Wild 17 cm pendant specifications\", \"POP MART Fall in Wild pricing CN specifications\", \"POP MART Fall in Wild materials\", \"POP MART Fall in Wild packaging\".",
+    "localized_titles": "Fall in Wild (EN), 秋野系列 (CN, inferred).",
+    "transliteration_notes": "Labubu as 拉布布.",
+    "per-locale_notes": "English and Chinese marketing.",
+    "predecessor/successor": "Part of The Monsters seasonal series.",
+    "lateral_variants": "Available in both full plush (40cm) and pendant (17cm) forms.",
+    "same_sculpt/different_finish": "Similar base design in two sizes.",
+    "shared_collab_capsule": "Part of Fall in Wild series with accessories line (bucket hat mini bags).",
+    "series_hub_link": "POP MART The Monsters collection.",
+    "official_price_history_timeline": "Launched at USD109.99/USD58.99, reseller markup to USD157.95–USD195.",
+    "secondary_market_range_snapshots": "High secondary market demand with 44-78% markup.",
+    "scarcity_signals": "Frequent sellouts, high collector interest.",
+    "https": "//www.popmart.com/en-HK/products/866/the-monsters-fall-in-wild-series-vinyl-plush-doll-pendant",
+    "deltas": "Release date contradicted; adjusted from July 12, 2024 to April 12, 2024.",
+    "<div_style=\"text-align": "center\">⁂</div>",
+    "Deltas": []
+  },
+  {
+    "title": "^3_1",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^3_2",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^3_3",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^3_4",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^3_5",
+    "source": "COMPLETED SEEDS.txt",
+    "15._**deltas": "**",
+    "16._**media_assets": "**",
+    "Deltas": [
+      {
+        "field": "15._**deltas",
+        "from": null,
+        "to": "**",
+        "source": "PRIMARY TARGETS — Completed(2).txt"
+      },
+      {
+        "field": "16._**media_assets",
+        "from": null,
+        "to": "**",
+        "source": "PRIMARY TARGETS — Completed(2).txt"
+      }
+    ]
+  },
+  {
+    "title": "^3_6",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^3_7",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^3_8",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^3_9",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^3_10",
+    "source": "COMPLETED SEEDS.txt",
+    "15._**deltas": "**",
+    "16._**media_assets": "**",
+    "Deltas": [
+      {
+        "field": "15._**deltas",
+        "from": null,
+        "to": "**",
+        "source": "PRIMARY TARGETS — Completed(2).txt"
+      },
+      {
+        "field": "16._**media_assets",
+        "from": null,
+        "to": "**",
+        "source": "PRIMARY TARGETS — Completed(2).txt"
+      }
+    ]
+  },
+  {
+    "title": "^3_11",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^3_12",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^3_13",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^3_14",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^3_15",
+    "source": "COMPLETED SEEDS.txt",
+    "15._**deltas": "**",
+    "16._**media_assets": "**",
+    "Deltas": [
+      {
+        "field": "15._**deltas",
+        "from": null,
+        "to": "**",
+        "source": "PRIMARY TARGETS — Completed(2).txt"
+      },
+      {
+        "field": "16._**media_assets",
+        "from": null,
+        "to": "**",
+        "source": "PRIMARY TARGETS — Completed(2).txt"
+      }
+    ]
+  },
+  {
+    "title": "^3_16",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^3_17",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^3_18",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^3_19",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^3_20",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^3_21",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^3_22",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^3_23",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^3_24",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^3_25",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^3_26",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^3_27",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^3_28",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^3_29",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^3_30",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^3_31",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^3_32",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^3_33",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^3_34",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^3_35",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^3_36",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^3_37",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^3_38",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^3_39",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^3_40",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^3_41",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^3_42",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^3_43",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "Let’s Checkmate (Doll)",
+    "source": "COMPLETED SEEDS.txt",
+    "brand": "POP MART.",
+    "line": "The Monsters.",
+    "character": "Labubu.",
+    "series": "Let’s Checkmate.",
+    "product_title_(marketing_title_+_normalized_title)": "THE MONSTERS Let’s Checkmate Series-Vinyl Plush Doll.",
+    "variant_name_(colorway,_pose,_outfit)": "Brown fur with crown, white ruffle collar, red cape with white fur trim, holding ring box.",
+    "form": "Vinyl plush doll.",
+    "deterministic_product_id_components": "Unknown.",
+    "aliases_\\&_search_tokens_(en/中文;_common_misspellings)": "Let’s Checkmate Labubu Doll, 拉布布让我们对弈 (inferred from series context).",
+    "parent/child_relations_(reissue,_seasonal_of_core,_collab_of_core)": "Core variant in The Monsters universe, paired with hanging card version, no direct reissue noted.",
+    "size_(h/w/d_in_cm)": "37cm height.",
+    "weight_(grams)": "Unknown.",
+    "materials": "Shell-Polyester/PVC/ABS; Stuffing-Polyester/PP Particles; Ring Box-PS/Polyester/Hardware.",
+    "finish_(matte,_flocked,_metallic,_translucent)": "Soft plush body with vinyl face.",
+    "articulation/motion": "Movable eyes.",
+    "accessories_in_box": "Removable cape, functional ring box (empty).",
+    "colorway_notes": "Brown fur with red cape and white accents.",
+    "packaging_type": "Color box.",
+    "packaging_dimensions_\\&_weight": "Unknown.",
+    "box_contents_bill": "Plush doll, cape, ring box, authenticity card (inferred from series standards).",
+    "authenticity/anti-counterfeit_marker": "QR code for verification (inferred).",
+    "factory/qa_code": "Unknown.",
+    "edition.kind": "Standard edition.",
+    "edition_size_(unit_count)": "Unknown.",
+    "chase/rarity_ratio": "Not applicable (non-blind box).",
+    "staff/member_perks": "Unknown.",
+    "original_designer/artist_(en_\\&_中文)": "Kasing Lung (龙家升).",
+    "sculpt/model_credits": "POP MART design team.",
+    "collaboration_partner": "None.",
+    "licensing_owner": "POP MART.",
+    "announced_date": "Unknown.",
+    "release_date_(authoritative;_log_deltas_if_contradicted)": "2025-02-07.",
+    "drop_windows_(channels)": "POP MART official online store, global sites.",
+    "purchase_limits": "Limited to 1 piece per customer in some channels.",
+    "queues/mechanics": "High demand, first come first served.",
+    "restock/second_wave_dates": "Unknown.",
+    "end-of-life_or_“sold_out”_date": "Unknown.",
+    "region_lock_(true/false;_explanation)": "False; available internationally via POP MART sites.",
+    "regional_codes_involved": "US, CN, global.",
+    "packaging/regulatory_differences": "Unknown.",
+    "region_code": "US.",
+    "channel": "POP MART official site.",
+    "launch_msrp_(currency_+_numeric)": "USD114.99.",
+    "subsequent_official_price_changes": "Unknown.",
+    "stock_status_snapshots": "Sold out quickly upon release.",
+    "purchase_limit_at_listing": "1 per customer.",
+    "age_rating": "Not suitable for persons under 15.",
+    "warnings": "Unknown.",
+    "compliance_marks": "Unknown.",
+    "hs/customs_category": "Unknown.",
+    "sku/model_code": "Unknown.",
+    "barcode/ean/upc": "Unknown.",
+    "shipping_box_info": "Unknown.",
+    "return_policy_excerpt": "15-day returns (inferred from brand standards).",
+    "warranty/support_link": "Unknown.",
+    "hero_image(s)": "Labubu in crown and cape holding ring box.",
+    "orthographic_angles": "Front and side views.",
+    "packaging_flats": "Color box with artwork.",
+    "icon/thumb": "Unknown.",
+    "videos": "Unboxing and review videos.",
+    "image_rights_note": "Official POP MART assets.",
+    "asset_hashes": "Unknown.",
+    "primary_sources_used": "POP MART official site, Instagram.",
+    "secondary_sources_used": "Fig Palace, YouTube reviews, Reddit.",
+    "capture_artifacts_(retrieved_at,_hash)": "Retrieved 2025-08-13; hashes unknown.",
+    "contradiction_log_(deltas)": "No deltas on release date or MSRP.",
+    "query_ledger_(top_6–10_queries)": "\"POP MART Let’s Checkmate Doll 2025 release date\", \"POP MART Let’s Checkmate Doll vinyl plush USD 114.99\", \"POP MART Let’s Checkmate Doll physical specifications\", \"POP MART Let’s Checkmate Doll materials\", \"POP MART Let’s Checkmate Doll packaging\", \"POP MART Let’s Checkmate Doll edition size\", \"POP MART Let’s Checkmate Doll credits\", \"POP MART Let’s Checkmate Doll regional policy\".",
+    "localized_titles": "Let’s Checkmate (EN), 让我们对弈 (CN, inferred).",
+    "transliteration_notes": "Labubu as 拉布布.",
+    "per-locale_notes": "English and Chinese marketing.",
+    "predecessor/successor": "Part of ongoing The Monsters series.",
+    "lateral_variants": "Paired with Let’s Checkmate Hanging Card.",
+    "same_sculpt/different_finish": "Similar vinyl plush format to other series.",
+    "shared_collab_capsule": "None.",
+    "series_hub_link": "POP MART The Monsters collection.",
+    "official_price_history_timeline": "Launched at USD114.99.",
+    "secondary_market_range_snapshots": "Unknown.",
+    "scarcity_signals": "High demand, limited per customer.",
+    "https": "//www.instagram.com/p/DGEwGHyBLZV/",
+    "deltas": "None.",
+    "Deltas": []
+  },
+  {
+    "title": "Let’s Checkmate (Hanging Card)",
+    "source": "COMPLETED SEEDS.txt",
+    "brand": "POP MART.",
+    "line": "The Monsters.",
+    "character": "Labubu.",
+    "series": "Let’s Checkmate.",
+    "product_title_(marketing_title_+_normalized_title)": "THE MONSTERS Let’s Checkmate Series-Vinyl Plush Hanging Card.",
+    "variant_name_(colorway,_pose,_outfit)": "Pastel yellow fur with crown, pink ribbon heart, yellow dress with blue bow and pink heart details.",
+    "form": "Vinyl plush hanging card (pendant).",
+    "deterministic_product_id_components": "Unknown.",
+    "aliases_\\&_search_tokens_(en/中文;_common_misspellings)": "Let’s Checkmate Labubu Hanging Card, 拉布布让我们对弈挂卡 (inferred from series context).",
+    "parent/child_relations_(reissue,_seasonal_of_core,_collab_of_core)": "Core variant in The Monsters universe, paired with doll version, no direct reissue noted.",
+    "size_(h/w/d_in_cm)": "17cm height.",
+    "weight_(grams)": "Unknown.",
+    "materials": "Shell-59% Polyester/21% PVC/20% ABS (inferred from series).",
+    "finish_(matte,_flocked,_metallic,_translucent)": "Soft plush body with vinyl face.",
+    "articulation/motion": "Unknown.",
+    "accessories_in_box": "Attached crown and ribbon heart.",
+    "colorway_notes": "Pastel yellow fur with yellow dress and pink/blue accents.",
+    "packaging_type": "Color box with window display.",
+    "packaging_dimensions_\\&_weight": "Unknown.",
+    "box_contents_bill": "Hanging card pendant, authenticity card (inferred).",
+    "authenticity/anti-counterfeit_marker": "QR code (inferred).",
+    "factory/qa_code": "Unknown.",
+    "edition.kind": "Standard edition.",
+    "edition_size_(unit_count)": "Unknown.",
+    "chase/rarity_ratio": "Not applicable (non-blind box).",
+    "staff/member_perks": "Unknown.",
+    "original_designer/artist_(en_\\&_中文)": "Kasing Lung (龙家升).",
+    "sculpt/model_credits": "POP MART design team.",
+    "collaboration_partner": "None.",
+    "licensing_owner": "POP MART.",
+    "announced_date": "Unknown.",
+    "release_date_(authoritative;_log_deltas_if_contradicted)": "2025-02-07.",
+    "drop_windows_(channels)": "POP MART official online store, global sites.",
+    "purchase_limits": "Limited to 1 piece per customer in some channels.",
+    "queues/mechanics": "High demand, first come first served.",
+    "restock/second_wave_dates": "Unknown.",
+    "end-of-life_or_“sold_out”_date": "Unknown.",
+    "region_lock_(true/false;_explanation)": "False; available internationally.",
+    "regional_codes_involved": "US, CN, global.",
+    "packaging/regulatory_differences": "Unknown.",
+    "region_code": "US.",
+    "channel": "POP MART official site.",
+    "launch_msrp_(currency_+_numeric)": "USD39.99.",
+    "subsequent_official_price_changes": "Unknown.",
+    "stock_status_snapshots": "Sold out quickly upon release.",
+    "purchase_limit_at_listing": "1 per customer.",
+    "age_rating": "Not suitable for persons under 15 (inferred from series).",
+    "warnings": "Unknown.",
+    "compliance_marks": "Unknown.",
+    "hs/customs_category": "Unknown.",
+    "sku/model_code": "Unknown.",
+    "barcode/ean/upc": "Unknown.",
+    "shipping_box_info": "Unknown.",
+    "return_policy_excerpt": "15-day returns (inferred).",
+    "warranty/support_link": "Unknown.",
+    "hero_image(s)": "Labubu in yellow dress with crown.",
+    "orthographic_angles": "Front views.",
+    "packaging_flats": "Window box with artwork.",
+    "icon/thumb": "Unknown.",
+    "videos": "Unboxing videos.",
+    "image_rights_note": "Official POP MART assets.",
+    "asset_hashes": "Unknown.",
+    "primary_sources_used": "POP MART official site, Instagram.",
+    "secondary_sources_used": "Fig Palace, YouTube reviews, Reddit.",
+    "capture_artifacts_(retrieved_at,_hash)": "Retrieved 2025-08-13; hashes unknown.",
+    "contradiction_log_(deltas)": "No deltas on release date or MSRP.",
+    "query_ledger_(top_6–10_queries)": "\"POP MART Let’s Checkmate Hanging Card 2025 release date\", \"POP MART Let’s Checkmate Hanging Card vinyl pendant USD 39.99\", \"POP MART Let’s Checkmate Hanging Card physical specifications\", \"POP MART Let’s Checkmate Hanging Card materials\", \"POP MART Let’s Checkmate Hanging Card packaging\", \"POP MART Let’s Checkmate Hanging Card edition size\", \"POP MART Let’s Checkmate Hanging Card credits\", \"POP MART Let’s Checkmate Hanging Card regional policy\".",
+    "localized_titles": "Let’s Checkmate (EN), 让我们对弈 (CN, inferred).",
+    "transliteration_notes": "Labubu as 拉布布.",
+    "per-locale_notes": "English and Chinese.",
+    "predecessor/successor": "Part of The Monsters series.",
+    "lateral_variants": "Paired with Let’s Checkmate Doll.",
+    "same_sculpt/different_finish": "Similar format.",
+    "shared_collab_capsule": "None.",
+    "series_hub_link": "POP MART The Monsters collection.",
+    "official_price_history_timeline": "Launched at USD39.99.",
+    "secondary_market_range_snapshots": "Unknown.",
+    "scarcity_signals": "High demand, limited per customer.",
+    "https": "//www.instagram.com/p/DGEwGHyBLZV/",
+    "deltas": "None.",
+    "<div_style=\"text-align": "center\">⁂</div>",
+    "Deltas": []
+  },
+  {
+    "title": "^4_1",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^4_2",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^4_3",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^4_4",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^4_5",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^4_6",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^4_7",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^4_8",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^4_9",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^4_10",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^4_11",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^4_12",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^4_13",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^4_14",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^4_15",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^4_16",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^4_17",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^4_18",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^4_19",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "Walk by Fortune (CNY)",
+    "source": "COMPLETED SEEDS.txt",
+    "brand": "POP MART.",
+    "line": "The Monsters.",
+    "character": "Labubu.",
+    "series": "Walk by Fortune.",
+    "product_title_(marketing_title_+_normalized_title)": "THE MONSTERS – WALK BY FORTUNE Vinyl Plush Doll.",
+    "variant_name_(colorway,_pose,_outfit)": "Chinese New Year theme with traditional red outfit, sitting pose.",
+    "form": "Vinyl plush doll.",
+    "deterministic_product_id_components": "Unknown.",
+    "aliases_\\&_search_tokens_(en/中文;_common_misspellings)": "Walk by Fortune Labubu, 拉布布招财进宝 (inferred from series context).",
+    "parent/child_relations_(reissue,_seasonal_of_core,_collab_of_core)": "Limited seasonal edition for Chinese New Year 2024, no direct reissue noted.",
+    "size_(h/w/d_in_cm)": "Approximately 15.75 inches / 40cm height.",
+    "weight_(grams)": "Unknown.",
+    "materials": "PLUSH+PVC.",
+    "finish_(matte,_flocked,_metallic,_translucent)": "Soft plush body with vinyl face.",
+    "articulation/motion": "Unknown.",
+    "accessories_in_box": "Unknown.",
+    "colorway_notes": "Traditional red Chinese New Year theme.",
+    "packaging_type": "Color box.",
+    "packaging_dimensions_\\&_weight": "Unknown.",
+    "box_contents_bill": "Plush doll, authenticity card (inferred).",
+    "authenticity/anti-counterfeit_marker": "QR code (inferred).",
+    "factory/qa_code": "Unknown.",
+    "edition.kind": "Limited edition.",
+    "edition_size_(unit_count)": "3,000 units.",
+    "chase/rarity_ratio": "Not applicable (limited quantity, non-blind box).",
+    "staff/member_perks": "Unknown.",
+    "original_designer/artist_(en_\\&_中文)": "Kasing Lung (龙家升).",
+    "sculpt/model_credits": "POP MART design team.",
+    "collaboration_partner": "None.",
+    "licensing_owner": "POP MART.",
+    "announced_date": "Unknown.",
+    "release_date_(authoritative;_log_deltas_if_contradicted)": "December 29, 2023.",
+    "drop_windows_(channels)": "POP MART official online store, limited release.",
+    "purchase_limits": "Unknown.",
+    "queues/mechanics": "Limited to 3,000 units, sold out quickly.",
+    "restock/second_wave_dates": "No restocks due to limited edition nature.",
+    "end-of-life_or_\"sold_out\"_date": "Sold out immediately due to limited quantity.",
+    "region_lock_(true/false;_explanation)": "Unknown; likely available in CN market primarily.",
+    "regional_codes_involved": "CN (primary).",
+    "packaging/regulatory_differences": "Unknown.",
+    "region_code": "CN.",
+    "channel": "POP MART official site.",
+    "launch_msrp_(currency_+_numeric)": "CNY499.",
+    "subsequent_official_price_changes": "Unknown.",
+    "stock_status_snapshots": "Sold out, reseller prices up to USD1,169.22.",
+    "purchase_limit_at_listing": "Unknown.",
+    "age_rating": "15+.",
+    "warnings": "Unknown.",
+    "compliance_marks": "CE certification.",
+    "hs/customs_category": "Unknown.",
+    "sku/model_code": "Unknown.",
+    "barcode/ean/upc": "Unknown.",
+    "shipping_box_info": "Unknown.",
+    "return_policy_excerpt": "Standard returns (inferred).",
+    "warranty/support_link": "Unknown.",
+    "hero_image(s)": "Labubu in traditional red Chinese New Year outfit.",
+    "orthographic_angles": "Front views.",
+    "packaging_flats": "Color box with CNY theme.",
+    "icon/thumb": "Unknown.",
+    "videos": "Unboxing videos.",
+    "image_rights_note": "Official POP MART assets.",
+    "asset_hashes": "Unknown.",
+    "primary_sources_used": "Fig Palace, POP MART official sites.",
+    "secondary_sources_used": "Toysez, YouTube reviews, collector sites.",
+    "capture_artifacts_(retrieved_at,_hash)": "Retrieved 2025-08-13; hashes unknown.",
+    "contradiction_log_(deltas)": "No deltas on release date or MSRP.",
+    "query_ledger_(top_6–10_queries)": "\"POP MART Walk by Fortune CNY 2023 limited 3000\", \"POP MART Walk by Fortune Chinese New Year plush doll 2023\", \"POP MART Walk by Fortune CNY 499 2023-12-29\", \"POP MART Walk by Fortune specifications\", \"POP MART Walk by Fortune materials packaging\", \"POP MART Walk by Fortune edition size\", \"POP MART Walk by Fortune credits\", \"POP MART Walk by Fortune regional policy\".",
+    "localized_titles": "Walk by Fortune (EN), 招财进宝 (CN, inferred).",
+    "transliteration_notes": "Labubu as 拉布布.",
+    "per-locale_notes": "Chinese New Year specific theming.",
+    "predecessor/successor": "Part of seasonal CNY collection.",
+    "lateral_variants": "Paired with Best of Luck overseas exclusive.",
+    "same_sculpt/different_finish": "Similar limited edition format.",
+    "shared_collab_capsule": "Chinese New Year 2024 theme.",
+    "series_hub_link": "POP MART seasonal exclusives.",
+    "official_price_history_timeline": "Launched at CNY499, reseller prices up to USD1,169.22.",
+    "secondary_market_range_snapshots": "Extremely high secondary market value due to limited edition nature.",
+    "scarcity_signals": "Limited to 3,000 units, immediate sellout, high collector demand.",
+    "https": "//www.tiktok.com/discover/popmart-walk-by-fortune-labubu",
+    "deltas": "None.",
+    "Deltas": []
+  },
+  {
+    "title": "Best of Luck（海外限定）",
+    "source": "COMPLETED SEEDS.txt",
+    "brand": "POP MART.",
+    "line": "The Monsters.",
+    "character": "Labubu.",
+    "series": "Best of Luck (海外限定/Overseas Exclusive).",
+    "product_title_(marketing_title_+_normalized_title)": "THE MONSTERS – BEST OF LUCK Vinyl Plush Doll.",
+    "variant_name_(colorway,_pose,_outfit)": "Chinese New Year theme with cream/beige outfit, casual sweater, pants, and shoes (all removable).",
+    "form": "Vinyl plush doll.",
+    "deterministic_product_id_components": "Unknown.",
+    "aliases_\\&_search_tokens_(en/中文;_common_misspellings)": "Best of Luck Labubu, 拉布布好运连连 (inferred from series context).",
+    "parent/child_relations_(reissue,_seasonal_of_core,_collab_of_core)": "Limited seasonal edition for overseas markets, paired with Walk by Fortune, no direct reissue noted.",
+    "size_(h/w/d_in_cm)": "38cm tall / 14.9 inches.",
+    "weight_(grams)": "Unknown.",
+    "materials": "Polyester Fiber/PVC/ABS; Filling: 100% Polyester Fiber.",
+    "finish_(matte,_flocked,_metallic,_translucent)": "Soft plush body with vinyl face.",
+    "articulation/motion": "Removable clothes and shoes.",
+    "accessories_in_box": "Removable sweater, pants, casual shoes.",
+    "colorway_notes": "Cream/beige colored outfit with casual streetwear styling.",
+    "packaging_type": "Color box.",
+    "packaging_dimensions_\\&_weight": "Unknown.",
+    "box_contents_bill": "Plush doll with removable outfit, authenticity card (inferred).",
+    "authenticity/anti-counterfeit_marker": "QR code (inferred).",
+    "factory/qa_code": "Unknown.",
+    "edition.kind": "Limited overseas exclusive edition.",
+    "edition_size_(unit_count)": "3,000 units.",
+    "chase/rarity_ratio": "Not applicable (limited quantity, non-blind box).",
+    "staff/member_perks": "Unknown.",
+    "original_designer/artist_(en_\\&_中文)": "Kasing Lung (龙家升).",
+    "sculpt/model_credits": "POP MART design team.",
+    "collaboration_partner": "None.",
+    "licensing_owner": "POP MART.",
+    "announced_date": "Unknown.",
+    "release_date_(authoritative;_log_deltas_if_contradicted)": "December 30, 2023.",
+    "drop_windows_(channels)": "POP MART official online store, overseas markets primarily.",
+    "purchase_limits": "Unknown.",
+    "queues/mechanics": "Limited to 3,000 units, customer screening required.",
+    "restock/second_wave_dates": "No restocks due to limited edition nature.",
+    "end-of-life_or_\"sold_out\"_date": "Sold out quickly due to limited quantity.",
+    "region_lock_(true/false;_explanation)": "True; designated as overseas exclusive (海外限定).",
+    "regional_codes_involved": "Overseas markets (non-CN).",
+    "packaging/regulatory_differences": "CE certification for overseas markets.",
+    "region_code": "Overseas.",
+    "channel": "POP MART official sites (overseas).",
+    "launch_msrp_(currency_+_numeric)": "CNY499.",
+    "subsequent_official_price_changes": "Unknown.",
+    "stock_status_snapshots": "Sold out, reseller prices up to USD1,808.51.",
+    "purchase_limit_at_listing": "Customer screening required.",
+    "age_rating": "Not suitable for persons under 15.",
+    "warnings": "Unknown.",
+    "compliance_marks": "CE certification.",
+    "hs/customs_category": "Unknown.",
+    "sku/model_code": "Unknown.",
+    "barcode/ean/upc": "Unknown.",
+    "shipping_box_info": "Unknown.",
+    "return_policy_excerpt": "15-day returns, no returns/refunds after confirmed orders.",
+    "warranty/support_link": "Unknown.",
+    "hero_image(s)": "Labubu in cream/beige casual outfit.",
+    "orthographic_angles": "Front views with removable clothing details.",
+    "packaging_flats": "Color box.",
+    "icon/thumb": "Unknown.",
+    "videos": "Unboxing videos.",
+    "image_rights_note": "Official POP MART assets.",
+    "asset_hashes": "Unknown.",
+    "primary_sources_used": "POP MART official sites, Fig Palace.",
+    "secondary_sources_used": "Hypebrother, collector sites, Pinterest.",
+    "capture_artifacts_(retrieved_at,_hash)": "Retrieved 2025-08-13; hashes unknown.",
+    "contradiction_log_(deltas)": "No deltas on release date or MSRP.",
+    "query_ledger_(top_6–10_queries)": "\"POP MART Best of Luck 海外限定 2023 limited 3000\", \"POP MART Best of Luck overseas exclusive CNY 499 specifications\", \"POP MART Best of Luck materials packaging\", \"POP MART Best of Luck edition size\", \"POP MART Best of Luck credits\", \"POP MART Best of Luck regional policy\", \"POP MART Best of Luck removable clothes\", \"POP MART Best of Luck physical specifications\".",
+    "localized_titles": "Best of Luck (EN), 好运连连 (CN, inferred).",
+    "transliteration_notes": "Labubu as 拉布布.",
+    "per-locale_notes": "Overseas exclusive marking (海外限定).",
+    "predecessor/successor": "Part of seasonal CNY collection.",
+    "lateral_variants": "Paired with Walk by Fortune (CNY).",
+    "same_sculpt/different_finish": "Similar limited edition format with removable clothing.",
+    "shared_collab_capsule": "Chinese New Year 2024 theme.",
+    "series_hub_link": "POP MART seasonal exclusives.",
+    "official_price_history_timeline": "Launched at CNY499, reseller prices up to USD1,808.51.",
+    "secondary_market_range_snapshots": "Extremely high secondary market value due to overseas exclusive and limited edition nature.",
+    "scarcity_signals": "Limited to 3,000 units, overseas exclusive, customer screening required, immediate sellout.",
+    "https": "//www.popmart.com/nl/products/652/the-monsters-best-of-luck-vinyl-plush-doll",
+    "deltas": "None.",
+    "<div_style=\"text-align": "center\">⁂</div>",
+    "Deltas": []
+  },
+  {
+    "title": "^5_1",
+    "source": "COMPLETED SEEDS.txt",
+    "15._**deltas": "**",
+    "16._**media_assets": "**",
+    "Deltas": [
+      {
+        "field": "15._**deltas",
+        "from": null,
+        "to": "**",
+        "source": "PRIMARY TARGETS — Completed(2).txt"
+      },
+      {
+        "field": "16._**media_assets",
+        "from": null,
+        "to": "**",
+        "source": "PRIMARY TARGETS — Completed(2).txt"
+      }
+    ]
+  },
+  {
+    "title": "^5_2",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^5_3",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^5_4",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^5_5",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^5_6",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^5_7",
+    "source": "COMPLETED SEEDS.txt",
+    "15._**deltas": "**",
+    "16._**media_assets": "**",
+    "hide_and_seek_in_singapore": "Material breakdown (62% polyester, 38% PVC; 95% polyester, 5% ABS) and exact dimensions 10×10×17.5 cm added to seed record[^5_2].",
+    "good_lucky_to_you": "Authentication of lottery/pre-order system, inclusion of mini canvas tote in select bundles added to seed record[^5_8][^5_5].",
+    "<div_style=\"text-align": "center\">⁂</div>",
+    "Deltas": [
+      {
+        "field": "15._**deltas",
+        "from": null,
+        "to": "**",
+        "source": "PRIMARY TARGETS — Completed(2).txt"
+      },
+      {
+        "field": "16._**media_assets",
+        "from": null,
+        "to": "**",
+        "source": "PRIMARY TARGETS — Completed(2).txt"
+      },
+      {
+        "field": "hide_and_seek_in_singapore",
+        "from": null,
+        "to": "Material breakdown (62% polyester, 38% PVC; 95% polyester, 5% ABS) and exact dimensions 10×10×17.5 cm added to seed record[^5_2].",
+        "source": "PRIMARY TARGETS — Completed(2).txt"
+      },
+      {
+        "field": "good_lucky_to_you",
+        "from": null,
+        "to": "Authentication of lottery/pre-order system, inclusion of mini canvas tote in select bundles added to seed record[^5_8][^5_5].",
+        "source": "PRIMARY TARGETS — Completed(2).txt"
+      },
+      {
+        "field": "<div_style=\"text-align",
+        "from": null,
+        "to": "center\">⁂</div>",
+        "source": "PRIMARY TARGETS — Completed(2).txt"
+      }
+    ]
+  },
+  {
+    "title": "^5_8",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^5_9",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^5_10",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^5_11",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^5_12",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^5_13",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^5_14",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^5_15",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^5_16",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^5_17",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^5_18",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^5_19",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^5_20",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^5_21",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^5_22",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^5_23",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^5_24",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^5_25",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^5_26",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^5_27",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^5_28",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^5_29",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "Happy Halloween Party",
+    "source": "COMPLETED SEEDS.txt",
+    "brand": "POP MART.",
+    "line": "The Monsters.",
+    "character": "Labubu.",
+    "series": "Happy Halloween Party.",
+    "product_title_(marketing_+_normalized)": "HAPPY HALLOWEEN PARTY Series – Sitting Pumpkin Vinyl Plush Pendant.",
+    "variant_name_(colorway,_pose,_outfit)": "Orange pumpkin body with green stem hat, sitting pose, carved-face motif.",
+    "form": "Vinyl plush pendant (keychain).",
+    "deterministic_product_id_components": "SKU 1505.",
+    "aliases_\\&_search_tokens_(en/中文)": "Happy Halloween Party Labubu, 万圣派对 (inferred).",
+    "parent/child_relations": "Seasonal Halloween edition, no reissue noted.",
+    "size_(h/w/d)": "8×7×15 cm.",
+    "weight": "Unknown.",
+    "materials": "PVC, soft plush fabric.",
+    "finish": "Soft flocked plush body with vinyl face.",
+    "articulation/motion": "Fixed sitting pose.",
+    "accessories_in_box": "Keychain loop.",
+    "colorway_notes": "Bright orange and green.",
+    "packaging_type": "Window display color box.",
+    "packaging_dimensions_\\&_weight": "Unknown.",
+    "box_contents_bill": "Plush pendant, authenticity card (inferred).",
+    "authenticity_marker": "QR code sticker (inferred).",
+    "factory/qa_code": "Unknown.",
+    "edition.kind": "Seasonal limited.",
+    "edition_size": "Unknown.",
+    "chase/rarity_ratio": "Not applicable.",
+    "staff/member_perks": "Unknown.",
+    "designer/artist": "Kasing Lung (龙家升).",
+    "sculpt/model": "POP MART design team.",
+    "collaboration_partner": "None.",
+    "licensing_owner": "POP MART.",
+    "announced_date": "September 24 2024.",
+    "release_date": "September 27 2024.",
+    "drop_windows": "POP MART official sites, selected stores.",
+    "purchase_limits": "Unknown.",
+    "queues/mechanics": "Standard launch.",
+    "restock_dates": "Unknown.",
+    "end-of-life": "Sold out rapidly post-launch.",
+    "region_lock": "False.",
+    "regions": "AU, US, CN, global.",
+    "packaging_differences": "Local language stickers.",
+    "region": "AU; Channel: POP MART AU; Launch MSRP: AU\\$ 50.",
+    "subsequent_price_changes": "Not recorded.",
+    "stock_snapshots": "Sold out in first week.",
+    "purchase_limit": "Unknown.",
+    "age_rating": "Not for <15.",
+    "warnings": "Choking hazard for small parts.",
+    "compliance_marks": "CE.",
+    "hs_category": "Unknown.",
+    "sku": "1505.",
+    "barcode/ean": "Unknown.",
+    "shipping_box": "Unknown.",
+    "return_policy": "15-day returns.",
+    "warranty/support": "Unknown.",
+    "hero_image": "Sitting pumpkin pendant.",
+    "orthographics": "Front view.",
+    "packaging_flats": "Display box art.",
+    "videos": "TikTok/Instagram reels.",
+    "image_rights": "POP MART.",
+    "primary": "POP MART product page [^6_1].",
+    "secondary": "Instagram reels [^6_2][^6_3].",
+    "retrieved": "2025-08-13.",
+    "deltas": "None.",
+    "queries": "\"POP MART Happy Halloween Party keychain 2024-10-25\",\"POP MART Happy Halloween Party AU\\$50\".",
+    "localized_title": "HAPPY HALLOWEEN PARTY 系列 (CN inferred).",
+    "transliteration": "Labubu 拉布布.",
+    "predecessor/successor": "Seasonal Halloween series.",
+    "lateral_variants": "Magic of Pumpkin pendant.",
+    "graph_hub": "POP MART seasonal.",
+    "price_history": "AU\\$ 50 launch, no official adjustments.",
+    "secondary_range": "AU\\$ 75–AU\\$ 90.",
+    "scarcity": "High collector demand, sold out first day.",
+    "https": "//www.instagram.com/p/C4dCMPovGfa/",
+    "Deltas": []
+  },
+  {
+    "title": "PRONOUNCE — Be Fancy Now",
+    "source": "COMPLETED SEEDS.txt",
+    "brand": "POP MART.",
+    "line": "The Monsters × Pronounce.",
+    "character": "Labubu.",
+    "series": "Be Fancy Now.",
+    "product_title_(marketing_+_normalized)": "LABUBU × PRONOUNCE – BE FANCY NOW Vinyl Plush Doll.",
+    "variant_name": "Purple fur with gold rope motifs, yellow toes, starry face accents, fashion week inspired outfit.",
+    "form": "Vinyl plush doll.",
+    "deterministic_id": "SKU 1012.",
+    "aliases/search_tokens": "Be Fancy Now Labubu, 时尚前卫 (inferred).",
+    "parent/child": "First Pronounce collaboration, follow-up Wings series.",
+    "size": "38 cm height.",
+    "weight": "1.5 kg (package gross).",
+    "materials": "Shell-40% Cotton, 20% PVC, 15% Polyester, 15% ABS, 10% TPR; Filling-100% Polyester.",
+    "finish": "Flocked plush body with vinyl face.",
+    "articulation": "None.",
+    "accessories": "Removable Infinity Rope accessory.",
+    "colorway_notes": "Vibrant purple with yellow and blue details.",
+    "packaging_type": "Rigid color box with window.",
+    "dimensions": "45×30×20 cm; Gross weight: 1.8 kg.",
+    "contents": "Plush doll, accessory, authenticity card.",
+    "marker": "QR code verification.",
+    "factory_code": "Unknown.",
+    "edition.kind": "Collaboration limited.",
+    "edition_size": "6,458 units.",
+    "chase/rarity": "Not a blind box.",
+    "perks": "VIP presale via Pronounce channels.",
+    "designer": "Kasing Lung (龙家升).",
+    "collaboration": "Pronounce fashion label.",
+    "sculpt": "POP MART team.",
+    "license": "POP MART \\& Pronounce.",
+    "announced": "March 12 2024 [^6_4].",
+    "release": "March 15 2024 [^6_5].",
+    "channels": "POP MART official, Pronounce flagship stores.",
+    "limits": "2 per customer.",
+    "mechanics": "Online queue, in-store queue.",
+    "restocks": "None.",
+    "sold_out": "Within 24 hours.",
+    "lock": "False.",
+    "regions": "CN, US, EU, APAC.",
+    "differences": "EU CE markings.",
+    "region": "CA; Channel: Pop Mart CA; converted MSRP: CAD 120.",
+    "price_changes": "None.",
+    "stock": "Sold out.",
+    "age": "15+.",
+    "warnings": "CE, RoHS.",
+    "category": "Toys.",
+    "sku": "1012.",
+    "barcode": "6972708071012.",
+    "shipping": "50×35×25 cm master carton.",
+    "return_policy": "15 days.",
+    "warranty": "None.",
+    "hero_images": "Purple Labubu with rope.",
+    "videos": "Instagram reels [^6_5], TikTok.",
+    "packaging_flats": "Box art.",
+    "rights": "POP MART \\& Pronounce.",
+    "primary": "POP MART US [^6_6], CA [^6_7].",
+    "secondary": "Instagram [^6_4][^6_5], Whoopea [^6_8], GetNowPrinting [^6_9].",
+    "retrieved": "2025-08-13.",
+    "deltas": "None.",
+    "queries": "\"POP MART Be Fancy Now CNY 599\", \"POP MART Be Fancy Now limited 6458\".",
+    "localized_title": "BE FANCY NOW 系列 (CN).",
+    "transliteration": "Pronounce 品牌联名.",
+    "predecessor": "Wings of Fantasy collab.",
+    "successor": "Wings of Fortune.",
+    "hub": "Collaboration series.",
+    "price_history": "Launch CNY 599, resale CNY 2,200+.",
+    "secondary_snapshot": "CNY 1,800–CNY 2,500.",
+    "scarcity": "6,458 units, sold out same day.",
+    "https": "//www.getnowprinting.com/shopdetail/10987066.html",
+    "<div_style=\"text-align": "center\">⁂</div>",
+    "Deltas": []
+  },
+  {
+    "title": "^6_1",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^6_2",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^6_3",
+    "source": "COMPLETED SEEDS.txt",
+    "15._**deltas": "**",
+    "16._**media_assets": "**",
+    "Deltas": [
+      {
+        "field": "15._**deltas",
+        "from": null,
+        "to": "**",
+        "source": "PRIMARY TARGETS — Completed(2).txt"
+      },
+      {
+        "field": "16._**media_assets",
+        "from": null,
+        "to": "**",
+        "source": "PRIMARY TARGETS — Completed(2).txt"
+      }
+    ]
+  },
+  {
+    "title": "^6_4",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^6_5",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^6_6",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^6_7",
+    "source": "COMPLETED SEEDS.txt",
+    "15._**deltas": "**",
+    "16._**media_assets": "**",
+    "**pop-up_exclusives": "** Wacky Mart variants’ multi-format size details (pendant vs large plush) added to seed record.",
+    "**points_mall_consistency": "** Forest Fairy Tale materials and redemption conditions standardized across card-series entries.",
+    "<div_style=\"text-align": "center\">⁂</div>",
+    "Deltas": [
+      {
+        "field": "15._**deltas",
+        "from": null,
+        "to": "**",
+        "source": "PRIMARY TARGETS — Completed(2).txt"
+      },
+      {
+        "field": "16._**media_assets",
+        "from": null,
+        "to": "**",
+        "source": "PRIMARY TARGETS — Completed(2).txt"
+      },
+      {
+        "field": "**pop-up_exclusives",
+        "from": null,
+        "to": "** Wacky Mart variants’ multi-format size details (pendant vs large plush) added to seed record.",
+        "source": "PRIMARY TARGETS — Completed(2).txt"
+      },
+      {
+        "field": "**points_mall_consistency",
+        "from": null,
+        "to": "** Forest Fairy Tale materials and redemption conditions standardized across card-series entries.",
+        "source": "PRIMARY TARGETS — Completed(2).txt"
+      },
+      {
+        "field": "<div_style=\"text-align",
+        "from": null,
+        "to": "center\">⁂</div>",
+        "source": "PRIMARY TARGETS — Completed(2).txt"
+      }
+    ]
+  },
+  {
+    "title": "^6_8",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^6_9",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^6_10",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^6_11",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^6_12",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^6_13",
+    "source": "COMPLETED SEEDS.txt",
+    "download": "popmart_monsters_seeds.csv",
+    "<div_style=\"text-align": "center\">⁂</div>",
+    "Deltas": [
+      {
+        "field": "download",
+        "from": null,
+        "to": "popmart_monsters_seeds.csv",
+        "source": "PRIMARY TARGETS — Completed(2).txt"
+      },
+      {
+        "field": "<div_style=\"text-align",
+        "from": null,
+        "to": "center\">⁂</div>",
+        "source": "PRIMARY TARGETS — Completed(2).txt"
+      }
+    ]
+  },
+  {
+    "title": "^6_14",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^6_15",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^6_16",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^6_17",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^6_18",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^6_19",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^6_20",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^6_21",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^6_22",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^6_23",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^6_24",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^6_25",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^6_26",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^6_27",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "PRONOUNCE — Wings of Fantasy (plush)",
+    "source": "COMPLETED SEEDS.txt",
+    "brand": "POP MART × Pronounce.",
+    "line": "The Monsters.",
+    "character": "Labubu.",
+    "series": "Wings of Fantasy.",
+    "product_title": "LABUBU × PRONOUNCE – WINGS OF FANTASY Vinyl Plush Doll.",
+    "variant_name": "Lavender fur with translucent butterfly wings, golden crown, star-patterned vest.",
+    "form": "Vinyl plush doll.",
+    "deterministic_product_id_components": "SKU 1580.",
+    "aliases_\\&_tokens": "Wings of Fantasy Labubu, 时尚幻想之翼 (inferred).",
+    "parent/child_relations": "Sequel to Be Fancy Now, paired with Wings of Fortune.",
+    "size": "22×11×8 cm (including wings and crown).",
+    "weight": "Unknown.",
+    "materials": "Shell: 66% polyester, 25% PVC, 9% ABS; Stuffing: 95% polyester, 5% iron wire.",
+    "finish": "Soft flocked plush with translucent vinyl wings.",
+    "articulation": "Fixed figure.",
+    "accessories": "Translucent butterfly wings, golden crown.",
+    "colorway_notes": "Pastel lavender with glitter accents.",
+    "packaging_type": "Window display color box.",
+    "packaging_dimensions_\\&_weight": "30×20×15 cm; gross weight ~0.5 kg.",
+    "box_contents": "Plush doll, authenticity card.",
+    "authenticity_marker": "QR code sticker.",
+    "factory/qa_code": "Unknown.",
+    "edition.kind": "Collaboration limited edition.",
+    "edition_size": "Unknown.",
+    "chase/rarity": "Not blind box.",
+    "perks": "VIP presale via Pronounce channels.",
+    "original_designer/artist": "Kasing Lung (龙家升).",
+    "sculpt/model": "POP MART design team.",
+    "collaboration_partner": "Pronounce.",
+    "licensing_owner": "POP MART \\& Pronounce.",
+    "announced_date": "September 28, 2024.",
+    "release_date": "October 4, 2024.",
+    "drop_windows": "POP MART US, CA, EU, CN.",
+    "purchase_limits": "2 per customer.",
+    "mechanic": "Online queue, in-store pick-up.",
+    "restock": "None.",
+    "sold_out": "Within 48 hours.",
+    "region_lock": "False.",
+    "regions": "US, CA, CN, EU, APAC.",
+    "differences": "CE marking on EU boxes.",
+    "region": "CA; Channel: POP MART CA; MSRP CAD149.99.",
+    "stock_status": "Out of stock.",
+    "purchase_limit": "2.",
+    "age_rating": "Not for under 15.",
+    "warnings": "Contains small parts.",
+    "compliance_marks": "CE.",
+    "hs_category": "Unknown.",
+    "sku": "1580.",
+    "barcode/ean": "6972708011580 (inferred).",
+    "shipping": "Master carton 60×40×30 cm.",
+    "return_policy": "15-day returns.",
+    "warranty": "None.",
+    "hero_images": "Doll front with wings.",
+    "orthographics": "Angled shots highlighting wings.",
+    "packaging_flats": "Box art with Pronounce logo.",
+    "videos": "Instagram reel [^7_1], TikTok demos.",
+    "image_rights": "POP MART \\& Pronounce.",
+    "asset_hashes": "Unknown.",
+    "primary": "PopCultureDepot product page [^7_2], POP MART US [^7_3].",
+    "secondary": "Instagram [^7_1][^7_4].",
+    "retrieved": "2025-08-13.",
+    "deltas": "None.",
+    "queries": "\"POP MART Wings of Fantasy plush 2024-10-04 USD 119.99\",\"POP MART Wings of Fantasy specifications\".",
+    "localized_titles": "Wings of Fantasy 系列 (CN).",
+    "transliteration": "Pronounce 品牌联名.",
+    "predecessor": "Be Fancy Now.",
+    "successor": "Wings of Fortune.",
+    "hub": "Pronounce collaboration series.",
+    "price_history": "Launch USD119.99; resell USD200–USD250.",
+    "secondary_market": "USD180–USD240.",
+    "scarcity": "Sold out quickly, limited per-order.",
+    "Deltas": []
+  },
+  {
+    "title": "PRONOUNCE — Wings of Fortune (hanging card)",
+    "source": "COMPLETED SEEDS.txt",
+    "brand": "POP MART × Pronounce.",
+    "line": "The Monsters.",
+    "character": "Labubu.",
+    "series": "Wings of Fortune.",
+    "product_title": "LABUBU × PRONOUNCE – WINGS OF FORTUNE Vinyl Plush Hanging Card.",
+    "variant_name": "Yellow fur with silver metallic wings, pearl crown, star motif.",
+    "form": "Vinyl plush hanging card (pendant).",
+    "deterministic_product_id_components": "SKU 1584.",
+    "aliases_\\&_tokens": "Wings of Fortune Labubu, 幸运之翼 (inferred).",
+    "parent/child_relations": "Companion to Wings of Fantasy.",
+    "size": "17.5×11×8 cm.",
+    "weight": "Unknown.",
+    "materials": "Shell: 66% polyester, 25% PVC, 9% ABS; Stuffing: 95% polyester, 5% iron wire.",
+    "finish": "Soft plush with metallic vinyl wings.",
+    "articulation": "Fixed.",
+    "accessories": "Hanging loop hardware.",
+    "colorway_notes": "Pastel yellow with silver accents.",
+    "packaging_type": "Blister card with hanging peg.",
+    "dimensions_\\&_weight": "20×12×9 cm; gross weight ~0.2 kg.",
+    "box_contents": "Hanging card figure, authenticity sticker.",
+    "marker": "QR code on backing card.",
+    "factory/qa_code": "Unknown.",
+    "edition.kind": "Collaboration limited.",
+    "edition_size": "Unknown.",
+    "chase/rarity": "Not blind box.",
+    "perks": "None.",
+    "designer/artist": "Kasing Lung (龙家升).",
+    "sculpt/model": "POP MART design team.",
+    "collaboration": "Pronounce.",
+    "license": "POP MART \\& Pronounce.",
+    "announced": "September 28, 2024.",
+    "release": "October 4, 2024.",
+    "channels": "POP MART US, global.",
+    "purchase_limits": "2 per customer.",
+    "mechanic": "Online sale.",
+    "restock": "None.",
+    "sold_out": "Within 48 hours.",
+    "region_lock": "False.",
+    "regions": "Global.",
+    "differences": "EU CE marking.",
+    "region": "US; Channel: POP MART US; MSRP: USD43.99.",
+    "stock_status": "Out of stock.",
+    "purchase_limit": "2.",
+    "age": "15+.",
+    "warnings": "Contains small parts.",
+    "compliance": "CE.",
+    "hs_category": "Unknown.",
+    "sku": "1584.",
+    "barcode": "6972708011584 (inferred).",
+    "shipping": "Bulk pegs per carton.",
+    "returns": "15-day.",
+    "warranty": "None.",
+    "hero_image": "Pendant on backing card.",
+    "orthographics": "Front, back of card.",
+    "packaging_flats": "Backing card art.",
+    "videos": "LittleThings listing [^7_5].",
+    "rights": "POP MART \\& Pronounce.",
+    "primary": "LittleThings product page [^7_5], POP MART US [^7_6].",
+    "secondary": "Instagram [^7_1][^7_7].",
+    "retrieved": "2025-08-13.",
+    "deltas": "None.",
+    "queries": "\"POP MART Wings of Fortune hanging card specifications\",\"POP MART Wings of Fortune price USD43.99\".",
+    "localized_title": "Wings of Fortune 挂卡 (CN).",
+    "transliteration": "幸运之翼.",
+    "companion": "Wings of Fantasy plush.",
+    "hub": "Pronounce collaboration.",
+    "price_history": "Launch USD43.99; resell USD75–USD90.",
+    "secondary_market": "USD65–USD85.",
+    "scarcity": "Limited sale, immediate sellout.",
+    "https": "//www.popmart.com/en-HK/products/1153/labubu-×-pronounce-wings-of-fortune-vinyl-plush-hanging-card",
+    "<div_style=\"text-align": "center\">⁂</div>",
+    "Deltas": []
+  },
+  {
+    "title": "^7_1",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^7_2",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^7_3",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^7_4",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^7_5",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^7_6",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^7_7",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^7_8",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^7_9",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^7_10",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^7_11",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^7_12",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^7_13",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^7_14",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^7_15",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "Coca-Cola",
+    "source": "COMPLETED SEEDS.txt",
+    "brand": "POP MART.",
+    "line": "The Monsters x Coca-Cola.",
+    "character": "Labubu \\& Zimomo.",
+    "series": "Coca-Cola.",
+    "product_title": "THE MONSTERS Coca-Cola Series – Vinyl Face Blind Box.",
+    "variant_name": "10 standard figures + 1 secret edition (“Labubu Express”).",
+    "form": "Vinyl face blind-box figures.",
+    "deterministic_product_id_components": "SKU unspecified; “popmart–coca-cola–blindbox.”",
+    "aliases_\\&_tokens_(en/中文)": "Coca-Cola Labubu, 可口可乐系列, 拉布布可乐版.",
+    "parent/child_relations": "Part of blind-box collectible lineup, multiple characters.",
+    "size_(h)": "Approx. 15.5–17 cm[^8_1].",
+    "weight": "~100 g per figure (inferred from packaging).",
+    "materials": "Shell: Polyester/ABS/PVC; Stuffing: Polyester/iron wire[^8_1].",
+    "finish": "Matte vinyl face, plush-textured body.",
+    "articulation": "Fixed.",
+    "accessories": "None.",
+    "colorway_notes": "Themed ski and winter outfits with Coca-Cola branding.",
+    "packaging_type": "Blind-box carton.",
+    "packaging_dimensions_\\&_weight": "6×6×8 in / 2 lb per box[^8_2].",
+    "box_contents_bill": "1 mystery figure, inner foil bag, QR code authenticity sticker.",
+    "authenticity_marker": "QR code on inner bag.",
+    "factory/qa_code": "UPC 6931571026271[^8_2].",
+    "edition.kind": "Blind-box series.",
+    "edition_size": "Unknown; widespread global release.",
+    "chase/rarity_ratio": "1 secret:10 regular; secret odds 1:72[^8_3].",
+    "staff/member_perks": "None.",
+    "original_designer/artist": "Kasing Lung (龙家升).",
+    "sculpt/model_credits": "POP MART design team.",
+    "collaboration_partner": "The Coca-Cola Company.",
+    "licensing_owner": "POP MART \\& Coca-Cola.",
+    "announced_date": "December 20, 2024[^8_4].",
+    "release_date": "January 24, 2025[^8_1].",
+    "drop_windows": "Global blind-box launch online and in-store EQL drops (max 6/entry)[^8_5].",
+    "purchase_limits": "6 per customer on EQL launch.",
+    "queues/mechanics": "EQL lottery entry; global online blind-box.",
+    "restock": "None.",
+    "end-of-life": "Series closed post-launch; sold out.",
+    "region_lock": "False.",
+    "regional_codes": "US, CN, SG, UK, AU (global).",
+    "packaging/regulatory_differences": "Local language on outer cartons, CE marking in EU.",
+    "us_blind_box": "USD 38.99–39.99 at Target[^8_2]/POP MART.",
+    "set_of_6": "USD 239.94 on POP MART US.",
+    "secondary_market": "USD 60–100 per box; secret edition up to USD 5,000+.",
+    "purchase_limit": "6 per customer.",
+    "series_size": "11 total (10 + secret).",
+    "odds_table": "Regulars 1:11 each; secret 1:72 overall[^8_3].",
+    "checklist": "Surf with Me; Crazy Ride; Vacation Fit; Snowy Mountain; Look What I Found; Special Sofa; Time to Cool Down; Little Snowman; Gift Delivery; … plus secret Labubu Express.",
+    "age_rating": "Not suitable under 15[^8_1].",
+    "warnings": "Choking hazard small parts.",
+    "compliance_marks": "CE, RoHS.",
+    "hs/customs_category": "9503.00.69.",
+    "sku/model_code": "THE-MONSTERS-COCA-COLA-BLINDBOX.",
+    "barcode/ean/upc": "6931571026271[^8_2].",
+    "shipping_box_info": "Case of 6 blind boxes.",
+    "return_policy_excerpt": "15-day returns on defective items.",
+    "warranty/support_link": "POP MART customer service.",
+    "hero_image(s)": "Blind-box carton art.",
+    "orthographic_angles": "Front/back/inner bag.",
+    "packaging_flats": "Blind-box panel layout.",
+    "icon/thumb": "Series logo.",
+    "videos": "Multiple unboxing YouTube/TikTok reviews[^8_6][^8_7].",
+    "image_rights_note": "POP MART \\& Coca-Cola.",
+    "asset_hashes": "None.",
+    "primary_sources": "POP MART US product page[^8_1], EQL landing page[^8_5].",
+    "secondary_sources": "Target listing[^8_2], Bagaholicboy guide[^8_3], YouTube unboxings[^8_6][^8_7], TikTok odds explainer[^8_8].",
+    "retrieved_at": "2025-08-13.",
+    "deltas": "None.",
+    "query_ledger": "“Pop Mart Coca-Cola blind box release details,” “Pop Mart Coca-Cola set USD239.94,” “Pop Mart Coca-Cola blind box checklist odds.”",
+    "localized_titles": "可口可乐系列盲盒 (CN).",
+    "transliteration": "Labubu 可乐版.",
+    "per-locale_notes": "Mandarin, English, localized packaging.",
+    "predecessor": "None (first Coca-Cola collab).",
+    "lateral_variants": "Figures vs plush blind-box (V3).",
+    "shared_collab_capsule": "Seasonal winter collab.",
+    "series_hub_link": "POP MART collab series.",
+    "official_price_history": "USD 39.99 launch; set of 6 for USD 239.94.",
+    "secondary_market_range": "USD 60–USD 100; secret edition trades USD 3,000–USD 5,000.",
+    "scarcity_signals": "Secret odds 1:72, sold out global blind-box launch.",
+    "Deltas": []
+  },
+  {
+    "title": "Exciting Macaron (v1)",
+    "source": "COMPLETED SEEDS.txt",
+    "brand": "POP MART.",
+    "line": "The Monsters.",
+    "character": "Labubu.",
+    "series": "Exciting Macaron (V1).",
+    "product_title": "THE MONSTERS – Exciting Macaron Vinyl Face Blind Box.",
+    "variant_name": "6 standard (Soymilk; Lychee Berry; Green Grape; Sea Salt Coconut; Toffee; Sesame Bean) + 1 secret (Chestnut Cocoa).",
+    "form": "Vinyl face blind-box pendant.",
+    "deterministic_product_id_components": "SKU 675 (US) / SKU 1789 (alternate)[^8_9][^8_10].",
+    "aliases_\\&_tokens_(en/中文)": "Macaron Labubu, 马卡龙系列.",
+    "parent/child_relations": "Predecessor to Have a Seat (V2) and Big Into Energy (V3).",
+    "size": "6–7 cm pendant.",
+    "weight": "~30 g.",
+    "materials": "Shell: PVC; Stuffing: Polyester; Hardware: metal chain.",
+    "finish": "Flocked plush face.",
+    "articulation": "None.",
+    "accessories": "Keychain clip.",
+    "colorway_notes": "Pastel macaron tones matching flavor names.",
+    "packaging_type": "Blind-box foil bag.",
+    "packaging_dimensions_\\&_weight": "~4×7 cm bag, 50 g.",
+    "contents": "1 pendant, QR authenticity code.",
+    "anti-counterfeit": "QR code on bag.",
+    "factory/qa_code": "Unspecified.",
+    "edition.kind": "Blind-box series.",
+    "edition_size": "Unknown; global release.",
+    "chase/rarity": "1/72 chance for secret Chestnut Cocoa[^8_11].",
+    "perks": "None.",
+    "designer/artist": "Kasing Lung (龙家升).",
+    "sculpt/model": "POP MART design team.",
+    "collaboration": "None.",
+    "licensing": "POP MART.",
+    "announced_date": "October 24, 2024.",
+    "release_date": "October 27, 2024[^8_12].",
+    "channels": "POP MART official online, physical stores.",
+    "purchase_limits": "None stated.",
+    "mechanics": "Free blind-box sale.",
+    "restocks": "Pop-up restocks in early 2025 (temporary).",
+    "sold_out": "Late 2024, intermittent restocks.",
+    "region_lock": "False.",
+    "regions": "Global.",
+    "differences": "Localized flavor names on packaging.",
+    "us_blind_box": "USD 21.99; set of 6 for USD 131.94.",
+    "secondary_market": "USD 35–USD 50 per box.",
+    "purchase_limit": "None.",
+    "series_size": "7 total; secret Chestnut Cocoa.",
+    "odds_table": "Standard 1:7; secret 1:72.",
+    "checklist": "Soymilk; Lychee Berry; Green Grape; Sea Salt Coconut; Toffee; Sesame Bean; Chestnut Cocoa (secret).",
+    "age_rating": "Not for <15.",
+    "warnings": "Choking hazard.",
+    "compliance_marks": "CE.",
+    "hs_category": "9503.00.",
+    "sku/model_code": "675 / 1789 (US).",
+    "barcode/ean": "6972708010675 (inferred).",
+    "shipping_box": "Carton of 6 blind boxes.",
+    "return_policy": "15-day returns.",
+    "warranty/support": "POP MART customer service.",
+    "hero_image(s)": "Blind-box art showing macarons.",
+    "orthographic_angles": "Front of bag.",
+    "videos": "YouTube unboxings demonstrating set and odds[^8_12][^8_11].",
+    "image_rights_note": "POP MART assets.",
+    "asset_hashes": "None.",
+    "primary": "POP MART US product page[^8_9].",
+    "secondary": "YouTube unboxings [^8_12][^8_11]; Reddit guide[^8_13]; TikTok odds explainer[^8_14].",
+    "retrieved_at": "2025-08-13.",
+    "deltas": "None.",
+    "query_ledger": "“Pop Mart Exciting Macaron set 131.94,” “Pop Mart Exciting Macaron odds,” “Pop Mart Exciting Macaron checklist.”",
+    "cn": "马卡龙系列盲盒.",
+    "transliteration": "Macaron 马卡龙.",
+    "per-locale_notes": "Flavors localized.",
+    "predecessor": "None.",
+    "successor": "Have a Seat (V2).",
+    "hub": "The Monsters blind-box series.",
+    "price_history": "Launch USD 21.99; set USD 131.94.",
+    "scarcity_signals": "Secret odds 1:72, intermittent restocks.",
+    "<div_style=\"text-align": "center\">⁂</div>",
+    "Deltas": []
+  },
+  {
+    "title": "^8_1",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^8_2",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^8_3",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^8_4",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^8_5",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^8_6",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^8_7",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^8_8",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^8_9",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^8_10",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^8_11",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^8_12",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^8_13",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^8_14",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^8_15",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^8_16",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^8_17",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^8_18",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^8_19",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^8_20",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^8_21",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^8_22",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^8_23",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^8_24",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^8_25",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^8_26",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^8_27",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^8_28",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^8_29",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^8_30",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "^8_31",
+    "source": "COMPLETED SEEDS.txt",
+    "Deltas": []
+  },
+  {
+    "title": "Time to Chill — 2022-10-31 — USD 69.99",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "1._**identity_\\&_taxonomy": "**",
+    "2._**physical_specification": "**",
+    "height": "14.5 inches (37cm)[^1_4][^1_5]. Materials: Shell composed of PP/Polyester/Cotton mixture, with plush material being 95% Polyester Fiber, 5% Cotton. Stuffing: 90% Polyester Fiber, 10% PP particles[^1_6][^1_7]. Weight: specifications indicate normal range variance of 0.4-1.2 inches due to measurement variations[^1_4].",
+    "3._**edition_\\&_release_context": "**",
+    "4._**pricing_\\&_value": "**",
+    "original_retail": "USD 69.99. Secondary market: significant appreciation with some listings reaching 760-7399 USD (973% markup). Notable price stability in initial years before 2024 explosion[^1_1][^1_6][^1_7].",
+    "5._**market_availability": "**",
+    "6._**distribution_channel": "**",
+    "7._**packaging_\\&_presentation": "**",
+    "8._**colorways_\\&_variants": "**",
+    "single_colorway": "denim dungarees with pastel blue top, embodying laid-back aesthetic. Blue/denim colorway designation[^1_1][^1_2].",
+    "9._**accessories_\\&_contents": "**",
+    "complete_outfit": "cozy denim dungarees, pastel blue top. Includes authentication card and original packaging[^1_2][^1_5].",
+    "10._**licensing_\\&_ip": "**",
+    "11._**manufacturing_\\&_materials": "**",
+    "high-quality_materials_blend": "polyester primary construction, cotton elements, vinyl face components. Premium feel with durability considerations[^1_2][^1_4].",
+    "12._**marketing_\\&_media": "**",
+    "13._**community_reception": "**",
+    "14._**provenance_urls": "**",
+    "launch_price": "USD 69.99[^1_1]. Packing size approximately 20×16.4×37.5cm[^1_6][^1_7]. Secondary market performance: By March 2024, became the best-selling plush product in POP MART's Tmall flagship store plush category with sales exceeding 4 million CNY[^1_2][^1_3]. Current secondary market prices range significantly above retail.",
+    "Deltas": [
+      {
+        "field": "height",
+        "from": "14.5 inches (37cm), Materials: polyester, cotton, vinyl face plate, PP/PVC components. Soft huggable plush body with vinyl face ensuring signature Labubu look. Movable eyes and articulated features for display versatility[^1_2][^1_4][^1_5].",
+        "to": "14.5 inches (37cm)[^1_4][^1_5]. Materials: Shell composed of PP/Polyester/Cotton mixture, with plush material being 95% Polyester Fiber, 5% Cotton. Stuffing: 90% Polyester Fiber, 10% PP particles[^1_6][^1_7]. Weight: specifications indicate normal range variance of 0.4-1.2 inches due to measurement variations[^1_4].",
+        "source": "PRIMARY TARGETS — Completed(1).txt"
+      },
+      {
+        "field": "launch_price",
+        "from": null,
+        "to": "USD 69.99[^1_1]. Packing size approximately 20×16.4×37.5cm[^1_6][^1_7]. Secondary market performance: By March 2024, became the best-selling plush product in POP MART's Tmall flagship store plush category with sales exceeding 4 million CNY[^1_2][^1_3]. Current secondary market prices range significantly above retail.",
+        "source": "PRIMARY TARGETS — Completed(1).txt"
+      }
+    ]
+  },
+  {
+    "title": "Jump for Joy — 2023-05-25 — CNY 499 (plush)",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "1._**identity_\\&_taxonomy": "**",
+    "2._**physical_specification": "**",
+    "height": "15.75 inches (40cm), Materials: PLUSH+PVC construction. Features galaxy grey coat as distinctive element. Removable winter clothing including furry hat, scarf, sweater, snow shoes[^1_14][^1_15].",
+    "3._**edition_\\&_release_context": "**",
+    "released_as_seasonal/winter-themed_edition._multiple_release_dates_noted": "initial May 25, 2023 launch with June 9, 2023 wider release[^1_17][^1_16][^1_18].",
+    "4._**pricing_\\&_value": "**",
+    "original_retail": "CNY 499 (~USD 71). Secondary market shows appreciation with listings at SGD 109-978 range. Quality variations affecting pricing noted[^1_14][^1_19][^1_15].",
+    "5._**market_availability": "**",
+    "6._**distribution_channel": "**",
+    "7._**packaging_\\&_presentation": "**",
+    "8._**colorways_\\&_variants": "**",
+    "9._**accessories_\\&_contents": "**",
+    "complete_winter_outfit_set": "furry hat, scarf, sweater, snow shoes. All clothing elements removable for customization[^1_15].",
+    "10._**licensing_\\&_ip": "**",
+    "11._**manufacturing_\\&_materials": "**",
+    "pu/pp/polyester_material_construction._height_specifications": "7.1/6.3/14.9 inches noted in different configurations[^1_17][^1_18].",
+    "12._**marketing_\\&_media": "**",
+    "13._**community_reception": "**",
+    "14._**provenance_urls": "**",
+    "Deltas": []
+  },
+  {
+    "title": "Dress be Latte — 2023-10-26 — CNY 499 (plush)",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "1._**identity_\\&_taxonomy": "**",
+    "2._**physical_specification": "**",
+    "height": "14.9 inches (37.9cm), Dimensions: 22 x 15 x 38 cm. Materials: ABS/PVC face, 80% polyester fiber, 20% cotton. 90% polyester filling, 10% PP rubber components[^1_21][^1_22].",
+    "3._**edition_\\&_release_context": "**",
+    "4._**pricing_\\&_value": "**",
+    "original_retail": "CNY 499. Secondary market pricing: 950-1250 USD range noted. High collector demand driving significant premiums[^1_21][^1_22].",
+    "5._**market_availability": "**",
+    "6._**distribution_channel": "**",
+    "7._**packaging_\\&_presentation": "**",
+    "8._**colorways_\\&_variants": "**",
+    "9._**accessories_\\&_contents": "**",
+    "10._**licensing_\\&_ip": "**",
+    "11._**manufacturing_\\&_materials": "**",
+    "12._**marketing_\\&_media": "**",
+    "13._**community_reception": "**",
+    "14._**provenance_urls": "**",
+    "Deltas": []
+  },
+  {
+    "title": "^1_21",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_22",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_23",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "15._**deltas": "**",
+    "16._**media_assets": "**",
+    "Deltas": []
+  },
+  {
+    "title": "Flip with Me — 2024-07-12 — plush 40×20×15 cm — CN/US pricing exists",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "1._**identity_\\&_taxonomy": "**",
+    "2._**physical_specification": "**",
+    "dimensions": "40×20×15 cm (confirmed), Height: 40cm. Features cream-colored fur, flip-eye mechanism creating four different expressions: confused, expectant, aggrieved, heart-struck[^1_19][^1_34].",
+    "3._**edition_\\&_release_context": "**",
+    "4._**pricing_\\&_value": "**",
+    "5._**market_availability": "**",
+    "6._**distribution_channel": "**",
+    "7._**packaging_\\&_presentation": "**",
+    "8._**colorways_\\&_variants": "**",
+    "single_cream-colored_fur_variant_with_professional_attire": "black-rimmed glasses, blue and white pinstripe shirt, jeans, sneakers[^1_19][^1_34].",
+    "9._**accessories_\\&_contents": "**",
+    "10._**licensing_\\&_ip": "**",
+    "11._**manufacturing_\\&_materials": "**",
+    "12._**marketing_\\&_media": "**",
+    "13._**community_reception": "**",
+    "14._**provenance_urls": "**",
+    "Deltas": []
+  },
+  {
+    "title": "^1_34",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_35",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_36",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "15._**deltas": "**",
+    "16._**media_assets": "**",
+    "Deltas": []
+  },
+  {
+    "title": "Fall in Wild — 2024-07-12 — plush 40×20×15 and keychain pendant 17 cm",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "1._**identity_\\&_taxonomy": "**",
+    "outdoor_adventure-themed_release_featuring_camping/wilderness_aesthetic._dual_format_offering": "large plush and pendant versions[^1_19][^1_33][^1_39].",
+    "2._**physical_specification": "**",
+    "large_plush": "SGD 109.90, Pendant: SGD 37.90. Dual pricing structure accommodating different collector budgets[^1_19].",
+    "3._**edition_\\&_release_context": "**",
+    "4._**pricing_\\&_value": "**",
+    "5._**market_availability": "**",
+    "6._**distribution_channel": "**",
+    "7._**packaging_\\&_presentation": "**",
+    "8._**colorways_\\&_variants": "**",
+    "9._**accessories_\\&_contents": "**",
+    "complete_outdoor_outfit": "bucket hat, white shirt, denim overalls. Size-specific accessories (flower vs. rain boots)[^1_19].",
+    "10._**licensing_\\&_ip": "**",
+    "11._**manufacturing_\\&_materials": "**",
+    "12._**marketing_\\&_media": "**",
+    "13._**community_reception": "**",
+    "14._**provenance_urls": "**",
+    "Deltas": []
+  },
+  {
+    "title": "^1_39",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_37",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "15._**deltas": "**",
+    "16._**media_assets": "**",
+    "Deltas": []
+  },
+  {
+    "title": "Coca-Cola Series → Enhanced specifications:",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "Big Into Energy v3 → Quality differentiation:",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "Have a Seat → Design specifications:",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "Exciting Macaron v1 → Quality concerns:",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "Let's Checkmate → Valentine's timing:",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "Regional Exclusives → Geographic distribution:",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "Time to Chill queries:",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "Jump for Joy queries:",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "Dress be Latte queries:",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "Cross-series queries:",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "![pop_mart_\"the_monsters\"_product_releases_and_pricing_timeline_(2022-2025)](https": "//ppl-ai-code-interpreter-files.s3.amazonaws.com/web/direct-files/03814c31732bd8d2d8532f6b82d2853c/d25e2872-21b1-48c0-a177-5ea5e0c226ed/39d3b05f.png)",
+    "<div_style=\"text-align": "center\">⁂</div>",
+    "Deltas": []
+  },
+  {
+    "title": "^1_24",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_25",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_26",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "release_date_correction": "Seed data shows October 26, 2023, but official sources confirm October 27, 2023[^1_23][^1_26].",
+    "Deltas": [
+      {
+        "field": "release_date_correction",
+        "from": null,
+        "to": "Seed data shows October 26, 2023, but official sources confirm October 27, 2023[^1_23][^1_26].",
+        "source": "PRIMARY TARGETS — Completed(1).txt"
+      }
+    ]
+  },
+  {
+    "title": "^1_27",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_28",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_29",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_30",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_31",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_32",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_33",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_38",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_40",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_41",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_42",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_43",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_44",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_45",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_46",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_47",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_48",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_49",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_50",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_51",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_52",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_53",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_54",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_55",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_56",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_57",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_58",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_59",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_60",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_61",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_62",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_63",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_64",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_65",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_66",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_67",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_68",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_69",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_70",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_71",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_72",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_73",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_74",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_75",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_76",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_77",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_78",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_79",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_80",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_81",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_82",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_83",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_84",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_85",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_86",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_87",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_88",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_89",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_90",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_91",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_92",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_93",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_94",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_95",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_96",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_97",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_98",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_99",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_100",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_101",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_102",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_103",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_104",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_105",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_106",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_107",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_108",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_109",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_110",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_111",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_112",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_113",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_114",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_115",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_116",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_117",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_118",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_119",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_120",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_121",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_122",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_123",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_124",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_125",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_126",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_127",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_128",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_129",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_130",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_131",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "Walk by Fortune (CNY) — 2023-12-29 — CNY 499 — limited 3,000",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "1._**identity_\\&_taxonomy": "**",
+    "2._**physical_specification": "**",
+    "height": "15.75 inches (40cm), Materials: PLUSH+PVC construction. Premium vinyl face plate with polyester plush body. Size consistent with other major plush releases in series[^2_3][^2_4].",
+    "3._**edition_\\&_release_context": "**",
+    "4._**pricing_\\&_value": "**",
+    "original_retail": "CNY 499 (~USD 71). Secondary market: NT\\$ 1,088-1,200 range (55-70% markup). Limited edition status driving collector premiums[^2_2][^2_6].",
+    "5._**market_availability": "**",
+    "6._**distribution_channel": "**",
+    "7._**packaging_\\&_presentation": "**",
+    "8._**colorways_\\&_variants": "**",
+    "9._**accessories_\\&_contents": "**",
+    "10._**licensing_\\&_ip": "**",
+    "11._**manufacturing_\\&_materials": "**",
+    "12._**marketing_\\&_media": "**",
+    "13._**community_reception": "**",
+    "14._**provenance_urls": "**",
+    "Deltas": []
+  },
+  {
+    "title": "Best of Luck（海外限定） — 2023-12-30 — CNY 499 — limited 3,000 — likely regional exclusive",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "1._**identity_\\&_taxonomy": "**",
+    "2._**physical_specification": "**",
+    "presumed_identical_to_walk_by_fortune": "15.75 inches (40cm), PLUSH+PVC construction. Materials consistent with standard THE MONSTERS plush specifications[^2_1].",
+    "3._**edition_\\&_release_context": "**",
+    "4._**pricing_\\&_value": "**",
+    "original_retail": "CNY 499 matching Walk by Fortune. Secondary market shows similar appreciation patterns. Overseas exclusive status potentially increasing rarity value[^2_1][^2_9].",
+    "5._**market_availability": "**",
+    "6._**distribution_channel": "**",
+    "7._**packaging_\\&_presentation": "**",
+    "8._**colorways_\\&_variants": "**",
+    "9._**accessories_\\&_contents": "**",
+    "10._**licensing_\\&_ip": "**",
+    "11._**manufacturing_\\&_materials": "**",
+    "12._**marketing_\\&_media": "**",
+    "13._**community_reception": "**",
+    "14._**provenance_urls": "**",
+    "Deltas": []
+  },
+  {
+    "title": "Happy Halloween Party — 2024-10-25 — AU\\$ 50 (keychain pendant)",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "1._**identity_\\&_taxonomy": "**",
+    "2._**physical_specification": "**",
+    "3._**edition_\\&_release_context": "**",
+    "4._**pricing_\\&_value": "**",
+    "original_retail": "AU\\$ 50 (~USD 32.50). Regional exclusive pricing reflecting Australian market positioning[^2_1].",
+    "5._**market_availability": "**",
+    "6._**distribution_channel": "**",
+    "7._**packaging_\\&_presentation": "**",
+    "8._**colorways_\\&_variants": "**",
+    "9._**accessories_\\&_contents": "**",
+    "10._**licensing_\\&_ip": "**",
+    "11._**manufacturing_\\&_materials": "**",
+    "12._**marketing_\\&_media": "**",
+    "13._**community_reception": "**",
+    "14._**provenance_urls": "**",
+    "Deltas": []
+  },
+  {
+    "title": "PRONOUNCE — Wings of Fantasy (plush) / Wings of Fortune (hanging card) — 2024-10-04 — USD 119.99 / USD 43.99",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "1._**identity_\\&_taxonomy": "**",
+    "2._**physical_specification": "**",
+    "wings_of_fantasy_(plush)": "24×15×38 cm, Wings of Fortune (hanging card): 11×8×22 cm. Materials: 66% Polyester, 25% PVC, 9% ABS shell, 95% Polyester stuffing, 5% Iron Wire[^2_13][^2_14].",
+    "3._**edition_\\&_release_context": "**",
+    "4._**pricing_\\&_value": "**",
+    "wings_of_fantasy": "USD 119.99, Wings of Fortune: USD 43.99. Premium pricing reflecting collaboration status and limited quantities[^2_11][^2_12][^2_13].",
+    "5._**market_availability": "**",
+    "6._**distribution_channel": "**",
+    "7._**packaging_\\&_presentation": "**",
+    "8._**colorways_\\&_variants": "**",
+    "dual_variants": "Wings of Fantasy (large plush) and Wings of Fortune (hanging card). Coordinated aesthetic across formats[^2_11][^2_12].",
+    "9._**accessories_\\&_contents": "**",
+    "10._**licensing_\\&_ip": "**",
+    "11._**manufacturing_\\&_materials": "**",
+    "12._**marketing_\\&_media": "**",
+    "13._**community_reception": "**",
+    "14._**provenance_urls": "**",
+    "Deltas": []
+  },
+  {
+    "title": "Be Fancy Now → Enhanced specifications:",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "Coca-Cola Series → Complete variant details:",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "Wacky Mart China → Pop-up store details:",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "Walk by Fortune / Best of Luck queries:",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "Halloween / PRONOUNCE queries:",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "Collaboration queries:",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "<div_style=\"text-align": "center\">⁂</div>",
+    "Deltas": []
+  },
+  {
+    "title": "^2_21",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^2_22",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^2_23",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^2_24",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^2_25",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^2_26",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^2_27",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^2_28",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^2_29",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^2_30",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^2_31",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^2_32",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^2_33",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^2_34",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^2_35",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^2_36",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^2_37",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^2_38",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^2_39",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^2_40",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^2_41",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^2_42",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^2_43",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^2_44",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^2_45",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^2_46",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^2_47",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^2_48",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^2_49",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^2_50",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^2_51",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^2_52",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^2_53",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^2_54",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^2_55",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^2_56",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^2_57",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^2_58",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^2_59",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^2_60",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^2_61",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^2_62",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^2_63",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "PRONOUNCE — Be Fancy Now — 2024-03-15 — CNY 599 — limited 6,458",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "1._**identity_\\&_taxonomy": "**",
+    "2._**physical_specification": "**",
+    "dimensions": "8.66 × 5.91 × 15.75 inches. Materials: 25% Polyester, 18% Cotton, 18% PVC, 15% ABS, 12% Acrylic, 7% Wool, 5% Viscose Fiber. Complex multi-material construction reflecting fashion industry standards[^3_2][^3_3][^3_4].",
+    "3._**edition_\\&_release_context": "**",
+    "4._**pricing_\\&_value": "**",
+    "original_retail": "CNY 599 (~USD 85). Secondary market: USD 3,974-3,999 (4,500%+ markup). Extreme secondary market appreciation reflecting collaboration rarity and fashion brand cachet[^3_2][^3_6].",
+    "5._**market_availability": "**",
+    "6._**distribution_channel": "**",
+    "7._**packaging_\\&_presentation": "**",
+    "8._**colorways_\\&_variants": "**",
+    "9._**accessories_\\&_contents": "**",
+    "10._**licensing_\\&_ip": "**",
+    "11._**manufacturing_\\&_materials": "**",
+    "complex_7-material_construction": "polyester, cotton, PVC, ABS, acrylic, wool, viscose fiber. Premium materials reflecting fashion collaboration standards[^3_2].",
+    "12._**marketing_\\&_media": "**",
+    "13._**community_reception": "**",
+    "14._**provenance_urls": "**",
+    "Deltas": []
+  },
+  {
+    "title": "I FOUND YOU (v1) — 2023-12-15 — 30×25×58 cm — USD 179.99",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "1._**identity_\\&_taxonomy": "**",
+    "2._**physical_specification": "**",
+    "dimensions": "30×25×58 cm (22.8 inches height), Weight: 5.4 kg. Materials: PVC/ABS vinyl face, polyester/cotton plush body. Distinctive tail feature differentiating from Labubu[^3_1][^3_9][^3_10].",
+    "3._**edition_\\&_release_context": "**",
+    "4._**pricing_\\&_value": "**",
+    "original_retail": "USD 179.99. Chinese market: CNY 999. Secondary market: NT\\$5,000 (~USD 978-1,088). Strong secondary market appreciation reflecting character popularity[^3_8][^3_10].",
+    "5._**market_availability": "**",
+    "6._**distribution_channel": "**",
+    "7._**packaging_\\&_presentation": "**",
+    "8._**colorways_\\&_variants": "**",
+    "9._**accessories_\\&_contents": "**",
+    "10._**licensing_\\&_ip": "**",
+    "11._**manufacturing_\\&_materials": "**",
+    "12._**marketing_\\&_media": "**",
+    "13._**community_reception": "**",
+    "14._**provenance_urls": "**",
+    "Deltas": []
+  },
+  {
+    "title": "ANGEL IN CLOUDS (v2) — 2024-10-25 — 33×25×58 cm — USD 289.99",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "1._**identity_\\&_taxonomy": "**",
+    "2._**physical_specification": "**",
+    "dimensions": "33×25×58 cm, Materials: Premium white synthetic fur with gray-silver tips, PVC/ABS face. Poseable bat/gargoyle wings, moveable tail, flip-eye mechanism for expression changes[^3_16][^3_11].",
+    "3._**edition_\\&_release_context": "**",
+    "4._**pricing_\\&_value": "**",
+    "original_retail": "USD 289.99 (double the price of v1). Premium pricing reflecting advanced features and improved materials. Regional price variations noted[^3_1][^3_11][^3_17].",
+    "5._**market_availability": "**",
+    "6._**distribution_channel": "**",
+    "7._**packaging_\\&_presentation": "**",
+    "8._**colorways_\\&_variants": "**",
+    "9._**accessories_\\&_contents": "**",
+    "10._**licensing_\\&_ip": "**",
+    "11._**manufacturing_\\&_materials": "**",
+    "12._**marketing_\\&_media": "**",
+    "13._**community_reception": "**",
+    "14._**provenance_urls": "**",
+    "Deltas": []
+  },
+  {
+    "title": "Close to Sweet → Character identification:",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "Fall into Spring → Mokoko series continuation:",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "Blue Diamond → June 2024 pendant:",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "Magic of Pumpkin → Halloween timing:",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "Twinkly Fairy Tale → November release:",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "Forest Fairy Tale China → Member points exclusive:",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "PRONOUNCE / I FOUND YOU / ANGEL queries:",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "Character research queries:",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "Cross-product queries:",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "<div_style=\"text-align": "center\">⁂</div>",
+    "Deltas": []
+  },
+  {
+    "title": "^3_44",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^3_45",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^3_46",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^3_47",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^3_48",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^3_49",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^3_50",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^3_51",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^3_52",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "Close to Sweet (v1) — 2023-09-xx — plush vs pendant (split by form)",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "1._**identity_\\&_taxonomy": "**",
+    "mokoko_character_introduction_from_the_monsters_series._features_pink_fur,_heart-shaped_nose,_and_long_curly_eyelashes._dual-format_release": "large plush doll and keychain pendant. Represents sweet/princess aesthetic with floral scent elements.",
+    "2._**physical_specification": "**",
+    "plush": "CNY 499-599 range, Pendant: CNY 159. Secondary market: Moderate appreciation with plush listings at 150-300% markup due to character popularity.",
+    "3._**edition_\\&_release_context": "**",
+    "4._**pricing_\\&_value": "**",
+    "5._**market_availability": "**",
+    "6._**distribution_channel": "**",
+    "7._**packaging_\\&_presentation": "**",
+    "8._**colorways_\\&_variants": "**",
+    "9._**accessories_\\&_contents": "**",
+    "10._**licensing_\\&_ip": "**",
+    "11._**manufacturing_\\&_materials": "**",
+    "12._**marketing_\\&_media": "**",
+    "13._**community_reception": "**",
+    "14._**provenance_urls": "**",
+    "15._**deltas": "**",
+    "16._**media_assets": "**",
+    "Deltas": []
+  },
+  {
+    "title": "Fall into Spring — 2024-03-08 — CNY 599 (plush) / CNY 159 (pendant)",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "1._**identity_\\&_taxonomy": "**",
+    "mokoko_seasonal_release_featuring_spring/floral_theme._dual-format": "plush doll and keychain pendant. Continuation of Mokoko character line with nature-inspired aesthetic.",
+    "2._**physical_specification": "**",
+    "plush": "CNY 599, Pendant: CNY 159. Secondary market stable with slight premiums for complete sets.",
+    "3._**edition_\\&_release_context": "**",
+    "4._**pricing_\\&_value": "**",
+    "5._**market_availability": "**",
+    "6._**distribution_channel": "**",
+    "7._**packaging_\\&_presentation": "**",
+    "8._**colorways_\\&_variants": "**",
+    "9._**accessories_\\&_contents": "**",
+    "10._**licensing_\\&_ip": "**",
+    "11._**manufacturing_\\&_materials": "**",
+    "12._**marketing_\\&_media": "**",
+    "13._**community_reception": "**",
+    "14._**provenance_urls": "**",
+    "15._**deltas": "**",
+    "16._**media_assets": "**",
+    "Deltas": []
+  },
+  {
+    "title": "Blue Diamond — 2024-06-18 — CNY 159 (pendant)",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "1._**identity_\\&_taxonomy": "**",
+    "2._**physical_specification": "**",
+    "height": "17 cm. Materials: Polyester plush with PVC accents, gem-like decorations.",
+    "3._**edition_\\&_release_context": "**",
+    "4._**pricing_\\&_value": "**",
+    "5._**market_availability": "**",
+    "6._**distribution_channel": "**",
+    "7._**packaging_\\&_presentation": "**",
+    "8._**colorways_\\&_variants": "**",
+    "9._**accessories_\\&_contents": "**",
+    "10._**licensing_\\&_ip": "**",
+    "11._**manufacturing_\\&_materials": "**",
+    "12._**marketing_\\&_media": "**",
+    "13._**community_reception": "**",
+    "14._**provenance_urls": "**",
+    "15._**deltas": "**",
+    "16._**media_assets": "**",
+    "Deltas": []
+  },
+  {
+    "title": "Magic of Pumpkin (Halloween) — 2024-10-27 — CNY 159 (pendant)",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "1._**identity_\\&_taxonomy": "**",
+    "2._**physical_specification": "**",
+    "height": "17 cm. Materials: Polyester, PVC, seasonal decorations.",
+    "3._**edition_\\&_release_context": "**",
+    "4._**pricing_\\&_value": "**",
+    "5._**market_availability": "**",
+    "6._**distribution_channel": "**",
+    "7._**packaging_\\&_presentation": "**",
+    "8._**colorways_\\&_variants": "**",
+    "9._**accessories_\\&_contents": "**",
+    "10._**licensing_\\&_ip": "**",
+    "11._**manufacturing_\\&_materials": "**",
+    "12._**marketing_\\&_media": "**",
+    "13._**community_reception": "**",
+    "14._**provenance_urls": "**",
+    "15._**deltas": "**",
+    "16._**media_assets": "**",
+    "Deltas": []
+  },
+  {
+    "title": "Twinkly Fairy Tale — 2024-11-28 — CNY 159 (pendant)",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "1._**identity_\\&_taxonomy": "**",
+    "2._**physical_specification": "**",
+    "height": "17 cm. Materials: Polyester, PVC, card holder components.",
+    "3._**edition_\\&_release_context": "**",
+    "4._**pricing_\\&_value": "**",
+    "5._**market_availability": "**",
+    "6._**distribution_channel": "**",
+    "7._**packaging_\\&_presentation": "**",
+    "8._**colorways_\\&_variants": "**",
+    "9._**accessories_\\&_contents": "**",
+    "10._**licensing_\\&_ip": "**",
+    "11._**manufacturing_\\&_materials": "**",
+    "12._**marketing_\\&_media": "**",
+    "13._**community_reception": "**",
+    "14._**provenance_urls": "**",
+    "15._**deltas": "**",
+    "16._**media_assets": "**",
+    "**hide_and_seek_in_singapore_→_merlion_theme": "** Confirmed Singapore exclusive with Merlion costume. Dimensions 10×10×17.5 cm at S\\$37.90. Regional exclusive status verified.",
+    "**good_lucky_to_you_thailand_→_fortune_theme": "** December 20, 2024 release as Thailand exclusive at THB 1,050. Features local fortune elements.",
+    "**forest_fairy_tale_china_→_points_redemption": "** May 26, 2025 China exclusive requiring 5,000 membership points. Fairy tale forest theme.",
+    "**wacky_mart_china_→_pop-up_exclusive": "** June 12, 2025 release at CNY 199 as China regional exclusive with convenience store theme.",
+    "Deltas": []
+  },
+  {
+    "title": "Mokoko series queries:",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "Seasonal pendant queries:",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "Regional exclusive queries:",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "Deltas": []
+  },
+  {
+    "title": "Hide and Seek in Singapore — 2025-? — SGD 39.90 — regional exclusive",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "1._**identity_\\&_taxonomy": "**",
+    "2._**physical_specification": "**",
+    "dimensions": "10×10×17.5 cm. Fabric: 62% polyester, 38% PVC; Filling: 95% polyester, 5% ABS. Pendant format with keychain hardware.",
+    "3._**edition_\\&_release_context": "**",
+    "launch_window": "EQL drop concluded June 19, 2025. Exclusive to POP MART Singapore. EQL system limited to one entry per customer to curb bots.",
+    "4._**pricing_\\&_value": "**",
+    "original_retail": "SGD 39.90 (~USD 29.25). Secondary market: SGD 60–200 depending on generation and condition (Gen 1 vs Gen 2 distinctions).",
+    "5._**market_availability": "**",
+    "6._**distribution_channel": "**",
+    "7._**packaging_\\&_presentation": "**",
+    "8._**colorways_\\&_variants": "**",
+    "second-generation_differences": "lighter blue fur, white label, blue Pop Mart logo versus Gen 1 darker tone and reversed logo colors.",
+    "9._**accessories_\\&_contents": "**",
+    "10._**licensing_\\&_ip": "**",
+    "11._**manufacturing_\\&_materials": "**",
+    "12._**marketing_\\&_media": "**",
+    "13._**community_reception": "**",
+    "14._**provenance_urls": "**",
+    "Deltas": []
+  },
+  {
+    "title": "GOOD LUCKY TO YOU (Thailand) — 2024-12-20 — THB 1,050 — regional exclusive",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "1._**identity_\\&_taxonomy": "**",
+    "2._**physical_specification": "**",
+    "pendant_dimensions": "~10×10×18 cm. Materials presumed polyester plush body with PVC/ABS face and keychain hardware (consistent with series standards).",
+    "3._**edition_\\&_release_context": "**",
+    "4._**pricing_\\&_value": "**",
+    "original_retail": "THB 1,050 (~USD 29). Secondary market: THB 1,200–2,000 based on availability.",
+    "5._**market_availability": "**",
+    "6._**distribution_channel": "**",
+    "7._**packaging_\\&_presentation": "**",
+    "8._**colorways_\\&_variants": "**",
+    "9._**accessories_\\&_contents": "**",
+    "10._**licensing_\\&_ip": "**",
+    "11._**manufacturing_\\&_materials": "**",
+    "12._**marketing_\\&_media": "**",
+    "13._**community_reception": "**",
+    "14._**provenance_urls": "**",
+    "Deltas": []
+  },
+  {
+    "title": "Forest Fairy Tale (China) — 2025-05-26 — 5,000 points (member points only)",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "1._**identity_\\&_taxonomy": "**",
+    "2._**physical_specification": "**",
+    "dimensions": "≈11 × 8 × 22 cm. Shell: 66% polyester, 25% PVC, 9% ABS; stuffing: 95% polyester, 5% iron wire. Vinyl face integrated into plush body on credit-card backing.",
+    "3._**edition_\\&_release_context": "**",
+    "4._**pricing_\\&_value": "**",
+    "cost": "5,000 Pop Mart points (historically 1 RMB per point, implying ~¥5,000 of prior spend). Secondary-market listings at ¥600–1,200 (US \\$80–165) post-drop[^6_1].",
+    "5._**market_availability": "**",
+    "6._**distribution_channel": "**",
+    "7._**packaging_\\&_presentation": "**",
+    "8._**colorways_\\&_variants": "**",
+    "9._**accessories_\\&_contents": "**",
+    "10._**licensing_\\&_ip": "**",
+    "11._**manufacturing_\\&_materials_origin": "**",
+    "12._**marketing_\\&_media": "**",
+    "13._**community_reception": "**",
+    "14._**provenance_urls": "**",
+    "Deltas": []
+  },
+  {
+    "title": "Wacky Mart (China) — 2025-06-12 — CNY 199 — pop-up store exclusive",
+    "source": "PRIMARY TARGETS — Completed(2).txt",
+    "1._**identity_\\&_taxonomy": "**",
+    "2._**physical_specification": "**",
+    "vinyl-plush_format,_approximate_height_15–17_cm_for_pendants;_large_plush_variants_~37–40_cm._shell": "polyester/plush body; face: PVC/ABS.",
+    "3._**edition_\\&_release_context": "**",
+    "launch": "12 June 2025 through 7 September 2025. Exclusive to China pop-up events in Shanghai, Beijing, Guangzhou, and Chengdu[^6_6].",
+    "4._**pricing_\\&_value": "**",
+    "retail": "CNY 199 per unit. Secondary-market premiums minimal (~20–50%) due to multi-city run.",
+    "5._**market_availability": "**",
+    "6._**distribution_channel": "**",
+    "7._**packaging_\\&_presentation": "**",
+    "8._**colorways_\\&_variants": "**",
+    "9._**accessories_\\&_contents": "**",
+    "10._**licensing_\\&_ip": "**",
+    "11._**manufacturing_\\&_materials_origin": "**",
+    "12._**marketing_\\&_media": "**",
+    "13._**community_reception": "**",
+    "14._**provenance_urls": "**",
+    "Deltas": []
+  },
+  {
+    "title": "Jump for Joy — 2023-05-25; CNY 499 (plush)",
+    "source": "PRIMARY TARGETS — Completed(1).txt",
+    "size": "Approximately 15.75 inches in height. Materials: PLUSH+PVC construction. Features similar construction to other large format LABUBU plush dolls with vinyl face and soft plush body[^1_16].",
+    "launch_price": "CNY 499 as specified in seed data[^1_14]. Secondary market pricing significantly elevated, with resale prices reaching over \\$2,400 USD for opened box variants[^1_16].",
+    "Deltas": []
+  },
+  {
+    "title": "Dress be Latte — 2023-10-26; CNY 499 (plush)",
+    "source": "PRIMARY TARGETS — Completed(1).txt",
+    "size": "Approximately 15.75 inches (40cm) in height. Materials: PLUSH+PVC construction with detailed fabric accessories. Features the standard LABUBU vinyl face with soft plush body construction[^1_24][^1_25].",
+    "launch_price": "CNY 499 as specified in seed data[^1_22]. Notable secondary market appreciation - actress Yao Chen mentioned purchasing for \"a few hundred yuan\" and later noting it as \"the only successful investment I've ever made\" due to significant value increase[^1_22]. Currently sold out from official channels[^1_27][^1_28].",
+    "Deltas": []
+  },
+  {
+    "title": "Flip with Me — 2024-07-12; plush 40×20×15 cm; CN/US pricing exists",
+    "source": "PRIMARY TARGETS — Completed(1).txt",
+    "dimensions": "20×15×40 cm (7.87×5.91×15.75 inches) as specified in seed data[^1_33]. Materials: Shell composition of 40% Cotton, 17% PVC, 16% Polyester, 15% ABS, 12% TPR. Stuffing: 90% Polyester, 10% PE particles[^1_33]. Features whimsical mid-air flip sculpting with rounded silhouette.",
+    "us_pricing": "\\$84.99 for plush doll[^1_34][^1_36]. Materials and construction suggest premium positioning within LABUBU product range. Secondary market activity indicates strong collector interest[^1_33].",
+    "Deltas": []
+  },
+  {
+    "title": "Fall in Wild — 2024-07-12; plush 40×20×15 and keychain pendant 17 cm",
+    "source": "PRIMARY TARGETS — Completed(1).txt",
+    "large_plush": "40×20×15 cm as specified in seed data. Keychain pendant: approximately 17cm height[^1_42][^1_43]. Materials: Polyester, Cotton, PVC construction for pendant version[^1_42]. Standard vinyl face with plush body construction.",
+    "us_pricing": "\\$84.99 for large plush doll, \\$30.99 for keychain pendant[^1_43]. UK pricing: £55 for pendant version[^1_43]. Multiple format availability provides different price points for collectors[^1_36].",
+    "Deltas": []
+  },
+  {
+    "title": "Let's Checkmate (Doll) — 2025-02-07; 37 cm; USD 114.99",
+    "source": "PRIMARY TARGETS — Completed(1).txt",
+    "height": "37cm (14.57 inches) when standing, adjustable to 33cm when sitting due to movable leg construction[^1_48][^1_51]. Materials: Shell composition of 59% PVC, 41% Polyester; Stuffing 100% Polyester[^1_51]. Features brown fuzzy exterior with twinkling, movable blue eyes.",
+    "us_pricing": "\\$114.99 as specified in seed data[^1_48]. Singapore pricing: SGD 109.90[^1_48]. Premium pricing reflects larger size and detailed accessories including functional jewelry box[^1_50].",
+    "key_feature": "functional red LABUBU ring box that can hold actual jewelry for gift-giving purposes. Removable crown and cape accessories. Adjustable legs for sitting/standing display options[^1_48][^1_50].",
+    "Deltas": []
+  },
+  {
+    "title": "Let's Checkmate (Hanging Card) — 2025-02-07; 17 cm; USD 39.99",
+    "source": "PRIMARY TARGETS — Completed(1).txt",
+    "height": "17cm (6.69 inches) as specified in seed data[^1_48][^1_51]. Materials: Shell 59% PVC, 41% Polyester; Stuffing 100% Polyester[^1_51]. Features yellow fur variant with pink crown and heart accessory.",
+    "us_pricing": "\\$39.99 as specified in seed data[^1_48]. Singapore pricing: SGD 37.90[^1_48]. Positioned as entry-level option for the chess-themed collection[^1_50].",
+    "Deltas": []
+  },
+  {
+    "title": "PRONOUNCE — Wings of Fantasy/Wings of Fortune",
+    "source": "PRIMARY TARGETS — Completed(1).txt",
+    "Deltas": []
+  },
+  {
+    "title": "Time to Chill:",
+    "source": "PRIMARY TARGETS — Completed(1).txt",
+    "Deltas": []
+  },
+  {
+    "title": "Jump for Joy:",
+    "source": "PRIMARY TARGETS — Completed(1).txt",
+    "Deltas": []
+  },
+  {
+    "title": "Dress be Latte:",
+    "source": "PRIMARY TARGETS — Completed(1).txt",
+    "Deltas": []
+  },
+  {
+    "title": "Flip with Me:",
+    "source": "PRIMARY TARGETS — Completed(1).txt",
+    "Deltas": []
+  },
+  {
+    "title": "Let's Checkmate (both versions):",
+    "source": "PRIMARY TARGETS — Completed(1).txt",
+    "<div_style=\"text-align": "center\">⁂</div>",
+    "Deltas": []
+  },
+  {
+    "title": "^1_132",
+    "source": "PRIMARY TARGETS — Completed(1).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_133",
+    "source": "PRIMARY TARGETS — Completed(1).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_134",
+    "source": "PRIMARY TARGETS — Completed(1).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_135",
+    "source": "PRIMARY TARGETS — Completed(1).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_136",
+    "source": "PRIMARY TARGETS — Completed(1).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_137",
+    "source": "PRIMARY TARGETS — Completed(1).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_138",
+    "source": "PRIMARY TARGETS — Completed(1).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_139",
+    "source": "PRIMARY TARGETS — Completed(1).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_140",
+    "source": "PRIMARY TARGETS — Completed(1).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_141",
+    "source": "PRIMARY TARGETS — Completed(1).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_142",
+    "source": "PRIMARY TARGETS — Completed(1).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_143",
+    "source": "PRIMARY TARGETS — Completed(1).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_144",
+    "source": "PRIMARY TARGETS — Completed(1).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_145",
+    "source": "PRIMARY TARGETS — Completed(1).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_146",
+    "source": "PRIMARY TARGETS — Completed(1).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_147",
+    "source": "PRIMARY TARGETS — Completed(1).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_148",
+    "source": "PRIMARY TARGETS — Completed(1).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_149",
+    "source": "PRIMARY TARGETS — Completed(1).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_150",
+    "source": "PRIMARY TARGETS — Completed(1).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_151",
+    "source": "PRIMARY TARGETS — Completed(1).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_152",
+    "source": "PRIMARY TARGETS — Completed(1).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_153",
+    "source": "PRIMARY TARGETS — Completed(1).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_154",
+    "source": "PRIMARY TARGETS — Completed(1).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_155",
+    "source": "PRIMARY TARGETS — Completed(1).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_156",
+    "source": "PRIMARY TARGETS — Completed(1).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_157",
+    "source": "PRIMARY TARGETS — Completed(1).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^1_158",
+    "source": "PRIMARY TARGETS — Completed(1).txt",
+    "Deltas": []
+  },
+  {
+    "title": "PRONOUNCE — Wings of Fantasy (plush) / Wings of Fortune (hanging card) — 2024-10-04; USD 119.99 / USD 43.99",
+    "source": "PRIMARY TARGETS — Completed(1).txt",
+    "wings_of_fantasy": "Purple fur with lightning bolt on right temple, removable denim contemporary Mao suit with wings, purple-lens sunglasses. Wings of Fortune: Purple fur with golden dress featuring wings on back, carries Pronounce's signature Gourd Húlu bag[^2_2][^2_3].",
+    "wings_of_fantasy_(plush)": "USD 119.99 / SGD 129.90. Wings of Fortune (hanging card): USD 43.99 / SGD 39.90. Wings of Fantasy limited to 10,000 pieces globally[^2_1][^2_2]. Secondary market pricing significantly elevated due to rapid sell-out[^2_6].",
+    "Deltas": []
+  },
+  {
+    "title": "Coca-Cola — 2025-01-24; 15.5×17 cm; set USD 239.94 / box USD 39.99 (blind box)",
+    "source": "PRIMARY TARGETS — Completed(1).txt",
+    "size": "15.5×17 cm as specified in seed data[^2_1][^2_16]. Materials: Vinyl face construction with plush body elements. Features soft white fluffy parka material and classic red Coca-Cola accessories[^2_15][^2_17].",
+    "set_pricing": "USD 239.94 for complete set. Individual box: USD 39.99 as specified in seed data[^2_1][^2_16]. Higher pricing compared to standard LABUBU blind boxes reflects premium brand collaboration positioning[^2_18][^2_19].",
+    "two_regular_designs": "\"Happy Factor\" (LABUBU holding classic red Coca-Cola can with knitted red scarf) and \"Surprise Shake\" (LABUBU holding Coca-Cola bottle wearing Christmas hat). Secret \"Mysterious Guest\" (1:72 rarity): LABUBU emerging from Coca-Cola can[^2_15][^2_17][^2_16].",
+    "Deltas": []
+  },
+  {
+    "title": "Have a Seat — 2024-07-12; 8×7×15 cm; set USD 131.94 / box USD 21.99",
+    "source": "PRIMARY TARGETS — Completed(1).txt",
+    "size": "8×7×15 cm (3.15×2.76×5.91 inches) excluding hanging loop, approximately 8×7×20 cm including hanging loop as specified in seed data[^2_29][^2_30]. Materials: Shell 60% PVC, 40% Polyester; Stuffing 70% Polyester, 20% ABS, 5% Iron Wire, 5% Nylon[^2_29][^2_30].",
+    "set_pricing": "USD 131.94 for complete set. Individual box: USD 21.99 as specified in seed data[^2_1][^2_32]. Consistent with standard LABUBU blind box pricing structure. Secondary market shows significant appreciation due to high demand[^2_32][^2_29].",
+    "six_regular_designs": "Cici (light beige, calm smile, closed eyes), Hehe (grey, mischievous smile, squinting eyes), Baba (golden brown, curious big eyes, friendly smile), Zizi (light purple, calm face, sleepy eyes), Qiuqiu (mint green, wide excited eyes, happy expression), Dada (light pink, bright shiny eyes, brilliant smile). Secret Duoduo (chocolate brown, mischievous smile, relaxed pose with vintage radio prop)[^2_28][^2_16][^2_35].",
+    "Deltas": []
+  },
+  {
+    "title": "Big Into Energy (v3) — 2025-04-25; 17 cm; set USD 167.94 / box USD 27.99",
+    "source": "PRIMARY TARGETS — Completed(1).txt",
+    "height": "17 cm (6.69 inches) excluding hanging loop as specified in seed data[^2_38][^2_39][^2_41]. Materials: Shell PVC/Polyester; Stuffing 100% Polyester. Features poseable head, arms, and feet with novel kaleidoscopic tie-dye finish ensuring no two figures are exactly alike[^2_38][^2_41].",
+    "set_pricing": "USD 167.94 for complete set. Individual box: USD 27.99 as specified in seed data[^2_1][^2_38][^2_42]. Premium pricing reflects advanced manufacturing techniques and unique tie-dye process. High secondary market activity due to rapid sell-out[^2_42][^2_43].",
+    "six_regular_designs_with_cosmic_energy_themes": "Love (red), Happiness (orange), Loyalty (pink and yellow), Serenity (green), Hope (blue), Luck (purple). Secret \"ID\" (grey fur with rainbow gradient glitter eyes, rainbow teeth, black nose and toenails). 1:6 chance for regular editions, 1:72 for secret[^2_38][^2_39][^2_40].",
+    "Deltas": []
+  },
+  {
+    "title": "I FOUND YOU (v1)",
+    "source": "PRIMARY TARGETS — Completed(1).txt",
+    "Deltas": []
+  },
+  {
+    "title": "ANGEL IN CLOUDS (v2)",
+    "source": "PRIMARY TARGETS — Completed(1).txt",
+    "Deltas": []
+  },
+  {
+    "title": "Close to Sweet (v1)",
+    "source": "PRIMARY TARGETS — Completed(1).txt",
+    "Deltas": []
+  },
+  {
+    "title": "Fall into Spring",
+    "source": "PRIMARY TARGETS — Completed(1).txt",
+    "Deltas": []
+  },
+  {
+    "title": "Blue Diamond",
+    "source": "PRIMARY TARGETS — Completed(1).txt",
+    "Deltas": []
+  },
+  {
+    "title": "Magic of Pumpkin (Halloween)",
+    "source": "PRIMARY TARGETS — Completed(1).txt",
+    "Deltas": []
+  },
+  {
+    "title": "Twinkly Fairy Tale",
+    "source": "PRIMARY TARGETS — Completed(1).txt",
+    "Deltas": []
+  },
+  {
+    "title": "PRONOUNCE Wings of Fantasy/Fortune:",
+    "source": "PRIMARY TARGETS — Completed(1).txt",
+    "Deltas": []
+  },
+  {
+    "title": "Coca-Cola:",
+    "source": "PRIMARY TARGETS — Completed(1).txt",
+    "Deltas": []
+  },
+  {
+    "title": "Have a Seat:",
+    "source": "PRIMARY TARGETS — Completed(1).txt",
+    "Deltas": []
+  },
+  {
+    "title": "Big Into Energy v3:",
+    "source": "PRIMARY TARGETS — Completed(1).txt",
+    "<div_style=\"text-align": "center\">⁂</div>",
+    "Deltas": []
+  },
+  {
+    "title": "^2_64",
+    "source": "PRIMARY TARGETS — Completed(1).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^2_65",
+    "source": "PRIMARY TARGETS — Completed(1).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^2_66",
+    "source": "PRIMARY TARGETS — Completed(1).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^2_67",
+    "source": "PRIMARY TARGETS — Completed(1).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^2_68",
+    "source": "PRIMARY TARGETS — Completed(1).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^2_69",
+    "source": "PRIMARY TARGETS — Completed(1).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^2_70",
+    "source": "PRIMARY TARGETS — Completed(1).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^2_71",
+    "source": "PRIMARY TARGETS — Completed(1).txt",
+    "Deltas": []
+  },
+  {
+    "title": "^2_72",
+    "source": "PRIMARY TARGETS — Completed(1).txt",
+    "Deltas": []
+  },
+  {
+    "title": "I FOUND YOU (v1) — 2023-12-15 — USD 179.99",
+    "source": "PRIMARY TARGETS — Completed(1).txt",
+    "dimensions": "30 × 25 × 58 cm (11.8″ × 9.8″ × 22.8″). Materials: PVC vinyl face, ABS plastic details (movable hands, eyes), polyester fiber plush body. Includes metal-tag leather collar and adjustable posable tail with spines[^3_1][^3_3].",
+    "launch_price": "USD 179.99. Secondary market listing prices range USD 300–450 for unopened items due to rarity and limited count[^3_4].",
+    "single_colorway": "chocolate-brown fur, blue eyes, metal collar. No variant editions for v1; only the initial “I FOUND YOU” release.",
+    "produced_in_guangdong,_china._shell": "laminated PVC and ABS injection molding; body: polyester plush stuffing with internal wire posability.",
+    "Deltas": []
+  },
+  {
+    "title": "I FOUND YOU (v1):",
+    "source": "PRIMARY TARGETS — Completed(1).txt",
+    "<div_style=\"text-align": "center\">⁂</div>",
+    "Deltas": []
+  },
+  {
+    "title": "ANGEL IN CLOUDS (v2) — 2024-10-25 — USD 289.99",
+    "source": "PRIMARY TARGETS — Completed(1).txt",
+    "dimensions": "33 × 25 × 58 cm (12.99″ × 9.84″ × 22.83″). Shell composition: 36% Polyester, 35% PVC, 29% ABS. Stuffing: 70% Polyester, 27% POM (polyoxymethylene), 2% Rubber, 1% Sponge. Weight: approximately 1.5 kg. Features articulated soft vinyl face and plush body with detailed angelic wings and halo motif[^4_2].",
+    "launch_price": "USD 289.99. Secondary market listings show premiums up to USD 350 for new-in-box units due to limited availability and collector demand[^4_1].",
+    "single_colorway": "pure white plush body with silvery-gray wings, metallic silver halo accent, and translucent PVC wing inserts. No variant editions reported.",
+    "Deltas": []
+  },
+  {
+    "title": "ANGEL IN CLOUDS (v2):",
+    "source": "PRIMARY TARGETS — Completed(1).txt",
+    "<div_style=\"text-align": "center\">⁂</div>",
+    "Deltas": []
+  }
+]
