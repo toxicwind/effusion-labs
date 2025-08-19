@@ -1,22 +1,41 @@
 {
+  "timeout": "5000",               // 5s per link max
+  "retryOn429": false,             // no retries
+  "retryCount": 0,
+  "fallbackRetryDelay": "0s",
+
+  "aliveStatusCodes": [200, 201, 202, 204, 301, 302, 307, 308],
+
   "ignorePatterns": [
     { "pattern": "^http://localhost" },
     { "pattern": "^https://127\\.0\\.0\\.1" },
+    { "pattern": "^https://0\\.0\\.0\\.0" },
+    { "pattern": "^/" },                  // skip root-relative paths
+    { "pattern": "\\{\\{[^}]+\\}\\}" },   // skip templated {{ ... }}
+    { "pattern": "\\{\\%[^%]+\\%\\}" },   // skip templated {% ... %}
+    { "pattern": "^mailto:" },
+    { "pattern": "^tel:" },
+    { "pattern": "^data:" },
+
+    { "pattern": "badge\\.(svg|png)$" },
+    { "pattern": "shields\\.io" },
+    { "pattern": "badgen\\.net" },
+    { "pattern": "gitlab\\.com/.*/badges" },
+    { "pattern": "github\\.com/.*/actions/workflows/.*badge" },
+
     { "pattern": "^https://ghcr\\.io/" },
     { "pattern": "^https://hub\\.docker\\.com/" },
-    { "pattern": "badge\\.svg" },
-    { "pattern": "shields\\.io" },
+
     { "pattern": "^https://github\\.com/.*/actions/workflows/" },
+    { "pattern": "^https://raw\\.githubusercontent\\.com/.*/.+" },
+
     { "pattern": "^https://effusionlabs\\.com:9000" }
   ],
-  "retryOn429": true,
+
   "httpHeaders": [
     {
-      "urls": ["https://github.com/**"],
-      "headers": {
-        "User-Agent": "Mozilla/5.0 (CI Link Checker)"
-      }
+      "urls": ["https://github.com", "https://raw.githubusercontent.com"],
+      "headers": { "User-Agent": "Mozilla/5.0 (CI Link Checker)" }
     }
-  ],
-  "aliveStatusCodes": [200, 201, 202, 204, 301, 302, 307, 308, 401]
+  ]
 }

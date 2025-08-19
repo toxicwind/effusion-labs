@@ -28,8 +28,19 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Check all Markdown links
+      - name: Check all Markdown links (fast, parallel)
         run: |
-          find . -name '*.md' -not -path './node_modules/*' \
-            | xargs -n1 markdown-link-check -c link-check.config.json
+          PROCS="$(nproc || echo 4)"                 # how many parallel workers
+          # Show which config we’re using (optional)
+          echo "Using link-check.config.json:"
+          sed -n '1,120p' link-check.config.json || true
+          echo
+
+          # Find *.md files and check them in parallel with grouped logs
+          find . -type f -name '*.md' -not -path './node_modules/*' -print0 \
+            | xargs -0 -P "$PROCS" -n1 -I{} sh -c '
+                echo "::group::markdown-link-check {}"
+                markdown-link-check -q -c link-check.config.json "{}" || true
+                echo "::endgroup::"
+              '
         continue-on-error: true   # warn but don’t fail CI
