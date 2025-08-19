@@ -8,7 +8,7 @@ System prompt invariants are non-nullifiable.
 
 ## Runtime Facts
 
-- Node.js: **v20**
+- Node.js: **v20+** (repo targets v20; runners may be v22). Honor `.nvmrc` if present.
 - Modules: **CommonJS (CJS)**
 - Static generator: **Eleventy (11ty)**
 - Templates: **Nunjucks**
@@ -19,7 +19,7 @@ System prompt invariants are non-nullifiable.
 
 ## Mandatory Activation (once per shell)
 
-You MUST activate guardrails before running anything:
+Activate guardrails before running anything:
 
 ```bash
 source scripts/llm-bootstrap.sh
@@ -28,13 +28,15 @@ source scripts/llm-bootstrap.sh
 **Self-check** (run right after sourcing):
 
 ```bash
-type llm_run            # => function
-trap -p DEBUG           # => shows _llm_rewrite
-alias tail              # => wrapper active
-echo "$LLM_STRICT"      # => 1
+type llm_run    # => llm_run is a function
+trap -p DEBUG   # => ... DEBUG _llm_rewrite
+type tail       # => tail is a function (wrapper)
+type head       # => head is a function (wrapper)
+type cat        # => cat is a function (wrapper)
+echo "$LLM_STRICT"  # => 1
 ```
 
-If these don’t match, re-source.
+If any of these don’t match, re-source the bootstrap.
 
 ---
 
@@ -46,22 +48,20 @@ If these don’t match, re-source.
 llm_run --out /tmp/task.log -- <cmd and args>
 ```
 
-* Streams live (folded) output to the console and to `/tmp/task.log`.
+* Streams live (folded) output to console and `/tmp/task.log`.
 * Emits **idle beacons** only during true inactivity.
-* Prints a final **run.complete** footer with exit code.
+* Prints a **run.complete** footer with exit code.
 * `Ctrl-C`: prints a bounded tail and exits **130**.
 
-### Forbidden patterns (strictly rejected)
-
-Do **not** use these; they are blocked under `LLM_STRICT=1`:
+### Forbidden patterns (strictly rejected under `LLM_STRICT=1`)
 
 ```bash
 <cmd> > file && tail -n 20 file     # disallowed
 <cmd> > file && head -n 20 file     # disallowed
-<cmd> > file                        # disallowed as a silent redirect
+<cmd> > file                        # silent redirect (disallowed)
 ```
 
-The trap will fail fast and suggest the fix:
+You’ll see a fast **rewrite.reject** with a suggestion:
 
 ```bash
 llm_run --out file -- <cmd>
@@ -69,32 +69,33 @@ llm_run --out file -- <cmd>
 
 ### Head & Tail safety
 
-* `tail -f/-F` is **blocked** (anti-runaway). You’ll get a bounded snapshot (default `LLM_TAIL_MAX_LINES=5000`).
+* `tail -f/-F` is **blocked** (anti-runaway); you get a bounded snapshot (default `LLM_TAIL_MAX_LINES=5000`).
 * `head` is **clamped** to `LLM_HEAD_MAX_LINES` (default **2000**) and folded to avoid token floods.
-* Use `command tail` / `command head` to bypass wrappers **only if you really know why**.
+* Bypass wrappers only if you truly must: `command tail …`, `command head …`.
 
 ### Pretty printing
 
-* In interactive TTY sessions, `cat` is aliased to a **Prettier-first** formatter for known types (fallback: raw + folded).
+* `cat` is a global wrapper that pretty-prints known code/text types via Prettier (fallback: raw + folded).
 * For raw bytes/pipes/binaries: use `command cat`.
 
 ---
 
 ## Heartbeats & Silence Discipline
 
-* `llm_run` emits `event=run.idle` roughly every `LLM_IDLE_SECS` (**7s** default) only while the child is *quiet*.
-* Global heartbeat is **scoped**: it runs when no `llm_run` lockfiles exist, then auto-stops.
-* **Stall guard**: if no new bytes arrive for `LLM_IDLE_FAIL_AFTER_SECS` (**300s** default), the runner cancels the job with exit **124** and prints a bounded tail.
+* `llm_run` emits `event=run.idle` about every `LLM_IDLE_SECS` (**7s** default) only while the child is *quiet*.
+* Global heartbeat is **scoped**: runs only when no `llm_run` lockfiles exist; auto-stops.
+* **Stall guard**: if no new bytes for `LLM_IDLE_FAIL_AFTER_SECS` (**300s** default), the runner cancels with exit **124** and prints a bounded tail.
 
-**Do not** print your own periodic “keep-alive” lines. The bootstrap already handles liveness; extra spam is suppressed by `LLM_SUPPRESS_PATTERNS`.
+Do **not** print your own “keep-alive” lines. Extra spam is suppressed by `LLM_SUPPRESS_PATTERNS`.
 
 ---
 
 ## Test/Build Mandates (11ty, CI mode)
 
-* When you run tests via `npm|pnpm|yarn test`, the env is auto-preset: `CI=1 ELEVENTY_ENV=test WATCH=0`.
+* When tests are invoked via `npm|pnpm|yarn test`, env is auto-preset: `CI=1 ELEVENTY_ENV=test WATCH=0`.
 * Eleventy must run **once** (no `--watch`/`--serve`) inside tests/builds.
-* Canonical forms:
+
+Canonical forms:
 
 ```bash
 # run tests
@@ -108,18 +109,18 @@ llm_run --out /tmp/build.log -- npx @11ty/eleventy --input=src --output=_site --
 
 ## Dependency Hygiene (autoinstall, hashed)
 
-* On activation, if lockfile hashes changed, this runs automatically:
+On activation, if lockfile hashes changed:
 
-  * `npm ci`
-  * `python -m pip install -r markdown_gateway/requirements.txt` **only if a virtualenv is active**
-* If no venv is detected, Python deps are **skipped** with an `event=deps.skip` notice.
-* You can force a rehash by touching a lockfile; otherwise it’s no-op when clean.
+* Runs `npm ci`
+* Runs `python -m pip install -r markdown_gateway/requirements.txt` **only if a virtualenv is active**; otherwise emits `event=deps.skip`.
+
+Force a rehash by touching a lockfile; no-op when clean.
 
 ---
 
 ## Observability (events you will see)
 
-Examples of notices emitted to stderr (and mirrored to `GITHUB_STEP_SUMMARY` when present):
+Examples (also mirrored to `GITHUB_STEP_SUMMARY` when present):
 
 ```
 ::notice:: LLM-GUARD ts=… event=run.start id=… out=/tmp/… cmd=…
@@ -142,14 +143,12 @@ Before implementing new functionality, search the registry and prefer reuse:
 node scripts/npm-utils.js <package>
 ```
 
-* This prints latest versions via registry search. If that tool is unavailable, minimally do:
+If unavailable, at minimum:
 
 ```bash
 npm view <package> version
 npm search --searchlimit 20 '<keywords>'
 ```
-
-Choose an existing package when suitable; write bespoke code only if you can name the gaps.
 
 Install with exact pins:
 
