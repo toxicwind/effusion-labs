@@ -1,24 +1,142 @@
 {% macro specSheet(product) %}
 {% set p = product.data %}
+{% set releaseDate = p.release_date or (p.release_info and p.release_info.release_date) %}
+{% set editionKind = (p.edition and p.edition.kind) %}
+{% set editionSize = (p.release_info and p.release_info.edition_size) or (p.availability and p.availability.unit_count) %}
+{% set msrpMap  = (p.pricing and p.pricing.original_msrp) %}
+{% set secRange = (p.pricing and p.pricing.secondary_market_range) %}
 <dl data-testid="spec-sheet" class="spec-sheet">
+  {% if p.product_title %}<dt>Title:</dt><dd>{{ p.product_title | safe }}</dd>{% endif %}
+  {% if p.product_id %}<dt>Product ID:</dt><dd><code>{{ p.product_id }}</code></dd>{% endif %}
+
   {% if p.brand %}<dt>Brand:</dt><dd>{{ p.brand | titleizeSlug }}</dd>{% endif %}
   {% if p.line %}<dt>Line:</dt><dd>{{ p.line | titleizeSlug }}</dd>{% endif %}
-  {% if p.character %}<dt>Character:</dt><dd><a href="/archives/collectables/designer-toys/pop-mart/the-monsters/characters/{{ p.character }}/">{{ p.character | titleizeSlug }}</a></dd>{% endif %}
+  {% if p.character %}
+    <dt>Character:</dt>
+    <dd><a href="/archives/collectables/designer-toys/pop-mart/the-monsters/characters/{{ p.character | urlencode }}/">{{ p.character | titleizeSlug }}</a></dd>
+  {% endif %}
   {% if p.series %}<dt>Series:</dt><dd>{{ p.series | titleizeSlug }}</dd>{% endif %}
+
   {% if p.form %}<dt>Form:</dt><dd>{{ p.form | titleizeSlug }}</dd>{% endif %}
   {% if p.variant %}<dt>Variant:</dt><dd>{{ p.variant | titleizeSlug }}</dd>{% endif %}
-  {% if p.edition.kind %}<dt>Edition:</dt><dd>{{ p.edition.kind | titleizeSlug }}</dd>{% endif %}
-  <dt>Region Lock:</dt><dd>{{ p.distribution.region_lock | yesNo }}</dd>
-    {% if p.distribution.markets and p.distribution.markets.length %}
-      <dt>Markets:</dt>
-      <dd>
-        {% for m in p.distribution.markets %}<span class="badge-chip" data-market data-testid="market-chip">{{ m }}</span>{% endfor %}
-      </dd>
-    {% endif %}
-  {% if p.release_date %}<dt>Release Date:</dt><dd>{{ p.release_date | humanDate | safe }}</dd>{% endif %}
-  <dt>Availability:</dt><dd>{% if p.availability.limited %}Limited{% else %}Standard{% endif %}</dd>
-  {% if p.availability.unit_count %}<dt>Unit Count:</dt><dd>{{ p.availability.unit_count }}</dd>{% endif %}
-  {% if p.confidence %}<dt>Confidence:</dt><dd>{{ p.confidence }}</dd>{% endif %}
-  {% if p.notes %}<dt>Notes:</dt><dd>{{ p.notes }}</dd>{% endif %}
+
+  {% if editionKind %}<dt>Edition:</dt><dd>{{ editionKind | titleizeSlug }}</dd>{% endif %}
+  {% if editionSize %}<dt>Edition Size:</dt><dd>{{ editionSize }}</dd>{% endif %}
+
+  <dt>Region Lock:</dt><dd>{{ p.distribution and p.distribution.region_lock | yesNo }}</dd>
+  {% if p.distribution and p.distribution.markets and p.distribution.markets.length %}
+    <dt>Markets:</dt>
+    <dd>
+      {% for m in p.distribution.markets %}
+        <span class="badge-chip" data-market data-testid="market-chip">{{ m }}</span>
+      {% endfor %}
+    </dd>
+  {% endif %}
+
+  {% if releaseDate %}<dt>Release Date:</dt><dd>{{ releaseDate | humanDate | safe }}</dd>{% endif %}
+
+  {% if p.size and (p.size.h or p.size.w or p.size.d) %}
+    <dt>Size:</dt>
+    <dd>
+      {% set u = p.size.unit or 'cm' %}
+      {% if p.size.h %}{{ p.size.h }}{% endif %}
+      {% if p.size.w %} × {{ p.size.w }}{% endif %}
+      {% if p.size.d %} × {{ p.size.d }}{% endif %}
+      {{ u }}
+    </dd>
+  {% endif %}
+
+  {% if p.colorway %}<dt>Colorway:</dt><dd>{{ p.colorway | safe }}</dd>{% endif %}
+  {% if p.articulation %}<dt>Articulation:</dt><dd>{{ p.articulation | safe }}</dd>{% endif %}
+
+  {% if p.materials and (p.materials.shell or p.materials.plush or p.materials.stuffing) %}
+    <dt>Materials:</dt>
+    <dd>
+      <ul class="spec-list">
+        {% if p.materials.shell %}<li><strong>Shell:</strong> {{ p.materials.shell | safe }}</li>{% endif %}
+        {% if p.materials.plush %}<li><strong>Plush:</strong> {{ p.materials.plush | safe }}</li>{% endif %}
+        {% if p.materials.stuffing %}<li><strong>Stuffing:</strong> {{ p.materials.stuffing | safe }}</li>{% endif %}
+      </ul>
+    </dd>
+  {% endif %}
+
+  {% if p.packaging and (p.packaging.type or p.packaging.dimensions_cm) %}
+    <dt>Packaging:</dt>
+    <dd>
+      {% if p.packaging.type %}{{ p.packaging.type | safe }}{% endif %}
+      {% if p.packaging.dimensions_cm %}
+        <span class="dim"> — {{ p.packaging.dimensions_cm | safe }}</span>
+      {% endif %}
+    </dd>
+  {% endif %}
+
+  {% if p.market_listings and p.market_listings.length %}
+    <dt>Market Listings:</dt>
+    <dd>
+      <ul class="spec-list compact">
+        {% for l in p.market_listings %}
+          <li>
+            <span class="badge-chip" data-market>{{ l.market }}</span>
+            {% if l.currency or l.price %} — {{ l.currency }} {{ l.price }}{% endif %}
+          </li>
+        {% endfor %}
+      </ul>
+    </dd>
+  {% endif %}
+
+  {% if msrpMap or (p.pricing and (p.pricing.current_status or secRange)) %}
+    <dt>Pricing:</dt>
+    <dd>
+      {% if msrpMap %}
+        <div><strong>Original MSRP:</strong>
+          {% for ccy, amt in msrpMap %}
+            <span class="badge-chip" data-price>{{ ccy }} {{ amt }}</span>
+          {% endfor %}
+        </div>
+      {% endif %}
+      {% if p.pricing and p.pricing.current_status %}
+        <div><strong>Status:</strong> {{ p.pricing.current_status }}</div>
+      {% endif %}
+      {% if secRange %}
+        <div><strong>Secondary Market:</strong>
+          {% for ccy, rng in secRange %}
+            <span class="badge-chip" data-price>{{ ccy }} {{ rng }}</span>
+          {% endfor %}
+        </div>
+      {% endif %}
+    </dd>
+  {% endif %}
+
+  {% if p.designer %}<dt>Designer:</dt><dd>{{ p.designer }}</dd>{% endif %}
+  {% if p.accessories and p.accessories.length %}
+    <dt>Accessories:</dt>
+    <dd>
+      <ul class="spec-list">
+        {% for a in p.accessories %}<li>{{ a | safe }}</li>{% endfor %}
+      </ul>
+    </dd>
+  {% endif %}
+
+  <dt>Availability:</dt>
+  <dd>{% if p.availability and p.availability.limited %}Limited{% else %}Standard{% endif %}</dd>
+  {% if p.availability and p.availability.unit_count %}<dt>Unit Count:</dt><dd>{{ p.availability.unit_count }}</dd>{% endif %}
+
+  {% if p.provenance_ref %}<dt>Provenance:</dt><dd><a href="{{ p.provenance_ref }}">{{ p.provenance_ref | safe }}</a></dd>{% endif %}
+  {% if p.confidence is not none %}<dt>Confidence:</dt><dd>{{ p.confidence }}</dd>{% endif %}
+  {% if p.notes %}<dt>Notes:</dt><dd>{{ p.notes | safe }}</dd>{% endif %}
+
+  {% if p.Deltas and p.Deltas.length %}
+    <dt>Changes:</dt>
+    <dd>
+      <details>
+        <summary>{{ p.Deltas.length }} change{{ p.Deltas.length > 1 ? 's' : '' }}</summary>
+        <ul class="spec-list">
+          {% for d in p.Deltas %}
+            <li><code>{{ d.field }}</code> — {{ d.reason }}{% if d.from or d.to %} <em>(from</em> {{ d.from | safe }} <em>to</em> {{ d.to | safe }}){% endif %}</li>
+          {% endfor %}
+        </ul>
+      </details>
+    </dd>
+  {% endif %}
 </dl>
 {% endmacro %}
