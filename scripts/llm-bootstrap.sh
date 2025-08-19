@@ -138,7 +138,7 @@ _llm_tail() {
   if _llm_bool "${LLM_TAIL_BLOCK:-1}" && (( follow )); then
     if [[ -n "${LLM_TAIL_ALLOW_CMDS:-}" && "${BASH_COMMAND:-}" =~ ${LLM_TAIL_ALLOW_CMDS} ]]; then
       _llm_emit tail.pass reason=allowlist args="$*"
-      command tail "$@"; return $?
+      command tail "$@"; local status=$?; _llm_emit tail.complete status="$status"; return $status
     fi
     for ((i=$#; i>=1; --i)); do
       if [[ -f "${!i}" ]]; then outfile="${!i}"; break; fi
@@ -146,14 +146,16 @@ _llm_tail() {
     if [[ -n "${outfile:-}" ]]; then
       _llm_emit tail.block file="$outfile" lines="${LLM_TAIL_MAX_LINES:-5000}" folded="${LLM_FOLD_WIDTH:-4000}"
       command tail -n "${LLM_TAIL_MAX_LINES:-5000}" -- "$outfile" | fold -w "${LLM_FOLD_WIDTH:-4000}" -s
-      return ${PIPESTATUS[0]}
+      local status=${PIPESTATUS[0]}; _llm_emit tail.complete file="$outfile" status="$status"; return $status
     fi
   fi
   _llm_emit tail.pass args="$*"
   if command -v stdbuf >/dev/null 2>&1; then
     command tail "$@" | stdbuf -o0 -e0 cat | fold -w "${LLM_FOLD_WIDTH:-4000}" -s
+    local status=${PIPESTATUS[0]}; _llm_emit tail.complete args="$*" status="$status"; return $status
   else
     command tail "$@" | fold -w "${LLM_FOLD_WIDTH:-4000}" -s
+    local status=${PIPESTATUS[0]}; _llm_emit tail.complete args="$*" status="$status"; return $status
   fi
 }
 
