@@ -137,18 +137,23 @@ Act on these; don’t ignore them.
 
 ## Package Choice Mandate (reuse-first)
 
-Before implementing new functionality, search the registry and prefer reuse:
+Before implementing new functionality, search the registry and prefer reuse. Use the helper script:
 
 ```bash
-node scripts/npm-utils.js <package>
+node scripts/npm-utils.js search '<keywords>'       # list matching packages
+node scripts/npm-utils.js view <pkg>               # show package metadata
+node scripts/npm-utils.js analyze '<keywords>'    # summarize candidates
+node scripts/npm-utils.js install <pkg>           # install with exact pin
 ```
 
-If unavailable, at minimum:
+If the helper is unavailable, minimally run:
 
 ```bash
-npm view <package> version
 npm search --searchlimit 20 '<keywords>'
+npm view <package> --json
 ```
+
+Choose an existing package when suitable; write bespoke code only if you can name the gaps.
 
 Install with exact pins:
 
