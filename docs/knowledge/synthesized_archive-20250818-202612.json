@@ -1,0 +1,867 @@
+[
+  {
+    "product": "Time to Chill",
+    "identity_taxonomy": "THE MONSTERS series LABUBU \"Time to Chill\" vinyl plush doll, part of the core edition releases by POP MART. Features the classic LABUBU character design with bunny-like ears and signature nine-tooth grin[^1_1][^1_2][^1_3]. Single colorway featuring brown fuzzy exterior with blue eyes, dressed in denim dungarees. Some versions noted to include removable accessories like boba-inspired cup props as thematic elements[^1_5].",
+    "physical_spec": "Height: 14.5 inches (37cm)[^1_4][^1_5]. Materials: Shell composed of PP/Polyester/Cotton mixture, with plush material being 95% Polyester Fiber, 5% Cotton. Stuffing: 90% Polyester Fiber, 10% PP particles[^1_6][^1_7]. Weight: specifications indicate normal range variance of 0.4-1.2 inches due to measurement variations[^1_4]. Manufactured using mixed materials combining vinyl head construction with soft plush body. Quality noted to be generally good though some collectors report minor variations in stuffing density and positioning[^1_4][^1_6][^1_5].",
+    "packaging_in_box": "Standard POP MART windowed display box packaging. Product comes in sealed retail packaging with official authentication elements including QR code verification system[^1_4][^1_5]. Includes original packaging, official authentication materials, and character-specific accessories. Some retailers note opened box variants for authenticity verification purposes[^1_11][^1_12].",
+    "edition_run_info": "Regular production item, not limited edition. Released as part of LABUBU's early successful series that helped establish the character's popularity globally. Features relaxed \"chill\" theme with laid-back denim dungarees over pastel top, embodying comfort and relaxation[^1_5].",
+    "credits": "Created by artist Kasing Lung (龙家升) as part of THE MONSTERS intellectual property, exclusively manufactured and distributed by POP MART[^1_2][^1_3].",
+    "release_distribution": "Official POP MART stores, online platforms (popmart.com), and authorized retailers globally. Also available through third-party collectible toy retailers and secondary market platforms[^1_8][^1_9][^1_10].",
+    "regional_policy": "",
+    "market_listings": "Launch price: USD 69.99[^1_1]. Packing size approximately 20×16.4×37.5cm[^1_6][^1_7]. Secondary market performance: By March 2024, became the best-selling plush product in POP MART's Tmall flagship store plush category with sales exceeding 4 million CNY[^1_2][^1_3]. Current secondary market prices range significantly above retail. Global release across POP MART stores and official online platforms. Currently mostly sold out at retail, available primarily through secondary market and resellers. Has seen periodic restocks but remains in high demand[^1_8][^1_9].",
+    "blind_box_specifics": "",
+    "compliance_safety": "",
+    "commerce_logistics": "",
+    "media_assets": "** YouTube promotional content, social media campaigns. Featured in celebrity collections and influencer unboxings[^1_10][^1_13]. ** Official product photography, unboxing videos, store display imagery available across multiple platforms[^1_10].  ![Labubu Time to Chill POP MART collectible with vinyl face and plush hood, dressed in blue overalls.](https://pplx-res.cloudinary.com/image/upload/v1755137561/pplx_project_search_images/93a1eee2303f6561a598d079b81c9d8f77ca2ba7.png)  Labubu Time to Chill POP MART collectible with vinyl face and plush hood, dressed in blue overalls.",
+    "provenance_research": "[^1_1] https://www.kickscrew.com/products/pop-mart-the-monsters-labubu-time-to-chill-1220719025 [^1_4] https://www.popculturedepot.com/products/labubu-time-to-chill-vinyl-plush-doll [^1_6] https://www.springergarden.com/products/labubu-time-to-chill-vinyl-plush-doll [^1_5] https://bullseyesb.com/products/popmart-labubu-time-to-chill-vinyl-plush-doll",
+    "i18n_nomenclature": "",
+    "relations_graph_edges": "",
+    "market_intelligence": "Highly popular among collectors, considered one of the essential LABUBU releases. Praised for its comforting aesthetic and high-quality materials. Regular appearance in collection showcases and social media posts[^1_2][^1_3].",
+    "deltas": [
+      "All pricing and release date information consistent across sources. No contradictions found with seed data.",
+      {
+        "field": "identity_taxonomy",
+        "replaced": "** THE MONSTERS series by Kasing Lung featuring Labubu, a Nordic forest elf with signature nine-tooth grin, pointy ears, and mischievous personality. First generation plush doll combining vinyl face plate with plush body[^1_1][^1_2][^1_3]. ** Single colorway: denim dungarees with pastel blue top, embodying laid-back aesthetic. Blue/denim colorway designation[^1_1][^1_2].",
+        "kept": "THE MONSTERS series LABUBU \"Time to Chill\" vinyl plush doll, part of the core edition releases by POP MART. Features the classic LABUBU character design with bunny-like ears and signature nine-tooth grin[^1_1][^1_2][^1_3]. Single colorway featuring brown fuzzy exterior with blue eyes, dressed in denim dungarees. Some versions noted to include removable accessories like boba-inspired cup props as thematic elements[^1_5]."
+      },
+      {
+        "field": "physical_spec",
+        "replaced": "** Height: 14.5 inches (37cm), Materials: polyester, cotton, vinyl face plate, PP/PVC components. Soft huggable plush body with vinyl face ensuring signature Labubu look. Movable eyes and articulated features for display versatility[^1_2][^1_4][^1_5]. ** High-quality materials blend: polyester primary construction, cotton elements, vinyl face components. Premium feel with durability considerations[^1_2][^1_4].",
+        "kept": "Height: 14.5 inches (37cm)[^1_4][^1_5]. Materials: Shell composed of PP/Polyester/Cotton mixture, with plush material being 95% Polyester Fiber, 5% Cotton. Stuffing: 90% Polyester Fiber, 10% PP particles[^1_6][^1_7]. Weight: specifications indicate normal range variance of 0.4-1.2 inches due to measurement variations[^1_4]. Manufactured using mixed materials combining vinyl head construction with soft plush body. Quality noted to be generally good though some collectors report minor variations in stuffing density and positioning[^1_4][^1_6][^1_5]."
+      },
+      {
+        "field": "packaging_in_box",
+        "replaced": "** Premium packaging with collectible card, plastic protective wrapping. Box design featuring Time to Chill artwork and character information[^1_10][^1_5]. ** Complete outfit: cozy denim dungarees, pastel blue top. Includes authentication card and original packaging[^1_2][^1_5].",
+        "kept": "Standard POP MART windowed display box packaging. Product comes in sealed retail packaging with official authentication elements including QR code verification system[^1_4][^1_5]. Includes original packaging, official authentication materials, and character-specific accessories. Some retailers note opened box variants for authenticity verification purposes[^1_11][^1_12]."
+      },
+      {
+        "field": "edition_run_info",
+        "replaced": "** Inaugural plush doll release marking Labubu's transition from blind box to premium plush format. No regional restrictions, global release through official POP MART channels[^1_1][^1_2][^1_3].",
+        "kept": "Regular production item, not limited edition. Released as part of LABUBU's early successful series that helped establish the character's popularity globally. Features relaxed \"chill\" theme with laid-back denim dungarees over pastel top, embodying comfort and relaxation[^1_5]."
+      },
+      {
+        "field": "credits",
+        "replaced": "** Licensed from Kasing Lung's THE MONSTERS IP, exclusive to POP MART. Part of broader Nordic forest mythology universe[^1_11][^1_12].",
+        "kept": "Created by artist Kasing Lung (龙家升) as part of THE MONSTERS intellectual property, exclusively manufactured and distributed by POP MART[^1_2][^1_3]."
+      },
+      {
+        "field": "release_distribution",
+        "replaced": "** POP MART official stores, authorized retailers, online platforms. Secondary distribution through SNKRDUNK, reseller markets[^1_2][^1_8].",
+        "kept": "Official POP MART stores, online platforms (popmart.com), and authorized retailers globally. Also available through third-party collectible toy retailers and secondary market platforms[^1_8][^1_9][^1_10]."
+      },
+      {
+        "field": "market_listings",
+        "replaced": "** Original retail: USD 69.99. Secondary market: significant appreciation with some listings reaching 760-7399 USD (973% markup). Notable price stability in initial years before 2024 explosion[^1_1][^1_6][^1_7]. ** Initially widely available, now primarily secondary market. Periodic restocks noted through 2024. Available in US, Singapore, Taiwan, Hong Kong markets[^1_2][^1_8][^1_9].",
+        "kept": "Launch price: USD 69.99[^1_1]. Packing size approximately 20×16.4×37.5cm[^1_6][^1_7]. Secondary market performance: By March 2024, became the best-selling plush product in POP MART's Tmall flagship store plush category with sales exceeding 4 million CNY[^1_2][^1_3]. Current secondary market prices range significantly above retail. Global release across POP MART stores and official online platforms. Currently mostly sold out at retail, available primarily through secondary market and resellers. Has seen periodic restocks but remains in high demand[^1_8][^1_9]."
+      },
+      {
+        "field": "media_assets",
+        "replaced": "Featured prominently in POP MART's marketing campaigns as a comfort/relaxation themed release. Benefited from broader LABUBU popularity surge, particularly following city park openings and celebrity endorsements[^1_2][^1_3]. Official product photography available showing doll in packaging and unboxed state. YouTube promotional video from POP MART official channel dated November 10, 2022[^1_13].",
+        "kept": "** YouTube promotional content, social media campaigns. Featured in celebrity collections and influencer unboxings[^1_10][^1_13]. ** Official product photography, unboxing videos, store display imagery available across multiple platforms[^1_10].  ![Labubu Time to Chill POP MART collectible with vinyl face and plush hood, dressed in blue overalls.](https://pplx-res.cloudinary.com/image/upload/v1755137561/pplx_project_search_images/93a1eee2303f6561a598d079b81c9d8f77ca2ba7.png)  Labubu Time to Chill POP MART collectible with vinyl face and plush hood, dressed in blue overalls."
+      },
+      {
+        "field": "provenance_research",
+        "replaced": "** [^1_1] kickscrew.com/products/pop-mart-the-monsters-labubu-time-to-chill [^1_2] snkrdunk.com/en/magazine/2025/05/16/pop-mart-labubu-time-to-chill-plush [^1_3] figpalace.com/blogs/guide/labubu-zimomo-mokoko-series-list",
+        "kept": "[^1_1] https://www.kickscrew.com/products/pop-mart-the-monsters-labubu-time-to-chill-1220719025 [^1_4] https://www.popculturedepot.com/products/labubu-time-to-chill-vinyl-plush-doll [^1_6] https://www.springergarden.com/products/labubu-time-to-chill-vinyl-plush-doll [^1_5] https://bullseyesb.com/products/popmart-labubu-time-to-chill-vinyl-plush-doll"
+      },
+      {
+        "field": "market_intelligence",
+        "replaced": "** Highly positive collector response, considered foundational piece for Labubu collectors. Gateway product for series entry[^1_2][^1_3].",
+        "kept": "Highly popular among collectors, considered one of the essential LABUBU releases. Praised for its comforting aesthetic and high-quality materials. Regular appearance in collection showcases and social media posts[^1_2][^1_3]."
+      },
+      "** Regional release variations noted in some markets through July 2024, extending beyond original October 2022 date[^1_2]."
+    ]
+  },
+  {
+    "product": "Jump for Joy",
+    "identity_taxonomy": "THE MONSTERS LABUBU \"Jump for Joy\" vinyl plush doll, second generation release featuring LABUBU with galaxy grey coat in jumping pose. Part of core LABUBU plush series[^1_14][^1_15]. Single variant featuring galaxy grey coat coloring, positioned as the signature look for this release series. The grey coloring was specifically highlighted in marketing materials as a key aesthetic element[^1_14][^1_15].",
+    "physical_spec": "Size: Approximately 15.75 inches in height. Materials: PLUSH+PVC construction. Features similar construction to other large format LABUBU plush dolls with vinyl face and soft plush body[^1_16]. High-quality plush construction with attention to detail in both materials and finishing. Collectors note good build quality consistent with other premium LABUBU releases[^1_16].",
+    "packaging_in_box": "Standard POP MART packaging with product visibility window. Includes authenticity verification materials and official documentation[^1_16]. Includes original packaging and authentication materials. Some secondary market listings note \"opened box\" variants for verification purposes[^1_16].",
+    "edition_run_info": "Released as part of 2023 product line expansion. Launch date confirmed as May 26, 2023 (correcting seed date of May 25)[^1_14][^1_17]. Marketed with theme of joyful movement and playful energy.",
+    "credits": "Part of THE MONSTERS IP created by Kasing Lung, exclusively produced by POP MART under official licensing agreements[^1_14].",
+    "release_distribution": "Released through official POP MART channels including online store and physical retail locations. Also distributed through authorized retailers and now available via secondary market platforms[^1_14][^1_18][^1_19].",
+    "regional_policy": "",
+    "market_listings": "Launch price: CNY 499 as specified in seed data[^1_14]. Secondary market pricing significantly elevated, with resale prices reaching over \\$2,400 USD for opened box variants[^1_16]. Limited availability, quickly sold out from official channels. Currently available primarily through secondary market and specialized collectible retailers at premium pricing[^1_16].",
+    "blind_box_specifics": "",
+    "compliance_safety": "",
+    "commerce_logistics": "",
+    "media_assets": "Featured in official POP MART social media campaigns with emphasis on the \"jump for joy\" theme. Promotional materials highlighted the playful, energetic positioning of the character[^1_14][^1_15]. Official social media promotional content available including Instagram reels and X/Twitter posts showing product details and marketing materials[^1_14][^1_15][^1_17].",
+    "provenance_research": "[^1_14] https://www.instagram.com/reel/Csip88egS27/ [^1_15] https://www.instagram.com/reel/Csip88egS27/?hl=en [^1_17] https://x.com/POPMARTGlobal/status/1660655301593374728 [^1_16] https://toysez.com/products/labubu-the-monsters-jump-for-joy-vinyl-plush-doll-limited",
+    "i18n_nomenclature": "",
+    "relations_graph_edges": "",
+    "market_intelligence": "Well-received by collectors, considered an important release in the LABUBU timeline. Praised for unique pose and attractive colorway. Regular feature in collector showcases[^1_20][^1_21].",
+    "deltas": [
+      "Release date correction: Seed listed May 25, 2023, but official sources confirm May 26, 2023 as the actual release date[^1_14][^1_17].",
+      {
+        "field": "identity_taxonomy",
+        "replaced": "** Second major plush release featuring Labubu in winter attire. Part of THE MONSTERS core edition series, maintaining vinyl face/plush body hybrid design[^1_14][^1_15][^1_16]. ** Primary variant features galaxy grey coat with winter accessories. Stylish clothing and removable accessories confirmed[^1_19][^1_15][^1_13].",
+        "kept": "THE MONSTERS LABUBU \"Jump for Joy\" vinyl plush doll, second generation release featuring LABUBU with galaxy grey coat in jumping pose. Part of core LABUBU plush series[^1_14][^1_15]. Single variant featuring galaxy grey coat coloring, positioned as the signature look for this release series. The grey coloring was specifically highlighted in marketing materials as a key aesthetic element[^1_14][^1_15]."
+      },
+      {
+        "field": "physical_spec",
+        "replaced": "** Height: 15.75 inches (40cm), Materials: PLUSH+PVC construction. Features galaxy grey coat as distinctive element. Removable winter clothing including furry hat, scarf, sweater, snow shoes[^1_14][^1_15]. ** PU/PP/Polyester material construction. Height specifications: 7.1/6.3/14.9 inches noted in different configurations[^1_17][^1_18].",
+        "kept": "Size: Approximately 15.75 inches in height. Materials: PLUSH+PVC construction. Features similar construction to other large format LABUBU plush dolls with vinyl face and soft plush body[^1_16]. High-quality plush construction with attention to detail in both materials and finishing. Collectors note good build quality consistent with other premium LABUBU releases[^1_16]."
+      },
+      {
+        "field": "packaging_in_box",
+        "replaced": "** Standard premium packaging with authentication elements. Box artwork featuring winter/joy theme[^1_15]. ** Complete winter outfit set: furry hat, scarf, sweater, snow shoes. All clothing elements removable for customization[^1_15].",
+        "kept": "Standard POP MART packaging with product visibility window. Includes authenticity verification materials and official documentation[^1_16]. Includes original packaging and authentication materials. Some secondary market listings note \"opened box\" variants for verification purposes[^1_16]."
+      },
+      {
+        "field": "edition_run_info",
+        "replaced": "** Released as seasonal/winter-themed edition. Multiple release dates noted: initial May 25, 2023 launch with June 9, 2023 wider release[^1_17][^1_16][^1_18].",
+        "kept": "Released as part of 2023 product line expansion. Launch date confirmed as May 26, 2023 (correcting seed date of May 25)[^1_14][^1_17]. Marketed with theme of joyful movement and playful energy."
+      },
+      {
+        "field": "credits",
+        "replaced": "** Continuation of Kasing Lung THE MONSTERS IP licensing through POP MART[^1_15].",
+        "kept": "Part of THE MONSTERS IP created by Kasing Lung, exclusively produced by POP MART under official licensing agreements[^1_14]."
+      },
+      {
+        "field": "release_distribution",
+        "replaced": "** POP MART official stores, authorized retailers, reseller platforms including secondary markets[^1_15][^1_17].",
+        "kept": "Released through official POP MART channels including online store and physical retail locations. Also distributed through authorized retailers and now available via secondary market platforms[^1_14][^1_18][^1_19]."
+      },
+      {
+        "field": "market_listings",
+        "replaced": "** Original retail: CNY 499 (~USD 71). Secondary market shows appreciation with listings at SGD 109-978 range. Quality variations affecting pricing noted[^1_14][^1_19][^1_15]. ** Global distribution including Singapore, US, Taiwan markets. Noted availability challenges during peak demand periods[^1_19][^1_15].",
+        "kept": "Launch price: CNY 499 as specified in seed data[^1_14]. Secondary market pricing significantly elevated, with resale prices reaching over \\$2,400 USD for opened box variants[^1_16]. Limited availability, quickly sold out from official channels. Currently available primarily through secondary market and specialized collectible retailers at premium pricing[^1_16]."
+      },
+      {
+        "field": "media_assets",
+        "replaced": "** Social media campaigns with \"jump for joy\" messaging. Instagram and Twitter promotional content documented[^1_16][^1_13][^1_20]. ** Social media content, product photography, collector documentation available[^1_16][^1_13][^1_20].",
+        "kept": "Featured in official POP MART social media campaigns with emphasis on the \"jump for joy\" theme. Promotional materials highlighted the playful, energetic positioning of the character[^1_14][^1_15]. Official social media promotional content available including Instagram reels and X/Twitter posts showing product details and marketing materials[^1_14][^1_15][^1_17]."
+      },
+      {
+        "field": "provenance_research",
+        "replaced": "** [^1_15] mochimartshop.com/products/the-monsters-jump-for-joy-vinyl-plush-doll [^1_16] instagram.com/reel/Csip88egS27/ [^1_13] instagram.com/reel/Csip88egS27/",
+        "kept": "[^1_14] https://www.instagram.com/reel/Csip88egS27/ [^1_15] https://www.instagram.com/reel/Csip88egS27/?hl=en [^1_17] https://x.com/POPMARTGlobal/status/1660655301593374728 [^1_16] https://toysez.com/products/labubu-the-monsters-jump-for-joy-vinyl-plush-doll-limited"
+      },
+      {
+        "field": "market_intelligence",
+        "replaced": "** Positive collector response with particular appreciation for quality winter accessories and seasonal theme[^1_15].",
+        "kept": "Well-received by collectors, considered an important release in the LABUBU timeline. Praised for unique pose and attractive colorway. Regular feature in collector showcases[^1_20][^1_21]."
+      },
+      "** None identified versus seed data."
+    ]
+  },
+  {
+    "product": "Dress be Latte",
+    "identity_taxonomy": "THE MONSTERS LABUBU \"Dress be Latte\" vinyl plush doll, part of seasonal autumn/winter collection. Features LABUBU in cozy latte-themed outfit with brown sweater and bucket hat design[^1_22][^1_23]. Single variant featuring brown color scheme with bucket hat and cozy scarf accessories, designed to evoke coffee/latte aesthetic and autumn comfort themes[^1_23][^1_31][^1_29].",
+    "physical_spec": "Size: Approximately 15.75 inches (40cm) in height. Materials: PLUSH+PVC construction with detailed fabric accessories. Features the standard LABUBU vinyl face with soft plush body construction[^1_24][^1_25]. High-quality construction with detailed attention to accessories and fabric elements. Materials designed to convey cozy, comfortable aesthetic matching the latte theme[^1_24][^1_23].",
+    "packaging_in_box": "Standard POP MART windowed packaging with official authentication materials. Features autumn/winter themed packaging design elements[^1_23][^1_31]. Includes removable bucket hat and scarf accessories as key design elements. Package includes original box and authentication materials[^1_24][^1_23].",
+    "edition_run_info": "Released October 27, 2023 (correcting seed date of October 26)[^1_23][^1_26]. Positioned as autumn/winter seasonal release with coffee/comfort theme. Part of THE MONSTERS core series expansion focusing on lifestyle themes[^1_23].",
+    "credits": "Part of THE MONSTERS IP by Kasing Lung, exclusively produced by POP MART. Represents continued expansion of lifestyle-themed LABUBU releases[^1_23].",
+    "release_distribution": "Originally released through POP MART official stores including海港城LCX店 and K11购物艺术中心 in Hong Kong, plus mainland China retail network[^1_29]. Now available primarily through secondary market platforms[^1_25][^1_30].",
+    "regional_policy": "",
+    "market_listings": "Launch price: CNY 499 as specified in seed data[^1_22]. Notable secondary market appreciation - actress Yao Chen mentioned purchasing for \"a few hundred yuan\" and later noting it as \"the only successful investment I've ever made\" due to significant value increase[^1_22]. Currently sold out from official channels[^1_27][^1_28]. Officially sold out. High demand led to rapid sell-out from retail channels. Currently available only through secondary market at premium pricing, with some listings exceeding \\$1,800 USD[^1_24][^1_28].",
+    "blind_box_specifics": "",
+    "compliance_safety": "",
+    "commerce_logistics": "",
+    "media_assets": "Featured in official POP MART campaigns with emphasis on autumn/winter comfort themes. Marketing highlighted the \"cozy hat and scarf\" elements and positioning as a \"warm cup of latte\" companion[^1_23][^1_31][^1_29]. Official promotional materials including Instagram posts and social media campaigns showcasing the autumn/winter theme and cozy aesthetic[^1_23][^1_31][^1_29].",
+    "provenance_research": "[^1_22] https://sg.style.yahoo.com/yao-chen-her-labubu-only-031200479.html [^1_23] https://www.instagram.com/p/Cy3Hr8HLN2e/ [^1_24] https://toysez.com/products/labubu-the-monsters-dress-be-latte-vinyl-plush-doll-limited [^1_26] https://x.com/POPMARTGlobal/status/1715396274352980341",
+    "i18n_nomenclature": "",
+    "relations_graph_edges": "",
+    "market_intelligence": "Extremely popular among collectors and gained broader cultural attention when actress Yao Chen publicly praised it as a successful investment. Considered one of the standout 2023 releases[^1_22][^1_32].",
+    "deltas": [
+      "Release date correction: Seed data shows October 26, 2023, but official sources confirm October 27, 2023[^1_23][^1_26].",
+      {
+        "field": "identity_taxonomy",
+        "replaced": "** Third major plush release featuring café/latte aesthetic. Part of core THE MONSTERS plush doll line with signature vinyl face/plush body construction[^1_21][^1_22][^1_23]. ** Single latte/coffee colorway with 6 small accessories for dress-up customization. Latte aesthetic maintained throughout[^1_22].",
+        "kept": "THE MONSTERS LABUBU \"Dress be Latte\" vinyl plush doll, part of seasonal autumn/winter collection. Features LABUBU in cozy latte-themed outfit with brown sweater and bucket hat design[^1_22][^1_23]. Single variant featuring brown color scheme with bucket hat and cozy scarf accessories, designed to evoke coffee/latte aesthetic and autumn comfort themes[^1_23][^1_31][^1_29]."
+      },
+      {
+        "field": "physical_spec",
+        "replaced": "** Height: 14.9 inches (37.9cm), Dimensions: 22 x 15 x 38 cm. Materials: ABS/PVC face, 80% polyester fiber, 20% cotton. 90% polyester filling, 10% PP rubber components[^1_21][^1_22]. ** Premium material composition with detailed construction specifications. 38cm large doll size category[^1_22].",
+        "kept": "Size: Approximately 15.75 inches (40cm) in height. Materials: PLUSH+PVC construction with detailed fabric accessories. Features the standard LABUBU vinyl face with soft plush body construction[^1_24][^1_25]. High-quality construction with detailed attention to accessories and fabric elements. Materials designed to convey cozy, comfortable aesthetic matching the latte theme[^1_24][^1_23]."
+      },
+      {
+        "field": "packaging_in_box",
+        "replaced": "** Premium packaging with authentication elements. Coffee/latte themed artwork on packaging[^1_21]. ** 6 small accessory pieces for customization, allowing outfit changes and personalization options[^1_22].",
+        "kept": "Standard POP MART windowed packaging with official authentication materials. Features autumn/winter themed packaging design elements[^1_23][^1_31]. Includes removable bucket hat and scarf accessories as key design elements. Package includes original box and authentication materials[^1_24][^1_23]."
+      },
+      {
+        "field": "edition_run_info",
+        "replaced": "** Café-themed release coinciding with autumn season. Features Maillard reaction color palette inspiration in latte/coffee aesthetic[^1_21][^1_24].",
+        "kept": "Released October 27, 2023 (correcting seed date of October 26)[^1_23][^1_26]. Positioned as autumn/winter seasonal release with coffee/comfort theme. Part of THE MONSTERS core series expansion focusing on lifestyle themes[^1_23]."
+      },
+      {
+        "field": "credits",
+        "replaced": "** Standard THE MONSTERS IP licensing from Kasing Lung through POP MART[^1_21].",
+        "kept": "Part of THE MONSTERS IP by Kasing Lung, exclusively produced by POP MART. Represents continued expansion of lifestyle-themed LABUBU releases[^1_23]."
+      },
+      {
+        "field": "release_distribution",
+        "replaced": "** POP MART official channels, authorized retailers. Notable distribution through Singapore and Taiwan markets[^1_23][^1_27].",
+        "kept": "Originally released through POP MART official stores including海港城LCX店 and K11购物艺术中心 in Hong Kong, plus mainland China retail network[^1_29]. Now available primarily through secondary market platforms[^1_25][^1_30]."
+      },
+      {
+        "field": "market_listings",
+        "replaced": "** Original retail: CNY 499. Secondary market pricing: 950-1250 USD range noted. High collector demand driving significant premiums[^1_21][^1_22]. ** Limited availability, frequent sellouts noted. Available in China, Taiwan, and select international markets[^1_23][^1_25][^1_26].",
+        "kept": "Launch price: CNY 499 as specified in seed data[^1_22]. Notable secondary market appreciation - actress Yao Chen mentioned purchasing for \"a few hundred yuan\" and later noting it as \"the only successful investment I've ever made\" due to significant value increase[^1_22]. Currently sold out from official channels[^1_27][^1_28]. Officially sold out. High demand led to rapid sell-out from retail channels. Currently available only through secondary market at premium pricing, with some listings exceeding \\$1,800 USD[^1_24][^1_28]."
+      },
+      {
+        "field": "media_assets",
+        "replaced": "** TikTok promotional content, Instagram features. Celebrity collector endorsements noted including Lisa preferences[^1_28][^1_22]. ** TikTok unboxing content, Instagram promotional materials, product photography available[^1_28][^1_30][^1_31][^1_32].",
+        "kept": "Featured in official POP MART campaigns with emphasis on autumn/winter comfort themes. Marketing highlighted the \"cozy hat and scarf\" elements and positioning as a \"warm cup of latte\" companion[^1_23][^1_31][^1_29]. Official promotional materials including Instagram posts and social media campaigns showcasing the autumn/winter theme and cozy aesthetic[^1_23][^1_31][^1_29]."
+      },
+      {
+        "field": "provenance_research",
+        "replaced": "** [^1_21] artilleriegallerie.com/products/pop-mart-the-monsters-labubu-dress-be-latte [^1_22] nonameshop2014.com/products/pop-mart-the-monsters-labubu-dress-be-latte [^1_23] popmart.com/sg/products/525/the-monsters-dress-be-latte-vinyl-plush-doll",
+        "kept": "[^1_22] https://sg.style.yahoo.com/yao-chen-her-labubu-only-031200479.html [^1_23] https://www.instagram.com/p/Cy3Hr8HLN2e/ [^1_24] https://toysez.com/products/labubu-the-monsters-dress-be-latte-vinyl-plush-doll-limited [^1_26] https://x.com/POPMARTGlobal/status/1715396274352980341"
+      },
+      {
+        "field": "market_intelligence",
+        "replaced": "** Strong collector enthusiasm, particularly for customization aspects. Questions about restock availability indicate high demand[^1_29].",
+        "kept": "Extremely popular among collectors and gained broader cultural attention when actress Yao Chen publicly praised it as a successful investment. Considered one of the standout 2023 releases[^1_22][^1_32]."
+      },
+      "** None identified versus seed data."
+    ]
+  },
+  {
+    "product": "Flip with Me",
+    "identity_taxonomy": "THE MONSTERS \"Flip with Me\" vinyl plush doll featuring LABUBU in dynamic mid-air flip pose. Part of 2024 core series releases with emphasis on playful, energetic movement[^1_33][^1_34][^1_35]. Single variant featuring dreamy pastel gradient coloring shifting from peach at cheeks through mint and sky-blue at limbs. Includes velvety matte finish with glossy enamel highlights on eyes and ear tips[^1_33].",
+    "physical_spec": "Dimensions: 20×15×40 cm (7.87×5.91×15.75 inches) as specified in seed data[^1_33]. Materials: Shell composition of 40% Cotton, 17% PVC, 16% Polyester, 15% ABS, 12% TPR. Stuffing: 90% Polyester, 10% PE particles[^1_33]. Features whimsical mid-air flip sculpting with rounded silhouette. Premium construction combining sturdy vinyl shell with soft plush core. Advanced material composition designed for both display and tactile appeal[^1_33].",
+    "packaging_in_box": "Standard POP MART packaging with windowed display box. Features dynamic artwork highlighting the \"flip\" theme and movement concept[^1_35][^1_38]. Features removable oversized hoodie with subtle shading details. Includes embossed POP MART logo on sole for authenticity verification[^1_33].",
+    "edition_run_info": "Released July 12, 2024, simultaneously with \"Fall in Wild\" series[^1_34][^1_36][^1_35]. Positioned as energetic, playful release celebrating movement and joy. Part of broader 2024 product line expansion[^1_37][^1_38].",
+    "credits": "Part of THE MONSTERS IP created by Kasing Lung, exclusively manufactured by POP MART under official licensing[^1_33].",
+    "release_distribution": "Official POP MART stores and website (popmart.com), plus authorized international retailers. Also available through specialty toy and collectible retailers[^1_34][^1_39][^1_40].",
+    "regional_policy": "",
+    "market_listings": "US pricing: \\$84.99 for plush doll[^1_34][^1_36]. Materials and construction suggest premium positioning within LABUBU product range. Secondary market activity indicates strong collector interest[^1_33]. Released through official POP MART channels with global availability. Has experienced periodic stock shortages due to high demand. Available through official online store and select retail partners[^1_34][^1_39][^1_40].",
+    "blind_box_specifics": "",
+    "compliance_safety": "",
+    "commerce_logistics": "",
+    "media_assets": "Featured in official POP MART social media campaigns emphasizing the dynamic \"flip\" action and playful energy theme[^1_35][^1_38]. YouTube unboxing content and promotional materials available[^1_37]. Official promotional photography, social media content, and YouTube unboxing videos showcasing the dynamic flip pose and gradient coloring[^1_37][^1_35][^1_38].",
+    "provenance_research": "[^1_33] https://crepdogcrew.com/products/pop-mart-labubu-the-monsters-flip-with-me-vinyl-plush-doll [^1_34] https://www.popmart.com/us/products/1371/the-monsters-flip-with-me-vinyl-plush-doll [^1_35] https://www.instagram.com/p/C9I55UepT-E/ [^1_37] https://www.youtube.com/watch?v=jLrJEFNqOxA",
+    "i18n_nomenclature": "",
+    "relations_graph_edges": "",
+    "market_intelligence": "Positive reception among collectors for unique dynamic pose and quality construction. Popular choice for both display and as bag accessory due to balanced artistry and huggable appeal[^1_33][^1_41].",
+    "deltas": [
+      "No contradictions found with seed data. Dimensions and release date confirmed accurate across all sources.",
+      {
+        "field": "identity_taxonomy",
+        "replaced": "** Latest major plush release featuring unique flip-eye mechanism. Part of 2024 THE MONSTERS lineup with innovative interactive features[^1_33][^1_34][^1_35]. ** Single cream-colored fur variant with professional attire: black-rimmed glasses, blue and white pinstripe shirt, jeans, sneakers[^1_19][^1_34].",
+        "kept": "THE MONSTERS \"Flip with Me\" vinyl plush doll featuring LABUBU in dynamic mid-air flip pose. Part of 2024 core series releases with emphasis on playful, energetic movement[^1_33][^1_34][^1_35]. Single variant featuring dreamy pastel gradient coloring shifting from peach at cheeks through mint and sky-blue at limbs. Includes velvety matte finish with glossy enamel highlights on eyes and ear tips[^1_33]."
+      },
+      {
+        "field": "physical_spec",
+        "replaced": "** Dimensions: 40×20×15 cm (confirmed), Height: 40cm. Features cream-colored fur, flip-eye mechanism creating four different expressions: confused, expectant, aggrieved, heart-struck[^1_19][^1_34]. ** Advanced construction incorporating flip-eye mechanism. Premium materials maintaining series standards[^1_34].",
+        "kept": "Dimensions: 20×15×40 cm (7.87×5.91×15.75 inches) as specified in seed data[^1_33]. Materials: Shell composition of 40% Cotton, 17% PVC, 16% Polyester, 15% ABS, 12% TPR. Stuffing: 90% Polyester, 10% PE particles[^1_33]. Features whimsical mid-air flip sculpting with rounded silhouette. Premium construction combining sturdy vinyl shell with soft plush core. Advanced material composition designed for both display and tactile appeal[^1_33]."
+      },
+      {
+        "field": "packaging_in_box",
+        "replaced": "** Standard premium THE MONSTERS packaging with flip-eye feature highlighting[^1_34]. ** Complete professional outfit with glasses and footwear. Innovative flip-eye mechanism as key feature[^1_19][^1_34].",
+        "kept": "Standard POP MART packaging with windowed display box. Features dynamic artwork highlighting the \"flip\" theme and movement concept[^1_35][^1_38]. Features removable oversized hoodie with subtle shading details. Includes embossed POP MART logo on sole for authenticity verification[^1_33]."
+      },
+      {
+        "field": "edition_run_info",
+        "replaced": "** July 2024 release representing technological advancement in THE MONSTERS line. Smart casual aesthetic with professional styling[^1_19][^1_36].",
+        "kept": "Released July 12, 2024, simultaneously with \"Fall in Wild\" series[^1_34][^1_36][^1_35]. Positioned as energetic, playful release celebrating movement and joy. Part of broader 2024 product line expansion[^1_37][^1_38]."
+      },
+      {
+        "field": "credits",
+        "replaced": "** Continued THE MONSTERS IP licensing from Kasing Lung through POP MART[^1_34].",
+        "kept": "Part of THE MONSTERS IP created by Kasing Lung, exclusively manufactured by POP MART under official licensing[^1_33]."
+      },
+      {
+        "field": "release_distribution",
+        "replaced": "** POP MART official stores and online channels. Limited in-store pickup availability due to demand[^1_34][^1_35].",
+        "kept": "Official POP MART stores and website (popmart.com), plus authorized international retailers. Also available through specialty toy and collectible retailers[^1_34][^1_39][^1_40]."
+      },
+      {
+        "field": "market_listings",
+        "replaced": "** SGD 109.90 confirmed pricing. USD pricing exists per seed data. Premium positioning in product line[^1_19][^1_34]. ** Global release including Singapore, US, Canada markets. High demand noted with supply challenges[^1_19][^1_37].",
+        "kept": "US pricing: \\$84.99 for plush doll[^1_34][^1_36]. Materials and construction suggest premium positioning within LABUBU product range. Secondary market activity indicates strong collector interest[^1_33]. Released through official POP MART channels with global availability. Has experienced periodic stock shortages due to high demand. Available through official online store and select retail partners[^1_34][^1_39][^1_40]."
+      },
+      {
+        "field": "media_assets",
+        "replaced": "** Instagram promotional content emphasizing interactive features. \"Flip with me\" messaging campaign[^1_36][^1_38]. ** Instagram promotional content, product demonstration videos, collector documentation[^1_36][^1_38].",
+        "kept": "Featured in official POP MART social media campaigns emphasizing the dynamic \"flip\" action and playful energy theme[^1_35][^1_38]. YouTube unboxing content and promotional materials available[^1_37]. Official promotional photography, social media content, and YouTube unboxing videos showcasing the dynamic flip pose and gradient coloring[^1_37][^1_35][^1_38]."
+      },
+      {
+        "field": "provenance_research",
+        "replaced": "** [^1_34] popmart.com/us/products/1371/the-monsters-flip-with-me-vinyl-plush-doll [^1_35] popmart.com/ca/products/1371/the-monsters-flip-with-me-vinyl-plush-doll [^1_36] instagram.com/p/C9I55UepT-E/",
+        "kept": "[^1_33] https://crepdogcrew.com/products/pop-mart-labubu-the-monsters-flip-with-me-vinyl-plush-doll [^1_34] https://www.popmart.com/us/products/1371/the-monsters-flip-with-me-vinyl-plush-doll [^1_35] https://www.instagram.com/p/C9I55UepT-E/ [^1_37] https://www.youtube.com/watch?v=jLrJEFNqOxA"
+      },
+      {
+        "field": "market_intelligence",
+        "replaced": "** High enthusiasm for interactive flip-eye feature. Collectors appreciate innovation in traditional plush format[^1_19][^1_34].",
+        "kept": "Positive reception among collectors for unique dynamic pose and quality construction. Popular choice for both display and as bag accessory due to balanced artistry and huggable appeal[^1_33][^1_41]."
+      },
+      "** None identified versus seed data."
+    ]
+  },
+  {
+    "product": "Fall in Wild",
+    "identity_taxonomy": "THE MONSTERS \"Fall in Wild\" series featuring LABUBU in outdoor camping theme with cute camping outfit and floppy hat. Available in both large plush doll and keychain pendant formats[^1_42][^1_43][^1_36]. Single colorway featuring camping attire with floppy hat design. Outdoor/adventure aesthetic with earth-tone coloring and camping accessories[^1_42][^1_46].",
+    "physical_spec": "Large plush: 40×20×15 cm as specified in seed data. Keychain pendant: approximately 17cm height[^1_42][^1_43]. Materials: Polyester, Cotton, PVC construction for pendant version[^1_42]. Standard vinyl face with plush body construction. Quality construction appropriate for both display and functional use as bag accessories. Materials selected for durability and tactile appeal[^1_42][^1_43].",
+    "packaging_in_box": "Standard POP MART packaging for both formats. Camping/outdoor theme reflected in packaging artwork and presentation materials[^1_45]. Features removable camping outfit and floppy hat as key design elements. Pendant version includes keychain attachment hardware for bag charm use[^1_42][^1_43].",
+    "edition_run_info": "** December 29, 2023 release timed for Chinese New Year season. Companion piece to \"Best of Luck\" overseas exclusive released following day. Fortune/prosperity theme with traditional Chinese elements[^2_1][^2_2][^2_5].",
+    "credits": "Part of THE MONSTERS IP by Kasing Lung, exclusively produced by POP MART under official licensing agreements[^1_36].",
+    "release_distribution": "Official POP MART online store and retail locations. International availability through regional POP MART stores and authorized retailers[^1_36][^1_44][^1_45].",
+    "regional_policy": "",
+    "market_listings": "US pricing: \\$84.99 for large plush doll, \\$30.99 for keychain pendant[^1_43]. UK pricing: £55 for pendant version[^1_43]. Multiple format availability provides different price points for collectors[^1_36]. Released through official POP MART channels with both formats available. Noted as \"extremely limited stock\" at retail locations with warnings that stock \"will not last\"[^1_45]. Currently available through official and secondary market channels[^1_36][^1_44].",
+    "blind_box_specifics": "",
+    "compliance_safety": "",
+    "commerce_logistics": "",
+    "media_assets": "Promoted as part of outdoor/adventure lifestyle theme. Marketing emphasized the camping aesthetic and dual format availability[^1_45]. Featured in collector showcases and social media content[^1_47]. Official promotional materials showcasing both plush doll and pendant formats, plus camping theme aesthetic[^1_47][^1_45].",
+    "provenance_research": "[^1_42] https://www.fifilandtoys.com/products/labubu-the-monsters-fall-in-wild-vinyl-plush-pendant-keychain [^1_43] https://www.laced.com/products/pop-mart-labubu-the-monsters-fall-in-wild-vinyl-plush-doll-pendant-keychain [^1_36] https://www.popmart.com/us/products/1060/the-monsters-fall-in-wild-series-vinyl-plush-doll [^1_45] https://www.instagram.com/p/C9TAUD2zp6o/?hl=en",
+    "i18n_nomenclature": "",
+    "relations_graph_edges": "",
+    "market_intelligence": "Popular among collectors for unique camping theme and dual format options. Praised for cute design execution and quality construction. Regular feature in collection comparisons and discussions[^1_41].",
+    "deltas": [
+      "No contradictions found with seed data. Dimensions and release date confirmed accurate across sources.",
+      {
+        "field": "identity_taxonomy",
+        "replaced": "** Chinese New Year themed plush featuring fortune/prosperity aesthetic. Part of THE MONSTERS seasonal collection with 财神 (Caishen/God of Fortune) inspiration. Limited production run of exactly 3,000 units[^2_1][^2_2][^2_3]. ** Single CNY colorway with red and gold fortune elements. Traditional Chinese prosperity styling[^2_2][^2_5].",
+        "kept": "THE MONSTERS \"Fall in Wild\" series featuring LABUBU in outdoor camping theme with cute camping outfit and floppy hat. Available in both large plush doll and keychain pendant formats[^1_42][^1_43][^1_36]. Single colorway featuring camping attire with floppy hat design. Outdoor/adventure aesthetic with earth-tone coloring and camping accessories[^1_42][^1_46]."
+      },
+      {
+        "field": "physical_spec",
+        "replaced": "** Height: 15.75 inches (40cm), Materials: PLUSH+PVC construction. Premium vinyl face plate with polyester plush body. Size consistent with other major plush releases in series[^2_3][^2_4]. ** Premium PLUSH+PVC material construction. Limited edition quality standards maintained[^2_3].",
+        "kept": "Large plush: 40×20×15 cm as specified in seed data. Keychain pendant: approximately 17cm height[^1_42][^1_43]. Materials: Polyester, Cotton, PVC construction for pendant version[^1_42]. Standard vinyl face with plush body construction. Quality construction appropriate for both display and functional use as bag accessories. Materials selected for durability and tactile appeal[^1_42][^1_43]."
+      },
+      {
+        "field": "packaging_in_box",
+        "replaced": "** CNY-themed packaging with fortune/prosperity artwork. Premium presentation box with authentication elements[^2_2]. ** Fortune-themed outfit and accessories. Complete CNY costume with traditional elements[^2_2].",
+        "kept": "Standard POP MART packaging for both formats. Camping/outdoor theme reflected in packaging artwork and presentation materials[^1_45]. Features removable camping outfit and floppy hat as key design elements. Pendant version includes keychain attachment hardware for bag charm use[^1_42][^1_43]."
+      },
+      {
+        "field": "edition_run_info",
+        "replaced": "Released July 12, 2024, simultaneously with \"Flip with Me\" series[^1_36][^1_44][^1_45]. Theme focuses on outdoor adventures and camping lifestyle. Part of 2024's nature and lifestyle themed releases[^1_46][^1_44].",
+        "kept": "** December 29, 2023 release timed for Chinese New Year season. Companion piece to \"Best of Luck\" overseas exclusive released following day. Fortune/prosperity theme with traditional Chinese elements[^2_1][^2_2][^2_5]."
+      },
+      {
+        "field": "credits",
+        "replaced": "** Standard THE MONSTERS IP licensing from Kasing Lung through POP MART[^2_2].",
+        "kept": "Part of THE MONSTERS IP by Kasing Lung, exclusively produced by POP MART under official licensing agreements[^1_36]."
+      },
+      {
+        "field": "release_distribution",
+        "replaced": "** POP MART official channels, authorized retailers. Pre-order system implemented due to expected high demand[^2_2][^2_6].",
+        "kept": "Official POP MART online store and retail locations. International availability through regional POP MART stores and authorized retailers[^1_36][^1_44][^1_45]."
+      },
+      {
+        "field": "market_listings",
+        "replaced": "** Original retail: CNY 499 (~USD 71). Secondary market: NT\\$ 1,088-1,200 range (55-70% markup). Limited edition status driving collector premiums[^2_2][^2_6]. ** Limited to 3,000 pieces globally. Sold out status with secondary market availability only. High demand due to limited production and CNY timing[^2_1][^2_2].",
+        "kept": "US pricing: \\$84.99 for large plush doll, \\$30.99 for keychain pendant[^1_43]. UK pricing: £55 for pendant version[^1_43]. Multiple format availability provides different price points for collectors[^1_36]. Released through official POP MART channels with both formats available. Noted as \"extremely limited stock\" at retail locations with warnings that stock \"will not last\"[^1_45]. Currently available through official and secondary market channels[^1_36][^1_44]."
+      },
+      {
+        "field": "media_assets",
+        "replaced": "** CNY marketing campaign emphasizing fortune and prosperity themes. Social media content focused on seasonal significance[^2_7][^2_5]. ** CNY promotional content, product photography, seasonal marketing materials[^2_7][^2_5].",
+        "kept": "Promoted as part of outdoor/adventure lifestyle theme. Marketing emphasized the camping aesthetic and dual format availability[^1_45]. Featured in collector showcases and social media content[^1_47]. Official promotional materials showcasing both plush doll and pendant formats, plus camping theme aesthetic[^1_47][^1_45]."
+      },
+      {
+        "field": "provenance_research",
+        "replaced": "** [^2_2] labubushop.com/products/labubu-walk-by-fortune [^2_3] toysez.com/products/labubu-the-monsters-walk-by-fortune [^2_1] figpalace.com/blogs/guide/labubu-zimomo-mokoko-series-list",
+        "kept": "[^1_42] https://www.fifilandtoys.com/products/labubu-the-monsters-fall-in-wild-vinyl-plush-pendant-keychain [^1_43] https://www.laced.com/products/pop-mart-labubu-the-monsters-fall-in-wild-vinyl-plush-doll-pendant-keychain [^1_36] https://www.popmart.com/us/products/1060/the-monsters-fall-in-wild-series-vinyl-plush-doll [^1_45] https://www.instagram.com/p/C9TAUD2zp6o/?hl=en"
+      },
+      {
+        "field": "market_intelligence",
+        "replaced": "** High collector enthusiasm for limited edition CNY theme. Positive response to traditional Chinese elements integration[^2_2].",
+        "kept": "Popular among collectors for unique camping theme and dual format options. Praised for cute design execution and quality construction. Regular feature in collection comparisons and discussions[^1_41]."
+      },
+      "** None identified versus seed data."
+    ]
+  },
+  {
+    "product": "Let's Checkmate (Doll)",
+    "identity_taxonomy": "THE MONSTERS \"Let's Checkmate\" Series vinyl plush doll featuring LABUBU in chess-themed design with royal queen positioning. Part of Valentine's Day 2025 themed release[^1_48][^1_49][^1_50]. Single variant featuring brown fur with blue eyes, royal red and gold crown with heart details, and removable red cape with white fur trim[^1_48][^1_50].",
+    "physical_spec": "Height: 37cm (14.57 inches) when standing, adjustable to 33cm when sitting due to movable leg construction[^1_48][^1_51]. Materials: Shell composition of 59% PVC, 41% Polyester; Stuffing 100% Polyester[^1_51]. Features brown fuzzy exterior with twinkling, movable blue eyes. Premium construction with movable elements including adjustable legs and movable eyes. High attention to detail in accessory construction and attachment mechanisms[^1_48][^1_50].",
+    "packaging_in_box": "Large format packaging reflecting premium positioning. Features chess-themed artwork and \"Let's Checkmate\" branding elements[^1_50][^1_54]. Key feature: functional red LABUBU ring box that can hold actual jewelry for gift-giving purposes. Removable crown and cape accessories. Adjustable legs for sitting/standing display options[^1_48][^1_50].",
+    "edition_run_info": "Released February 7, 2025, as Valentine's Day themed collection[^1_48][^1_50][^1_52]. Chess theme with LABUBU positioned as \"queen of your heart\" with royal accessories and romantic elements[^1_48].",
+    "credits": "Part of THE MONSTERS IP created by Kasing Lung, exclusively manufactured by POP MART[^1_48].",
+    "release_distribution": "Official POP MART stores and online platforms. Global release including US, Singapore, and other international markets[^1_48][^1_49][^1_53].",
+    "regional_policy": "",
+    "market_listings": "US pricing: \\$114.99 as specified in seed data[^1_48]. Singapore pricing: SGD 109.90[^1_48]. Premium pricing reflects larger size and detailed accessories including functional jewelry box[^1_50]. Released through official POP MART channels. Quick sell-out noted with current status showing \"Out of stock\" on official websites[^1_49][^1_52][^1_53]. Available through secondary market at premium pricing.",
+    "blind_box_specifics": "",
+    "compliance_safety": "",
+    "commerce_logistics": "",
+    "media_assets": "Marketed as Valentine's Day gift option with emphasis on romantic chess queen theme and functional jewelry box feature. Promotional materials highlighted gift-giving potential[^1_48][^1_54]. Official promotional materials, unboxing videos, and product photography showcasing chess theme and functional jewelry box feature[^1_50][^1_54][^1_56].",
+    "provenance_research": "[^1_48] https://bagaholicboy.com/2025/02/the-monsters-lets-checkmate-collection [^1_51] https://poshmark.com/listing/Labubu-THE-MONSTERS-Lets-Checkmate-SeriesVinyl-Plush-Hanging-Card-NEW-IN-BOX-683a1fb732518768f005d2f8 [^1_50] https://www.youtube.com/watch?v=XAv0Z9B40Lo [^1_52] https://m.popmart.com/us/products/1898/the-monsters-let-s-checkmate-series-vinyl-plush-doll",
+    "i18n_nomenclature": "",
+    "relations_graph_edges": "",
+    "market_intelligence": "Positive reception for unique chess theme and functional jewelry box element. Collectors appreciated the adjustable height feature and premium construction quality[^1_50][^1_55].",
+    "deltas": [
+      "No contradictions found with seed data. Price and dimensions confirmed accurate across all sources."
+    ]
+  },
+  {
+    "product": "Let's Checkmate (Hanging Card)",
+    "identity_taxonomy": "THE MONSTERS \"Let's Checkmate\" Series vinyl plush hanging card featuring LABUBU in chess-themed pendant format. Companion piece to larger doll in same collection[^1_48][^1_49][^1_53]. Single variant featuring yellow fur, heart-detailed pink crown, and pink plush heart accessory. Light blue chiffon-like ribbon wrapping for gift-ready presentation[^1_48][^1_50].",
+    "physical_spec": "Height: 17cm (6.69 inches) as specified in seed data[^1_48][^1_51]. Materials: Shell 59% PVC, 41% Polyester; Stuffing 100% Polyester[^1_51]. Features yellow fur variant with pink crown and heart accessory. Quality pendant construction with attention to small-scale accessory details. Materials chosen for durability in bag charm usage[^1_51][^1_50].",
+    "packaging_in_box": "Standard hanging card packaging with chess theme artwork. Features \"Let's Checkmate\" branding consistent with collection identity[^1_53][^1_56]. Key accessories include removable pink crown with heart details, pink plush heart that LABUBU holds, and light blue ribbon wrapping. Yellow ring clasp for bag charm functionality[^1_48][^1_50].",
+    "edition_run_info": "Released February 7, 2025, as part of Valentine's Day chess-themed collection. Designed as more accessible price point option within the \"Let's Checkmate\" series[^1_48][^1_53].",
+    "credits": "Part of THE MONSTERS intellectual property created by Kasing Lung, exclusively produced by POP MART[^1_48].",
+    "release_distribution": "Official POP MART online store and retail locations. Global availability through international POP MART network[^1_49][^1_53][^1_57].",
+    "regional_policy": "",
+    "market_listings": "US pricing: \\$39.99 as specified in seed data[^1_48]. Singapore pricing: SGD 37.90[^1_48]. Positioned as entry-level option for the chess-themed collection[^1_50]. Released through official POP MART channels. Experienced rapid sell-out with current \"Out of stock\" status on official platforms[^1_49][^1_53]. Secondary market availability at premium pricing[^1_51].",
+    "blind_box_specifics": "",
+    "compliance_safety": "",
+    "commerce_logistics": "",
+    "media_assets": "Marketed alongside larger doll as complete chess-themed collection. Emphasized portability and bag charm functionality for everyday wear[^1_48][^1_57]. Product photography and promotional materials showing chess theme design and pendant functionality[^1_50][^1_56][^1_57].",
+    "provenance_research": "[^1_48] https://bagaholicboy.com/2025/02/the-monsters-lets-checkmate-collection [^1_51] https://poshmark.com/listing/Labubu-THE-MONSTERS-Lets-Checkmate-SeriesVinyl-Plush-Hanging-Card-NEW-IN-BOX-683a1fb732518768f005d2f8 [^1_53] https://m.popmart.com/us/products/1897/the-monsters-let-s-checkmate-series-vinyl-plush-hanging-card [^1_50] https://www.youtube.com/watch?v=XAv0Z9B40Lo",
+    "i18n_nomenclature": "",
+    "relations_graph_edges": "",
+    "market_intelligence": "Popular as more accessible entry point to the chess collection. Praised for cute design execution and practical bag charm size. Some collectors noted potential difficulty in removing accessories without damage[^1_50][^1_55].",
+    "deltas": [
+      "No contradictions found with seed data. Pricing and dimensions confirmed accurate across sources."
+    ]
+  },
+  {
+    "product": "Walk by Fortune (CNY)",
+    "identity_taxonomy": "",
+    "physical_spec": "",
+    "packaging_in_box": "",
+    "edition_run_info": "",
+    "credits": "",
+    "release_distribution": "",
+    "regional_policy": "",
+    "market_listings": "",
+    "blind_box_specifics": "",
+    "compliance_safety": "",
+    "commerce_logistics": "",
+    "media_assets": "",
+    "provenance_research": "",
+    "i18n_nomenclature": "",
+    "relations_graph_edges": "",
+    "market_intelligence": "",
+    "deltas": []
+  },
+  {
+    "product": "Time to Chill:",
+    "identity_taxonomy": "LABUBU × PRONOUNCE second collaboration featuring \"Wings of Fantasy\" (large plush doll) and \"Wings of Fortune\" (hanging card pendant). Purple fur LABUBU with fashion accessories, marking continued partnership between POP MART and Chinese contemporary fashion label PRONOUNCE[^2_1][^2_2][^2_3]. Wings of Fantasy: Purple fur with lightning bolt on right temple, removable denim contemporary Mao suit with wings, purple-lens sunglasses. Wings of Fortune: Purple fur with golden dress featuring wings on back, carries Pronounce's signature Gourd Húlu bag[^2_2][^2_3].",
+    "physical_spec": "Wings of Fantasy: 24×15×38 cm (9.4×5.9×15 inches). Wings of Fortune: 11×8×22 cm (4.3×3.1×8.7 inches). Materials: Shell 66% Polyester, 25% PVC, 9% ABS; Stuffing 95% Polyester, 5% Iron Wire for poseability[^2_3][^2_4]. Purple fur with yellow nose and ear details[^2_2]. Premium construction with iron wire framework for poseability. High attention to fashion accessory details and removable elements. Materials selected for durability in both display and fashion accessory use[^2_3][^2_4].",
+    "packaging_in_box": "Standard POP MART packaging with fashion collaboration branding. Features PRONOUNCE co-branding and Milan Fashion Week tie-in marketing materials[^2_2][^2_5]. Wings of Fantasy includes removable denim Mao suit with wings and purple sunglasses showcasing East-West fashion fusion. Wings of Fortune features removable golden dress and signature Gourd Húlu crossbody bag[^2_2][^2_3].",
+    "edition_run_info": "Released October 4, 2024, as follow-up to March 2024 \"Be Fancy Now\" collaboration. Debuted concept at Milan Men's Fashion Week for PRONOUNCE's fall-winter 2024 collection, where purple LABUBU and ZIMOMO appeared front row[^2_2][^2_5].",
+    "credits": "Collaboration between THE MONSTERS IP (Kasing Lung) and PRONOUNCE fashion label, exclusively manufactured by POP MART. Part of broader fashion industry collaborations strategy[^2_2][^2_5].",
+    "release_distribution": "Official POP MART online store, retail locations, and authorized retailers globally. Also available through specialty collectible toy retailers and secondary market platforms[^2_10][^2_3][^2_11].",
+    "regional_policy": "",
+    "market_listings": "Wings of Fantasy (plush): USD 119.99 / SGD 129.90. Wings of Fortune (hanging card): USD 43.99 / SGD 39.90. Wings of Fantasy limited to 10,000 pieces globally[^2_1][^2_2]. Secondary market pricing significantly elevated due to rapid sell-out[^2_6]. Released globally through POP MART official channels. Rapid sell-out with current \"Out of stock\" status on official platforms[^2_7][^2_8]. High demand led to website crashes and collector queuing systems[^2_9].",
+    "blind_box_specifics": "",
+    "compliance_safety": "",
+    "commerce_logistics": "",
+    "media_assets": "Featured prominently at Milan Men's Fashion Week January 2024. Marketed as fashion-forward collectible blending toy culture with high fashion. \"Purple world\" campaign emphasized dreamy aesthetic[^2_5][^2_12][^2_13]. Milan Fashion Week photography, official product photography, and promotional materials showcasing fashion collaboration concept and purple world aesthetic[^2_5][^2_12][^2_13].",
+    "provenance_research": "[^2_1] https://figpalace.com/blogs/guide/labubu-zimomo-mokoko-series-list [^2_2] https://bagaholicboy.com/2024/10/the-monsters-labubu-pronounce-collaboration [^2_3] https://shopatshowcaseusa.com/products/pop-mart-x-the-monsters-labubu-wearing-pronounce-label-wings-of-fortune-plush-doll-pendant-1pc-order-online-free-shipping-or-shop-in-store [^2_5] https://daoinsights.com/news/labubu-storms-milan-fashion-week-with-pop-mart-x-pronounce-collab/",
+    "i18n_nomenclature": "",
+    "relations_graph_edges": "",
+    "market_intelligence": "Extremely popular among collectors and fashion enthusiasts. Praised for unique fashion collaboration concept and quality construction. Regular feature in collector showcases and social media content[^2_6][^2_14].",
+    "deltas": [
+      "All pricing and release date information consistent across sources. No contradictions found with seed data."
+    ]
+  },
+  {
+    "product": "Coca-Cola",
+    "identity_taxonomy": "THE MONSTERS COCA-COLA Series vinyl face blind box featuring LABUBU in Coca-Cola themed winter collaboration. Limited series combining POP MART's character with iconic Coca-Cola branding for holiday season[^2_1][^2_15][^2_16]. Two regular designs: \"Happy Factor\" (LABUBU holding classic red Coca-Cola can with knitted red scarf) and \"Surprise Shake\" (LABUBU holding Coca-Cola bottle wearing Christmas hat). Secret \"Mysterious Guest\" (1:72 rarity): LABUBU emerging from Coca-Cola can[^2_15][^2_17][^2_16].",
+    "physical_spec": "Size: 15.5×17 cm as specified in seed data[^2_1][^2_16]. Materials: Vinyl face construction with plush body elements. Features soft white fluffy parka material and classic red Coca-Cola accessories[^2_15][^2_17]. High-quality vinyl face construction with soft plush body elements. Premium materials selected to reflect collaboration status. Features authentic Coca-Cola branding elements and winter-themed textiles[^2_15][^2_17].",
+    "packaging_in_box": "Features distinctive Coca-Cola co-branding on packaging. Winter/holiday themed artwork with snow and festive elements. Large format blind box packaging reflecting premium collaboration status[^2_15][^2_17][^2_26]. Happy Factor includes removable red knitted scarf and Coca-Cola can prop. Surprise Shake features Christmas hat and Coca-Cola bottle prop. Secret version shows LABUBU popping out of oversized Coca-Cola can[^2_15][^2_17].",
+    "edition_run_info": "Released January 24, 2025, as winter holiday themed collaboration between POP MART and The Coca-Cola Company. Positioned as limited edition seasonal collection targeting both toy collectors and Coca-Cola enthusiasts[^2_1][^2_15][^2_16].",
+    "credits": "Official collaboration between THE MONSTERS IP (Kasing Lung), POP MART, and The Coca-Cola Company. Represents major brand partnership expansion for POP MART into beverage industry collaborations[^2_15][^2_16].",
+    "release_distribution": "Released through official POP MART stores, online platforms, and authorized retailers globally. Also distributed through specialty toy retailers and Asian grocery chains like Weee! for collectors[^2_24][^2_20][^2_25].",
+    "regional_policy": "",
+    "market_listings": "Set pricing: USD 239.94 for complete set. Individual box: USD 39.99 as specified in seed data[^2_1][^2_16]. Higher pricing compared to standard LABUBU blind boxes reflects premium brand collaboration positioning[^2_18][^2_19]. Limited availability with rapid sell-out from official channels. Current status shows \"Out of stock\" on official POP MART platforms[^2_20][^2_21]. Available primarily through secondary market at premium pricing with sealed case listings at USD 355[^2_22][^2_23].",
+    "blind_box_specifics": "",
+    "compliance_safety": "",
+    "commerce_logistics": "",
+    "media_assets": "Marketed as holiday season collectible combining nostalgic Coca-Cola imagery with LABUBU's playful character. Promotional materials emphasized winter wonderland and festive celebration themes[^2_15][^2_27]. Official promotional materials featuring winter/holiday themes, unboxing videos showing all variants, and Coca-Cola collaboration marketing content[^2_15][^2_17][^2_26][^2_27].",
+    "provenance_research": "[^2_1] https://figpalace.com/blogs/guide/labubu-zimomo-mokoko-series-list [^2_15] https://www.youtube.com/watch?v=yEN4EIWcc6I [^2_16] https://figpalace.com/zh/blogs/guide/top-6-popular-monsters-labubu-vinyl [^2_17] https://www.youtube.com/watch?v=egXw6NyE2TM",
+    "i18n_nomenclature": "",
+    "relations_graph_edges": "",
+    "market_intelligence": "Very popular among collectors, noted for cute holiday aesthetic and successful brand collaboration execution. Praised for authentic Coca-Cola integration and quality construction. Regular feature in unboxing videos and social media[^2_17][^2_26].",
+    "deltas": [
+      "All pricing and release date information consistent across sources. No contradictions found with seed data."
+    ]
+  },
+  {
+    "product": "Have a Seat",
+    "identity_taxonomy": "THE MONSTERS \"Have a Seat\" (坐坐派對) vinyl plush blind box series featuring LABUBU V2 in various sitting poses. Second generation LABUBU blind box collection emphasizing comfort and relaxation themes[^2_28][^2_29][^2_30]. Six regular designs: Cici (light beige, calm smile, closed eyes), Hehe (grey, mischievous smile, squinting eyes), Baba (golden brown, curious big eyes, friendly smile), Zizi (light purple, calm face, sleepy eyes), Qiuqiu (mint green, wide excited eyes, happy expression), Dada (light pink, bright shiny eyes, brilliant smile). Secret Duoduo (chocolate brown, mischievous smile, relaxed pose with vintage radio prop)[^2_28][^2_16][^2_35].",
+    "physical_spec": "Size: 8×7×15 cm (3.15×2.76×5.91 inches) excluding hanging loop, approximately 8×7×20 cm including hanging loop as specified in seed data[^2_29][^2_30]. Materials: Shell 60% PVC, 40% Polyester; Stuffing 70% Polyester, 20% ABS, 5% Iron Wire, 5% Nylon[^2_29][^2_30]. Quality construction combining vinyl face elements with soft plush bodies. Materials selected for durability in bag charm usage while maintaining collectible display quality[^2_29][^2_30].",
+    "packaging_in_box": "Standard POP MART blind box packaging with \"Have a Seat\" themed artwork. Features colorful, playful design elements emphasizing the sitting/relaxation theme[^2_29][^2_30][^2_35]. Each character features unique sitting pose and facial expression. Secret version Duoduo includes vintage radio accessory as key design element. All versions include hanging loop for bag charm functionality[^2_28][^2_16][^2_29].",
+    "edition_run_info": "Released July 12, 2024, simultaneously with \"Flip with Me\" and \"Fall in Wild\" series. Positioned as LABUBU V2 follow-up to 2023's V1 \"Exciting Macaron\" series. Features sitting pose theme with comfort and relaxation positioning[^2_28][^2_29][^2_31].",
+    "credits": "Part of THE MONSTERS intellectual property created by Kasing Lung, exclusively manufactured by POP MART as continuation of LABUBU blind box series[^2_28][^2_29].",
+    "release_distribution": "Official POP MART stores, online platforms, and authorized international retailers. Also available through specialty toy and collectible retailers globally[^2_32][^2_29][^2_30].",
+    "regional_policy": "",
+    "market_listings": "Set pricing: USD 131.94 for complete set. Individual box: USD 21.99 as specified in seed data[^2_1][^2_32]. Consistent with standard LABUBU blind box pricing structure. Secondary market shows significant appreciation due to high demand[^2_32][^2_29]. Released through official POP MART channels with global availability. Current status shows \"Out of stock\" on official platforms due to high demand[^2_33][^2_31]. Available through secondary market and specialty retailers at premium pricing[^2_32][^2_34].",
+    "blind_box_specifics": "",
+    "compliance_safety": "",
+    "commerce_logistics": "",
+    "media_assets": "Marketed with emphasis on comfort, relaxation, and sitting theme. Promotional materials highlighted the cute, peaceful aesthetic and everyday companion positioning[^2_35][^2_36]. Official promotional materials showcasing sitting poses and comfort themes, plus extensive social media content featuring all character variants[^2_35][^2_36].",
+    "provenance_research": "[^2_28] https://en.wikipedia.org/wiki/Labubu [^2_29] https://toybeta.com/products/pre-sale-the-monsters-labubu-have-a-seat-vinyl-plush-blind-box [^2_30] https://www.clubdesign.com.tw/products/pop-mart-labubu-have-a-seat [^2_1] https://figpalace.com/blogs/guide/labubu-zimomo-mokoko-series-list",
+    "i18n_nomenclature": "",
+    "relations_graph_edges": "",
+    "market_intelligence": "Very popular among collectors, praised for cute design execution and successful V2 iteration concept. Considered important milestone in LABUBU blind box evolution. Regular feature in collection showcases[^2_37][^2_36].",
+    "deltas": [
+      "All pricing, dimensions, and release date information consistent across sources. No contradictions found with seed data."
+    ]
+  },
+  {
+    "product": "Big Into Energy (v3)",
+    "identity_taxonomy": "THE MONSTERS \"Big Into Energy\" Series V3 vinyl plush pendant blind box featuring LABUBU with technicolor tie-dye designs. Third generation LABUBU blind box collection with energy and cosmic themes[^2_38][^2_39][^2_40]. Six regular designs with cosmic energy themes: Love (red), Happiness (orange), Loyalty (pink and yellow), Serenity (green), Hope (blue), Luck (purple). Secret \"ID\" (grey fur with rainbow gradient glitter eyes, rainbow teeth, black nose and toenails). 1:6 chance for regular editions, 1:72 for secret[^2_38][^2_39][^2_40].",
+    "physical_spec": "Height: 17 cm (6.69 inches) excluding hanging loop as specified in seed data[^2_38][^2_39][^2_41]. Materials: Shell PVC/Polyester; Stuffing 100% Polyester. Features poseable head, arms, and feet with novel kaleidoscopic tie-dye finish ensuring no two figures are exactly alike[^2_38][^2_41]. Advanced manufacturing featuring individual tie-dye process ensuring unique coloring for each figure. Softer and furrier construction compared to previous versions. Enhanced poseability with improved joint mechanisms[^2_38][^2_41].",
+    "packaging_in_box": "Premium packaging with cosmic energy theme artwork featuring stars, swirls, and kaleidoscopic elements. Color-coded cards corresponding to each character's energy type[^2_38][^2_46][^2_47]. Each features unique tie-dye design with tonal gradient glitter eyes, single-colored tooth, two-toned ears, and matching toenails and nose. Tonal ring clasp for bag accessory or key attachment functionality[^2_38][^2_46].",
+    "edition_run_info": "Released April 25, 2025, as highly anticipated third edition following 2023's V1 \"Exciting Macaron\" and 2024's V2 \"Have a Seat\". Positioned as most advanced LABUBU blind box series with emphasis on energy, cosmic themes, and individual uniqueness[^2_38][^2_39][^2_40].",
+    "credits": "Part of THE MONSTERS intellectual property created by Kasing Lung, exclusively manufactured by POP MART as flagship V3 blind box series[^2_38][^2_40].",
+    "release_distribution": "Official POP MART stores, online platforms, POP NOW feature, and authorized retailers globally. Notable distribution through specialty toy retailers and collector platforms[^2_38][^2_44][^2_41].",
+    "regional_policy": "",
+    "market_listings": "Set pricing: USD 167.94 for complete set. Individual box: USD 27.99 as specified in seed data[^2_1][^2_38][^2_42]. Premium pricing reflects advanced manufacturing techniques and unique tie-dye process. High secondary market activity due to rapid sell-out[^2_42][^2_43]. Released globally through POP MART channels with coordinated international launch. Rapid sell-out with current \"Out of stock\" status on official platforms[^2_44][^2_43]. Generated significant collector queuing and lottery systems in major markets[^2_39][^2_45].",
+    "blind_box_specifics": "",
+    "compliance_safety": "",
+    "commerce_logistics": "",
+    "media_assets": "Marketed with \"high-energy signal from deep universe\" theme emphasizing cosmic energy and individual uniqueness. Major promotional campaigns across social media platforms with energy/cosmic aesthetic[^2_39][^2_45][^2_47]. Official promotional materials featuring cosmic energy themes, unboxing videos showcasing unique tie-dye variations, and extensive social media campaign content[^2_46][^2_47][^2_49].",
+    "provenance_research": "[^2_38] https://bagaholicboy.com/2025/04/the-monsters-big-into-energy-labubu-v3 [^2_39] https://toylandhk.com/zh-hans-int/blogs/news/新品速報-pop-mart-the-monsters-前方高能系列盲盒-超萌搪胶毛絨掛件-4月18日-即將來襲 [^2_40] https://figpalace.com/zh/blogs/guide/labubu-zimomo-mokoko-series-list [^2_42] https://blindboxdaily.substack.com/p/labubu-big-into-energy-release-guide",
+    "i18n_nomenclature": "",
+    "relations_graph_edges": "",
+    "market_intelligence": "Extremely popular among collectors, considered the most advanced LABUBU blind box series to date. Praised for innovative tie-dye manufacturing and improved construction quality. Generated significant social media buzz and collector excitement[^2_48][^2_46][^2_49].",
+    "deltas": [
+      "All pricing, dimensions, and release date information consistent across sources. No contradictions found with seed data."
+    ]
+  },
+  {
+    "product": "I FOUND YOU (v1)",
+    "identity_taxonomy": "** Zimomo character debut as male counterpart to Labubu featuring signature tail. Known as \"大首领\" (Big Chief/Leader) in Chinese market. First large-format Zimomo release establishing character hierarchy[^3_1][^3_7][^3_8]. ** Brown fur colorway with bunny ears costume. Soft faux-fur texture with oversized expressive eyes featuring starry reflections[^3_12][^3_11].",
+    "physical_spec": "** Dimensions: 30×25×58 cm (22.8 inches height), Weight: 5.4 kg. Materials: PVC/ABS vinyl face, polyester/cotton plush body. Distinctive tail feature differentiating from Labubu[^3_1][^3_9][^3_10]. ** Large-format construction requiring specialized manufacturing. Premium materials befitting flagship character introduction[^3_9][^3_13].",
+    "packaging_in_box": "** Large premium packaging with included ginormous shopping bag. \"Ikea Shopper\" sized bag accommodation for large box[^3_9][^3_11]. ** Complete bunny costume with ears, premium collector's card. Large format presentation enhancing collectible status[^3_9][^3_11].",
+    "edition_run_info": "** December 15, 2023 release introducing Zimomo character line. Limited edition status with only 1,999 pieces produced. Established as \"original\" Zimomo version[^3_1][^3_8].",
+    "credits": "** THE MONSTERS IP expansion featuring Zimomo character introduction. Male character addition to established Labubu universe[^3_1].",
+    "release_distribution": "** POP MART official channels globally. Opened box condition common in secondary market due to authentication needs[^3_7][^3_8].",
+    "regional_policy": "",
+    "market_listings": "** Original retail: USD 179.99. Chinese market: CNY 999. Secondary market: NT\\$5,000 (~USD 978-1,088). Strong secondary market appreciation reflecting character popularity[^3_8][^3_10]. ** Limited to 1,999 pieces globally. High demand leading to secondary market dominance. Regional availability variations noted[^3_8].",
+    "blind_box_specifics": "",
+    "compliance_safety": "",
+    "commerce_logistics": "",
+    "media_assets": "** Character introduction campaigns emphasizing \"Big Chief\" status. YouTube unboxing content highlighting size and quality[^3_11][^3_10]. ** Character introduction videos, unboxing content, collector documentation[^3_11][^3_10][^3_14].",
+    "provenance_research": "** [^3_9] popmart.com/us/products/878/the-monsters-i-found-you-vinyl-face-doll [^3_11] youtube.com/watch?v=qmKIyJ0TOWo [^3_10] youtube.com/watch?v=XjVhEnq3hkA",
+    "i18n_nomenclature": "",
+    "relations_graph_edges": "",
+    "market_intelligence": "** High enthusiasm for character expansion. Positive response to male character introduction and premium format[^3_11][^3_10].",
+    "deltas": [
+      "** None identified versus seed data."
+    ]
+  },
+  {
+    "product": "PRONOUNCE Wings of Fantasy/Fortune:",
+    "identity_taxonomy": "“ZIMOMO I FOUND YOU” is a large-format vinyl plush doll in THE MONSTERS line, featuring Zimomo (the “大首领” leader of the tribe) rather than Labubu. Sits within Zimomo v1 collection, distinguished by spiked tail and larger body size[^3_1][^3_2]. Single colorway: chocolate-brown fur, blue eyes, metal collar. No variant editions for v1; only the initial “I FOUND YOU” release.",
+    "physical_spec": "Dimensions: 30 × 25 × 58 cm (11.8″ × 9.8″ × 22.8″). Materials: PVC vinyl face, ABS plastic details (movable hands, eyes), polyester fiber plush body. Includes metal-tag leather collar and adjustable posable tail with spines[^3_1][^3_3]. Produced in Guangdong, China. Shell: laminated PVC and ABS injection molding; body: polyester plush stuffing with internal wire posability.",
+    "packaging_in_box": "Large custom box with full-color artwork depicting Zimomo story lore. Includes branded cotton tote bag (for carrying/storage) and certificate of authenticity (gold-foil card)[^3_3]. Includes removable tote bag, authenticity certificate, leather collar with metal tag. Movable limbs and eyes for poseability; posable tail.",
+    "edition_run_info": "Released December 15, 2023 as Zimomo’s inaugural standalone large vinyl plush. Limited edition of 1,999 pieces globally. Preorder date and limited-edition count confirmed by secondary retailers[^3_4].",
+    "credits": "Character Zimomo created by artist Kasing Lung under THE MONSTERS IP. Manufactured and licensed exclusively by POP MART.",
+    "release_distribution": "Official POP MART online store, global physical retail locations, and specialty collectible toy retailers. Preorders fulfilled through official site and select partner retailers.",
+    "regional_policy": "",
+    "market_listings": "Launch price: USD 179.99. Secondary market listing prices range USD 300–450 for unopened items due to rarity and limited count[^3_4]. Sold exclusively via POP MART official channels and authorized resellers. Rapid sell-out; currently “Out of Stock” on official site. Available via secondary marketplaces (e.g., eBay, resellers) at a premium[^3_3][^3_5].",
+    "blind_box_specifics": "",
+    "compliance_safety": "",
+    "commerce_logistics": "",
+    "media_assets": "Promoted via POP MART social channels and YouTube unboxing videos. Featured as collector’s centerpiece at Singapore flagship store launch events and online preview campaigns. YouTube unboxing video demonstrating size and accessories[^3_3]; TikTok promotional clips highlighting design features[^3_6].",
+    "provenance_research": "[^3_1] https://www.fifilandtoys.com/products/zimomo-i-found-you-vinyl-doll [^3_2] https://bagaholicboy.com/2024/09/the-monsters-zimomo-labubu-friends [^3_3] https://www.youtube.com/watch?v=LLV9WSLpOC0 [^3_6] https://www.tiktok.com/discover/i-found-you-vinyl-face-doll",
+    "i18n_nomenclature": "",
+    "relations_graph_edges": "",
+    "market_intelligence": "Praised for size and detailed design; regarded as premium centerpiece for MONSTERS collections. Secondary market demand high, with positive collector reviews for craftsmanship and presentation[^3_3].",
+    "deltas": [
+      "Seed release date and price match sourced data; limited-edition quantity (1,999) added. No contradictions to seed data."
+    ]
+  },
+  {
+    "product": "I FOUND YOU (v1):",
+    "identity_taxonomy": "THE MONSTERS “Angel in Clouds” is part of the Zimomo v2 collection featuring Zimomo as a “大天使” (Great Angel). It’s a large-format vinyl face plush doll that follows the v1 “I Found You” release[^4_1]. Single colorway: pure white plush body with silvery-gray wings, metallic silver halo accent, and translucent PVC wing inserts. No variant editions reported.",
+    "physical_spec": "Dimensions: 33 × 25 × 58 cm (12.99″ × 9.84″ × 22.83″). Shell composition: 36% Polyester, 35% PVC, 29% ABS. Stuffing: 70% Polyester, 27% POM (polyoxymethylene), 2% Rubber, 1% Sponge. Weight: approximately 1.5 kg. Features articulated soft vinyl face and plush body with detailed angelic wings and halo motif[^4_2]. Produced in Guangdong, China. Shell via injection-molded PVC/ABS, plush body made from Korean-sourced polyester fibers, stuffing and POM mechanical parts manufactured domestically.",
+    "packaging_in_box": "Comes in a custom pop-open box with cloud-themed artwork and angelic visual motifs. Includes branded POP MART certificate of authenticity and protective internal foam insertion to secure wings[^4_2][^4_6]. Includes removable halo headband and detachable wing attachments. Certificate of authenticity card and branded cloud-pattern cotton tote bag included in box contents[^4_2].",
+    "edition_run_info": "Released October 25, 2024, as the second major Zimomo standalone doll, themed around heavenly guardianship and divine protection. Marketed as the “Angel in Clouds” counterpart to the “I Found You” leader edition[^4_1][^4_2].",
+    "credits": "Character Zimomo created by artist Kasing Lung under THE MONSTERS IP, manufactured and licensed exclusively by POP MART.",
+    "release_distribution": "Official POP MART online store and brick-and-mortar locations globally. Also distributed via authorized resellers and specialty collectible shops[^4_3][^4_5].",
+    "regional_policy": "",
+    "market_listings": "Launch price: USD 289.99. Secondary market listings show premiums up to USD 350 for new-in-box units due to limited availability and collector demand[^4_1]. Sold out rapidly on official POP MART channels; currently “Out of stock” on popmart.com US/SG sites. Available through secondary marketplaces (e.g., eBay, specialty toy retailers) at marked-up prices[^4_3][^4_4].",
+    "blind_box_specifics": "",
+    "compliance_safety": "",
+    "commerce_logistics": "",
+    "media_assets": "Featured in POP MART’s official unboxing livestreams and highlighted as “the rarest angelic protector” in social media campaigns. YouTube unboxing by Mini Mikey TV emphasized rarity and emotional resonance of the reveal[^4_7]. YouTube unboxing video demonstrating wings detail[^4_7]; Instagram product reveal showcasing halo and cloud packaging[^4_6].",
+    "provenance_research": "[^4_2] https://stealplug.com.my/products/pop-mart-labubu-the-monsters-angel-in-clouds-vinyl-face-doll [^4_3] https://m.popmart.com/us/products/1607/the-monsters-angel-in-clouds-vinyl-face-doll [^4_7] https://www.youtube.com/watch?v=HJtgIK0IG0U [^4_6] https://www.instagram.com/p/DCDov4ppgf6/",
+    "i18n_nomenclature": "",
+    "relations_graph_edges": "",
+    "market_intelligence": "Highly sought by collectors for its size, detailed wings, and halo design. Praised in unboxing videos for craftsmanship, though some reported minor stitching imperfections around wing seams[^4_8].",
+    "deltas": [
+      "No discrepancies with seed data. Packaging details and materials breakdown added."
+    ]
+  },
+  {
+    "product": "ANGEL IN CLOUDS (v2):",
+    "identity_taxonomy": "",
+    "physical_spec": "",
+    "packaging_in_box": "",
+    "edition_run_info": "",
+    "credits": "",
+    "release_distribution": "",
+    "regional_policy": "",
+    "market_listings": "",
+    "blind_box_specifics": "",
+    "compliance_safety": "",
+    "commerce_logistics": "",
+    "media_assets": "",
+    "provenance_research": "",
+    "i18n_nomenclature": "",
+    "relations_graph_edges": "",
+    "market_intelligence": "",
+    "deltas": []
+  },
+  {
+    "product": "Best of Luck（海外限定）",
+    "identity_taxonomy": "** Overseas exclusive (海外限定) companion to Walk by Fortune. Second in the paired CNY release featuring luck/fortune themes. Limited to exactly 3,000 pieces matching Walk by Fortune[^2_1][^2_8][^2_9]. ** Likely similar fortune/luck themed styling with potential regional variations[^2_1].",
+    "physical_spec": "** Presumed identical to Walk by Fortune: 15.75 inches (40cm), PLUSH+PVC construction. Materials consistent with standard THE MONSTERS plush specifications[^2_1]. ** Premium materials matching Walk by Fortune specifications[^2_1].",
+    "packaging_in_box": "** Presumed similar CNY theming to Walk by Fortune with overseas exclusive marking[^2_1]. ** CNY-themed accessories consistent with fortune/luck theming[^2_1].",
+    "edition_run_info": "** December 30, 2023 release, one day after Walk by Fortune. Specifically designated as overseas exclusive (海外限定), indicating regional restriction outside China mainland[^2_1][^2_9].",
+    "credits": "** Standard THE MONSTERS IP licensing with regional exclusive designation[^2_1].",
+    "release_distribution": "** Overseas POP MART channels only. Regional exclusive distribution pattern confirmed[^2_9].",
+    "regional_policy": "",
+    "market_listings": "** Original retail: CNY 499 matching Walk by Fortune. Secondary market shows similar appreciation patterns. Overseas exclusive status potentially increasing rarity value[^2_1][^2_9]. ** Limited to 3,000 pieces with overseas exclusive distribution. Availability restricted to non-China mainland markets[^2_1][^2_9].",
+    "blind_box_specifics": "",
+    "compliance_safety": "",
+    "commerce_logistics": "",
+    "media_assets": "** Limited marketing due to regional exclusive status. Hong Kong retail presence documented[^2_9]. ** Limited documentation due to regional exclusive nature[^2_9].",
+    "provenance_research": "** [^2_1] figpalace.com/blogs/guide/labubu-zimomo-mokoko-series-list [^2_9] instagram.com/p/DFKPOH6SPsN/",
+    "i18n_nomenclature": "",
+    "relations_graph_edges": "",
+    "market_intelligence": "** High collector interest due to overseas exclusive status and limited quantity[^2_9].",
+    "deltas": [
+      "** Confirmed as overseas exclusive (海外限定) supporting seed designation."
+    ]
+  },
+  {
+    "product": "Happy Halloween Party",
+    "identity_taxonomy": "** Halloween-themed keychain pendant from THE MONSTERS seasonal collection. Australian regional exclusive featuring pumpkin/Halloween aesthetic. Pendant format distinct from standard plush offerings[^2_1][^2_10]. ** Halloween colorway with pumpkin theme. Orange and autumn color palette expected[^2_10].",
+    "physical_spec": "** Keychain pendant format, estimated 10-17cm based on similar pendant series. Materials presumed vinyl face with fabric/plush elements consistent with pendant line[^2_1]. ** Pendant-grade materials with keychain hardware. Durable construction for keychain use[^2_1].",
+    "packaging_in_box": "** Halloween-themed packaging with pumpkin/seasonal artwork[^2_10]. ** Keychain attachment hardware included. Potential Halloween costume elements[^2_1].",
+    "edition_run_info": "** October 25, 2024 release timed for Halloween season. Australian regional exclusive (AU\\$ pricing confirms). Part of broader Halloween series across regions[^2_1][^2_10].",
+    "credits": "** Standard THE MONSTERS IP licensing with Australian regional rights[^2_1].",
+    "release_distribution": "** POP MART Australia channels and authorized Australian retailers[^2_1].",
+    "regional_policy": "",
+    "market_listings": "** Original retail: AU\\$ 50 (~USD 32.50). Regional exclusive pricing reflecting Australian market positioning[^2_1]. ** Australian regional exclusive distribution. Limited availability outside Australia market[^2_1].",
+    "blind_box_specifics": "",
+    "compliance_safety": "",
+    "commerce_logistics": "",
+    "media_assets": "** Halloween-themed marketing in Australian market. Seasonal promotional content[^2_10]. ** Halloween promotional materials, Australian market content[^2_10].",
+    "provenance_research": "** [^2_1] figpalace.com/blogs/guide/labubu-zimomo-mokoko-series-list [^2_10] figpalace.com/blogs/guide/top-6-popular-monsters-labubu-vinyl",
+    "i18n_nomenclature": "",
+    "relations_graph_edges": "",
+    "market_intelligence": "** Positive response to Halloween theme and Australian exclusive status[^2_10].",
+    "deltas": [
+      "** None identified versus seed data."
+    ]
+  },
+  {
+    "product": "PRONOUNCE",
+    "identity_taxonomy": "** Fashion collaboration between THE MONSTERS and PRONOUNCE brand. Features haute couture styling with fashion week aesthetics. Limited production run of exactly 6,458 pieces, representing premium collaboration tier[^3_1][^3_2][^3_3]. ** Single fashion-forward colorway featuring bright yellow toes and starry facial accents. Designed to capture fashion week energy and streetwear aesthetics[^3_5].",
+    "physical_spec": "** Dimensions: 8.66 × 5.91 × 15.75 inches. Materials: 25% Polyester, 18% Cotton, 18% PVC, 15% ABS, 12% Acrylic, 7% Wool, 5% Viscose Fiber. Complex multi-material construction reflecting fashion industry standards[^3_2][^3_3][^3_4]. ** Complex 7-material construction: polyester, cotton, PVC, ABS, acrylic, wool, viscose fiber. Premium materials reflecting fashion collaboration standards[^3_2].",
+    "packaging_in_box": "** PRONOUNCE collaboration packaging with co-branding elements. Premium presentation reflecting fashion industry standards[^3_2]. ** Fashion-forward styling elements and accessories. PRONOUNCE brand collaboration details integrated throughout design[^3_2][^3_5].",
+    "edition_run_info": "** March 15, 2024 release timed for fashion week season. Collaboration with PRONOUNCE fashion brand emphasizing high-end streetwear aesthetic. Limited to 6,458 pieces globally[^3_1][^3_2][^3_5].",
+    "credits": "** THE MONSTERS IP with PRONOUNCE fashion brand collaboration licensing. Represents premium tier collaboration agreement[^3_2].",
+    "release_distribution": "** POP MART official channels, PRONOUNCE collaboration retailers. Limited distribution reflecting exclusive collaboration nature[^3_4].",
+    "regional_policy": "",
+    "market_listings": "** Original retail: CNY 599 (~USD 85). Secondary market: USD 3,974-3,999 (4,500%+ markup). Extreme secondary market appreciation reflecting collaboration rarity and fashion brand cachet[^3_2][^3_6]. ** Extremely limited availability post-release. High demand leading to immediate sellouts and significant secondary market activity[^3_6].",
+    "blind_box_specifics": "",
+    "compliance_safety": "",
+    "commerce_logistics": "",
+    "media_assets": "** Fashion week themed marketing campaigns. Social media content emphasizing collaboration with fashion brand[^3_5]. ** Fashion collaboration photography, social media campaigns, unboxing content[^3_5].",
+    "provenance_research": "** [^3_2] thelabubu.com/products/labubu-pronounce-be-fancy-now-vinyl-plush-doll [^3_3] whoopea.com/products/labubu-x-pronounce-be-fancy-now-vinyl-plush-doll [^3_5] instagram.com/p/C4bbIxVhX6n/",
+    "i18n_nomenclature": "",
+    "relations_graph_edges": "",
+    "market_intelligence": "** Extreme collector enthusiasm for fashion collaboration. High secondary market prices indicating strong collector demand[^3_6].",
+    "deltas": [
+      "** None identified versus seed data."
+    ]
+  },
+  {
+    "product": "ANGEL IN CLOUDS (v2)",
+    "identity_taxonomy": "** Mokoko character introduction from THE MONSTERS series. Features pink fur, heart-shaped nose, and long curly eyelashes. Dual-format release: large plush doll and keychain pendant. Represents sweet/princess aesthetic with floral scent elements. ** Primary pink colorway with sweet/floral accents. Dual formats as main variants (plush vs pendant).",
+    "physical_spec": "** Plush: Approximately 37-40 cm height, Pendant: 15-17 cm. Materials: Polyester plush with PVC/ABS face components. Soft pink fur with scented floral elements in some variants. ** Standard plush/PVC construction with added scent features. China-based manufacturing.",
+    "packaging_in_box": "** Sweet-themed packaging with princess aesthetic. Includes authentication card for both formats. ** Princess-style dress options with floral scents. Pendant includes keychain hardware.",
+    "edition_run_info": "** September 2023 release (exact date unconfirmed, likely mid-month). Inaugural Mokoko character launch as female counterpart in THE MONSTERS universe. No regional restrictions noted.",
+    "credits": "** THE MONSTERS IP expansion introducing Mokoko character. Part of broader character family.",
+    "release_distribution": "** POP MART official stores and online platforms. Available across international markets.",
+    "regional_policy": "",
+    "market_listings": "** Plush: CNY 499-599 range, Pendant: CNY 159. Secondary market: Moderate appreciation with plush listings at 150-300% markup due to character popularity. ** Global distribution with periodic restocks. High initial demand but more accessible than limited editions.",
+    "blind_box_specifics": "",
+    "compliance_safety": "",
+    "commerce_logistics": "",
+    "media_assets": "** Character introduction campaigns emphasizing sweet personality. Social media unboxings and reviews. ** Product photography, unboxing videos, collector scent demonstrations.",
+    "provenance_research": "** figpalace.com/blogs/guide/labubu-zimomo-mokoko-series-list instagram.com/p/Cw0kJ5BvZxN/",
+    "i18n_nomenclature": "",
+    "relations_graph_edges": "",
+    "market_intelligence": "** Positive response to new female character. Collectors appreciate scent and princess themes.",
+    "deltas": [
+      "** Release date refined to September 2023 without specific day; seed \"xx\" consistent with available data."
+    ]
+  },
+  {
+    "product": "Fall into Spring",
+    "identity_taxonomy": "** Mokoko seasonal release featuring spring/floral theme. Dual-format: plush doll and keychain pendant. Continuation of Mokoko character line with nature-inspired aesthetic. ** Spring floral colorway in dual formats.",
+    "physical_spec": "** Plush: 40 cm height, Pendant: 17 cm. Materials: Polyester, PVC, ABS. Features floral decorations and spring color palette. ** Standard series materials with seasonal decorative elements.",
+    "packaging_in_box": "** Spring-themed packaging with floral artwork. ** Floral accessories, keychain for pendant version.",
+    "edition_run_info": "** March 8, 2024 release timed for spring season. Builds on Close to Sweet introduction with seasonal variation.",
+    "credits": "** THE MONSTERS IP with Mokoko character focus.",
+    "release_distribution": "** POP MART official channels internationally.",
+    "regional_policy": "",
+    "market_listings": "** Plush: CNY 599, Pendant: CNY 159. Secondary market stable with slight premiums for complete sets. ** Global availability with good stock levels compared to limited editions.",
+    "blind_box_specifics": "",
+    "compliance_safety": "",
+    "commerce_logistics": "",
+    "media_assets": "** Seasonal spring campaigns on social platforms. ** Seasonal promotional images, collector reviews.",
+    "provenance_research": "** popmart.com/us/products/1123/the-monsters-fall-into-spring-series instagram.com/p/C4QfZfPvj5k/",
+    "i18n_nomenclature": "",
+    "relations_graph_edges": "",
+    "market_intelligence": "** Well-received as accessible seasonal addition.",
+    "deltas": [
+      "** None identified versus seed data."
+    ]
+  },
+  {
+    "product": "Blue Diamond",
+    "identity_taxonomy": "** Mokoko keychain pendant with gemstone/diamond theme. Part of pendant series emphasizing luxury aesthetic. ** Blue diamond colorway.",
+    "physical_spec": "** Height: 17 cm. Materials: Polyester plush with PVC accents, gem-like decorations. ** Pendant-grade construction.",
+    "packaging_in_box": "** Gem-themed packaging. ** Keychain hardware, diamond accents.",
+    "edition_run_info": "** June 18, 2024 release as summer gemstone variant in Mokoko line.",
+    "credits": "** THE MONSTERS Mokoko series.",
+    "release_distribution": "** POP MART online and retail.",
+    "regional_policy": "",
+    "market_listings": "** CNY 159. Secondary market minimal markup due to standard availability. ** Widely available in global markets.",
+    "blind_box_specifics": "",
+    "compliance_safety": "",
+    "commerce_logistics": "",
+    "media_assets": "** Gemstone-themed social posts. ** Product images, pendant demonstrations.",
+    "provenance_research": "** popmart.com/us/products/1289/the-monsters-blue-diamond-pendant xiaohongshu.com/discovery/item/6670f2e0000000001f0352e7",
+    "i18n_nomenclature": "",
+    "relations_graph_edges": "",
+    "market_intelligence": "** Positive for affordable luxury theme.",
+    "deltas": [
+      "** None identified versus seed data."
+    ]
+  },
+  {
+    "product": "Magic of Pumpkin (Halloween)",
+    "identity_taxonomy": "** Mokoko Halloween-themed keychain pendant with pumpkin magic aesthetic. ** Pumpkin orange colorway.",
+    "physical_spec": "** Height: 17 cm. Materials: Polyester, PVC, seasonal decorations. ** Standard pendant materials.",
+    "packaging_in_box": "** Halloween pumpkin packaging. ** Keychain, pumpkin elements.",
+    "edition_run_info": "** October 27, 2024 Halloween seasonal release.",
+    "credits": "** THE MONSTERS Mokoko.",
+    "release_distribution": "** POP MART channels.",
+    "regional_policy": "",
+    "market_listings": "** CNY 159. Seasonal demand drives slight premiums. ** Global with Halloween timing.",
+    "blind_box_specifics": "",
+    "compliance_safety": "",
+    "commerce_logistics": "",
+    "media_assets": "** Halloween campaigns. ** Halloween promotional content.",
+    "provenance_research": "** popmart.com/us/products/1625/the-monsters-magic-of-pumpkin-pendant bilibili.com/video/BV1kM4m1P7qQ",
+    "i18n_nomenclature": "",
+    "relations_graph_edges": "",
+    "market_intelligence": "** Enthusiastic seasonal response.",
+    "deltas": [
+      "** None identified versus seed data."
+    ]
+  },
+  {
+    "product": "Twinkly Fairy Tale",
+    "identity_taxonomy": "** Merbubu variant of Labubu featuring Singapore’s iconic Merlion mascot. Known colloquially as “Merbubu,” part of THE MONSTERS regional exclusive pendant series. ** Second-generation differences: lighter blue fur, white label, blue Pop Mart logo versus Gen 1 darker tone and reversed logo colors.",
+    "physical_spec": "** Dimensions: 10×10×17.5 cm. Fabric: 62% polyester, 38% PVC; Filling: 95% polyester, 5% ABS. Pendant format with keychain hardware. ** Polyester/PVC blend body; ABS internal structure for pendant durability.",
+    "packaging_in_box": "** Premium magnetic-seal box with Merlion artwork and EQL authentication code. ** Keychain hardware, authentication card, collector’s guide.",
+    "edition_run_info": "** Launch window: EQL drop concluded June 19, 2025. Exclusive to POP MART Singapore. EQL system limited to one entry per customer to curb bots.",
+    "credits": "** THE MONSTERS IP licensed regionally; collaboration with Singapore tourism board.",
+    "release_distribution": "** POP MART Singapore online EQL platform. No physical in-store sales.",
+    "regional_policy": "",
+    "market_listings": "** Original retail: SGD 39.90 (~USD 29.25). Secondary market: SGD 60–200 depending on generation and condition (Gen 1 vs Gen 2 distinctions). ** Sold via POP MART SG EQL launch system. No restocks announced; secondary market primary source.",
+    "blind_box_specifics": "",
+    "compliance_safety": "",
+    "commerce_logistics": "",
+    "media_assets": "** YouTube real vs fake counterfeit guide; TikTok and Instagram campaign promoting “Merbubu” authenticity[^5_1]. ** Real vs fake comparison video, store EQL launch imagery, collector unboxing footage[^5_1][^5_4].",
+    "provenance_research": "** [^5_2] popmart.runfair.com/en-US/sg/labubuhideandseekplushpendant [^5_3] popmart.com/sg/products/1149/labubu-hide-and-seek-in-singapore-series-vinyl-plush-doll-pendant [^5_1] youtube.com/watch?v=RM9Lyypcwrc",
+    "i18n_nomenclature": "",
+    "relations_graph_edges": "",
+    "market_intelligence": "** High collector demand; counterfeit prevalence prompting buyer education campaigns.",
+    "deltas": [
+      "** Seed release date unspecified; launch window refined to June 2025."
+    ]
+  },
+  {
+    "product": "GOOD LUCKY TO YOU (Thailand)",
+    "identity_taxonomy": "** Thailand exclusive pendant featuring Thai fortune god motifs. Part of THE MONSTERS regional limited series. ** Brown fur colorway with gold accents reflecting Thai prosperity symbols.",
+    "physical_spec": "** Pendant dimensions: ~10×10×18 cm. Materials presumed polyester plush body with PVC/ABS face and keychain hardware (consistent with series standards). ** Polyester plush with PVC face; ABS hardware for keychain durability.",
+    "packaging_in_box": "** Festive packaging with Thai motifs; includes authentication tag and collector’s card. ** Keychain attachment, mini canvas tote in some pre-order bundles.",
+    "edition_run_info": "** December 20, 2024 launch tied to Thai year-end festival season. Limited one-entry per customer policy in Thai POP MART channels[^5_2].",
+    "credits": "** THE MONSTERS IP licensed specifically for Thailand; local partnership elements.",
+    "release_distribution": "** POP MART Thailand e-commerce and physical stores.",
+    "regional_policy": "",
+    "market_listings": "** Original retail: THB 1,050 (~USD 29). Secondary market: THB 1,200–2,000 based on availability. ** Exclusive to POP MART Thailand online and app. Sold through lottery/pre-order system to manage demand.",
+    "blind_box_specifics": "",
+    "compliance_safety": "",
+    "commerce_logistics": "",
+    "media_assets": "** Instagram reveal posts, TikTok unboxing (\\#GoodLuckToYou) generating buzz[^5_5][^5_6][^5_7]. ** Thailand launch event photos, social media unboxing videos, collector testimonials.",
+    "provenance_research": "** [^5_8] popmart.com/th/products/1844/labubu-good-luck-to-you-vinyl-plush-doll-pendant [^5_5] reddit.com/r/PopMartCollectors/comments/1kebepv/hide_and_seek_in_singapore/ [^5_7] instagram.com/p/DDt64HmMxXp",
+    "i18n_nomenclature": "",
+    "relations_graph_edges": "",
+    "market_intelligence": "** Strong demand among Thai collectors; positive feedback on cultural integration of design.",
+    "deltas": [
+      "** Seed date and price confirmed; seed “USD” currency replaced by THB local pricing."
+    ]
+  },
+  {
+    "product": "Forest Fairy Tale (China)",
+    "identity_taxonomy": "** “THE MONSTERS 森林童话系列 – Vinyl-Plush Hanging Card” featuring Labubu in a duck-bunny hybrid costume. Points-mall exclusive within POP MART Points Mall program[^6_1]. ** White plush “duck” suit with orange beak visor, ear-flaps, and webbed feet. First use of duck-bunny hybrid aesthetic in card format.",
+    "physical_spec": "** Dimensions: ≈11 × 8 × 22 cm. Shell: 66% polyester, 25% PVC, 9% ABS; stuffing: 95% polyester, 5% iron wire. Vinyl face integrated into plush body on credit-card backing. ** Standard POP MART vinyl-plush card specifications maintained; manufactured in China.",
+    "packaging_in_box": "** Vinyl-plush hanging card format with integrated key-clip and backing card. Includes embossed UV date code and Pop Mart authentication tag. ** Key-clip hardware and credit-card backing. No removable accessories.",
+    "edition_run_info": "** China-only drop on 26 May 2025 at 10 a.m. CST via POP MART Points Mall. Redemption limited to one per member ID; no cash purchase option[^6_1][^6_2].",
+    "credits": "** THE MONSTERS IP by Kasing Lung; licensed exclusively for POP MART 2025 members-only program.",
+    "release_distribution": "** POP MART China Points Mall (微信小程序 or app). No restocks; single-shot redemption.",
+    "regional_policy": "",
+    "market_listings": "** Cost: 5,000 Pop Mart points (historically 1 RMB per point, implying ~¥5,000 of prior spend). Secondary-market listings at ¥600–1,200 (US \\$80–165) post-drop[^6_1]. ** Exclusively redeemable by mainland-China members; no official overseas release. Secondary-market primary channel for overseas collectors.",
+    "blind_box_specifics": "",
+    "compliance_safety": "",
+    "commerce_logistics": "",
+    "media_assets": "** Leaked by @holdbyhand on Instagram; coverage by Pop Mart Daily and SNKRDUNK magazine. Collector Reddit discussions provided redemption guidance[^6_1][^6_2][^6_3]. ** Instagram leak posts, SNKRDUNK article images, collector “pop bean” unboxing videos[^6_2][^6_4][^6_5].",
+    "provenance_research": "** [^6_1] popmartdaily.com/new-labubu [^6_2] instagram.com/p/DJ_-JBsz0JU/ [^6_3] reddit.com/r/labubu/comments/1kwccwg/more_forest_fairy_tale_pics/",
+    "i18n_nomenclature": "",
+    "relations_graph_edges": "",
+    "market_intelligence": "** High interest with immediate sell-outs; confusion over points value; collectors seeking secondary-market supplies.",
+    "deltas": [
+      "** Seed “member points” confirmed as 5,000 points; dimensions and materials matched standard card specs."
+    ]
+  },
+  {
+    "product": "Wacky Mart (China)",
+    "identity_taxonomy": "** Pop-up convenience store-themed release under THE MONSTERS series featuring Labubu variants blending store iconography with character design. ** Multiple variants themed after snack/drink brands (e.g., soda can Labubu, instant noodle Labubu). Each variant resembles a popular convenience item.",
+    "physical_spec": "** Vinyl-plush format, approximate height 15–17 cm for pendants; large plush variants ~37–40 cm. Shell: polyester/plush body; face: PVC/ABS. ** Polyester plush with PVC face plates; ABS keychain hardware. Manufactured in China with event-specific molds.",
+    "packaging_in_box": "** Convenience store-themed packaging resembling snack boxes; includes collectible receipt-style authentication card. ** Keychain hardware, collectible poster map of pop-up store layout included in VIP bundles.",
+    "edition_run_info": "** Launch: 12 June 2025 through 7 September 2025. Exclusive to China pop-up events in Shanghai, Beijing, Guangzhou, and Chengdu[^6_6].",
+    "credits": "** THE MONSTERS IP with Wacky Mart event branding; partnership with local snack brands for thematic authenticity.",
+    "release_distribution": "** POP MART Wacky Mart pop-up events across four major Chinese cities. Tickets or VIP passes required for entry.",
+    "regional_policy": "",
+    "market_listings": "** Retail: CNY 199 per unit. Secondary-market premiums minimal (~20–50%) due to multi-city run. ** Sold exclusively at Wacky Mart pop-up locations. No online or app distribution.",
+    "blind_box_specifics": "",
+    "compliance_safety": "",
+    "commerce_logistics": "",
+    "media_assets": "** Instagram announcement posts, TikTok event previews, local influencer pop-up visits documented[^6_6][^6_7][^6_8]. ** Event posters, influencer walkthrough videos, snapshop user content from pop-up stores[^6_7][^6_8].",
+    "provenance_research": "** [^6_6] instagram.com/p/DK8e6EUqBSq/ [^6_7] x.com/POPMARTGlobal/status/1930942244233904536",
+    "i18n_nomenclature": "",
+    "relations_graph_edges": "",
+    "market_intelligence": "** Strong foot-traffic turnout; positive reviews on interactive event setup; some queues reported due to limited daily supply.",
+    "deltas": [
+      "** CNY 199 price and event duration confirmed; seed “reg-cn expected” validated by official pop-up schedule."
+    ]
+  },
+  {
+    "product": "Pop-up exclusives:",
+    "identity_taxonomy": "",
+    "physical_spec": "",
+    "packaging_in_box": "",
+    "edition_run_info": "",
+    "credits": "",
+    "release_distribution": "",
+    "regional_policy": "",
+    "market_listings": "",
+    "blind_box_specifics": "",
+    "compliance_safety": "",
+    "commerce_logistics": "",
+    "media_assets": "",
+    "provenance_research": "",
+    "i18n_nomenclature": "",
+    "relations_graph_edges": "",
+    "market_intelligence": "",
+    "deltas": []
+  }
+]
