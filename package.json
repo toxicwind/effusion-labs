@@ -52,6 +52,7 @@
     "daisyui": "^5.0.50",
     "danfojs-node": "1.2.0",
     "fd-find": "^1.2.0",
+    "fd-find": "1.2.0",
     "jsdom": "^26.1.0",
     "markdown-it": "14.1.0",
     "markdown-it-attrs": "^4.3.1",
