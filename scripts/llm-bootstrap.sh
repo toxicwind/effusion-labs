@@ -5,19 +5,20 @@ set -u
 : "${LLM_HIJACK_DISABLE:=0}"
 : "${LLM_FOLD_WIDTH:=4000}"
 : "${LLM_TAIL_BLOCK:=1}"
-: "${LLM_TAIL_MAX_LINES:=2000}"
+: "${LLM_TAIL_MAX_LINES:=5000}"
 : "${LLM_TAIL_ALLOW_CMDS:=}"
 : "${LLM_IDLE_SECS:=${LLM_HEARTBEAT_SECS:-7}}"
-: "${LLM_CAT_MAX_BYTES:=1048576}"
-: "${LLM_DEPS_AUTOINSTALL:=1}"        # ON by default per request
-: "${LLM_ALIAS_CAT:=1}"               # ON by default; aliased only in interactive TTY
+: "${LLM_CAT_MAX_BYTES:=0}"
+: "${LLM_DEPS_AUTOINSTALL:=1}"
+: "${LLM_ALIAS_CAT:=1}"               # alias only in interactive TTY
 : "${LLM_GIT_HOOKS:=1}"
 : "${LLM_GLOBAL_HEARTBEAT:=1}"
-: "${LLM_GLOBAL_HB_TIMEOUT_S:=330}"
-: "${LLM_TEST_PRESETS:=1}"            # inject CI=1 ELEVENTY_ENV=test for npm|pnpm|yarn test
-: "${LLM_SUPPRESS_PATTERNS:=^::notice:: LLM-safe: tests alive}"  # streaming filter (regex). Empty to disable.
-: "${LLM_STRICT:=1}"                  # 1: reject bad patterns (e.g., > file && tail) instead of rewriting
-: "${LLM_IDLE_FAIL_AFTER_SECS:=300}"    # >0: if no new bytes for this long, soft-cancel and exit 124
+: "${LLM_GLOBAL_HB_TIMEOUT_S:=600}"
+: "${LLM_TEST_PRESETS:=1}"
+: "${LLM_SUPPRESS_PATTERNS:=^::notice:: LLM-safe: tests alive}"
+: "${LLM_STRICT:=1}"
+: "${LLM_IDLE_FAIL_AFTER_SECS:=300}"
+: "${LLM_HEAD_MAX_LINES:=2000}"
 
 _llm_ts(){ date -u +"%Y-%m-%dT%H:%M:%SZ"; }
 _llm_has(){ command -v "$1" >/dev/null 2>&1; }
@@ -32,9 +33,8 @@ _llm_emit(){
   [[ -n "${GITHUB_STEP_SUMMARY:-}" ]] && { printf 'LLM-GUARD %s ' "$ts" >>"$GITHUB_STEP_SUMMARY"; printf '%s ' "$@" >>"$GITHUB_STEP_SUMMARY"; printf '\n' >>"$GITHUB_STEP_SUMMARY"; }
 }
 
-# Python venv guard for pip installs
-_llm_in_venv() {
-  python - <<'PY' 2>/dev/null || exit 1
+# venv guard for pip
+_llm_in_venv(){ python - <<'PY' 2>/dev/null || exit 1
 import sys
 print(int(hasattr(sys, "real_prefix") or (getattr(sys, "base_prefix", sys.prefix) != sys.prefix)))
 PY
@@ -43,7 +43,7 @@ PY
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd 2>/dev/null || pwd)"
 _llm_emit event=bootstrap.start repo_root="$repo_root" fold="$LLM_FOLD_WIDTH"
 
-# ===== deps autoinstall (hash-based) =====
+# deps autoinstall (hash-based)
 if [[ "${LLM_DEPS_AUTOINSTALL}" == "1" ]]; then
   mkdir -p "$repo_root/tmp"; DEPS_HASH_FILE="$repo_root/tmp/.llm_deps_hash"
   hash_inputs=(); [[ -f "$repo_root/package-lock.json" ]] && hash_inputs+=("$repo_root/package-lock.json")
@@ -69,7 +69,6 @@ if [[ "${LLM_DEPS_AUTOINSTALL}" == "1" ]]; then
   fi
 fi
 
-# ===== pretty-cat =====
 _prettier_bin(){
   local bin_local; bin_local="$(git rev-parse --show-toplevel 2>/dev/null)/node_modules/.bin/prettier"
   [[ -x "$bin_local" ]] && { echo "$bin_local"; return 0; }
@@ -91,12 +90,9 @@ llm_cat(){
   fi
 }
 export -f llm_cat
-# Alias cat ONLY in interactive TTY sessions
-if [[ "${LLM_ALIAS_CAT}" == "1" && $- == *i* && -t 1 ]]; then
-  alias cat='llm_cat'
-fi
+if [[ "${LLM_ALIAS_CAT}" == "1" && $- == *i* && -t 1 ]]; then alias cat='llm_cat'; fi
 
-# ===== tail guard =====
+# tail guard
 tail(){
   local follow=0 file="" args=()
   for a in "$@"; do [[ "$a" == "-f" || "$a" == "-F" ]] && follow=1; args+=("$a"); [[ -f "$a" ]] && file="$a"; done
@@ -116,14 +112,39 @@ tail(){
 }
 export -f tail
 
-# ===== stream filter (suppress noisy heartbeats from other tools) =====
+# head guard (interactive-only alias below)
+llm_head(){
+  local args=("$@") file="" n_req=""
+  local i
+  for ((i=0;i<${#args[@]};i++)); do
+    [[ "${args[i]}" == "-n" && $((i+1)) -lt ${#args[@]} ]] && n_req="${args[i+1]}"
+    [[ "${args[i]}" =~ ^-n([0-9]+)$ ]] && n_req="${BASH_REMATCH[1]}"
+    [[ -z "$file" && -f "${args[i]}" ]] && file="${args[i]}"
+  done
+  if [[ -n "$file" && -n "$n_req" && "$n_req" =~ ^[0-9]+$ ]]; then
+    local max="${LLM_HEAD_MAX_LINES:-2000}" use_n="$n_req"
+    if (( n_req > max )); then
+      use_n="$max"; _llm_emit event=head.clamp file="$file" requested="$n_req" used="$use_n"
+    else
+      _llm_emit event=head.pass file="$file" lines="$use_n"
+    fi
+    command head -n "$use_n" -- "$file" | _llm_fold
+    return ${PIPESTATUS[0]}
+  fi
+  _llm_emit event=head.pass args="$(printf '%q ' "$@")"
+  command head "$@" | _llm_fold
+}
+export -f llm_head
+if [[ $- == *i* && -t 1 ]]; then alias head='llm_head'; fi
+
+# stream filter
 _llm_stream_filter(){
   if [[ -z "${LLM_SUPPRESS_PATTERNS}" ]]; then cat
   else awk -v pat="$LLM_SUPPRESS_PATTERNS" 'pat==""{print;next} { if ($0 ~ pat) next; print }'
   fi
 }
 
-# ===== PID-scoped runner =====
+# PID-scoped runner
 llm_run(){
   local out="/tmp/llm-run.$$.log" idle="${LLM_IDLE_SECS:-7}" id="r$$-$(date +%s)-$RANDOM" tail_on_complete=0
   while [[ $# -gt 0 ]]; do
@@ -203,27 +224,27 @@ llm_run(){
 }
 export -f llm_run
 
-# ===== redirect/chain rewrite trap =====
+# redirect/chain rewrite trap
 _llm_rewrite(){
   [[ "${LLM_HIJACK_DISABLE:-0}" == "1" ]] && return 0
   [[ -z "${BASH_COMMAND:-}" ]] && return 0
   [[ "${_LLM_REWRITE_ACTIVE:-}" == "1" ]] && return 0
   local c="$BASH_COMMAND"
 
-  # Pattern: "<cmd> > file && tail ..."
-  if [[ "$c" =~ ^[[:space:]]*(.+)[[:space:]]\>[\> ]*[[:space:]]*([^[:space:];&\|]+)[[:space:]]*((2\>\&1)*)[[:space:]]*&&[[:space:]]*tail ]]; then
+  # "<cmd> > file && (tail|head) ..."
+  if [[ "$c" =~ ^[[:space:]]*(.+)[[:space:]]\>[\> ]*[[:space:]]*([^[:space:];&\|]+)[[:space:]]*((2\>\&1)*)[[:space:]]*&&[[:space:]]*(tail|head)\b ]]; then
     local base="${BASH_REMATCH[1]}" out="${BASH_REMATCH[2]}"
     if [[ "${LLM_STRICT}" == "1" ]]; then
-      _llm_emit event=rewrite.reject reason=">+tail disallowed" suggest="llm_run --out $(printf %q "$out") -- $base"
+      _llm_emit event=rewrite.reject reason=">+tail/head disallowed" suggest="llm_run --out $(printf %q "$out") -- $base"
       BASH_COMMAND="false"; return 0
     fi
     _LLM_REWRITE_ACTIVE=1
-    _llm_emit event=rewrite.chain op=">+tail" out="$out"
+    _llm_emit event=rewrite.chain op=">+tail/head" out="$out"
     BASH_COMMAND="llm_run --out $(printf %q "$out") -- $base"
     return 0
   fi
 
-  # Simple redirects: "<cmd> > file" / ">> file"
+  # "<cmd> > file" / ">> file"
   if [[ "$c" =~ [[:space:]](1?\>\>|\>)[[:space:]]*([^[:space:]&|;]+)[[:space:]]*(2\>\&1)?[[:space:]]*$ ]] && [[ ! "$c" =~ \| ]] && [[ ! "$c" =~ \&\& ]] && [[ ! "$c" =~ \|\| ]]; then
     local op="${BASH_REMATCH[1]}" outfile="${BASH_REMATCH[2]}" base="${c%${BASH_REMATCH[0]}}"
     if [[ "${LLM_STRICT}" == "1" ]]; then
@@ -246,7 +267,7 @@ _llm_rewrite(){
 trap _llm_rewrite DEBUG
 export -f _llm_rewrite
 
-# ===== git hooks (persistence) =====
+# git hooks
 if [[ "${LLM_GIT_HOOKS:-0}" == "1" ]]; then
   for hook in post-checkout post-merge; do
     hp="$repo_root/.git/hooks/$hook"
@@ -258,7 +279,7 @@ if [[ "${LLM_GIT_HOOKS:-0}" == "1" ]]; then
   _llm_emit event=hooks.installed hooks="post-checkout,post-merge"
 fi
 
-# ===== scoped global heartbeat (quiet when llm_run active) =====
+# scoped global heartbeat (quiet while llm_run lock exists)
 _llm_hb_global(){
   local interval=$(( ${LLM_IDLE_SECS:-7} * 4 )); (( interval < 30 )) && interval=30
   local stop_after="${LLM_GLOBAL_HB_TIMEOUT_S:-600}" start=$(date +%s)
@@ -277,9 +298,9 @@ if [[ "${LLM_GLOBAL_HEARTBEAT:-0}" == "1" ]]; then
   fi
 fi
 
-_llm_emit event=tip text='Prefer: llm_run --out /tmp/unit.log -- <cmd>; Avoid: <cmd> >/tmp/unit.log && tail …'
+_llm_emit event=tip text='Prefer: llm_run --out /tmp/unit.log -- <cmd>; Avoid: <cmd> >/tmp/unit.log && (tail|head) …'
 _llm_emit event=bootstrap.ready fold="$LLM_FOLD_WIDTH" idle="$LLM_IDLE_SECS" tail_block="$LLM_TAIL_BLOCK" hijack="$LLM_HIJACK_DISABLE"
-_llm_emit event=bootstrap.done summary="llm_run pid-scoped; chain+redirect rewrites; tail fold; deps:auto=${LLM_DEPS_AUTOINSTALL}; hooks=${LLM_GIT_HOOKS}; hb.global=${LLM_GLOBAL_HEARTBEAT}; presets=${LLM_TEST_PRESETS}; strict=${LLM_STRICT}; suppress='${LLM_SUPPRESS_PATTERNS}'"
+_llm_emit event=bootstrap.done summary="llm_run; rewrites(strict=${LLM_STRICT}); tail/head guards; deps:auto=${LLM_DEPS_AUTOINSTALL}; hooks=${LLM_GIT_HOOKS}; hb.global=${LLM_GLOBAL_HEARTBEAT}; presets=${LLM_TEST_PRESETS}; suppress='${LLM_SUPPRESS_PATTERNS}'"
 printf 'LLM-GUARD summary: fold=%s idle=%s tail_block=%s hijack=%s hooks=%s hb_global=%s presets=%s strict=%s\n' \
   "$LLM_FOLD_WIDTH" "$LLM_IDLE_SECS" "$LLM_TAIL_BLOCK" "$LLM_HIJACK_DISABLE" "$LLM_GIT_HOOKS" "$LLM_GLOBAL_HEARTBEAT" "$LLM_TEST_PRESETS" "$LLM_STRICT" >&2
 printf 'LLM-GUARD suppress_patterns: %s\n' "${LLM_SUPPRESS_PATTERNS:-}" >&2
