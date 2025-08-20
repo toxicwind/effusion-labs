@@ -1,12 +1,9 @@
 // tools/synthesize.mjs
-import fs from 'fs';
-import path from 'path';
+import fs from 'node:fs';
+import path from 'node:path';
 import MarkdownIt from 'markdown-it';
 import Ajv from 'ajv';
-import { fileURLToPath } from 'url';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname  = path.dirname(__filename);
+import { fileURLToPath } from 'node:url';
 
 const md = new MarkdownIt();
 
@@ -31,7 +28,7 @@ function toRows(obj, source) {
 }
 
 export function synthesize() {
-  const baseDir = path.join(__dirname, '..', 'research');
+  const baseDir = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', 'research');
   const files = [
     'PRIMARY TARGETS — Completed(1).txt',
     'PRIMARY TARGETS — Completed(2).txt',
@@ -87,7 +84,7 @@ export function synthesize() {
   }
 
   const timestamp = new Date().toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
-  const outDir = path.join(__dirname, '..', 'docs', 'knowledge');
+  const outDir = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', 'docs', 'knowledge');
   fs.mkdirSync(outDir, { recursive: true });
   const outPath = path.join(outDir, `synthesized_archive_${timestamp}.json`);
   const payload = JSON.stringify([final], null, 2);

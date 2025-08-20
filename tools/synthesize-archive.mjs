@@ -1,11 +1,8 @@
 // tools/synthesized-archive.mjs
-import fs from 'fs';
-import fsp from 'fs/promises';
-import path from 'path';
-import { fileURLToPath } from 'url';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname  = path.dirname(__filename);
+import fs from 'node:fs';
+import fsp from 'node:fs/promises';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 // Schema fields in numbered order (1..N) as they appear in the source docs
 const schemaFields = [
@@ -201,7 +198,7 @@ function bestPriority(sources) {
 
 async function main() {
   // Read all three sources (relative to repo root)
-  const base = path.join(__dirname, '..');
+  const base = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
   const payloads = await Promise.all(
     sourceFiles.map(async (rel) => {
       const full = path.join(base, rel);

@@ -1,0 +1,51 @@
+# CJS Discovery Report
+
+- lib/archive-nav.js: Converted or Removed
+- lib/config.js: Converted or Removed
+- lib/plugins.js: Converted or Removed
+- lib/outboundProxy.js: Converted or Removed
+- lib/build-info.js: Converted or Removed
+- lib/constants.js: Converted or Removed
+- lib/seeded.js: Converted or Removed
+- lib/filters.js: Converted or Removed
+- lib/webpageToMarkdown.js: Converted or Removed
+- lib/eleventy/archive-collections.js: Converted or Removed
+- lib/markdown/links.js: Converted or Removed
+- lib/markdown/index.js: Converted or Removed
+- lib/eleventy/register.js: Unresolved
+- lib/markdown/footnotes.js: Converted or Removed
+- lib/utils.js: Converted or Removed
+- lib/homepage.js: Converted or Removed
+- lib/markdown/inlineMacros.js: Converted or Removed
+- lib/postcss.js: Converted or Removed
+- lib/markdownGateway.js: Converted or Removed
+- lib/concept-map.js: Converted or Removed
+- lib/shortcodes.js: Converted or Removed
+- lib/postcssPlugins.js: Unresolved
+- lib/flareClient.js: Converted or Removed
+- lib/proxyAgent.js: Converted or Removed
+- lib/wikilinks/filter-dead-links.js: Converted or Removed
+- tailwind.config.cjs: Kept as .cjs (compat)
+- src/work.11tydata.js: Converted or Removed
+- src/_data/archivesNav.js: Converted or Removed
+- src/_data/eleventyComputed.js: Converted or Removed
+- src/_data/branding.js: Converted or Removed
+- src/_data/nav.js: Converted or Removed
+- test/integration/feed-build-meta.spec.mjs: Converted or Removed
+- test/lib/markdownGateway.js: Converted or Removed
+- test/lib/concept-map.js: Converted or Removed
+- test/src/_data/nav.js: Converted or Removed
+- test/unit/design-tokens.test.mjs: Unresolved
+- scripts/npm-utils.js: Converted or Removed
+- scripts/merge-golden.js: Converted or Removed
+- postcss.config.cjs: Kept as .cjs (compat)
+- src/styles/app.tailwind.css: Unresolved
+- src/index.11tydata.js: Converted or Removed
+- src/work/latest.11ty.js: Converted or Removed
+- src/work/drop.11ty.js: Converted or Removed
+- tools/select.mjs: Converted or Removed
+- tools/synthesize-archive.mjs: Converted or Removed
+- tools/build-vendor-index.js: Converted or Removed
+- tools/synthesize.mjs: Converted or Removed
+- tools/validate-docs.js: Converted or Removed
+- tools/merge-golden.mjs: Converted or Removed

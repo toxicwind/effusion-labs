@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   title: "Experimental R&D you can actually use.",
   lede: "Prototypes, systems, and notes from the lab.",
   ctas: [

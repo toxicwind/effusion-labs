@@ -1,4 +1,4 @@
-exports.data = {
+export const data = {
   layout: "layouts/redirect.njk",
   permalink: "/work/latest/index.html",
   eleventyComputed: {
@@ -9,4 +9,4 @@ exports.data = {
   }
 };
 
-exports.render = () => '';
+export const render = () => '';

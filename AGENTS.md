@@ -4,6 +4,8 @@ _Effusion Labs — Operating Rails for Autonomous Coding Agents (Codex-style)_
 
 This is the **in-repo operating spec** for autonomous coding agents that run bash, read/write files, and iterate quickly. It complements the upstream system charter (Mission Anchor, No-Ask, single final message) — keep that in mind and use this as the on-disk contract.
 
+> **Note:** The repository is ESM-first (`type: "module"`). Use `import`/`export` syntax for Node.js files. Any modules that must remain CommonJS use the `.cjs` extension explicitly.
+
 ---
 
 ## 0) Runtime Augmentation (one command)

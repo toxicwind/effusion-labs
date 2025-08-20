@@ -1,2 +1,2 @@
-const generateConceptMapJSONLD = require('../../lib/concept-map.js');
-module.exports = generateConceptMapJSONLD;
+import generateConceptMapJSONLD from '../../lib/concept-map.js';
+export default generateConceptMapJSONLD;

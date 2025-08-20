@@ -1,4 +1,4 @@
-const { CONTENT_AREAS } = require("../../lib/constants");
+import { CONTENT_AREAS } from '../../lib/constants.js';
 
 const areaLinks = CONTENT_AREAS.map((a) => ({
   title: a.charAt(0).toUpperCase() + a.slice(1),
@@ -6,9 +6,9 @@ const areaLinks = CONTENT_AREAS.map((a) => ({
 }));
 
 const nav = [
-  { title: "Showcase", url: "/" },
+  { title: 'Showcase', url: '/' },
   ...areaLinks,
-  { title: "Map", url: "/map/" },
+  { title: 'Map', url: '/map/' },
 ].map((item, idx) => ({ ...item, order: idx + 1 }));
 
-module.exports = nav;
+export default nav;

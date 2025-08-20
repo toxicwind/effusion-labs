@@ -1,6 +1,6 @@
-const { fetch } = require('undici');
+import { fetch } from 'undici';
 
-async function fetchMarkdown(targetUrl) {
+export async function fetchMarkdown(targetUrl) {
   const gateway = process.env.OUTBOUND_MARKDOWN_URL || 'http://gateway';
   const res = await fetch(`${gateway}/convert`, {
     method: 'POST',
@@ -10,4 +10,4 @@ async function fetchMarkdown(targetUrl) {
   return res.json();
 }
 
-module.exports = { fetchMarkdown };
+export default { fetchMarkdown };

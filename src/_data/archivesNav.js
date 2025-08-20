@@ -1,2 +1,2 @@
-const { buildArchiveNav } = require('../../lib/archive-nav');
-module.exports = buildArchiveNav();
+import { buildArchiveNav } from '../../lib/archive-nav.js';
+export default buildArchiveNav();
