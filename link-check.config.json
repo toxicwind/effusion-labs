@@ -1,6 +1,6 @@
 {
-  "timeout": "5000",               // 5s per link max
-  "retryOn429": false,             // no retries
+  "timeout": "5000",
+  "retryOn429": false,
   "retryCount": 0,
   "fallbackRetryDelay": "0s",
 
@@ -10,9 +10,9 @@
     { "pattern": "^http://localhost" },
     { "pattern": "^https://127\\.0\\.0\\.1" },
     { "pattern": "^https://0\\.0\\.0\\.0" },
-    { "pattern": "^/" },                  // skip root-relative paths
-    { "pattern": "\\{\\{[^}]+\\}\\}" },   // skip templated {{ ... }}
-    { "pattern": "\\{\\%[^%]+\\%\\}" },   // skip templated {% ... %}
+    { "pattern": "^/" },
+    { "pattern": "\\{\\{[^}]+\\}\\}" },
+    { "pattern": "\\{\\%[^%]+\\%\\}" },
     { "pattern": "^mailto:" },
     { "pattern": "^tel:" },
     { "pattern": "^data:" },

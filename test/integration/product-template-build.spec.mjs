@@ -25,9 +25,9 @@ test('products template builds correct heading (acceptance)', async () => {
 
 test('availability renders human readable text (property)', async () => {
   const html = await build();
-  const match = html.match(/<dt>Availability:<\/dt><dd>([^<]+)<\/dd>/);
-  assert.ok(match, 'availability row present');
-  assert.ok(['Standard','Limited'].includes(match[1]), 'availability uses Standard/Limited');
+  const match = html.match(/data-tip="Availability">\s*<span class="badge[^>]*>([^<]+)<\/span>/);
+  assert.ok(match, 'availability badge present');
+  assert.ok(['Standard', 'Limited'].includes(match[1].trim()), 'availability uses Standard/Limited');
 });
 
 test('product heading is unique per page (contract)', async () => {
