@@ -63,10 +63,7 @@ cd effusion-labs
 # 2) Install deps
 npm install
 
-# 3) Configure env (optional; only if you need overrides)
-cp .env.example .env
-
-# 4) Start the dev server
+# 3) Start the dev server
 npm run dev
 ```
 

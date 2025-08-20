@@ -19,7 +19,7 @@ source scripts/llm-bootstrap.sh
 - **`llm_run`** → canonical runner: live streaming, idle beacons, preserved exit codes, clean interrupts, bounded post-tails.
 - **I/O wrappers** → `cat` → `llm_cat` (format-aware, folded lines); `tail -f/-F` auto-bounded; `head` clamped.
 - **Command rewrite** → naive `> file` or `> file && tail …` becomes a streaming pipeline (or is rejected in strict mode) so logs are visible and token-efficient.
-- **Autoinstall** → hash-based detection triggers `npm ci` (+ optional Python reqs if a venv is active).
+- **Autoinstall** → hash-based detection triggers `npm ci`
 
 > Quick sanity check (optional):
 > `type llm_run && trap -p DEBUG && echo "STRICT=$LLM_STRICT"`
@@ -36,14 +36,12 @@ llm_cat package.json
 llm_cat eleventy.config.mjs
 [ -f tailwind.config.cjs ] && llm_cat tailwind.config.cjs
 [ -f docker-compose.yml ]  && llm_cat docker-compose.yml
-[ -f .env.example ]        && llm_cat .env.example
 ```
 
 **Pull out**
 
 - `package.json` → scripts (`dev`, `build`, `test`) and key deps.
 - `eleventy.config.mjs` → `addCollection`, filters/shortcodes, `addPassthroughCopy`.
-- Any required env from `.env.example`.
 
 ---
 
