@@ -1,88 +1,133 @@
-name: Deploy to GHCR
+name: CI/CD Pipeline
 
 on:
   push:
     branches: [main]
   workflow_dispatch:
 
-permissions:
-  contents: read
-  packages: write
+# Define environment variables once to keep the code DRY (Don't Repeat Yourself)
+env:
+  REGISTRY: ghcr.io
+  EFFUSION_IMAGE_NAME: effusion-labs
+  GATEWAY_IMAGE_NAME: markdown_gateway
 
 concurrency:
   group: deploy-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  deploy:
+  # Job 1: Build the static site assets. This job does not need Docker.
+  build_site:
+    name: Build Website Assets
     runs-on: ubuntu-latest
-    timeout-minutes: 40
+    permissions:
+      contents: read # This job only needs to read the code
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
+      - name: Set up Node.js 20
+        uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'npm'
 
-      - name: Install deps
+      - name: Install dependencies
         run: npm ci --ignore-scripts
 
-      - name: Build site
+      - name: Build static site
         run: npm run build
 
-      - uses: docker/setup-buildx-action@v3
+      - name: Upload build artifact
+        # This makes the build output available to the next job
+        uses: actions/upload-artifact@v4
+        with:
+          name: site-build-artifact
+          path: ./dist # IMPORTANT: Change './dist' if your build output directory is different
 
-      - name: Log in to GHCR (main only)
-        if: github.ref == 'refs/heads/main'
+  # Job 2: Build and push container images after the site is built.
+  build_and_push:
+    name: Build & Push Docker Images
+    needs: build_site # This job will not start until 'build_site' is successful
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' # Only run for the main branch
+    permissions:
+      contents: read
+      packages: write # Required to push images to GHCR
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Download build artifact
+        # Download the site assets built in the previous job
+        uses: actions/download-artifact@v4
+        with:
+          name: site-build-artifact
+          path: ./dist
+
+      - name: Set up QEMU for multi-platform builds
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GitHub Container Registry
         uses: docker/login-action@v3
         with:
-          registry: ghcr.io
+          registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build effusion-labs
-        run: |
-          IMAGE_ID=ghcr.io/${{ github.actor }}/effusion-labs:latest
-          docker buildx build \
-            -t "$IMAGE_ID" \
-            --cache-to type=inline \
-            --cache-from type=registry,ref=$IMAGE_ID \
-            -f .portainer/Dockerfile . 
+      - name: Extract metadata for effusion-labs image
+        id: meta_effusion
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ github.repository }}/${{ env.EFFUSION_IMAGE_NAME }}
 
-      - name: Push effusion-labs (main only)
-        if: github.ref == 'refs/heads/main'
-        run: |
-          IMAGE_ID=ghcr.io/${{ github.actor }}/effusion-labs:latest
-          docker buildx build \
-            -t "$IMAGE_ID" \
-            --cache-to type=inline \
-            --cache-from type=registry,ref=$IMAGE_ID \
-            -f .portainer/Dockerfile . --push
+      - name: Build and push effusion-labs image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./.portainer/Dockerfile
+          push: true
+          tags: ${{ steps.meta_effusion.outputs.tags }}
+          labels: ${{ steps.meta_effusion.outputs.labels }}
+          platforms: linux/amd64,linux/arm64
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
-      - name: Build markdown_gateway
-        run: |
-          IMAGE_ID=ghcr.io/${{ github.actor }}/markdown_gateway:latest
-          docker buildx build \
-            -t "$IMAGE_ID" \
-            --cache-to type=inline \
-            --cache-from type=registry,ref=$IMAGE_ID \
-            markdown_gateway
+      - name: Extract metadata for markdown_gateway image
+        id: meta_gateway
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ github.repository }}/${{ env.GATEWAY_IMAGE_NAME }}
 
-      - name: Push markdown_gateway (main only)
-        if: github.ref == 'refs/heads/main'
-        run: |
-          IMAGE_ID=ghcr.io/${{ github.actor }}/markdown_gateway:latest
-          docker buildx build \
-            -t "$IMAGE_ID" \
-            --cache-to type=inline \
-            --cache-from type=registry,ref=$IMAGE_ID \
-            markdown_gateway --push
+      - name: Build and push markdown_gateway image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./markdown_gateway
+          push: true
+          tags: ${{ steps.meta_gateway.outputs.tags }}
+          labels: ${{ steps.meta_gateway.outputs.labels }}
+          platforms: linux/amd64,linux/arm64
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
-      - name: Trigger Portainer redeploy (main only)
-        if: github.ref == 'refs/heads/main'
+  # Job 3: Trigger the redeployment webhook only after images are successfully pushed.
+  redeploy:
+    name: Trigger Portainer Redeployment
+    needs: build_and_push # This job depends on the successful completion of the previous job
+    runs-on: ubuntu-latest
+    if: success() && github.ref == 'refs/heads/main'
+    
+    steps:
+      - name: Call Portainer webhook
         env:
           HOOK: ${{ secrets.PORTAINER_WEBHOOK_EFFUSION }}
         run: |
-          curl --fail --retry 5 --retry-all-errors --retry-delay 2 -X POST "$HOOK"
+          echo "🚀 Triggering redeployment on Portainer..."
+          curl --fail --retry 5 --retry-all-errors --retry-delay 3 -X POST "$HOOK"
+          echo "✅ Redeployment signal sent."
