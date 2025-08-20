@@ -86,7 +86,7 @@ jobs:
         id: meta_effusion
         uses: docker/metadata-action@v5
         with:
-          images: ${{ env.REGISTRY }}/${{ github.repository }}/effusion-labs
+          images: ${{ env.REGISTRY }}/${{ github.repository }}
 
       - name: 🏗️ Build & Push 'effusion-labs' image to GHCR
         uses: docker/build-push-action@v6
@@ -106,7 +106,7 @@ jobs:
         id: meta_gateway
         uses: docker/metadata-action@v5
         with:
-          images: ${{ env.REGISTRY }}/${{ github.repository }}/markdown_gateway
+          images: ${{ env.REGISTRY }}/${{ github.repository }}
 
       - name: 🏗️ Build & Push 'markdown_gateway' image to GHCR
         uses: docker/build-push-action@v6

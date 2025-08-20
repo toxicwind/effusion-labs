@@ -3,7 +3,7 @@
 ############################
 # deps layer (heavy caching)
 ############################
-FROM node:20-alpine AS deps
+FROM node:24-alpine AS deps
 WORKDIR /app
 
 # Reduce npm noise & avoid audits during CI
@@ -18,7 +18,7 @@ RUN --mount=type=cache,target=/root/.npm \
 ############################
 # build layer
 ############################
-FROM node:20-alpine AS builder
+FROM node:24-alpine AS builder
 WORKDIR /app
 
 ARG COMMIT_SHA=unknown
