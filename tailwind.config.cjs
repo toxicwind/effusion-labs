@@ -1,6 +1,6 @@
 /*  tailwind.config.cjs  (CommonJS so the plugin’s require() always works) */
 module.exports = {
-  content: ["./src/**/*.{njk,md,html,js}"],
+    content: ['./src/**/*.{njk,md,html,js}','./src/content/archives/**/*.{njk,md,html}','./src/_includes/**/*.{njk,md,html,js}'],
   theme: {
     extend: {
       colors: {

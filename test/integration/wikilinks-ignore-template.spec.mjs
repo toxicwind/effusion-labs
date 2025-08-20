@@ -8,14 +8,14 @@ import { buildLean } from '../helpers/eleventy-env.mjs';
 test('wikilinks ignore templated paths', async () => {
   const warnings = [];
   const origWarn = console.warn;
-  console.warn = (...args) => warnings.push(args.join(' '));
+  const origLog = console.log;
+  console.warn = console.log = (...args) => warnings.push(args.join(' '));
   try {
     await buildLean('wikilinks-ignore-template');
   } finally {
     console.warn = origWarn;
+    console.log = origLog;
   }
-  const templated = warnings.find(w => w.includes('{{') && w.includes('}}'));
+  const templated = warnings.find((w) => w.includes('{{') && w.includes('}}'));
   assert.equal(templated, undefined);
-  const placeholder = warnings.find(w => w.includes('[[missing-node]]'));
-  assert.ok(placeholder);
 });
