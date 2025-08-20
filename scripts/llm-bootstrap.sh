@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
-set -u
+# Strict, robust defaults: ERR-trace, nounset, and pipefail; no global -e foot-guns.
+set -Euo pipefail
+# If you later enable -e, also consider: shopt -s inherit_errexit  # Bash ≥5
 
 : "${LLM_VERBOSE:=1}"
 : "${LLM_HIJACK_DISABLE:=0}"
@@ -31,6 +33,19 @@ _llm_emit(){
   while [[ $# -gt 0 ]]; do printf ' %s' "$1" >&2; shift; done
   printf '\n' >&2
   [[ -n "${GITHUB_STEP_SUMMARY:-}" ]] && { printf 'LLM-GUARD %s ' "$ts" >>"$GITHUB_STEP_SUMMARY"; printf '%s ' "$@" >>"$GITHUB_STEP_SUMMARY"; printf '\n' >>"$GITHUB_STEP_SUMMARY"; }
+}
+
+# Atomic regex helper: captures are copied immediately; avoids ambient BASH_REMATCH hazards.
+# Usage: if rex "$string" "$regex" rem; then echo "${rem[1]}"; fi
+rex() {
+  local s=$1 re=$2
+  local -n _out=$3
+  if [[ $s =~ $re ]]; then
+    _out=("${BASH_REMATCH[@]}")
+    return 0
+  fi
+  _out=()
+  return 1
 }
 
 # Detect Python venv (guard pip install)
@@ -97,7 +112,7 @@ llm_cat(){
     yml|yaml)   parser="yaml" ;;
   esac
   bin="$(_prettier_bin || true)"
-  if [[ -n "$parser" && -n "$bin" && ( "$LLM_CAT_MAX_BYTES" -eq 0 || "$size" -le "$LLM_CAT_MAX_BYTES" ) ]]; then
+  if [[ -n "$parser" && -n "$bin" && ( "${LLM_CAT_MAX_BYTES:-0}" -eq 0 || "$size" -le "${LLM_CAT_MAX_BYTES:-0}" ) ]]; then
     _llm_emit cat.format file="$p" bytes="$size" parser="$parser"
     command cat -- "$p" | $bin --parser "$parser" --print-width "${LLM_FOLD_WIDTH:-100}" 2>/dev/null | _llm_fold
   else
@@ -141,13 +156,16 @@ export -f tail
 # ---- head guard (default wrapper; use "command head" to bypass) ----
 llm_head(){
   local args=("$@") file="" n_req=""
-  local i
+  local i rem=()
   for ((i=0;i<${#args[@]};i++)); do
-    [[ "${args[i]}" == "-n" && $((i+1)) -lt ${#args[@]} ]] && n_req="${args[i+1]}"
-    [[ "${args[i]}" =~ ^-n([0-9]+)$ ]] && n_req="${BASH_REMATCH[1]}"
+    if [[ "${args[i]}" == "-n" && $((i+1)) -lt ${#args[@]} ]]; then
+      n_req="${args[i+1]}"
+    elif rex "${args[i]}" '^-n([0-9]+)$' rem; then
+      n_req="${rem[1]}"
+    fi
     [[ -z "$file" && -f "${args[i]}" ]] && file="${args[i]}"
   done
-  if [[ -n "$file" && -n "$n_req" && "$n_req" =~ ^[0-9]+$ ]]; then
+  if [[ -n "$file" && -n "${n_req-}" && "$n_req" =~ ^[0-9]+$ ]]; then
     local max="${LLM_HEAD_MAX_LINES:-2000}" use_n="$n_req"
     if (( n_req > max )); then
       use_n="$max"; _llm_emit event=head.clamp file="$file" requested="$n_req" used="$use_n"
@@ -262,11 +280,13 @@ _llm_rewrite(){
   local c="$BASH_COMMAND"
   local re_chain='^[[:space:]]*(.+)[[:space:]]>[> ]*[[:space:]]*([^[:space:];&|]+)[[:space:]]*(2>&1)?[[:space:]]*&&[[:space:]]*(tail|head)([[:space:]]|$)'
   local re_redirect='[[:space:]]((1>>|1>|>>|>))[[:space:]]*([^[:space:]&|;]+)[[:space:]]*(2>&1)?[[:space:]]*$'
-  local re_has_pipe='[|]'
+  local re_has_pipe='[|]'  # kept for reference; avoid using to not clobber captures
+
+  local rem=()
 
   # "<cmd> > file && (tail|head) ..."
-  if [[ $c =~ $re_chain ]]; then
-    local base="${BASH_REMATCH[1]}" out="${BASH_REMATCH[2]}"
+  if rex "$c" "$re_chain" rem; then
+    local whole="${rem[0]}" base="${rem[1]}" out="${rem[2]}"
     if [[ "${LLM_STRICT}" == "1" ]]; then
       _llm_emit event=rewrite.reject reason=">+tail/head disallowed" suggest="llm_run --out $(printf %q "$out") -- $base"
       BASH_COMMAND="false"; return 0
@@ -278,25 +298,29 @@ _llm_rewrite(){
   fi
 
   # Simple redirects: "<cmd> > file" / ">> file" (optionally with 1>)
-  if [[ $c =~ $re_redirect ]] && [[ ! $c =~ $re_has_pipe ]] && [[ $c != *'&&'* ]] && [[ $c != *'||'* ]]; then
-    local op="${BASH_REMATCH[1]}" outfile="${BASH_REMATCH[3]}"
-    local base="${c%${BASH_REMATCH[0]}}"
-    if [[ "${LLM_STRICT}" == "1" ]]; then
-      _llm_emit event=rewrite.reject reason="redirection disallowed" suggest="llm_run --out $(printf %q "$outfile") -- $base"
-      BASH_COMMAND="false"; return 0
+  if rex "$c" "$re_redirect" rem; then
+    # Avoid any further =~ until after we consume captures
+    local whole="${rem[0]}" op="${rem[1]}" outfile="${rem[3]}"
+    # Block pipes/&&/|| for this rewrite path using glob checks (doesn't touch BASH_REMATCH)
+    if [[ "$c" != *'|'* && "$c" != *'&&'* && "$c" != *'||'* ]]; then
+      local base="${c%$whole}"
+      if [[ "${LLM_STRICT}" == "1" ]]; then
+        _llm_emit event=rewrite.reject reason="redirection disallowed" suggest="llm_run --out $(printf %q "$outfile") -- $base"
+        BASH_COMMAND="false"; return 0
+      fi
+      local tee_flag=''
+      [[ "$op" == *">>"* ]] && tee_flag='-a'
+      _LLM_REWRITE_ACTIVE=1
+      _llm_emit event=rewrite.redirect op="$op" file="$outfile"
+      (
+        set -o pipefail
+        bash -c "$base" 2>&1
+      ) | _llm_fold | tee $tee_flag -- "$outfile"
+      local s=${PIPESTATUS[0]}
+      _LLM_REWRITE_ACTIVE=
+      BASH_COMMAND=:
+      return "$s"
     fi
-    local tee_flag=''
-    [[ "$op" == *">>"* ]] && tee_flag='-a'
-    _LLM_REWRITE_ACTIVE=1
-    _llm_emit event=rewrite.redirect op="$op" file="$outfile"
-    (
-      set -o pipefail
-      bash -c "$base" 2>&1
-    ) | _llm_fold | tee $tee_flag -- "$outfile"
-    local s=${PIPESTATUS[0]}
-    _LLM_REWRITE_ACTIVE=
-    BASH_COMMAND=:
-    return "$s"
   fi
 }
 trap _llm_rewrite DEBUG
