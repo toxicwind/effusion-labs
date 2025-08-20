@@ -39,7 +39,7 @@ jobs:
           cache: 'npm'
 
       - name: 📦 Install NPM dependencies
-        run: npm ci
+        run: npm ci --ignore-scripts
 
       - name: 🧪 Run unit tests with code coverage
         run: npm test
