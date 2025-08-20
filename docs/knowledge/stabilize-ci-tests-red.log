@@ -53,15 +53,15 @@ ok 4 - rejects http URLs with credentials to non-localhost
   ...
 # npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
 # [11ty] Eleventy Fatal Error (CLI):
-# [11ty] 1. Error in your Eleventy config file '.eleventy.js'. (via EleventyConfigError)
-# [11ty] 2. There was a problem importing '.eleventy.js' via import(cjs) (via EleventyImportError)
+# [11ty] 1. Error in your Eleventy config file 'eleventy.config.mjs'. (via EleventyConfigError)
+# [11ty] 2. There was a problem importing 'eleventy.config.mjs' via import(cjs) (via EleventyImportError)
 # [11ty] 3. Cannot find module '@mozilla/readability'
 # [11ty] Require stack:
 # [11ty] - /workspace/effusion-labs/lib/webpageToMarkdown.js
 # [11ty] - /workspace/effusion-labs/lib/utils.js
 # [11ty] - /workspace/effusion-labs/lib/filters.js
 # [11ty] - /workspace/effusion-labs/lib/eleventy/register.js
-# [11ty] - /workspace/effusion-labs/.eleventy.js
+# [11ty] - /workspace/effusion-labs/eleventy.config.mjs
 # [11ty] 
 # [11ty] Original error stack trace: Error: Cannot find module '@mozilla/readability'
 # [11ty] Require stack:
@@ -69,7 +69,7 @@ ok 4 - rejects http URLs with credentials to non-localhost
 # [11ty] - /workspace/effusion-labs/lib/utils.js
 # [11ty] - /workspace/effusion-labs/lib/filters.js
 # [11ty] - /workspace/effusion-labs/lib/eleventy/register.js
-# [11ty] - /workspace/effusion-labs/.eleventy.js
+# [11ty] - /workspace/effusion-labs/eleventy.config.mjs
 # [11ty]     at Function._resolveFilename (node:internal/modules/cjs/loader:1365:15)
 # [11ty]     at defaultResolveImpl (node:internal/modules/cjs/loader:1021:19)
 # [11ty]     at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1026:22)
@@ -103,15 +103,15 @@ not ok 5 - archive nav exposes child counts
   ...
 # npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
 # [11ty] Eleventy Fatal Error (CLI):
-# [11ty] 1. Error in your Eleventy config file '.eleventy.js'. (via EleventyConfigError)
-# [11ty] 2. There was a problem importing '.eleventy.js' via import(cjs) (via EleventyImportError)
+# [11ty] 1. Error in your Eleventy config file 'eleventy.config.mjs'. (via EleventyConfigError)
+# [11ty] 2. There was a problem importing 'eleventy.config.mjs' via import(cjs) (via EleventyImportError)
 # [11ty] 3. Cannot find module '@mozilla/readability'
 # [11ty] Require stack:
 # [11ty] - /workspace/effusion-labs/lib/webpageToMarkdown.js
 # [11ty] - /workspace/effusion-labs/lib/utils.js
 # [11ty] - /workspace/effusion-labs/lib/filters.js
 # [11ty] - /workspace/effusion-labs/lib/eleventy/register.js
-# [11ty] - /workspace/effusion-labs/.eleventy.js
+# [11ty] - /workspace/effusion-labs/eleventy.config.mjs
 # [11ty] 
 # [11ty] Original error stack trace: Error: Cannot find module '@mozilla/readability'
 # [11ty] Require stack:
@@ -119,7 +119,7 @@ not ok 5 - archive nav exposes child counts
 # [11ty] - /workspace/effusion-labs/lib/utils.js
 # [11ty] - /workspace/effusion-labs/lib/filters.js
 # [11ty] - /workspace/effusion-labs/lib/eleventy/register.js
-# [11ty] - /workspace/effusion-labs/.eleventy.js
+# [11ty] - /workspace/effusion-labs/eleventy.config.mjs
 # [11ty]     at Function._resolveFilename (node:internal/modules/cjs/loader:1365:15)
 # [11ty]     at defaultResolveImpl (node:internal/modules/cjs/loader:1021:19)
 # [11ty]     at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1026:22)
@@ -153,15 +153,15 @@ not ok 6 - layout exposes build timestamp
   ...
 # npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
 # [11ty] Eleventy Fatal Error (CLI):
-# [11ty] 1. Error in your Eleventy config file '.eleventy.js'. (via EleventyConfigError)
-# [11ty] 2. There was a problem importing '.eleventy.js' via import(cjs) (via EleventyImportError)
+# [11ty] 1. Error in your Eleventy config file 'eleventy.config.mjs'. (via EleventyConfigError)
+# [11ty] 2. There was a problem importing 'eleventy.config.mjs' via import(cjs) (via EleventyImportError)
 # [11ty] 3. Cannot find module '@mozilla/readability'
 # [11ty] Require stack:
 # [11ty] - /workspace/effusion-labs/lib/webpageToMarkdown.js
 # [11ty] - /workspace/effusion-labs/lib/utils.js
 # [11ty] - /workspace/effusion-labs/lib/filters.js
 # [11ty] - /workspace/effusion-labs/lib/eleventy/register.js
-# [11ty] - /workspace/effusion-labs/.eleventy.js
+# [11ty] - /workspace/effusion-labs/eleventy.config.mjs
 # [11ty] 
 # [11ty] Original error stack trace: Error: Cannot find module '@mozilla/readability'
 # [11ty] Require stack:
@@ -169,7 +169,7 @@ not ok 6 - layout exposes build timestamp
 # [11ty] - /workspace/effusion-labs/lib/utils.js
 # [11ty] - /workspace/effusion-labs/lib/filters.js
 # [11ty] - /workspace/effusion-labs/lib/eleventy/register.js
-# [11ty] - /workspace/effusion-labs/.eleventy.js
+# [11ty] - /workspace/effusion-labs/eleventy.config.mjs
 # [11ty]     at Function._resolveFilename (node:internal/modules/cjs/loader:1365:15)
 # [11ty]     at defaultResolveImpl (node:internal/modules/cjs/loader:1021:19)
 # [11ty]     at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1026:22)
@@ -203,15 +203,15 @@ not ok 7 - code blocks expose copy control
   ...
 # npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
 # [11ty] Eleventy Fatal Error (CLI):
-# [11ty] 1. Error in your Eleventy config file '.eleventy.js'. (via EleventyConfigError)
-# [11ty] 2. There was a problem importing '.eleventy.js' via import(cjs) (via EleventyImportError)
+# [11ty] 1. Error in your Eleventy config file 'eleventy.config.mjs'. (via EleventyConfigError)
+# [11ty] 2. There was a problem importing 'eleventy.config.mjs' via import(cjs) (via EleventyImportError)
 # [11ty] 3. Cannot find module '@mozilla/readability'
 # [11ty] Require stack:
 # [11ty] - /workspace/effusion-labs/lib/webpageToMarkdown.js
 # [11ty] - /workspace/effusion-labs/lib/utils.js
 # [11ty] - /workspace/effusion-labs/lib/filters.js
 # [11ty] - /workspace/effusion-labs/lib/eleventy/register.js
-# [11ty] - /workspace/effusion-labs/.eleventy.js
+# [11ty] - /workspace/effusion-labs/eleventy.config.mjs
 # [11ty] 
 # [11ty] Original error stack trace: Error: Cannot find module '@mozilla/readability'
 # [11ty] Require stack:
@@ -219,7 +219,7 @@ not ok 7 - code blocks expose copy control
 # [11ty] - /workspace/effusion-labs/lib/utils.js
 # [11ty] - /workspace/effusion-labs/lib/filters.js
 # [11ty] - /workspace/effusion-labs/lib/eleventy/register.js
-# [11ty] - /workspace/effusion-labs/.eleventy.js
+# [11ty] - /workspace/effusion-labs/eleventy.config.mjs
 # [11ty]     at Function._resolveFilename (node:internal/modules/cjs/loader:1365:15)
 # [11ty]     at defaultResolveImpl (node:internal/modules/cjs/loader:1021:19)
 # [11ty]     at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1026:22)
@@ -259,15 +259,15 @@ ok 9 - concept map JSON-LD export generates @context and @graph
   ...
 # npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
 # [11ty] Eleventy Fatal Error (CLI):
-# [11ty] 1. Error in your Eleventy config file '.eleventy.js'. (via EleventyConfigError)
-# [11ty] 2. There was a problem importing '.eleventy.js' via import(cjs) (via EleventyImportError)
+# [11ty] 1. Error in your Eleventy config file 'eleventy.config.mjs'. (via EleventyConfigError)
+# [11ty] 2. There was a problem importing 'eleventy.config.mjs' via import(cjs) (via EleventyImportError)
 # [11ty] 3. Cannot find module '@mozilla/readability'
 # [11ty] Require stack:
 # [11ty] - /workspace/effusion-labs/lib/webpageToMarkdown.js
 # [11ty] - /workspace/effusion-labs/lib/utils.js
 # [11ty] - /workspace/effusion-labs/lib/filters.js
 # [11ty] - /workspace/effusion-labs/lib/eleventy/register.js
-# [11ty] - /workspace/effusion-labs/.eleventy.js
+# [11ty] - /workspace/effusion-labs/eleventy.config.mjs
 # [11ty] 
 # [11ty] Original error stack trace: Error: Cannot find module '@mozilla/readability'
 # [11ty] Require stack:
@@ -275,7 +275,7 @@ ok 9 - concept map JSON-LD export generates @context and @graph
 # [11ty] - /workspace/effusion-labs/lib/utils.js
 # [11ty] - /workspace/effusion-labs/lib/filters.js
 # [11ty] - /workspace/effusion-labs/lib/eleventy/register.js
-# [11ty] - /workspace/effusion-labs/.eleventy.js
+# [11ty] - /workspace/effusion-labs/eleventy.config.mjs
 # [11ty]     at Function._resolveFilename (node:internal/modules/cjs/loader:1365:15)
 # [11ty]     at defaultResolveImpl (node:internal/modules/cjs/loader:1021:19)
 # [11ty]     at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1026:22)
@@ -309,15 +309,15 @@ not ok 10 - feed exposes build metadata
   ...
 # npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
 # [11ty] Eleventy Fatal Error (CLI):
-# [11ty] 1. Error in your Eleventy config file '.eleventy.js'. (via EleventyConfigError)
-# [11ty] 2. There was a problem importing '.eleventy.js' via import(cjs) (via EleventyImportError)
+# [11ty] 1. Error in your Eleventy config file 'eleventy.config.mjs'. (via EleventyConfigError)
+# [11ty] 2. There was a problem importing 'eleventy.config.mjs' via import(cjs) (via EleventyImportError)
 # [11ty] 3. Cannot find module '@mozilla/readability'
 # [11ty] Require stack:
 # [11ty] - /workspace/effusion-labs/lib/webpageToMarkdown.js
 # [11ty] - /workspace/effusion-labs/lib/utils.js
 # [11ty] - /workspace/effusion-labs/lib/filters.js
 # [11ty] - /workspace/effusion-labs/lib/eleventy/register.js
-# [11ty] - /workspace/effusion-labs/.eleventy.js
+# [11ty] - /workspace/effusion-labs/eleventy.config.mjs
 # [11ty] 
 # [11ty] Original error stack trace: Error: Cannot find module '@mozilla/readability'
 # [11ty] Require stack:
@@ -325,7 +325,7 @@ not ok 10 - feed exposes build metadata
 # [11ty] - /workspace/effusion-labs/lib/utils.js
 # [11ty] - /workspace/effusion-labs/lib/filters.js
 # [11ty] - /workspace/effusion-labs/lib/eleventy/register.js
-# [11ty] - /workspace/effusion-labs/.eleventy.js
+# [11ty] - /workspace/effusion-labs/eleventy.config.mjs
 # [11ty]     at Function._resolveFilename (node:internal/modules/cjs/loader:1365:15)
 # [11ty]     at defaultResolveImpl (node:internal/modules/cjs/loader:1021:19)
 # [11ty]     at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1026:22)
@@ -359,15 +359,15 @@ not ok 11 - home page header includes primary nav landmark
   ...
 # npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
 # [11ty] Eleventy Fatal Error (CLI):
-# [11ty] 1. Error in your Eleventy config file '.eleventy.js'. (via EleventyConfigError)
-# [11ty] 2. There was a problem importing '.eleventy.js' via import(cjs) (via EleventyImportError)
+# [11ty] 1. Error in your Eleventy config file 'eleventy.config.mjs'. (via EleventyConfigError)
+# [11ty] 2. There was a problem importing 'eleventy.config.mjs' via import(cjs) (via EleventyImportError)
 # [11ty] 3. Cannot find module '@mozilla/readability'
 # [11ty] Require stack:
 # [11ty] - /workspace/effusion-labs/lib/webpageToMarkdown.js
 # [11ty] - /workspace/effusion-labs/lib/utils.js
 # [11ty] - /workspace/effusion-labs/lib/filters.js
 # [11ty] - /workspace/effusion-labs/lib/eleventy/register.js
-# [11ty] - /workspace/effusion-labs/.eleventy.js
+# [11ty] - /workspace/effusion-labs/eleventy.config.mjs
 # [11ty] 
 # [11ty] Original error stack trace: Error: Cannot find module '@mozilla/readability'
 # [11ty] Require stack:
@@ -375,7 +375,7 @@ not ok 11 - home page header includes primary nav landmark
 # [11ty] - /workspace/effusion-labs/lib/utils.js
 # [11ty] - /workspace/effusion-labs/lib/filters.js
 # [11ty] - /workspace/effusion-labs/lib/eleventy/register.js
-# [11ty] - /workspace/effusion-labs/.eleventy.js
+# [11ty] - /workspace/effusion-labs/eleventy.config.mjs
 # [11ty]     at Function._resolveFilename (node:internal/modules/cjs/loader:1365:15)
 # [11ty]     at defaultResolveImpl (node:internal/modules/cjs/loader:1021:19)
 # [11ty]     at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1026:22)
@@ -409,15 +409,15 @@ not ok 12 - homepage hero and sections
   ...
 # npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
 # [11ty] Eleventy Fatal Error (CLI):
-# [11ty] 1. Error in your Eleventy config file '.eleventy.js'. (via EleventyConfigError)
-# [11ty] 2. There was a problem importing '.eleventy.js' via import(cjs) (via EleventyImportError)
+# [11ty] 1. Error in your Eleventy config file 'eleventy.config.mjs'. (via EleventyConfigError)
+# [11ty] 2. There was a problem importing 'eleventy.config.mjs' via import(cjs) (via EleventyImportError)
 # [11ty] 3. Cannot find module '@mozilla/readability'
 # [11ty] Require stack:
 # [11ty] - /workspace/effusion-labs/lib/webpageToMarkdown.js
 # [11ty] - /workspace/effusion-labs/lib/utils.js
 # [11ty] - /workspace/effusion-labs/lib/filters.js
 # [11ty] - /workspace/effusion-labs/lib/eleventy/register.js
-# [11ty] - /workspace/effusion-labs/.eleventy.js
+# [11ty] - /workspace/effusion-labs/eleventy.config.mjs
 # [11ty] 
 # [11ty] Original error stack trace: Error: Cannot find module '@mozilla/readability'
 # [11ty] Require stack:
@@ -425,7 +425,7 @@ not ok 12 - homepage hero and sections
 # [11ty] - /workspace/effusion-labs/lib/utils.js
 # [11ty] - /workspace/effusion-labs/lib/filters.js
 # [11ty] - /workspace/effusion-labs/lib/eleventy/register.js
-# [11ty] - /workspace/effusion-labs/.eleventy.js
+# [11ty] - /workspace/effusion-labs/eleventy.config.mjs
 # [11ty]     at Function._resolveFilename (node:internal/modules/cjs/loader:1365:15)
 # [11ty]     at defaultResolveImpl (node:internal/modules/cjs/loader:1021:19)
 # [11ty]     at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1026:22)
@@ -459,15 +459,15 @@ not ok 13 - markdown headings include anchor ids
   ...
 # npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
 # [11ty] Eleventy Fatal Error (CLI):
-# [11ty] 1. Error in your Eleventy config file '.eleventy.js'. (via EleventyConfigError)
-# [11ty] 2. There was a problem importing '.eleventy.js' via import(cjs) (via EleventyImportError)
+# [11ty] 1. Error in your Eleventy config file 'eleventy.config.mjs'. (via EleventyConfigError)
+# [11ty] 2. There was a problem importing 'eleventy.config.mjs' via import(cjs) (via EleventyImportError)
 # [11ty] 3. Cannot find module '@mozilla/readability'
 # [11ty] Require stack:
 # [11ty] - /workspace/effusion-labs/lib/webpageToMarkdown.js
 # [11ty] - /workspace/effusion-labs/lib/utils.js
 # [11ty] - /workspace/effusion-labs/lib/filters.js
 # [11ty] - /workspace/effusion-labs/lib/eleventy/register.js
-# [11ty] - /workspace/effusion-labs/.eleventy.js
+# [11ty] - /workspace/effusion-labs/eleventy.config.mjs
 # [11ty] 
 # [11ty] Original error stack trace: Error: Cannot find module '@mozilla/readability'
 # [11ty] Require stack:
@@ -475,7 +475,7 @@ not ok 13 - markdown headings include anchor ids
 # [11ty] - /workspace/effusion-labs/lib/utils.js
 # [11ty] - /workspace/effusion-labs/lib/filters.js
 # [11ty] - /workspace/effusion-labs/lib/eleventy/register.js
-# [11ty] - /workspace/effusion-labs/.eleventy.js
+# [11ty] - /workspace/effusion-labs/eleventy.config.mjs
 # [11ty]     at Function._resolveFilename (node:internal/modules/cjs/loader:1365:15)
 # [11ty]     at defaultResolveImpl (node:internal/modules/cjs/loader:1021:19)
 # [11ty]     at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1026:22)
@@ -509,15 +509,15 @@ not ok 14 - monsters hub lists products and cross-links product and character pa
   ...
 # npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
 # [11ty] Eleventy Fatal Error (CLI):
-# [11ty] 1. Error in your Eleventy config file '.eleventy.js'. (via EleventyConfigError)
-# [11ty] 2. There was a problem importing '.eleventy.js' via import(cjs) (via EleventyImportError)
+# [11ty] 1. Error in your Eleventy config file 'eleventy.config.mjs'. (via EleventyConfigError)
+# [11ty] 2. There was a problem importing 'eleventy.config.mjs' via import(cjs) (via EleventyImportError)
 # [11ty] 3. Cannot find module '@mozilla/readability'
 # [11ty] Require stack:
 # [11ty] - /workspace/effusion-labs/lib/webpageToMarkdown.js
 # [11ty] - /workspace/effusion-labs/lib/utils.js
 # [11ty] - /workspace/effusion-labs/lib/filters.js
 # [11ty] - /workspace/effusion-labs/lib/eleventy/register.js
-# [11ty] - /workspace/effusion-labs/.eleventy.js
+# [11ty] - /workspace/effusion-labs/eleventy.config.mjs
 # [11ty] 
 # [11ty] Original error stack trace: Error: Cannot find module '@mozilla/readability'
 # [11ty] Require stack:
@@ -525,7 +525,7 @@ not ok 14 - monsters hub lists products and cross-links product and character pa
 # [11ty] - /workspace/effusion-labs/lib/utils.js
 # [11ty] - /workspace/effusion-labs/lib/filters.js
 # [11ty] - /workspace/effusion-labs/lib/eleventy/register.js
-# [11ty] - /workspace/effusion-labs/.eleventy.js
+# [11ty] - /workspace/effusion-labs/eleventy.config.mjs
 # [11ty]     at Function._resolveFilename (node:internal/modules/cjs/loader:1365:15)
 # [11ty]     at defaultResolveImpl (node:internal/modules/cjs/loader:1021:19)
 # [11ty]     at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1026:22)
@@ -565,15 +565,15 @@ ok 16 - navigation items are sequentially ordered
   ...
 # npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
 # [11ty] Eleventy Fatal Error (CLI):
-# [11ty] 1. Error in your Eleventy config file '.eleventy.js'. (via EleventyConfigError)
-# [11ty] 2. There was a problem importing '.eleventy.js' via import(cjs) (via EleventyImportError)
+# [11ty] 1. Error in your Eleventy config file 'eleventy.config.mjs'. (via EleventyConfigError)
+# [11ty] 2. There was a problem importing 'eleventy.config.mjs' via import(cjs) (via EleventyImportError)
 # [11ty] 3. Cannot find module '@mozilla/readability'
 # [11ty] Require stack:
 # [11ty] - /workspace/effusion-labs/lib/webpageToMarkdown.js
 # [11ty] - /workspace/effusion-labs/lib/utils.js
 # [11ty] - /workspace/effusion-labs/lib/filters.js
 # [11ty] - /workspace/effusion-labs/lib/eleventy/register.js
-# [11ty] - /workspace/effusion-labs/.eleventy.js
+# [11ty] - /workspace/effusion-labs/eleventy.config.mjs
 # [11ty] 
 # [11ty] Original error stack trace: Error: Cannot find module '@mozilla/readability'
 # [11ty] Require stack:
@@ -581,7 +581,7 @@ ok 16 - navigation items are sequentially ordered
 # [11ty] - /workspace/effusion-labs/lib/utils.js
 # [11ty] - /workspace/effusion-labs/lib/filters.js
 # [11ty] - /workspace/effusion-labs/lib/eleventy/register.js
-# [11ty] - /workspace/effusion-labs/.eleventy.js
+# [11ty] - /workspace/effusion-labs/eleventy.config.mjs
 # [11ty]     at Function._resolveFilename (node:internal/modules/cjs/loader:1365:15)
 # [11ty]     at defaultResolveImpl (node:internal/modules/cjs/loader:1021:19)
 # [11ty]     at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1026:22)
@@ -615,15 +615,15 @@ not ok 17 - runEleventy sets env and output directory
   ...
 # npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
 # [11ty] Eleventy Fatal Error (CLI):
-# [11ty] 1. Error in your Eleventy config file '.eleventy.js'. (via EleventyConfigError)
-# [11ty] 2. There was a problem importing '.eleventy.js' via import(cjs) (via EleventyImportError)
+# [11ty] 1. Error in your Eleventy config file 'eleventy.config.mjs'. (via EleventyConfigError)
+# [11ty] 2. There was a problem importing 'eleventy.config.mjs' via import(cjs) (via EleventyImportError)
 # [11ty] 3. Cannot find module '@mozilla/readability'
 # [11ty] Require stack:
 # [11ty] - /workspace/effusion-labs/lib/webpageToMarkdown.js
 # [11ty] - /workspace/effusion-labs/lib/utils.js
 # [11ty] - /workspace/effusion-labs/lib/filters.js
 # [11ty] - /workspace/effusion-labs/lib/eleventy/register.js
-# [11ty] - /workspace/effusion-labs/.eleventy.js
+# [11ty] - /workspace/effusion-labs/eleventy.config.mjs
 # [11ty] 
 # [11ty] Original error stack trace: Error: Cannot find module '@mozilla/readability'
 # [11ty] Require stack:
@@ -631,7 +631,7 @@ not ok 17 - runEleventy sets env and output directory
 # [11ty] - /workspace/effusion-labs/lib/utils.js
 # [11ty] - /workspace/effusion-labs/lib/filters.js
 # [11ty] - /workspace/effusion-labs/lib/eleventy/register.js
-# [11ty] - /workspace/effusion-labs/.eleventy.js
+# [11ty] - /workspace/effusion-labs/eleventy.config.mjs
 # [11ty]     at Function._resolveFilename (node:internal/modules/cjs/loader:1365:15)
 # [11ty]     at defaultResolveImpl (node:internal/modules/cjs/loader:1021:19)
 # [11ty]     at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1026:22)

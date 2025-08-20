@@ -1,34 +1,34 @@
 Breadcrumbs:
 
-*   [Eleventy Documentation](https://www.11ty.dev/docs/)
-*   [Guide](https://www.11ty.dev/docs/projects/)
+- [Eleventy Documentation](https://www.11ty.dev/docs/)
+- [Guide](https://www.11ty.dev/docs/projects/)
 
 On this page
 
-*   [Default filenames](#default-filenames)
-*   [Configuration Options](#configuration-options)
-    *   [Input Directory](#input-directory)
-    *   [Directory for Includes](#directory-for-includes)
-    *   [Directory for Layouts (Optional)](#directory-for-layouts-optional)
-    *   [Directory for Global Data Files](#directory-for-global-data-files)
-    *   [Output Directory](#output-directory)
-    *   [Default template engine for Markdown files](#default-template-engine-for-markdown-files)
-    *   [Default template engine for HTML files](#default-template-engine-for-html-files)
-    *   [Template Formats](#template-formats)
-    *   [Enable Quiet Mode to Reduce Console Noise](#enable-quiet-mode-to-reduce-console-noise)
-    *   [Deploy to a subdirectory with a Path Prefix](#deploy-to-a-subdirectory-with-a-path-prefix)
-    *   [Change Base File Name for Data Files](#change-base-file-name-for-data-files)
-    *   [Change File Suffix for Data Files](#change-file-suffix-for-data-files)
-    *   [Transforms](#transforms)
-    *   [Linters](#linters)
-    *   [Data Filter Selectors](#data-filter-selectors)
-    *   [TypeScript Type Definitions](#type-script-type-definitions)
-    *   [Removed Features](#removed-features)
-    *   [Documentation Moved to Dedicated Pages](#documentation-moved-to-dedicated-pages)
+- [Default filenames](#default-filenames)
+- [Configuration Options](#configuration-options)
+  - [Input Directory](#input-directory)
+  - [Directory for Includes](#directory-for-includes)
+  - [Directory for Layouts (Optional)](#directory-for-layouts-optional)
+  - [Directory for Global Data Files](#directory-for-global-data-files)
+  - [Output Directory](#output-directory)
+  - [Default template engine for Markdown files](#default-template-engine-for-markdown-files)
+  - [Default template engine for HTML files](#default-template-engine-for-html-files)
+  - [Template Formats](#template-formats)
+  - [Enable Quiet Mode to Reduce Console Noise](#enable-quiet-mode-to-reduce-console-noise)
+  - [Deploy to a subdirectory with a Path Prefix](#deploy-to-a-subdirectory-with-a-path-prefix)
+  - [Change Base File Name for Data Files](#change-base-file-name-for-data-files)
+  - [Change File Suffix for Data Files](#change-file-suffix-for-data-files)
+  - [Transforms](#transforms)
+  - [Linters](#linters)
+  - [Data Filter Selectors](#data-filter-selectors)
+  - [TypeScript Type Definitions](#type-script-type-definitions)
+  - [Removed Features](#removed-features)
+  - [Documentation Moved to Dedicated Pages](#documentation-moved-to-dedicated-pages)
 
-Configuration files are optional. Add an `eleventy.config.js` file to the root directory of your project (read more about [default configuration filenames](#default-filenames)) to configure Eleventy to your own project’s needs. It might look like this:
+Configuration files are optional. Add an `eleventy.config.mjs` file to the root directory of your project (read more about [default configuration filenames](#default-filenames)) to configure Eleventy to your own project’s needs. It might look like this:
 
-eleventy.config.js
+eleventy.config.mjs
 
     export default async function(eleventyConfig) {	// Configure Eleventy};
 
@@ -36,27 +36,25 @@ eleventy.config.js
 
 There are a few different ways to [shape your configuration file](https://www.11ty.dev/docs/config-shapes/). Added in v3.0.0Eleventy v3 added support for both ESM and Asynchronous callbacks.
 
-*   Add [Filters](https://www.11ty.dev/docs/filters/).
-*   Add [Shortcodes](https://www.11ty.dev/docs/shortcodes/).
-*   Add [Custom Tags](https://www.11ty.dev/docs/custom-tags/).
-*   Add [JavaScript Template Functions](https://www.11ty.dev/docs/languages/javascript/#javascript-template-functions)
-*   Add custom [Collections](https://www.11ty.dev/docs/collections/) and use [Advanced Collection Filtering and Sorting](https://www.11ty.dev/docs/collections/#advanced-custom-filtering-and-sorting).
-*   Add [Plugins](https://www.11ty.dev/docs/plugins/).
+- Add [Filters](https://www.11ty.dev/docs/filters/).
+- Add [Shortcodes](https://www.11ty.dev/docs/shortcodes/).
+- Add [Custom Tags](https://www.11ty.dev/docs/custom-tags/).
+- Add [JavaScript Template Functions](https://www.11ty.dev/docs/languages/javascript/#javascript-template-functions)
+- Add custom [Collections](https://www.11ty.dev/docs/collections/) and use [Advanced Collection Filtering and Sorting](https://www.11ty.dev/docs/collections/#advanced-custom-filtering-and-sorting).
+- Add [Plugins](https://www.11ty.dev/docs/plugins/).
 
-Default filenames
------------------
+## Default filenames
 
 We look for the following configuration files:
 
-1.  `.eleventy.js`
-2.  `eleventy.config.js` Added in v2.0.0
+1.  `eleventy.config.mjs`
+2.  `eleventy.config.mjs` Added in v2.0.0
 3.  `eleventy.config.mjs` Added in v3.0.0
 4.  `eleventy.config.cjs` Added in v2.0.0
 
 The first configuration file found is used. The others are ignored.
 
-Configuration Options
----------------------
+## Configuration Options
 
 ### Input Directory
 
@@ -92,7 +90,7 @@ _Command Line Override_
 
 Via named export (order doesn’t matter). Note that there are many [different shapes of configuration file](https://www.11ty.dev/docs/config-shapes/).
 
-eleventy.config.js
+eleventy.config.mjs
 
     export const config = {  dir: {    input: "views"  }};
 
@@ -100,7 +98,7 @@ eleventy.config.js
 
 Or via method (not available in plugins) Added in v3.0.0:
 
-eleventy.config.js
+eleventy.config.mjs
 
     export default function(eleventyConfig) {	// Order matters, put this at the top of your configuration file.  eleventyConfig.setInputDirectory("views");};
 
@@ -134,7 +132,7 @@ _None_
 
 Via named export (order doesn’t matter). Note that there are many [different shapes of configuration file](https://www.11ty.dev/docs/config-shapes/).
 
-eleventy.config.js
+eleventy.config.mjs
 
     export const config = {  dir: {		// ⚠️ This value is relative to your input directory.    includes: "my_includes"  }};
 
@@ -142,7 +140,7 @@ eleventy.config.js
 
 Or via method (not available in plugins) Added in v3.0.0:
 
-eleventy.config.js
+eleventy.config.mjs
 
     export default function(eleventyConfig) {	// Order matters, put this at the top of your configuration file.	// This is relative to your input directory!  eleventyConfig.setIncludesDirectory("my_includes");};
 
@@ -178,7 +176,7 @@ _None_
 
 Via named export (order doesn’t matter). Note that there are many [different shapes of configuration file](https://www.11ty.dev/docs/config-shapes/).
 
-eleventy.config.js
+eleventy.config.mjs
 
     export const config = {  dir: {    // These are both relative to your input directory!    includes: "_includes",    layouts: "_layouts",  }};
 
@@ -186,7 +184,7 @@ eleventy.config.js
 
 Or via method (not available in plugins) Added in v3.0.0:
 
-eleventy.config.js
+eleventy.config.mjs
 
     export default function(eleventyConfig) {	// Order matters, put this at the top of your configuration file.	// This is relative to your input directory!  eleventyConfig.setLayoutsDirectory("_layouts");};
 
@@ -220,7 +218,7 @@ _None_
 
 Via named export (order doesn’t matter). Note that there are many [different shapes of configuration file](https://www.11ty.dev/docs/config-shapes/).
 
-eleventy.config.js
+eleventy.config.mjs
 
     export const config = {  dir: {    // ⚠️ This value is relative to your input directory.    data: "lore",  }};
 
@@ -228,7 +226,7 @@ eleventy.config.js
 
 Or via method (not available in plugins) Added in v3.0.0:
 
-eleventy.config.js
+eleventy.config.mjs
 
     export default function(eleventyConfig) {	// Order matters, put this at the top of your configuration file.  eleventyConfig.setDataDirectory("lore");};
 
@@ -268,7 +266,7 @@ _Command Line Override_
 
 Via named export (order doesn’t matter). Note that there are many [different shapes of configuration file](https://www.11ty.dev/docs/config-shapes/).
 
-eleventy.config.js
+eleventy.config.mjs
 
     export const config = {  dir: {		output: "dist",  }};
 
@@ -276,7 +274,7 @@ eleventy.config.js
 
 Or via method (not available in plugins) Added in v3.0.0:
 
-eleventy.config.js
+eleventy.config.mjs
 
     export default function(eleventyConfig) {	// Order matters, put this at the top of your configuration file.  eleventyConfig.setOutputDirectory("dist");};
 
@@ -304,7 +302,7 @@ _Command Line Override_
 
 _None_
 
-eleventy.config.js
+eleventy.config.mjs
 
     export const config = {  markdownTemplateEngine: "njk",};
 
@@ -334,7 +332,7 @@ _Command Line Override_
 
 _None_
 
-eleventy.config.js
+eleventy.config.mjs
 
     export const config = {  htmlTemplateEngine: "njk",};
 
@@ -375,11 +373,10 @@ INFO:
 #### Command Line
 
     npx @11ty/eleventy --formats=html,liquid,njk
-    
 
 #### Configuration File Static Export
 
-eleventy.config.js
+eleventy.config.mjs
 
     export const config = {  templateFormats: ["html", "liquid", "njk"],};
 
@@ -389,7 +386,7 @@ There are many [different shapes of configuration file](https://www.11ty.dev/doc
 
 #### Configuration API
 
-eleventy.config.js
+eleventy.config.mjs
 
     export default function (eleventyConfig) {	// Reset to this value	eleventyConfig.setTemplateFormats("html,liquid,njk");	// Additive to existing	eleventyConfig.addTemplateFormats("pug,haml");	// Or:	// eleventyConfig.setTemplateFormats([ "html", "liquid", "njk" ]);	// eleventyConfig.addTemplateFormats([ "pug", "haml" ]);};
 
@@ -413,7 +410,7 @@ _Command Line Override_
 
 `--quiet`
 
-eleventy.config.js
+eleventy.config.mjs
 
     export default function (eleventyConfig) {	eleventyConfig.setQuietMode(true);};
 
@@ -445,7 +442,7 @@ _Command Line Override_
 
 `--pathprefix`
 
-eleventy.config.js
+eleventy.config.mjs
 
     import { HtmlBasePlugin } from "@11ty/eleventy";export default function (eleventyConfig) {	eleventyConfig.addPlugin(HtmlBasePlugin);};export const config = {	pathPrefix: "/eleventy-base-blog/",}
 
@@ -477,7 +474,7 @@ _Command Line Override_
 
 _None_
 
-eleventy.config.js
+eleventy.config.mjs
 
     export default function (eleventyConfig) {	// Looks for index.json and index.11tydata.json instead of using folder names	eleventyConfig.setDataFileBaseName("index");};
 
@@ -511,7 +508,7 @@ This feature can also be used to disable Template and Directory Data Files altog
 
 Read more about [Template and Directory Specific Data Files](https://www.11ty.dev/docs/data-template-dir/).
 
-eleventy.config.js
+eleventy.config.mjs
 
     export default function (eleventyConfig) {	// e.g. file.json and file.11tydata.json	eleventyConfig.setDataFileSuffixes([".11tydata", ""]);	// e.g. file.11tydata.json	eleventyConfig.setDataFileSuffixes([".11tydata"]);	// No data files are used.	eleventyConfig.setDataFileSuffixes([]);};
 
@@ -521,7 +518,7 @@ _**Backwards Compatibility Note**_ (`v2.0.0`)
 
 Prior to v2.0.0 this feature was exposed using a `jsDataFileSuffix` property in the configuration return object. When the `setDataFileSuffixes` method has not been used, Eleventy maintains backwards compatibility for old projects by using this property as a fallback.
 
-eleventy.config.js
+eleventy.config.mjs
 
     export default function (eleventyConfig) {	return {		jsDataFileSuffix: ".11tydata",	};};
 
@@ -529,7 +526,7 @@ eleventy.config.js
 
 ### Transforms
 
-*   Documented moved to [Transforms](https://www.11ty.dev/docs/transforms/).
+- Documented moved to [Transforms](https://www.11ty.dev/docs/transforms/).
 
 ### Linters
 
@@ -553,7 +550,7 @@ _Command Line Override_
 
 _None_
 
-eleventy.config.js
+eleventy.config.mjs
 
     export default function (eleventyConfig) {	// Sync or async	eleventyConfig.addLinter("linter-name", async function (content) {		console.log(this.inputPath);		console.log(this.outputPath);		// Eleventy 2.0+ has full access to Eleventy’s `page` variable		console.log(this.page.inputPath);		console.log(this.page.outputPath);	});};
 
@@ -565,7 +562,7 @@ Inspired by the [CSS Tricks post _Words to Avoid in Educational Writing_](https:
 
 This example has been packaged as a plugin in [`eleventy-plugin-inclusive-language`](https://www.11ty.dev/docs/plugins/inclusive-language/).
 
-**Filename** eleventy.config.js
+**Filename** eleventy.config.mjs
 
     export default function (eleventyConfig) {	eleventyConfig.addLinter(		"inclusive-language",		function (content, inputPath, outputPath) {			let words =				"simply,obviously,basically,of course,clearly,just,everyone knows,however,easy".split(					","				);			// Eleventy 1.0+: use this.inputPath and this.outputPath instead			if (inputPath.endsWith(".md")) {				for (let word of words) {					let regexp = new RegExp("\\b(" + word + ")\\b", "gi");					if (content.match(regexp)) {						console.warn(							`Inclusive Language Linter (${inputPath}) Found: ${word}`						);					}				}			}		}	);};
 
@@ -573,7 +570,7 @@ This example has been packaged as a plugin in [`eleventy-plugin-inclusive-langua
 
 A `Set` of [`lodash` selectors](https://lodash.com/docs/4.17.15#get) that allow you to include data from the data cascade in the output from `--to=json`, `--to=ndjson`.
 
-eleventy.config.js
+eleventy.config.mjs
 
     export default function (eleventyConfig) {	eleventyConfig.dataFilterSelectors.add("page");	eleventyConfig.dataFilterSelectors.delete("page");};
 
@@ -585,13 +582,13 @@ This will now include a `data` property in your JSON output that includes the `p
 
 This may enable some extra autocomplete features in your IDE (where supported).
 
-eleventy.config.js
+eleventy.config.mjs
 
     /** @param {import("@11ty/eleventy").UserConfig} eleventyConfig */export default function (eleventyConfig) {	// …};
 
     /** @param {import("@11ty/eleventy").UserConfig} eleventyConfig */module.exports = function (eleventyConfig) {	// …};
 
-*   Related: [GitHub #2091](https://github.com/11ty/eleventy/pull/2091) and [GitHub #3097](https://github.com/11ty/eleventy/issues/3097)
+- Related: [GitHub #2091](https://github.com/11ty/eleventy/pull/2091) and [GitHub #3097](https://github.com/11ty/eleventy/issues/3097)
 
 ### Removed Features
 
@@ -609,99 +606,99 @@ Files found (that don’t have a valid template engine) from opt-in file extensi
 
 #### Data Deep Merge
 
-*   Documentation for [Data Deep Merging has been moved to its own page](https://www.11ty.dev/docs/data-deep-merge/) under the Data Cascade.
+- Documentation for [Data Deep Merging has been moved to its own page](https://www.11ty.dev/docs/data-deep-merge/) under the Data Cascade.
 
 #### Customize Front Matter Parsing Options
 
-*   Documented at [Customize Front Matter Parsing](https://www.11ty.dev/docs/data-frontmatter-customize/).
+- Documented at [Customize Front Matter Parsing](https://www.11ty.dev/docs/data-frontmatter-customize/).
 
 #### Watch JavaScript Dependencies
 
-*   Documented at [Watch and Serve Configuration](https://www.11ty.dev/docs/watch-serve/).
+- Documented at [Watch and Serve Configuration](https://www.11ty.dev/docs/watch-serve/).
 
 #### Add Your Own Watch Targets
 
-*   Documented at [Watch and Serve Configuration](https://www.11ty.dev/docs/watch-serve/).
+- Documented at [Watch and Serve Configuration](https://www.11ty.dev/docs/watch-serve/).
 
 #### Override Browsersync Server Options
 
-*   Documented at [Watch and Serve Configuration](https://www.11ty.dev/docs/watch-serve/).
+- Documented at [Watch and Serve Configuration](https://www.11ty.dev/docs/watch-serve/).
 
 #### Transforms
 
-*   Documented at [Transforms](https://www.11ty.dev/docs/transforms/).
+- Documented at [Transforms](https://www.11ty.dev/docs/transforms/).
 
-* * *
+---
 
 ### Other pages in Eleventy Projects
 
-*   [Get Started](https://www.11ty.dev/docs/)
-*   [Command Line Usage](https://www.11ty.dev/docs/usage/)
-*   [Add a Configuration File](https://www.11ty.dev/docs/config/)
-*   [Copy Files to Output](https://www.11ty.dev/docs/copy/)
-*   [Add CSS, JS, Fonts](https://www.11ty.dev/docs/assets/)
-*   [Importing Content](https://www.11ty.dev/docs/migrate/)
-*   [Configure Templates with Data](https://www.11ty.dev/docs/data-configuration/)
-    *   [Permalinks](https://www.11ty.dev/docs/permalinks/)
-    *   [Layouts](https://www.11ty.dev/docs/layouts/)
-    *   [Collections](https://www.11ty.dev/docs/collections/)
-        *   [Collections API](https://www.11ty.dev/docs/collections-api/)
-    *   [Content Dates](https://www.11ty.dev/docs/dates/)
-    *   [Create Pages From Data](https://www.11ty.dev/docs/pages-from-data/)
-        *   [Pagination](https://www.11ty.dev/docs/pagination/)
-        *   [Pagination Navigation](https://www.11ty.dev/docs/pagination/nav/)
-*   [Using Data in Templates](https://www.11ty.dev/docs/data/)
-    *   [Eleventy Supplied Data](https://www.11ty.dev/docs/data-eleventy-supplied/)
-    *   [Data Cascade](https://www.11ty.dev/docs/data-cascade/)
-        *   [Front Matter Data](https://www.11ty.dev/docs/data-frontmatter/)
-            *   [Custom Front Matter](https://www.11ty.dev/docs/data-frontmatter-customize/)
-        *   [Template & Directory Data Files](https://www.11ty.dev/docs/data-template-dir/)
-        *   [Global Data Files](https://www.11ty.dev/docs/data-global/)
-        *   [Config Global Data](https://www.11ty.dev/docs/data-global-custom/)
-        *   [Computed Data](https://www.11ty.dev/docs/data-computed/)
-    *   [JavaScript Data Files](https://www.11ty.dev/docs/data-js/)
-    *   [Custom Data File Formats](https://www.11ty.dev/docs/data-custom/)
-    *   [Validate Data](https://www.11ty.dev/docs/data-validate/)
-*   [Template Languages](https://www.11ty.dev/docs/languages/)
-    *   [HTML](https://www.11ty.dev/docs/languages/html/)
-    *   [Markdown](https://www.11ty.dev/docs/languages/markdown/)
-        *   [MDX](https://www.11ty.dev/docs/languages/mdx/)
-    *   [JavaScript](https://www.11ty.dev/docs/languages/javascript/)
-        *   [JSX](https://www.11ty.dev/docs/languages/jsx/)
-        *   [TypeScript](https://www.11ty.dev/docs/languages/typescript/)
-    *   [Custom](https://www.11ty.dev/docs/languages/custom/)
-    *   [WebC](https://www.11ty.dev/docs/languages/webc/)
-    *   [Nunjucks](https://www.11ty.dev/docs/languages/nunjucks/)
-    *   [Liquid](https://www.11ty.dev/docs/languages/liquid/)
-    *   [Handlebars](https://www.11ty.dev/docs/languages/handlebars/)
-    *   [Mustache](https://www.11ty.dev/docs/languages/mustache/)
-    *   [EJS](https://www.11ty.dev/docs/languages/ejs/)
-    *   [HAML](https://www.11ty.dev/docs/languages/haml/)
-    *   [Pug](https://www.11ty.dev/docs/languages/pug/)
-    *   [Sass](https://www.11ty.dev/docs/languages/sass/)
-    *   [Virtual Templates](https://www.11ty.dev/docs/virtual-templates/)
-    *   [Overriding Languages](https://www.11ty.dev/docs/template-overrides/)
-*   Template Features
-    *   [Ignore Files](https://www.11ty.dev/docs/ignores/)
-    *   [Preprocess Content](https://www.11ty.dev/docs/config-preprocessors/)
-    *   [Postprocess Content](https://www.11ty.dev/docs/transforms/)
-    *   [Filters](https://www.11ty.dev/docs/filters/)
-        *   [`url`](https://www.11ty.dev/docs/filters/url/)
-        *   [`slugify`](https://www.11ty.dev/docs/filters/slugify/)
-        *   [`log`](https://www.11ty.dev/docs/filters/log/)
-        *   [`get*CollectionItem`](https://www.11ty.dev/docs/filters/collection-items/)
-        *   [`inputPathToUrl`](https://www.11ty.dev/docs/filters/inputpath-to-url/)
-    *   [Shortcodes](https://www.11ty.dev/docs/shortcodes/)
-        *   [`getBundle`](https://www.11ty.dev/docs/plugins/bundle/)
-        *   [`getBundleFileUrl`](https://www.11ty.dev/docs/plugins/bundle/)
-*   [Environment Variables](https://www.11ty.dev/docs/environment-vars/)
-*   [Internationalization (i18n)](https://www.11ty.dev/docs/i18n/)
-*   [Development Servers](https://www.11ty.dev/docs/watch-serve/)
-    *   [Eleventy Dev Server](https://www.11ty.dev/docs/dev-server/)
-    *   [Vite](https://www.11ty.dev/docs/server-vite/)
-*   [Common Pitfalls](https://www.11ty.dev/docs/pitfalls/)
-*   [Advanced](https://www.11ty.dev/docs/advanced/)
-    *   [Release History](https://www.11ty.dev/docs/versions/)
-    *   [Programmatic API](https://www.11ty.dev/docs/programmatic/)
-    *   [Configuration Events](https://www.11ty.dev/docs/events/)
-    *   [Order of Operations](https://www.11ty.dev/docs/advanced-order/)
+- [Get Started](https://www.11ty.dev/docs/)
+- [Command Line Usage](https://www.11ty.dev/docs/usage/)
+- [Add a Configuration File](https://www.11ty.dev/docs/config/)
+- [Copy Files to Output](https://www.11ty.dev/docs/copy/)
+- [Add CSS, JS, Fonts](https://www.11ty.dev/docs/assets/)
+- [Importing Content](https://www.11ty.dev/docs/migrate/)
+- [Configure Templates with Data](https://www.11ty.dev/docs/data-configuration/)
+  - [Permalinks](https://www.11ty.dev/docs/permalinks/)
+  - [Layouts](https://www.11ty.dev/docs/layouts/)
+  - [Collections](https://www.11ty.dev/docs/collections/)
+    - [Collections API](https://www.11ty.dev/docs/collections-api/)
+  - [Content Dates](https://www.11ty.dev/docs/dates/)
+  - [Create Pages From Data](https://www.11ty.dev/docs/pages-from-data/)
+    - [Pagination](https://www.11ty.dev/docs/pagination/)
+    - [Pagination Navigation](https://www.11ty.dev/docs/pagination/nav/)
+- [Using Data in Templates](https://www.11ty.dev/docs/data/)
+  - [Eleventy Supplied Data](https://www.11ty.dev/docs/data-eleventy-supplied/)
+  - [Data Cascade](https://www.11ty.dev/docs/data-cascade/)
+    - [Front Matter Data](https://www.11ty.dev/docs/data-frontmatter/)
+      - [Custom Front Matter](https://www.11ty.dev/docs/data-frontmatter-customize/)
+    - [Template & Directory Data Files](https://www.11ty.dev/docs/data-template-dir/)
+    - [Global Data Files](https://www.11ty.dev/docs/data-global/)
+    - [Config Global Data](https://www.11ty.dev/docs/data-global-custom/)
+    - [Computed Data](https://www.11ty.dev/docs/data-computed/)
+  - [JavaScript Data Files](https://www.11ty.dev/docs/data-js/)
+  - [Custom Data File Formats](https://www.11ty.dev/docs/data-custom/)
+  - [Validate Data](https://www.11ty.dev/docs/data-validate/)
+- [Template Languages](https://www.11ty.dev/docs/languages/)
+  - [HTML](https://www.11ty.dev/docs/languages/html/)
+  - [Markdown](https://www.11ty.dev/docs/languages/markdown/)
+    - [MDX](https://www.11ty.dev/docs/languages/mdx/)
+  - [JavaScript](https://www.11ty.dev/docs/languages/javascript/)
+    - [JSX](https://www.11ty.dev/docs/languages/jsx/)
+    - [TypeScript](https://www.11ty.dev/docs/languages/typescript/)
+  - [Custom](https://www.11ty.dev/docs/languages/custom/)
+  - [WebC](https://www.11ty.dev/docs/languages/webc/)
+  - [Nunjucks](https://www.11ty.dev/docs/languages/nunjucks/)
+  - [Liquid](https://www.11ty.dev/docs/languages/liquid/)
+  - [Handlebars](https://www.11ty.dev/docs/languages/handlebars/)
+  - [Mustache](https://www.11ty.dev/docs/languages/mustache/)
+  - [EJS](https://www.11ty.dev/docs/languages/ejs/)
+  - [HAML](https://www.11ty.dev/docs/languages/haml/)
+  - [Pug](https://www.11ty.dev/docs/languages/pug/)
+  - [Sass](https://www.11ty.dev/docs/languages/sass/)
+  - [Virtual Templates](https://www.11ty.dev/docs/virtual-templates/)
+  - [Overriding Languages](https://www.11ty.dev/docs/template-overrides/)
+- Template Features
+  - [Ignore Files](https://www.11ty.dev/docs/ignores/)
+  - [Preprocess Content](https://www.11ty.dev/docs/config-preprocessors/)
+  - [Postprocess Content](https://www.11ty.dev/docs/transforms/)
+  - [Filters](https://www.11ty.dev/docs/filters/)
+    - [`url`](https://www.11ty.dev/docs/filters/url/)
+    - [`slugify`](https://www.11ty.dev/docs/filters/slugify/)
+    - [`log`](https://www.11ty.dev/docs/filters/log/)
+    - [`get*CollectionItem`](https://www.11ty.dev/docs/filters/collection-items/)
+    - [`inputPathToUrl`](https://www.11ty.dev/docs/filters/inputpath-to-url/)
+  - [Shortcodes](https://www.11ty.dev/docs/shortcodes/)
+    - [`getBundle`](https://www.11ty.dev/docs/plugins/bundle/)
+    - [`getBundleFileUrl`](https://www.11ty.dev/docs/plugins/bundle/)
+- [Environment Variables](https://www.11ty.dev/docs/environment-vars/)
+- [Internationalization (i18n)](https://www.11ty.dev/docs/i18n/)
+- [Development Servers](https://www.11ty.dev/docs/watch-serve/)
+  - [Eleventy Dev Server](https://www.11ty.dev/docs/dev-server/)
+  - [Vite](https://www.11ty.dev/docs/server-vite/)
+- [Common Pitfalls](https://www.11ty.dev/docs/pitfalls/)
+- [Advanced](https://www.11ty.dev/docs/advanced/)
+  - [Release History](https://www.11ty.dev/docs/versions/)
+  - [Programmatic API](https://www.11ty.dev/docs/programmatic/)
+  - [Configuration Events](https://www.11ty.dev/docs/events/)
+  - [Order of Operations](https://www.11ty.dev/docs/advanced-order/)
