@@ -150,86 +150,86 @@ Verification will never be finished because the world never stops moving. That i
 ### Annotated Appendix
 
 [^1]: **[C. O’Connor & J. Weatherall (2019)]** – _The Misinformation Age: How False Beliefs Spread_.
-> _Epistemic Note (Primary):_ Explains how misinformation propagates through social systems, grounding the ecology metaphor.
+> _Epistemic Note (Primary):_ Classic contagion manual for bad ideas; supplies the petri dish for our ecology.
 > **Source Type:** Primary
 > - **URL:** `https://press.princeton.edu/books/hardcover/9780691179232/the-misinformation-age`
 
 [^2]: **[D. Centola (2018)]** – _How Behavior Spreads: The Science of Complex Contagions_.
-> _Epistemic Note (Primary):_ Introduces complex contagion theory used to model verification dynamics.
+> _Epistemic Note (Primary):_ Shows that behavior moves in clusters, turning verification into herd management.
 > **Source Type:** Primary
 > - **URL:** `https://press.princeton.edu/books/hardcover/9780691175319/how-behavior-spreads`
 
 [^3]: **[M. Ware & M. Monkman (2015)]** – _Peer Review: An Introduction and Guide_.
-> _Epistemic Note (Conceptual):_ Provides institutional context for predator roles in verification.
+> _Epistemic Note (Conceptual):_ Codifies the predator instinct into policy; peer review as sanctioned pounce.
 > **Source Type:** Conceptual
 > - **URL:** `https://publishingresearchconsortium.com/index.php/102-prc-guides/peer-review-an-introduction-and-guide`
 
 [^4]: **[R. Y. Wang & D. M. Strong (1996)]** – “Beyond Accuracy: What Data Quality Means to Data Consumers.”
-> _Epistemic Note (Primary):_ Defines multi-dimensional data quality, basis for scavenger duties.
+> _Epistemic Note (Primary):_ Turns “data quality” into a multi-axis chore list—the scavenger’s job description.
 > **Source Type:** Primary
 > - **URL:** `https://doi.org/10.1080/07421222.1996.11518099`
 
 [^5]: **[P. Resnick & R. Zeckhauser (2002)]** – “Trust Among Strangers in Internet Transactions: Empirical Analysis of eBay’s Reputation System.”
-> _Epistemic Note (Primary):_ Empirical evidence for reputation systems as verification infrastructure.
+> _Epistemic Note (Primary):_ eBay receipts as natural selection for honesty; reputation becomes an organ.
 > **Source Type:** Primary
 > - **URL:** `https://doi.org/10.1016/S0167-6245(01)00062-4`
 
 [^6]: **[C. Dellarocas (2003)]** – “The Digitization of Word of Mouth: Promise and Challenges of Online Feedback Mechanisms.”
-> _Epistemic Note (Primary):_ Extends reputation mechanics to digital marketplaces, informing gardener roles.
+> _Epistemic Note (Primary):_ Maps how online feedback becomes the gardener’s trellis for cultivating trust.
 > **Source Type:** Primary
 > - **URL:** `https://doi.org/10.1287/mnsc.49.10.1407.17378`
 
 [^7]: **[M. Fricker (2007)]** – _Epistemic Injustice: Power and the Ethics of Knowing_.
-> _Epistemic Note (Conceptual):_ Frames verification labor as a question of justice and distribution.
+> _Epistemic Note (Conceptual):_ Names the injustice of who gets stuck doing the proving; doubt as unpaid labor.
 > **Source Type:** Conceptual
 > - **URL:** `https://global.oup.com/academic/product/epistemic-injustice-9780198237907`
 
 [^8]: **[R. B. Cialdini (2009)]** – _Influence: Science and Practice_.
-> _Epistemic Note (Primary):_ Classic experiments on social proof underpin the theatre of trust.
+> _Epistemic Note (Primary):_ Social proof lab notes; doubles as a playbook for weaponized skepticism.
 > **Source Type:** Primary
 > - **URL:** `https://www.pearson.com/en-us/subject-catalog/p/influence/P200000006695/9780205609994`
 
 [^9]: **[E. Goffman (1959)]** – _The Presentation of Self in Everyday Life_.
-> _Epistemic Note (Conceptual):_ Provides the dramaturgical lens for trust performances.
+> _Epistemic Note (Conceptual):_ Dramaturgy 101—the stagecraft behind verification cosplay.
 > **Source Type:** Conceptual
 > - **URL:** `https://monoskop.org/images/1/19/Goffman_Erving_The_Presentation_of_Self_in_Everyday_Life.pdf`
 
 [^10]: **[N. N. Taleb (2012)]** – _Antifragile: Things That Gain from Disorder_.
-> _Epistemic Note (Conceptual):_ Introduces heavy-tail risk framing for red-tier domains.
+> _Epistemic Note (Conceptual):_ Reminder that some domains bite harder than averages admit; fuels the red tier.
 > **Source Type:** Conceptual
 > - **URL:** `https://www.penguinrandomhouse.com/books/215462/antifragile-by-nassim-nicholas-taleb/`
 
 [^11]: **[D. Kahneman & A. Tversky (1979)]** – “Prospect Theory: An Analysis of Decision under Risk.”
-> _Epistemic Note (Primary):_ Establishes bounded rationality underlying risk tiers.
+> _Epistemic Note (Primary):_ Charts how humans misprice risk, giving structure to our tiered doubt budget.
 > **Source Type:** Primary
 > - **URL:** `https://doi.org/10.2307/1914185`
 
 [^12]: **[J. Kleinberg et al. (2018)]** – “Human Decisions and Machine Predictions.”
-> _Epistemic Note (Primary):_ Demonstrates complementarity between humans and algorithms.
+> _Epistemic Note (Primary):_ Mixed-team scoreboard: numbers on when humans plus models actually win.
 > **Source Type:** Primary
 > - **URL:** `https://doi.org/10.1093/qje/qjx032`
 
 [^13]: **[V. Lai, C. Chen, & C. Tan (2019/2021)]** – “On Human-AI Complementarity.”
-> _Epistemic Note (Primary):_ Empirical grounding for mixed oversight models.
+> _Epistemic Note (Primary):_ Follow-up showing the human–machine duo’s awkward dance can still land the routine.
 > **Source Type:** Primary
 > - **URL:** `https://arxiv.org/abs/2112.04237`
 
 [^14]: **[C. D. Manning, P. Raghavan, & H. Schütze (2008)]** – _Introduction to Information Retrieval_.
-> _Epistemic Note (Conceptual):_ Standard text on precision/recall, source for shortlist metrics.
+> _Epistemic Note (Conceptual):_ The shortlist precision playbook; fewer rotten apples at the top.
 > **Source Type:** Conceptual
 > - **URL:** `https://doi.org/10.1017/CBO9780511809071`
 
 [^15]: **[Z. Ji et al. (2023)]** – “Survey of Hallucination in Natural Language Generation.”
-> _Epistemic Note (Primary):_ Catalogs failure modes motivating abstention strategies.
+> _Epistemic Note (Primary):_ Hallucination rogues’ gallery; proof that guessing is hazardous.
 > **Source Type:** Primary
 > - **URL:** `https://arxiv.org/abs/2302.02430`
 
 [^16]: **[J. Maynez et al. (2020)]** – “On Faithfulness and Factuality in Abstractive Summarization.”
-> _Epistemic Note (Primary):_ Evaluates fidelity in summarization systems, supporting source pinning.
+> _Epistemic Note (Primary):_ Summaries that drift from source; a cautionary tale for “no source, no claim.”
 > **Source Type:** Primary
 > - **URL:** `https://doi.org/10.18653/v1/2020.acl-main.450`
 
 [^17]: **[S. Kadavath et al. (2022)]** – “Language Models (Mostly) Know What They Know.”
-> _Epistemic Note (Primary):_ Shows models’ awareness of uncertainty, justifying abstention mechanisms.
+> _Epistemic Note (Primary):_ Models with a faint sense of their own ignorance—reason enough for an abstain button.
 > **Source Type:** Primary
 > - **URL:** `https://arxiv.org/abs/2207.05221`
