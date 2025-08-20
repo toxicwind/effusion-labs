@@ -22,7 +22,7 @@
     "data:merge-golden": "node tools/merge-golden.mjs --verbose"
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=24"
   },
   "keywords": [],
   "author": "",

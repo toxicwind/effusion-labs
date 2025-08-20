@@ -35,7 +35,7 @@ jobs:
       - name: ⚙️ Set up Node.js v20 environment
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version-file: '.nvmrc'
           cache: 'npm'
 
       - name: 📦 Install NPM dependencies
