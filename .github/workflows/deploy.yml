@@ -1,93 +1,100 @@
-name: CI/CD Pipeline
+name: CI & Production Deployment
+# A comprehensive pipeline that tests, validates, builds, publishes, and deploys the services.
 
 on:
+  # Run deployment on pushes to the main branch
   push:
     branches: [main]
+  # Run validation checks on pull requests
+  pull_request:
+  # Allow manual runs from the Actions tab
   workflow_dispatch:
 
-# Define environment variables once to keep the code DRY (Don't Repeat Yourself)
+# Central place for image configuration
 env:
   REGISTRY: ghcr.io
-  EFFUSION_IMAGE_NAME: effusion-labs
-  GATEWAY_IMAGE_NAME: markdown_gateway
 
+# Ensures only one workflow runs at a time for a given branch
 concurrency:
-  group: deploy-${{ github.ref }}
+  group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  # Job 1: Build the static site assets. This job does not need Docker.
-  build_site:
-    name: Build Website Assets
+  #############################################################
+  # JOB 1: Run on all pushes and PRs for quality assurance
+  #############################################################
+  pre_deployment_checks:
+    name: Run Code Validation & Pre-Deployment Checks
     runs-on: ubuntu-latest
-    permissions:
-      contents: read # This job only needs to read the code
+    timeout-minutes: 20
 
     steps:
-      - name: Checkout repository
+      - name: ⬇️ Checkout repository code
         uses: actions/checkout@v4
 
-      - name: Set up Node.js 20
+      - name: ⚙️ Set up Node.js v20 environment
         uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'npm'
 
-      - name: Install dependencies
-        run: npm ci --ignore-scripts
+      - name: 📦 Install NPM dependencies
+        run: npm ci
 
-      - name: Build static site
+      - name: 🧪 Run unit tests with code coverage
+        run: npm test
+
+      - name: 🔗 Check for broken links in Markdown files
+        run: npm run docs:links
+
+      - name: 📄 Validate document frontmatter and structure
+        run: npm run docs:validate
+      
+      - name: 🔨 Run Eleventy build for validation purposes
         run: npm run build
 
-      - name: Upload build artifact
-        # This makes the build output available to the next job
+      - name: ⬆️ Upload test coverage report artifact
+        if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: site-build-artifact
-          path: ./dist # IMPORTANT: Change './dist' if your build output directory is different
+          name: coverage-report
+          path: coverage/
 
-  # Job 2: Build and push container images after the site is built.
-  build_and_push:
-    name: Build & Push Docker Images
-    needs: build_site # This job will not start until 'build_site' is successful
+  ####################################################################
+  # JOB 2: Run only on 'main' branch to publish and deploy
+  ####################################################################
+  publish_and_deploy:
+    name: Publish Images & Trigger Production Deployment
+    # This job only runs after checks succeed AND it's a push to the main branch.
+    needs: pre_deployment_checks
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main' # Only run for the main branch
     permissions:
       contents: read
-      packages: write # Required to push images to GHCR
+      packages: write # Required to push to GitHub Container Registry
 
     steps:
-      - name: Checkout repository
+      - name: ⬇️ Checkout repository code
         uses: actions/checkout@v4
 
-      - name: Download build artifact
-        # Download the site assets built in the previous job
-        uses: actions/download-artifact@v4
-        with:
-          name: site-build-artifact
-          path: ./dist
-
-      - name: Set up QEMU for multi-platform builds
-        uses: docker/setup-qemu-action@v3
-
-      - name: Set up Docker Buildx
-        id: buildx
+      - name: 🐳 Set up Docker Buildx for multi-platform builds
         uses: docker/setup-buildx-action@v3
 
-      - name: Log in to GitHub Container Registry
+      - name: 🔑 Log in to GitHub Container Registry (GHCR)
         uses: docker/login-action@v3
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Extract metadata for effusion-labs image
+      # --- Metadata and build for effusion-labs ---
+      - name: 🏷️ Generate Docker tags for effusion-labs
         id: meta_effusion
         uses: docker/metadata-action@v5
         with:
-          images: ${{ env.REGISTRY }}/${{ github.repository }}/${{ env.EFFUSION_IMAGE_NAME }}
+          images: ${{ env.REGISTRY }}/${{ github.repository }}/effusion-labs
 
-      - name: Build and push effusion-labs image
+      - name: 🏗️ Build & Push 'effusion-labs' image to GHCR
         uses: docker/build-push-action@v6
         with:
           context: .
@@ -95,39 +102,32 @@ jobs:
           push: true
           tags: ${{ steps.meta_effusion.outputs.tags }}
           labels: ${{ steps.meta_effusion.outputs.labels }}
-          platforms: linux/amd64,linux/arm64
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          build-args: |
+            COMMIT_SHA=${{ github.sha }}
 
-      - name: Extract metadata for markdown_gateway image
+      # --- Metadata and build for markdown_gateway ---
+      - name: 🏷️ Generate Docker tags for markdown_gateway
         id: meta_gateway
         uses: docker/metadata-action@v5
         with:
-          images: ${{ env.REGISTRY }}/${{ github.repository }}/${{ env.GATEWAY_IMAGE_NAME }}
+          images: ${{ env.REGISTRY }}/${{ github.repository }}/markdown_gateway
 
-      - name: Build and push markdown_gateway image
+      - name: 🏗️ Build & Push 'markdown_gateway' image to GHCR
         uses: docker/build-push-action@v6
         with:
           context: ./markdown_gateway
           push: true
           tags: ${{ steps.meta_gateway.outputs.tags }}
           labels: ${{ steps.meta_gateway.outputs.labels }}
-          platforms: linux/amd64,linux/arm64
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-  # Job 3: Trigger the redeployment webhook only after images are successfully pushed.
-  redeploy:
-    name: Trigger Portainer Redeployment
-    needs: build_and_push # This job depends on the successful completion of the previous job
-    runs-on: ubuntu-latest
-    if: success() && github.ref == 'refs/heads/main'
-    
-    steps:
-      - name: Call Portainer webhook
+      - name: 🚀 Trigger Portainer webhook for service redeployment
         env:
-          HOOK: ${{ secrets.PORTAINER_WEBHOOK_EFFUSION }}
+          HOOK: ${{ secrets.PORTAINER_WEBHOOK }}
         run: |
-          echo "🚀 Triggering redeployment on Portainer..."
-          curl --fail --retry 5 --retry-all-errors --retry-delay 3 -X POST "$HOOK"
-          echo "✅ Redeployment signal sent."
+          echo "Triggering redeployment on Portainer..."
+          curl --fail --retry-all-errors --retry 5 --retry-delay 3 -X POST "$HOOK"
+          echo "Redeployment signal sent."
