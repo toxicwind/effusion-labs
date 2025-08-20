@@ -121,7 +121,7 @@ Nothing exotic—just a normal Eleventy dev loop, with nicer defaults if you opt
 - `lib/` — Reusable app/library code (helpers, transforms, utilities).
 * `.eleventy.js` — Eleventy config (collections, filters/shortcodes, passthrough).
 * `src/styles/app.tailwind.css` — Tailwind v4 entry with `@plugin` and `@source` directives.
-* `tailwind.config.cjs` / `postcss.config.cjs` — Theme tokens and PostCSS pipeline.
+* `tailwind.config.mjs` / `postcss.config.mjs` — Theme tokens and PostCSS pipeline.
 
 ## 2) Automation, Tooling & Guardrails
 
@@ -179,7 +179,7 @@ Nothing exotic—just a normal Eleventy dev loop, with nicer defaults if you opt
   - Collections via `addCollection` in `eleventy.config.mjs`
   - Static assets via `addPassthroughCopy`
 
-* **Tailwind/DaisyUI**: plugins/themes in `src/styles/app.tailwind.css`, tokens in `tailwind.config.cjs`
+* **Tailwind/DaisyUI**: plugins/themes in `src/styles/app.tailwind.css`, tokens in `tailwind.config.mjs`
 * **Node version**: respect `.nvmrc`
 
 ---

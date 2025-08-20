@@ -32,4 +32,4 @@ The header exposes a keyboard-accessible button that switches between dark and l
 
 ## Extending
 
-Add new variables in `tokens.css` and reference them from `tailwind.config.cjs` to create additional color roles or extend the type scale.
+Add new variables in `tokens.css` and reference them from `tailwind.config.mjs` to create additional color roles or extend the type scale.

@@ -1,6 +1,6 @@
-/*  tailwind.config.cjs  (CommonJS so the plugin’s require() always works) */
+/*  tailwind.config.mjs  (ESM config for Tailwind) */
 // Tailwind v4: templates are declared via `@source` in CSS, and plugins via `@plugin`.
-module.exports = {
+export default {
   theme: {
     extend: {
       colors: {

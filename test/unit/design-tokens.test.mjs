@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
-import tailwindConfig from '../../tailwind.config.cjs';
+import tailwindConfig from '../../tailwind.config.mjs';
 import { contrast } from '../helpers/color.mjs';
 
 function parseTheme(tokens, theme) {
