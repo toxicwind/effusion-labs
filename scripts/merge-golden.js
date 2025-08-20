@@ -1,10 +1,11 @@
 #!/usr/bin/env node
 
-const fs = require('fs');
-const path = require('path');
-const { glob } = require('glob');
-const slugify = require('slugify');
-const crypto = require('crypto');
+import fs from 'node:fs';
+import path from 'node:path';
+import { glob } from 'glob';
+import slugify from 'slugify';
+import crypto from 'node:crypto';
+import { fileURLToPath } from 'node:url';
 
 const args = process.argv.slice(2);
 const options = {
@@ -13,7 +14,7 @@ const options = {
   verbose: args.includes('--verbose'),
 };
 
-const repoRoot = path.resolve(__dirname, '..');
+const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
 function log(...msg) {
   console.log(...msg);

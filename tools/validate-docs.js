@@ -1,7 +1,7 @@
 #!/usr/bin/env node
-const fs = require('node:fs/promises');
-const path = require('node:path');
-const crypto = require('node:crypto');
+import fs from 'node:fs/promises';
+import path from 'node:path';
+import crypto from 'node:crypto';
 
 const VENDOR_DIR = process.env.VENDOR_DOCS_DIR || path.join('docs','vendors');
 async function main(){

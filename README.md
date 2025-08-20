@@ -47,7 +47,7 @@ Effusion Labs is a static site built with:
 
 Output is emitted to `_site/`, suitable for direct static hosting or containerization. GitHub Actions drive deploys and link checks.
 
-**Runtime target:** Node.js **24+** (honor `.nvmrc` if present).
+**Runtime target:** Node.js **24+** (honor `.nvmrc` if present). The repository is ESM-first (`package.json` sets `"type": "module"`); use `import`/`export` syntax. Configuration files that must stay CommonJS are suffixed with `.cjs`.
 
 ---
 

@@ -1,6 +1,6 @@
 const toArray = v => (Array.isArray(v) ? v : v ? [v] : []);
 
-module.exports = {
+export default {
   tags: data => {
     const merged = [
       ...toArray(data.tags),

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
-const libnpmsearch = require('libnpmsearch');
-const npmFetch = require('npm-registry-fetch');
-const { execSync } = require('child_process');
+import libnpmsearch from 'libnpmsearch';
+import npmFetch from 'npm-registry-fetch';
+import { execSync } from 'node:child_process';
 
 async function search(keyword) {
   const results = await libnpmsearch(keyword, { size: 20 });

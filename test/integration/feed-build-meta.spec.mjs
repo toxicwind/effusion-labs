@@ -6,7 +6,7 @@ import { createRequire } from 'module';
 import { buildLean } from '../helpers/eleventy-env.mjs';
 
 const require = createRequire(import.meta.url);
-const dateToRfc822 = require('@11ty/eleventy-plugin-rss/src/dateRfc822.js');
+import dateToRfc822 from '@11ty/eleventy-plugin-rss/src/dateRfc822.js';
 
 test('feed exposes build metadata', async () => {
   const outDir = await buildLean('feed-build-meta');
