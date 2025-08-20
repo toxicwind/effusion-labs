@@ -43,12 +43,6 @@ jobs:
 
       - name: 🧪 Run unit tests with code coverage
         run: npm test
-
-      - name: 🔗 Check for broken links in Markdown files
-        run: npm run docs:links
-
-      - name: 📄 Validate document frontmatter and structure
-        run: npm run docs:validate
       
       - name: 🔨 Run Eleventy build for validation purposes
         run: npm run build

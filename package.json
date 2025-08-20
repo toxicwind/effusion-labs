@@ -4,28 +4,22 @@
   "description": "This is a digital studio and knowledge base for Effusion Labs, built with Eleventy and the powerful `@photogabble/eleventy-plugin-interlinker`.",
   "main": "index.js",
   "scripts": {
-    "css:build": "node -e \"require('./lib/postcss')('src/styles/app.tailwind.css','src/assets/css/app.css')\"",
+    "//-- CORE COMMANDS --//": "",
     "dev": "eleventy --serve",
     "build": "eleventy",
-    "format": "prettier -w .",
     "test": "c8 node tools/runner.mjs",
-    "test:all": "npm test -- --all",
-    "test:browser": "node --test \"test/browser/**/*.test.mjs\"",
-    "coverage": "c8 report",
-    "docs:links": "find -L . -name '*.md' -type f -not -path './node_modules/*' | xargs markdown-link-check -c link-check.config.json",
-    "docs:validate": "node tools/validate-docs.js",
-    "docs:reindex": "node tools/build-vendor-index.js",
-    "tools:build-search": "npm install --prefix tools/google-search && npm run build --prefix tools/google-search",
-    "deps:setup": "npm run deps:playwright && npm run deps:system",
+    "format": "prettier -w .",
+
+    "//-- CI & VALIDATION --//": "",
+    "validate:links": "markdown-link-check -c link-check.config.json",
+    "validate:docs": "node tools/validate-docs.js",
     "deps:playwright": "playwright install chromium || true",
-    "deps:system": "playwright install-deps || true",
-    "proxy:health": "node scripts/proxy-health.mjs",
-    "deps:provision": "bash scripts/provision-env.sh",
-    "data:merge-sections": "node tools/merge-sections.mjs  --verbose",
-    "data:synthesize": "node tools/synthesize.mjs --verbose",
-    "data:merge-golden": "node tools/merge-golden.mjs --verbose",
+    
+    "//-- DATA PIPELINE --//": "",
     "data:all": "npm run data:merge-sections && npm run data:synthesize && npm run data:merge-golden",
-    "audit:golden": "node tools/audit-identity.mjs --file src/content/archives/golden_record_20250819T081755Z.json --max-combo=3 --top=5 --verbose"
+    "data:merge-sections": "node tools/merge-sections.mjs --verbose",
+    "data:synthesize": "node tools/synthesize.mjs --verbose",
+    "data:merge-golden": "node tools/merge-golden.mjs --verbose"
   },
   "engines": {
     "node": ">=20"
