@@ -1,20 +1,13 @@
 // tools/runner.mjs
-import { spawnSync } from 'node:child_process';
+import { spawn, spawnSync } from 'node:child_process';
 import process from 'node:process';
 import select from './select.mjs';
 
-/**
- * Performs a single, shared Eleventy build for all tests.
- * The output is streamed directly to the console.
- */
 function runEleventyBuild() {
   const outputDir = '/tmp/eleventy-build';
   console.log(`\n🏗️  Performing single Eleventy build...`);
-
-  // Clean previous build
   spawnSync('rm', ['-rf', outputDir], { stdio: 'inherit' });
 
-  // Run Eleventy build, inheriting stdio for live progress
   const result = spawnSync('npx', ['@11ty/eleventy', `--output=${outputDir}`], {
     stdio: 'inherit',
     env: { ...process.env, ELEVENTY_ENV: 'test', WATCH: '0' },
@@ -29,36 +22,67 @@ function runEleventyBuild() {
   return outputDir;
 }
 
-/**
- * The main entry point for the script.
- */
-function main() {
+async function main() {
   console.log('🚀 Launching test runner...');
 
-  // 1. Find all test files. The bootstrap script will handle smart filtering later if needed.
-  const allTests = select({ all: true });
+  const allTests = await select();
   const testsToRun = allTests.map(t => t.file);
   console.log(`🔍 Found ${testsToRun.length} test files.`);
 
-  // 2. Build the site once.
-  const sharedBuildDir = runEleventyBuild();
+  if (testsToRun.length === 0) {
+    console.log('No tests found. Exiting.');
+    process.exit(0);
+  }
 
-  // 3. Execute the tests.
-  // We use spawnSync with 'inherit' because the parent `llm_run` is handling the supervision,
-  // timeouts, and logging. This script's only job is to run the tests and exit with the correct code.
+  const sharedBuildDir = runEleventyBuild();
   console.log(`\n🧪 Running ${testsToRun.length} tests...`);
-  const testResult = spawnSync(process.execPath, ['--test', ...testsToRun], {
-    stdio: 'inherit',
-    env: { ...process.env, ELEVENTY_BUILD_DIR: sharedBuildDir },
+
+  // --- NEW: Timeout and Process Handling ---
+  let testProcess;
+  const timeoutMs = Number(process.env.TEST_TIMEOUT_MS || 300000); // Default to 5 minutes (300,000 ms)
+
+  const testPromise = new Promise((resolve, reject) => {
+    testProcess = spawn(process.execPath, ['--test', ...testsToRun], {
+      stdio: 'inherit',
+      env: { ...process.env, ELEVENTY_BUILD_DIR: sharedBuildDir },
+    });
+    testProcess.on('close', (code) => {
+      if (code === 0) {
+        resolve();
+      } else {
+        reject(new Error(`Tests failed with exit code ${code}`));
+      }
+    });
+    testProcess.on('error', (err) => reject(err));
   });
 
-  // 4. Exit with the result of the test run.
-  if (testResult.status === 0) {
+  const timeoutPromise = new Promise((_, reject) => {
+    setTimeout(() => {
+      // This runs only if the tests take too long.
+      testProcess.kill('SIGTERM'); // Terminate the stuck test process.
+      reject(new Error(`Timeout: Tests took longer than ${timeoutMs / 60000} minutes.`));
+    }, timeoutMs);
+  });
+  // --- END NEW ---
+
+  const heartbeat = setInterval(() => {
+    console.log(`// HEARTBEAT @ ${new Date().toISOString()}: Test runner is active.`);
+  }, 15000);
+
+  try {
+    // Race the test process against our timeout.
+    await Promise.race([testPromise, timeoutPromise]);
     console.log('\n✨ All tests passed!');
-  } else {
-    console.error('\n🔥 Tests failed.');
+    process.exit(0);
+  } catch (error) {
+    console.error(`\n🔥 ${error.message}`);
+    process.exit(1);
+  } finally {
+    clearInterval(heartbeat);
   }
-  process.exit(testResult.status);
 }
 
-main();
+main().catch(err => {
+  console.error('A critical error occurred in the test runner:', err);
+  process.exit(1);
+});
