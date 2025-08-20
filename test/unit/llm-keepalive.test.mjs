@@ -1,6 +1,8 @@
-import { spawnSync } from 'node:child_process';
+import cp from 'node:child_process';
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
+
+const { spawnSync } = cp;
 
 const KEEPALIVE_IMPORT = '--import=./test/setup/llm-keepalive.mjs';
 

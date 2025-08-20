@@ -1,7 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert';
-import { execSync } from 'node:child_process';
+import cp from 'node:child_process';
 import fs from 'node:fs';
+
+const { execSync } = cp;
 
 const nodeShim = 'bin/node';
 
