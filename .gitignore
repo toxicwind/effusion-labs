@@ -36,3 +36,7 @@ tools/search2serp/package-lock.json
 tmp/
 coverage/
 .llm-bash-env
+
+# Generated CSS
+src/assets/css/*
+!src/assets/css/.gitkeep
