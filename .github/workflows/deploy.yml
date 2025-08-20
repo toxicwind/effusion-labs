@@ -120,7 +120,7 @@ jobs:
 
       - name: 🚀 Trigger Portainer webhook for service redeployment
         env:
-          HOOK: ${{ secrets.PORTAINER_WEBHOOK }}
+          HOOK: ${{ secrets.PORTAINER_WEBHOOK_EFFUSION }}
         run: |
           echo "Triggering redeployment on Portainer..."
           curl --fail --retry-all-errors --retry 5 --retry-delay 3 -X POST "$HOOK"

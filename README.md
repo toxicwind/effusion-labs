@@ -47,7 +47,7 @@ Effusion Labs is a static site built with:
 
 Output is emitted to `_site/`, suitable for direct static hosting or containerization. GitHub Actions drive deploys and link checks.
 
-**Runtime target:** Node.js **20+** (honor `.nvmrc` if present).
+**Runtime target:** Node.js **24+** (honor `.nvmrc` if present).
 
 ---
 
@@ -177,7 +177,7 @@ Nothing exotic—just a normal Eleventy dev loop, with nicer defaults if you opt
 ## Configuration
 * **Eleventy**:
 
-  * Collections via `addCollection` in `eleventy.config.js`
+  * Collections via `addCollection` in `.eleventy.js`
   * Static assets via `addPassthroughCopy`
 * **Tailwind/DaisyUI**: theme in `tailwind.config.cjs`
 * **Node version**: respect `.nvmrc`
@@ -188,7 +188,7 @@ Nothing exotic—just a normal Eleventy dev loop, with nicer defaults if you opt
 
 Optional local services via Docker Compose:
 
-* **`effusion-labs`** web container exposed at **`18400:80`**
+* **`effusion-labs`** web container (port mapping as defined in `docker-compose.yml`)
 * **`markdown_gateway`**: proxies HTML→Markdown (uses FlareSolverr)
 
   * Configure solver with `SOLVER_URL` in your environment
@@ -228,7 +228,7 @@ If you’re running this repo under an automated coding agent (Codex-style, CI s
 2. `npm install`
 3. Create a feature branch
 4. Add tests or docs as appropriate
-5. `npm test` and (if present) `npm run docs:links`
+5. `npm test`
 6. Open a PR
 
 We use the **ISC** license and expect contributions to be compatible.

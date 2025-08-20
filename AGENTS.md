@@ -31,7 +31,7 @@ Build a current mental model of the workspace in \~seconds.
 ```bash
 tree -L 3 -I "node_modules|_site|.git"
 llm_cat package.json
-llm_cat eleventy.config.js
+llm_cat .eleventy.js
 [ -f tailwind.config.cjs ] && llm_cat tailwind.config.cjs
 [ -f docker-compose.yml ]  && llm_cat docker-compose.yml
 [ -f .env.example ]        && llm_cat .env.example
@@ -40,7 +40,7 @@ llm_cat eleventy.config.js
 **Pull out**
 
 * `package.json` → scripts (`dev`, `build`, `test`) and key deps.
-* `eleventy.config.js` → `addCollection`, filters/shortcodes, `addPassthroughCopy`.
+* `.eleventy.js` → `addCollection`, filters/shortcodes, `addPassthroughCopy`.
 * Any required env from `.env.example`.
 
 ---
@@ -109,7 +109,7 @@ Summaries should be crisp: what the file does, the key interfaces, and the speci
 
 ## 5) Eleventy-specific Notes (work with the grain)
 
-* Collections live in `eleventy.config.js` → read `addCollection` shapes before changing front matter.
+* Collections live in `.eleventy.js` → read `addCollection` shapes before changing front matter.
 * Assets via `addPassthroughCopy`.
 * Output is `_site/` → never edit `_site/`; build to change it.
 
