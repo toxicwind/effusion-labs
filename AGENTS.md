@@ -1,217 +1,182 @@
-## START OF AGENTS.md — effusion-labs (Repository Operational Rails)
+## START OF AGENTS.md — effusion-labs
+_Effusion Labs — Operating Rails for Autonomous Coding Agents (Codex-style)_
 
-**Binding Priority**
-Order of authority: **User → AGENTS.md → Workspace → System Prompt**.
-System prompt invariants are non-nullifiable.
-
----
-
-## Runtime Facts
-
-- Node.js: **v20+** (repo targets v20; runners may be v22). Honor `.nvmrc` if present.
-- Modules: **CommonJS (CJS)**
-- Static generator: **Eleventy (11ty)**
-- Templates: **Nunjucks**
-- Styling: **Tailwind CSS**
-- Content: **Markdown**
+This is the **in-repo operating spec** for autonomous coding agents that run bash, read/write files, and iterate quickly. It complements the upstream system charter (Mission Anchor, No-Ask, single final message) — keep that in mind and use this as the on-disk contract.
 
 ---
 
-## Mandatory Activation (once per shell)
-
-Activate guardrails before running anything:
+## 0) Runtime Augmentation (one command)
+Activate the augmented shell so you get streaming runs, structured notices, and sane defaults.
 
 ```bash
 source scripts/llm-bootstrap.sh
 ````
 
-**Self-check** (run right after sourcing):
+**You get**
 
-```bash
-type llm_run    # => llm_run is a function
-trap -p DEBUG   # => ... DEBUG _llm_rewrite
-type tail       # => tail is a function (wrapper)
-type head       # => head is a function (wrapper)
-type cat        # => cat is a function (wrapper)
-echo "$LLM_STRICT"  # => 1
-```
+* **`llm_run`** → canonical runner: live streaming, idle beacons, preserved exit codes, clean interrupts, bounded post-tails.
+* **I/O wrappers** → `cat` → `llm_cat` (format-aware, folded lines); `tail -f/-F` auto-bounded; `head` clamped.
+* **Command rewrite** → naive `> file` or `> file && tail …` becomes a streaming pipeline (or is rejected in strict mode) so logs are visible and token-efficient.
+* **Autoinstall** → hash-based detection triggers `npm ci` (+ optional Python reqs if a venv is active).
 
-If any of these don’t match, re-source the bootstrap.
+> Quick sanity check (optional):
+> `type llm_run && trap -p DEBUG && echo "STRICT=$LLM_STRICT"`
 
 ---
 
-## Canonical I/O & Streaming Rules
+## 1) Fast Orientation Macro (always run before planning)
 
-### Golden incantation (always prefer)
-
-```bash
-llm_run --out /tmp/task.log -- <cmd and args>
-```
-
-* Streams live (folded) output to console and `/tmp/task.log`.
-* Emits **idle beacons** only during true inactivity.
-* Prints a **run.complete** footer with exit code.
-* `Ctrl-C`: prints a bounded tail and exits **130**.
-
-### Forbidden patterns (strictly rejected under `LLM_STRICT=1`)
+Build a current mental model of the workspace in \~seconds.
 
 ```bash
-<cmd> > file && tail -n 20 file     # disallowed
-<cmd> > file && head -n 20 file     # disallowed
-<cmd> > file                        # silent redirect (disallowed)
+tree -L 3 -I "node_modules|_site|.git"
+llm_cat package.json
+llm_cat eleventy.config.js
+[ -f tailwind.config.cjs ] && llm_cat tailwind.config.cjs
+[ -f docker-compose.yml ]  && llm_cat docker-compose.yml
+[ -f .env.example ]        && llm_cat .env.example
 ```
 
-You’ll see a fast **rewrite.reject** with a suggestion:
+**Pull out**
 
-```bash
-llm_run --out file -- <cmd>
-```
-
-### Head & Tail safety
-
-* `tail -f/-F` is **blocked** (anti-runaway); you get a bounded snapshot (default `LLM_TAIL_MAX_LINES=5000`).
-* `head` is **clamped** to `LLM_HEAD_MAX_LINES` (default **2000**) and folded to avoid token floods.
-* Bypass wrappers only if you truly must: `command tail …`, `command head …`.
-
-### Pretty printing
-
-* `cat` is a global wrapper that pretty-prints known code/text types via Prettier (fallback: raw + folded).
-* For raw bytes/pipes/binaries: use `command cat`.
+* `package.json` → scripts (`dev`, `build`, `test`) and key deps.
+* `eleventy.config.js` → `addCollection`, filters/shortcodes, `addPassthroughCopy`.
+* Any required env from `.env.example`.
 
 ---
 
-## Heartbeats & Silence Discipline
+## 2) Golden Execution Macros
 
-* `llm_run` emits `event=run.idle` about every `LLM_IDLE_SECS` (**7s** default) only while the child is *quiet*.
-* Global heartbeat is **scoped**: runs only when no `llm_run` lockfiles exist; auto-stops.
-* **Stall guard**: if no new bytes for `LLM_IDLE_FAIL_AFTER_SECS` (**300s** default), the runner cancels with exit **124** and prints a bounded tail.
+Prefer these shapes. They stream, they finish, they leave artifacts.
 
-Do **not** print your own “keep-alive” lines. Extra spam is suppressed by `LLM_SUPPRESS_PATTERNS`.
+```bash
+# dev: bounded digest on completion
+llm_run --out /tmp/dev.log   --tail 120 -- npm run dev
+
+# build: one-shot
+llm_run --out /tmp/build.log             -- npm run build
+
+# tests: CI-friendly presets may be applied (CI=1, ELEVENTY_ENV=test, WATCH=0)
+llm_run --out /tmp/test.log              -- npm test
+```
+
+**Signals you’ll see**
+
+* Idle: emits `event=run.idle` at \~`LLM_IDLE_SECS` when the child is quiet.
+* Stall cutoff: after `LLM_IDLE_FAIL_AFTER_SECS`, run ends (non-zero) with a bounded tail for triage.
+* Ctrl-C: prints \~80 trailing lines, exits **130**.
+
+> You can write naive patterns (`cmd > log && tail …`); the DEBUG trap will rewrite or reject. The golden macros are faster and clearer — use them.
 
 ---
 
-## Test/Build Mandates (11ty, CI mode)
+## 3) Live Registry Expansion (dependencies are a first-class tool)
 
-* When tests are invoked via `npm|pnpm|yarn test`, env is auto-preset: `CI=1 ELEVENTY_ENV=test WATCH=0`.
-* Eleventy must run **once** (no `--watch`/`--serve`) inside tests/builds.
-
-Canonical forms:
+Treat the npm registry as the **ground truth** when expanding capability. Fetch facts, choose versions deliberately, pin, and run.
 
 ```bash
-# run tests
-llm_run --out /tmp/unit.log -- npm test
+# discover candidates
+llm_run --out /tmp/npm-search.log -- npm search --searchlimit 20 "<keywords>"
 
-# build site once
-llm_run --out /tmp/build.log -- npx @11ty/eleventy --input=src --output=_site --quiet
+# inspect specific packages
+llm_run --out /tmp/npm-view.log   -- npm view <pkg> version dist-tags latest time --json
+
+# choose & pin exact version, then install
+llm_run --out /tmp/npm-install.log -- npm install <pkg>@<exact> --save-exact
 ```
+
+**Principles**
+
+* Prefer **maintained** libs with clear semver and healthy release cadence.
+* Pin **exact** versions to stabilize builds; record choice rationale in your final Result.
+* Lockfile changes will trigger autoinstall on next activation; you can also run `llm_run --out /tmp/ci.log -- npm ci` explicitly.
 
 ---
 
-## Dependency Hygiene (autoinstall, hashed)
+## 4) Reading & Summarizing Code (token-smart)
 
-On activation, if lockfile hashes changed:
+Use `llm_cat` for source (pretty + folded); bypass with `command cat` only for binaries or raw pipes.
 
-* Runs `npm ci`
-* Runs `python -m pip install -r markdown_gateway/requirements.txt` **only if a virtualenv is active**; otherwise emits `event=deps.skip`.
+```bash
+llm_cat src/_data/site.json
+llm_cat src/_includes/layouts/base.njk
+llm_cat src/content/projects/example.md
+```
 
-Force a rehash by touching a lockfile; no-op when clean.
+Summaries should be crisp: what the file does, the key interfaces, and the specific seams you’ll modify.
 
 ---
 
-## Observability (events you will see)
+## 5) Eleventy-specific Notes (work with the grain)
 
-Examples (also mirrored to `GITHUB_STEP_SUMMARY` when present):
-
-```
-::notice:: LLM-GUARD ts=… event=run.start id=… out=/tmp/… cmd=…
-::notice:: LLM-GUARD ts=… event=run.idle id=… idle_secs=7 total_idle=…
-::notice:: LLM-GUARD ts=… event=run.complete id=… status=0 duration_s=…
-::notice:: LLM-GUARD ts=… event=rewrite.reject reason=>+tail/head disallowed suggest="llm_run --out … -- …"
-::notice:: LLM-GUARD ts=… event=tail.block file=… lines=5000
-::notice:: LLM-GUARD ts=… event=head.clamp file=… requested=50000 used=2000
-```
-
-Act on these; don’t ignore them.
+* Collections live in `eleventy.config.js` → read `addCollection` shapes before changing front matter.
+* Assets via `addPassthroughCopy`.
+* Output is `_site/` → never edit `_site/`; build to change it.
 
 ---
 
-## Package Choice Mandate (reuse-first)
+## 6) “Interactive Development” clarified
 
-Before implementing new functionality, search the registry and prefer reuse. Use the helper script:
+This setup lets an agent **observe** a dev server in a sandbox **without hanging** on `tail -f`. Use bounded tails so each run yields a digest and exits.
+
+* Run: `llm_run --out /tmp/dev.log --tail 120 -- npm run dev`
+* If the server prints a URL, **surface it** in your final Result.
+* If the server is long-quiet by design, increase the stall cutoff per command:
+  `LLM_IDLE_FAIL_AFTER_SECS=900 llm_run --out /tmp/dev.log --tail 120 -- npm run dev`
+
+---
+
+## 7) Tuning Knobs (set only with intent)
+
+* `LLM_STRICT=1` → enforce rewrite/reject of risky redirects; prefer canonical runs.
+* `LLM_TAIL_BLOCK=1` / `LLM_TAIL_MAX_LINES=5000` → follow protection & snapshot size.
+* `LLM_HEAD_MAX_LINES=2000` → cap for `head`.
+* `LLM_SUPPRESS_PATTERNS` → awk/regex to drop noisy lines.
+* `LLM_IDLE_SECS` / `LLM_IDLE_FAIL_AFTER_SECS` → idle cadence & stall cutoff.
+
+Per-command override example:
 
 ```bash
-node scripts/npm-utils.js search '<keywords>'       # list matching packages
-node scripts/npm-utils.js view <pkg>               # show package metadata
-node scripts/npm-utils.js analyze '<keywords>'    # summarize candidates
-node scripts/npm-utils.js install <pkg>           # install with exact pin
-```
-
-If the helper is unavailable, minimally run:
-
-```bash
-npm search --searchlimit 20 '<keywords>'
-npm view <package> --json
-```
-
-Choose an existing package when suitable; write bespoke code only if you can name the gaps.
-
-Install with exact pins:
-
-```bash
-npm install <pkg>@<version> --save-exact
+LLM_IDLE_FAIL_AFTER_SECS=1200 llm_run --out /tmp/slow.log -- <quiet-task>
 ```
 
 ---
 
-## Do/Don’t Cheat Sheet
+## 8) Operating Cadence (tight loop, decisive edits)
 
-**Do**
-
-* `llm_run --out /tmp/x.log -- <cmd>`
-* `llm_run --out /tmp/unit.log --tail 120 -- npm test`
-* `llm_cat package.json`; `llm_cat src/index.ts`
-* Use `command cat|tail|head` only when wrappers would break a binary/pipe case.
-
-**Don’t**
-
-* `npm test >/tmp/unit.log && tail -n 20 /tmp/unit.log`
-* `eleventy --serve` or `--watch` inside tests
-* Emit your own “keep-alive” lines; rely on bootstrap heartbeats
-
-**Interrupts & Exit Codes**
-
-* `Ctrl-C` during `llm_run`: prints bounded tail, exits **130**.
-* Idle stall trip: exits **124**.
-* Otherwise, child exit code is preserved.
+1. **Anchor** (system charter) → define Mission Anchor + BDD acceptance.
+2. **Recon** (macro above) → facts over guesses.
+3. **Execute** (golden macros) → small, verifiable steps.
+4. **Expand** (live registry) → add/upgrade libs when they unlock capability; pin exact.
+5. **Verify** → evidence from logs/builds/tests.
+6. **Record** → summarize diffs and decisions.
 
 ---
 
-## Quick Toggles (rare)
+## 9) Completion Lens (what “DONE” means)
 
-```bash
-export LLM_STRICT=0                 # temporarily allow redirects (not recommended)
-export LLM_IDLE_FAIL_AFTER_SECS=0   # disable idle stall cancel for this shell
-export LLM_TAIL_BLOCK=0             # allow tail -f (prefer allowlist regex instead)
-export LLM_SUPPRESS_PATTERNS=       # show all upstream heartbeats (noisy)
+Mark complete only when:
+
+* Acceptance criteria are met with observable evidence (`event=run.complete status=0` for the decisive command).
+* A log artifact exists for each major step (`--out /tmp/*.log`).
+* The diff is minimal and purposeful (include `git diff --stat` if available).
+* Any dev server URL printed by tools is included in your Result.
+
+**Result skeleton (single final message, as per system charter)**
+
 ```
-
-Prefer per-command overrides:
-
-```bash
-LLM_IDLE_FAIL_AFTER_SECS=900 llm_run -- <long-quiet-build>
+Analysis: facts, constraints, assumptions, risks.
+Plan: steps, commands (llm_run …), expected signals.
+Result: diffs (stat), artifacts (/tmp/*.log), URLs, Acceptance Map, Resolution Map.
 ```
 
 ---
 
-## Mission Discipline (IDD loop)
+## 10) Rapid Recovery (when something misbehaves)
 
-* Work against explicit acceptance criteria (Mission Anchor).
-* **PROVE → FIX** loop:
-
-  * PROVE: run, capture, summarize.
-  * FIX: minimal change; if new deps are needed, install with exact pin; then PROVE again.
-* Close only when acceptance criteria are met and `event=run.complete status=0` is observed.
-
----
+* Show last \~120 lines from the relevant `/tmp/*.log`.
+* Re-read targeted files with `llm_cat`; adjust the plan minimally.
+* If a tool is chatty but correct, raise `LLM_IDLE_FAIL_AFTER_SECS` for that run only.
+* If a library blocks progress, pivot: pick the next best maintained alternative from the registry and pin.
 
 ## END OF AGENTS.md — effusion-labs
