@@ -1,11 +1,14 @@
 // tools/select.mjs
-import { exec } from 'node:child_process/promises';
+import cp from 'node:child_process';
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.resolve(__dirname, '..');
+
+// Use the promise-based exec (Node.js 15+)
+const { exec } = cp.promises;
 
 /**
  * Finds all test files tracked by Git and enriches them with metadata.

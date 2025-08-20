@@ -1,7 +1,9 @@
 // tools/runner.mjs
-import { spawn, spawnSync } from 'node:child_process';
+import cp from 'node:child_process';
 import process from 'node:process';
 import select from './select.mjs';
+
+const { spawn, spawnSync } = cp;
 
 function runEleventyBuild() {
   const outputDir = '/tmp/eleventy-build';
