@@ -1,6 +1,6 @@
 {# src/_includes/layout.njk #}
 <!DOCTYPE html>
-<html lang="en" data-theme="dark" class="scroll-pt-16 dark">
+<html lang="en" data-theme="light" class="scroll-pt-16">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -69,13 +69,17 @@
     </main>
 
     <footer class="mt-16 p-8 text-center text-sm text-text/60 border-t border-border">
+      <!-- DaisyUI Theme Controller -->
+      <div class="flex items-center gap-2 p-2">
+        <span>Theme</span>
+        <input type="checkbox" class="toggle theme-controller" value="dark" />
+      </div>
       <span class="block font-mono text-xs tracking-widest mb-2" data-build="{{ buildTime }}">{{ buildTime }}</span>
       &copy; 2025 Effusion Labs. A space for creative synthesis.
     </footer>
   </div>
 
   <script>lucide.createIcons();</script>
-    <script src="/assets/js/theme-toggle.js" defer></script>
     <script src="/assets/js/footnote-nav.js" defer></script>
     <script src="/assets/js/code-copy.js" defer></script>
   </body>
