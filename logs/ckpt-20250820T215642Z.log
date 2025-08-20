@@ -1,0 +1,8 @@
+commit 6da61679616eb312562f86eb5ed3f66cac599067
+Author: Codex <codex@openai.com>
+Date:   Wed Aug 20 22:02:59 2025 +0000
+
+    chore: revert deps hash to baseline
+
+ tmp/.llm_deps_hash | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
