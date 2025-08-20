@@ -299,4 +299,4 @@
 }
 
 /* If you see utility gaps, explicitly hint sources for Tailwind v4 */
-@source "./src/**/*.{njk,md,html,js}";
+@source "../**/*.{njk,md,html,js}";
