@@ -40,10 +40,10 @@ A fast, opinionated Eleventy + Nunjucks + Tailwind static site—curated as a �
 
 Effusion Labs is a static site built with:
 
-* **Eleventy (11ty)** for generation
-* **Nunjucks** for templating
-* **Tailwind CSS** (with DaisyUI) for styling
-* **Markdown** content in `src/content`
+- **Eleventy (11ty)** for generation
+- **Nunjucks** for templating
+- **Tailwind CSS** (with DaisyUI) for styling
+- **Markdown** content in `src/content`
 
 Output is emitted to `_site/`, suitable for direct static hosting or containerization. GitHub Actions drive deploys and link checks.
 
@@ -84,10 +84,10 @@ source scripts/llm-bootstrap.sh
 
 **What you get, in plain terms**
 
-* **Streaming runs** with `llm_run` (clean interrupts, preserved exit codes, optional “tail N on completion”).
-* **Smarter I/O**: pretty `cat` for code/text; guard rails for `tail`/`head` to avoid runaway terminals.
-* **No surprise silence**: long commands stream instead of hiding behind redirects.
-* **Autoinstall-on-change**: if lockfiles change, `npm ci` runs automatically on activation.
+- **Streaming runs** with `llm_run` (clean interrupts, preserved exit codes, optional “tail N on completion”).
+- **Smarter I/O**: pretty `cat` for code/text; guard rails for `tail`/`head` to avoid runaway terminals.
+- **No surprise silence**: long commands stream instead of hiding behind redirects.
+- **Autoinstall-on-change**: if lockfiles change, `npm ci` runs automatically on activation.
 
 Use it during local dev if you like clearer logs; it’s **required** for our agent workflows (see `AGENTS.md`).
 
@@ -97,8 +97,8 @@ Use it during local dev if you like clearer logs; it’s **required** for our ag
 
 “Interactive development” here simply means **run the dev server with live reload** while you edit content, templates, or styles.
 
-* **Humans**: Run `npm run dev` (or via guardrails: `llm_run --out /tmp/dev.log --tail 120 -- npm run dev`) and work as usual in your editor.
-* **Agents/CI**: We avoid `tail -f` loops and use bounded output so runs finish cleanly; details live in `AGENTS.md`.
+- **Humans**: Run `npm run dev` (or via guardrails: `llm_run --out /tmp/dev.log --tail 120 -- npm run dev`) and work as usual in your editor.
+- **Agents/CI**: We avoid `tail -f` loops and use bounded output so runs finish cleanly; details live in `AGENTS.md`.
 
 Nothing exotic—just a normal Eleventy dev loop, with nicer defaults if you opt into guardrails.
 
@@ -106,11 +106,11 @@ Nothing exotic—just a normal Eleventy dev loop, with nicer defaults if you opt
 
 ## Key Features
 
-* **Homepage**: Multi-column “Work” feed, filter toolbar, concept-map CTA, animated lab seal flourish.
-* **Work Section**: `/work` aggregates projects, concepts, and sparks with category filters & deep links.
-* **Product Pages**: Surfaces provenance metadata; links related “character” pages where applicable.
-* **Utilities**: Helpers like ordinal suffixing (including negative numbers) and robust file caching.
-* **Collections**: Curated Eleventy collections (e.g., `sparks`, `concepts`, `projects`, `archives`, `meta`) plus convenience composites (`nodes`, `featured`, `interactive`, `recentAll`).
+- **Homepage**: Multi-column “Work” feed, filter toolbar, concept-map CTA, animated lab seal flourish.
+- **Work Section**: `/work` aggregates projects, concepts, and sparks with category filters & deep links.
+- **Product Pages**: Surfaces provenance metadata; links related “character” pages where applicable.
+- **Utilities**: Helpers like ordinal suffixing (including negative numbers) and robust file caching.
+- **Collections**: Curated Eleventy collections (e.g., `sparks`, `concepts`, `projects`, `archives`, `meta`) plus convenience composites (`nodes`, `featured`, `interactive`, `recentAll`).
 
 ---
 
@@ -120,66 +120,69 @@ Nothing exotic—just a normal Eleventy dev loop, with nicer defaults if you opt
 
 ## 1) Site Source & Build Logic
 
-* `src/` — All content & templates used by Eleventy (Markdown, Nunjucks, data, assets).
-* `lib/` — Reusable app/library code (helpers, transforms, utilities).
+- `src/` — All content & templates used by Eleventy (Markdown, Nunjucks, data, assets).
+- `lib/` — Reusable app/library code (helpers, transforms, utilities).
 * `.eleventy.js` — Eleventy config (collections, filters/shortcodes, passthrough).
-* `tailwind.config.cjs` / `postcss.config.cjs` — Styling pipeline config (Tailwind + PostCSS).
+* `src/styles/app.tailwind.css` — Tailwind v4 entry with `@plugin` and `@source` directives.
+* `tailwind.config.cjs` / `postcss.config.cjs` — Theme tokens and PostCSS pipeline.
 
 ## 2) Automation, Tooling & Guardrails
 
-* `scripts/` — Operational scripts (includes `llm-bootstrap.sh` guardrail env).
-* `bin/` / `tools/` — CLI utilities, one-offs, maintenance tools.
+- `scripts/` — Operational scripts (includes `llm-bootstrap.sh` guardrail env).
+- `bin/` / `tools/` — CLI utilities, one-offs, maintenance tools.
 
 ## 3) Services & Infrastructure
 
-* `markdown_gateway/` — Python HTML→Markdown proxy (optional service).
-* `docker-compose.yml` — Local service orchestration (web, gateway, etc.).
-* `.github/` — CI workflows (deploy, link-check).
-* `.portainer/` — Portainer stack/config.
+- `markdown_gateway/` — Python HTML→Markdown proxy (optional service).
+- `docker-compose.yml` — Local service orchestration (web, gateway, etc.).
+- `.github/` — CI workflows (deploy, link-check).
+- `.portainer/` — Portainer stack/config.
 
 ## 4) Docs, Research & Outputs
 
-* `docs/` — Project documentation, design notes, generated reports.
-* `research/` — Notebooks, experiments, scratch investigations.
-* `artifacts/` — Build artifacts or export bundles you want to keep.
-* `logs/` — Runtime logs (local/CI runs), agent traces, diagnostics.
+- `docs/` — Project documentation, design notes, generated reports.
+- `research/` — Notebooks, experiments, scratch investigations.
+- `artifacts/` — Build artifacts or export bundles you want to keep.
+- `logs/` — Runtime logs (local/CI runs), agent traces, diagnostics.
 
 ## 5) Tests & Quality
 
-* `test/` — Unit/integration tests and fixtures.
-* `link-check.config.json` — Link checker settings for docs/site.
+- `test/` — Unit/integration tests and fixtures.
+- `link-check.config.json` — Link checker settings for docs/site.
 
 ## 6) Build Products & Dependencies (generated/managed)
 
-* `_site/` — Final static site output (never edit directly, but use to understand final site).
-* `node_modules/` — Node dependencies (managed by npm).
-* `tmp/` — Scratch/ephemeral working area (if present).
+- `_site/` — Final static site output (never edit directly, but use to understand final site).
+- `node_modules/` — Node dependencies (managed by npm).
+- `tmp/` — Scratch/ephemeral working area (if present).
 
 ## 7) Repo Control & Configuration
 
-* `package.json` / `package-lock.json` — Scripts & dependency lock.
-* `.nvmrc` — Node version pin.
-* `.prettierrc`, `.gitignore`, `.dockerignore` — Formatting & VCS/docker hygiene.
-* `AGENTS.md` — Operating protocol for autonomous agents (how to run safely).
-* `README.md` — Human-facing overview.
-* `LICENSE` — ISC license.
+- `package.json` / `package-lock.json` — Scripts & dependency lock.
+- `.nvmrc` — Node version pin.
+- `.prettierrc`, `.gitignore`, `.dockerignore` — Formatting & VCS/docker hygiene.
+- `AGENTS.md` — Operating protocol for autonomous agents (how to run safely).
+- `README.md` — Human-facing overview.
+- `LICENSE` — ISC license.
 
 ---
 
 ### Quick orientation (on demand)
 
-* Humans: `npm run dev` to work with live reload.
-* Agents/CI: `source scripts/llm-bootstrap.sh` then `llm_run --out /tmp/build.log -- npm run build`.
-* Want a current snapshot? `tree -L 2 -I "node_modules|_site|.git|tmp"` (don’t commit the output).
+- Humans: `npm run dev` to work with live reload.
+- Agents/CI: `source scripts/llm-bootstrap.sh` then `llm_run --out /tmp/build.log -- npm run build`.
+- Want a current snapshot? `tree -L 2 -I "node_modules|_site|.git|tmp"` (don’t commit the output).
 
 ---
 
 ## Configuration
-* **Eleventy**:
 
-  * Collections via `addCollection` in `.eleventy.js`
-  * Static assets via `addPassthroughCopy`
-* **Tailwind/DaisyUI**: theme in `tailwind.config.cjs`
+- **Eleventy**:
+
+  - Collections via `addCollection` in `eleventy.config.mjs`
+  - Static assets via `addPassthroughCopy`
+
+* **Tailwind/DaisyUI**: plugins/themes in `src/styles/app.tailwind.css`, tokens in `tailwind.config.cjs`
 * **Node version**: respect `.nvmrc`
 
 ---
@@ -188,10 +191,10 @@ Nothing exotic—just a normal Eleventy dev loop, with nicer defaults if you opt
 
 Optional local services via Docker Compose:
 
-* **`effusion-labs`** web container (port mapping as defined in `docker-compose.yml`)
-* **`markdown_gateway`**: proxies HTML→Markdown (uses FlareSolverr)
+- **`effusion-labs`** web container (port mapping as defined in `docker-compose.yml`)
+- **`markdown_gateway`**: proxies HTML→Markdown (uses FlareSolverr)
 
-  * Configure solver with `SOLVER_URL` in your environment
+  - Configure solver with `SOLVER_URL` in your environment
 
 Start with:
 
@@ -209,10 +212,10 @@ Requires **Node ≥ 24** (see `package.json` / `.nvmrc`). Run from the repo root
 
 ### Core
 
-* `npm run dev` — Start Eleventy dev server with live reload (`eleventy --serve`).
-* `npm run build` — Build the static site to `_site/` (`eleventy`).
-* `npm test` — Run the test runner under coverage (`c8 node tools/runner.mjs`).
-* `npm run format` — Format the repo with Prettier (`prettier -w .`).
+- `npm run dev` — Start Eleventy dev server with live reload (`eleventy --serve`).
+- `npm run build` — Build the static site to `_site/` (`eleventy`).
+- `npm test` — Run the test runner under coverage (`c8 node tools/runner.mjs`).
+- `npm run format` — Format the repo with Prettier (`prettier -w .`).
 
 ---
 
