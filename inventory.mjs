@@ -18,9 +18,9 @@ const templateExt = new Set([
 ]);
 const configFiles = [
   'tailwind.config.js',
-  'tailwind.config.cjs',
+  'tailwind.config.mjs',
   'postcss.config.js',
-  'postcss.config.cjs',
+  'postcss.config.mjs',
   'eleventy.config.mjs',
 ];
 

@@ -1,4 +1,4 @@
-import register from './lib/eleventy/register.js';
+import register from './lib/eleventy/register.mjs';
 import { dirs } from './lib/config.js';
 import seeded from './lib/seeded.js';
 import registerArchiveCollections from './lib/eleventy/archive-collections.js';

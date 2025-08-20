@@ -39,7 +39,7 @@ Build a current mental model of the workspace in \~seconds.
 tree -L 3 -I "node_modules|_site|.git"
 llm_cat package.json
 llm_cat eleventy.config.mjs
-[ -f tailwind.config.cjs ] && llm_cat tailwind.config.cjs
+[ -f tailwind.config.mjs ] && llm_cat tailwind.config.mjs
 [ -f docker-compose.yml ]  && llm_cat docker-compose.yml
 ```
 

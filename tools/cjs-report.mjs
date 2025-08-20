@@ -10,7 +10,7 @@ function pathsFromScan(file) {
   return paths;
 }
 
-const include = /^(lib|src|scripts|tools|test|tailwind\.config\.cjs|postcss\.config\.cjs)/;
+const include = /^(lib|src|scripts|tools|test|tailwind\.config\.mjs|postcss\.config\.mjs)/;
 const before = [...pathsFromScan('tmp/cjs-scan.json')].filter(p => include.test(p));
 const after = new Set([...pathsFromScan('tmp/cjs-scan-post.json')].filter(p => include.test(p)));
 const report = [];
