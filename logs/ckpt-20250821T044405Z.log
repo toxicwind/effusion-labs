@@ -1,0 +1,13 @@
+commit 880c3062759eeb72cb9e30f5a1ec9c46b21461af
+Author: Codex <codex@openai.com>
+Date:   Thu Aug 21 04:48:17 2025 +0000
+
+    fix: scope archive pages by locale and remove unsupported class
+
+ .dead-links.json                                                             | 1 +
+ src/archives/collectables/designer-toys/pop-mart/the-monsters/characters.njk | 4 ++--
+ src/archives/collectables/designer-toys/pop-mart/the-monsters/index.njk      | 6 +++---
+ src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk   | 6 +++---
+ src/archives/collectables/designer-toys/pop-mart/the-monsters/series.njk     | 4 ++--
+ src/styles/app.tailwind.css                                                  | 2 +-
+ 6 files changed, 12 insertions(+), 11 deletions(-)

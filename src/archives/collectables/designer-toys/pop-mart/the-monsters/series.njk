@@ -1,13 +1,13 @@
 ---
 layout: "layout.njk"
 pagination:
-  data: collections.archiveSeries
+  data: collections.archiveSeries | byCompany('pop-mart') | byLine('the-monsters') | byLocale('en')
   size: 1
   alias: series
 eleventyComputed:
   companySlug: "{{ series.data.companySlug or series.data.company or 'pop-mart' }}"
   lineSlug: "{{ series.data.lineSlug or series.data.line or 'the-monsters' }}"
-  seriesSlug: "{{ series.data.seriesSlug }}"
+  seriesSlug: "{{ series.data.seriesSlug or (series.data.title | slug) }}"
   title: "{{ (series.data.title or seriesSlug) ~ ' — ' ~ (lineSlug | replace('-', ' ') | title) ~ ' — POP MART' }}"
 permalink: "/archives/collectables/designer-toys/{{ companySlug }}/{{ lineSlug }}/series/{{ seriesSlug }}/index.html"
 ---

@@ -266,7 +266,7 @@
 @layer components {
   /* ——— Failure Box ------------------------------------------------------- */
   .failbox {
-    @apply relative w-full rounded-xl border p-4 md:p-5 shadow-sm not-prose;
+    @apply relative w-full rounded-xl border p-4 md:p-5 shadow-sm;
     background-color: hsl(var(--b1));
     border-color: hsl(var(--bc)/.14);
     color: hsl(var(--bc));

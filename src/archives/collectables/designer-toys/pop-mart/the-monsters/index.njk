@@ -4,9 +4,9 @@ eleventyComputed:
   companySlug: "pop-mart"
   lineSlug: "the-monsters"
   title: "POP MART — The Monsters"
-  lineProducts: "{{ collections.archiveProducts | byCompany(companySlug) | byLine(lineSlug) }}"
-  lineCharacters: "{{ collections.archiveCharacters | byCompany(companySlug) | byLine(lineSlug) }}"
-  lineSeries: "{{ collections.archiveSeries | byCompany(companySlug) | byLine(lineSlug) }}"
+  lineProducts: "{{ collections.archiveProducts | byCompany(companySlug) | byLine(lineSlug) | byLocale('en') }}"
+  lineCharacters: "{{ collections.archiveCharacters | byCompany(companySlug) | byLine(lineSlug) | byLocale('en') }}"
+  lineSeries: "{{ collections.archiveSeries | byCompany(companySlug) | byLine(lineSlug) | byLocale('en') }}"
 ---
 
 <header class="mb-6">
