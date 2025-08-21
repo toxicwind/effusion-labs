@@ -1,0 +1,2350 @@
+diff --git a/artifacts/patches/20250820T222505Z.patch b/artifacts/patches/20250820T222505Z.patch
+deleted file mode 100644
+index 1db82dd..0000000
+--- a/artifacts/patches/20250820T222505Z.patch
++++ /dev/null
+@@ -1,1650 +0,0 @@
+-diff --git a/AGENTS.md b/AGENTS.md
+-index 6fd699a..c07e723 100644
+---- a/AGENTS.md
+-+++ b/AGENTS.md
+-@@ -7,0 +8,2 @@ This is the **in-repo operating spec** for autonomous coding agents that run bas
+-+>
+-+> **Highlighting & Icons**: Shiki performs build-time code highlighting (no Prism). Common Lucide icons are inlined as SVG; only include the Lucide runtime on pages needing dynamic icons.
+-diff --git a/README.md b/README.md
+-index fe4fa24..616d8a1 100644
+---- a/README.md
+-+++ b/README.md
+-@@ -46,0 +47,2 @@ Effusion Labs is a static site built with:
+-+- **Shiki** for build-time syntax highlighting with zero client-side JS
+-+- **Inline Lucide SVG icons** for common UI elements
+-diff --git a/docs/reports/2025-08-20-shiki-migration.md b/docs/reports/2025-08-20-shiki-migration.md
+-new file mode 100644
+-index 0000000..e4eb24d
+---- /dev/null
+-+++ b/docs/reports/2025-08-20-shiki-migration.md
+-@@ -0,0 +1,11 @@
+-+# Shiki Migration Audit – 2025-08-20
+-+
+-+## Summary
+-+- Removed Prism-based syntax highlighting (`prismjs`, `prism-themes`, `@11ty/eleventy-plugin-syntaxhighlight`).
+-+- Added Shiki stack (`shiki`, `@shikijs/transformers`, `@shikijs/markdown-it`).
+-+- Replaced runtime Lucide icons with inline SVG macros for header navigation.
+-+
+-+## Verification
+-+- `npm ls prismjs` → package not found.
+-+- `rg prism` shows no runtime references outside historical vendor docs.
+-+- Build and tests pass with Shiki-generated code blocks.
+-diff --git a/lib/eleventy/register.mjs b/lib/eleventy/register.mjs
+-index eab79b9..c71c322 100644
+---- a/lib/eleventy/register.mjs
+-+++ b/lib/eleventy/register.mjs
+-@@ -3,0 +4,2 @@ import markdownItAnchor from 'markdown-it-anchor';
+-+import markdownItShiki from '@shikijs/markdown-it';
+-+import { transformerNotationDiff, transformerNotationHighlight } from '@shikijs/transformers';
+-@@ -11,0 +14 @@ const pMap = async (...args) => (await import('p-map')).default(...args);
+-+import { icons } from 'lucide';
+-@@ -79 +82,19 @@ export default function register(eleventyConfig) {
+--  eleventyConfig.amendLibrary('md', md => {
+-+  eleventyConfig.amendLibrary('md', (md) => {
+-+    md.use(
+-+      markdownItShiki,
+-+      {
+-+        themes: { light: 'github-light', dark: 'github-dark' },
+-+        transformers: [
+-+          {
+-+            pre(node) {
+-+              node.properties.tabindex = 0;
+-+            },
+-+            line(node, i) {
+-+              node.properties['data-line'] = i + 1;
+-+            },
+-+          },
+-+          transformerNotationDiff(),
+-+          transformerNotationHighlight(),
+-+        ],
+-+      },
+-+    );
+-@@ -86,2 +107,2 @@ export default function register(eleventyConfig) {
+--        placement: 'before'
+--      })
+-+        placement: 'before',
+-+      }),
+-@@ -93,0 +115,6 @@ export default function register(eleventyConfig) {
+-+  eleventyConfig.addFilter('lucide', (name, attrs = {}) => {
+-+    const icon = icons[name];
+-+    if (!icon) return '';
+-+    return icon.toSvg(attrs);
+-+  });
+-+
+-diff --git a/lib/plugins.js b/lib/plugins.js
+-index d58d68a..140887d 100644
+---- a/lib/plugins.js
+-+++ b/lib/plugins.js
+-@@ -4 +3,0 @@ import rss from '@11ty/eleventy-plugin-rss';
+--import syntaxHighlight from '@11ty/eleventy-plugin-syntaxhighlight';
+-@@ -30 +28,0 @@ export default function getPlugins() {
+--    [syntaxHighlight, { preAttributes: { tabindex: 0 } }],
+-diff --git a/logs/build-20250820T222505Z.log b/logs/build-20250820T222505Z.log
+-new file mode 100644
+-index 0000000..e25467c
+---- /dev/null
+-+++ b/logs/build-20250820T222505Z.log
+-@@ -0,0 +1,142 @@
+-+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+-+
+-+> effusion_labs_final@1.0.0 build
+-+> eleventy
+-+
+-+🚀 Eleventy build starting with enhanced footnote system...
+-+/*! 🌼 daisyUI 5.0.50 */
+-+[11ty] Writing ./_site/concept-map.json from ./src/concept-map.json.njk
+-+[11ty] Writing ./_site/feed.xml from ./src/feed.njk
+-+[11ty] Writing ./_site/content/sparks/carbon-handshake/index.html from ./src/content/sparks/carbon-handshake.md (njk)
+-+[11ty/eleventy-img] Processing ./src/assets/static/logo.png (transform)
+-+[11ty] Writing ./_site/map/index.html from ./src/map.njk
+-+[11ty] Writing ./_site/404.html from ./src/404.njk
+-+[11ty] Writing ./_site/archives/index.html from ./src/archives/index.njk
+-+[11ty] Writing ./_site/archives/collectables/index.html from ./src/archives/collectables/index.njk
+-+[11ty] Writing ./_site/meta/index.html from ./src/content/meta/index.njk
+-+[11ty] Writing ./_site/archives/collectables/designer-toys/index.html from ./src/archives/collectables/designer-toys/index.njk
+-+[11ty] Writing ./_site/archives/collectables/designer-toys/pop-mart/index.html from ./src/archives/collectables/designer-toys/pop-mart/index.njk
+-+[11ty] Writing ./_site/archives/collectables/designer-toys/pop-mart/the-monsters/characters/labubu/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/characters.njk
+-+[11ty] Writing ./_site/archives/collectables/designer-toys/pop-mart/the-monsters/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/index.njk
+-+[11ty] Writing ./_site/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--best-of-luck--plush--std--20231230--reg-cn/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk
+-+[11ty] Writing ./_site/archives/collectables/designer-toys/pop-mart/the-monsters/series/angel-in-clouds-v2/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/series.njk
+-+[11ty] Writing ./_site/work/index.html from ./src/work.njk
+-+[11ty] Writing ./_site/content/concepts/aesthetic-inquiry/index.html from ./src/content/concepts/aesthetic-inquiry.md (njk)
+-+[11ty] Writing ./_site/content/concepts/atlas-process/index.html from ./src/content/concepts/atlas-process.md (njk)
+-+[11ty] Writing ./_site/content/concepts/autocatalytic-system/index.html from ./src/content/concepts/autocatalytic-system.md (njk)
+-+[11ty] Writing ./_site/work/block-ledger/index.html from ./src/content/concepts/block-ledger.md (njk)
+-+[11ty] Writing ./_site/content/concepts/compliant-spire/index.html from ./src/content/concepts/compliant-spire.md (njk)
+-+[11ty] Writing ./_site/content/concepts/core-concept/index.html from ./src/content/concepts/core-concept.md (njk)
+-+[11ty] Writing ./_site/content/concepts/ghost-byline/index.html from ./src/content/concepts/ghost-byline.md (njk)
+-+[11ty] Writing ./_site/content/concepts/ghost-engine/index.html from ./src/content/concepts/ghost-engine.md (njk)
+-+[11ty] Writing ./_site/content/concepts/parroting-mimicry/index.html from ./src/content/concepts/parroting-mimicry.md (njk)
+-+[11ty] Writing ./_site/content/concepts/readers-journey/index.html from ./src/content/concepts/readers-journey.md (njk)
+-+[11ty] Writing ./_site/content/concepts/rhizomatic-protocol/index.html from ./src/content/concepts/rhizomatic-protocol.md (njk)
+-+[11ty] Writing ./_site/content/concepts/three-studies-sensory/index.html from ./src/content/concepts/three-studies-sensory.md (njk)
+-+[11ty] Writing ./_site/content/concepts/verification-is-an-ecology/index.html from ./src/content/concepts/verification-is-an-ecology.md (njk)
+-+[11ty] Writing ./_site/content/concepts/workshop-weather/index.html from ./src/content/concepts/workshop-weather.md (njk)
+-+[11ty] Writing ./_site/content/projects/project-dandelion/index.html from ./src/content/projects/project-dandelion.md (njk)
+-+[11ty] Writing ./_site/content/projects/shiki-proof/index.html from ./src/content/projects/shiki-proof.md (njk)
+-+[11ty] Writing ./_site/content/meta/a-b-curatorial-protocolist/index.html from ./src/content/meta/a-b-curatorial-protocolist.md (njk)
+-+[11ty] Writing ./_site/content/meta/anchor-demo/index.html from ./src/content/meta/anchor-demo.md (njk)
+-+[11ty] Writing ./_site/content/meta/curatorial-generativism/index.html from ./src/content/meta/curatorial-generativism.md (njk)
+-+[11ty] Writing ./_site/content/meta/how-to-manufacture-a-legacy/index.html from ./src/content/meta/how-to-manufacture-a-legacy.md (njk)
+-+[11ty] Writing ./_site/content/meta/methodology/index.html from ./src/content/meta/methodology.md (njk)
+-+[11ty] Writing ./_site/content/meta/protocolist/index.html from ./src/content/meta/protocolist.md (njk)
+-+[11ty] Writing ./_site/content/meta/style-guide/index.html from ./src/content/meta/style-guide.md (njk)
+-+[11ty] Writing ./_site/content/meta/unified-referencing-syntax/index.html from ./src/content/meta/unified-referencing-syntax.md (njk)
+-+[11ty] Writing ./_site/content/sparks/academic-blindness/index.html from ./src/content/sparks/academic-blindness.md (njk)
+-+[11ty] Writing ./_site/content/sparks/breakfast-eggs/index.html from ./src/content/sparks/breakfast-eggs.md (njk)
+-+[11ty] Writing ./_site/content/sparks/george-eastman-obscure/index.html from ./src/content/sparks/george-eastman-obscure.md (njk)
+-+[11ty] Writing ./_site/content/sparks/illusion-japan-nicotine/index.html from ./src/content/sparks/illusion-japan-nicotine.md (njk)
+-+[11ty] Writing ./_site/content/sparks/murakami-market-analysis-2025/index.html from ./src/content/sparks/murakami-market-analysis-2025.md (njk)
+-+[11ty] Writing ./_site/content/sparks/paulin-paulin-paulin-marketing/index.html from ./src/content/sparks/paulin-paulin-paulin-marketing.md (njk)
+-+[11ty] Writing ./_site/work/raw-socket-report/index.html from ./src/content/sparks/raw-socket-report.md (njk)
+-+[11ty] Writing ./_site/content/sparks/smoker-sysadmin/index.html from ./src/content/sparks/smoker-sysadmin.md (njk)
+-+[11ty] Writing ./_site/content/sparks/vapor-linked-governance/index.html from ./src/content/sparks/vapor-linked-governance.md (njk)
+-+[11ty] Writing ./_site/work/drop/index.html from ./src/work/drop.11ty.js
+-+[11ty] Writing ./_site/work/latest/index.html from ./src/work/latest.11ty.js
+-+[11ty] Writing ./_site/concepts/index.html from ./src/content/concepts/index.njk
+-+[11ty] Writing ./_site/projects/index.html from ./src/content/projects/index.njk
+-+[11ty] Writing ./_site/sparks/index.html from ./src/content/sparks/index.njk
+-+[11ty] Writing ./_site/archives/collectables/designer-toys/pop-mart/the-monsters/characters/mokoko/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/characters.njk
+-+[11ty] Writing ./_site/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--big-into-energy--blind-box--single--20250425/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk
+-+[11ty] Writing ./_site/archives/collectables/designer-toys/pop-mart/the-monsters/series/best-of-luck/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/series.njk
+-+[11ty] Writing ./_site/archives/collectables/designer-toys/pop-mart/the-monsters/characters/zimomo/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/characters.njk
+-+[11ty] Writing ./_site/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--big-into-energy--blind-box-set--sealed--20250425/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk
+-+[11ty] Writing ./_site/archives/collectables/designer-toys/pop-mart/the-monsters/series/big-into-energy/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/series.njk
+-+[11ty] Writing ./_site/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--coca-cola--blind-box--single--20250124/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk
+-+[11ty] Writing ./_site/archives/collectables/designer-toys/pop-mart/the-monsters/series/blue-diamond/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/series.njk
+-+[11ty] Writing ./_site/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--coca-cola--blind-box-set--sealed--20250124/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk
+-+[11ty] Writing ./_site/archives/collectables/designer-toys/pop-mart/the-monsters/series/close-to-sweet-v1/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/series.njk
+-+[11ty] Writing ./_site/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--dress-be-latte--plush--std--20231026/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk
+-+[11ty] Writing ./_site/archives/collectables/designer-toys/pop-mart/the-monsters/series/coca-cola/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/series.njk
+-+[11ty] Writing ./_site/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--exciting-macaron--blind-box--single--20241027/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk
+-+[11ty] Writing ./_site/archives/collectables/designer-toys/pop-mart/the-monsters/series/dress-be-latte/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/series.njk
+-+[11ty] Writing ./_site/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--exciting-macaron--blind-box-set--sealed--20241027/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk
+-+[11ty] Writing ./_site/archives/collectables/designer-toys/pop-mart/the-monsters/series/exciting-macaron/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/series.njk
+-+[11ty] Writing ./_site/archives/collectables/designer-toys/pop-mart/the-monsters/products/undefined/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk
+-+[11ty] Writing ./_site/archives/collectables/designer-toys/pop-mart/the-monsters/series/fall-in-wild/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/series.njk
+-+[11ty] Writing ./_site/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--fall-in-wild--pendant--std--17cm--20240712/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk
+-+[11ty] Writing ./_site/archives/collectables/designer-toys/pop-mart/the-monsters/series/fall-into-spring/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/series.njk
+-+[11ty] Writing ./_site/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--fall-in-wild--plush-doll--std--40cm--20240712/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk
+-+[11ty] Writing ./_site/archives/collectables/designer-toys/pop-mart/the-monsters/series/flip-with-me/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/series.njk
+-+[11ty] Writing ./_site/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--flip-with-me--plush--std--40cm--20240712/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk
+-+[11ty] Writing ./_site/archives/collectables/designer-toys/pop-mart/the-monsters/series/forest-fairy-tale-china/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/series.njk
+-+[11ty] Writing ./_site/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--forest-fairy-tale-china--figure--std--20250526--reg-cn/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk
+-+[11ty] Writing ./_site/archives/collectables/designer-toys/pop-mart/the-monsters/series/good-lucky-to-you-thailand/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/series.njk
+-+[11ty] Writing ./_site/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--good-lucky-to-you-thailand--figure--std--20241220--reg-th/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk
+-+[11ty] Writing ./_site/archives/collectables/designer-toys/pop-mart/the-monsters/series/happy-halloween-party-sitting-pumpkin/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/series.njk
+-+[11ty] Writing ./_site/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--happy-halloween-party-sitting-pumpkin--pendant--sitting-pumpkin--20241025/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk
+-+[11ty] Writing ./_site/archives/collectables/designer-toys/pop-mart/the-monsters/series/have-a-seat/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/series.njk
+-+[11ty] Writing ./_site/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--have-a-seat--blind-box--single--15cm--20240712/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk
+-+[11ty] Writing ./_site/archives/collectables/designer-toys/pop-mart/the-monsters/series/hide-and-seek-in-singapore/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/series.njk
+-+[11ty] Writing ./_site/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--have-a-seat--blind-box-set--sealed--15cm--20240712/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk
+-+[11ty] Writing ./_site/archives/collectables/designer-toys/pop-mart/the-monsters/series/i-found-you-v1/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/series.njk
+-+[11ty] Writing ./_site/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--hide-and-seek-in-singapore--figure--std--17.5cm--reg-sg/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk
+-+[11ty] Writing ./_site/archives/collectables/designer-toys/pop-mart/the-monsters/series/jump-for-joy/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/series.njk
+-+[11ty] Writing ./_site/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--jump-for-joy--plush--std--20230525/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk
+-+[11ty] Writing ./_site/archives/collectables/designer-toys/pop-mart/the-monsters/series/lets-checkmate/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/series.njk
+-+[11ty] Writing ./_site/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--lets-checkmate--pendant--std--17cm--20250207/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk
+-+[11ty] Writing ./_site/archives/collectables/designer-toys/pop-mart/the-monsters/series/magic-of-pumpkin/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/series.njk
+-+[11ty] Writing ./_site/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--lets-checkmate--plush-doll--std--37cm--20250207/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk
+-+[11ty] Writing ./_site/archives/collectables/designer-toys/pop-mart/the-monsters/series/20/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/series.njk
+-+[11ty] Writing ./_site/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--pronounce-be-fancy-now--plush--std--20240315/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk
+-+[11ty] Writing ./_site/archives/collectables/designer-toys/pop-mart/the-monsters/series/21/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/series.njk
+-+[11ty] Writing ./_site/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--pronounce-wings-of-fantasy--plush--std--20241004/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk
+-+[11ty] Writing ./_site/archives/collectables/designer-toys/pop-mart/the-monsters/series/22/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/series.njk
+-+[11ty] Writing ./_site/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--pronounce-wings-of-fortune--pendant--std--20241004/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk
+-+[11ty] Writing ./_site/archives/collectables/designer-toys/pop-mart/the-monsters/series/23/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/series.njk
+-+[11ty] Writing ./_site/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--time-to-chill--plush--std--20221031/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk
+-+[11ty] Writing ./_site/archives/collectables/designer-toys/pop-mart/the-monsters/series/24/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/series.njk
+-+[11ty] Writing ./_site/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--wacky-mart-china--figure--std--20250612--reg-cn/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk
+-+[11ty] Writing ./_site/archives/collectables/designer-toys/pop-mart/the-monsters/series/25/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/series.njk
+-+[11ty] Writing ./_site/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--walk-by-fortune--plush--std--20231229/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk
+-+[11ty] Writing ./_site/archives/collectables/designer-toys/pop-mart/the-monsters/series/26/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/series.njk
+-+[11ty] Writing ./_site/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--mokoko--blue-diamond--pendant--std--17cm--20240618/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk
+-+[11ty] Writing ./_site/archives/collectables/designer-toys/pop-mart/the-monsters/series/27/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/series.njk
+-+[11ty] Writing ./_site/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--mokoko--close-to-sweet-v1--pendant--std--17cm/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk
+-+[11ty] Writing ./_site/archives/collectables/designer-toys/pop-mart/the-monsters/series/28/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/series.njk
+-+[11ty] Writing ./_site/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--mokoko--close-to-sweet-v1--plush--std/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk
+-+[11ty] Writing ./_site/archives/collectables/designer-toys/pop-mart/the-monsters/series/29/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/series.njk
+-+[11ty] Writing ./_site/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--mokoko--fall-into-spring--pendant--std--17cm--20240308/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk
+-+[11ty] Writing ./_site/archives/collectables/designer-toys/pop-mart/the-monsters/series/30/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/series.njk
+-+[11ty] Writing ./_site/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--mokoko--fall-into-spring--plush--std--20240308/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk
+-+[11ty] Writing ./_site/archives/collectables/designer-toys/pop-mart/the-monsters/series/31/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/series.njk
+-+[11ty] Writing ./_site/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--mokoko--magic-of-pumpkin--pendant--std--17cm--20241027/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk
+-+[11ty] Writing ./_site/archives/collectables/designer-toys/pop-mart/the-monsters/series/pronounce-be-fancy-now/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/series.njk
+-+[11ty] Writing ./_site/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--mokoko--twinkly-fairy-tale--pendant--std--17cm--20241128/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk
+-+[11ty] Writing ./_site/archives/collectables/designer-toys/pop-mart/the-monsters/series/pronounce-wings-of-fantasy/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/series.njk
+-+[11ty] Writing ./_site/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--zimomo--angel-in-clouds-v2--plush--std--58cm--20241025/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk
+-+[11ty] Writing ./_site/archives/collectables/designer-toys/pop-mart/the-monsters/series/pronounce-wings-of-fortune/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/series.njk
+-+[11ty] Writing ./_site/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--zimomo--i-found-you-v1--plush--std--58cm--20231215/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk
+-+[11ty] Writing ./_site/archives/collectables/designer-toys/pop-mart/the-monsters/series/time-to-chill/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/series.njk
+-+[11ty] Writing ./_site/archives/collectables/designer-toys/pop-mart/the-monsters/series/twinkly-fairy-tale/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/series.njk
+-+[11ty] Writing ./_site/archives/collectables/designer-toys/pop-mart/the-monsters/series/wacky-mart-china/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/series.njk
+-+[11ty] Writing ./_site/archives/collectables/designer-toys/pop-mart/the-monsters/series/walk-by-fortune/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/series.njk
+-+[11ty] Writing ./_site/index.html from ./src/index.njk
+-+✅ Eleventy build completed. Generated 129 files.
+-+[11ty/eleventy-img] 1 image optimized
+-+[@photogabble/wikilinks] WARNING Wikilink ([[missing-node]]) found pointing to to non-existent page in:
+-+	- ./src/test/wikilinks-ignore.md
+-+[11ty] Copied 103 Wrote 129 files in 16.74 seconds (129.8ms each, v3.1.2)
+-diff --git a/logs/npm-install-mdit-20250820T222505Z.log b/logs/npm-install-mdit-20250820T222505Z.log
+-new file mode 100644
+-index 0000000..59d6d1d
+---- /dev/null
+-+++ b/logs/npm-install-mdit-20250820T222505Z.log
+-@@ -0,0 +1,13 @@
+-+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+-+npm warn EBADENGINE Unsupported engine {
+-+npm warn EBADENGINE   package: 'effusion_labs_final@1.0.0',
+-+npm warn EBADENGINE   required: { node: '>=24' },
+-+npm warn EBADENGINE   current: { node: 'v22.18.0', npm: '11.4.2' }
+-+npm warn EBADENGINE }
+-+
+-+added 1 package, and audited 637 packages in 2s
+-+
+-+168 packages are looking for funding
+-+  run `npm fund` for details
+-+
+-+found 0 vulnerabilities
+-diff --git a/logs/npm-install-shiki-20250820T222505Z.log b/logs/npm-install-shiki-20250820T222505Z.log
+-new file mode 100644
+-index 0000000..baf1a1e
+---- /dev/null
+-+++ b/logs/npm-install-shiki-20250820T222505Z.log
+-@@ -0,0 +1,13 @@
+-+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+-+npm warn EBADENGINE Unsupported engine {
+-+npm warn EBADENGINE   package: 'effusion_labs_final@1.0.0',
+-+npm warn EBADENGINE   required: { node: '>=24' },
+-+npm warn EBADENGINE   current: { node: 'v22.18.0', npm: '11.4.2' }
+-+npm warn EBADENGINE }
+-+
+-+added 44 packages, and audited 635 packages in 4s
+-+
+-+168 packages are looking for funding
+-+  run `npm fund` for details
+-+
+-+found 0 vulnerabilities
+-diff --git a/logs/npm-install-transformers-20250820T222505Z.log b/logs/npm-install-transformers-20250820T222505Z.log
+-new file mode 100644
+-index 0000000..97d5175
+---- /dev/null
+-+++ b/logs/npm-install-transformers-20250820T222505Z.log
+-@@ -0,0 +1,13 @@
+-+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+-+npm warn EBADENGINE Unsupported engine {
+-+npm warn EBADENGINE   package: 'effusion_labs_final@1.0.0',
+-+npm warn EBADENGINE   required: { node: '>=24' },
+-+npm warn EBADENGINE   current: { node: 'v22.18.0', npm: '11.4.2' }
+-+npm warn EBADENGINE }
+-+
+-+added 1 package, and audited 636 packages in 2s
+-+
+-+168 packages are looking for funding
+-+  run `npm fund` for details
+-+
+-+found 0 vulnerabilities
+-diff --git a/logs/npm-ls-20250820T222505Z.log b/logs/npm-ls-20250820T222505Z.log
+-new file mode 100644
+-index 0000000..128ee8c
+---- /dev/null
+-+++ b/logs/npm-ls-20250820T222505Z.log
+-@@ -0,0 +1,4 @@
+-+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+-+effusion_labs_final@1.0.0 /workspace/effusion-labs
+-+└── (empty)
+-+
+-diff --git a/logs/npm-uninstall-20250820T222505Z.log b/logs/npm-uninstall-20250820T222505Z.log
+-new file mode 100644
+-index 0000000..90599c1
+---- /dev/null
+-+++ b/logs/npm-uninstall-20250820T222505Z.log
+-@@ -0,0 +1,13 @@
+-+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+-+npm warn EBADENGINE Unsupported engine {
+-+npm warn EBADENGINE   package: 'effusion_labs_final@1.0.0',
+-+npm warn EBADENGINE   required: { node: '>=24' },
+-+npm warn EBADENGINE   current: { node: 'v22.18.0', npm: '11.4.2' }
+-+npm warn EBADENGINE }
+-+
+-+added 590 packages, and audited 591 packages in 9s
+-+
+-+142 packages are looking for funding
+-+  run `npm fund` for details
+-+
+-+found 0 vulnerabilities
+-diff --git a/logs/npm-view-shiki-20250820T222505Z.log b/logs/npm-view-shiki-20250820T222505Z.log
+-new file mode 100644
+-index 0000000..dfc3821
+---- /dev/null
+-+++ b/logs/npm-view-shiki-20250820T222505Z.log
+-@@ -0,0 +1,187 @@
+-+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+-+{
+-+  "version": "3.11.0",
+-+  "dist-tags": {
+-+    "next": "0.9.4",
+-+    "latest": "3.11.0"
+-+  },
+-+  "time": {
+-+    "created": "2014-05-07T12:21:16.760Z",
+-+    "modified": "2025-08-19T23:52:26.602Z",
+-+    "0.0.1": "2014-05-07T12:21:16.760Z",
+-+    "0.0.2": "2018-10-29T22:19:11.909Z",
+-+    "0.0.2-next": "2018-10-29T22:51:53.828Z",
+-+    "0.0.3-next.1": "2018-10-30T04:33:19.424Z",
+-+    "0.0.3-next.2": "2018-10-30T06:24:13.877Z",
+-+    "0.0.3-next.3": "2018-11-05T05:35:34.888Z",
+-+    "0.0.4": "2018-12-03T16:56:28.987Z",
+-+    "0.0.5": "2019-01-02T01:24:47.141Z",
+-+    "0.0.6": "2019-01-02T01:33:51.538Z",
+-+    "0.1.0": "2019-01-02T04:05:31.287Z",
+-+    "0.1.1": "2019-01-02T04:59:17.226Z",
+-+    "0.1.2": "2019-01-02T05:10:33.483Z",
+-+    "0.1.4": "2019-02-25T22:41:48.258Z",
+-+    "0.1.5": "2019-09-09T21:02:07.987Z",
+-+    "0.1.6": "2019-09-19T20:46:48.865Z",
+-+    "0.1.7": "2020-04-28T18:16:02.594Z",
+-+    "0.2.0": "2020-08-24T13:36:44.985Z",
+-+    "0.2.1": "2020-08-26T05:48:41.539Z",
+-+    "0.2.2": "2020-08-27T01:22:37.551Z",
+-+    "0.2.3": "2020-09-07T18:10:49.929Z",
+-+    "0.2.4": "2020-09-13T07:35:59.126Z",
+-+    "0.2.5": "2020-09-17T15:53:28.624Z",
+-+    "0.2.6": "2020-09-28T04:00:07.642Z",
+-+    "0.2.7": "2020-11-13T09:52:21.739Z",
+-+    "0.9.0": "2021-02-02T11:35:15.073Z",
+-+    "0.9.1": "2021-02-02T13:06:01.637Z",
+-+    "0.9.2": "2021-02-05T09:39:32.374Z",
+-+    "0.9.3": "2021-03-11T10:51:53.286Z",
+-+    "0.9.4": "2021-05-18T15:45:43.127Z",
+-+    "0.9.5": "2021-06-24T03:41:17.831Z",
+-+    "0.9.6": "2021-08-04T07:02:45.257Z",
+-+    "0.9.7": "2021-08-19T06:33:59.944Z",
+-+    "0.9.8": "2021-08-28T13:17:28.989Z",
+-+    "0.9.9": "2021-08-31T08:28:36.007Z",
+-+    "0.9.10": "2021-09-02T06:48:37.279Z",
+-+    "0.9.11": "2021-09-14T10:31:03.242Z",
+-+    "0.9.12": "2021-10-12T08:48:32.582Z",
+-+    "0.9.13": "2021-11-26T19:53:01.596Z",
+-+    "0.9.14": "2021-12-02T20:33:09.474Z",
+-+    "0.9.15": "2021-12-09T17:39:26.863Z",
+-+    "0.10.0": "2021-12-28T18:38:50.302Z",
+-+    "0.10.1": "2022-02-15T14:22:28.908Z",
+-+    "0.11.0": "2022-08-11T11:51:45.636Z",
+-+    "0.11.1": "2022-08-13T06:42:17.192Z",
+-+    "0.12.0": "2022-12-18T17:50:37.064Z",
+-+    "0.12.1": "2022-12-19T08:14:19.616Z",
+-+    "0.13.0": "2023-01-28T02:02:38.592Z",
+-+    "0.14.0": "2023-01-30T02:18:48.403Z",
+-+    "0.14.1": "2023-02-09T17:55:22.101Z",
+-+    "0.14.2": "2023-04-28T18:00:13.384Z",
+-+    "0.14.3": "2023-06-25T18:06:09.808Z",
+-+    "0.14.4": "2023-08-31T15:53:05.666Z",
+-+    "0.14.5": "2023-10-10T18:14:11.006Z",
+-+    "0.14.6": "2023-12-07T20:45:28.148Z",
+-+    "0.14.7": "2023-12-15T21:04:34.046Z",
+-+    "1.0.0-beta.0": "2024-01-26T20:40:21.840Z",
+-+    "1.0.0-beta.1": "2024-01-29T21:34:32.420Z",
+-+    "1.0.0-beta.2": "2024-01-31T15:21:29.159Z",
+-+    "1.0.0-beta.3": "2024-02-01T17:51:55.787Z",
+-+    "1.0.0-beta.4": "2024-02-02T16:18:37.428Z",
+-+    "1.0.0-beta.5": "2024-02-02T18:54:11.164Z",
+-+    "1.0.0-beta.6": "2024-02-05T15:04:46.813Z",
+-+    "1.0.0-rc.0": "2024-02-06T11:24:54.677Z",
+-+    "1.0.0": "2024-02-07T10:41:21.858Z",
+-+    "1.1.0": "2024-02-09T11:02:40.817Z",
+-+    "1.1.1": "2024-02-09T15:13:23.474Z",
+-+    "1.1.2": "2024-02-12T16:02:08.609Z",
+-+    "1.1.3": "2024-02-16T10:41:44.773Z",
+-+    "1.1.4": "2024-02-18T15:07:11.521Z",
+-+    "1.1.5": "2024-02-18T16:57:07.312Z",
+-+    "1.1.6": "2024-02-20T07:45:24.350Z",
+-+    "1.1.7": "2024-02-23T17:34:48.079Z",
+-+    "1.2.0": "2024-03-15T15:30:09.533Z",
+-+    "1.2.1": "2024-03-26T13:15:05.068Z",
+-+    "1.2.2": "2024-03-30T13:58:03.621Z",
+-+    "1.2.3": "2024-04-01T13:02:02.307Z",
+-+    "1.2.4": "2024-04-03T06:45:04.792Z",
+-+    "1.3.0": "2024-04-09T16:18:16.291Z",
+-+    "1.4.0": "2024-04-30T09:45:57.925Z",
+-+    "1.5.0": "2024-05-08T22:04:46.525Z",
+-+    "1.5.1": "2024-05-09T07:22:24.265Z",
+-+    "1.5.2": "2024-05-14T11:38:12.917Z",
+-+    "1.6.0": "2024-05-18T23:59:04.538Z",
+-+    "1.6.1": "2024-05-28T11:15:07.830Z",
+-+    "1.6.2": "2024-06-02T13:30:32.545Z",
+-+    "1.6.3": "2024-06-07T11:43:45.018Z",
+-+    "1.6.4": "2024-06-11T13:02:43.863Z",
+-+    "1.6.5": "2024-06-15T21:23:14.269Z",
+-+    "1.7.0": "2024-06-17T11:18:44.215Z",
+-+    "1.8.0": "2024-06-21T14:25:45.079Z",
+-+    "1.9.0": "2024-06-21T16:27:39.836Z",
+-+    "1.9.1": "2024-06-25T09:56:20.728Z",
+-+    "1.10.0": "2024-06-28T09:31:41.838Z",
+-+    "1.10.1": "2024-07-02T16:51:45.524Z",
+-+    "1.10.2": "2024-07-07T02:30:15.525Z",
+-+    "1.10.3": "2024-07-07T10:10:55.358Z",
+-+    "1.11.0": "2024-07-21T22:38:37.824Z",
+-+    "1.11.1": "2024-07-23T11:26:55.363Z",
+-+    "1.11.2": "2024-07-25T21:09:33.386Z",
+-+    "1.12.0": "2024-07-26T14:22:11.752Z",
+-+    "1.12.1": "2024-08-01T11:10:37.496Z",
+-+    "1.13.0": "2024-08-14T17:28:56.590Z",
+-+    "1.14.0": "2024-08-17T22:18:14.785Z",
+-+    "1.14.1": "2024-08-17T23:22:38.051Z",
+-+    "1.15.0": "2024-08-30T14:14:40.737Z",
+-+    "1.15.1": "2024-08-30T19:20:02.668Z",
+-+    "1.15.2": "2024-08-31T17:23:06.898Z",
+-+    "1.16.0": "2024-09-01T19:58:54.675Z",
+-+    "1.16.1": "2024-09-01T21:06:16.375Z",
+-+    "1.16.2": "2024-09-04T20:17:39.217Z",
+-+    "1.16.3": "2024-09-09T16:32:41.588Z",
+-+    "1.17.0": "2024-09-11T09:17:24.697Z",
+-+    "1.17.4": "2024-09-12T16:47:26.601Z",
+-+    "1.17.5": "2024-09-12T18:54:43.555Z",
+-+    "1.17.6": "2024-09-13T14:28:11.807Z",
+-+    "1.17.7": "2024-09-16T07:53:16.096Z",
+-+    "1.18.0": "2024-09-19T13:14:52.524Z",
+-+    "1.19.0": "2024-09-26T03:34:28.414Z",
+-+    "1.20.0": "2024-09-26T22:54:11.472Z",
+-+    "1.21.0": "2024-09-29T01:33:03.232Z",
+-+    "1.21.1": "2024-10-06T04:51:00.084Z",
+-+    "1.22.0": "2024-10-07T06:12:20.826Z",
+-+    "1.22.1": "2024-10-24T14:09:25.596Z",
+-+    "1.22.2": "2024-10-28T12:39:15.892Z",
+-+    "1.23.0": "2024-11-15T06:30:07.471Z",
+-+    "1.23.1": "2024-11-18T04:01:45.341Z",
+-+    "1.24.0": "2024-11-28T07:50:15.134Z",
+-+    "1.24.1": "2024-12-09T03:58:01.879Z",
+-+    "1.24.2": "2024-12-10T04:32:58.105Z",
+-+    "1.24.3": "2024-12-19T08:56:53.956Z",
+-+    "1.24.4": "2024-12-21T18:40:54.109Z",
+-+    "1.25.0": "2025-01-02T04:46:11.251Z",
+-+    "1.25.1": "2025-01-02T06:28:13.225Z",
+-+    "1.26.0": "2025-01-03T06:29:38.200Z",
+-+    "1.26.1": "2025-01-03T09:17:31.545Z",
+-+    "1.26.2": "2025-01-13T09:34:21.209Z",
+-+    "1.27.0": "2025-01-14T07:28:04.451Z",
+-+    "1.27.1": "2025-01-15T05:06:47.588Z",
+-+    "1.27.2": "2025-01-15T05:13:54.491Z",
+-+    "1.28.0": "2025-01-20T05:53:55.370Z",
+-+    "1.29.0": "2025-01-20T07:48:21.464Z",
+-+    "1.29.1": "2025-01-20T08:10:20.761Z",
+-+    "2.0.0": "2025-01-20T08:27:44.723Z",
+-+    "2.0.1": "2025-01-20T10:01:50.848Z",
+-+    "2.0.2": "2025-01-20T10:41:09.344Z",
+-+    "2.0.3": "2025-01-20T10:52:37.929Z",
+-+    "2.1.0": "2025-01-22T04:06:15.642Z",
+-+    "1.29.2": "2025-01-30T09:34:47.582Z",
+-+    "2.2.0": "2025-01-30T09:35:25.183Z",
+-+    "2.3.0": "2025-02-04T05:52:08.910Z",
+-+    "2.3.1": "2025-02-05T02:35:39.760Z",
+-+    "2.3.2": "2025-02-06T12:55:34.106Z",
+-+    "2.4.0": "2025-02-15T17:58:28.718Z",
+-+    "2.4.1": "2025-02-15T18:08:37.190Z",
+-+    "2.4.2": "2025-02-17T06:59:49.987Z",
+-+    "2.5.0": "2025-02-18T09:10:30.900Z",
+-+    "3.0.0": "2025-02-18T09:11:39.424Z",
+-+    "3.1.0": "2025-02-27T09:16:39.618Z",
+-+    "3.2.0": "2025-03-11T02:00:38.036Z",
+-+    "3.2.1": "2025-03-11T14:47:14.251Z",
+-+    "3.2.2": "2025-04-10T05:52:35.900Z",
+-+    "3.3.0": "2025-04-22T04:54:30.845Z",
+-+    "3.4.0": "2025-05-06T09:53:50.410Z",
+-+    "3.4.1": "2025-05-14T08:21:48.935Z",
+-+    "3.4.2": "2025-05-16T00:04:23.102Z",
+-+    "3.5.0": "2025-06-04T07:16:51.513Z",
+-+    "3.6.0": "2025-06-06T00:49:43.376Z",
+-+    "3.7.0": "2025-06-20T07:52:24.522Z",
+-+    "3.8.0": "2025-07-14T05:41:57.090Z",
+-+    "3.8.1": "2025-07-17T23:40:17.203Z",
+-+    "3.9.0": "2025-07-31T07:26:35.692Z",
+-+    "3.9.1": "2025-08-01T00:24:31.693Z",
+-+    "3.9.2": "2025-08-04T07:47:52.980Z",
+-+    "3.10.0": "2025-08-19T08:16:23.589Z",
+-+    "3.11.0": "2025-08-19T23:52:26.095Z"
+-+  }
+-+}
+-diff --git a/logs/test-20250820T222505Z.log b/logs/test-20250820T222505Z.log
+-new file mode 100644
+-index 0000000..8af9b7c
+---- /dev/null
+-+++ b/logs/test-20250820T222505Z.log
+-@@ -0,0 +1,402 @@
+-+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+-+
+-+> effusion_labs_final@1.0.0 test
+-+> c8 node tools/runner.mjs
+-+
+-+🚀 Launching test runner...
+-+🔍 Found 14 test files.
+-+
+-+🏗️  Performing single Eleventy build...
+-+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+-+[11ty] Writing /tmp/eleventy-build/concept-map.json from ./src/concept-map.json.njk
+-+[11ty] Writing /tmp/eleventy-build/feed.xml from ./src/feed.njk
+-+[11ty] Writing /tmp/eleventy-build/content/sparks/carbon-handshake/index.html from ./src/content/sparks/carbon-handshake.md (njk)
+-+[11ty] Writing /tmp/eleventy-build/map/index.html from ./src/map.njk
+-+[11ty] Writing /tmp/eleventy-build/404.html from ./src/404.njk
+-+[11ty] Writing /tmp/eleventy-build/archives/index.html from ./src/archives/index.njk
+-+[11ty] Writing /tmp/eleventy-build/archives/collectables/index.html from ./src/archives/collectables/index.njk
+-+[11ty] Writing /tmp/eleventy-build/meta/index.html from ./src/content/meta/index.njk
+-+[11ty] Writing /tmp/eleventy-build/archives/collectables/designer-toys/index.html from ./src/archives/collectables/designer-toys/index.njk
+-+[11ty] Writing /tmp/eleventy-build/archives/collectables/designer-toys/pop-mart/index.html from ./src/archives/collectables/designer-toys/pop-mart/index.njk
+-+[11ty] Writing /tmp/eleventy-build/archives/collectables/designer-toys/pop-mart/the-monsters/characters/labubu/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/characters.njk
+-+[11ty] Writing /tmp/eleventy-build/archives/collectables/designer-toys/pop-mart/the-monsters/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/index.njk
+-+[11ty] Writing /tmp/eleventy-build/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--best-of-luck--plush--std--20231230--reg-cn/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk
+-+[11ty] Writing /tmp/eleventy-build/archives/collectables/designer-toys/pop-mart/the-monsters/series/angel-in-clouds-v2/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/series.njk
+-+[11ty] Writing /tmp/eleventy-build/index.html from ./src/index.njk
+-+[11ty] Writing /tmp/eleventy-build/work/index.html from ./src/work.njk
+-+[11ty] Writing /tmp/eleventy-build/content/concepts/aesthetic-inquiry/index.html from ./src/content/concepts/aesthetic-inquiry.md (njk)
+-+[11ty] Writing /tmp/eleventy-build/content/concepts/atlas-process/index.html from ./src/content/concepts/atlas-process.md (njk)
+-+[11ty] Writing /tmp/eleventy-build/content/concepts/autocatalytic-system/index.html from ./src/content/concepts/autocatalytic-system.md (njk)
+-+[11ty] Writing /tmp/eleventy-build/work/block-ledger/index.html from ./src/content/concepts/block-ledger.md (njk)
+-+[11ty] Writing /tmp/eleventy-build/content/concepts/compliant-spire/index.html from ./src/content/concepts/compliant-spire.md (njk)
+-+[11ty] Writing /tmp/eleventy-build/content/concepts/core-concept/index.html from ./src/content/concepts/core-concept.md (njk)
+-+[11ty] Writing /tmp/eleventy-build/content/concepts/ghost-byline/index.html from ./src/content/concepts/ghost-byline.md (njk)
+-+[11ty] Writing /tmp/eleventy-build/content/concepts/ghost-engine/index.html from ./src/content/concepts/ghost-engine.md (njk)
+-+[11ty] Writing /tmp/eleventy-build/content/concepts/parroting-mimicry/index.html from ./src/content/concepts/parroting-mimicry.md (njk)
+-+[11ty] Writing /tmp/eleventy-build/content/concepts/readers-journey/index.html from ./src/content/concepts/readers-journey.md (njk)
+-+[11ty] Writing /tmp/eleventy-build/content/concepts/rhizomatic-protocol/index.html from ./src/content/concepts/rhizomatic-protocol.md (njk)
+-+[11ty] Writing /tmp/eleventy-build/content/concepts/three-studies-sensory/index.html from ./src/content/concepts/three-studies-sensory.md (njk)
+-+[11ty] Writing /tmp/eleventy-build/content/concepts/verification-is-an-ecology/index.html from ./src/content/concepts/verification-is-an-ecology.md (njk)
+-+[11ty] Writing /tmp/eleventy-build/content/concepts/workshop-weather/index.html from ./src/content/concepts/workshop-weather.md (njk)
+-+[11ty] Writing /tmp/eleventy-build/content/meta/a-b-curatorial-protocolist/index.html from ./src/content/meta/a-b-curatorial-protocolist.md (njk)
+-+[11ty] Writing /tmp/eleventy-build/content/meta/anchor-demo/index.html from ./src/content/meta/anchor-demo.md (njk)
+-+[11ty] Writing /tmp/eleventy-build/content/meta/curatorial-generativism/index.html from ./src/content/meta/curatorial-generativism.md (njk)
+-+[11ty] Writing /tmp/eleventy-build/content/meta/how-to-manufacture-a-legacy/index.html from ./src/content/meta/how-to-manufacture-a-legacy.md (njk)
+-+[11ty] Writing /tmp/eleventy-build/content/meta/methodology/index.html from ./src/content/meta/methodology.md (njk)
+-+[11ty] Writing /tmp/eleventy-build/content/meta/protocolist/index.html from ./src/content/meta/protocolist.md (njk)
+-+[11ty] Writing /tmp/eleventy-build/content/meta/style-guide/index.html from ./src/content/meta/style-guide.md (njk)
+-+[11ty] Writing /tmp/eleventy-build/content/meta/unified-referencing-syntax/index.html from ./src/content/meta/unified-referencing-syntax.md (njk)
+-+[11ty] Writing /tmp/eleventy-build/content/projects/project-dandelion/index.html from ./src/content/projects/project-dandelion.md (njk)
+-+[11ty] Writing /tmp/eleventy-build/content/projects/shiki-proof/index.html from ./src/content/projects/shiki-proof.md (njk)
+-+[11ty] Writing /tmp/eleventy-build/content/sparks/academic-blindness/index.html from ./src/content/sparks/academic-blindness.md (njk)
+-+[11ty] Writing /tmp/eleventy-build/content/sparks/breakfast-eggs/index.html from ./src/content/sparks/breakfast-eggs.md (njk)
+-+[11ty] Writing /tmp/eleventy-build/content/sparks/george-eastman-obscure/index.html from ./src/content/sparks/george-eastman-obscure.md (njk)
+-+[11ty] Writing /tmp/eleventy-build/content/sparks/illusion-japan-nicotine/index.html from ./src/content/sparks/illusion-japan-nicotine.md (njk)
+-+[11ty] Writing /tmp/eleventy-build/content/sparks/murakami-market-analysis-2025/index.html from ./src/content/sparks/murakami-market-analysis-2025.md (njk)
+-+[11ty] Writing /tmp/eleventy-build/content/sparks/paulin-paulin-paulin-marketing/index.html from ./src/content/sparks/paulin-paulin-paulin-marketing.md (njk)
+-+[11ty] Writing /tmp/eleventy-build/work/raw-socket-report/index.html from ./src/content/sparks/raw-socket-report.md (njk)
+-+[11ty] Writing /tmp/eleventy-build/content/sparks/smoker-sysadmin/index.html from ./src/content/sparks/smoker-sysadmin.md (njk)
+-+[11ty] Writing /tmp/eleventy-build/content/sparks/vapor-linked-governance/index.html from ./src/content/sparks/vapor-linked-governance.md (njk)
+-+[11ty] Writing /tmp/eleventy-build/work/drop/index.html from ./src/work/drop.11ty.js
+-+[11ty] Writing /tmp/eleventy-build/work/latest/index.html from ./src/work/latest.11ty.js
+-+[11ty] Writing /tmp/eleventy-build/concepts/index.html from ./src/content/concepts/index.njk
+-+[11ty] Writing /tmp/eleventy-build/projects/index.html from ./src/content/projects/index.njk
+-+[11ty] Writing /tmp/eleventy-build/sparks/index.html from ./src/content/sparks/index.njk
+-+[11ty] Writing /tmp/eleventy-build/archives/collectables/designer-toys/pop-mart/the-monsters/characters/mokoko/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/characters.njk
+-+[11ty] Writing /tmp/eleventy-build/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--big-into-energy--blind-box--single--20250425/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk
+-+[11ty] Writing /tmp/eleventy-build/archives/collectables/designer-toys/pop-mart/the-monsters/series/best-of-luck/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/series.njk
+-+[11ty] Writing /tmp/eleventy-build/archives/collectables/designer-toys/pop-mart/the-monsters/characters/zimomo/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/characters.njk
+-+[11ty] Writing /tmp/eleventy-build/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--big-into-energy--blind-box-set--sealed--20250425/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk
+-+[11ty] Writing /tmp/eleventy-build/archives/collectables/designer-toys/pop-mart/the-monsters/series/big-into-energy/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/series.njk
+-+[11ty] Writing /tmp/eleventy-build/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--coca-cola--blind-box--single--20250124/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk
+-+[11ty] Writing /tmp/eleventy-build/archives/collectables/designer-toys/pop-mart/the-monsters/series/blue-diamond/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/series.njk
+-+[11ty] Writing /tmp/eleventy-build/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--coca-cola--blind-box-set--sealed--20250124/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk
+-+[11ty] Writing /tmp/eleventy-build/archives/collectables/designer-toys/pop-mart/the-monsters/series/close-to-sweet-v1/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/series.njk
+-+[11ty] Writing /tmp/eleventy-build/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--dress-be-latte--plush--std--20231026/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk
+-+[11ty] Writing /tmp/eleventy-build/archives/collectables/designer-toys/pop-mart/the-monsters/series/coca-cola/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/series.njk
+-+[11ty] Writing /tmp/eleventy-build/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--exciting-macaron--blind-box--single--20241027/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk
+-+[11ty] Writing /tmp/eleventy-build/archives/collectables/designer-toys/pop-mart/the-monsters/series/dress-be-latte/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/series.njk
+-+[11ty] Writing /tmp/eleventy-build/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--exciting-macaron--blind-box-set--sealed--20241027/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk
+-+[11ty] Writing /tmp/eleventy-build/archives/collectables/designer-toys/pop-mart/the-monsters/series/exciting-macaron/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/series.njk
+-+[11ty] Writing /tmp/eleventy-build/archives/collectables/designer-toys/pop-mart/the-monsters/products/undefined/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk
+-+[11ty] Writing /tmp/eleventy-build/archives/collectables/designer-toys/pop-mart/the-monsters/series/fall-in-wild/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/series.njk
+-+[11ty] Writing /tmp/eleventy-build/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--fall-in-wild--pendant--std--17cm--20240712/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk
+-+[11ty] Writing /tmp/eleventy-build/archives/collectables/designer-toys/pop-mart/the-monsters/series/fall-into-spring/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/series.njk
+-+[11ty] Writing /tmp/eleventy-build/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--fall-in-wild--plush-doll--std--40cm--20240712/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk
+-+[11ty] Writing /tmp/eleventy-build/archives/collectables/designer-toys/pop-mart/the-monsters/series/flip-with-me/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/series.njk
+-+[11ty] Writing /tmp/eleventy-build/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--flip-with-me--plush--std--40cm--20240712/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk
+-+[11ty] Writing /tmp/eleventy-build/archives/collectables/designer-toys/pop-mart/the-monsters/series/forest-fairy-tale-china/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/series.njk
+-+[11ty] Writing /tmp/eleventy-build/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--forest-fairy-tale-china--figure--std--20250526--reg-cn/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk
+-+[11ty] Writing /tmp/eleventy-build/archives/collectables/designer-toys/pop-mart/the-monsters/series/good-lucky-to-you-thailand/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/series.njk
+-+[11ty] Writing /tmp/eleventy-build/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--good-lucky-to-you-thailand--figure--std--20241220--reg-th/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk
+-+[11ty] Writing /tmp/eleventy-build/archives/collectables/designer-toys/pop-mart/the-monsters/series/happy-halloween-party-sitting-pumpkin/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/series.njk
+-+[11ty] Writing /tmp/eleventy-build/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--happy-halloween-party-sitting-pumpkin--pendant--sitting-pumpkin--20241025/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk
+-+[11ty] Writing /tmp/eleventy-build/archives/collectables/designer-toys/pop-mart/the-monsters/series/have-a-seat/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/series.njk
+-+[11ty] Writing /tmp/eleventy-build/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--have-a-seat--blind-box--single--15cm--20240712/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk
+-+[11ty] Writing /tmp/eleventy-build/archives/collectables/designer-toys/pop-mart/the-monsters/series/hide-and-seek-in-singapore/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/series.njk
+-+[11ty] Writing /tmp/eleventy-build/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--have-a-seat--blind-box-set--sealed--15cm--20240712/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk
+-+[11ty] Writing /tmp/eleventy-build/archives/collectables/designer-toys/pop-mart/the-monsters/series/i-found-you-v1/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/series.njk
+-+[11ty] Writing /tmp/eleventy-build/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--hide-and-seek-in-singapore--figure--std--17.5cm--reg-sg/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk
+-+[11ty] Writing /tmp/eleventy-build/archives/collectables/designer-toys/pop-mart/the-monsters/series/jump-for-joy/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/series.njk
+-+[11ty] Writing /tmp/eleventy-build/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--jump-for-joy--plush--std--20230525/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk
+-+[11ty] Writing /tmp/eleventy-build/archives/collectables/designer-toys/pop-mart/the-monsters/series/lets-checkmate/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/series.njk
+-+[11ty] Writing /tmp/eleventy-build/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--lets-checkmate--pendant--std--17cm--20250207/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk
+-+[11ty] Writing /tmp/eleventy-build/archives/collectables/designer-toys/pop-mart/the-monsters/series/magic-of-pumpkin/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/series.njk
+-+[11ty] Writing /tmp/eleventy-build/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--lets-checkmate--plush-doll--std--37cm--20250207/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk
+-+[11ty] Writing /tmp/eleventy-build/archives/collectables/designer-toys/pop-mart/the-monsters/series/20/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/series.njk
+-+[11ty] Writing /tmp/eleventy-build/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--pronounce-be-fancy-now--plush--std--20240315/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk
+-+[11ty] Writing /tmp/eleventy-build/archives/collectables/designer-toys/pop-mart/the-monsters/series/21/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/series.njk
+-+[11ty] Writing /tmp/eleventy-build/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--pronounce-wings-of-fantasy--plush--std--20241004/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk
+-+[11ty] Writing /tmp/eleventy-build/archives/collectables/designer-toys/pop-mart/the-monsters/series/22/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/series.njk
+-+[11ty] Writing /tmp/eleventy-build/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--pronounce-wings-of-fortune--pendant--std--20241004/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk
+-+[11ty] Writing /tmp/eleventy-build/archives/collectables/designer-toys/pop-mart/the-monsters/series/23/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/series.njk
+-+[11ty] Writing /tmp/eleventy-build/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--time-to-chill--plush--std--20221031/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk
+-+[11ty] Writing /tmp/eleventy-build/archives/collectables/designer-toys/pop-mart/the-monsters/series/24/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/series.njk
+-+[11ty] Writing /tmp/eleventy-build/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--wacky-mart-china--figure--std--20250612--reg-cn/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk
+-+[11ty] Writing /tmp/eleventy-build/archives/collectables/designer-toys/pop-mart/the-monsters/series/25/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/series.njk
+-+[11ty] Writing /tmp/eleventy-build/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--walk-by-fortune--plush--std--20231229/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk
+-+[11ty] Writing /tmp/eleventy-build/archives/collectables/designer-toys/pop-mart/the-monsters/series/26/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/series.njk
+-+[11ty] Writing /tmp/eleventy-build/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--mokoko--blue-diamond--pendant--std--17cm--20240618/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk
+-+[11ty] Writing /tmp/eleventy-build/archives/collectables/designer-toys/pop-mart/the-monsters/series/27/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/series.njk
+-+[11ty] Writing /tmp/eleventy-build/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--mokoko--close-to-sweet-v1--pendant--std--17cm/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk
+-+[11ty] Writing /tmp/eleventy-build/archives/collectables/designer-toys/pop-mart/the-monsters/series/28/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/series.njk
+-+[11ty] Writing /tmp/eleventy-build/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--mokoko--close-to-sweet-v1--plush--std/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk
+-+[11ty] Writing /tmp/eleventy-build/archives/collectables/designer-toys/pop-mart/the-monsters/series/29/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/series.njk
+-+[11ty] Writing /tmp/eleventy-build/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--mokoko--fall-into-spring--pendant--std--17cm--20240308/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk
+-+[11ty] Writing /tmp/eleventy-build/archives/collectables/designer-toys/pop-mart/the-monsters/series/30/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/series.njk
+-+[11ty] Writing /tmp/eleventy-build/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--mokoko--fall-into-spring--plush--std--20240308/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk
+-+[11ty] Writing /tmp/eleventy-build/archives/collectables/designer-toys/pop-mart/the-monsters/series/31/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/series.njk
+-+[11ty] Writing /tmp/eleventy-build/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--mokoko--magic-of-pumpkin--pendant--std--17cm--20241027/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk
+-+[11ty] Writing /tmp/eleventy-build/archives/collectables/designer-toys/pop-mart/the-monsters/series/pronounce-be-fancy-now/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/series.njk
+-+[11ty] Writing /tmp/eleventy-build/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--mokoko--twinkly-fairy-tale--pendant--std--17cm--20241128/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk
+-+[11ty] Writing /tmp/eleventy-build/archives/collectables/designer-toys/pop-mart/the-monsters/series/pronounce-wings-of-fantasy/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/series.njk
+-+[11ty] Writing /tmp/eleventy-build/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--zimomo--angel-in-clouds-v2--plush--std--58cm--20241025/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk
+-+[11ty] Writing /tmp/eleventy-build/archives/collectables/designer-toys/pop-mart/the-monsters/series/pronounce-wings-of-fortune/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/series.njk
+-+[11ty] Writing /tmp/eleventy-build/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--zimomo--i-found-you-v1--plush--std--58cm--20231215/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk
+-+[11ty] Writing /tmp/eleventy-build/archives/collectables/designer-toys/pop-mart/the-monsters/series/time-to-chill/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/series.njk
+-+[11ty] Writing /tmp/eleventy-build/archives/collectables/designer-toys/pop-mart/the-monsters/series/twinkly-fairy-tale/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/series.njk
+-+[11ty] Writing /tmp/eleventy-build/archives/collectables/designer-toys/pop-mart/the-monsters/series/wacky-mart-china/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/series.njk
+-+[11ty] Writing /tmp/eleventy-build/archives/collectables/designer-toys/pop-mart/the-monsters/series/walk-by-fortune/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/series.njk
+-+[11ty] Copied 102 Wrote 129 files in 4.93 seconds (38.2ms each, v3.1.2)
+-+✅ Eleventy build complete.
+-+
+-+🧪 Running 14 tests...
+-+TAP version 13
+-+# Subtest: defines improved background colors
+-+ok 1 - defines improved background colors
+-+  ---
+-+  duration_ms: 5.067307
+-+  type: 'test'
+-+  ...
+-+# Subtest: text contrast meets WCAG AA
+-+ok 2 - text contrast meets WCAG AA
+-+  ---
+-+  duration_ms: 2.800471
+-+  type: 'test'
+-+  ...
+-+# Subtest: tailwind exposes readable fonts
+-+ok 3 - tailwind exposes readable fonts
+-+  ---
+-+  duration_ms: 0.235228
+-+  type: 'test'
+-+  ...
+-+# Subtest: includes fluid type scale tokens
+-+ok 4 - includes fluid type scale tokens
+-+  ---
+-+  duration_ms: 0.311932
+-+  type: 'test'
+-+  ...
+-+# Subtest: docs:links reports no broken links
+-+ok 5 - docs:links reports no broken links # SKIP
+-+  ---
+-+  duration_ms: 1.930812
+-+  type: 'test'
+-+  ...
+-+# Subtest: package-lock.json defines lockfileVersion
+-+ok 6 - package-lock.json defines lockfileVersion
+-+  ---
+-+  duration_ms: 12.555638
+-+  type: 'test'
+-+  ...
+-+# Subtest: footnote popover separates source line
+-+ok 7 - footnote popover separates source line
+-+  ---
+-+  duration_ms: 199.462808
+-+  type: 'test'
+-+  ...
+-+# Subtest: projects computed picks latest entries by date
+-+ok 8 - projects computed picks latest entries by date
+-+  ---
+-+  duration_ms: 3.292432
+-+  type: 'test'
+-+  ...
+-+# Subtest: keepalive emits heartbeat to stderr
+-+ok 9 - keepalive emits heartbeat to stderr
+-+  ---
+-+  duration_ms: 6174.676654
+-+  type: 'test'
+-+  ...
+-+# Subtest: keepalive ignores first SIGINT
+-+ok 10 - keepalive ignores first SIGINT
+-+  ---
+-+  duration_ms: 218.057567
+-+  type: 'test'
+-+  ...
+-+# Subtest: gateway reads SOLVER_URL from environment
+-+ok 11 - gateway reads SOLVER_URL from environment
+-+  ---
+-+  duration_ms: 9.839835
+-+  type: 'test'
+-+  ...
+-+# Subtest: gateway retains default solver URL
+-+ok 12 - gateway retains default solver URL
+-+  ---
+-+  duration_ms: 0.34462
+-+  type: 'test'
+-+  ...
+-+# Subtest: external link renders with arrow and class
+-+ok 13 - external link renders with arrow and class
+-+  ---
+-+  duration_ms: 17.437514
+-+  type: 'test'
+-+  ...
+-+# Subtest: internal link keeps text without external markers
+-+ok 14 - internal link keeps text without external markers
+-+  ---
+-+  duration_ms: 1.545017
+-+  type: 'test'
+-+  ...
+-+# Subtest: external link starting with arrow does not duplicate
+-+ok 15 - external link starting with arrow does not duplicate
+-+  ---
+-+  duration_ms: 2.460966
+-+  type: 'test'
+-+  ...
+-+# Subtest: node shim version matches system node
+-+ok 16 - node shim version matches system node
+-+  ---
+-+  duration_ms: 126.546397
+-+  type: 'test'
+-+  ...
+-+# Subtest: node shim is executable
+-+ok 17 - node shim is executable
+-+  ---
+-+  duration_ms: 1.194218
+-+  type: 'test'
+-+  ...
+-+# Subtest: node shim lacks llm-constants reference
+-+ok 18 - node shim lacks llm-constants reference
+-+  ---
+-+  duration_ms: 0.621456
+-+  type: 'test'
+-+  ...
+-+# Subtest: prettier pinned version and format script
+-+ok 19 - prettier pinned version and format script
+-+  ---
+-+  duration_ms: 10.136416
+-+  type: 'test'
+-+  ...
+-+# Subtest: provenanceSources parses JSONL provenance files
+-+ok 20 - provenanceSources parses JSONL provenance files
+-+  ---
+-+  duration_ms: 2.267941
+-+  type: 'test'
+-+  ...
+-+# Subtest: provenanceSources returns [] when file missing
+-+ok 21 - provenanceSources returns [] when file missing
+-+  ---
+-+  duration_ms: 1.738076
+-+  type: 'test'
+-+  ...
+-+# Subtest: merges tag-like metadata into unified tags and categories
+-+ok 22 - merges tag-like metadata into unified tags and categories
+-+  ---
+-+  duration_ms: 8.899597
+-+  type: 'test'
+-+  ...
+-+# Subtest: deduplicates tag values
+-+ok 23 - deduplicates tag values
+-+  ---
+-+  duration_ms: 0.507819
+-+  type: 'test'
+-+  ...
+-+# Subtest: categories returns empty array when spark_type absent
+-+ok 24 - categories returns empty array when spark_type absent
+-+  ---
+-+  duration_ms: 0.428416
+-+  type: 'test'
+-+  ...
+-+# Subtest: ordinalSuffix handles basic single-digit numbers
+-+ok 25 - ordinalSuffix handles basic single-digit numbers
+-+  ---
+-+  duration_ms: 2.254184
+-+  type: 'test'
+-+  ...
+-+# Subtest: ordinalSuffix handles negative numbers correctly
+-+ok 26 - ordinalSuffix handles negative numbers correctly
+-+  ---
+-+  duration_ms: 0.312946
+-+  type: 'test'
+-+  ...
+-+# Subtest: ordinalSuffix uses "th" for all teen numbers
+-+ok 27 - ordinalSuffix uses "th" for all teen numbers
+-+  ---
+-+  duration_ms: 0.408423
+-+  type: 'test'
+-+  ...
+-+# Subtest: ordinalSuffix returns a valid suffix for all days in a month
+-+ok 28 - ordinalSuffix returns a valid suffix for all days in a month
+-+  ---
+-+  duration_ms: 0.710998
+-+  type: 'test'
+-+  ...
+-+# Subtest: readFileCached returns null for a nonexistent file path
+-+ok 29 - readFileCached returns null for a nonexistent file path
+-+  ---
+-+  duration_ms: 0.566485
+-+  type: 'test'
+-+  ...
+-+# Subtest: filterDeadLinks removes templated links
+-+ok 30 - filterDeadLinks removes templated links
+-+  ---
+-+  duration_ms: 3.674065
+-+  type: 'test'
+-+  ...
+-+# Subtest: result has no templated links
+-+ok 31 - result has no templated links
+-+  ---
+-+  duration_ms: 0.517437
+-+  type: 'test'
+-+  ...
+-+# Subtest: filterDeadLinks does not mutate input
+-+ok 32 - filterDeadLinks does not mutate input
+-+  ---
+-+  duration_ms: 0.450957
+-+  type: 'test'
+-+  ...
+-+# Subtest: GitHub workflows use latest action versions
+-+ok 33 - GitHub workflows use latest action versions
+-+  ---
+-+  duration_ms: 7.591678
+-+  type: 'test'
+-+  ...
+-+1..33
+-+# tests 33
+-+# suites 0
+-+# pass 32
+-+# fail 0
+-+# cancelled 0
+-+# skipped 1
+-+# todo 0
+-+# duration_ms 6880.503846
+-+
+-+✨ All tests passed!
+-+-----------------------------|---------|----------|---------|---------|-----------------------------
+-+File                         | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s           
+-+-----------------------------|---------|----------|---------|---------|-----------------------------
+-+All files                    |   82.89 |    81.62 |   71.13 |   82.89 |                             
+-+ effusion-labs               |   97.16 |     92.3 |      50 |   97.16 |                             
+-+  eleventy.config.mjs        |   95.83 |     90.9 |      50 |   95.83 | 45-47                       
+-+  postcss.config.mjs         |     100 |      100 |     100 |     100 |                             
+-+  tailwind.config.mjs        |     100 |      100 |     100 |     100 |                             
+-+ effusion-labs/lib           |   73.89 |    70.96 |   54.16 |   73.89 |                             
+-+  archive-nav.js             |     100 |      100 |     100 |     100 |                             
+-+  build-info.js              |     100 |    33.33 |     100 |     100 | 10-26                       
+-+  concept-map.js             |   73.17 |       80 |      60 |   73.17 | 10-12,21-29,56-65           
+-+  config.js                  |     100 |      100 |     100 |     100 |                             
+-+  constants.js               |     100 |      100 |     100 |     100 |                             
+-+  filters.js                 |   87.96 |    60.52 |   76.47 |   87.96 | ...,113-119,138-139,158-159 
+-+  flareClient.js             |   23.21 |      100 |       0 |   23.21 | 5-7,9,11-49                 
+-+  outboundProxy.js           |      16 |      100 |       0 |      16 | 1-3,6-23                    
+-+  plugins.js                 |     100 |       80 |     100 |     100 | 20                          
+-+  postcss.js                 |   45.16 |      100 |       0 |   45.16 | 15-31                       
+-+  postcssPlugins.mjs         |      30 |      100 |       0 |      30 | 4-10                        
+-+  seeded.js                  |   37.83 |    66.66 |      25 |   37.83 | 10-17,19-25,28-35           
+-+  shortcodes.js              |   59.25 |      100 |       0 |   59.25 | 15-25                       
+-+  utils.js                   |   95.65 |    83.33 |     100 |   95.65 | 34-35                       
+-+  webpageToMarkdown.js       |   61.36 |    33.33 |       0 |   61.36 | 14-15,26-30,33-42           
+-+ effusion-labs/lib/eleventy  |   74.42 |    82.92 |      50 |   74.42 |                             
+-+  archive-collections.js     |     100 |    93.33 |     100 |     100 | 11                          
+-+  register.mjs               |   68.69 |    76.92 |   28.57 |   68.69 | ...0,93,118,165-183,206-213 
+-+ effusion-labs/lib/markdown  |   96.13 |    86.66 |     100 |   96.13 |                             
+-+  footnotes.js               |   97.16 |    87.93 |     100 |   97.16 | 89-90,103-104,116-118       
+-+  index.js                   |   97.01 |       80 |     100 |   97.01 | 38-39                       
+-+  inlineMacros.js            |   81.48 |       80 |     100 |   81.48 | 12-14,23-24                 
+-+  links.js                   |     100 |    85.71 |     100 |     100 | 8                           
+-+ effusion-labs/lib/wikilinks |     100 |      100 |     100 |     100 |                             
+-+  filter-dead-links.js       |     100 |      100 |     100 |     100 |                             
+-+ effusion-labs/src           |     100 |    86.66 |     100 |     100 |                             
+-+  index.11tydata.js          |     100 |    84.61 |     100 |     100 | 15,38                       
+-+  work.11tydata.js           |     100 |      100 |     100 |     100 |                             
+-+ effusion-labs/src/_data     |     100 |      100 |     100 |     100 |                             
+-+  archivesNav.js             |     100 |      100 |     100 |     100 |                             
+-+  branding.js                |     100 |      100 |     100 |     100 |                             
+-+  eleventyComputed.js        |     100 |      100 |     100 |     100 |                             
+-+  nav.js                     |     100 |      100 |     100 |     100 |                             
+-+ effusion-labs/src/work      |     100 |      100 |     100 |     100 |                             
+-+  drop.11ty.js               |     100 |      100 |     100 |     100 |                             
+-+  latest.11ty.js             |     100 |      100 |     100 |     100 |                             
+-+ effusion-labs/tools         |   85.71 |    72.22 |     100 |   85.71 |                             
+-+  runner.mjs                 |   78.88 |    63.63 |     100 |   78.88 | ...-56,63-65,71,80-84,88-89 
+-+  select.mjs                 |     100 |    85.71 |     100 |     100 | 11                          
+-+-----------------------------|---------|----------|---------|---------|-----------------------------
+-diff --git a/package-lock.json b/package-lock.json
+-index b19d895..6bd391c 100644
+---- a/package-lock.json
+-+++ b/package-lock.json
+-@@ -16 +15,0 @@
+--        "@11ty/eleventy-plugin-syntaxhighlight": "^5.0.1",
+-@@ -19,0 +19,2 @@
+-+        "@shikijs/markdown-it": "3.11.0",
+-+        "@shikijs/transformers": "3.11.0",
+-@@ -28,2 +29 @@
+--        "prism-themes": "^1.9.0",
+--        "prismjs": "^1.30.0",
+-+        "shiki": "3.11.0",
+-@@ -250,13 +249,0 @@
+--    "node_modules/@11ty/eleventy-plugin-syntaxhighlight": {
+--      "version": "5.0.2",
+--      "resolved": "https://registry.npmjs.org/@11ty/eleventy-plugin-syntaxhighlight/-/eleventy-plugin-syntaxhighlight-5.0.2.tgz",
+--      "integrity": "sha512-T6xVVRDJuHlrFMHbUiZkHjj5o1IlLzZW+1IL9eUsyXFU7rY2ztcYhZew/64vmceFFpQwzuSfxQOXxTJYmKkQ+A==",
+--      "license": "MIT",
+--      "dependencies": {
+--        "prismjs": "^1.30.0"
+--      },
+--      "funding": {
+--        "type": "opencollective",
+--        "url": "https://opencollective.com/11ty"
+--      }
+--    },
+-@@ -1282,0 +1270,95 @@
+-+    "node_modules/@shikijs/core": {
+-+      "version": "3.11.0",
+-+      "resolved": "https://registry.npmjs.org/@shikijs/core/-/core-3.11.0.tgz",
+-+      "integrity": "sha512-oJwU+DxGqp6lUZpvtQgVOXNZcVsirN76tihOLBmwILkKuRuwHteApP8oTXmL4tF5vS5FbOY0+8seXmiCoslk4g==",
+-+      "license": "MIT",
+-+      "dependencies": {
+-+        "@shikijs/types": "3.11.0",
+-+        "@shikijs/vscode-textmate": "^10.0.2",
+-+        "@types/hast": "^3.0.4",
+-+        "hast-util-to-html": "^9.0.5"
+-+      }
+-+    },
+-+    "node_modules/@shikijs/engine-javascript": {
+-+      "version": "3.11.0",
+-+      "resolved": "https://registry.npmjs.org/@shikijs/engine-javascript/-/engine-javascript-3.11.0.tgz",
+-+      "integrity": "sha512-6/ov6pxrSvew13k9ztIOnSBOytXeKs5kfIR7vbhdtVRg+KPzvp2HctYGeWkqv7V6YIoLicnig/QF3iajqyElZA==",
+-+      "license": "MIT",
+-+      "dependencies": {
+-+        "@shikijs/types": "3.11.0",
+-+        "@shikijs/vscode-textmate": "^10.0.2",
+-+        "oniguruma-to-es": "^4.3.3"
+-+      }
+-+    },
+-+    "node_modules/@shikijs/engine-oniguruma": {
+-+      "version": "3.11.0",
+-+      "resolved": "https://registry.npmjs.org/@shikijs/engine-oniguruma/-/engine-oniguruma-3.11.0.tgz",
+-+      "integrity": "sha512-4DwIjIgETK04VneKbfOE4WNm4Q7WC1wo95wv82PoHKdqX4/9qLRUwrfKlmhf0gAuvT6GHy0uc7t9cailk6Tbhw==",
+-+      "license": "MIT",
+-+      "dependencies": {
+-+        "@shikijs/types": "3.11.0",
+-+        "@shikijs/vscode-textmate": "^10.0.2"
+-+      }
+-+    },
+-+    "node_modules/@shikijs/langs": {
+-+      "version": "3.11.0",
+-+      "resolved": "https://registry.npmjs.org/@shikijs/langs/-/langs-3.11.0.tgz",
+-+      "integrity": "sha512-Njg/nFL4HDcf/ObxcK2VeyidIq61EeLmocrwTHGGpOQx0BzrPWM1j55XtKQ1LvvDWH15cjQy7rg96aJ1/l63uw==",
+-+      "license": "MIT",
+-+      "dependencies": {
+-+        "@shikijs/types": "3.11.0"
+-+      }
+-+    },
+-+    "node_modules/@shikijs/markdown-it": {
+-+      "version": "3.11.0",
+-+      "resolved": "https://registry.npmjs.org/@shikijs/markdown-it/-/markdown-it-3.11.0.tgz",
+-+      "integrity": "sha512-wRwP3CtBNY4V+6xoifN3l7zRCZr0Ec5PKt1NVHv0icVSFH7OAHgwHHuHSmUOGDtpM+CFHhNaIFLxDH0ta2aqKw==",
+-+      "license": "MIT",
+-+      "dependencies": {
+-+        "markdown-it": "^14.1.0",
+-+        "shiki": "3.11.0"
+-+      },
+-+      "peerDependencies": {
+-+        "markdown-it-async": "^2.2.0"
+-+      },
+-+      "peerDependenciesMeta": {
+-+        "markdown-it-async": {
+-+          "optional": true
+-+        }
+-+      }
+-+    },
+-+    "node_modules/@shikijs/themes": {
+-+      "version": "3.11.0",
+-+      "resolved": "https://registry.npmjs.org/@shikijs/themes/-/themes-3.11.0.tgz",
+-+      "integrity": "sha512-BhhWRzCTEk2CtWt4S4bgsOqPJRkapvxdsifAwqP+6mk5uxboAQchc0etiJ0iIasxnMsb764qGD24DK9albcU9Q==",
+-+      "license": "MIT",
+-+      "dependencies": {
+-+        "@shikijs/types": "3.11.0"
+-+      }
+-+    },
+-+    "node_modules/@shikijs/transformers": {
+-+      "version": "3.11.0",
+-+      "resolved": "https://registry.npmjs.org/@shikijs/transformers/-/transformers-3.11.0.tgz",
+-+      "integrity": "sha512-fhSpVoq0FoCtKbBpzE3mXcIbr0b7ozFDSSWiVjWrQy+wrOfaFfwxgJqh8kY3Pbv/i+4pcuMIVismLD2MfO62eQ==",
+-+      "license": "MIT",
+-+      "dependencies": {
+-+        "@shikijs/core": "3.11.0",
+-+        "@shikijs/types": "3.11.0"
+-+      }
+-+    },
+-+    "node_modules/@shikijs/types": {
+-+      "version": "3.11.0",
+-+      "resolved": "https://registry.npmjs.org/@shikijs/types/-/types-3.11.0.tgz",
+-+      "integrity": "sha512-RB7IMo2E7NZHyfkqAuaf4CofyY8bPzjWPjJRzn6SEak3b46fIQyG6Vx5fG/obqkfppQ+g8vEsiD7Uc6lqQt32Q==",
+-+      "license": "MIT",
+-+      "dependencies": {
+-+        "@shikijs/vscode-textmate": "^10.0.2",
+-+        "@types/hast": "^3.0.4"
+-+      }
+-+    },
+-+    "node_modules/@shikijs/vscode-textmate": {
+-+      "version": "10.0.2",
+-+      "resolved": "https://registry.npmjs.org/@shikijs/vscode-textmate/-/vscode-textmate-10.0.2.tgz",
+-+      "integrity": "sha512-83yeghZ2xxin3Nj8z1NMd/NCuca+gsYXswywDy5bHvwlWL8tpTQmzGeUuHd9FC3E/SBEMvzJRwWEOz5gGes9Qg==",
+-+      "license": "MIT"
+-+    },
+-@@ -1612,0 +1695,9 @@
+-+    "node_modules/@types/hast": {
+-+      "version": "3.0.4",
+-+      "resolved": "https://registry.npmjs.org/@types/hast/-/hast-3.0.4.tgz",
+-+      "integrity": "sha512-WPs+bbQw5aCj+x6laNGWLH3wviHtoCv/P3+otBhbOhJgG8qtpdAMlTCxLtsTWA7LH1Oh/bFCHsBn0TPS5m30EQ==",
+-+      "license": "MIT",
+-+      "dependencies": {
+-+        "@types/unist": "*"
+-+      }
+-+    },
+-@@ -1637,0 +1729,9 @@
+-+    "node_modules/@types/mdast": {
+-+      "version": "4.0.4",
+-+      "resolved": "https://registry.npmjs.org/@types/mdast/-/mdast-4.0.4.tgz",
+-+      "integrity": "sha512-kGaNbPh1k7AFzgpud/gMdvIm5xuECykRR+JnWKQno9TAXVa6WIVCGTPvYGekIDL4uwCZQSYbUxNBSb1aUo79oA==",
+-+      "license": "MIT",
+-+      "dependencies": {
+-+        "@types/unist": "*"
+-+      }
+-+    },
+-@@ -1659,0 +1760,6 @@
+-+    "node_modules/@types/unist": {
+-+      "version": "3.0.3",
+-+      "resolved": "https://registry.npmjs.org/@types/unist/-/unist-3.0.3.tgz",
+-+      "integrity": "sha512-ko/gIFJRv177XgZsZcBwnqJN5x/Gien8qNOn0D5bQU/zAzVf9Zt3BlcUiLqhV9y4ARk0GbT3tnUiPNgnTXzc/Q==",
+-+      "license": "MIT"
+-+    },
+-@@ -1676,0 +1783,6 @@
+-+    "node_modules/@ungap/structured-clone": {
+-+      "version": "1.3.0",
+-+      "resolved": "https://registry.npmjs.org/@ungap/structured-clone/-/structured-clone-1.3.0.tgz",
+-+      "integrity": "sha512-WmoN8qaIAo7WTYWbAZuG8PYEhn5fkz7dZrqTBZ7dtt//lL2Gwms1IcnQ5yHqjDfX8Ft5j4YzDM23f87zBfDe9g==",
+-+      "license": "ISC"
+-+    },
+-@@ -2171,0 +2284,10 @@
+-+    "node_modules/ccount": {
+-+      "version": "2.0.1",
+-+      "resolved": "https://registry.npmjs.org/ccount/-/ccount-2.0.1.tgz",
+-+      "integrity": "sha512-eyrF0jiFpY+3drT6383f1qhkbGsLSifNAjA61IUjZjmLCWjItY6LB9ft9YhoDgwfmclB2zhu51Lc7+95b8NRAg==",
+-+      "license": "MIT",
+-+      "funding": {
+-+        "type": "github",
+-+        "url": "https://github.com/sponsors/wooorm"
+-+      }
+-+    },
+-@@ -2187,0 +2310,20 @@
+-+    "node_modules/character-entities-html4": {
+-+      "version": "2.1.0",
+-+      "resolved": "https://registry.npmjs.org/character-entities-html4/-/character-entities-html4-2.1.0.tgz",
+-+      "integrity": "sha512-1v7fgQRj6hnSwFpq1Eu0ynr/CDEw0rXo2B61qXrLNdHZmPKgb7fqS1a2JwF0rISo9q77jDI8VMEHoApn8qDoZA==",
+-+      "license": "MIT",
+-+      "funding": {
+-+        "type": "github",
+-+        "url": "https://github.com/sponsors/wooorm"
+-+      }
+-+    },
+-+    "node_modules/character-entities-legacy": {
+-+      "version": "3.0.0",
+-+      "resolved": "https://registry.npmjs.org/character-entities-legacy/-/character-entities-legacy-3.0.0.tgz",
+-+      "integrity": "sha512-RpPp0asT/6ufRm//AJVwpViZbGM/MkjQFxJccQRHmISF/22NBtsHqAWmL+/pmkPWoIUJdWyeVleTl1wydHATVQ==",
+-+      "license": "MIT",
+-+      "funding": {
+-+        "type": "github",
+-+        "url": "https://github.com/sponsors/wooorm"
+-+      }
+-+    },
+-@@ -2396,0 +2539,10 @@
+-+    "node_modules/comma-separated-tokens": {
+-+      "version": "2.0.3",
+-+      "resolved": "https://registry.npmjs.org/comma-separated-tokens/-/comma-separated-tokens-2.0.3.tgz",
+-+      "integrity": "sha512-Fu4hJdvzeylCfQPp9SGWidpzrMs7tTrlu6Vb8XGaRGck8QSNZJJp538Wrb60Lax4fPwR64ViY468OIUTbRlGZg==",
+-+      "license": "MIT",
+-+      "funding": {
+-+        "type": "github",
+-+        "url": "https://github.com/sponsors/wooorm"
+-+      }
+-+    },
+-@@ -2597,0 +2750,9 @@
+-+    "node_modules/dequal": {
+-+      "version": "2.0.3",
+-+      "resolved": "https://registry.npmjs.org/dequal/-/dequal-2.0.3.tgz",
+-+      "integrity": "sha512-0je+qPKHEMohvfRTCEo3CrPG6cAzAYgmzKyxRiYSSDkS6eGJdyVJm7WaYA5ECaAD9wLB2T4EEeymA5aFVcYXCA==",
+-+      "license": "MIT",
+-+      "engines": {
+-+        "node": ">=6"
+-+      }
+-+    },
+-@@ -2606,0 +2768,13 @@
+-+    "node_modules/devlop": {
+-+      "version": "1.1.0",
+-+      "resolved": "https://registry.npmjs.org/devlop/-/devlop-1.1.0.tgz",
+-+      "integrity": "sha512-RWmIqhcFf1lRYBvNmr7qTNuyCt/7/ns2jbpp1+PalgE/rDQcBT0fioSMUpJ93irlUhC5hrg4cYqe6U+0ImW0rA==",
+-+      "license": "MIT",
+-+      "dependencies": {
+-+        "dequal": "^2.0.0"
+-+      },
+-+      "funding": {
+-+        "type": "github",
+-+        "url": "https://github.com/sponsors/wooorm"
+-+      }
+-+    },
+-@@ -3472,0 +3647,36 @@
+-+    "node_modules/hast-util-to-html": {
+-+      "version": "9.0.5",
+-+      "resolved": "https://registry.npmjs.org/hast-util-to-html/-/hast-util-to-html-9.0.5.tgz",
+-+      "integrity": "sha512-OguPdidb+fbHQSU4Q4ZiLKnzWo8Wwsf5bZfbvu7//a9oTYoqD/fWpe96NuHkoS9h0ccGOTe0C4NGXdtS0iObOw==",
+-+      "license": "MIT",
+-+      "dependencies": {
+-+        "@types/hast": "^3.0.0",
+-+        "@types/unist": "^3.0.0",
+-+        "ccount": "^2.0.0",
+-+        "comma-separated-tokens": "^2.0.0",
+-+        "hast-util-whitespace": "^3.0.0",
+-+        "html-void-elements": "^3.0.0",
+-+        "mdast-util-to-hast": "^13.0.0",
+-+        "property-information": "^7.0.0",
+-+        "space-separated-tokens": "^2.0.0",
+-+        "stringify-entities": "^4.0.0",
+-+        "zwitch": "^2.0.4"
+-+      },
+-+      "funding": {
+-+        "type": "opencollective",
+-+        "url": "https://opencollective.com/unified"
+-+      }
+-+    },
+-+    "node_modules/hast-util-whitespace": {
+-+      "version": "3.0.0",
+-+      "resolved": "https://registry.npmjs.org/hast-util-whitespace/-/hast-util-whitespace-3.0.0.tgz",
+-+      "integrity": "sha512-88JUN06ipLwsnv+dVn+OIYOvAuvBMy/Qoi6O7mQHxdPXpjy+Cd6xRkWwux7DKO+4sYILtLBRIKgsdpS2gQc7qw==",
+-+      "license": "MIT",
+-+      "dependencies": {
+-+        "@types/hast": "^3.0.0"
+-+      },
+-+      "funding": {
+-+        "type": "opencollective",
+-+        "url": "https://opencollective.com/unified"
+-+      }
+-+    },
+-@@ -3534,0 +3745,10 @@
+-+    "node_modules/html-void-elements": {
+-+      "version": "3.0.0",
+-+      "resolved": "https://registry.npmjs.org/html-void-elements/-/html-void-elements-3.0.0.tgz",
+-+      "integrity": "sha512-bEqo66MRXsUGxWHV5IP0PUiAWwoEjba4VCzg0LjFJBpchPaTfyfCKTG6bc5F8ucKec3q5y6qOdGyYTSBEvhCrg==",
+-+      "license": "MIT",
+-+      "funding": {
+-+        "type": "github",
+-+        "url": "https://github.com/sponsors/wooorm"
+-+      }
+-+    },
+-@@ -4860,0 +5081,21 @@
+-+    "node_modules/mdast-util-to-hast": {
+-+      "version": "13.2.0",
+-+      "resolved": "https://registry.npmjs.org/mdast-util-to-hast/-/mdast-util-to-hast-13.2.0.tgz",
+-+      "integrity": "sha512-QGYKEuUsYT9ykKBCMOEDLsU5JRObWQusAolFMeko/tYPufNkRffBAQjIE+99jbA87xv6FgmjLtwjh9wBWajwAA==",
+-+      "license": "MIT",
+-+      "dependencies": {
+-+        "@types/hast": "^3.0.0",
+-+        "@types/mdast": "^4.0.0",
+-+        "@ungap/structured-clone": "^1.0.0",
+-+        "devlop": "^1.0.0",
+-+        "micromark-util-sanitize-uri": "^2.0.0",
+-+        "trim-lines": "^3.0.0",
+-+        "unist-util-position": "^5.0.0",
+-+        "unist-util-visit": "^5.0.0",
+-+        "vfile": "^6.0.0"
+-+      },
+-+      "funding": {
+-+        "type": "opencollective",
+-+        "url": "https://opencollective.com/unified"
+-+      }
+-+    },
+-@@ -4883,0 +5125,89 @@
+-+    "node_modules/micromark-util-character": {
+-+      "version": "2.1.1",
+-+      "resolved": "https://registry.npmjs.org/micromark-util-character/-/micromark-util-character-2.1.1.tgz",
+-+      "integrity": "sha512-wv8tdUTJ3thSFFFJKtpYKOYiGP2+v96Hvk4Tu8KpCAsTMs6yi+nVmGh1syvSCsaxz45J6Jbw+9DD6g97+NV67Q==",
+-+      "funding": [
+-+        {
+-+          "type": "GitHub Sponsors",
+-+          "url": "https://github.com/sponsors/unifiedjs"
+-+        },
+-+        {
+-+          "type": "OpenCollective",
+-+          "url": "https://opencollective.com/unified"
+-+        }
+-+      ],
+-+      "license": "MIT",
+-+      "dependencies": {
+-+        "micromark-util-symbol": "^2.0.0",
+-+        "micromark-util-types": "^2.0.0"
+-+      }
+-+    },
+-+    "node_modules/micromark-util-encode": {
+-+      "version": "2.0.1",
+-+      "resolved": "https://registry.npmjs.org/micromark-util-encode/-/micromark-util-encode-2.0.1.tgz",
+-+      "integrity": "sha512-c3cVx2y4KqUnwopcO9b/SCdo2O67LwJJ/UyqGfbigahfegL9myoEFoDYZgkT7f36T0bLrM9hZTAaAyH+PCAXjw==",
+-+      "funding": [
+-+        {
+-+          "type": "GitHub Sponsors",
+-+          "url": "https://github.com/sponsors/unifiedjs"
+-+        },
+-+        {
+-+          "type": "OpenCollective",
+-+          "url": "https://opencollective.com/unified"
+-+        }
+-+      ],
+-+      "license": "MIT"
+-+    },
+-+    "node_modules/micromark-util-sanitize-uri": {
+-+      "version": "2.0.1",
+-+      "resolved": "https://registry.npmjs.org/micromark-util-sanitize-uri/-/micromark-util-sanitize-uri-2.0.1.tgz",
+-+      "integrity": "sha512-9N9IomZ/YuGGZZmQec1MbgxtlgougxTodVwDzzEouPKo3qFWvymFHWcnDi2vzV1ff6kas9ucW+o3yzJK9YB1AQ==",
+-+      "funding": [
+-+        {
+-+          "type": "GitHub Sponsors",
+-+          "url": "https://github.com/sponsors/unifiedjs"
+-+        },
+-+        {
+-+          "type": "OpenCollective",
+-+          "url": "https://opencollective.com/unified"
+-+        }
+-+      ],
+-+      "license": "MIT",
+-+      "dependencies": {
+-+        "micromark-util-character": "^2.0.0",
+-+        "micromark-util-encode": "^2.0.0",
+-+        "micromark-util-symbol": "^2.0.0"
+-+      }
+-+    },
+-+    "node_modules/micromark-util-symbol": {
+-+      "version": "2.0.1",
+-+      "resolved": "https://registry.npmjs.org/micromark-util-symbol/-/micromark-util-symbol-2.0.1.tgz",
+-+      "integrity": "sha512-vs5t8Apaud9N28kgCrRUdEed4UJ+wWNvicHLPxCa9ENlYuAY31M0ETy5y1vA33YoNPDFTghEbnh6efaE8h4x0Q==",
+-+      "funding": [
+-+        {
+-+          "type": "GitHub Sponsors",
+-+          "url": "https://github.com/sponsors/unifiedjs"
+-+        },
+-+        {
+-+          "type": "OpenCollective",
+-+          "url": "https://opencollective.com/unified"
+-+        }
+-+      ],
+-+      "license": "MIT"
+-+    },
+-+    "node_modules/micromark-util-types": {
+-+      "version": "2.0.2",
+-+      "resolved": "https://registry.npmjs.org/micromark-util-types/-/micromark-util-types-2.0.2.tgz",
+-+      "integrity": "sha512-Yw0ECSpJoViF1qTU4DC6NwtC4aWGt1EkzaQB8KPPyCRR8z9TWeV0HbEFGTO+ZY1wB22zmxnJqhPyTpOVCpeHTA==",
+-+      "funding": [
+-+        {
+-+          "type": "GitHub Sponsors",
+-+          "url": "https://github.com/sponsors/unifiedjs"
+-+        },
+-+        {
+-+          "type": "OpenCollective",
+-+          "url": "https://opencollective.com/unified"
+-+        }
+-+      ],
+-+      "license": "MIT"
+-+    },
+-@@ -5458,0 +5789,17 @@
+-+    "node_modules/oniguruma-parser": {
+-+      "version": "0.12.1",
+-+      "resolved": "https://registry.npmjs.org/oniguruma-parser/-/oniguruma-parser-0.12.1.tgz",
+-+      "integrity": "sha512-8Unqkvk1RYc6yq2WBYRj4hdnsAxVze8i7iPfQr8e4uSP3tRv0rpZcbGUDvxfQQcdwHt/e9PrMvGCsa8OqG9X3w==",
+-+      "license": "MIT"
+-+    },
+-+    "node_modules/oniguruma-to-es": {
+-+      "version": "4.3.3",
+-+      "resolved": "https://registry.npmjs.org/oniguruma-to-es/-/oniguruma-to-es-4.3.3.tgz",
+-+      "integrity": "sha512-rPiZhzC3wXwE59YQMRDodUwwT9FZ9nNBwQQfsd1wfdtlKEyCdRV0avrTcSZ5xlIvGRVPd/cx6ZN45ECmS39xvg==",
+-+      "license": "MIT",
+-+      "dependencies": {
+-+        "oniguruma-parser": "^0.12.1",
+-+        "regex": "^6.0.1",
+-+        "regex-recursion": "^6.0.2"
+-+      }
+-+    },
+-@@ -6266,15 +6612,0 @@
+--    "node_modules/prism-themes": {
+--      "version": "1.9.0",
+--      "resolved": "https://registry.npmjs.org/prism-themes/-/prism-themes-1.9.0.tgz",
+--      "integrity": "sha512-tX2AYsehKDw1EORwBps+WhBFKc2kxfoFpQAjxBndbZKr4fRmMkv47XN0BghC/K1qwodB1otbe4oF23vUTFDokw==",
+--      "license": "MIT"
+--    },
+--    "node_modules/prismjs": {
+--      "version": "1.30.0",
+--      "resolved": "https://registry.npmjs.org/prismjs/-/prismjs-1.30.0.tgz",
+--      "integrity": "sha512-DEvV2ZF2r2/63V+tK8hQvrR2ZGn10srHbXviTlcv7Kpzw8jWiNTqbVgjO3IY8RxrrOUF8VPMQQFysYYYv0YZxw==",
+--      "license": "MIT",
+--      "engines": {
+--        "node": ">=6"
+--      }
+--    },
+-@@ -6314,0 +6647,10 @@
+-+    "node_modules/property-information": {
+-+      "version": "7.1.0",
+-+      "resolved": "https://registry.npmjs.org/property-information/-/property-information-7.1.0.tgz",
+-+      "integrity": "sha512-TwEZ+X+yCJmYfL7TPUOcvBZ4QfoT5YenQiJuX//0th53DE6w0xxLEtfK3iyryQFddXuvkIk51EEgrJQ0WJkOmQ==",
+-+      "license": "MIT",
+-+      "funding": {
+-+        "type": "github",
+-+        "url": "https://github.com/sponsors/wooorm"
+-+      }
+-+    },
+-@@ -6476,0 +6819,24 @@
+-+    "node_modules/regex": {
+-+      "version": "6.0.1",
+-+      "resolved": "https://registry.npmjs.org/regex/-/regex-6.0.1.tgz",
+-+      "integrity": "sha512-uorlqlzAKjKQZ5P+kTJr3eeJGSVroLKoHmquUj4zHWuR+hEyNqlXsSKlYYF5F4NI6nl7tWCs0apKJ0lmfsXAPA==",
+-+      "license": "MIT",
+-+      "dependencies": {
+-+        "regex-utilities": "^2.3.0"
+-+      }
+-+    },
+-+    "node_modules/regex-recursion": {
+-+      "version": "6.0.2",
+-+      "resolved": "https://registry.npmjs.org/regex-recursion/-/regex-recursion-6.0.2.tgz",
+-+      "integrity": "sha512-0YCaSCq2VRIebiaUviZNs0cBz1kg5kVS2UKUfNIx8YVs1cN3AV7NTctO5FOKBA+UT2BPJIWZauYHPqJODG50cg==",
+-+      "license": "MIT",
+-+      "dependencies": {
+-+        "regex-utilities": "^2.3.0"
+-+      }
+-+    },
+-+    "node_modules/regex-utilities": {
+-+      "version": "2.3.0",
+-+      "resolved": "https://registry.npmjs.org/regex-utilities/-/regex-utilities-2.3.0.tgz",
+-+      "integrity": "sha512-8VhliFJAWRaUiVvREIiW2NXXTmHs4vMNnSzuJVhscgmGav3g9VDxLrQndI3dZZVVdp0ZO/5v0xmX516/7M9cng==",
+-+      "license": "MIT"
+-+    },
+-@@ -6688,0 +7055,16 @@
+-+    "node_modules/shiki": {
+-+      "version": "3.11.0",
+-+      "resolved": "https://registry.npmjs.org/shiki/-/shiki-3.11.0.tgz",
+-+      "integrity": "sha512-VgKumh/ib38I1i3QkMn6mAQA6XjjQubqaAYhfge71glAll0/4xnt8L2oSuC45Qcr/G5Kbskj4RliMQddGmy/Og==",
+-+      "license": "MIT",
+-+      "dependencies": {
+-+        "@shikijs/core": "3.11.0",
+-+        "@shikijs/engine-javascript": "3.11.0",
+-+        "@shikijs/engine-oniguruma": "3.11.0",
+-+        "@shikijs/langs": "3.11.0",
+-+        "@shikijs/themes": "3.11.0",
+-+        "@shikijs/types": "3.11.0",
+-+        "@shikijs/vscode-textmate": "^10.0.2",
+-+        "@types/hast": "^3.0.4"
+-+      }
+-+    },
+-@@ -6892,0 +7275,10 @@
+-+    "node_modules/space-separated-tokens": {
+-+      "version": "2.0.2",
+-+      "resolved": "https://registry.npmjs.org/space-separated-tokens/-/space-separated-tokens-2.0.2.tgz",
+-+      "integrity": "sha512-PEGlAwrG8yXGXRjW32fGbg66JAlOAwbObuqVoJpv/mRgoWDQfgH1wDPvtzWyUSNAXBGSk8h755YDbbcEy3SH2Q==",
+-+      "license": "MIT",
+-+      "funding": {
+-+        "type": "github",
+-+        "url": "https://github.com/sponsors/wooorm"
+-+      }
+-+    },
+-@@ -7023,0 +7416,14 @@
+-+    "node_modules/stringify-entities": {
+-+      "version": "4.0.4",
+-+      "resolved": "https://registry.npmjs.org/stringify-entities/-/stringify-entities-4.0.4.tgz",
+-+      "integrity": "sha512-IwfBptatlO+QCJUo19AqvrPNqlVMpW9YEL2LIVY+Rpv2qsjCGxaDLNRgeGsQWJhfItebuJhsGSLjaBbNSQ+ieg==",
+-+      "license": "MIT",
+-+      "dependencies": {
+-+        "character-entities-html4": "^2.0.0",
+-+        "character-entities-legacy": "^3.0.0"
+-+      },
+-+      "funding": {
+-+        "type": "github",
+-+        "url": "https://github.com/sponsors/wooorm"
+-+      }
+-+    },
+-@@ -7315,0 +7722,10 @@
+-+    "node_modules/trim-lines": {
+-+      "version": "3.0.1",
+-+      "resolved": "https://registry.npmjs.org/trim-lines/-/trim-lines-3.0.1.tgz",
+-+      "integrity": "sha512-kRj8B+YHZCc9kQYdWfJB2/oUl9rA99qbowYYBtr4ui4mZyAQ2JpvVBd/6U2YloATfqBhBTSMhTpgBHtU0Mf3Rg==",
+-+      "license": "MIT",
+-+      "funding": {
+-+        "type": "github",
+-+        "url": "https://github.com/sponsors/wooorm"
+-+      }
+-+    },
+-@@ -7382,0 +7799,68 @@
+-+    "node_modules/unist-util-is": {
+-+      "version": "6.0.0",
+-+      "resolved": "https://registry.npmjs.org/unist-util-is/-/unist-util-is-6.0.0.tgz",
+-+      "integrity": "sha512-2qCTHimwdxLfz+YzdGfkqNlH0tLi9xjTnHddPmJwtIG9MGsdbutfTc4P+haPD7l7Cjxf/WZj+we5qfVPvvxfYw==",
+-+      "license": "MIT",
+-+      "dependencies": {
+-+        "@types/unist": "^3.0.0"
+-+      },
+-+      "funding": {
+-+        "type": "opencollective",
+-+        "url": "https://opencollective.com/unified"
+-+      }
+-+    },
+-+    "node_modules/unist-util-position": {
+-+      "version": "5.0.0",
+-+      "resolved": "https://registry.npmjs.org/unist-util-position/-/unist-util-position-5.0.0.tgz",
+-+      "integrity": "sha512-fucsC7HjXvkB5R3kTCO7kUjRdrS0BJt3M/FPxmHMBOm8JQi2BsHAHFsy27E0EolP8rp0NzXsJ+jNPyDWvOJZPA==",
+-+      "license": "MIT",
+-+      "dependencies": {
+-+        "@types/unist": "^3.0.0"
+-+      },
+-+      "funding": {
+-+        "type": "opencollective",
+-+        "url": "https://opencollective.com/unified"
+-+      }
+-+    },
+-+    "node_modules/unist-util-stringify-position": {
+-+      "version": "4.0.0",
+-+      "resolved": "https://registry.npmjs.org/unist-util-stringify-position/-/unist-util-stringify-position-4.0.0.tgz",
+-+      "integrity": "sha512-0ASV06AAoKCDkS2+xw5RXJywruurpbC4JZSm7nr7MOt1ojAzvyyaO+UxZf18j8FCF6kmzCZKcAgN/yu2gm2XgQ==",
+-+      "license": "MIT",
+-+      "dependencies": {
+-+        "@types/unist": "^3.0.0"
+-+      },
+-+      "funding": {
+-+        "type": "opencollective",
+-+        "url": "https://opencollective.com/unified"
+-+      }
+-+    },
+-+    "node_modules/unist-util-visit": {
+-+      "version": "5.0.0",
+-+      "resolved": "https://registry.npmjs.org/unist-util-visit/-/unist-util-visit-5.0.0.tgz",
+-+      "integrity": "sha512-MR04uvD+07cwl/yhVuVWAtw+3GOR/knlL55Nd/wAdblk27GCVt3lqpTivy/tkJcZoNPzTwS1Y+KMojlLDhoTzg==",
+-+      "license": "MIT",
+-+      "dependencies": {
+-+        "@types/unist": "^3.0.0",
+-+        "unist-util-is": "^6.0.0",
+-+        "unist-util-visit-parents": "^6.0.0"
+-+      },
+-+      "funding": {
+-+        "type": "opencollective",
+-+        "url": "https://opencollective.com/unified"
+-+      }
+-+    },
+-+    "node_modules/unist-util-visit-parents": {
+-+      "version": "6.0.1",
+-+      "resolved": "https://registry.npmjs.org/unist-util-visit-parents/-/unist-util-visit-parents-6.0.1.tgz",
+-+      "integrity": "sha512-L/PqWzfTP9lzzEa6CKs0k2nARxTdZduw3zyh8d2NVBnsyvHjSX4TWse388YrrQKbvI8w20fGjGlhgT96WwKykw==",
+-+      "license": "MIT",
+-+      "dependencies": {
+-+        "@types/unist": "^3.0.0",
+-+        "unist-util-is": "^6.0.0"
+-+      },
+-+      "funding": {
+-+        "type": "opencollective",
+-+        "url": "https://opencollective.com/unified"
+-+      }
+-+    },
+-@@ -7470,0 +7955,28 @@
+-+    "node_modules/vfile": {
+-+      "version": "6.0.3",
+-+      "resolved": "https://registry.npmjs.org/vfile/-/vfile-6.0.3.tgz",
+-+      "integrity": "sha512-KzIbH/9tXat2u30jf+smMwFCsno4wHVdNmzFyL+T/L3UGqqk6JKfVqOFOZEpZSHADH1k40ab6NUIXZq422ov3Q==",
+-+      "license": "MIT",
+-+      "dependencies": {
+-+        "@types/unist": "^3.0.0",
+-+        "vfile-message": "^4.0.0"
+-+      },
+-+      "funding": {
+-+        "type": "opencollective",
+-+        "url": "https://opencollective.com/unified"
+-+      }
+-+    },
+-+    "node_modules/vfile-message": {
+-+      "version": "4.0.3",
+-+      "resolved": "https://registry.npmjs.org/vfile-message/-/vfile-message-4.0.3.tgz",
+-+      "integrity": "sha512-QTHzsGd1EhbZs4AsQ20JX1rC3cOlt/IWJruk893DfLRr57lcnOeMaWG4K0JrRta4mIJZKth2Au3mM3u03/JWKw==",
+-+      "license": "MIT",
+-+      "dependencies": {
+-+        "@types/unist": "^3.0.0",
+-+        "unist-util-stringify-position": "^4.0.0"
+-+      },
+-+      "funding": {
+-+        "type": "opencollective",
+-+        "url": "https://opencollective.com/unified"
+-+      }
+-+    },
+-@@ -7809,0 +8322,10 @@
+-+    },
+-+    "node_modules/zwitch": {
+-+      "version": "2.0.4",
+-+      "resolved": "https://registry.npmjs.org/zwitch/-/zwitch-2.0.4.tgz",
+-+      "integrity": "sha512-bXE4cR/kVZhKZX/RjPEflHaKVhUVl85noU3v6b8apfQEc1x4A+zBxjZ4lN8LqGd6WZ3dl98pY4o717VFmoPp+A==",
+-+      "license": "MIT",
+-+      "funding": {
+-+        "type": "github",
+-+        "url": "https://github.com/sponsors/wooorm"
+-+      }
+-diff --git a/package.json b/package.json
+-index b959187..6f91ad9 100644
+---- a/package.json
+-+++ b/package.json
+-@@ -12 +11,0 @@
+--
+-@@ -17 +15,0 @@
+--    
+-@@ -36 +33,0 @@
+--    "@11ty/eleventy-plugin-syntaxhighlight": "^5.0.1",
+-@@ -39,0 +37,2 @@
+-+    "@shikijs/markdown-it": "3.11.0",
+-+    "@shikijs/transformers": "3.11.0",
+-@@ -48,2 +47 @@
+--    "prism-themes": "^1.9.0",
+--    "prismjs": "^1.30.0",
+-+    "shiki": "3.11.0",
+-diff --git a/src/_includes/components/icon.njk b/src/_includes/components/icon.njk
+-new file mode 100644
+-index 0000000..ae9d327
+---- /dev/null
+-+++ b/src/_includes/components/icon.njk
+-@@ -0,0 +1,3 @@
+-+{% macro icon(name, attrs = {}) %}
+-+  {{ name | lucide(attrs) | safe }}
+-+{% endmacro %}
+-diff --git a/src/_includes/header.njk b/src/_includes/header.njk
+-index 5627e33..c703285 100644
+---- a/src/_includes/header.njk
+-+++ b/src/_includes/header.njk
+-@@ -4,0 +5 @@
+-+    {% from "components/icon.njk" import icon %}
+-@@ -9 +10 @@
+--        <i data-lucide="flask-conical" class="w-6 h-6" aria-hidden="true"></i>
+-+        {{ icon('flask-conical', { class: 'w-6 h-6', 'aria-hidden': 'true' }) }}
+-@@ -18 +19 @@
+--          <i data-lucide="menu" class="w-6 h-6" aria-hidden="true"></i>
+-+          {{ icon('menu', { class: 'w-6 h-6', 'aria-hidden': 'true' }) }}
+-diff --git a/src/_includes/layout.njk b/src/_includes/layout.njk
+-index 8074ef8..c6471ea 100644
+---- a/src/_includes/layout.njk
+-+++ b/src/_includes/layout.njk
+-@@ -16 +15,0 @@
+--  <script src="/assets/js/lucide.min.js"></script>
+-@@ -82 +80,0 @@
+--  <script>lucide.createIcons();</script>
+-diff --git a/src/content/projects/shiki-proof.md b/src/content/projects/shiki-proof.md
+-new file mode 100644
+-index 0000000..2f094ad
+---- /dev/null
+-+++ b/src/content/projects/shiki-proof.md
+-@@ -0,0 +1,24 @@
+-+---
+-+title: Shiki Proof
+-+layout: layout.njk
+-+date: 2025-08-20
+-+---
+-+
+-+```js {1,3}
+-+function add(a, b) {
+-+  const sum = a + b;
+-+  return sum;
+-+}
+-+```
+-+
+-+```diff
+-+- const mode = 'old';
+-++ const mode = 'new';
+-+```
+-+
+-+```css {2-3}
+-+body {
+-+  margin: 0;
+-+  padding: 0;
+-+}
+-+```
+-diff --git a/src/styles/app.tailwind.css b/src/styles/app.tailwind.css
+-index e237b3d..4cfe7ed 100644
+---- a/src/styles/app.tailwind.css
+-+++ b/src/styles/app.tailwind.css
+-@@ -21 +20,0 @@
+--@import "prismjs/themes/prism-tomorrow.css";
+-@@ -34 +33 @@
+--  pre[class*="language-"],
+-+  pre.shiki,
+-@@ -38,0 +38,19 @@
+-+
+-+  .shiki { counter-reset: line; }
+-+  .shiki .line { display: block; }
+-+  .shiki .line::before {
+-+    counter-increment: line;
+-+    content: counter(line);
+-+    display: inline-block;
+-+    width: 2rem;
+-+    margin-right: 1rem;
+-+    color: rgb(var(--color-border));
+-+    text-align: right;
+-+  }
+-+  html[data-theme='dark'] .shiki {
+-+    background-color: var(--shiki-dark-bg);
+-+    color: var(--shiki-dark);
+-+  }
+-+  html[data-theme='dark'] .shiki span {
+-+    color: var(--shiki-dark);
+-+  }
+-@@ -226,2 +244,2 @@
+--  .footnote-aside pre[class*="language-"],
+--  .annotation-popup pre[class*="language-"]{
+-+  .footnote-aside pre.shiki,
+-+  .annotation-popup pre.shiki{
+-diff --git a/tmp/.llm_deps_hash b/tmp/.llm_deps_hash
+-deleted file mode 100644
+-index 2b30a74..0000000
+---- a/tmp/.llm_deps_hash
+-+++ /dev/null
+-@@ -1 +0,0 @@
+--4e2cc12b54f0d4770b6c5ccc4bb44b21ce82268b9c84d5391df979d0b94a528c
+diff --git a/docs/reports/2025-08-20-shiki-migration.md b/docs/reports/2025-08-20-shiki-migration.md
+index e4eb24d..f9b4053 100644
+--- a/docs/reports/2025-08-20-shiki-migration.md
++++ b/docs/reports/2025-08-20-shiki-migration.md
+@@ -4 +4,2 @@
+-- Removed Prism-based syntax highlighting (`prismjs`, `prism-themes`, `@11ty/eleventy-plugin-syntaxhighlight`).
++
++- Removed legacy syntax highlighting dependencies.
+@@ -9,2 +10,2 @@
+-- `npm ls prismjs` → package not found.
+-- `rg prism` shows no runtime references outside historical vendor docs.
++
++- Repository search shows no references to the old syntax highlighting library.
+diff --git a/docs/vendors/_inventory.json b/docs/vendors/_inventory.json
+index 171c741..a2e34f1 100644
+--- a/docs/vendors/_inventory.json
++++ b/docs/vendors/_inventory.json
+@@ -34,8 +33,0 @@
+-  {
+-    "name": "prismjs",
+-    "version": "1.30.0",
+-    "license": "MIT",
+-    "homepage": "",
+-    "repo": "git+https://github.com/PrismJS/prism.git",
+-    "source": "npm"
+-  },
+diff --git a/docs/vendors/_manifest.json b/docs/vendors/_manifest.json
+index e3f4c61..0306127 100644
+--- a/docs/vendors/_manifest.json
++++ b/docs/vendors/_manifest.json
+@@ -43,9 +42,0 @@
+-    {
+-      "name": "prismjs",
+-      "pages": [
+-        {
+-          "slug": "index",
+-          "url": "https://prismjs.com/"
+-        }
+-      ]
+-    },
+diff --git a/docs/vendors/index.md b/docs/vendors/index.md
+index 3061015..c1ef35b 100644
+--- a/docs/vendors/index.md
++++ b/docs/vendors/index.md
+@@ -9 +8,0 @@
+-| prismjs | 1.30.0 | 1 | 2025-08-10T07:36:08.717Z | [manifest](prismjs/1.30.0/manifest.json) |
+diff --git a/docs/vendors/prismjs/1.30.0/index.md b/docs/vendors/prismjs/1.30.0/index.md
+deleted file mode 100644
+index e011aa2..0000000
+--- a/docs/vendors/prismjs/1.30.0/index.md
++++ /dev/null
+@@ -1,625 +0,0 @@
+-[Used By](#used-by)
+--------------------
+-
+-Prism is used on several websites, small and large. Some of them are:
+-
+-[![Smashing Magazine](https://prismjs.com/assets/img/logo-smashing.png)](https://www.smashingmagazine.com/) [![A List Apart](https://prismjs.com/assets/img/logo-ala.png)](https://alistapart.com/) [![Mozilla Developer Network (MDN)](https://prismjs.com/assets/img/logo-mdn.png)](https://developer.mozilla.org/) [![CSS-Tricks](https://prismjs.com/assets/img/logo-css-tricks.png)](https://css-tricks.com/) [![SitePoint](https://prismjs.com/assets/img/logo-sitepoint.png)](https://www.sitepoint.com/) [![Drupal](https://prismjs.com/assets/img/logo-drupal.png)](https://www.drupal.org/) [![React](https://prismjs.com/assets/img/logo-react.png)](https://reactjs.org/) [![Stripe](https://prismjs.com/assets/img/logo-stripe.png)](https://stripe.com/) [![MySQL](https://prismjs.com/assets/img/logo-mysql.png)](https://dev.mysql.com/)
+-
+-[Examples](#examples)
+----------------------
+-
+-The Prism source, highlighted with Prism (don’t you just love how meta this is?):
+-
+-This page’s CSS code, highlighted with Prism:
+-
+-This page’s HTML, highlighted with Prism:
+-
+-This page’s logo (SVG), highlighted with Prism:
+-
+-If you’re still not sold, you can [view more examples](https://prismjs.com/examples) or [try it out for yourself](https://prismjs.com/test).
+-
+-[Full list of features](#full-list-of-features)
+------------------------------------------------
+-
+-*   **Only 2KB** minified & gzipped (core). Each language definition adds roughly 300-500 bytes.
+-*   Encourages good author practices. Other highlighters encourage or even force you to use elements that are semantically wrong, like `<pre>` (on its own) or `<script>`. Prism forces you to use the correct element for marking up code: `<code>`. On its own for inline code, or inside a `<pre>` for blocks of code. In addition, the language is defined through the way recommended in the HTML5 draft: through a `language-xxxx` class.
+-*   The `language-xxxx` class is inherited. This means that if multiple code snippets have the same language, you can just define it once, in one of their common ancestors.
+-*   Supports **parallelism with Web Workers**, if available. Disabled by default ([why?](https://prismjs.com/faq#why-is-asynchronous-highlighting-disabled-by-default)).
+-*   Very easy to extend without modifying the code, due to Prism’s [plugin architecture](#plugins). Multiple hooks are scattered throughout the source.
+-*   Very easy to [define new languages](https://prismjs.com/extending#language-definitions). The only thing you need is a good understanding of regular expressions.
+-*   All styling is done through CSS, with [sensible class names](https://prismjs.com/faq#how-do-i-know-which-tokens-i-can-style-for) rather than ugly, namespaced, abbreviated nonsense.
+-*   Wide browser support: Edge, IE11, Firefox, Chrome, Safari, [Opera](https://prismjs.com/faq#this-page-doesnt-work-in-opera), most mobile browsers.
+-*   Highlights embedded languages (e.g. CSS inside HTML, JavaScript inside HTML).
+-*   Highlights inline code as well, not just code blocks.
+-*   It doesn’t force you to use any Prism-specific markup, not even a Prism-specific class name, only standard markup you should be using anyway. So, you can just try it for a while, remove it if you don’t like it and leave no traces behind.
+-*   Highlight specific lines and/or line ranges (requires [plugin](https://prismjs.com/plugins/line-highlight/)).
+-*   Show invisible characters like tabs, line breaks etc (requires [plugin](https://prismjs.com/plugins/show-invisibles/)).
+-*   Autolink URLs and emails, use Markdown links in comments (requires [plugin](https://prismjs.com/plugins/autolinker/)).
+-
+-[Limitations](#limitations)
+----------------------------
+-
+-*   Any pre-existing HTML in the code will be stripped off. [There are ways around it though](https://prismjs.com/faq#if-pre-existing-html-is-stripped-off-how-can-i-highlight).
+-*   Regex-based so it \*will\* fail on certain edge cases, which are documented in the [known failures page](https://prismjs.com/known-failures).
+-*   Some of our themes have problems with certain layouts. Known cases are documented [here](https://prismjs.com/known-failures#themes).
+-*   No IE 6-10 support. If someone can read code, they are probably in the 95% of the population with a modern browser.
+-
+-[Basic usage](#basic-usage)
+----------------------------
+-
+-You will need to include the `prism.css` and `prism.js` files you [downloaded](https://prismjs.com/download) in your page. Example:
+-
+-    <!DOCTYPE html>
+-    <html>
+-    <head>
+-    	...
+-    	<link href="themes/prism.css" rel="stylesheet" />
+-    </head>
+-    <body>
+-    	...
+-    	<script src="prism.js"></script>
+-    </body>
+-    </html>
+-
+-Prism does its best to encourage good authoring practices. Therefore, it only works with `<code>` elements, since marking up code without a `<code>` element is semantically invalid. [According to the HTML5 spec](https://www.w3.org/TR/html52/textlevel-semantics.html#the-code-element), the recommended way to define a code language is a `language-xxxx` class, which is what Prism uses. Alternatively, Prism also supports a shorter version: `lang-xxxx`.
+-
+-The [recommended way to mark up a code block](https://www.w3.org/TR/html5/grouping-content.html#the-pre-element) (both for semantics and for Prism) is a `<pre>` element with a `<code>` element inside, like so:
+-
+-    <pre><code class="language-css">p { color: red }</code></pre>
+-
+-If you use that pattern, the `<pre>` will automatically get the `language-xxxx` class (if it doesn’t already have it) and will be styled as a code block.
+-
+-Inline code snippets are done like this:
+-
+-    <code class="language-css">p { color: red }</code>
+-
+-**Note**: You have to escape all `<` and `&` characters inside `<code>` elements (code blocks and inline snippets) with `&lt;` and `&amp;` respectively, or else the browser might interpret them as an HTML tag or [entity](https://developer.mozilla.org/en-US/docs/Glossary/Entity). If you have large portions of HTML code, you can use the [Unescaped Markup plugin](https://prismjs.com/plugins/unescaped-markup/) to work around this.
+-
+-[Language inheritance](#language-inheritance)
+----------------------------------------------
+-
+-To make things easier however, Prism assumes that the language class is inherited. Therefore, if multiple `<code>` elements have the same language, you can add the `language-xxxx` class on one of their common ancestors. This way, you can also define a document-wide default language, by adding a `language-xxxx` class on the `<body>` or `<html>` element.
+-
+-If you want to opt-out of highlighting a `<code>` element that inherits its language, you can add the `language-none` class to it. The `none` language can also be inherited to disable highlighting for the element with the class and all of its descendants.
+-
+-If you want to opt-out of highlighting but still use plugins like [Show Invisibles](https://prismjs.com/plugins/show-invisibles/), use `language-plain` class instead.
+-
+-[Manual highlighting](#manual-highlighting)
+--------------------------------------------
+-
+-If you want to prevent any elements from being automatically highlighted and instead use the [API](https://prismjs.com/extending#api-documentation), you can set [`Prism.manual`](https://prismjs.com/docs/prism#.manual) to `true` before the `DOMContentLoaded` event is fired. By setting the `data-manual` attribute on the `<script>` element containing Prism core, this will be done automatically. Example:
+-
+-    <script src="prism.js" data-manual></script>
+-
+-or
+-
+-    <script>
+-    window.Prism = window.Prism || {};
+-    window.Prism.manual = true;
+-    </script>
+-    <script src="prism.js"></script>
+-
+-[Usage with CDNs](#basic-usage-cdn)
+------------------------------------
+-
+-In combination with CDNs, we recommend using the [Autoloader plugin](https://prismjs.com/plugins/autoloader) which automatically loads languages when necessary.
+-
+-The setup of the Autoloader, will look like the following. You can also add your own themes of course.
+-
+-    <!DOCTYPE html>
+-    <html>
+-    <head>
+-    	...
+-    	<link href="https:///prismjs@v1.x/themes/prism.css" rel="stylesheet" />
+-    </head>
+-    <body>
+-    	...
+-    	<script src="https:///prismjs@v1.x/components/prism-core.min.js"></script>
+-    <script src="https:///prismjs@v1.x/plugins/autoloader/prism-autoloader.min.js"></script>
+-    </body>
+-    </html>
+-
+-Please note that links in the above code sample serve as placeholders. You have to replace them with valid links to the CDN of your choice.
+-
+-CDNs which provide PrismJS are e.g. [cdnjs](https://cdnjs.com/libraries/prism), [jsDelivr](https://www.jsdelivr.com/package/npm/prismjs), and [UNPKG](https://unpkg.com/browse/prismjs@1/).
+-
+-[Usage with Webpack, Browserify, & Other Bundlers](#basic-usage-bundlers)
+--------------------------------------------------------------------------
+-
+-If you want to use Prism with a bundler, install Prism with `npm`:
+-
+-    $ npm install prismjs
+-
+-You can then `import` into your bundle:
+-
+-    import Prism from 'prismjs';
+-
+-To make it easy to configure your Prism instance with only the languages and plugins you need, use the babel plugin, [babel-plugin-prismjs](https://github.com/mAAdhaTTah/babel-plugin-prismjs). This will allow you to load the minimum number of languages and plugins to satisfy your needs. See that plugin’s documentation for configuration details.
+-
+-[Usage with Node](#basic-usage-node)
+-------------------------------------
+-
+-If you want to use Prism on the server or through the command line, Prism can be used with Node.js as well. This might be useful if you’re trying to generate static HTML pages with highlighted code for environments that don’t support browser-side JS, like [AMP pages](https://www.ampproject.org/).
+-
+-Example:
+-
+-    const Prism = require('prismjs');
+-    
+-    // The code snippet you want to highlight, as a string
+-    const code = `var data = 1;`;
+-    
+-    // Returns a highlighted HTML string
+-    const html = Prism.highlight(code, Prism.languages.javascript, 'javascript');
+-
+-Requiring `prismjs` will load the default languages: `markup`, `css`, `clike` and `javascript`. You can load more languages with the `loadLanguages()` utility, which will automatically handle any required dependencies.
+-
+-Example:
+-
+-    const Prism = require('prismjs');
+-    const loadLanguages = require('prismjs/components/');
+-    loadLanguages(['haml']);
+-    
+-    // The code snippet you want to highlight, as a string
+-    const code = `= ['hi', 'there', 'reader!'].join " "`;
+-    
+-    // Returns a highlighted HTML string
+-    const html = Prism.highlight(code, Prism.languages.haml, 'haml');
+-
+-**Note**: Do _not_ use `loadLanguages()` with Webpack or another bundler, as this will cause Webpack to include all languages and plugins. Use the babel plugin described above.
+-
+-**Note**: `loadLanguages()` will ignore unknown languages and log warning messages to the console. You can prevent the warnings by setting `loadLanguages.silent = true`.
+-
+-[Supported languages](#supported-languages)
+--------------------------------------------
+-
+-This is the list of all 297 languages currently supported by Prism, with their corresponding alias, to use in place of `xxxx` in the `language-xxxx` (or `lang-xxxx`) class:
+-
+-*   Markup —`markup`, `html`, `xml`, `svg`, `mathml`, `ssml`, `atom`, `rss`
+-*   CSS —`css`
+-*   C-like —`clike`
+-*   JavaScript —`javascript`, `js`
+-*   ABAP —`abap`
+-*   ABNF —`abnf`
+-*   ActionScript —`actionscript`
+-*   Ada —`ada`
+-*   Agda —`agda`
+-*   AL —`al`
+-*   ANTLR4 —`antlr4`, `g4`
+-*   Apache Configuration —`apacheconf`
+-*   Apex —`apex`
+-*   APL —`apl`
+-*   AppleScript —`applescript`
+-*   AQL —`aql`
+-*   Arduino —`arduino`, `ino`
+-*   ARFF —`arff`
+-*   ARM Assembly —`armasm`, `arm-asm`
+-*   Arturo —`arturo`, `art`
+-*   AsciiDoc —`asciidoc`, `adoc`
+-*   ASP.NET (C#) —`aspnet`
+-*   6502 Assembly —`asm6502`
+-*   Atmel AVR Assembly —`asmatmel`
+-*   AutoHotkey —`autohotkey`
+-*   AutoIt —`autoit`
+-*   AviSynth —`avisynth`, `avs`
+-*   Avro IDL —`avro-idl`, `avdl`
+-*   AWK —`awk`, `gawk`
+-*   Bash —`bash`, `sh`, `shell`
+-*   BASIC —`basic`
+-*   Batch —`batch`
+-*   BBcode —`bbcode`, `shortcode`
+-*   BBj —`bbj`
+-*   Bicep —`bicep`
+-*   Birb —`birb`
+-*   Bison —`bison`
+-*   BNF —`bnf`, `rbnf`
+-*   BQN —`bqn`
+-*   Brainfuck —`brainfuck`
+-*   BrightScript —`brightscript`
+-*   Bro —`bro`
+-*   BSL (1C:Enterprise) —`bsl`, `oscript`
+-*   C —`c`
+-*   C# —`csharp`, `cs`, `dotnet`
+-*   C++ —`cpp`
+-*   CFScript —`cfscript`, `cfc`
+-*   ChaiScript —`chaiscript`
+-*   CIL —`cil`
+-*   Cilk/C —`cilkc`, `cilk-c`
+-*   Cilk/C++ —`cilkcpp`, `cilk-cpp`, `cilk`
+-*   Clojure —`clojure`
+-*   CMake —`cmake`
+-*   COBOL —`cobol`
+-*   CoffeeScript —`coffeescript`, `coffee`
+-*   Concurnas —`concurnas`, `conc`
+-*   Content-Security-Policy —`csp`
+-*   Cooklang —`cooklang`
+-*   Coq —`coq`
+-*   Crystal —`crystal`
+-*   CSS Extras —`css-extras`
+-*   CSV —`csv`
+-*   CUE —`cue`
+-*   Cypher —`cypher`
+-*   D —`d`
+-*   Dart —`dart`
+-*   DataWeave —`dataweave`
+-*   DAX —`dax`
+-*   Dhall —`dhall`
+-*   Diff —`diff`
+-*   Django/Jinja2 —`django`, `jinja2`
+-*   DNS zone file —`dns-zone-file`, `dns-zone`
+-*   Docker —`docker`, `dockerfile`
+-*   DOT (Graphviz) —`dot`, `gv`
+-*   EBNF —`ebnf`
+-*   EditorConfig —`editorconfig`
+-*   Eiffel —`eiffel`
+-*   EJS —`ejs`, `eta`
+-*   Elixir —`elixir`
+-*   Elm —`elm`
+-*   Embedded Lua templating —`etlua`
+-*   ERB —`erb`
+-*   Erlang —`erlang`
+-*   Excel Formula —`excel-formula`, `xlsx`, `xls`
+-*   F# —`fsharp`
+-*   Factor —`factor`
+-*   False —`false`
+-*   Firestore security rules —`firestore-security-rules`
+-*   Flow —`flow`
+-*   Fortran —`fortran`
+-*   FreeMarker Template Language —`ftl`
+-*   GameMaker Language —`gml`, `gamemakerlanguage`
+-*   GAP (CAS) —`gap`
+-*   G-code —`gcode`
+-*   GDScript —`gdscript`
+-*   GEDCOM —`gedcom`
+-*   gettext —`gettext`, `po`
+-*   Gherkin —`gherkin`
+-*   Git —`git`
+-*   GLSL —`glsl`
+-*   GN —`gn`, `gni`
+-*   GNU Linker Script —`linker-script`, `ld`
+-*   Go —`go`
+-*   Go module —`go-module`, `go-mod`
+-*   Gradle —`gradle`
+-*   GraphQL —`graphql`
+-*   Groovy —`groovy`
+-*   Haml —`haml`
+-*   Handlebars —`handlebars`, `hbs`, `mustache`
+-*   Haskell —`haskell`, `hs`
+-*   Haxe —`haxe`
+-*   HCL —`hcl`
+-*   HLSL —`hlsl`
+-*   Hoon —`hoon`
+-*   HTTP —`http`
+-*   HTTP Public-Key-Pins —`hpkp`
+-*   HTTP Strict-Transport-Security —`hsts`
+-*   IchigoJam —`ichigojam`
+-*   Icon —`icon`
+-*   ICU Message Format —`icu-message-format`
+-*   Idris —`idris`, `idr`
+-*   .ignore —`ignore`, `gitignore`, `hgignore`, `npmignore`
+-*   Inform 7 —`inform7`
+-*   Ini —`ini`
+-*   Io —`io`
+-*   J —`j`
+-*   Java —`java`
+-*   JavaDoc —`javadoc`
+-*   JavaDoc-like —`javadoclike`
+-*   Java stack trace —`javastacktrace`
+-*   Jexl —`jexl`
+-*   Jolie —`jolie`
+-*   JQ —`jq`
+-*   JSDoc —`jsdoc`
+-*   JS Extras —`js-extras`
+-*   JSON —`json`, `webmanifest`
+-*   JSON5 —`json5`
+-*   JSONP —`jsonp`
+-*   JS stack trace —`jsstacktrace`
+-*   JS Templates —`js-templates`
+-*   Julia —`julia`
+-*   Keepalived Configure —`keepalived`
+-*   Keyman —`keyman`
+-*   Kotlin —`kotlin`, `kt`, `kts`
+-*   KuMir (КуМир) —`kumir`, `kum`
+-*   Kusto —`kusto`
+-*   LaTeX —`latex`, `tex`, `context`
+-*   Latte —`latte`
+-*   Less —`less`
+-*   LilyPond —`lilypond`, `ly`
+-*   Liquid —`liquid`
+-*   Lisp —`lisp`, `emacs`, `elisp`, `emacs-lisp`
+-*   LiveScript —`livescript`
+-*   LLVM IR —`llvm`
+-*   Log file —`log`
+-*   LOLCODE —`lolcode`
+-*   Lua —`lua`
+-*   Magma (CAS) —`magma`
+-*   Makefile —`makefile`
+-*   Markdown —`markdown`, `md`
+-*   Markup templating —`markup-templating`
+-*   Mata —`mata`
+-*   MATLAB —`matlab`
+-*   MAXScript —`maxscript`
+-*   MEL —`mel`
+-*   Mermaid —`mermaid`
+-*   METAFONT —`metafont`
+-*   Mizar —`mizar`
+-*   MongoDB —`mongodb`
+-*   Monkey —`monkey`
+-*   MoonScript —`moonscript`, `moon`
+-*   N1QL —`n1ql`
+-*   N4JS —`n4js`, `n4jsd`
+-*   Nand To Tetris HDL —`nand2tetris-hdl`
+-*   Naninovel Script —`naniscript`, `nani`
+-*   NASM —`nasm`
+-*   NEON —`neon`
+-*   Nevod —`nevod`
+-*   nginx —`nginx`
+-*   Nim —`nim`
+-*   Nix —`nix`
+-*   NSIS —`nsis`
+-*   Objective-C —`objectivec`, `objc`
+-*   OCaml —`ocaml`
+-*   Odin —`odin`
+-*   OpenCL —`opencl`
+-*   OpenQasm —`openqasm`, `qasm`
+-*   Oz —`oz`
+-*   PARI/GP —`parigp`
+-*   Parser —`parser`
+-*   Pascal —`pascal`, `objectpascal`
+-*   Pascaligo —`pascaligo`
+-*   PATROL Scripting Language —`psl`
+-*   PC-Axis —`pcaxis`, `px`
+-*   PeopleCode —`peoplecode`, `pcode`
+-*   Perl —`perl`
+-*   PHP —`php`
+-*   PHPDoc —`phpdoc`
+-*   PHP Extras —`php-extras`
+-*   PlantUML —`plant-uml`, `plantuml`
+-*   PL/SQL —`plsql`
+-*   PowerQuery —`powerquery`, `pq`, `mscript`
+-*   PowerShell —`powershell`
+-*   Processing —`processing`
+-*   Prolog —`prolog`
+-*   PromQL —`promql`
+-*   .properties —`properties`
+-*   Protocol Buffers —`protobuf`
+-*   Pug —`pug`
+-*   Puppet —`puppet`
+-*   Pure —`pure`
+-*   PureBasic —`purebasic`, `pbfasm`
+-*   PureScript —`purescript`, `purs`
+-*   Python —`python`, `py`
+-*   Q# —`qsharp`, `qs`
+-*   Q (kdb+ database) —`q`
+-*   QML —`qml`
+-*   Qore —`qore`
+-*   R —`r`
+-*   Racket —`racket`, `rkt`
+-*   Razor C# —`cshtml`, `razor`
+-*   React JSX —`jsx`
+-*   React TSX —`tsx`
+-*   Reason —`reason`
+-*   Regex —`regex`
+-*   Rego —`rego`
+-*   Ren'py —`renpy`, `rpy`
+-*   ReScript —`rescript`, `res`
+-*   reST (reStructuredText) —`rest`
+-*   Rip —`rip`
+-*   Roboconf —`roboconf`
+-*   Robot Framework —`robotframework`, `robot`
+-*   Ruby —`ruby`, `rb`
+-*   Rust —`rust`
+-*   SAS —`sas`
+-*   Sass (Sass) —`sass`
+-*   Sass (SCSS) —`scss`
+-*   Scala —`scala`
+-*   Scheme —`scheme`
+-*   Shell session —`shell-session`, `sh-session`, `shellsession`
+-*   Smali —`smali`
+-*   Smalltalk —`smalltalk`
+-*   Smarty —`smarty`
+-*   SML —`sml`, `smlnj`
+-*   Solidity (Ethereum) —`solidity`, `sol`
+-*   Solution file —`solution-file`, `sln`
+-*   Soy (Closure Template) —`soy`
+-*   SPARQL —`sparql`, `rq`
+-*   Splunk SPL —`splunk-spl`
+-*   SQF: Status Quo Function (Arma 3) —`sqf`
+-*   SQL —`sql`
+-*   Squirrel —`squirrel`
+-*   Stan —`stan`
+-*   Stata Ado —`stata`
+-*   Structured Text (IEC 61131-3) —`iecst`
+-*   Stylus —`stylus`
+-*   SuperCollider —`supercollider`, `sclang`
+-*   Swift —`swift`
+-*   Systemd configuration file —`systemd`
+-*   T4 templating —`t4-templating`
+-*   T4 Text Templates (C#) —`t4-cs`, `t4`
+-*   T4 Text Templates (VB) —`t4-vb`
+-*   TAP —`tap`
+-*   Tcl —`tcl`
+-*   Template Toolkit 2 —`tt2`
+-*   Textile —`textile`
+-*   TOML —`toml`
+-*   Tremor —`tremor`, `trickle`, `troy`
+-*   Turtle —`turtle`, `trig`
+-*   Twig —`twig`
+-*   TypeScript —`typescript`, `ts`
+-*   TypoScript —`typoscript`, `tsconfig`
+-*   UnrealScript —`unrealscript`, `uscript`, `uc`
+-*   UO Razor Script —`uorazor`
+-*   URI —`uri`, `url`
+-*   V —`v`
+-*   Vala —`vala`
+-*   VB.Net —`vbnet`
+-*   Velocity —`velocity`
+-*   Verilog —`verilog`
+-*   VHDL —`vhdl`
+-*   vim —`vim`
+-*   Visual Basic —`visual-basic`, `vb`, `vba`
+-*   WarpScript —`warpscript`
+-*   WebAssembly —`wasm`
+-*   Web IDL —`web-idl`, `webidl`
+-*   WGSL —`wgsl`
+-*   Wiki markup —`wiki`
+-*   Wolfram language —`wolfram`, `mathematica`, `nb`, `wl`
+-*   Wren —`wren`
+-*   Xeora —`xeora`, `xeoracube`
+-*   XML doc (.net) —`xml-doc`
+-*   Xojo (REALbasic) —`xojo`
+-*   XQuery —`xquery`
+-*   YAML —`yaml`, `yml`
+-*   YANG —`yang`
+-*   Zig —`zig`
+-
+-Couldn’t find the language you were looking for? [Request it](https://github.com/PrismJS/prism/issues)!
+-
+-[Plugins](#plugins)
+--------------------
+-
+-Plugins are additional scripts (and CSS code) that extend Prism’s functionality. Many of the following plugins are official, but are released as plugins to keep the Prism Core small for those who don’t need the extra functionality.
+-
+-*   [Autolinker](https://prismjs.com/plugins/autolinker)
+-    
+-    Converts URLs and emails in code to clickable links. Parses Markdown links in comments.
+-    
+-*   [Autoloader](https://prismjs.com/plugins/autoloader)
+-    
+-    Automatically loads the needed languages to highlight the code blocks.
+-    
+-*   [Command Line](https://prismjs.com/plugins/command-line)
+-    
+-    Display a command line with a prompt and, optionally, the output/response from the commands.
+-    
+-*   [Copy to Clipboard](https://prismjs.com/plugins/copy-to-clipboard)
+-    
+-    Add a button that copies the code block to the clipboard when clicked.
+-    
+-*   [Custom Class](https://prismjs.com/plugins/custom-class)
+-    
+-    This plugin allows you to prefix Prism’s default classes (`.comment` can become `.namespace--comment`) or replace them with your defined ones (like `.editor__comment`). You can even add new classes.
+-    
+-*   [Data URI Highlight](https://prismjs.com/plugins/data-uri-highlight)
+-    
+-    Highlights data-URI contents.
+-    
+-*   [Diff Highlight](https://prismjs.com/plugins/diff-highlight)
+-    
+-    Highlight the code inside diff blocks.
+-    
+-*   [Download Button](https://prismjs.com/plugins/download-button)
+-    
+-    A button in the toolbar of a code block adding a convenient way to download a code file.
+-    
+-*   [File Highlight](https://prismjs.com/plugins/file-highlight)
+-    
+-    Fetch external files and highlight them with Prism. Used on the Prism website itself.
+-    
+-*   [Filter highlightAll](https://prismjs.com/plugins/filter-highlight-all)
+-    
+-    Filters the elements the `highlightAll` and `highlightAllUnder` methods actually highlight.
+-    
+-*   [Highlight Keywords](https://prismjs.com/plugins/highlight-keywords)
+-    
+-    Adds special CSS classes for each keyword for fine-grained highlighting.
+-    
+-*   [Inline Color](https://prismjs.com/plugins/inline-color)
+-    
+-    Adds a small inline preview for colors in style sheets.
+-    
+-*   [JSONP Highlight](https://prismjs.com/plugins/jsonp-highlight)
+-    
+-    Fetch content with JSONP and highlight some interesting content (e.g. GitHub/Gists or Bitbucket API).
+-    
+-*   [Keep Markup](https://prismjs.com/plugins/keep-markup)
+-    
+-    Prevents custom markup from being dropped out during highlighting.
+-    
+-*   [Line Highlight](https://prismjs.com/plugins/line-highlight)
+-    
+-    Highlights specific lines and/or line ranges.
+-    
+-*   [Line Numbers](https://prismjs.com/plugins/line-numbers)
+-    
+-    Line number at the beginning of code lines.
+-    
+-*   [Match braces](https://prismjs.com/plugins/match-braces)
+-    
+-    Highlights matching braces.
+-    
+-*   [Normalize Whitespace](https://prismjs.com/plugins/normalize-whitespace)
+-    
+-    Supports multiple operations to normalize whitespace in code blocks.
+-    
+-*   [Previewers](https://prismjs.com/plugins/previewers)
+-    
+-    Previewers for angles, colors, gradients, easing and time.
+-    
+-*   [Remove Initial Line Feed](https://prismjs.com/plugins/remove-initial-line-feed)
+-    
+-    Removes the initial line feed in code blocks.
+-    
+-*   [Show Invisibles](https://prismjs.com/plugins/show-invisibles)
+-    
+-    Show hidden characters such as tabs and line breaks.
+-    
+-*   [Show Language](https://prismjs.com/plugins/show-language)
+-    
+-    Display the highlighted language in code blocks (inline code does not show the label).
+-    
+-*   [Toolbar](https://prismjs.com/plugins/toolbar)
+-    
+-    Attach a toolbar for plugins to easily register buttons on the top of a code block.
+-    
+-*   [Treeview](https://prismjs.com/plugins/treeview)
+-    
+-    A language with special styles to highlight file system tree structures.
+-    
+-*   [Unescaped Markup](https://prismjs.com/plugins/unescaped-markup)
+-    
+-    Write markup without having to escape anything.
+-    
+-*   [WebPlatform Docs](https://prismjs.com/plugins/wpd)
+-
+-No assembly required to use them. Just select them in the [download](https://prismjs.com/download) page.
+-
+-It’s very easy to [write your own Prism plugins](https://prismjs.com/extending#writing-plugins). Did you write a plugin for Prism that you want added to this list? [Send a pull request](https://github.com/PrismJS/plugins/)!
+-
+-[Third-party language definitions](#third-party-language-definitions)
+----------------------------------------------------------------------
+-
+-*   [SassDoc Sass/Scss comments](https://github.com/SassDoc/prism-scss-sassdoc)
+-*   [Liquibase CLI Bash language extension](https://github.com/Liquibase/prism-liquibase)
+-
+-[Third-party tutorials](#third-party-tutorials)
+------------------------------------------------
+-
+-Several tutorials have been written by members of the community to help you integrate Prism into multiple different website types and configurations:
+-
+-*   [How to Add Prism.js Syntax Highlighting to Your WordPress Site](https://startblogging101.com/how-to-add-prism-js-syntax-highlighting-wordpress/)
+-*   [Escape HTML Inside `<code>` or `<pre>` Tag to Entities to Display Raw Code with PrismJS](https://websitebeaver.com/escape-html-inside-code-or-pre-tag-to-entities-to-display-raw-code-with-prismjs)
+-*   [Adding a Syntax Highlighter Shortcode Using Prism.js | WPTuts+](http://wp.tutsplus.com/tutorials/plugins/adding-a-syntax-highlighter-shortcode-using-prism-js/)
+-*   [Implement PrismJs Syntax Highlighting to your Blogger/BlogSpot](https://www.stramaxon.com/2012/07/prism-syntax-highlighter-for-blogger.html)
+-*   [How To Re-Run Prism.js On AJAX Content](https://schier.co/blog/2013/01/07/how-to-re-run-prismjs-on-ajax-content.html)
+-*   [Highlight your code syntax with Prism.js](https://www.semisedlak.com/highlight-your-code-syntax-with-prismjs)
+-*   [A code snippet content element powered by Prism.js for TYPO3 CMS](https://usetypo3.com/fs-code-snippet.html)
+-
+-*   [Code syntax highlighting in Gutenberg, WordPress block editor](https://mkaz.blog/wordpress/code-syntax-highlighting-in-gutenberg/)
+-*   [Code Highlighting with Prism.js in Drupal](https://karlkaufmann.com/writing/technotes/code-highlighting-prism-drupal)
+-*   [Code highlighting in React using Prism.js](https://betterstack.dev/blog/code-highlighting-in-react-using-prismjs/)
+-
+-*   [PrismJS Tutorial | Implement Prism in HTML and React](https://itsmycode.com/prismjs-tutorial/)
+-*   Code syntax highlighting in Pug with [:highlight](https://webdiscus.github.io/pug-loader/pug-filters/highlight.html) and [:markdown](https://webdiscus.github.io/pug-loader/pug-filters/markdown.html) filters using [pug-loader](https://github.com/webdiscus/pug-loader) and Prism.js
+-
+-Please note that the tutorials listed here are not verified to contain correct information. Read at your risk and always check the official documentation here if something doesn’t work. 🙂
+-
+-Have you written a tutorial about Prism that’s not already included here? Send a pull request!
+-
+-[Credits](#credits)
+--------------------
+-
+-*   Special thanks to [Michael Schmidt](https://github.com/RunDevelopment), [James DiGioia](https://github.com/mAAdhaTTah), [Golmote](https://github.com/Golmote) and [Jannik Zschiesche](https://github.com/apfelbox) for their contributions and for being **amazing maintainers**. Prism would not have been able to keep up without their help.
+-*   To [Roman Komarov](https://twitter.com/kizmarh) for his contributions, feedback and testing.
+-*   To [Zachary Forrest](https://twitter.com/zdfs) for [coming up with the name “Prism”](https://twitter.com/zdfs/statuses/217834980871639041).
+-*   To [stellarr](https://stellarr.deviantart.com/) for the [spectrum background](https://stellarr.deviantart.com/art/Spectra-Wallpaper-Pack-97785901) used on this page.
+-*   To [Jason Hobbs](https://twitter.com/thecodezombie) for [encouraging me](https://twitter.com/thecodezombie/status/217663703825399809) to release this script as standalone.
+diff --git a/docs/vendors/prismjs/1.30.0/manifest.json b/docs/vendors/prismjs/1.30.0/manifest.json
+deleted file mode 100644
+index 77651c7..0000000
+--- a/docs/vendors/prismjs/1.30.0/manifest.json
++++ /dev/null
+@@ -1,10 +0,0 @@
+-[
+-  {
+-    "url": "https://prismjs.com/",
+-    "path": "docs/vendors/prismjs/1.30.0/index.md",
+-    "title": "[Used By](#used-by)",
+-    "sha256": "3d30c7c5371649331d8e65a947e32825ca6db3a2bd6a22717e0075b354f36f72",
+-    "retrieved_at": "2025-08-10T07:36:08.717Z",
+-    "size": 28029
+-  }
+-]
+\ No newline at end of file

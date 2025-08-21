@@ -32,14 +32,6 @@
     "source": "npm"
   },
   {
-    "name": "prismjs",
-    "version": "1.30.0",
-    "license": "MIT",
-    "homepage": "",
-    "repo": "git+https://github.com/PrismJS/prism.git",
-    "source": "npm"
-  },
-  {
     "name": "daisyui",
     "version": "5.0.50",
     "license": "MIT",

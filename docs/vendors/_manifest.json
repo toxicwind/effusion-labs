@@ -41,15 +41,6 @@
       ]
     },
     {
-      "name": "prismjs",
-      "pages": [
-        {
-          "slug": "index",
-          "url": "https://prismjs.com/"
-        }
-      ]
-    },
-    {
       "name": "daisyui",
       "pages": [
         {
