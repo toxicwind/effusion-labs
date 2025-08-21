@@ -5,8 +5,9 @@ _Effusion Labs — Operating Rails for Autonomous Coding Agents (Codex-style)_
 This is the **in-repo operating spec** for autonomous coding agents that run bash, read/write files, and iterate quickly. It complements the upstream system charter (Mission Anchor, No-Ask, single final message) — treat this as the on-disk contract.
 
 > **ESM note**: Application code uses native ES modules. Configuration files like `tailwind.config.mjs` and `postcss.config.mjs` are also ESM; avoid CommonJS unless a third-party tool strictly requires it.
+> **T4DL stack**: Tailwind v4 + daisyUI v5 + Eleventy v3 + lucide-eleventy. All tokens and themes live in `src/styles/app.tailwind.css`; built site references a single `/assets/css/app.css`.
 >
-> **Highlighting & Icons**: Shiki performs build-time code highlighting (no Prism). Common Lucide icons are inlined as SVG; only include the Lucide runtime on pages needing dynamic icons.
+> **Highlighting & Icons**: Shiki performs build-time code highlighting (no Prism). Common Lucide icons are inlined as SVG via `lucide-eleventy` macros (src/_includes/components/icons.njk); only include the Lucide runtime on pages needing dynamic icons.
 
 ---
 
