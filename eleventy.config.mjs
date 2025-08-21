@@ -47,6 +47,44 @@ export default function (eleventyConfig) {
     return ad.localeCompare(bd);
   });
 
+
+  // --- Failure box + items ---
+  eleventyConfig.addPairedShortcode(
+    "failbox",
+    function (content, title = "FAILURE MODES WORTH RESPECTING", kicker = "") {
+      const safeTitle = this.env.filters.escape(title);
+      const safeKicker = kicker ? `<p class="failbox-kicker">${this.env.filters.escape(kicker)}</p>` : "";
+      return `
+  <aside class="failbox" role="note" aria-labelledby="failbox-title">
+    <div class="failbox-head">
+      <h3 id="failbox-title" class="failbox-title">${safeTitle}</h3>
+      ${safeKicker}
+    </div>
+    <div class="failbox-body">
+      ${content}
+    </div>
+  </aside>`;
+    }
+  );
+
+  // Individual item
+  eleventyConfig.addPairedShortcode(
+    "failitem",
+    function (content, label = "") {
+      const safeLabel = this.env.filters.escape(label);
+      const heading = label
+        ? `<div class="failitem-label"><strong>${safeLabel}</strong></div>`
+        : "";
+      return `
+  <section class="failitem">
+    ${heading}
+    <div class="failitem-content">
+      ${content}
+    </div>
+  </section>`;
+    }
+  );
+
   eleventyConfig.addFilter('seededShuffle', (arr, seed) =>
     seeded.seededShuffle(arr, seed),
   );

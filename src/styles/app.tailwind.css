@@ -264,6 +264,73 @@
 }
 
 @layer components {
+  /* ——— Failure Box ------------------------------------------------------- */
+  .failbox {
+    @apply relative w-full rounded-xl border p-4 md:p-5 shadow-sm not-prose;
+    background-color: hsl(var(--b1));
+    border-color: hsl(var(--bc)/.14);
+    color: hsl(var(--bc));
+  }
+  .failbox:focus-within {
+    box-shadow: 0 0 0 2px hsl(var(--p)/.25);
+  }
+
+  .failbox-head { @apply mb-3; }
+  .failbox-title {
+    @apply m-0 font-heading text-sm tracking-wider uppercase;
+    letter-spacing: .08em;
+    color: hsl(var(--bc));
+  }
+  .failbox-kicker {
+    @apply m-0 mt-1 text-sm;
+    color: hsl(var(--bc)/.7);
+  }
+
+  .failbox-body { @apply mt-2; }
+
+  /* Accent variant (optional): add `failbox--accent` to get a left rule + badge */
+  .failbox--accent { @apply pl-4 md:pl-5; }
+  .failbox--accent { border-left: 4px solid hsl(var(--p)); }
+  .failbox--accent .failbox-title { color: hsl(var(--p)); }
+
+  /* ——— Items -------------------------------------------------------------- */
+  .failitem {
+    @apply py-3 border-t border-dashed;
+    border-color: hsl(var(--bc)/.16);
+  }
+  .failitem:first-child { @apply border-t-0 pt-0; }
+  .failitem:last-child  { @apply pb-0; }
+
+  .failitem-label { @apply mb-1; }
+  .failitem-label strong {
+    @apply font-semibold;
+    letter-spacing: .01em;
+  }
+
+  .failitem-content { @apply text-[0.98rem] leading-relaxed; }
+  .failitem-content p { @apply m-0; }
+  .failitem-content + .failitem-content { @apply mt-2; }
+
+  /* Links + code inside the box follow theme */
+  .failbox a { color: hsl(var(--p)); }
+  .failbox a:hover { color: hsl(var(--pf)); }
+  .failbox :not(pre)>code {
+    @apply rounded px-1 py-0.5 text-[0.85em] font-mono;
+    background-color: hsl(var(--b2));
+    color: hsl(var(--bc));
+  }
+
+  /* Compact variant (optional): add `failbox--compact` for tighter rhythm */
+  .failbox--compact { @apply p-3 md:p-4 rounded-lg; }
+  .failbox--compact .failitem { @apply py-2; }
+
+  /* Dark mode tweaks handled by tokens; add a tiny depth bump */
+  @media (prefers-color-scheme: dark) {
+    .failbox { box-shadow: 0 1px 0 0 hsl(var(--bc)/.08); }
+  }
+}
+
+@layer components {
   /*-- Specification Sheet ---------------------------------------------------*/
   /* A two-column layout for displaying key-value data. */
 
