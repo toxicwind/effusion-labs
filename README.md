@@ -44,6 +44,8 @@ Effusion Labs is a static site built with:
 - **Nunjucks** for templating
 - **Tailwind CSS** (with DaisyUI) for styling
 - **Markdown** content in `src/content`
+- **Shiki** for build-time syntax highlighting with zero client-side JS
+- **Inline Lucide SVG icons** for common UI elements
 
 Output is emitted to `_site/`, suitable for direct static hosting or containerization. GitHub Actions drive deploys and link checks.
 
