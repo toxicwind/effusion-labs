@@ -2,17 +2,39 @@
 layout: "layout.njk"
 title: "POP MART — The Monsters"
 ---
-<h1 class="text-2xl font-bold mb-4">POP MART — The Monsters</h1>
-<h2 class="text-xl font-semibold mt-4 mb-2">Products</h2>
-<ul>
-{% for p in collections.monstersProducts %}
-  <li><a href="/archives/collectables/designer-toys/pop-mart/the-monsters/products/{{ p.data.product_id }}/">{{ p.data.product_id }}</a></li>
-{% endfor %}
-</ul>
+<header class="mb-8">
+  <h1 class="text-3xl font-heading tracking-wide text-primary m-0">POP MART — The Monsters</h1>
+  <p class="opacity-80 mt-2">Explore products, characters, and series.</p>
+</header>
 
-<h2 class="text-xl font-semibold mt-4 mb-2">Characters</h2>
-<ul>
-{% for c in collections.monstersCharacters %}
-  <li><a href="/archives/collectables/designer-toys/pop-mart/the-monsters/characters/{{ c.data.slug }}/">{{ c.data.slug }}</a></li>
-{% endfor %}
-</ul>
+<section class="mb-10">
+  <h2 class="text-xl font-semibold mb-3">Products</h2>
+  <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+  {% for p in collections.monstersProducts %}
+    {% set pslug = (p.data.product_id or p.fileSlug or p.data.slug or ('p-' ~ loop.index)) | slug %}
+    <li class="card bg-base-100 border hover:shadow-md transition">
+      <a class="card-body p-4 sm:p-5 block" href="/archives/collectables/designer-toys/pop-mart/the-monsters/products/{{ pslug }}/">
+        <h3 class="card-title text-base m-0">{{ p.data.product_id or p.fileSlug or 'Product ' ~ loop.index }}</h3>
+        {% if p.data.character %}
+          <span class="badge badge-outline mt-2">{{ p.data.character }}</span>
+        {% endif %}
+      </a>
+    </li>
+  {% endfor %}
+  </ul>
+</section>
+
+<section class="mb-10">
+  <h2 class="text-xl font-semibold mb-3">Characters</h2>
+  <ul class="flex flex-wrap gap-2">
+  {% for c in collections.monstersCharacters %}
+    {% set cslug = (c.data.slug or c.fileSlug or c.data.name or ('c-' ~ loop.index)) | slug %}
+    <li>
+      <a class="badge badge-outline hover:badge-primary transition"
+         href="/archives/collectables/designer-toys/pop-mart/the-monsters/characters/{{ cslug }}/">
+        {{ c.data.slug or c.data.name or cslug }}
+      </a>
+    </li>
+  {% endfor %}
+  </ul>
+</section>

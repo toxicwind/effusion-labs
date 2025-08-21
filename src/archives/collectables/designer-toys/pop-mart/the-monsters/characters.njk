@@ -4,15 +4,37 @@ pagination:
   data: collections.monstersCharacters
   size: 1
   alias: character
-permalink: "/archives/collectables/designer-toys/pop-mart/the-monsters/characters/{{ character.data.slug }}/index.html"
+eleventyComputed:
+  charSlug: "{{ (character.data.slug or character.fileSlug or character.data.name or ('c-' ~ pagination.pageNumber)) | slug }}"
+  title: "POP MART — The Monsters — {{ character.data.name or character.data.slug or charSlug }}"
+permalink: "/archives/collectables/designer-toys/pop-mart/the-monsters/characters/{{ charSlug }}/index.html"
 ---
 {% from "components/badge.njk" import badge %}
-<h1 class="text-2xl font-bold mb-2">{{ character.data.name }}</h1>
-<p class="mb-4">{{ character.data.notes }}</p>
-<ul>
+
+<nav class="breadcrumbs text-sm mb-6" aria-label="Breadcrumb">
+  <ul>
+    <li><a href="/archives/">Archives</a></li>
+    <li><a href="/archives/collectables/designer-toys/pop-mart/">POP MART</a></li>
+    <li><a href="/archives/collectables/designer-toys/pop-mart/the-monsters/">The Monsters</a></li>
+    <li class="opacity-70">{{ character.data.name or character.data.slug or charSlug }}</li>
+  </ul>
+</nav>
+
+<header class="mb-4">
+  <h1 class="text-3xl font-heading tracking-wide text-primary m-0">
+    {{ character.data.name or character.data.slug or charSlug }}
+  </h1>
+  {% if character.data.notes %}
+    <p class="mt-2 opacity-80">{{ character.data.notes }}</p>
+  {% endif %}
+</header>
+
+<h2 class="text-lg font-semibold mt-6 mb-3">Products featuring this character</h2>
+<ul class="flex flex-wrap gap-2">
 {% for p in collections.monstersProducts %}
-{% if p.data.character == character.data.slug %}
-      <li>{{ badge(p.data.product_id, "/archives/collectables/designer-toys/pop-mart/the-monsters/products/" + p.data.product_id + "/") }}</li>
+  {% if p.data.character == (character.data.slug or character.data.name) %}
+    {% set pslug = (p.data.product_id or p.fileSlug or p.data.slug or ('p-' ~ loop.index)) | slug %}
+    <li>{{ badge(p.data.product_id, "/archives/collectables/designer-toys/pop-mart/the-monsters/products/" + pslug + "/") }}</li>
   {% endif %}
 {% endfor %}
 </ul>

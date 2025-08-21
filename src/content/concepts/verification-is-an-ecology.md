@@ -1,9 +1,9 @@
 ---
-title: 'Verification Is an Ecology'
+title: 'A Field Guide to the Ecology of Doubt'
 layout: 'layout.njk'
 date: 2025-08-20
-status: Draft
-certainty: exploratory
+status: Final
+certainty: conceptual
 importance: 3
 tags:
   - verification
@@ -14,8 +14,10 @@ tags:
   - doubt
   - reputation-systems
   - decision-theory
+  - epistemology
+  - signaling
 spark_type: field-guide
-target: Verification roles in human–machine systems
+target: A framework for designing verification systems in hybrid human-machine environments
 analytic_lens:
   - information-ecology
   - labor-economics
@@ -30,7 +32,7 @@ memory_ref:
   - [decision-theory]
 preamble:
   classification: '[CONCEPT] Verification dynamics in hybrid ecosystems'
-  version: '1.0-draft'
+  version: '1.0'
 ---
 
 > *The greatest enemy of knowledge is not ignorance, it is the illusion of knowledge.* — Daniel J. Boorstin
