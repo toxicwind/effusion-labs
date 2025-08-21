@@ -1,0 +1,8 @@
+{% from "components/icons.njk" import icon %}
+{% macro extLink(url, text) %}
+  <a href="{{ url }}" class="external-link" target="_blank" rel="noopener noreferrer">
+    {{ text }}
+    {{ icon('external-link', { class: 'inline w-4 h-4 ml-1', 'aria-hidden': 'true' }) }}
+    <span class="sr-only">(opens in a new tab)</span>
+  </a>
+{% endmacro %}

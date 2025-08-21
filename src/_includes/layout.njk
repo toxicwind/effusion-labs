@@ -1,4 +1,6 @@
 {# src/_includes/layout.njk #}
+{% from "components/header.njk" import header %}
+{% from "components/footer.njk" import footer %}
 <!DOCTYPE html>
 <html lang="en" data-theme="light" class="scroll-pt-16">
 <head>
@@ -17,7 +19,7 @@
 
 <body class="bg-background text-text font-body">
   <a href="#main" class="skip-link">Skip to main content</a>
-  {% include 'header.njk' %}
+  {{ header(nav, page) }}
 
   <div class="mx-auto max-w-screen-2xl px-6">
     {% set metaOff = metaDisable == true or metaDisable == 'true' %}
@@ -67,15 +69,7 @@
       {% endif %}
     </main>
 
-    <footer class="mt-16 p-8 text-center text-sm text-text/60 border-t border-border">
-      <!-- DaisyUI Theme Controller -->
-      <div class="flex items-center gap-2 p-2">
-        <span>Theme</span>
-        <input type="checkbox" class="toggle theme-controller" value="dark" />
-      </div>
-      <span class="block font-mono text-xs tracking-widest mb-2" data-build="{{ buildTime }}">{{ buildTime }}</span>
-      &copy; 2025 Effusion Labs. A space for creative synthesis.
-    </footer>
+    {{ footer(buildTime) }}
   </div>
 
     <script src="/assets/js/footnote-nav.js" defer></script>
