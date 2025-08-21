@@ -40,12 +40,14 @@ A fast, opinionated Eleventy + Nunjucks + Tailwind static siteâ€”curated as a â€
 
 Effusion Labs is a static site built with:
 
-- **Eleventy (11ty)** for generation
+- **Eleventy v3** for generation
 - **Nunjucks** for templating
-- **Tailwind CSS** (with DaisyUI) for styling
+- **Tailwind CSS v4** with **daisyUI v5** for styling
 - **Markdown** content in `src/content`
 - **Shiki** for build-time syntax highlighting with zero client-side JS
-- **Inline Lucide SVG icons** for common UI elements
+- **Build-time Lucide icons** via **lucide-eleventy**
+
+The T4DL stack (Tailwind v4, daisyUI v5, Eleventy v3, lucide-eleventy) keeps styling CSS-first with a single compiled file at `/assets/css/app.css`.
 
 Output is emitted to `_site/`, suitable for direct static hosting or containerization. GitHub Actions drive deploys and link checks.
 
