@@ -44,10 +44,12 @@ Effusion Labs is a static site built with:
 - **Nunjucks** for templating
 - **Tailwind CSS** (with DaisyUI) for styling
 - **Markdown** content in `src/content`
+- **Shiki** for build-time syntax highlighting with zero client-side JS
+- **Inline Lucide SVG icons** for common UI elements
 
 Output is emitted to `_site/`, suitable for direct static hosting or containerization. GitHub Actions drive deploys and link checks.
 
-**Runtime target:** Node.js **24+** (honor `.nvmrc` if present). The repository is ESM-first (`package.json` sets `"type": "module"`); use `import`/`export` syntax. Configuration files that must stay CommonJS are suffixed with `.cjs`.
+**Runtime target:** Node.js **24+** (honor `.nvmrc` if present). The repository is ESM-first (`package.json` sets `"type": "module"`); use `import`/`export` syntax. Configuration files like `eleventy.config.mjs`, `tailwind.config.mjs`, and `postcss.config.mjs` are ESM as well.
 
 ---
 
@@ -121,7 +123,7 @@ Nothing exotic—just a normal Eleventy dev loop, with nicer defaults if you opt
 - `lib/` — Reusable app/library code (helpers, transforms, utilities).
 * `.eleventy.js` — Eleventy config (collections, filters/shortcodes, passthrough).
 * `src/styles/app.tailwind.css` — Tailwind v4 entry with `@plugin` and `@source` directives.
-* `tailwind.config.cjs` / `postcss.config.cjs` — Theme tokens and PostCSS pipeline.
+* `tailwind.config.mjs` / `postcss.config.mjs` — Theme tokens and PostCSS pipeline.
 
 ## 2) Automation, Tooling & Guardrails
 
@@ -179,7 +181,8 @@ Nothing exotic—just a normal Eleventy dev loop, with nicer defaults if you opt
   - Collections via `addCollection` in `eleventy.config.mjs`
   - Static assets via `addPassthroughCopy`
 
-* **Tailwind/DaisyUI**: plugins/themes in `src/styles/app.tailwind.css`, tokens in `tailwind.config.cjs`
+* **Tailwind/DaisyUI**: plugins/themes in `src/styles/app.tailwind.css`, tokens in `tailwind.config.mjs`
+* **PostCSS**: plugin pipeline in `postcss.config.mjs`
 * **Node version**: respect `.nvmrc`
 
 ---

@@ -7,7 +7,7 @@
 2. Text contrast meets WCAG AA.
    - Test: `docs/knowledge/typography-colors-green.log`
 3. Tailwind exposes Merriweather and Inter fonts.
-   - Evidence: `tailwind.config.cjs`
+   - Evidence: `tailwind.config.mjs`
    - Test: `docs/knowledge/typography-colors-green.log`
 4. Theming guide updated.
    - Evidence: `docs/theming.md`

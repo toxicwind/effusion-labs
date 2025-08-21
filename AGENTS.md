@@ -4,7 +4,9 @@ _Effusion Labs — Operating Rails for Autonomous Coding Agents (Codex-style)_
 
 This is the **in-repo operating spec** for autonomous coding agents that run bash, read/write files, and iterate quickly. It complements the upstream system charter (Mission Anchor, No-Ask, single final message) — treat this as the on-disk contract.
 
-> **ESM note**: Application code uses native ES modules. Keep config files like `tailwind.config.cjs` in CommonJS when tooling expects it.
+> **ESM note**: Application code uses native ES modules. Configuration files like `tailwind.config.mjs` and `postcss.config.mjs` are also ESM; avoid CommonJS unless a third-party tool strictly requires it.
+>
+> **Highlighting & Icons**: Shiki performs build-time code highlighting (no Prism). Common Lucide icons are inlined as SVG; only include the Lucide runtime on pages needing dynamic icons.
 
 ---
 
@@ -39,7 +41,7 @@ Build a current mental model of the workspace in \~seconds.
 tree -L 3 -I "node_modules|_site|.git"
 llm_cat package.json
 llm_cat eleventy.config.mjs
-[ -f tailwind.config.cjs ] && llm_cat tailwind.config.cjs
+[ -f tailwind.config.mjs ] && llm_cat tailwind.config.mjs
 [ -f docker-compose.yml ]  && llm_cat docker-compose.yml
 ```
 

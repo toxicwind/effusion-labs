@@ -1,4 +1,4 @@
-@config "../../tailwind.config.cjs";
+@config "../../tailwind.config.mjs";
 @import "./tokens.css";
 @import "tailwindcss";
 
@@ -18,7 +18,6 @@
   /* Define tokens here later if/when you want a bespoke theme */
 }
 
-@import "prismjs/themes/prism-tomorrow.css";
 @import "./home.css";
 @import "./mschf-overlay.css";
 
@@ -31,10 +30,29 @@
 
   .heading-anchor { @apply mr-2 no-underline text-gray-400; }
 
-  pre[class*="language-"],
+  pre.shiki,
   :not(pre) > code {
     background-color: rgb(var(--color-code-bg));
     color: rgb(var(--color-code-text));
+  }
+
+  .shiki { counter-reset: line; }
+  .shiki .line { display: block; }
+  .shiki .line::before {
+    counter-increment: line;
+    content: counter(line);
+    display: inline-block;
+    width: 2rem;
+    margin-right: 1rem;
+    color: rgb(var(--color-border));
+    text-align: right;
+  }
+  html[data-theme='dark'] .shiki {
+    background-color: var(--shiki-dark-bg);
+    color: var(--shiki-dark);
+  }
+  html[data-theme='dark'] .shiki span {
+    color: var(--shiki-dark);
   }
 }
 
@@ -223,8 +241,8 @@
 
 /* ——— Prism interop (code readability inside footnotes/popup) ——— */
 @layer components {
-  .footnote-aside pre[class*="language-"],
-  .annotation-popup pre[class*="language-"]{
+  .footnote-aside pre.shiki,
+  .annotation-popup pre.shiki{
     @apply rounded-md p-3 overflow-x-auto text-xs leading-6;
     background-color: hsl(var(--b2)); /* keeps Prism theme legible on both themes */
     border: 1px solid hsl(var(--bc)/.12);
