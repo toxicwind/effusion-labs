@@ -10,8 +10,9 @@ eleventyComputed:
 permalink: "/archives/collectables/designer-toys/pop-mart/the-monsters/characters/{{ charSlug }}/index.html"
 ---
 {% from "components/badge.njk" import badge %}
+{% from "components/back-link.njk" import backLink %}
 
-<nav class="breadcrumbs text-sm mb-6" aria-label="Breadcrumb">
+<nav class="breadcrumbs text-sm mb-2 overflow-x-auto whitespace-nowrap" aria-label="Breadcrumb">
   <ul>
     <li><a href="/archives/">Archives</a></li>
     <li><a href="/archives/collectables/designer-toys/pop-mart/">POP MART</a></li>
@@ -20,8 +21,12 @@ permalink: "/archives/collectables/designer-toys/pop-mart/the-monsters/character
   </ul>
 </nav>
 
-<header class="mb-4">
-  <h1 class="text-3xl font-heading tracking-wide text-primary m-0">
+<div class="mb-6">
+  {{ backLink('Back', '/archives/collectables/designer-toys/pop-mart/the-monsters/') }}
+</div>
+
+<header class="mb-6">
+  <h1 class="text-3xl font-heading tracking-wide text-primary mb-0">
     {{ character.data.name or character.data.slug or charSlug }}
   </h1>
   {% if character.data.notes %}
@@ -31,10 +36,15 @@ permalink: "/archives/collectables/designer-toys/pop-mart/the-monsters/character
 
 <h2 class="text-lg font-semibold mt-6 mb-3">Products featuring this character</h2>
 <ul class="flex flex-wrap gap-2">
+{% set count = 0 %}
 {% for p in collections.monstersProducts %}
   {% if p.data.character == (character.data.slug or character.data.name) %}
     {% set pslug = (p.data.product_id or p.fileSlug or p.data.slug or ('p-' ~ loop.index)) | slug %}
+    {% set _ = count + 1 %}
     <li>{{ badge(p.data.product_id, "/archives/collectables/designer-toys/pop-mart/the-monsters/products/" + pslug + "/") }}</li>
   {% endif %}
 {% endfor %}
+{% if count == 0 %}
+  <li class="opacity-60">No products found for this character.</li>
+{% endif %}
 </ul>

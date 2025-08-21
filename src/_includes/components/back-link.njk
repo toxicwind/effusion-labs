@@ -1,0 +1,12 @@
+{% from "components/icons.njk" import icon %}
+{% macro backLink(label='Back', fallback='/' ) %}
+<a
+  href="{{ fallback }}"
+  class="btn btn-ghost btn-sm"
+  aria-label="{{ label }}"
+  onclick="if (document.referrer) { event.preventDefault(); history.back(); }"
+>
+  {{ icon('arrow-left', { class: 'w-4 h-4', 'aria-hidden': 'true' }) }}
+  <span class="ml-1">{{ label }}</span>
+</a>
+{% endmacro %}

@@ -2,14 +2,55 @@
 layout: "layout.njk"
 title: "POP MART"
 ---
+{% from "components/back-link.njk" import backLink %}
+{% from "archive-nav.njk" import archiveNav %}
+
+<nav class="breadcrumbs text-sm mb-2 overflow-x-auto whitespace-nowrap" aria-label="Breadcrumb">
+  <ul>
+    <li><a href="/archives/">Archives</a></li>
+    <li class="opacity-70">POP MART</li>
+  </ul>
+</nav>
+
+<div class="mb-6">
+  {{ backLink('Back', '/archives/') }}
+</div>
+
 <header class="mb-6">
   <h1 class="text-3xl font-heading tracking-wide text-primary m-0">POP MART</h1>
-  <p class="opacity-80 mt-2">Dive into series, characters, and product pages.</p>
+  <p class="opacity-80 mt-2">Browse POP MART lines (series, characters, product pages) discovered at build time.</p>
 </header>
 
-{% from "archive-nav.njk" import archiveNav %}
-<div class="card bg-base-100 border">
-  <div class="card-body p-4 sm:p-6">
-    {{ archiveNav(page.url, archivesNav) }}
+<section class="mb-10">
+  <div class="card bg-base-100 border">
+    <div class="card-body p-4 sm:p-6">
+      {{ archiveNav(page.url, archivesNav) }}
+    </div>
   </div>
-</div>
+</section>
+
+<section class="mb-12">
+  <h2 class="text-xl font-semibold mb-3">Lines</h2>
+
+  {% if lines and lines.length %}
+  <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    {% for line in lines %}
+      <li class="card bg-base-100 border hover:shadow-md transition">
+        <a class="card-body p-4 sm:p-5 block" href="/archives/collectables/designer-toys/pop-mart/{{ line.slug }}/">
+          <h3 class="card-title text-base m-0">{{ line.title }}</h3>
+          <p class="opacity-80 mt-1">{{ line.description or 'Collection pages for this POP MART line.' }}</p>
+          <div class="mt-3 flex flex-wrap gap-2">
+            <span class="badge badge-outline">Products: {{ line.counts.products }}</span>
+            <span class="badge badge-outline">Characters: {{ line.counts.characters }}</span>
+            <span class="badge badge-outline">Series: {{ line.counts.series }}</span>
+          </div>
+        </a>
+      </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+    <div class="alert">
+      <span>No lines found under POP MART yet.</span>
+    </div>
+  {% endif %}
+</section>

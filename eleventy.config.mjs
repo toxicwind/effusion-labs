@@ -1,96 +1,81 @@
-import register from './lib/eleventy/register.mjs';
-import { dirs } from './lib/config.js';
-import seeded from './lib/seeded.js';
-import registerArchiveCollections from './lib/eleventy/archive-collections.js';
-import { getBuildInfo } from './lib/build-info.js';
+// eleventy.config.mjs (root)
+import register from "./lib/eleventy/register.mjs";
+import { dirs } from "./lib/config.js";
+import seeded from "./lib/seeded.js";
+import registerArchive from "./lib/eleventy/archives.mjs";
+import { getBuildInfo } from "./lib/build-info.js";
+
+// tiny local slugger (keeps filters resilient)
+const slug = (s) =>
+  String(s ?? "")
+    .normalize("NFKD")
+    .toLowerCase()
+    .replace(/[^\w\s-]/g, "")
+    .trim()
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-");
 
 export default function (eleventyConfig) {
   const buildTime = new Date().toISOString();
-  register(eleventyConfig);
-  eleventyConfig.addTemplateFormats('json');
 
-  eleventyConfig.addCollection('featured', (api) =>
-    api
-      .getAll()
-      .filter((p) => p.data?.featured === true)
-      .sort((a, b) => b.date - a.date),
+  // Core project wiring (markdown, assets, images, etc.)
+  register(eleventyConfig);
+
+  // 🔐 Load JSON archives → stable collections + helpers
+  // Exposes: collections.archiveProducts / archiveCharacters / archiveSeries
+  // and filters: byLine, byCompany, byLocale, uniqueBy (+ global archiveCompanies, archiveLines)
+  registerArchive(eleventyConfig);
+
+  // ---- Site-specific collections (unchanged semantics) ----
+  eleventyConfig.addCollection("featured", (api) =>
+    api.getAll().filter((p) => p.data?.featured === true).sort((a, b) => b.date - a.date)
   );
 
-  eleventyConfig.addCollection('interactive', (api) =>
+  eleventyConfig.addCollection("interactive", (api) =>
     api
       .getAll()
       .filter((p) => {
         const tags = p.data.tags || [];
-        return tags.includes('prototype') || p.data.interactive === true;
+        return tags.includes("prototype") || p.data.interactive === true;
       })
-      .sort((a, b) => b.date - a.date),
+      .sort((a, b) => b.date - a.date)
   );
 
-  eleventyConfig.addCollection('recentAll', (api) => {
+  eleventyConfig.addCollection("recentAll", (api) => {
     const items = api.getAll().filter((p) => p.data.type);
     items.sort((a, b) => b.date - a.date);
     items.take = (n) => items.slice(0, n);
     return items;
   });
 
-  registerArchiveCollections(eleventyConfig);
-
-  eleventyConfig.addFilter('byCharacter', (items, slug) =>
-    items.filter((p) => p.data.character === slug),
-  );
-  eleventyConfig.addFilter('bySeries', (items, slug) =>
-    items.filter((p) => p.data.series === slug),
-  );
-  eleventyConfig.addFilter('productsSorted', (a, b) => {
-    const ad = a.data.release_date || '';
-    const bd = b.data.release_date || '';
-    return ad.localeCompare(bd);
+  // ---- Filters that play nicely with archive data ----
+  // Match products by character (accepts name or slug)
+  eleventyConfig.addFilter("byCharacter", (items, id) => {
+    const target = slug(id);
+    return (items ?? []).filter((p) => slug(p?.data?.charSlug ?? p?.data?.character) === target);
   });
 
+  // Match products by series (accepts title or slug)
+  eleventyConfig.addFilter("bySeries", (items, id) => {
+    const target = slug(id);
+    return (items ?? []).filter((p) => slug(p?.data?.seriesSlug ?? p?.data?.series) === target);
+  });
 
-  // --- Failure box + items ---
-  eleventyConfig.addPairedShortcode(
-    "failbox",
-    function (content, title = "FAILURE MODES WORTH RESPECTING", kicker = "") {
-      const safeTitle = this.env.filters.escape(title);
-      const safeKicker = kicker ? `<p class="failbox-kicker">${this.env.filters.escape(kicker)}</p>` : "";
-      return `
-  <aside class="failbox" role="note" aria-labelledby="failbox-title">
-    <div class="failbox-head">
-      <h3 id="failbox-title" class="failbox-title">${safeTitle}</h3>
-      ${safeKicker}
-    </div>
-    <div class="failbox-body">
-      ${content}
-    </div>
-  </aside>`;
-    }
-  );
+  // Sort helpers (non-mutating)
+  eleventyConfig.addFilter("sortByReleaseDate", (items, dir = "asc") => {
+    const arr = [...(items ?? [])];
+    arr.sort((a, b) =>
+      String(a?.data?.release_date ?? "").localeCompare(String(b?.data?.release_date ?? ""))
+    );
+    return dir === "desc" ? arr.reverse() : arr;
+  });
 
-  // Individual item
-  eleventyConfig.addPairedShortcode(
-    "failitem",
-    function (content, label = "") {
-      const safeLabel = this.env.filters.escape(label);
-      const heading = label
-        ? `<div class="failitem-label"><strong>${safeLabel}</strong></div>`
-        : "";
-      return `
-  <section class="failitem">
-    ${heading}
-    <div class="failitem-content">
-      ${content}
-    </div>
-  </section>`;
-    }
-  );
+  eleventyConfig.addFilter("seededShuffle", (arr, seed) => seeded.seededShuffle(arr, seed));
 
-  eleventyConfig.addFilter('seededShuffle', (arr, seed) =>
-    seeded.seededShuffle(arr, seed),
-  );
-  eleventyConfig.addGlobalData('buildTime', buildTime);
-  eleventyConfig.addGlobalData('dailySeed', seeded.dailySeed);
-  eleventyConfig.addGlobalData('homepageCaps', {
+  // ---- Global data ----
+  eleventyConfig.addGlobalData("buildTime", buildTime);
+  eleventyConfig.addGlobalData("dailySeed", seeded.dailySeed);
+  eleventyConfig.addGlobalData("homepageCaps", {
     featured: 3,
     today: 3,
     tryNow: [1, 3],
@@ -99,12 +84,11 @@ export default function (eleventyConfig) {
     notebook: 3,
   });
   const build = getBuildInfo();
-  eleventyConfig.addGlobalData('build', build);
-
+  eleventyConfig.addGlobalData("build", build);
   return {
     dir: dirs,
-    markdownTemplateEngine: 'njk',
-    htmlTemplateEngine: 'njk',
-    pathPrefix: '/',
+    markdownTemplateEngine: "njk",
+    htmlTemplateEngine: "njk",
+    pathPrefix: "/",
   };
 }
