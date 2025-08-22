@@ -4,6 +4,9 @@ import { dirs } from "./lib/config.js";
 import seeded from "./lib/seeded.js";
 import registerArchive from "./lib/eleventy/archives.mjs";
 import { getBuildInfo } from "./lib/build-info.js";
+import fs from "node:fs";
+import MarkdownIt from "markdown-it";
+import markdownItFootnote from "markdown-it-footnote";
 
 // tiny local slugger (keeps filters resilient)
 const slug = (s) =>
@@ -81,156 +84,74 @@ export default function (eleventyConfig) {
 
   eleventyConfig.addFilter("seededShuffle", (arr, seed) => seeded.seededShuffle(arr, seed));
 
-  // ---------- failbox / failitem paired shortcodes (ESM) ----------
-  const normalizeBoxOpts = function (ctx, titleOrOpts, kicker) {
-    // Supports:
-    // {% failbox "Title", "Kicker" %}
-    // {% failbox title="Title" kicker="Kicker" variant="warn" collapsible=true %}
-    const isObj =
-      titleOrOpts && typeof titleOrOpts === "object" && !Array.isArray(titleOrOpts);
-    const envEscape =
-      ctx && ctx.env && ctx.env.filters && typeof ctx.env.filters.escape === "function"
-        ? ctx.env.filters.escape
-        : escapeHtml;
-
-    const opts = isObj ? { ...titleOrOpts } : { title: titleOrOpts, kicker };
-
+  // ---------- unified callout shortcode ----------
+  const calloutShortcode = function (content, opts = {}) {
+    const md = eleventyConfig.markdownLibrary || MarkdownIt().use(markdownItFootnote);
+    const isObj = opts && typeof opts === 'object' && !Array.isArray(opts);
     const {
-      title = "FAILURE MODES WORTH RESPECTING",
-      kicker: kk = "",
-      variant = "neutral", // neutral | info | warn | danger
-      headingLevel = 3, // 2..6
-      collapsible = false,
-      open = true, // only used when collapsible=true
-      id,
-      class: extraClass = "",
-      icon = "", // raw SVG or text
-    } = opts;
-
+      title = '',
+      kicker = '',
+      variant = 'neutral',
+      position = 'center',
+      icon = '',
+      headingLevel = 3,
+    } = isObj ? opts : { title: opts };
+    const envEscape = this?.env?.filters?.escape ?? escapeHtml;
     const safeTitle = envEscape(title);
-    const safeKicker = kk ? envEscape(kk) : "";
+    const safeKicker = kicker ? envEscape(kicker) : '';
+    const safeVariant = String(variant).toLowerCase().replace(/[^\w-]/g, '');
+    const safePosition = String(position).toLowerCase().replace(/[^\w-]/g, '');
     const clampedLevel = Math.min(6, Math.max(2, Number(headingLevel) || 3));
     const tag = `h${clampedLevel}`;
-    const generatedId = id || (title ? `failbox-${slug(title)}` : `failbox-${Date.now()}`);
-    const safeId = envEscape(generatedId);
-    const safeVariant = String(variant).toLowerCase().replace(/[^\w-]/g, "");
-    const safeExtraClass = envEscape(extraClass);
-    const boxClasses = ["failbox", `failbox--${safeVariant}`, safeExtraClass]
-      .filter(Boolean)
-      .join(" ");
-
-    const iconMarkup =
-      icon && /^<svg[\s>]/.test(String(icon))
-        ? String(icon) // inline SVG trusted from repo source
-        : icon
-        ? `<span class="failbox-icon" aria-hidden="true">${envEscape(icon)}</span>`
-        : "";
-
-    return {
-      safeTitle,
-      safeKicker,
-      tag,
-      safeId,
-      boxClasses,
-      collapsible: Boolean(collapsible),
-      open: Boolean(open),
-      iconMarkup,
-    };
-  };
-
-  const normalizeItemOpts = function (ctx, labelOrOpts) {
-    // Supports:
-    // {% failitem "Label" %}...{% endfailitem %}
-    // {% failitem label="Label" tone="warn" %}
-    const isObj = labelOrOpts && typeof labelOrOpts === "object" && !Array.isArray(labelOrOpts);
-    const envEscape =
-      ctx && ctx.env && ctx.env.filters && typeof ctx.env.filters.escape === "function"
-        ? ctx.env.filters.escape
-        : escapeHtml;
-
-    const opts = isObj ? { ...labelOrOpts } : { label: labelOrOpts };
-
-    const {
-      label = "",
-      tone = "neutral", // neutral | info | warn | danger | good
-      class: extraClass = "",
-      icon = "",
-    } = opts;
-
-    const safeLabel = label ? envEscape(label) : "";
-    const safeTone = String(tone).toLowerCase().replace(/[^\w-]/g, "");
-    const safeExtraClass = envEscape(extraClass);
-    const classes = ["failitem", `failitem--${safeTone}`, safeExtraClass]
-      .filter(Boolean)
-      .join(" ");
+    const id = `callout-${title ? slug(title) : Date.now()}`;
+    const safeId = envEscape(id);
+    const classes = ['callout', `callout--${safeVariant}`, `callout--dock-${safePosition}`].join(' ');
     const iconMarkup =
       icon && /^<svg[\s>]/.test(String(icon))
         ? String(icon)
         : icon
-        ? `<span class="failitem-icon" aria-hidden="true">${envEscape(icon)}</span>`
-        : "";
+          ? `<span class="callout-icon" aria-hidden="true">${envEscape(icon)}</span>`
+          : '';
+    const footnotes = (() => {
+      try {
+        const txt = fs.readFileSync(this.page.inputPath, 'utf8');
+        return (
+          txt.match(/\n\[\^[^\n]*?\]:.*?(?=\n\n|$)/gs) || []
+        ).join('\n');
+      } catch {
+        return '';
+      }
+    })();
+    const rendered = md.render(`${content}\n${footnotes}`);
+    const body = rendered.replace(/<section class="footnotes"[\s\S]*<\/section>/, '');
 
-    return { safeLabel, classes, iconMarkup, hasLabel: Boolean(label) };
+    return `
+<aside class="${classes}" role="note" aria-labelledby="${safeId}">
+  <div class="callout-head">
+    <${tag} id="${safeId}" class="callout-title">${iconMarkup}${safeTitle}</${tag}>
+    ${safeKicker ? `<p class="callout-kicker">${safeKicker}</p>` : ''}
+  </div>
+  <div class="callout-body">
+    ${body.trim()}
+  </div>
+</aside><!-- -->
+`.trim();
   };
 
-  eleventyConfig.addPairedShortcode("failbox", function (content, titleOrOpts, kicker) {
-    const {
-      safeTitle,
-      safeKicker,
-      tag,
-      safeId,
-      boxClasses,
-      collapsible,
-      open,
-      iconMarkup,
-    } = normalizeBoxOpts(this, titleOrOpts, kicker);
-  const contentInner = content.trim();
+  eleventyConfig.addPairedShortcode('callout', calloutShortcode);
 
-    const headerInner = `
-      <div class="failbox-head">
-        <${tag} id="${safeId}" class="failbox-title">${iconMarkup}${safeTitle}</${tag}>
-        ${safeKicker ? `<p class="failbox-kicker">${safeKicker}</p>` : ""}
-      </div>`.trim();
-
-    const bodyInner = `
-      <div class="failbox-body">
-        ${contentInner}
-      </div>`.trim();
-
-    if (collapsible) {
-      return `
-<aside class="${boxClasses}" role="note" aria-labelledby="${safeId}">
-  <details class="failbox-collapse"${open ? " open" : ""}>
-    <summary class="failbox-summary">${headerInner}</summary>
-    ${bodyInner}
-  </details></aside><!-- -->
-`.trimStart();
-    }
-
-    return `
-<aside class="${boxClasses}" role="note" aria-labelledby="${safeId}">
-  ${headerInner}
-  ${bodyInner}</aside><!-- -->
-`.trimStart();
+  // ---- Legacy aliases ----
+  eleventyConfig.addPairedShortcode('failbox', function (content, titleOrOpts, kicker) {
+    const opts =
+      titleOrOpts && typeof titleOrOpts === 'object' && !Array.isArray(titleOrOpts)
+        ? { ...titleOrOpts }
+        : { title: titleOrOpts, kicker };
+    return calloutShortcode.call(this, content, opts);
   });
+  eleventyConfig.addPairedShortcode('failitem', (content) => content);
 
-  eleventyConfig.addPairedShortcode("failitem", function (content, labelOrOpts = "") {
-    const { safeLabel, classes, iconMarkup, hasLabel } = normalizeItemOpts(this, labelOrOpts);
-    const heading = hasLabel
-      ? `<div class="failitem-label"><strong>${iconMarkup}${safeLabel}</strong></div>`
-      : "";
-    const inner = content.trim();
 
-    return `
-<section class="${classes}">
-  ${heading}
-  <div class="failitem-content">
-    ${inner}
-  </div>
-</section>`.trim();
-  });
-
-  // ---- Global data ----
+// ---- Global data ----
   eleventyConfig.addGlobalData("buildTime", buildTime);
   eleventyConfig.addGlobalData("dailySeed", seeded.dailySeed);
   eleventyConfig.addGlobalData("homepageCaps", {
