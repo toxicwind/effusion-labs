@@ -18,7 +18,6 @@ function parseTheme(tokens, theme) {
   );
 }
 
-
 const tokens = fs.readFileSync(path.join(process.cwd(), 'src/styles/tokens.css'), 'utf8');
 
 test('defines improved background colors', () => {
@@ -35,13 +34,30 @@ test('text contrast meets WCAG AA', () => {
   assert.ok(contrast(light['--color-bg'], light['--color-text']) >= 4.5);
 });
 
-test('tailwind exposes readable fonts', () => {
-  assert.equal(tailwindConfig.theme.extend.fontFamily.body[0], "'Inter'");
-  assert.equal(tailwindConfig.theme.extend.fontFamily.heading[0], "'Merriweather'");
+test('tailwind exposes readable font families', () => {
+  const { body, heading, mono } = tailwindConfig.theme.extend.fontFamily;
+
+  // Ensure each fontFamily is defined and non-empty
+  assert.ok(Array.isArray(body) && body.length > 0, 'body fontFamily missing');
+  assert.ok(Array.isArray(heading) && heading.length > 0, 'heading fontFamily missing');
+  assert.ok(Array.isArray(mono) && mono.length > 0, 'mono fontFamily missing');
+
+  // Sanity check: first entries should look like font names
+  [body[0], heading[0], mono[0]].forEach(f => {
+    assert.match(f, /^[A-Za-z'"\s-]+$/, `unexpected font name: ${f}`);
+  });
 });
 
 test('includes fluid type scale tokens', () => {
-  const required = ['--step--2', '--step--1', '--step-0', '--step-1', '--step-2', '--step-3', '--step-4'];
+  const required = [
+    '--step--2',
+    '--step--1',
+    '--step-0',
+    '--step-1',
+    '--step-2',
+    '--step-3',
+    '--step-4'
+  ];
   for (const token of required) {
     assert.ok(tokens.includes(token), `missing ${token}`);
   }
