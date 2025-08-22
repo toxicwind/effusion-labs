@@ -10,7 +10,7 @@
   <meta name="color-scheme" content="light dark">
   <title>{{ title }} | Effusion Labs</title>
 
-  {# Early theme: honor stored; else OS → sunset (dark) / nord (light). Also updates color-scheme. #}
+  <!-- Early theme: honor stored; else OS → sunset (dark) / nord (light). Also updates color-scheme. -->
   <script>
     (function () {
       try {
@@ -42,15 +42,15 @@
     })();
   </script>
 
-  {# Fonts: brutalist / Kaws-adjacent #}
+  <!-- Fonts: brutalist / Kaws-adjacent -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Rubik:wght@400..900&family=Space+Grotesk:wght@400..700&display=swap" rel="stylesheet">
 
-  {# Tailwind v4 + daisyUI v5 CSS (cache-busted) #}
+  <!-- Tailwind v4 + daisyUI v5 CSS (cache-busted) -->
   <link rel="stylesheet" href="/assets/css/app.css?v={{ build.hash or build.commit or build.version or buildTime }}">
 
-  {# Icons / PWA (optional) #}
+  <!-- Icons / PWA (optional) -->
   <link rel="icon" href="/favicon.ico" sizes="any">
   <link rel="icon" type="image/svg+xml" href="/assets/icons/favicon.svg">
   <link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon.png">
@@ -69,7 +69,7 @@
       {% if not metaOff %}xl:grid xl:gap-10 xl:grid-cols-[1fr_16rem]{% endif %}
       {% if showTitle != false %} mt-12{% endif %}
     ">
-      <article class="prose dark:prose-invert max-w-none m-0
+      <article class="prose max-w-none m-0
         {% if not metaOff %} xl:col-span-1 {% else %} w-full {% endif %}
       ">
         {% if showTitle != false %}

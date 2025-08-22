@@ -1,3 +1,4 @@
+{# components/products/SpecSheet.njk #}
 {# ---------------------------------------------------------------------------
  # Pretty spec sheet (Tailwind + daisyUI), MSCHF-ish accents
  # - No JS-style ternaries (Nunjucks-safe)
@@ -21,11 +22,11 @@
 {% endif %}
 
 <section
-  class="card bg-base-100 border border-base-300/60 shadow-xl rounded-2xl overflow-hidden
-         before:pointer-events-none before:block before:absolute before:inset-0
-         before:bg-[radial-gradient(1200px_600px_at_0%_-10%,theme(colors.error/10),transparent_40%)]
-         after:pointer-events-none after:block after:absolute after:inset-0
-         after:bg-[radial-gradient(900px_500px_at_110%_120%,theme(colors.primary/10),transparent_40%)] relative">
+  class="relative card bg-base-100 border border-base-300/60 shadow-xl rounded-2xl overflow-hidden
+         before:content-[''] before:pointer-events-none before:block before:absolute before:inset-0
+         before:bg-[radial-gradient(1200px_600px_at_0%_-10%,hsl(var(--er)/.10),transparent_40%)]
+         after:content-[''] after:pointer-events-none after:block after:absolute after:inset-0
+         after:bg-[radial-gradient(900px_500px_at_110%_120%,hsl(var(--p)/.10),transparent_40%)]">
 
   <div class="card-body gap-4">
     {# ---------- Header ---------- #}
