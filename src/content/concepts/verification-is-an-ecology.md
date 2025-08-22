@@ -126,11 +126,7 @@ A community can tolerate low global coverage if shortlist precision stays high a
 
 ### ENGINEERING A HABITAT WHERE VERIFICATION WORKS
 
-{% callout
-  title="FAILURE MODES WORTH RESPECTING"
-  kicker="Because habitats rot in predictable ways."
-  variant="danger"
-  position="right" %}
+  {% callout title="FAILURE MODES WORTH RESPECTING", kicker="Because habitats rot in predictable ways.", variant="danger", position="right" %}
 
 - **Catastrophic tails** — Red-tier domains hide ruin in a single miss. No “average” cancels extinction.[^12][^13]
 - **Spec theatre** — Receipts are easy to forge. Audits matter more than applause lines.[^4][^5]
