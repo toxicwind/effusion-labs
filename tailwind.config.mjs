@@ -27,6 +27,7 @@ export default {
         border: "rgb(var(--color-border) / <alpha-value>)",
         codebg: "rgb(var(--color-code-bg) / <alpha-value>)",
         codetext: "rgb(var(--color-code-text) / <alpha-value>)",
+        electric: "rgb(0 191 255 / <alpha-value>)",
       },
 
       typography: ({ theme }) => ({
