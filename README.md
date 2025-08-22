@@ -1,7 +1,6 @@
 # Effusion Labs — Digital Garden
 
 [![Deploy](https://github.com/effusion-labs/effusion-labs/actions/workflows/deploy.yml/badge.svg)](https://github.com/effusion-labs/effusion-labs/actions/workflows/deploy.yml)
-[![Link Check](https://github.com/effusion-labs/effusion-labs/actions/workflows/link-check.yml/badge.svg)](https://github.com/effusion-labs/effusion-labs/actions/workflows/link-check.yml)
 [![License: ISC](https://img.shields.io/badge/license-ISC-blue.svg)](./LICENSE)
 
 A fast, opinionated Eleventy + Nunjucks + Tailwind static site—curated as a “digital garden.” Batteries included, CI-ready, and friendly to autonomous coding agents.
@@ -49,7 +48,7 @@ Effusion Labs is a static site built with:
 
 The T4DL stack (Tailwind v4, daisyUI v5, Eleventy v3, lucide-eleventy) keeps styling CSS-first with a single compiled file at `/assets/css/app.css`.
 
-Output is emitted to `_site/`, suitable for direct static hosting or containerization. GitHub Actions drive deploys and link checks.
+Output is emitted to `_site/`, suitable for direct static hosting or containerization. GitHub Actions drive deploys.
 
 **Runtime target:** Node.js **24+** (honor `.nvmrc` if present). The repository is ESM-first (`package.json` sets `"type": "module"`); use `import`/`export` syntax. Configuration files like `eleventy.config.mjs`, `tailwind.config.mjs`, and `postcss.config.mjs` are ESM as well.
 
@@ -136,7 +135,7 @@ Nothing exotic—just a normal Eleventy dev loop, with nicer defaults if you opt
 
 - `markdown_gateway/` — Python HTML→Markdown proxy (optional service).
 - `docker-compose.yml` — Local service orchestration (web, gateway, etc.).
-- `.github/` — CI workflows (deploy, link-check).
+- `.github/` — CI workflows (deploy).
 - `.portainer/` — Portainer stack/config.
 
 ## 4) Docs, Research & Outputs
@@ -149,7 +148,7 @@ Nothing exotic—just a normal Eleventy dev loop, with nicer defaults if you opt
 ## 5) Tests & Quality
 
 - `test/` — Unit/integration tests and fixtures.
-- `link-check.config.json` — Link checker settings for docs/site.
+- `link-check.config.json` — Config for manual dead-link checks (`npm run dead-links`).
 
 ## 6) Build Products & Dependencies (generated/managed)
 
