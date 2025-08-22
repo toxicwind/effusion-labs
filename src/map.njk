@@ -22,39 +22,42 @@ memory_ref:
   - [[core-concept]]
 ---
 
-{# Intro copy #}
+{# Intro prose, theme-aware colors #}
 <div class="map-intro prose dark:prose-invert max-w-none">
   <p>
-    This interactive map visualizes how <strong>Sparks</strong>, <strong>Concepts</strong>,
-    <strong>Projects</strong>, and <strong>Meta</strong> documents relate across the Effusion Labs
-    knowledge base. Use it to explore how fragments evolve into ideas and converge into projects.
+    This interactive map visualizes how
+    <span class="font-bold text-success">Projects</span>,
+    <span class="font-bold text-info">Concepts</span>,
+    <span class="font-bold text-primary">Sparks</span>,
+    and <span class="font-bold text-warning">Meta</span>
+    documents relate across the Effusion Labs knowledge base. Use it to explore how fragments evolve
+    into ideas and converge into projects.
   </p>
 </div>
 
-{# Wrapper + canvas #}
-<section class="mt-4 card bg-base-100 border border-base-300/60 shadow-sm">
+{# Card wrapper for the visualization #}
+<section class="mt-6 card bg-base-100 border border-base-300 shadow">
   <div class="card-body p-4 sm:p-6">
-    <div id="concept-map-container" class="h-[80vh] w-full rounded-md"></div>
+    <div id="concept-map-container" class="h-[80vh] w-full rounded-box"></div>
   </div>
 </section>
 
-{# JSON-LD for the graph #}
+{# JSON-LD for SEO/graph data #}
 <script type="application/ld+json">
 {{ collections.nodes | conceptMapJSONLD | safe }}
 </script>
 
-{# vis-network (UMD) #}
+{# vis-network bundle #}
 <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
 
-{# Theme-aware graph renderer (daisyUI v5/v4 var-safe) #}
+{# Graph renderer that reads daisyUI theme vars #}
 <script>
 (function () {
-  // Read an HSL var from root, supporting both daisyUI v5 and v4 names
   function readVar(names, alpha) {
     var rs = getComputedStyle(document.documentElement);
-    for (var i = 0; i < names.length; i++) {
-      var v = rs.getPropertyValue(names[i]).trim(); // e.g. "210 10% 20%"
-      if (v) return alpha ? ("hsl(" + v + " / " + alpha + ")") : ("hsl(" + v + ")");
+    for (var i=0; i<names.length; i++) {
+      var v = rs.getPropertyValue(names[i]).trim();
+      if (v) return alpha ? "hsl(" + v + " / " + alpha + ")" : "hsl(" + v + ")";
     }
     return alpha ? "hsl(0 0% 50% / " + alpha + ")" : "hsl(0 0% 50%)";
   }
@@ -63,7 +66,7 @@ memory_ref:
       base:          readVar(["--b1","--color-base-100"]),
       base2:         readVar(["--b2","--color-base-200"]),
       content:       readVar(["--bc","--color-base-content"]),
-      contentSubtle: readVar(["--bc","--color-base-content"], "0.70"),
+      contentSubtle: readVar(["--bc","--color-base-content"], "0.7"),
       border:        readVar(["--bc","--color-base-content"], "0.25"),
       primary:       readVar(["--p","--color-primary"]),
       info:          readVar(["--in","--color-info"]),
@@ -84,35 +87,33 @@ memory_ref:
 
   function getNodeVisualProps(url, tags) {
     tags = Array.isArray(tags) ? tags : [];
-    var lower = String(url || "").toLowerCase();
+    var lower = String(url||"").toLowerCase();
     var cat =
-      (lower.indexOf("/projects") > -1 || tags.indexOf("projects") > -1) ? "Projects" :
-      (lower.indexOf("/concepts") > -1 || tags.indexOf("concepts") > -1) ? "Concepts" :
-      (lower.indexOf("/sparks")   > -1 || tags.indexOf("sparks")   > -1) ? "Sparks"   :
-      (lower.indexOf("/meta")     > -1 || tags.indexOf("meta")     > -1) ? "Meta"     : null;
+      (lower.includes("/projects") || tags.includes("projects")) ? "Projects" :
+      (lower.includes("/concepts") || tags.includes("concepts")) ? "Concepts" :
+      (lower.includes("/sparks")   || tags.includes("sparks"))   ? "Sparks"   :
+      (lower.includes("/meta")     || tags.includes("meta"))     ? "Meta"     : null;
 
     var borderColor =
-      cat === "Projects" ? C.primary :
-      cat === "Concepts" ? C.info :
-      cat === "Sparks"   ? C.warning :
-      cat === "Meta"     ? C.border : C.border;
+      cat==="Projects" ? C.success :
+      cat==="Concepts" ? C.info :
+      cat==="Sparks"   ? C.primary :
+      cat==="Meta"     ? C.warning : C.border;
 
     var shape =
-      cat === "Projects" ? "diamond" :
-      cat === "Concepts" ? "hexagon" :
-      cat === "Sparks"   ? "star" :
-      cat === "Meta"     ? "triangleDown" : "dot";
+      cat==="Projects" ? "diamond" :
+      cat==="Concepts" ? "hexagon" :
+      cat==="Sparks"   ? "star" :
+      cat==="Meta"     ? "triangleDown" : "dot";
 
     return { glyph: categoryGlyphs[cat] || "", borderColor: borderColor, shape: shape };
   }
 
-  // Build document nodes
-  for (var i = 0; i < allNodesData.length; i++) {
-    var page = allNodesData[i];
-    var props = getNodeVisualProps(page.url, (page.data && page.data.tags) || []);
+  allNodesData.forEach(function (page) {
+    var props = getNodeVisualProps(page.url, page.data.tags || []);
     nodes.push({
       id: page.url,
-      label: (props.glyph ? (props.glyph + " ") : "") + (page.data.title || page.fileSlug),
+      label: (props.glyph ? props.glyph+" " : "") + (page.data.title || page.fileSlug),
       title: "Connections: 0",
       shape: props.shape,
       font: { face: "Space Grotesk", size: 14, color: C.content, strokeWidth: 0 },
@@ -124,18 +125,17 @@ memory_ref:
       }
     });
     connectionCount[page.url] = 0;
-  }
+  });
 
-  // Category hubs
   ["Projects","Concepts","Sparks","Meta"].forEach(function (cat) {
     nodes.push({
-      id: "category:" + cat.toLowerCase(),
-      label: (categoryGlyphs[cat] || "") + " " + cat,
+      id: "category:"+cat.toLowerCase(),
+      label: (categoryGlyphs[cat]||"")+" "+cat,
       shape: "box",
       value: 42,
-      scaling: { min: 10, max: 50, label: { enabled: true, min: 14, max: 30 } },
-      title: "Category: " + cat,
-      font: { face: "Space Grotesk", size: 16, color: C.content, strokeWidth: 0 },
+      scaling: { min: 10, max: 50, label:{enabled:true,min:14,max:30} },
+      title: "Category: "+cat,
+      font: { face:"Space Grotesk", size:16, color:C.content, strokeWidth:0 },
       color: {
         background: C.base,
         border: C.primary,
@@ -145,119 +145,78 @@ memory_ref:
       mass: 1,
       physics: true
     });
-    connectionCount["category:" + cat.toLowerCase()] = 0;
+    connectionCount["category:"+cat.toLowerCase()] = 0;
   });
 
-  // Edges for internal links + category clustering
   allNodesData.forEach(function (page) {
     var content = page.inputContent || "";
-    var url = String(page.url || "").toLowerCase();
-    var tags = (page.data && page.data.tags) || [];
+    var url = String(page.url||"").toLowerCase();
+    var tags = page.data.tags || [];
 
     var m;
     while ((m = linkRegex.exec(content)) !== null) {
       var needle = m[1].trim().toLowerCase();
       var target = allNodesData.find(function (p) {
-        return (p.fileSlug && p.fileSlug.toLowerCase() === needle) ||
-               (p.data && p.data.title && p.data.title.toLowerCase() === needle) ||
-               (p.data && p.data.aliases && p.data.aliases.map(function (a){return a.toLowerCase();}).includes(needle));
+        return (p.fileSlug && p.fileSlug.toLowerCase()===needle) ||
+               (p.data.title && p.data.title.toLowerCase()===needle) ||
+               (p.data.aliases && p.data.aliases.map(function(a){return a.toLowerCase();}).includes(needle));
       });
       if (target) {
-        edges.push({ from: page.url, to: target.url });
-        connectionCount[page.url] = (connectionCount[page.url] || 0) + 1;
-        connectionCount[target.url] = (connectionCount[target.url] || 0) + 1;
+        edges.push({from:page.url,to:target.url});
+        connectionCount[page.url]++; connectionCount[target.url]++;
       }
     }
 
     var catId =
-      (url.indexOf("/projects") > -1 || tags.indexOf("projects") > -1) ? "category:projects" :
-      (url.indexOf("/concepts") > -1 || tags.indexOf("concepts") > -1) ? "category:concepts" :
-      (url.indexOf("/sparks")   > -1 || tags.indexOf("sparks")   > -1) ? "category:sparks"   :
-      (url.indexOf("/meta")     > -1 || tags.indexOf("meta")     > -1) ? "category:meta"     : null;
+      (url.includes("/projects")||tags.includes("projects"))?"category:projects":
+      (url.includes("/concepts")||tags.includes("concepts"))?"category:concepts":
+      (url.includes("/sparks")||tags.includes("sparks"))  ?"category:sparks":
+      (url.includes("/meta")||tags.includes("meta"))      ?"category:meta":null;
 
     if (catId) {
-      edges.push({ from: catId, to: page.url });
-      connectionCount[catId] = (connectionCount[catId] || 0) + 1;
-      connectionCount[page.url] = (connectionCount[page.url] || 0) + 1;
+      edges.push({from:catId,to:page.url});
+      connectionCount[catId]++; connectionCount[page.url]++;
     }
   });
 
-  // Scale by degree
   nodes.forEach(function (n) {
     var c = connectionCount[n.id] || 0;
     n.value = c;
-    n.title = n.label + "\nConnections: " + c;
+    n.title = n.label + "\nConnections: "+c;
   });
 
-  // Render
   var container = document.getElementById("concept-map-container");
-  var data = { nodes: nodes, edges: edges };
-  var options = {
-    nodes: {
-      scaling: { min: 8, max: 30 },
-      font: { face: "Space Grotesk", size: 14, color: C.content, strokeWidth: 0 },
-      borderWidth: 1,
-      shadow: { enabled: false }
-    },
-    edges: {
-      width: 1,
-      color: { color: C.border, highlight: C.primary, hover: C.contentSubtle, inherit: "from", opacity: 0.85 },
-      arrows: { to: { enabled: true, scaleFactor: 0.4 } },
-      smooth: { type: "continuous" }
-    },
-    interaction: { hover: true, tooltipDelay: 200, navigationButtons: true, keyboard: true },
-    physics: {
-      enabled: true,
-      barnesHut: { gravitationalConstant: -3500, centralGravity: 0.05, springLength: 180, springConstant: 0.04, damping: 0.12, avoidOverlap: 0.5 },
-      stabilization: { enabled: true, iterations: 1000, updateInterval: 25 }
-    }
-  };
-  var network = new vis.Network(container, data, options);
+  var network = new vis.Network(container,{nodes:nodes,edges:edges},{
+    nodes:{scaling:{min:8,max:30},font:{face:"Space Grotesk",size:14,color:C.content,strokeWidth:0},borderWidth:1},
+    edges:{width:1,color:{color:C.border,highlight:C.primary,hover:C.contentSubtle,inherit:"from",opacity:0.85},arrows:{to:{enabled:true,scaleFactor:0.4}},smooth:{type:"continuous"}},
+    interaction:{hover:true,tooltipDelay:200,navigationButtons:true,keyboard:true},
+    physics:{enabled:true,barnesHut:{gravitationalConstant:-3500,centralGravity:0.05,springLength:180,springConstant:0.04,damping:0.12,avoidOverlap:0.5},stabilization:{enabled:true,iterations:1000,updateInterval:25}}
+  });
 
-  // Live theme re-sync on data-theme changes
   function recolor() {
     C = palette();
     var allIds = network.body.data.nodes.getIds();
     var updates = allIds.map(function (id) {
-      var isCat = String(id).indexOf("category:") === 0;
+      var isCat = id.startsWith("category:");
       var border = isCat ? C.primary : C.border;
-      return {
-        id: id,
-        font: { color: C.content },
-        color: { background: C.base, border: border, highlight: { background: C.base2, border: border }, hover: { background: C.base, border: border } }
-      };
+      return {id:id,font:{color:C.content},color:{background:C.base,border:border,highlight:{background:C.base2,border:border},hover:{background:C.base,border:border}}};
     });
     network.body.data.nodes.update(updates);
-    network.setOptions({ edges: { color: { color: C.border, highlight: C.primary, hover: C.contentSubtle, inherit: "from", opacity: 0.85 } } });
+    network.setOptions({edges:{color:{color:C.border,highlight:C.primary,hover:C.contentSubtle,inherit:"from",opacity:0.85}}});
   }
 
-  new MutationObserver(function (mutList) {
-    for (var i = 0; i < mutList.length; i++) {
-      if (mutList[i].attributeName === "data-theme") { recolor(); break; }
-    }
-  }).observe(document.documentElement, { attributes: true });
+  new MutationObserver(function(muts){
+    muts.forEach(function(m){if(m.attributeName==="data-theme"){recolor();}});
+  }).observe(document.documentElement,{attributes:true});
 
-  // Optional highlight behavior
-  network.on("hoverNode", function (params) {
-    var nodeId = params.node;
-    var connected = network.getConnectedNodes(nodeId);
-    var all = network.body.data.nodes.getIds();
-
-    network.body.data.nodes.update(all.map(function (id) {
-      return { id: id, color: { background: C.base2, border: C.border }, font: { color: C.contentSubtle } };
-    }));
-    network.body.data.nodes.update([nodeId].concat(connected).map(function (id) {
-      return { id: id, color: { background: C.base, border: C.primary }, font: { color: C.content } };
-    }));
+  network.on("hoverNode",function(params){
+    var nodeId=params.node;
+    var connected=network.getConnectedNodes(nodeId);
+    var all=network.body.data.nodes.getIds();
+    network.body.data.nodes.update(all.map(function(id){return{id:id,color:{background:C.base2,border:C.border},font:{color:C.contentSubtle}};}));
+    network.body.data.nodes.update([nodeId].concat(connected).map(function(id){return{id:id,color:{background:C.base,border:C.primary},font:{color:C.content}};}));
   });
-  network.on("blurNode", function () { recolor(); });
-
-  // Click-through to page
-  network.on("click", function (params) {
-    if (params.nodes && params.nodes.length > 0) {
-      var id = params.nodes[0];
-      if (String(id).indexOf("category:") !== 0) window.location.href = id;
-    }
-  });
+  network.on("blurNode",recolor);
+  network.on("click",function(params){if(params.nodes.length>0){var id=params.nodes[0];if(!id.startsWith("category:"))window.location.href=id;}});
 })();
 </script>
