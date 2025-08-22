@@ -1,7 +1,6 @@
+{# Feed section: uses the local feedEntry macro #}
 {% from "components/section.njk" import section %}
-{% from "components/feed-entry.njk" import feedEntry %}
-
-{% macro feedSection(title, url, items) %}
+{% macro feedSection(title, url, items) -%}
   {% call section(title, url) %}
     <ul class="space-y-4">
       {% for item in items %}
@@ -9,4 +8,4 @@
       {% endfor %}
     </ul>
   {% endcall %}
-{% endmacro %}
+{%- endmacro %}

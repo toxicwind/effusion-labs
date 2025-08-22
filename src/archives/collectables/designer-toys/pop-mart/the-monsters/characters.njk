@@ -29,11 +29,11 @@ permalink: "/archives/collectables/designer-toys/{{ companySlug }}/{{ lineSlug }
 </div>
 
 <header class="mb-6">
-  <h1 class="text-3xl font-heading tracking-wide text-primary mb-0">
+  <h1 class="font-heading text-3xl uppercase tracking-[-0.02em] text-primary mb-0">
     {{ character.data.name or charSlug }}
   </h1>
   {% if character.data.notes %}
-    <p class="mt-2 opacity-80">{{ character.data.notes }}</p>
+    <p class="mt-2 text-base-content/80">{{ character.data.notes }}</p>
   {% endif %}
 </header>
 
@@ -43,8 +43,12 @@ permalink: "/archives/collectables/designer-toys/{{ companySlug }}/{{ lineSlug }
   {% set matches = [] %}
   {% for p in products %}
     {% if p.data.charSlug and p.data.charSlug == charSlug %}
-      <li>{{ badge(p.data.product_id or p.data.productSlug,
-            '/archives/collectables/designer-toys/' + companySlug + '/' + lineSlug + '/products/' + p.data.productSlug + '/') }}</li>
+      <li>
+        {{ badge(
+          p.data.product_id or p.data.productSlug,
+          '/archives/collectables/designer-toys/' + companySlug + '/' + lineSlug + '/products/' + p.data.productSlug + '/'
+        ) }}
+      </li>
     {% endif %}
   {% endfor %}
   {% if matches.length == 0 %}

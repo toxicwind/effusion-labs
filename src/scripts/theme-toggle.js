@@ -1,29 +1,51 @@
-(function(){
-  const storageKey = 'theme';
-  const btn = document.getElementById('theme-toggle');
-  if (!btn) return;
-  const doc = document.documentElement;
-  const meta = document.querySelector('meta[name="color-scheme"]');
-  const sun = btn.querySelector('.lucide-sun');
-  const moon = btn.querySelector('.lucide-moon');
+(function () {
+  "use strict";
 
-  function apply(theme, persist){
-    doc.dataset.theme = theme;
-    doc.classList.toggle('dark', theme === 'dark');
-    meta && (meta.content = theme === 'light' ? 'light dark' : 'dark light');
-    if (persist) localStorage.setItem(storageKey, theme);
-    btn.setAttribute('aria-pressed', theme === 'dark');
-    btn.setAttribute('aria-label', theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme');
-    if(sun && moon){
-      sun.classList.toggle('hidden', theme === 'dark');
-      moon.classList.toggle('hidden', theme !== 'dark');
-    }
+  var STORAGE_KEY = "theme";
+  var LIGHT = "nord";
+  var DARK = "sunset";
+
+  var btn = document.getElementById("theme-toggle");
+  if (!btn) return;
+
+  var doc = document.documentElement;
+  var meta = document.querySelector('meta[name="color-scheme"]');
+  var sun = btn.querySelector(".lucide-sun");
+  var moon = btn.querySelector(".lucide-moon");
+
+  function currentTheme() {
+    var t = doc.getAttribute("data-theme");
+    return t === DARK ? DARK : LIGHT; // default safe
   }
 
-  apply(doc.dataset.theme || 'dark', false);
+  function apply(theme, persist, source) {
+    doc.setAttribute("data-theme", theme);
+    doc.dataset.themeSource = source || "user";
 
-  btn.addEventListener('click', () => {
-    const next = doc.dataset.theme === 'dark' ? 'light' : 'dark';
-    apply(next, true);
+    if (meta) meta.setAttribute("content", theme === LIGHT ? "light dark" : "dark light");
+    if (persist) {
+      try { localStorage.setItem(STORAGE_KEY, theme); } catch (_) {}
+    }
+
+    // Button a11y + icon state
+    var isDark = theme === DARK;
+    btn.setAttribute("aria-pressed", String(isDark));
+    btn.setAttribute("aria-label", isDark ? "Switch to light theme" : "Switch to dark theme");
+    if (sun && moon) {
+      sun.classList.toggle("hidden", isDark);
+      moon.classList.toggle("hidden", !isDark);
+    }
+
+    try {
+      document.dispatchEvent(new CustomEvent("themechange", { detail: { theme: theme, source: source || "user" } }));
+    } catch (_) {}
+  }
+
+  // Initialize button state from current document theme
+  apply(currentTheme(), false, "hydrate");
+
+  btn.addEventListener("click", function () {
+    var next = currentTheme() === DARK ? LIGHT : DARK;
+    apply(next, true, "toggle");
   });
 })();

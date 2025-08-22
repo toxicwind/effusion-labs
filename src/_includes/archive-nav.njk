@@ -1,9 +1,19 @@
+{# components/archive-nav.njk #}
 {% macro archiveNav(path, nav) %}
   {% set items = nav[path] or [] %}
   {% if items.length %}
-  <ul class="list-none pl-0">
+  <ul class="menu menu-sm p-0">
     {% for item in items %}
-    <li class="border-l-4 border-current pl-2"><a href="{{ item.url }}">{{ item.title }}</a> <span class="font-mono text-xs">({{ item.count }})</span></li>
+      <li>
+        <a
+          href="{{ item.url }}"
+          class="flex items-center justify-between rounded-sm
+                 focus:outline-none focus-visible:ring focus-visible:ring-primary/40"
+        >
+          <span>{{ item.title }}</span>
+          <span class="badge badge-ghost badge-xs">{{ item.count }}</span>
+        </a>
+      </li>
     {% endfor %}
   </ul>
   {% endif %}

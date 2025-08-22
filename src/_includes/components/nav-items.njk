@@ -1,5 +1,16 @@
+{# src/_includes/components/nav-items.njk #}
 {% macro navItems(nav, pageUrl, linkClass='') -%}
   {% for n in nav %}
-    <li><a href="{{ n.url }}"{% if linkClass %} class="{{ linkClass }}"{% endif %}{% if n.url == pageUrl %} aria-current="page"{% endif %}>{{ n.title }}</a></li>
+    {% set isActive = (n.url == pageUrl) %}
+    <li>
+      <a
+        href="{{ n.url }}"
+        class="transition-colors rounded-sm px-1 py-0.5 {% if isActive %}text-primary{% endif %}{% if linkClass %} {{ linkClass }}{% endif %} focus:outline-none focus-visible:ring focus-visible:ring-primary/40"
+        {% if isActive %}aria-current="page" data-active="true"{% endif %}
+      >
+        {% if n.order %}<span class="opacity-60">{{ n.order }}.</span>{% endif %}
+        <span>{{ n.title | shout }}</span>
+      </a>
+    </li>
   {% endfor %}
 {%- endmacro %}

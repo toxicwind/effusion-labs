@@ -1,6 +1,7 @@
 // postcss.config.mjs
-import tailwindcss from '@tailwindcss/postcss';
+// Tailwind v4 runs via the PostCSS plugin; daisyUI is enabled in CSS with @plugin.
+import tailwindcss from "@tailwindcss/postcss";
 
 export default {
-  plugins: [tailwindcss],
+  plugins: [tailwindcss]
 };

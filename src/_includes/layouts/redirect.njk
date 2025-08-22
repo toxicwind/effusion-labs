@@ -1,12 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="nord">
 <head>
   <meta charset="UTF-8">
-  <title>Redirecting...</title>
+  <meta name="color-scheme" content="light dark">
   <meta http-equiv="refresh" content="0; url={{ redirect }}">
   <link rel="canonical" href="{{ redirect }}">
+  <title>Redirecting…</title>
 </head>
-<body>
-  <p>Redirecting to <a href="{{ redirect }}">{{ redirect }}</a>...</p>
+<body class="bg-base-100 text-base-content">
+  <p>Redirecting to <a class="link link-hover" href="{{ redirect }}">{{ redirect }}</a>…</p>
+  <script>
+    // JS fallback for environments that ignore meta refresh or strip querystrings
+    try { location.replace({{ redirect | dump }}); } catch (_) {}
+  </script>
 </body>
 </html>

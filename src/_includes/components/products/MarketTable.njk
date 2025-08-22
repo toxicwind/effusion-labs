@@ -1,13 +1,22 @@
+{# components/products/market-table.njk #}
 {% macro marketTable(listings) %}
-<table data-testid="market-table" class="market-table">
-  <caption>Market Listings</caption>
-  <thead>
-    <tr><th scope="col">Market</th><th scope="col">Price</th></tr>
-  </thead>
-  <tbody>
-    {% for l in listings | sort(false, false, 'market') %}
-    <tr><td>{{ l.market }}</td><td>{{ l.price | money(l.currency) }}</td></tr>
-    {% endfor %}
-  </tbody>
-</table>
+<div class="overflow-x-auto">
+  <table data-testid="market-table" class="table table-sm">
+    <caption class="caption-top text-xs text-base-content/70">Market Listings</caption>
+    <thead>
+      <tr>
+        <th scope="col">Market</th>
+        <th scope="col" class="text-right">Price</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for l in listings | sort(false, false, 'market') %}
+      <tr>
+        <td>{{ l.market }}</td>
+        <td class="text-right">{{ l.price | money(l.currency) }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
 {% endmacro %}

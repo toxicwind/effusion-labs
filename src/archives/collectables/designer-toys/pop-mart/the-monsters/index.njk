@@ -10,8 +10,8 @@ eleventyComputed:
 ---
 
 <header class="mb-6">
-  <h1 class="text-3xl font-heading tracking-wide text-primary mb-0">POP MART — The Monsters</h1>
-  <p class="opacity-80 mt-2">Explore products, characters, and series.</p>
+  <h1 class="font-heading text-3xl uppercase tracking-[-0.02em] text-primary mb-0">POP MART — The Monsters</h1>
+  <p class="mt-2 text-base-content/80">Explore products, characters, and series.</p>
 </header>
 
 <section class="mb-10">
@@ -20,7 +20,7 @@ eleventyComputed:
   </h2>
   <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
     {% for p in lineProducts %}
-      <li class="card bg-base-100 border hover:shadow-md transition">
+      <li class="card bg-base-100 border hover:shadow-xl hover:border-primary/50 transition">
         <a class="card-body p-4 sm:p-5 block"
            href="/archives/collectables/designer-toys/{{ companySlug }}/{{ lineSlug }}/products/{{ p.data.productSlug }}/">
           <h3 class="card-title text-base m-0">{{ p.data.product_id or p.data.title or p.data.productSlug }}</h3>
@@ -56,11 +56,11 @@ eleventyComputed:
   </h2>
   <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
     {% for s in lineSeries %}
-      <li class="card bg-base-100 border hover:shadow-md transition">
+      <li class="card bg-base-100 border hover:shadow-xl hover:border-primary/50 transition">
         <a class="card-body p-4 sm:p-5 block"
            href="/archives/collectables/designer-toys/{{ companySlug }}/{{ lineSlug }}/series/{{ s.data.seriesSlug }}/">
           <h3 class="card-title text-base m-0">{{ s.data.title or s.data.seriesSlug }}</h3>
-          {% if s.data.notes %}<p class="opacity-80 mt-1">{{ s.data.notes }}</p>{% endif %}
+          {% if s.data.notes %}<p class="mt-1 text-base-content/80">{{ s.data.notes }}</p>{% endif %}
         </a>
       </li>
     {% endfor %}

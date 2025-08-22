@@ -2,22 +2,62 @@
 {% from "components/header.njk" import header %}
 {% from "components/footer.njk" import footer %}
 <!DOCTYPE html>
-<html lang="en" data-theme="light" class="scroll-pt-16">
+<html lang="en" class="scroll-pt-16">
 <head>
+  <!-- Meta -->
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="color-scheme" content="light dark">
   <title>{{ title }} | Effusion Labs</title>
 
-  <meta name="color-scheme" content="dark light">
-  <script>{% include '../scripts/theme-init.js' %}</script>
+  {# Early theme: honor stored; else OS → sunset (dark) / nord (light). Also updates color-scheme. #}
+  <script>
+    (function () {
+      try {
+        var LIGHT = "nord";
+        var DARK  = "sunset";
+        var mapLegacy = { light: LIGHT, dark: DARK };
 
-  <link rel="stylesheet" href="/assets/css/app.css">
+        var meta = document.querySelector('meta[name="color-scheme"]') ||
+          (function () { var m = document.createElement("meta"); m.name = "color-scheme"; document.head.appendChild(m); return m; })();
+
+        var stored = localStorage.getItem("theme");
+        var picked = (stored && stored.trim()) ? stored.trim() : null;
+        if (picked && mapLegacy[picked]) picked = mapLegacy[picked]; // translate legacy
+
+        if (!picked) {
+          var prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+          picked = prefersDark ? DARK : LIGHT;
+          document.documentElement.dataset.themeSource = prefersDark ? "os-dark" : "os-light";
+        } else {
+          document.documentElement.dataset.themeSource = "storage";
+        }
+
+        document.documentElement.setAttribute("data-theme", picked);
+        meta.content = picked === LIGHT ? "light dark" : "dark light";
+      } catch (_) {
+        document.documentElement.setAttribute("data-theme", "nord");
+        document.documentElement.dataset.themeSource = "fallback";
+      }
+    })();
+  </script>
+
+  {# Fonts: brutalist / Kaws-adjacent #}
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Merriweather:wght@400;700&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Rubik:wght@400..900&family=Space+Grotesk:wght@400..700&display=swap" rel="stylesheet">
+
+  {# Tailwind v4 + daisyUI v5 CSS (cache-busted) #}
+  <link rel="stylesheet" href="/assets/css/app.css?v={{ build.hash or build.commit or build.version or buildTime }}">
+
+  {# Icons / PWA (optional) #}
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/svg+xml" href="/assets/icons/favicon.svg">
+  <link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
 </head>
 
-<body class="bg-background text-text font-body">
+<body class="bg-base-100 text-base-content font-body antialiased selection:bg-primary/20">
   <a href="#main" class="skip-link">Skip to main content</a>
   {{ header(nav, page) }}
 
@@ -34,17 +74,17 @@
       ">
         {% if showTitle != false %}
           <header class="mb-8">
-            <h1 class="font-heading text-primary text-4xl tracking-wider">{{ title }}</h1>
+            <h1 class="font-heading text-primary text-4xl uppercase tracking-[-0.025em]">{{ title }}</h1>
           </header>
         {% endif %}
         {{ content | safe }}
       </article>
 
       {% if hasMeta %}
-      <aside class="w-full mt-10 text-sm opacity-90 border-t border-border pt-4 xl:mt-0 xl:w-64 xl:pl-4 xl:border-t-0 xl:border-l">
+      <aside class="w-full mt-10 text-sm opacity-90 border-t border-base-content/20 pt-4 xl:mt-0 xl:w-64 xl:pl-4 xl:border-t-0 xl:border-l">
         <div class="space-y-2 xl:sticky xl:top-28">
           <h2 class="font-heading text-lg font-semibold tracking-wide">Meta</h2>
-          <ul class="space-y-1 text-text">
+          <ul class="space-y-1">
             {% if status %}<li><strong>Status:</strong> {{ status }}</li>{% endif %}
             {% if date %}
               <li><strong>Date:</strong>
@@ -72,7 +112,7 @@
     {{ footer(buildTime) }}
   </div>
 
-    <script src="/assets/js/footnote-nav.js" defer></script>
-    <script src="/assets/js/code-copy.js" defer></script>
-  </body>
+  <script src="/assets/js/footnote-nav.js" defer></script>
+  <script src="/assets/js/code-copy.js" defer></script>
+</body>
 </html>

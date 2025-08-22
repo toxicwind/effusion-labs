@@ -1,27 +1,33 @@
-<a href="{{ url }}" class="embed block border border-zinc-700 rounded-md p-4 bg-zinc-900 hover:bg-zinc-800 transition-all">
+{# components/embed.njk #}
+<a
+  href="{{ url }}"
+  class="embed block rounded-md border border-base-content/15 bg-base-100/80 backdrop-blur p-4 transition
+         hover:bg-base-200/60 hover:border-primary/50
+         focus:outline-none focus-visible:ring focus-visible:ring-primary/40"
+>
   <div class="mb-1">
-    <strong class="text-lg">{{ title or fileSlug or "Untitled" }}</strong>
+    <strong class="text-lg text-base-content">{{ title or fileSlug or "Untitled" }}</strong>
   </div>
 
   {% if description %}
-    <p class="text-zinc-400 text-sm mb-2">{{ description }}</p>
+    <p class="text-base-content/70 text-sm mb-2">{{ description }}</p>
   {% endif %}
 
-  <div class="text-xs text-zinc-400 space-y-1">
+  <div class="text-xs text-base-content/70 space-y-1">
     {% if status or certainty or importance %}
-    <div class="flex gap-3 flex-wrap">
-      {% if status %}<span class="inline-block px-2 py-0.5 bg-zinc-800 rounded">{{ status }}</span>{% endif %}
-      {% if certainty %}<span class="inline-block px-2 py-0.5 bg-zinc-800 rounded">certainty: {{ certainty }}</span>{% endif %}
-      {% if importance %}<span class="inline-block px-2 py-0.5 bg-zinc-800 rounded">importance: {{ importance }}</span>{% endif %}
+    <div class="flex gap-2 flex-wrap">
+      {% if status %}<span class="badge badge-ghost badge-xs">{{ status }}</span>{% endif %}
+      {% if certainty %}<span class="badge badge-ghost badge-xs">certainty: {{ certainty }}</span>{% endif %}
+      {% if importance %}<span class="badge badge-ghost badge-xs">importance: {{ importance }}</span>{% endif %}
     </div>
     {% endif %}
 
     {% if tags %}
     <div class="mt-1">
-      <strong class="text-zinc-500">Tags:</strong>
-      <span>
+      <strong class="text-base-content/60">Tags:</strong>
+      <span class="inline-flex flex-wrap gap-1 pl-1">
         {% for tag in tags %}
-          <span class="inline-block px-1.5 py-0.5 bg-zinc-800 rounded-sm mr-1">{{ tag }}</span>
+          <span class="badge badge-outline badge-xs">{{ tag }}</span>
         {% endfor %}
       </span>
     </div>
@@ -29,10 +35,10 @@
 
     {% if memory_ref %}
     <div class="mt-1">
-      <strong class="text-zinc-500">Memory:</strong>
+      <strong class="text-base-content/60">Memory:</strong>
       <ul class="list-disc pl-4">
         {% for ref in memory_ref %}
-          <li><a href="{{ ref }}" class="text-zinc-300 hover:text-zinc-100 underline">{{ ref }}</a></li>
+          <li><a href="{{ ref }}" class="link link-hover">{{ ref }}</a></li>
         {% endfor %}
       </ul>
     </div>

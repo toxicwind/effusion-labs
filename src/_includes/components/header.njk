@@ -1,8 +1,10 @@
+{# src/_includes/components/header.njk #}
 {% from "components/nav-items.njk" import navItems %}
 {% from "components/icons.njk" import icon %}
+
 {% macro header(nav, page) %}
   {% set navLabel = 'Primary navigation' %}
-  <header class="sticky top-0 z-40 w-full bg-base-100/90 backdrop-blur shadow">
+  <header data-site-header class="sticky top-0 z-40 w-full bg-base-100/90 backdrop-blur shadow">
     <div class="navbar mx-auto max-w-screen-2xl px-6">
       <!-- Brand -->
       <div class="flex-1">
@@ -35,7 +37,7 @@
         </nav>
       </div>
 
-      <!-- Right cluster: desktop nav -->
+      <!-- Right cluster: desktop nav + theme toggle -->
       <div class="flex-none flex items-center gap-2">
         <!-- Desktop nav (shown on lg+) -->
         <nav class="hidden lg:flex" aria-label="{{ navLabel }}">
@@ -54,6 +56,23 @@
             {% endif %}
           </ul>
         </nav>
+
+        <!-- Theme toggle (works with theme-init.js + theme-toggle.js) -->
+        <button
+          id="theme-toggle"
+          class="btn btn-ghost btn-square"
+          type="button"
+          aria-pressed="false"
+          aria-label="Switch to dark theme"
+          title="Toggle theme"
+        >
+          <span class="lucide-sun">
+            {{ icon('sun', { class: 'w-6 h-6', 'aria-hidden': 'true' }) }}
+          </span>
+          <span class="lucide-moon hidden">
+            {{ icon('moon', { class: 'w-6 h-6', 'aria-hidden': 'true' }) }}
+          </span>
+        </button>
       </div>
     </div>
   </header>

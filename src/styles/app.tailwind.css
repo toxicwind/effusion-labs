@@ -1,23 +1,21 @@
+/* src/styles/app.tailwind.css */
 @config "../../tailwind.config.mjs";
 @import "./tokens.css";
 @import "tailwindcss";
 
-/* Plugins: wire via CSS for Tailwind v4 + daisyUI v5 */
+/* Bind Tailwind's `dark:` variant to the daisyUI dark theme ("sunset") */
+@custom-variant dark (&:where([data-theme=sunset], [data-theme=sunset] *));
+
+/* Plugins (Tailwind v4 style) */
 @plugin "@tailwindcss/typography";
+
+/* daisyUI v5 — enable themes with explicit defaults */
 @plugin "daisyui" {
-  /* Keep it lean and explicit for build determinism */
-  themes: light --default, dark --prefersdark;
+  themes: nord --default, sunset --prefersdark;
+  /* logs: false;  // uncomment to silence plugin logs */
 }
 
-/* OPTIONAL custom theme; safe to keep even if unused right now */
-@plugin "daisyui/theme" {
-  name: "lab";
-  default: false;
-  prefersdark: false;
-  color-scheme: light;
-  /* Define tokens here later if/when you want a bespoke theme */
-}
-
+/* Project CSS */
 @import "./home.css";
 @import "./mschf-overlay.css";
 
@@ -60,7 +58,6 @@
   .skip-link { @apply sr-only focus:not-sr-only fixed top-2 left-2 z-50 rounded bg-primary text-text px-4 py-2; }
 }
 
-/* ——— Small utility cluster (unchanged names) ——— */
 @layer components {
   .spec-note-soft     { @apply italic text-gray-500 border-b border-dotted border-gray-300 cursor-help; }
   .spec-note-subtle   { @apply text-gray-400 border-b border-dashed border-gray-300 cursor-help; }
@@ -71,7 +68,6 @@
   .rotate-90 { @apply transform rotate-90 origin-top-left block; } .mirror-x { @apply transform -scale-x-100 block; }
   .flicker { @apply animate-pulse; } .audio-embed { @apply my-4 block; } .qr-code { @apply my-4 block w-32 h-32; }
 
-  /* color signifiers retained */
   .slate{ @apply text-slate-500;} .gray{ @apply text-gray-500;} .zinc{ @apply text-zinc-500;} .neutral{ @apply text-neutral-500;}
   .stone{ @apply text-stone-500;} .red{ @apply text-red-500;} .orange{ @apply text-orange-500;} .amber{ @apply text-amber-500;}
   .yellow{ @apply text-yellow-500;} .lime{ @apply text-lime-500;} .green{ @apply text-green-500;} .emerald{ @apply text-emerald-500;}
@@ -80,7 +76,7 @@
   .pink{ @apply text-pink-500;} .rose{ @apply text-rose-500;} .blackout{ @apply text-black bg-black; }
 }
 
-/* ——— Inline footnote popover (theme-aware) ——— */
+/* Inline footnote popover (theme-aware) */
 @layer components {
   .annotation-ref { @apply relative inline-block; }
   .annotation-anchor {
@@ -127,7 +123,7 @@
   }
 }
 
-/* ——— Targeting / scroll affordances (works with sticky headers) ——— */
+/* Targeting / scroll affordances */
 @layer components {
   :root { --header-height: 5rem; }
   [id^="fn"],[id^="fnref"],.footnote-item,.annotation-anchor,.footnote-local,.footnote-enhanced,.footnote-ref{
@@ -146,7 +142,7 @@
 
   [id^="fn"]:target,[id^="fnref"]:target{
     border-radius:.375rem;
-    box-shadow: 0 0 0 2px hsl(var(--in)/.45); /* info color ring */
+    box-shadow: 0 0 0 2px hsl(var(--in)/.45);
     animation: footnote-highlight 2.2s ease-in-out;
   }
   @keyframes footnote-highlight{
@@ -167,7 +163,7 @@
   }
 }
 
-/* ——— Footnote card (daisyUI theme + Typography tolerance + Prism-safe) ——— */
+/* Footnote card */
 @layer components {
   .footnote-aside{
     @apply block w-full my-6 rounded-lg border p-4 text-[0.95rem] leading-relaxed;
@@ -186,7 +182,6 @@
   }
   .footnote-aside .footnote-backref:hover{ color: hsl(var(--bc)); }
 
-  /* Explanation: full-width, calm rhythm */
   .footnote-aside .footnote-explanation{
     @apply block w-full clear-both mt-2 pl-4;
     border-left: 1px solid hsl(var(--bc)/.18);
@@ -207,18 +202,17 @@
     color: hsl(var(--bc)/.7);
   }
 
-  /* If someone forgets `not-prose`, still resist Typography defaults */
   .prose .footnote-aside .footnote-explanation{
     margin-top: .5rem;
     padding-left: 1rem;
     border-left: 1px solid hsl(var(--bc)/.18);
     color: hsl(var(--bc)/.9);
-    font-style: normal; /* prevent forced italics */
+    font-style: normal;
     background: transparent;
   }
 }
 
-/* ——— Optional compact variant (keeps your existing name) ——— */
+/* Optional compact variant */
 @layer components {
   .footnote-aside--compact{ @apply border-0 bg-transparent p-0 my-6; }
   .footnote-aside--compact .footnote-local{ @apply mb-2 bg-transparent px-0 py-0; }
@@ -228,7 +222,7 @@
   }
 }
 
-/* ——— Standard footnote list (hybrid compat) ——— */
+/* Standard footnote list */
 @layer components {
   .footnotes-hybrid{ @apply mt-8 pt-6 border-t; border-color: hsl(var(--bc)/.14); }
   .footnote-enhanced{ @apply mb-3 text-sm leading-relaxed; color: hsl(var(--bc)); }
@@ -239,12 +233,12 @@
   .footnote-ref a:hover{ color: hsl(var(--pf)); }
 }
 
-/* ——— Prism interop (code readability inside footnotes/popup) ——— */
+/* Prism interop */
 @layer components {
   .footnote-aside pre.shiki,
   .annotation-popup pre.shiki{
     @apply rounded-md p-3 overflow-x-auto text-xs leading-6;
-    background-color: hsl(var(--b2)); /* keeps Prism theme legible on both themes */
+    background-color: hsl(var(--b2));
     border: 1px solid hsl(var(--bc)/.12);
     color: hsl(var(--bc));
   }
@@ -256,132 +250,61 @@
   }
 }
 
-/* ——— Link affordances (unchanged names) ——— */
+/* Link affordances */
 @layer components {
   .interlink::before{ content:"⇢ "; margin-right:.15rem; color:currentColor; font-size:.9em; }
   .external-link{ @apply underline transition-colors; color: hsl(var(--p)); }
   .external-link:hover{ color: hsl(var(--pf)); }
 }
 
+/* Failure Box */
 @layer components {
-  /* ——— Failure Box ------------------------------------------------------- */
   .failbox {
     @apply relative w-full rounded-xl border p-4 md:p-5 shadow-sm;
     background-color: hsl(var(--b1));
     border-color: hsl(var(--bc)/.14);
     color: hsl(var(--bc));
   }
-  .failbox:focus-within {
-    box-shadow: 0 0 0 2px hsl(var(--p)/.25);
-  }
+  .failbox:focus-within { box-shadow: 0 0 0 2px hsl(var(--p)/.25); }
 
   .failbox-head { @apply mb-3; }
-  .failbox-title {
-    @apply m-0 font-heading text-sm tracking-wider uppercase;
-    letter-spacing: .08em;
-    color: hsl(var(--bc));
-  }
-  .failbox-kicker {
-    @apply m-0 mt-1 text-sm;
-    color: hsl(var(--bc)/.7);
-  }
+  .failbox-title { @apply m-0 font-heading text-sm tracking-wider uppercase; letter-spacing: .08em; color: hsl(var(--bc)); }
+  .failbox-kicker { @apply m-0 mt-1 text-sm; color: hsl(var(--bc)/.7); }
 
   .failbox-body { @apply mt-2; }
 
-  /* Accent variant (optional): add `failbox--accent` to get a left rule + badge */
   .failbox--accent { @apply pl-4 md:pl-5; }
   .failbox--accent { border-left: 4px solid hsl(var(--p)); }
   .failbox--accent .failbox-title { color: hsl(var(--p)); }
 
-  /* ——— Items -------------------------------------------------------------- */
-  .failitem {
-    @apply py-3 border-t border-dashed;
-    border-color: hsl(var(--bc)/.16);
-  }
+  .failitem { @apply py-3 border-t border-dashed; border-color: hsl(var(--bc)/.16); }
   .failitem:first-child { @apply border-t-0 pt-0; }
   .failitem:last-child  { @apply pb-0; }
 
   .failitem-label { @apply mb-1; }
-  .failitem-label strong {
-    @apply font-semibold;
-    letter-spacing: .01em;
-  }
+  .failitem-label strong { @apply font-semibold; letter-spacing: .01em; }
 
   .failitem-content { @apply text-[0.98rem] leading-relaxed; }
   .failitem-content p { @apply m-0; }
   .failitem-content + .failitem-content { @apply mt-2; }
 
-  /* Links + code inside the box follow theme */
   .failbox a { color: hsl(var(--p)); }
   .failbox a:hover { color: hsl(var(--pf)); }
-  .failbox :not(pre)>code {
-    @apply rounded px-1 py-0.5 text-[0.85em] font-mono;
-    background-color: hsl(var(--b2));
-    color: hsl(var(--bc));
-  }
+  .failbox :not(pre)>code { @apply rounded px-1 py-0.5 text-[0.85em] font-mono; background-color: hsl(var(--b2)); color: hsl(var(--bc)); }
 
-  /* Compact variant (optional): add `failbox--compact` for tighter rhythm */
-  .failbox--compact { @apply p-3 md:p-4 rounded-lg; }
-  .failbox--compact .failitem { @apply py-2; }
-
-  /* Dark mode tweaks handled by tokens; add a tiny depth bump */
-  @media (prefers-color-scheme: dark) {
-    .failbox { box-shadow: 0 1px 0 0 hsl(var(--bc)/.08); }
-  }
+  @media (prefers-color-scheme: dark) { .failbox { box-shadow: 0 1px 0 0 hsl(var(--bc)/.08); } }
 }
 
+/* SpecSheet / MarketTable */
 @layer components {
-  /*-- Specification Sheet ---------------------------------------------------*/
-  /* A two-column layout for displaying key-value data. */
+  .spec-sheet { @apply grid gap-2 rounded-lg border-4 p-4 sm:grid-cols-[max-content_auto]; }
+  .spec-sheet dt { @apply font-semibold tracking-tight pr-4; }
+  .spec-sheet dd { @apply mb-1 break-words hyphens-auto; }
 
-  .spec-sheet {
-    @apply grid gap-2 rounded-lg border-4 p-4 sm:grid-cols-[max-content_auto];
-  }
-
-  .spec-sheet dt {
-    @apply font-semibold tracking-tight pr-4;
-  }
-
-  .spec-sheet dd {
-    @apply mb-1 break-words hyphens-auto;
-  }
-
-  /*-- Market Data Table -----------------------------------------------------*/
-  /* A standard table for displaying structured data. */
-
-  .market-table {
-    @apply mt-4 w-full border-2 border-collapse;
-  }
-
-  .market-table th,
-  .market-table td {
-    @apply border-2 px-2 py-1 text-left;
-  }
-
-  /* Suggestion: Add a distinct style for the table header for better hierarchy. */
-  .market-table th {
-    @apply bg-slate-100 font-semibold dark:bg-slate-800;
-  }
-
-  /*-- Reusable Components ---------------------------------------------------*/
-
-  /* A small, pill-shaped badge for tags or statuses. */
-  .badge-chip {
-    @apply mb-1 mr-1 inline-block rounded-full border-2 px-2 py-1 text-xs font-medium;
-  }
-
-  /* A standard bulleted list for provenance or feature lists. */
-  .provenance-list {
-    @apply list-disc space-y-1 pl-5;
-  }
-
-  /*-- Notes & Metadata ------------------------------------------------------*/
-  /* A styled container for important notes or warnings. */
-
-  .meta-notes {
-    @apply rounded-md bg-yellow-100 p-3 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-200;
-  }
+  .market-table { @apply mt-4 w-full border-2 border-collapse; }
+  .market-table th, .market-table td { @apply border-2 px-2 py-1 text-left; }
+  .market-table th { @apply bg-slate-100 font-semibold dark:bg-slate-800; }
 }
 
-/* If you see utility gaps, explicitly hint sources for Tailwind v4 */
+/* Tailwind v4 content discovery */
 @source "../**/*.{njk,md,html,js}";

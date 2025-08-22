@@ -32,13 +32,13 @@ permalink: "/archives/collectables/designer-toys/{{ companySlug }}/{{ lineSlug }
 </div>
 
 <header class="mb-6">
-  <h1 class="text-3xl font-heading tracking-wide text-primary mb-0">
+  <h1 class="font-heading text-3xl uppercase tracking-[-0.02em] text-primary mb-0">
     {{ product.data.product_id or product.data.title or productSlug }}
   </h1>
 
-  <div class="mt-2 flex flex-wrap gap-2 text-sm opacity-80">
+  <div class="mt-2 flex flex-wrap gap-2 text-sm text-base-content/80">
     {% if product.data.character %}
-      <span>Character:</span>
+      <span class="opacity-70">Character:</span>
       <a class="badge badge-outline badge-primary align-middle"
          href="/archives/collectables/designer-toys/{{ companySlug }}/{{ lineSlug }}/characters/{{ (product.data.character) | slug }}/">
         {{ product.data.character }}
@@ -47,7 +47,7 @@ permalink: "/archives/collectables/designer-toys/{{ companySlug }}/{{ lineSlug }
 
     {% if product.data.seriesSlug or product.data.series %}
       <span class="opacity-60">•</span>
-      <span>Series:</span>
+      <span class="opacity-70">Series:</span>
       {% set sslug = (product.data.seriesSlug or product.data.series) | slug %}
       <a class="badge badge-outline align-middle"
          href="/archives/collectables/designer-toys/{{ companySlug }}/{{ lineSlug }}/series/{{ sslug }}/">

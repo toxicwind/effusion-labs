@@ -1,7 +1,17 @@
-{% macro heroTile(type, title, description, href, primary=false) %}
-<a href="{{ href }}" class="tile {% if primary %}tile-primary {% endif %}rounded-lg border border-white/10 p-6 text-left transition hover:-translate-y-0.5 hover:shadow focus:outline-none focus:ring">
-  <span class="chip">{{ type }}</span>
-  <h3 class="mt-2 font-heading text-lg">{{ title }}</h3>
-  <p class="text-sm text-gray-200">{{ description }}</p>
+{# Hero tile: daisyUI-leaning tile/card with primary variant #}
+{% macro heroTile(type, title, description, href, primary=false) -%}
+<a
+  href="{{ href }}"
+  class="group block rounded-xl border transition bg-base-100/80 backdrop-blur
+         {% if primary %}
+           border-primary/60 ring-1 ring-primary/20 bg-gradient-to-br from-primary/5 to-transparent
+         {% else %}
+           border-base-content/15 hover:border-primary/50
+         {% endif %}
+         hover:-translate-y-0.5 hover:shadow-xl focus:outline-none focus-visible:ring focus-visible:ring-primary/40 p-6 text-left"
+>
+  <span class="badge badge-ghost badge-xs uppercase tracking-wider">{{ type }}</span>
+  <h3 class="mt-2 font-heading text-lg text-base-content group-hover:text-primary transition-colors">{{ title }}</h3>
+  <p class="text-sm text-base-content/80">{{ description }}</p>
 </a>
-{% endmacro %}
+{%- endmacro %}
