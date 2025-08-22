@@ -23,6 +23,11 @@ test('homepage hero and work filters', async () => {
   const dom = new JSDOM(html);
   const doc = dom.window.document;
 
+  // No invisible text utilities
+  assert(!/text-transparent/.test(html));
+  assert(!/opacity-0/.test(html));
+  assert(!/text-base-content\/[0-8]\d/.test(html));
+
   // Hero
   const h1 = doc.querySelector('h1');
   assert.equal(h1.textContent.trim(), 'Experimental R&D you can actually use.');

@@ -2,7 +2,7 @@
 {% from "components/hero-tile.njk" import heroTile %}
 
 <header class="hero relative mx-auto w-full">
-  <div class="container mx-auto max-w-screen-2xl px-6 py-28 text-center text-base-content">
+  <div class="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8 py-28 text-center text-base-content">
     {# logo — brand sentinel #}
     <img
       class="hero-logo mx-auto mb-6 w-28 md:w-40"
@@ -15,7 +15,7 @@
 
     {# eyebrow #}
     {% if eyebrow %}
-      <p class="eyebrow font-mono text-xs uppercase tracking-[0.18em] text-base-content/70">
+      <p class="eyebrow font-mono text-xs uppercase tracking-[0.18em] text-base-content/90">
         {{ eyebrow }}
       </p>
     {% endif %}
@@ -33,14 +33,14 @@
       </p>
     {% endif %}
     {% if sublede %}
-      <p class="mx-auto mt-1 max-w-3xl font-body text-base md:text-lg text-base-content/80">
+      <p class="mx-auto mt-2 max-w-3xl font-body text-base md:text-lg text-base-content/90">
         {{ sublede }}
       </p>
     {% endif %}
 
     {# CTAs #}
     {% if ctas and ctas.length %}
-      <div class="cta-row mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row">
+      <div class="cta-row mt-6 flex flex-col items-center justify-center gap-4 sm:flex-row">
         {% for c in ctas %}
           {% set isPrimary = (c.kind or 'primary') == 'primary' %}
           <a
@@ -63,7 +63,7 @@
     {% endif %}
 
     {# build meta #}
-    <div class="mt-10 border-t border-base-content/20 pt-2 font-mono text-[11px] text-base-content/70">
+    <div class="mt-10 border-t border-base-content/20 pt-2 font-mono text-[11px] text-base-content/90">
       {{ build.branch }} · {{ build.hash }} · {{ build.builtAtIso }}
     </div>
   </div>

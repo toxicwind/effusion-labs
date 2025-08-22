@@ -8,9 +8,9 @@
            focus:outline-none focus-visible:ring focus-visible:ring-primary/40"
   >
     <div class="flex items-start justify-between">
-      <span class="badge badge-ghost badge-xs uppercase tracking-wider">{{ item.type | capitalize }}</span>
+      <span class="chip badge badge-ghost badge-xs uppercase tracking-wider">{{ item.type | capitalize }}</span>
       {% if item.date %}
-        <time datetime="{{ item.date.toISOString() }}" class="text-[0.7rem] opacity-70">
+        <time datetime="{{ item.date.toISOString() }}" class="text-[0.7rem] opacity-90">
           {{ item.date.toISOString().slice(0, 10) }}
         </time>
       {% endif %}
@@ -21,7 +21,7 @@
     </h3>
 
     {% if item.data.description %}
-      <p class="mt-1 text-sm text-base-content/80 line-clamp-2">
+      <p class="mt-2 text-sm text-base-content/90 line-clamp-2">
         {{ item.data.description | truncate(140, true, '…') }}
       </p>
     {% endif %}
