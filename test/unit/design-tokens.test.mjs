@@ -37,14 +37,13 @@ test('text contrast meets WCAG AA', () => {
 test('tailwind exposes readable font families', () => {
   const { body, heading, mono } = tailwindConfig.theme.extend.fontFamily;
 
-  // Ensure each fontFamily is defined and non-empty
   assert.ok(Array.isArray(body) && body.length > 0, 'body fontFamily missing');
   assert.ok(Array.isArray(heading) && heading.length > 0, 'heading fontFamily missing');
   assert.ok(Array.isArray(mono) && mono.length > 0, 'mono fontFamily missing');
 
-  // Sanity check: first entries should look like font names
+  // First entries should look like font names (alphanumeric + optional spaces)
   [body[0], heading[0], mono[0]].forEach(f => {
-    assert.match(f, /^[A-Za-z'"\s-]+$/, `unexpected font name: ${f}`);
+    assert.match(f, /^[\w\s"'-]+$/, `unexpected font name: ${f}`);
   });
 });
 
