@@ -3,9 +3,8 @@ import assert from 'node:assert';
 import { readdirSync, readFileSync } from 'node:fs';
 
 const workflowDir = new URL('../../.github/workflows/', import.meta.url);
-const workflows = readdirSync(workflowDir)
-  .filter((f) => f.endsWith('.yml'))
-  .map((f) => readFileSync(new URL(f, workflowDir), 'utf8'));
+const workflowFiles = readdirSync(workflowDir).filter((f) => /\.ya?ml$/i.test(f));
+const workflows = workflowFiles.map((f) => readFileSync(new URL(f, workflowDir), 'utf8'));
 
 function assertNoLegacyActions(workflow) {
   assert.doesNotMatch(workflow, /actions\/checkout@v[0-3]/);

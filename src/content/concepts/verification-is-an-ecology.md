@@ -126,6 +126,20 @@ A community can tolerate low global coverage if shortlist precision stays high a
 
 ### ENGINEERING A HABITAT WHERE VERIFICATION WORKS
 
+{% callout
+  title="FAILURE MODES WORTH RESPECTING"
+  kicker="Because habitats rot in predictable ways."
+  variant="danger"
+  position="right" %}
+
+- **Catastrophic tails** — Red-tier domains hide ruin in a single miss. No “average” cancels extinction.[^12][^13]
+- **Spec theatre** — Receipts are easy to forge. Audits matter more than applause lines.[^4][^5]
+- **Metrics drift** — Green dashboards lull you while the ground shifts. Rotate checks, plan for surprise.[^14]
+- **Bureaucratic creep** — A tidy spec metastasizes. Trim constantly or lose the forest to paperwork.[^6]
+
+*Bound the damage. Learn from the mess. Then keep moving.*
+{% endcallout %}
+
 Theories make for good panels. Habitats keep the lights on. If you want doubt to fertilize instead of scorch, you need rules that bend toward practice, not performance.
 
 1. **Ban absolutes.** No more “lowest price.” Scope it: “best found in these sources, this region, this time,” plus receipts. The fence is part of the sentence.[^6][^4]
@@ -140,25 +154,6 @@ Translate that into social practice and the culture war deflates into maintenanc
 
 -----
 
-{% failbox "FAILURE MODES WORTH RESPECTING", "Because habitats rot in predictable ways." %}
-  {% failitem "Catastrophic tails" %}
-  Red-tier domains hide ruin in a single miss. No “average” cancels extinction.[^12][^13]
-  {% endfailitem %}
-
-  {% failitem "Spec theatre" %}
-  Receipts are easy to forge. Audits matter more than applause lines.[^4][^5]
-  {% endfailitem %}
-
-  {% failitem "Metrics drift" %}
-  Green dashboards lull you while the ground shifts. Rotate checks, plan for surprise.[^14]
-  {% endfailitem %}
-
-  {% failitem "Bureaucratic creep" %}
-  A tidy spec metastasizes. Trim constantly or lose the forest to paperwork.[^6]
-  {% endfailitem %}
-
-  Bound the damage. Learn from the mess. Then keep moving.
-{% endfailbox %}
 ## CODA: LIVING WITH DOUBT
 
 Doubt isn’t a virtue so much as a survival tactic, and the modern internet is its habitat. In any given thread, “verification” rarely looks like truth-seeking; it looks like ritualized suspicion, petty demands for proof, the pile-on that turns skepticism into theater. But remove those frictions and the ecosystem collapses: unchecked claims congeal into lore, lore hardens into fact, and the cycle accelerates until even obvious nonsense acquires a pedigree. The constant drag of doubt is the only thing that slows the churn.
