@@ -5,8 +5,6 @@ import seeded from "./lib/seeded.js";
 import registerArchive from "./lib/eleventy/archives.mjs";
 import { getBuildInfo } from "./lib/build-info.js";
 import fs from "node:fs";
-import MarkdownIt from "markdown-it";
-import markdownItFootnote from "markdown-it-footnote";
 
 // tiny local slugger (keeps filters resilient)
 const slug = (s) =>
@@ -27,11 +25,81 @@ const escapeHtml = (str) =>
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#39;");
 
+export function createCalloutShortcode(eleventyConfig) {
+  return function (content, opts = {}) {
+    const md = eleventyConfig.markdownLibrary;
+    const isObj = opts && typeof opts === "object" && !Array.isArray(opts);
+    const {
+      title = "",
+      kicker = "",
+      variant = "neutral",
+      position = "center",
+      icon = "",
+      headingLevel = 3,
+    } = isObj ? opts : { title: opts };
+    const envEscape = this?.env?.filters?.escape ?? escapeHtml;
+    const safeTitle = envEscape(title);
+    const safeKicker = kicker ? envEscape(kicker) : "";
+    const safeVariant = String(variant).toLowerCase().replace(/[^\w-]/g, "");
+    const safePosition = String(position).toLowerCase().replace(/[^\w-]/g, "");
+    const clampedLevel = Math.min(6, Math.max(2, Number(headingLevel) || 3));
+    const tag = `h${clampedLevel}`;
+    const id = `callout-${title ? slug(title) : Date.now()}`;
+    const safeId = envEscape(id);
+    const classes = ["callout", `callout--${safeVariant}`, `callout--dock-${safePosition}`].join(" ");
+    const iconMarkup =
+      icon && /^<svg[\s>]/.test(String(icon))
+        ? String(icon)
+        : icon
+        ? `<span class="callout-icon" aria-hidden="true">${envEscape(icon)}</span>`
+        : "";
+
+    const refs = [...String(content).matchAll(/\[\^([^\]]+)\]/g)].map((m) => m[1]);
+    const unique = [...new Set(refs)];
+    const defs = [];
+    if (unique.length) {
+      try {
+        const txt = fs.readFileSync(this.page.inputPath, "utf8");
+        const defRe = /^\[\^([^\]]+)\]:[\s\S]*?(?=\n\[\^[^\]]+\]:|$)/gm;
+        let m;
+        while ((m = defRe.exec(txt)) !== null) {
+          if (unique.includes(m[1])) defs.push(m[0].trim());
+        }
+      } catch {
+        /* ignore */
+      }
+    }
+    const rendered = md.render(`${content}\n\n${defs.join("\n\n")}`.trim());
+    const body = rendered
+      .replace(/<section class="footnotes"[\s\S]*?<\/section>/, "")
+      .replace(/<div class="footnotes-hybrid"[\s\S]*?<\/div>/, "")
+      .trim();
+
+    return `
+<aside class="${classes}" role="note" aria-labelledby="${safeId}">
+  <div class="callout-head">
+    <${tag} id="${safeId}" class="callout-title">${iconMarkup}${safeTitle}</${tag}>
+    ${safeKicker ? `<p class="callout-kicker">${safeKicker}</p>` : ''}
+  </div>
+  <div class="callout-body">
+    ${body}
+  </div>
+</aside><!-- -->
+`.trim();
+  };
+}
+
 export default function (eleventyConfig) {
   const buildTime = new Date().toISOString();
 
   // Core project wiring (markdown, assets, images, etc.)
   register(eleventyConfig);
+
+  // capture markdown library for shortcodes
+  eleventyConfig.amendLibrary('md', (md) => {
+    eleventyConfig.markdownLibrary = md;
+    return md;
+  });
 
   // 🔐 Load JSON archives → stable collections + helpers
   // Exposes: collections.archiveProducts / archiveCharacters / archiveSeries
@@ -85,60 +153,8 @@ export default function (eleventyConfig) {
   eleventyConfig.addFilter("seededShuffle", (arr, seed) => seeded.seededShuffle(arr, seed));
 
   // ---------- unified callout shortcode ----------
-  const calloutShortcode = function (content, opts = {}) {
-    const md = eleventyConfig.markdownLibrary || MarkdownIt().use(markdownItFootnote);
-    const isObj = opts && typeof opts === 'object' && !Array.isArray(opts);
-    const {
-      title = '',
-      kicker = '',
-      variant = 'neutral',
-      position = 'center',
-      icon = '',
-      headingLevel = 3,
-    } = isObj ? opts : { title: opts };
-    const envEscape = this?.env?.filters?.escape ?? escapeHtml;
-    const safeTitle = envEscape(title);
-    const safeKicker = kicker ? envEscape(kicker) : '';
-    const safeVariant = String(variant).toLowerCase().replace(/[^\w-]/g, '');
-    const safePosition = String(position).toLowerCase().replace(/[^\w-]/g, '');
-    const clampedLevel = Math.min(6, Math.max(2, Number(headingLevel) || 3));
-    const tag = `h${clampedLevel}`;
-    const id = `callout-${title ? slug(title) : Date.now()}`;
-    const safeId = envEscape(id);
-    const classes = ['callout', `callout--${safeVariant}`, `callout--dock-${safePosition}`].join(' ');
-    const iconMarkup =
-      icon && /^<svg[\s>]/.test(String(icon))
-        ? String(icon)
-        : icon
-          ? `<span class="callout-icon" aria-hidden="true">${envEscape(icon)}</span>`
-          : '';
-    const footnotes = (() => {
-      try {
-        const txt = fs.readFileSync(this.page.inputPath, 'utf8');
-        return (
-          txt.match(/\n\[\^[^\n]*?\]:.*?(?=\n\n|$)/gs) || []
-        ).join('\n');
-      } catch {
-        return '';
-      }
-    })();
-    const rendered = md.render(`${content}\n${footnotes}`);
-    const body = rendered.replace(/<section class="footnotes"[\s\S]*<\/section>/, '');
-
-    return `
-<aside class="${classes}" role="note" aria-labelledby="${safeId}">
-  <div class="callout-head">
-    <${tag} id="${safeId}" class="callout-title">${iconMarkup}${safeTitle}</${tag}>
-    ${safeKicker ? `<p class="callout-kicker">${safeKicker}</p>` : ''}
-  </div>
-  <div class="callout-body">
-    ${body.trim()}
-  </div>
-</aside><!-- -->
-`.trim();
-  };
-
-  eleventyConfig.addPairedShortcode('callout', calloutShortcode);
+  const callout = createCalloutShortcode(eleventyConfig);
+  eleventyConfig.addPairedShortcode('callout', callout);
 
   // ---- Legacy aliases ----
   eleventyConfig.addPairedShortcode('failbox', function (content, titleOrOpts, kicker) {
@@ -146,9 +162,13 @@ export default function (eleventyConfig) {
       titleOrOpts && typeof titleOrOpts === 'object' && !Array.isArray(titleOrOpts)
         ? { ...titleOrOpts }
         : { title: titleOrOpts, kicker };
-    return calloutShortcode.call(this, content, opts);
+    return callout.call(this, content, opts);
   });
-  eleventyConfig.addPairedShortcode('failitem', (content) => content);
+  eleventyConfig.addPairedShortcode('failitem', function (content, label = '') {
+    const envEscape = this?.env?.filters?.escape ?? escapeHtml;
+    const safeLabel = label ? `**${envEscape(label)}** ` : '';
+    return `- ${safeLabel}${content}`.trim();
+  });
 
 
 // ---- Global data ----
