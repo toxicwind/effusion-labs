@@ -903,8 +903,7 @@ index 1db82dd..0000000
 -+  index.js                   |   97.01 |       80 |     100 |   97.01 | 38-39                       
 -+  inlineMacros.js            |   81.48 |       80 |     100 |   81.48 | 12-14,23-24                 
 -+  links.js                   |     100 |    85.71 |     100 |     100 | 8                           
--+ effusion-labs/lib/wikilinks |     100 |      100 |     100 |     100 |                             
--+  filter-dead-links.js       |     100 |      100 |     100 |     100 |                             
+-+ effusion-labs/lib/wikilinks |     100 |      100 |     100 |     100 |                                            
 -+ effusion-labs/src           |     100 |    86.66 |     100 |     100 |                             
 -+  index.11tydata.js          |     100 |    84.61 |     100 |     100 | 15,38                       
 -+  work.11tydata.js           |     100 |      100 |     100 |     100 |                             
