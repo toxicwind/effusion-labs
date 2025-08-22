@@ -1,0 +1,57 @@
+diff --git a/eleventy.config.mjs b/eleventy.config.mjs
+index 42ec354..13e3f02 100644
+--- a/eleventy.config.mjs
++++ b/eleventy.config.mjs
+@@ -7 +6,0 @@ import { getBuildInfo } from "./lib/build-info.js";
+-import fs from "node:fs";
+@@ -57,16 +56 @@ export function createCalloutShortcode(eleventyConfig) {
+-    const refs = [...String(content).matchAll(/\[\^([^\]]+)\]/g)].map((m) => m[1]);
+-    const unique = [...new Set(refs)];
+-    const defs = [];
+-    if (unique.length) {
+-      try {
+-        const txt = fs.readFileSync(this.page.inputPath, "utf8");
+-        const defRe = /^\[\^([^\]]+)\]:[\s\S]*?(?=\n\[\^[^\]]+\]:|$)/gm;
+-        let m;
+-        while ((m = defRe.exec(txt)) !== null) {
+-          if (unique.includes(m[1])) defs.push(m[0].trim());
+-        }
+-      } catch {
+-        /* ignore */
+-      }
+-    }
+-    const rendered = md.render(`${content}\n\n${defs.join("\n\n")}`.trim());
++    const rendered = md.render(String(content), this.ctx ?? {});
+diff --git a/test/unit/callout-shortcode.test.mjs b/test/unit/callout-shortcode.test.mjs
+index 2400307..0384d4f 100644
+--- a/test/unit/callout-shortcode.test.mjs
++++ b/test/unit/callout-shortcode.test.mjs
+@@ -7 +6,0 @@ import { createCalloutShortcode } from '../../eleventy.config.mjs';
+-import path from 'node:path';
+@@ -9 +8 @@ import path from 'node:path';
+-test('callout splices only referenced footnotes', () => {
++test('callout renders content without inner footnotes block', () => {
+@@ -13,3 +12,2 @@ test('callout splices only referenced footnotes', () => {
+-  const fixture = path.join('test', 'unit', 'fixtures', 'callout-page.md');
+-  const ctx = { page: { inputPath: fixture }, env: { filters: { escape: (s) => s } } };
+-  const html = callout.call(ctx, 'Check[^4]');
++  const ctx = { env: { filters: { escape: (s) => s } } };
++  const html = callout.call(ctx, 'Check[^1]\n\n[^1]: note');
+@@ -17,3 +15,2 @@ test('callout splices only referenced footnotes', () => {
+-  assert.ok(!html.includes('[^4]'), 'raw footnote ref removed');
+-  assert.ok(!html.includes('fn9'), 'unused footnote definition not included');
+-  assert.ok(!/footnotes-hybrid/.test(html), 'no inner footnotes block');
++  assert.ok(!html.includes('footnotes-hybrid'), 'no inner footnotes block');
++  assert.ok(!html.includes('<section class="footnotes">'), 'no footnotes section rendered');
+diff --git a/test/unit/fixtures/callout-page.md b/test/unit/fixtures/callout-page.md
+deleted file mode 100644
+index bfeefca..0000000
+--- a/test/unit/fixtures/callout-page.md
++++ /dev/null
+@@ -1,6 +0,0 @@
+-Intro
+-
+-[^4]: Footnote four line one
+-    second paragraph line
+-
+-[^9]: Footnote nine
