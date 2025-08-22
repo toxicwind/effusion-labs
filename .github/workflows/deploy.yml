@@ -1,38 +1,28 @@
 name: CI & Production Deployment
-# A comprehensive pipeline that tests, validates, builds, publishes, and deploys the services.
 
 on:
-  # Run deployment on pushes to the main branch
   push:
     branches: [main]
-  # Run validation checks on pull requests
   pull_request:
-  # Allow manual runs from the Actions tab
   workflow_dispatch:
 
-# Central place for image configuration
 env:
   REGISTRY: ghcr.io
 
-# Ensures only one workflow runs at a time for a given branch
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  #############################################################
-  # JOB 1: Run on all pushes and PRs for quality assurance
-  #############################################################
   pre_deployment_checks:
     name: Run Code Validation & Pre-Deployment Checks
     runs-on: ubuntu-latest
     timeout-minutes: 20
-
     steps:
       - name: ⬇️ Checkout repository code
         uses: actions/checkout@v4
 
-      - name: ⚙️ Set up Node.js v20 environment
+      - name: ⚙️ Set up Node.js (from .nvmrc)
         uses: actions/setup-node@v4
         with:
           node-version-file: '.nvmrc'
@@ -43,72 +33,75 @@ jobs:
 
       - name: 🧪 Run unit tests with code coverage
         run: npm test
-      
-      - name: 🔨 Run Eleventy build for validation purposes
+
+      - name: 🔨 Run Eleventy build for validation
         run: npm run build
 
-      - name: ⬆️ Upload test coverage report artifact
+      - name: ⬆️ Upload coverage
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: coverage-report
           path: coverage/
 
-  ####################################################################
-  # JOB 2: Run only on 'main' branch to publish and deploy
-  ####################################################################
   publish_and_deploy:
     name: Publish Images & Trigger Production Deployment
-    # This job only runs after checks succeed AND it's a push to the main branch.
     needs: pre_deployment_checks
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      packages: write # Required to push to GitHub Container Registry
+      packages: write
 
     steps:
       - name: ⬇️ Checkout repository code
         uses: actions/checkout@v4
 
-      - name: 🐳 Set up Docker Buildx for multi-platform builds
+      - name: 🐳 Setup Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: 🔑 Log in to GitHub Container Registry (GHCR)
+      - name: 🔑 Login to GHCR
         uses: docker/login-action@v3
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      # --- Metadata and build for effusion-labs ---
-      - name: 🏷️ Generate Docker tags for effusion-labs
-        id: meta_effusion
+      # ── Web image (effusion-labs)
+      - name: 🏷️ Metadata (web)
+        id: meta_web
         uses: docker/metadata-action@v5
         with:
-          images: ${{ env.REGISTRY }}/${{ github.repository }}
-
-      - name: 🏗️ Build & Push 'effusion-labs' image to GHCR
+          images: ${{ env.REGISTRY }}/toxicwind/effusion-labs
+          tags: |
+            # keep Portainer happy
+            type=raw,value=latest,enable={{is_default_branch}}
+            type=raw,value=main,enable={{is_default_branch}}
+            # useful extras
+            type=sha
+      - name: 🏗️ Build & Push (web)
         uses: docker/build-push-action@v6
         with:
           context: .
           file: ./.portainer/Dockerfile
           push: true
-          tags: ${{ steps.meta_effusion.outputs.tags }}
-          labels: ${{ steps.meta_effusion.outputs.labels }}
+          tags: ${{ steps.meta_web.outputs.tags }}
+          labels: ${{ steps.meta_web.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
-          build-args: |
-            COMMIT_SHA=${{ github.sha }}
+          build-args: COMMIT_SHA=${{ github.sha }}
 
-      # --- Metadata and build for markdown_gateway ---
-      - name: 🏷️ Generate Docker tags for markdown_gateway
+      # ── Gateway image (distinct name)
+      - name: 🏷️ Metadata (gateway)
         id: meta_gateway
         uses: docker/metadata-action@v5
         with:
-          images: ${{ env.REGISTRY }}/${{ github.repository }}
-
-      - name: 🏗️ Build & Push 'markdown_gateway' image to GHCR
+          images: ${{ env.REGISTRY }}/toxicwind/markdown-gateway
+          tags: |
+            type=raw,value=latest,enable={{is_default_branch}}
+            type=raw,value=main,enable={{is_default_branch}}
+            type=sha
+      - name: 🏗️ Build & Push (gateway)
         uses: docker/build-push-action@v6
         with:
           context: ./markdown_gateway
@@ -118,10 +111,10 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      - name: 🚀 Trigger Portainer webhook for service redeployment
+      - name: 🚀 Trigger Portainer redeploy
         env:
           HOOK: ${{ secrets.PORTAINER_WEBHOOK_EFFUSION }}
         run: |
-          echo "Triggering redeployment on Portainer..."
+          echo "Triggering redeployment on Portainer…"
           curl --fail --retry-all-errors --retry 5 --retry-delay 3 -X POST "$HOOK"
           echo "Redeployment signal sent."
