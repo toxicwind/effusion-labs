@@ -126,16 +126,19 @@ A community can tolerate low global coverage if shortlist precision stays high a
 
 ### ENGINEERING A HABITAT WHERE VERIFICATION WORKS
 
-> [!callout title="Failure modes worth respecting" kicker="Because habitats rot in predictable ways." variant="danger" position="right"]
-> **Catastrophic tails** — Red-tier domains hide ruin in a single miss. No “average” cancels extinction.[^12][^13]
->
-> **Spec theatre** — Receipts are easy to forge. Audits matter more than applause lines.[^4][^5]
->
-> **Metrics drift** — Green dashboards lull you while the ground shifts. Rotate checks, plan for surprise.[^14]
->
-> **Bureaucratic creep** — A tidy spec metastasizes. Trim constantly or lose the forest to paperwork.[^6]
->
-> Bound the damage. Learn from the mess. Then keep moving.
+{% callout
+  title="FAILURE MODES WORTH RESPECTING"
+  kicker="Because habitats rot in predictable ways."
+  variant="danger"
+  position="right" %}
+
+- **Catastrophic tails** — Red-tier domains hide ruin in a single miss. No “average” cancels extinction.[^12][^13]
+- **Spec theatre** — Receipts are easy to forge. Audits matter more than applause lines.[^4][^5]
+- **Metrics drift** — Green dashboards lull you while the ground shifts. Rotate checks, plan for surprise.[^14]
+- **Bureaucratic creep** — A tidy spec metastasizes. Trim constantly or lose the forest to paperwork.[^6]
+
+*Bound the damage. Learn from the mess. Then keep moving.*
+{% endcallout %}
 
 Theories make for good panels. Habitats keep the lights on. If you want doubt to fertilize instead of scorch, you need rules that bend toward practice, not performance.
 
