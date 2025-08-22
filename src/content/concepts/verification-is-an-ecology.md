@@ -81,7 +81,7 @@ In open forums, “check the source” is both a filter and a costume. Some wear
 
 The play can be constructive. Constantly asking for receipts shifts norms from vibes to screenshots, from gestures to logs. It can also curdle into farce: a permanent sneer that escalates until the only rational move is silence. Once you see the stagecraft, though, you can redirect it. The highest-status move stops being “demand endless proof” and becomes “ship the verification kit others actually adopt.”
 
-Sociologists pointed out decades ago that trust is a staged arrangement\[^8]\[^9]. Behavioral scientists translate the same idea: social proof is contagious, so aim it at practices that add signal, not applause lines. The theatre is inevitable; the trick is rewriting the script so the audience leaves smarter instead of quieter.
+Sociologists pointed out decades ago that trust is a staged arrangement[^8][^9]. Behavioral scientists translate the same idea: social proof is contagious, so aim it at practices that add signal, not applause lines. The theatre is inevitable; the trick is rewriting the script so the audience leaves smarter instead of quieter.
 
 -----
 
@@ -93,7 +93,7 @@ The **finite game** is about safety now. It measures success by the fires that n
 
 The **infinite game** is about growth. It measures success by whether tomorrow is sharper than today: new tools tested, small errors tolerated, fresh angles discovered. It wants adaptation, hates stagnation, and shrugs at failures so long as they can be metabolized into learning.
 
-Both games matter. The trouble starts when one tries to annex the other’s turf. The finite player treats every checkout like heart surgery, banning even low-stakes experimentation. The infinite player treats someone else’s losses as “cheap tuition,” excusing collateral damage because the system “learned something.” Studies of human–machine workflows land on the same split: where stakes are high and feedback is sparse, human judgment dominates; where exploration pays and errors are survivable, human+model teams outperform both alone.\[^10]\[^11] Decision theory adds a blunt caveat: when losses are catastrophic, you don’t argue optimism—you quarantine the domain.\[^12]\[^13]
+Both games matter. The trouble starts when one tries to annex the other’s turf. The finite player treats every checkout like heart surgery, banning even low-stakes experimentation. The infinite player treats someone else’s losses as “cheap tuition,” excusing collateral damage because the system “learned something.” Studies of human–machine workflows land on the same split: where stakes are high and feedback is sparse, human judgment dominates; where exploration pays and errors are survivable, human+model teams outperform both alone.[^10][^11] Decision theory adds a blunt caveat: when losses are catastrophic, you don’t argue optimism—you quarantine the domain.[^12][^13]
 
 The fix isn’t another manifesto; it’s scheduling. Make risk tiers explicit:
 
@@ -114,11 +114,11 @@ This is why the top of the list matters more than the long tail. If the first fe
 * **Shortlist precision:** How often are the top picks legit, in-stock, and fairly represented?
 * **Regret:** How big is the gap between what you chose and the best deal a second pass might have found?
 
-Information retrieval has obsessed over precision/recall for decades; the trick here is to pivot to where human attention actually lands—the shortlist.\[^14] And on the model side, the big gains come not from bolting on more detectors, but from refusing to bluff:
+Information retrieval has obsessed over precision/recall for decades; the trick here is to pivot to where human attention actually lands—the shortlist.[^14] And on the model side, the big gains come not from bolting on more detectors, but from refusing to bluff:
 
 * Abstain when the source can’t be read.
 * Pin claims to documents that exist.
-* Escalate when the context is ambiguous.\[^15]\[^16]\[^17]
+* Escalate when the context is ambiguous.[^15][^16][^17]
 
 A community can tolerate low global coverage if shortlist precision stays high and regret stays low. What it cannot tolerate is fabrications at the top of the stack. That’s where the skeptic and the explorer actually agree, even if they’d never admit it: the shortlist must be tight, the map should be wide. The right metrics let each side check what they care about without forcing every argument into an endless trench war.
 
@@ -128,13 +128,13 @@ A community can tolerate low global coverage if shortlist precision stays high a
 
 Theories make for good panels. Habitats keep the lights on. If you want doubt to fertilize instead of scorch, you need rules that bend toward practice, not performance.
 
-1. **Ban absolutes.** No more “lowest price.” Scope it: “best found in these sources, this region, this time,” plus receipts. The fence is part of the sentence.\[^6]\[^4]
-2. **No source, no claim.** If the page won’t load, say so. If the data can’t be read, abstain. Refusal beats bluff every time.\[^15]\[^16]\[^17]
+1. **Ban absolutes.** No more “lowest price.” Scope it: “best found in these sources, this region, this time,” plus receipts. The fence is part of the sentence.[^6][^4]
+2. **No source, no claim.** If the page won’t load, say so. If the data can’t be read, abstain. Refusal beats bluff every time.[^15][^16][^17]
 3. **Proxy parity.** If geography or login changes the numbers, match the user’s conditions or admit you can’t. A half-truth labeled as half-truth is honesty.
-4. **Shortlist precision first.** Better three solid options than fifty shaky ones. Top results set the tone; tune them hard.\[^14]
-5. **Risk router.** Red/amber/green isn’t metaphor—it’s governance. Publish the tiers, move categories only after evidence.\[^12]\[^13]\[^10]
-6. **Public numbers.** Once a month, show your work: shortlist precision and regret by category. Two stats, zero PhDs required.\[^6]\[^4]\[^14]
-7. **Budgeted vetoes.** Give skeptics teeth, but count the bites. After a set number, they must propose fixes—proxy parity, timestamp checks—or yield. Predators keep balance; apex predators don’t get free reign.\[^1]\[^2]\[^5]
+4. **Shortlist precision first.** Better three solid options than fifty shaky ones. Top results set the tone; tune them hard.[^14]
+5. **Risk router.** Red/amber/green isn’t metaphor—it’s governance. Publish the tiers, move categories only after evidence.[^12][^13][^10]
+6. **Public numbers.** Once a month, show your work: shortlist precision and regret by category. Two stats, zero PhDs required.[^6][^4][^14]
+7. **Budgeted vetoes.** Give skeptics teeth, but count the bites. After a set number, they must propose fixes—proxy parity, timestamp checks—or yield. Predators keep balance; apex predators don’t get free reign.[^1][^2][^5]
 
 Translate that into social practice and the culture war deflates into maintenance. Predators hunt by rule. Gardeners plant by spec. Scavengers recycle into shared kits. The fights don’t vanish; they just shrink to scale—less about metaphysics, more about plumbing.
 
