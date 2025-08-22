@@ -113,7 +113,9 @@ export default function (eleventyConfig) {
     const tag = `h${clampedLevel}`;
     const generatedId = id || (title ? `failbox-${slug(title)}` : `failbox-${Date.now()}`);
     const safeId = envEscape(generatedId);
-    const boxClasses = ["failbox", `failbox--${String(variant).toLowerCase()}`, extraClass]
+    const safeVariant = String(variant).toLowerCase().replace(/[^\w-]/g, "");
+    const safeExtraClass = envEscape(extraClass);
+    const boxClasses = ["failbox", `failbox--${safeVariant}`, safeExtraClass]
       .filter(Boolean)
       .join(" ");
 
@@ -156,7 +158,9 @@ export default function (eleventyConfig) {
     } = opts;
 
     const safeLabel = label ? envEscape(label) : "";
-    const classes = ["failitem", `failitem--${String(tone).toLowerCase()}`, extraClass]
+    const safeTone = String(tone).toLowerCase().replace(/[^\w-]/g, "");
+    const safeExtraClass = envEscape(extraClass);
+    const classes = ["failitem", `failitem--${safeTone}`, safeExtraClass]
       .filter(Boolean)
       .join(" ");
     const iconMarkup =
