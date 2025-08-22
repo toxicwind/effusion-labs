@@ -159,7 +159,6 @@ Translate that into social practice and the culture war deflates into maintenanc
 
   Bound the damage. Learn from the mess. Then keep moving.
 {% endfailbox %}
-
 ## CODA: LIVING WITH DOUBT
 
 Doubt isn’t a virtue so much as a survival tactic, and the modern internet is its habitat. In any given thread, “verification” rarely looks like truth-seeking; it looks like ritualized suspicion, petty demands for proof, the pile-on that turns skepticism into theater. But remove those frictions and the ecosystem collapses: unchecked claims congeal into lore, lore hardens into fact, and the cycle accelerates until even obvious nonsense acquires a pedigree. The constant drag of doubt is the only thing that slows the churn.

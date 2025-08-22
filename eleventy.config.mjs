@@ -184,6 +184,7 @@ export default function (eleventyConfig) {
       open,
       iconMarkup,
     } = normalizeBoxOpts(this, titleOrOpts, kicker);
+  const contentInner = content.trim();
 
     const headerInner = `
       <div class="failbox-head">
@@ -193,7 +194,7 @@ export default function (eleventyConfig) {
 
     const bodyInner = `
       <div class="failbox-body">
-        ${content}
+        ${contentInner}
       </div>`.trim();
 
     if (collapsible) {
@@ -202,15 +203,15 @@ export default function (eleventyConfig) {
   <details class="failbox-collapse"${open ? " open" : ""}>
     <summary class="failbox-summary">${headerInner}</summary>
     ${bodyInner}
-  </details>
-</aside>`;
+  </details></aside><!-- -->
+`.trimStart();
     }
 
     return `
 <aside class="${boxClasses}" role="note" aria-labelledby="${safeId}">
   ${headerInner}
-  ${bodyInner}
-</aside>`;
+  ${bodyInner}</aside><!-- -->
+`.trimStart();
   });
 
   eleventyConfig.addPairedShortcode("failitem", function (content, labelOrOpts = "") {
@@ -218,14 +219,15 @@ export default function (eleventyConfig) {
     const heading = hasLabel
       ? `<div class="failitem-label"><strong>${iconMarkup}${safeLabel}</strong></div>`
       : "";
+    const inner = content.trim();
 
     return `
 <section class="${classes}">
   ${heading}
   <div class="failitem-content">
-    ${content}
+    ${inner}
   </div>
-</section>`;
+</section>`.trim();
   });
 
   // ---- Global data ----
