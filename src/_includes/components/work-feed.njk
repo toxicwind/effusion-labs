@@ -11,7 +11,7 @@
     <button class="btn btn-ghost btn-sm" data-filter="meta" aria-pressed="false">Meta</button>
   </div>
 
-  <ul id="work-list" class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+  <ul id="work-list" class="grid gap-4 md:grid-cols-2 md:gap-6 lg:grid-cols-3 lg:gap-8">
     {% for item in work %}
       {{ feedEntry(item) }}
     {% endfor %}
