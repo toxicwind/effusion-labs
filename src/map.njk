@@ -22,270 +22,242 @@ memory_ref:
   - [[core-concept]]
 ---
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
-<style>
-  body {
-    font-family: 'Inter', sans-serif;
-  }
-  .map-container-wrapper {
-    background: #111;
-    border-radius: 8px;
-    padding: 1rem;
-    border: 1px solid #2a2a2a;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-  }
-  #concept-map-container {
-    height: 80vh;
-    width: 100%;
-    background-color: transparent;
-  }
-</style>
-
-<div class="map-intro">
-  <p>This interactive map visualizes how <strong>Sparks</strong>, <strong>Concepts</strong>, <strong>Projects</strong>, and <strong>Meta</strong> documents relate to one another across the Effusion Labs knowledge base. Use it to explore how fragments evolve into ideas and converge into projects.</p>
+{# Intro copy #}
+<div class="map-intro prose dark:prose-invert max-w-none">
+  <p>
+    This interactive map visualizes how <strong>Sparks</strong>, <strong>Concepts</strong>,
+    <strong>Projects</strong>, and <strong>Meta</strong> documents relate across the Effusion Labs
+    knowledge base. Use it to explore how fragments evolve into ideas and converge into projects.
+  </p>
 </div>
 
-<div class="map-container-wrapper">
-  <div id="concept-map-container"></div>
-</div>
-  <script type="application/ld+json">
-  {{ collections.nodes | conceptMapJSONLD | safe }}
-  </script>
+{# Wrapper + canvas #}
+<section class="mt-4 card bg-base-100 border border-base-300/60 shadow-sm">
+  <div class="card-body p-4 sm:p-6">
+    <div id="concept-map-container" class="h-[80vh] w-full rounded-md"></div>
+  </div>
+</section>
 
+{# JSON-LD for the graph #}
+<script type="application/ld+json">
+{{ collections.nodes | conceptMapJSONLD | safe }}
+</script>
 
-<script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
-<script type="text/javascript">
-const allNodesData = {{ collections.nodes | jsonify | safe }};
-const nodes = [];
-const edges = [];
-const linkRegex = /\[\[([^|\]#]+)/g;
-const connectionCount = {};
+{# vis-network (UMD) #}
+<script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
 
-const categoryGlyphs = {
-  Projects: '📁',
-  Concepts: '📘',
-  Sparks: '💡',
-  Meta: '⚙️'
-};
-
-// Color mapping for document nodes
-function getNodeVisualProps(url, tags = []) {
-  const lowerUrl = url.toLowerCase();
-  const categoryMatch =
-    (lowerUrl.includes('/projects') || tags.includes('projects')) ? 'Projects' :
-    (lowerUrl.includes('/concepts') || tags.includes('concepts')) ? 'Concepts' :
-    (lowerUrl.includes('/sparks') || tags.includes('sparks')) ? 'Sparks' :
-    (lowerUrl.includes('/meta') || tags.includes('meta')) ? 'Meta' : null;
-
-  const glyph = categoryGlyphs[categoryMatch] || '';
-  const baseColor = {
-    Projects: '#89f0cb',
-    Concepts: '#89bcf0',
-    Sparks: '#f0d889',
-    Meta: '#aaaaaa'
-  }[categoryMatch] || '#666666';
-
-  const shape = {
-    Projects: 'diamond',
-    Concepts: 'hexagon',
-    Sparks: 'star',
-    Meta: 'triangleDown'
-  }[categoryMatch] || 'dot';
-
-  return {
-    labelPrefix: glyph,
-    borderColor: baseColor,
-    shape
-  };
-}
-
-// Create document nodes with glyph and styling
-allNodesData.forEach(page => {
-  const { labelPrefix, borderColor, shape } = getNodeVisualProps(page.url, page.data.tags);
-  nodes.push({
-    id: page.url,
-    label: `${labelPrefix} ${page.data.title || page.fileSlug}`,
-    title: `Connections: 0`,
-    shape,
-font: {
-  face: 'Inter',
-  size: 14,
-  color: '#DDD',
-  background: 'rgba(40,40,40,0.7)',  // dark semi-transparent fill
-
-  align: 'center'
-},
-    color: {
-      background: '#1a1a1a',
-      border: borderColor,
-      highlight: { background: '#252525', border: borderColor },
-      hover: { background: '#1a1a1a', border: borderColor }
+{# Theme-aware graph renderer (daisyUI v5/v4 var-safe) #}
+<script>
+(function () {
+  // Read an HSL var from root, supporting both daisyUI v5 and v4 names
+  function readVar(names, alpha) {
+    var rs = getComputedStyle(document.documentElement);
+    for (var i = 0; i < names.length; i++) {
+      var v = rs.getPropertyValue(names[i]).trim(); // e.g. "210 10% 20%"
+      if (v) return alpha ? ("hsl(" + v + " / " + alpha + ")") : ("hsl(" + v + ")");
     }
+    return alpha ? "hsl(0 0% 50% / " + alpha + ")" : "hsl(0 0% 50%)";
+  }
+  function palette() {
+    return {
+      base:          readVar(["--b1","--color-base-100"]),
+      base2:         readVar(["--b2","--color-base-200"]),
+      content:       readVar(["--bc","--color-base-content"]),
+      contentSubtle: readVar(["--bc","--color-base-content"], "0.70"),
+      border:        readVar(["--bc","--color-base-content"], "0.25"),
+      primary:       readVar(["--p","--color-primary"]),
+      info:          readVar(["--in","--color-info"]),
+      success:       readVar(["--su","--color-success"]),
+      warning:       readVar(["--wa","--color-warning"]),
+      error:         readVar(["--er","--color-error"])
+    };
+  }
+  var C = palette();
+
+  var allNodesData = {{ collections.nodes | jsonify | safe }};
+  var nodes = [];
+  var edges = [];
+  var linkRegex = /\[\[([^|\]#]+)/g;
+  var connectionCount = Object.create(null);
+
+  var categoryGlyphs = { Projects:"📁", Concepts:"📘", Sparks:"💡", Meta:"⚙️" };
+
+  function getNodeVisualProps(url, tags) {
+    tags = Array.isArray(tags) ? tags : [];
+    var lower = String(url || "").toLowerCase();
+    var cat =
+      (lower.indexOf("/projects") > -1 || tags.indexOf("projects") > -1) ? "Projects" :
+      (lower.indexOf("/concepts") > -1 || tags.indexOf("concepts") > -1) ? "Concepts" :
+      (lower.indexOf("/sparks")   > -1 || tags.indexOf("sparks")   > -1) ? "Sparks"   :
+      (lower.indexOf("/meta")     > -1 || tags.indexOf("meta")     > -1) ? "Meta"     : null;
+
+    var borderColor =
+      cat === "Projects" ? C.primary :
+      cat === "Concepts" ? C.info :
+      cat === "Sparks"   ? C.warning :
+      cat === "Meta"     ? C.border : C.border;
+
+    var shape =
+      cat === "Projects" ? "diamond" :
+      cat === "Concepts" ? "hexagon" :
+      cat === "Sparks"   ? "star" :
+      cat === "Meta"     ? "triangleDown" : "dot";
+
+    return { glyph: categoryGlyphs[cat] || "", borderColor: borderColor, shape: shape };
+  }
+
+  // Build document nodes
+  for (var i = 0; i < allNodesData.length; i++) {
+    var page = allNodesData[i];
+    var props = getNodeVisualProps(page.url, (page.data && page.data.tags) || []);
+    nodes.push({
+      id: page.url,
+      label: (props.glyph ? (props.glyph + " ") : "") + (page.data.title || page.fileSlug),
+      title: "Connections: 0",
+      shape: props.shape,
+      font: { face: "Space Grotesk", size: 14, color: C.content, strokeWidth: 0 },
+      color: {
+        background: C.base,
+        border: props.borderColor,
+        highlight: { background: C.base2, border: props.borderColor },
+        hover: { background: C.base, border: props.borderColor }
+      }
+    });
+    connectionCount[page.url] = 0;
+  }
+
+  // Category hubs
+  ["Projects","Concepts","Sparks","Meta"].forEach(function (cat) {
+    nodes.push({
+      id: "category:" + cat.toLowerCase(),
+      label: (categoryGlyphs[cat] || "") + " " + cat,
+      shape: "box",
+      value: 42,
+      scaling: { min: 10, max: 50, label: { enabled: true, min: 14, max: 30 } },
+      title: "Category: " + cat,
+      font: { face: "Space Grotesk", size: 16, color: C.content, strokeWidth: 0 },
+      color: {
+        background: C.base,
+        border: C.primary,
+        highlight: { background: C.base2, border: C.primary },
+        hover: { background: C.base, border: C.primary }
+      },
+      mass: 1,
+      physics: true
+    });
+    connectionCount["category:" + cat.toLowerCase()] = 0;
   });
-  connectionCount[page.url] = 0;
-});
 
-// Add category nodes
-['Projects', 'Concepts', 'Sparks', 'Meta'].forEach(cat => {
-  nodes.push({
-    id: `category:${cat.toLowerCase()}`,
-    label: `${categoryGlyphs[cat]} ${cat}`,
-    shape: 'box',
-    value: 42,
-    scaling: {
-      min: 10,
-      max: 50,
-      label: { enabled: true, min: 14, max: 30 }
-    },
-    title: `Category: ${cat}`,
-    font: {
-      face: 'Inter',
-      size: 18,
-      color: '#CCCCCC',
-      strokeWidth: 0
-    },
-    color: {
-      background: '#1a1a1a',
-      border: '#89f0cb',
-      highlight: { background: '#1a1a1a', border: '#89f0cb' },
-      hover: { background: '#1a1a1a', border: '#89f0cb' }
-    },
-    mass: 1,
-    physics: true
-  });
-  connectionCount[`category:${cat.toLowerCase()}`] = 0;
-});
+  // Edges for internal links + category clustering
+  allNodesData.forEach(function (page) {
+    var content = page.inputContent || "";
+    var url = String(page.url || "").toLowerCase();
+    var tags = (page.data && page.data.tags) || [];
 
-// Edges for internal links and category clustering
-allNodesData.forEach(page => {
-  const content = page.inputContent;
-  const url = page.url.toLowerCase();
-  const tags = page.data.tags || [];
-
-  if (content) {
-    let match;
-    while ((match = linkRegex.exec(content)) !== null) {
-      const linkIdentifier = match[1].trim();
-      const targetPage = allNodesData.find(p =>
-        (p.fileSlug && p.fileSlug.toLowerCase() === linkIdentifier.toLowerCase()) ||
-        (p.data.title && p.data.title.toLowerCase() === linkIdentifier.toLowerCase()) ||
-        (p.data.aliases && p.data.aliases.map(a => a.toLowerCase()).includes(linkIdentifier.toLowerCase()))
-      );
-      if (targetPage) {
-        edges.push({ from: page.url, to: targetPage.url });
-        connectionCount[page.url]++;
-        connectionCount[targetPage.url]++;
+    var m;
+    while ((m = linkRegex.exec(content)) !== null) {
+      var needle = m[1].trim().toLowerCase();
+      var target = allNodesData.find(function (p) {
+        return (p.fileSlug && p.fileSlug.toLowerCase() === needle) ||
+               (p.data && p.data.title && p.data.title.toLowerCase() === needle) ||
+               (p.data && p.data.aliases && p.data.aliases.map(function (a){return a.toLowerCase();}).includes(needle));
+      });
+      if (target) {
+        edges.push({ from: page.url, to: target.url });
+        connectionCount[page.url] = (connectionCount[page.url] || 0) + 1;
+        connectionCount[target.url] = (connectionCount[target.url] || 0) + 1;
       }
     }
-  }
 
-  if (url.includes('/projects') || tags.includes('projects')) {
-    edges.push({ from: `category:projects`, to: page.url });
-    connectionCount[`category:projects`]++;
-    connectionCount[page.url]++;
-  } else if (url.includes('/concepts') || tags.includes('concepts')) {
-    edges.push({ from: `category:concepts`, to: page.url });
-    connectionCount[`category:concepts`]++;
-    connectionCount[page.url]++;
-  } else if (url.includes('/sparks') || tags.includes('sparks')) {
-    edges.push({ from: `category:sparks`, to: page.url });
-    connectionCount[`category:sparks`]++;
-    connectionCount[page.url]++;
-  } else if (url.includes('/meta') || tags.includes('meta')) {
-    edges.push({ from: `category:meta`, to: page.url });
-    connectionCount[`category:meta`]++;
-    connectionCount[page.url]++;
-  }
-});
+    var catId =
+      (url.indexOf("/projects") > -1 || tags.indexOf("projects") > -1) ? "category:projects" :
+      (url.indexOf("/concepts") > -1 || tags.indexOf("concepts") > -1) ? "category:concepts" :
+      (url.indexOf("/sparks")   > -1 || tags.indexOf("sparks")   > -1) ? "category:sparks"   :
+      (url.indexOf("/meta")     > -1 || tags.indexOf("meta")     > -1) ? "category:meta"     : null;
 
-// Scale node values based on connection count
-nodes.forEach(node => {
-  const count = connectionCount[node.id] || 0;
-  node.value = count;
-  node.title = `${node.label}\nConnections: ${count}`;
-});
+    if (catId) {
+      edges.push({ from: catId, to: page.url });
+      connectionCount[catId] = (connectionCount[catId] || 0) + 1;
+      connectionCount[page.url] = (connectionCount[page.url] || 0) + 1;
+    }
+  });
 
-// Render network
-const container = document.getElementById('concept-map-container');
-const data = { nodes, edges };
-const options = {
-  nodes: {
-    scaling: { min: 8, max: 30 },
-    font: { face: 'Inter', size: 14, color: '#DDD', strokeWidth: 0 },
-    borderWidth: 1,
-    shadow: { enabled: false }
-  },
-  edges: {
-    width: 1,
-    color: {
-      color: '#444',
-      highlight: '#89f0cb',
-      hover: '#aaaaaa',
-      inherit: 'from',
-      opacity: 0.8
+  // Scale by degree
+  nodes.forEach(function (n) {
+    var c = connectionCount[n.id] || 0;
+    n.value = c;
+    n.title = n.label + "\nConnections: " + c;
+  });
+
+  // Render
+  var container = document.getElementById("concept-map-container");
+  var data = { nodes: nodes, edges: edges };
+  var options = {
+    nodes: {
+      scaling: { min: 8, max: 30 },
+      font: { face: "Space Grotesk", size: 14, color: C.content, strokeWidth: 0 },
+      borderWidth: 1,
+      shadow: { enabled: false }
     },
-    arrows: { to: { enabled: true, scaleFactor: 0.4 } },
-    smooth: { type: 'continuous' }
-  },
-  interaction: {
-    hover: true,
-    tooltipDelay: 200,
-    navigationButtons: true,
-    keyboard: true
-  },
-  physics: {
-    enabled: true,
-    barnesHut: {
-      gravitationalConstant: -3500,
-      centralGravity: 0.05,
-      springLength: 180,
-      springConstant: 0.04,
-      damping: 0.12,
-      avoidOverlap: 0.5
+    edges: {
+      width: 1,
+      color: { color: C.border, highlight: C.primary, hover: C.contentSubtle, inherit: "from", opacity: 0.85 },
+      arrows: { to: { enabled: true, scaleFactor: 0.4 } },
+      smooth: { type: "continuous" }
     },
-    stabilization: {
+    interaction: { hover: true, tooltipDelay: 200, navigationButtons: true, keyboard: true },
+    physics: {
       enabled: true,
-      iterations: 1000,
-      updateInterval: 25
+      barnesHut: { gravitationalConstant: -3500, centralGravity: 0.05, springLength: 180, springConstant: 0.04, damping: 0.12, avoidOverlap: 0.5 },
+      stabilization: { enabled: true, iterations: 1000, updateInterval: 25 }
     }
+  };
+  var network = new vis.Network(container, data, options);
+
+  // Live theme re-sync on data-theme changes
+  function recolor() {
+    C = palette();
+    var allIds = network.body.data.nodes.getIds();
+    var updates = allIds.map(function (id) {
+      var isCat = String(id).indexOf("category:") === 0;
+      var border = isCat ? C.primary : C.border;
+      return {
+        id: id,
+        font: { color: C.content },
+        color: { background: C.base, border: border, highlight: { background: C.base2, border: border }, hover: { background: C.base, border: border } }
+      };
+    });
+    network.body.data.nodes.update(updates);
+    network.setOptions({ edges: { color: { color: C.border, highlight: C.primary, hover: C.contentSubtle, inherit: "from", opacity: 0.85 } } });
   }
-};
-const network = new vis.Network(container, data, options);
 
-// Highlight behavior
-network.on("hoverNode", function (params) {
-  const nodeId = params.node;
-  const connectedNodes = network.getConnectedNodes(nodeId);
-  const allNodeIds = network.body.data.nodes.getIds();
-
-  network.body.data.nodes.update(allNodeIds.map(id => ({
-    id,
-    color: { background: '#333', border: '#555' },
-    font: { color: '#666' }
-  })));
-
-  network.body.data.nodes.update([nodeId, ...connectedNodes].map(id => ({
-    id,
-    color: { background: '#1a1a1a', border: '#89f0cb' },
-    font: { color: '#fff' }
-  })));
-});
-
-network.on("blurNode", function () {
-  const allNodeIds = network.body.data.nodes.getIds();
-  network.body.data.nodes.update(allNodeIds.map(id => ({
-    id,
-    color: { background: '#1a1a1a', border: '#444' },
-    font: { color: '#DDD' }
-  })));
-});
-
-network.on("click", function (params) {
-  if (params.nodes.length > 0) {
-    const nodeId = params.nodes[0];
-    if (!nodeId.startsWith("category:")) {
-      window.location.href = nodeId;
+  new MutationObserver(function (mutList) {
+    for (var i = 0; i < mutList.length; i++) {
+      if (mutList[i].attributeName === "data-theme") { recolor(); break; }
     }
-  }
-});
+  }).observe(document.documentElement, { attributes: true });
+
+  // Optional highlight behavior
+  network.on("hoverNode", function (params) {
+    var nodeId = params.node;
+    var connected = network.getConnectedNodes(nodeId);
+    var all = network.body.data.nodes.getIds();
+
+    network.body.data.nodes.update(all.map(function (id) {
+      return { id: id, color: { background: C.base2, border: C.border }, font: { color: C.contentSubtle } };
+    }));
+    network.body.data.nodes.update([nodeId].concat(connected).map(function (id) {
+      return { id: id, color: { background: C.base, border: C.primary }, font: { color: C.content } };
+    }));
+  });
+  network.on("blurNode", function () { recolor(); });
+
+  // Click-through to page
+  network.on("click", function (params) {
+    if (params.nodes && params.nodes.length > 0) {
+      var id = params.nodes[0];
+      if (String(id).indexOf("category:") !== 0) window.location.href = id;
+    }
+  });
+})();
 </script>

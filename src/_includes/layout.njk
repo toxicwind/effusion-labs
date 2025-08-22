@@ -64,12 +64,21 @@
   <div class="mx-auto max-w-screen-2xl px-6">
     {% set metaOff = metaDisable == true or metaDisable == 'true' %}
     {% set hasMeta = (status or certainty or importance or tags or memory_ref) and not metaOff %}
+    {% set proseOn = prose != false %}
 
     <main id="main" class="
       {% if not metaOff %}xl:grid xl:gap-10 xl:grid-cols-[1fr_16rem]{% endif %}
       {% if showTitle != false %} mt-12{% endif %}
     ">
-      <article class="prose max-w-none m-0
+      <article class="
+        {% if proseOn %}
+          prose dark:prose-invert max-w-none m-0
+          prose-headings:font-heading prose-h1:tracking-tight
+          prose-a:text-primary prose-a:no-underline hover:prose-a:underline
+          prose-blockquote:border-l-4 prose-blockquote:border-base-content/20 prose-blockquote:opacity-90
+        {% else %}
+          m-0
+        {% endif %}
         {% if not metaOff %} xl:col-span-1 {% else %} w-full {% endif %}
       ">
         {% if showTitle != false %}

@@ -2,27 +2,18 @@
 layout: "layout.njk"
 metaDisable: true
 showTitle: false
+prose: false
 ---
 
 <div id="page-shell" data-mschf="auto" data-mschf-intensity="lite" data-mschf-seed-mode="page">
   <div id="mschf-overlay-root" aria-hidden="true"></div>
 
   {% include "components/hero.njk" %}
-
   {% include "components/map-cta.njk" %}
 
   <main class="mx-auto max-w-screen-xl px-6 sm:px-8 space-y-16">
     {% include "components/work-feed.njk" %}
   </main>
-
-  <div class="p-6">
-    <button class="btn btn-primary">Primary</button>
-    <div class="alert mt-4">If you see this styled, daisyUI is working.</div>
-    <article class="prose mt-6">
-      <h2>Typography Check</h2>
-      <p>This should look like prose, not raw default text.</p>
-    </article>
-  </div>
 
   <script src="/assets/js/work-filters.js" defer></script>
   <script type="module" src="/assets/js/mschf-overlay.js" defer></script>
