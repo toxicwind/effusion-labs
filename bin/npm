@@ -1,8 +1,0 @@
-#!/usr/bin/env bash
-# Repo-local npm shim: transparent pass-through.
-set -euo pipefail
-
-shim_dir="$(cd "$(dirname "$0")" && pwd)"
-PATH="${PATH//$shim_dir/}"
-real="$(command -v npm || echo /usr/bin/npm)"
-exec "$real" "$@"

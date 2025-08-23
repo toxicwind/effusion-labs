@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+set -euo pipefail
+REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+BIN_LOCAL="$REPO_ROOT/node_modules/.bin/prettier"
+
+# Ensure local devDependency exists (non‑interactive idempotent install)
+if [[ ! -x "$BIN_LOCAL" ]]; then
+  if command -v npm >/dev/null 2>&1; then
+    echo "📦 Installing prettier (devDependency)..." >&2
+    # Pin major to 3 for stability; exact patch can float via lockfile.
+    npm install --save-dev --save-exact prettier@3 >/dev/null 2>&1 || true
+  fi
+fi
+
+if [[ -x "$BIN_LOCAL" ]]; then
+  exec "$BIN_LOCAL" "$@"
+fi
+
+# Fallback to global (if present)
+if command -v prettier >/dev/null 2>&1; then
+  exec prettier "$@"
+fi
+
+echo "❌ prettier not available and local install failed. Ensure npm is usable or preinstall devDeps." >&2
+exit 127

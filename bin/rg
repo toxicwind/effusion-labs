@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+set -euo pipefail
+. "$(cd "$(dirname "$0")" && pwd)/_lib.sh"
+
+# Try repo cache, then system, then apt
+retry_exec "$@" -- \
+  "$TOOLS_DIR/rg/rg" \
+  rg
+# Install via apt if missing
+apt_install ripgrep >/dev/null 2>&1 || true
+retry_exec "$@" -- \
+  "$TOOLS_DIR/rg/rg" \
+  rg
+
+echo "❌ ripgrep (rg) not available and static fallback is not configured for this host. Install via: sudo apt-get install ripgrep" >&2
+exit 127

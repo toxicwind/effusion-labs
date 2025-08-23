@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+set -euo pipefail
+. "$(cd "$(dirname "$0")" && pwd)/_lib.sh"
+
+# Ubuntu often ships fd as 'fdfind'
+retry_exec "$@" -- \
+  "$TOOLS_DIR/fd/fd" \
+  fd \
+  fdfind
+apt_install fd-find >/dev/null 2>&1 || true
+retry_exec "$@" -- \
+  "$TOOLS_DIR/fd/fd" \
+  fd \
+  fdfind
+
+echo "❌ fd not available. On Ubuntu the binary may be 'fdfind'. Try: sudo apt-get install fd-find" >&2
+exit 127

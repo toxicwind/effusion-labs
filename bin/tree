@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+set -euo pipefail
+. "$(cd "$(dirname "$0")" && pwd)/_lib.sh"
+
+retry_exec "$@" -- \
+  "$TOOLS_DIR/tree/tree" \
+  tree
+apt_install tree >/dev/null 2>&1 || true
+retry_exec "$@" -- \
+  "$TOOLS_DIR/tree/tree" \
+  tree
+
+echo "❌ tree not available and no static fallback configured. Install via: sudo apt-get install tree" >&2
+exit 127

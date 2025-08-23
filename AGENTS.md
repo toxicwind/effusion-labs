@@ -26,11 +26,29 @@ source scripts/llm-bootstrap.sh
 * **Command rewrite** → naive `> file` or `> file && tail …` becomes a streaming pipeline (or is rejected in strict mode) so logs are visible and token-efficient.
 * **Autoinstall** → hash-based detection triggers `npm ci` (+ optional Python reqs if a venv is active).
 
-> Quick sanity check (optional):
+> Quick sanity check:
 >
 > ```bash
 > type llm_run && trap -p DEBUG && echo "STRICT=$LLM_STRICT"
 > ```
+
+---
+
+## 0.5) Repo Tool Shims
+
+All external binaries (node, npm, jq, rg, fd, tree, bat, yq, prettier) are exposed via repo-scoped shims in `./bin/`.  
+Each shim:
+
+* auto-installs its package on first use (Ubuntu apt or repo-local `.tools/`).
+* always prefers the repo’s copy over global state.
+* lives under `bin/` — add to PATH during a session:
+
+```bash
+export PATH="$PWD/bin:$PATH"
+````
+
+> Agents should **always call the shim** (`node`, `jq`, `yq`, etc.) rather than assuming a system install. This guarantees reproducible behavior when the repo is cloned into a fresh environment.
+
 
 ---
 
