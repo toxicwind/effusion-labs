@@ -4,7 +4,6 @@ import { dirs } from "./lib/config.js";
 import seeded from "./lib/seeded.js";
 import registerArchive from "./lib/eleventy/archives.mjs";
 import { getBuildInfo } from "./lib/build-info.js";
-import fs from "node:fs";
 
 // tiny local slugger (keeps filters resilient)
 const slug = (s) =>
@@ -54,22 +53,7 @@ export function createCalloutShortcode(eleventyConfig) {
         ? `<span class="callout-icon" aria-hidden="true">${envEscape(icon)}</span>`
         : "";
 
-    const refs = [...String(content).matchAll(/\[\^([^\]]+)\]/g)].map((m) => m[1]);
-    const unique = [...new Set(refs)];
-    const defs = [];
-    if (unique.length) {
-      try {
-        const txt = fs.readFileSync(this.page.inputPath, "utf8");
-        const defRe = /^\[\^([^\]]+)\]:[\s\S]*?(?=\n\[\^[^\]]+\]:|$)/gm;
-        let m;
-        while ((m = defRe.exec(txt)) !== null) {
-          if (unique.includes(m[1])) defs.push(m[0].trim());
-        }
-      } catch {
-        /* ignore */
-      }
-    }
-    const rendered = md.render(`${content}\n\n${defs.join("\n\n")}`.trim());
+    const rendered = md.render(String(content), this.ctx ?? {});
     const body = rendered
       .replace(/<section class="footnotes"[\s\S]*?<\/section>/, "")
       .replace(/<div class="footnotes-hybrid"[\s\S]*?<\/div>/, "")
