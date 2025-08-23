@@ -1,90 +1,68 @@
+# .github/dependabot.yml
 version: 2
 
+# Security updates:
+# - Dependabot will open PRs automatically when GitHub Security Advisories flag vulnerabilities.
+# - Keep daily schedule; security PRs will arrive as advisories are published.
+# - Groups below include a 'security' bucket so security updates are clearly labeled/bundled.
+
 updates:
-  # ── 1) NPM deps (root)
-  - package-ecosystem: "npm"
+  # 1) NPM (root)
+  - package-ecosystem: npm
     directory: "/"
     schedule:
-      interval: "weekly"
-      day: "monday"
+      interval: daily
       time: "09:00"
       timezone: "America/Denver"
-    versioning-strategy: increase
-    open-pull-requests-limit: 10
-    cooldown:
-      days: 2
-    rebase-strategy: "disabled"
-    labels: ["deps", "automerge-candidate"]
+    open-pull-requests-limit: 50
+    rebase-strategy: auto
+    labels: ["deps", "automerge"]
     groups:
-      npm-prod-minor-patch:
+      security:
+        applies-to: security-updates
         patterns: ["*"]
-        dependency-type: "production"
-        update-types: ["minor", "patch"]
-      npm-dev-minor-patch:
-        patterns: ["*"]
-        dependency-type: "development"
-        update-types: ["minor", "patch"]
-      npm-all-majors:
-        patterns: ["*"]
-        update-types: ["major"]
-      npm-security:
-        applies-to: "security-updates"
-        patterns: ["*"]
-        update-types: ["patch", "minor"]
 
-  # ── 2) GitHub Actions (workflow files under /.github/workflows)
-  - package-ecosystem: "github-actions"
+  # 2) GitHub Actions
+  - package-ecosystem: github-actions
     directory: "/"
     schedule:
-      interval: "weekly"
-      day: "monday"
-      time: "09:15"
+      interval: daily
+      time: "09:05"
       timezone: "America/Denver"
-    open-pull-requests-limit: 5
-    rebase-strategy: "disabled"
-    labels: ["deps", "automerge-candidate"]
+    open-pull-requests-limit: 50
+    rebase-strategy: auto
+    labels: ["deps", "automerge"]
     groups:
-      gha-minor-patch:
+      security:
+        applies-to: security-updates
         patterns: ["*"]
-        update-types: ["minor", "patch"]
-      gha-majors:
-        patterns: ["*"]
-        update-types: ["major"]
 
-  # ── 3) Docker base images — .portainer/Dockerfile
-  - package-ecosystem: "docker"
+  # 3) Docker — .portainer/Dockerfile
+  - package-ecosystem: docker
     directory: "/.portainer"
     schedule:
-      interval: "weekly"
-      day: "monday"
-      time: "09:30"
+      interval: daily
+      time: "09:10"
       timezone: "America/Denver"
-    open-pull-requests-limit: 5
-    rebase-strategy: "disabled"
-    labels: ["deps", "automerge-candidate"]
+    open-pull-requests-limit: 50
+    rebase-strategy: auto
+    labels: ["deps", "automerge"]
     groups:
-      docker-minor-patch:
+      security:
+        applies-to: security-updates
         patterns: ["*"]
-        update-types: ["minor", "patch"]
-      docker-majors:
-        patterns: ["*"]
-        update-types: ["major"]
 
-  # ── 4) Docker base images — markdown_gateway/Dockerfile
-  - package-ecosystem: "docker"
+  # 4) Docker — markdown_gateway/Dockerfile
+  - package-ecosystem: docker
     directory: "/markdown_gateway"
     schedule:
-      interval: "weekly"
-      day: "monday"
-      time: "09:35"
+      interval: daily
+      time: "09:12"
       timezone: "America/Denver"
-    open-pull-requests-limit: 5
-    rebase-strategy: "disabled"
-    labels: ["deps", "automerge-candidate"]
+    open-pull-requests-limit: 50
+    rebase-strategy: auto
+    labels: ["deps", "automerge"]
     groups:
-      docker-minor-patch:
+      security:
+        applies-to: security-updates
         patterns: ["*"]
-        update-types: ["minor", "patch"]
-      docker-majors:
-        patterns: ["*"]
-        update-types: ["major"]

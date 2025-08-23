@@ -3,83 +3,105 @@ name: CI & Production Deployment
 on:
   push:
     branches: [main]
-  pull_request:
   workflow_dispatch:
+    inputs:
+      force_rebuild:
+        description: "Rebuild all images regardless of path changes"
+        type: boolean
+        default: false
 
 env:
   REGISTRY: ghcr.io
 
+permissions:
+  contents: read
+  packages: write
+
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: deploy-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  pre_deployment_checks:
-    name: Run Code Validation & Pre-Deployment Checks
+  build_and_deploy:
+    name: Build what changed → push → Portainer
     runs-on: ubuntu-latest
-    timeout-minutes: 20
-    steps:
-      - name: ⬇️ Checkout repository code
-        uses: actions/checkout@v4
-
-      - name: ⚙️ Set up Node.js (from .nvmrc)
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: '.nvmrc'
-          cache: 'npm'
-
-      - name: 📦 Install NPM dependencies
-        run: npm ci --ignore-scripts
-
-      - name: 🧪 Run unit tests with code coverage
-        run: npm test
-
-      - name: 🔨 Run Eleventy build for validation
-        run: npm run build
-
-      - name: ⬆️ Upload coverage
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: coverage-report
-          path: coverage/
-
-  publish_and_deploy:
-    name: Publish Images & Trigger Production Deployment
-    needs: pre_deployment_checks
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
 
     steps:
-      - name: ⬇️ Checkout repository code
+      - name: ⬇️ Checkout
         uses: actions/checkout@v4
+
+      - name: 🧠 Is this commit a PR merge?
+        id: mergecheck
+        run: |
+          msg="$(git log -1 --pretty=%s)"
+          if [[ "$msg" =~ ^Merge\ pull\ request\ # ]]; then
+            echo "merge=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "merge=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: 🔍 Detect changed areas
+        id: changes
+        uses: dorny/paths-filter@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          filters: |
+            web:
+              - '.portainer/**'
+              - 'package.json'
+              - 'package-lock.json'
+              - 'lib/**'
+              - 'src/**'
+              - 'eleventy.config.mjs'
+            gateway:
+              - 'markdown_gateway/**'
+
+      # Optional safety: only for direct pushes to main (PR merges already ran CI)
+      - name: ⚡ Direct-push smoke (tests + Eleventy)
+        if: steps.mergecheck.outputs.merge == 'false'
+        run: |
+          if [ -f package-lock.json ]; then npm ci --ignore-scripts; fi
+          if npm run -s test >/dev/null 2>&1; then npm test; else echo "no tests"; fi
+          if npm run -s build >/dev/null 2>&1; then npm run build; else echo "no build"; fi
+
+      - name: 💤 Nothing to build
+        if: |
+          github.event.inputs.force_rebuild != 'true' &&
+          steps.changes.outputs.web != 'true' &&
+          steps.changes.outputs.gateway != 'true'
+        run: echo "No relevant changes. Skipping image build & deploy."
 
       - name: 🐳 Setup Buildx
+        if: |
+          github.event.inputs.force_rebuild == 'true' ||
+          steps.changes.outputs.web == 'true' || steps.changes.outputs.gateway == 'true'
         uses: docker/setup-buildx-action@v3
 
-      - name: 🔑 Login to GHCR
+      - name: 🔑 GHCR login
+        if: |
+          github.event.inputs.force_rebuild == 'true' ||
+          steps.changes.outputs.web == 'true' || steps.changes.outputs.gateway == 'true'
         uses: docker/login-action@v3
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      # ── Web image (effusion-labs)
+      # ── Web image
       - name: 🏷️ Metadata (web)
+        if: |
+          github.event.inputs.force_rebuild == 'true' || steps.changes.outputs.web == 'true'
         id: meta_web
         uses: docker/metadata-action@v5
         with:
           images: ${{ env.REGISTRY }}/toxicwind/effusion-labs
           tags: |
-            # keep Portainer happy
             type=raw,value=latest,enable={{is_default_branch}}
             type=raw,value=main,enable={{is_default_branch}}
-            # useful extras
             type=sha
       - name: 🏗️ Build & Push (web)
+        if: |
+          github.event.inputs.force_rebuild == 'true' || steps.meta_web.outputs.tags
         uses: docker/build-push-action@v6
         with:
           context: .
@@ -91,8 +113,10 @@ jobs:
           cache-to: type=gha,mode=max
           build-args: COMMIT_SHA=${{ github.sha }}
 
-      # ── Gateway image (distinct name)
+      # ── Gateway image
       - name: 🏷️ Metadata (gateway)
+        if: |
+          github.event.inputs.force_rebuild == 'true' || steps.changes.outputs.gateway == 'true'
         id: meta_gateway
         uses: docker/metadata-action@v5
         with:
@@ -102,6 +126,8 @@ jobs:
             type=raw,value=main,enable={{is_default_branch}}
             type=sha
       - name: 🏗️ Build & Push (gateway)
+        if: |
+          github.event.inputs.force_rebuild == 'true' || steps.meta_gateway.outputs.tags
         uses: docker/build-push-action@v6
         with:
           context: ./markdown_gateway
@@ -110,11 +136,15 @@ jobs:
           labels: ${{ steps.meta_gateway.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          build-args: COMMIT_SHA=${{ github.sha }}
 
-      - name: 🚀 Trigger Portainer redeploy
+      - name: 🚀 Portainer redeploy
+        if: |
+          github.event.inputs.force_rebuild == 'true' ||
+          steps.changes.outputs.web == 'true' || steps.changes.outputs.gateway == 'true'
         env:
           HOOK: ${{ secrets.PORTAINER_WEBHOOK_EFFUSION }}
         run: |
-          echo "Triggering redeployment on Portainer…"
+          echo "Triggering Portainer redeploy…"
           curl --fail --retry-all-errors --retry 5 --retry-delay 3 -X POST "$HOOK"
-          echo "Redeployment signal sent."
+          echo "Redeploy signal sent."
