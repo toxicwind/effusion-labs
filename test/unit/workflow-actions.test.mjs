@@ -1,9 +1,10 @@
 import test from 'node:test';
 import assert from 'node:assert';
-import { readFileSync } from 'node:fs';
+import { readdirSync, readFileSync } from 'node:fs';
 
-const deploy = readFileSync(new URL('../../.github/workflows/deploy.yml', import.meta.url), 'utf8');
-const linkCheck = readFileSync(new URL('../../.github/workflows/link-check.yml', import.meta.url), 'utf8');
+const workflowDir = new URL('../../.github/workflows/', import.meta.url);
+const workflowFiles = readdirSync(workflowDir).filter((f) => /\.ya?ml$/i.test(f));
+const workflows = workflowFiles.map((f) => readFileSync(new URL(f, workflowDir), 'utf8'));
 
 function assertNoLegacyActions(workflow) {
   assert.doesNotMatch(workflow, /actions\/checkout@v[0-3]/);
@@ -12,5 +13,5 @@ function assertNoLegacyActions(workflow) {
 }
 
 test('GitHub workflows use latest action versions', () => {
-  [deploy, linkCheck].forEach(assertNoLegacyActions);
+  workflows.forEach(assertNoLegacyActions);
 });

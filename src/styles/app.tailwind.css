@@ -258,6 +258,27 @@
   .external-link:hover{ color: hsl(var(--pf)); }
 }
 
+/* Callout */
+@layer components {
+  .callout { @apply relative w-full rounded-xl border p-4 md:p-5 shadow-sm; background-color: hsl(var(--b1)); border-color: hsl(var(--bc)/.14); color: hsl(var(--bc)); }
+  .callout-head { @apply mb-3; }
+  .callout-title { @apply m-0 font-heading text-sm tracking-wider uppercase; letter-spacing:.08em; color: hsl(var(--bc)); }
+  .callout-kicker { @apply m-0 mt-1 text-sm; color: hsl(var(--bc)/.7); }
+  .callout-body { @apply mt-2; }
+  /* tones */
+  .callout--info   .callout-title{ color:hsl(var(--in)); }
+  .callout--warn   .callout-title{ color:hsl(var(--wa)); }
+  .callout--danger .callout-title{ color:hsl(var(--er)); }
+  .callout--good   .callout-title{ color:hsl(var(--su)); }
+  /* docking */
+  .callout--dock-right { @apply lg:float-right lg:ml-6 lg:w-[min(22rem,38%)]; }
+  .callout--dock-left  { @apply lg:float-left  lg:mr-6 lg:w-[min(22rem,38%)]; }
+  .callout--dock-center{ @apply w-full; }
+  /* footnote/links inside */
+  .callout :not(pre)>code{ @apply rounded px-1 py-0.5 text-[0.85em] font-mono; background-color:hsl(var(--b2)); color:hsl(var(--bc)); }
+  .callout a{ color:hsl(var(--p)); } .callout a:hover{ color:hsl(var(--pf)); }
+}
+
 /* Failure Box */
 @layer components {
   .failbox {

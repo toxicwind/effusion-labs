@@ -1,0 +1,35 @@
+commit d207041ca4593bb6f1cc057d6180781e3c0f16fc
+Author: Codex <codex@openai.com>
+Date:   Fri Aug 22 15:52:00 2025 +0000
+
+    chore: remove dead links automation
+
+ .github/workflows/link-check.yml                  |   46 --
+ .gitignore                                        |    1 +
+ README.md                                         |    7 +-
+ artifacts/patches/20250821T044405Z.patch          |   58 --
+ artifacts/patches/20250821T230624Z.patch          | 2349 ---------------------------------------------------------------------
+ docs/knowledge/docs-links.md                      |    8 -
+ docs/knowledge/gha-actions-upgrade/docs-links.log |   22 -
+ docs/knowledge/link-hygiene/build-green.log       |  124 ----
+ docs/knowledge/markdown-links.fail.log            |   32 -
+ docs/knowledge/npm-docs-links-green.log           | 1581 ----------------------------------------------
+ docs/knowledge/npm-docs-links-install.log         |    7 -
+ docs/knowledge/npm-docs-links-red.log             |   25 -
+ docs/knowledge/npm-docs-links-test-red.log        | 1641 ------------------------------------------------
+ docs/knowledge/solver-url-env-docs.log            |   23 -
+ docs/knowledge/tags-metadata/docs-links.log       |   23 -
+ docs/knowledge/typography-colors-docs.log         |   23 -
+ docs/knowledge/wikilink-filter-red-run.log        |   38 --
+ docs/knowledge/wikilink-filter-red.log            |   38 --
+ docs/knowledge/work-readme-links.log              |   23 -
+ docs/reports/npm-docs-links-continue.md           |   12 -
+ docs/reports/npm-docs-links-ledger.md             |   14 -
+ logs/ckpt-20250821T044405Z.log                    |   13 -
+ logs/docs-links.log                               |   23 -
+ logs/test-20250820T215642Z.log                    |  399 ------------
+ logs/test-20250820T222505Z.log                    |  402 ------------
+ package.json                                      |    2 +-
+ test/unit/docs-links.test.mjs                     |   31 -
+ test/unit/workflow-actions.test.mjs               |    3 +-
+ 28 files changed, 6 insertions(+), 6962 deletions(-)
