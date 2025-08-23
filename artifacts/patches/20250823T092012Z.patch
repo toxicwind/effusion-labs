@@ -1,0 +1,33 @@
+diff --git a/eleventy.config.mjs b/eleventy.config.mjs
+index 13e3f02..886af6f 100644
+--- a/eleventy.config.mjs
++++ b/eleventy.config.mjs
+@@ -56,5 +56,5 @@ export function createCalloutShortcode(eleventyConfig) {
+-    const rendered = md.render(String(content), this.ctx ?? {});
+-    const body = rendered
+-      .replace(/<section class="footnotes"[\s\S]*?<\/section>/, "")
+-      .replace(/<div class="footnotes-hybrid"[\s\S]*?<\/div>/, "")
+-      .trim();
++    const env = this.ctx ?? {};
++    const tokens = md.parse(String(content), env);
++    const footnoteStart = tokens.findIndex((t) => t.type === "footnote_block_open");
++    const bodyTokens = footnoteStart >= 0 ? tokens.slice(0, footnoteStart) : tokens;
++    const body = md.renderer.render(bodyTokens, md.options, env).trim();
+diff --git a/test/unit/callout-shortcode.test.mjs b/test/unit/callout-shortcode.test.mjs
+index 0384d4f..24bee62 100644
+--- a/test/unit/callout-shortcode.test.mjs
++++ b/test/unit/callout-shortcode.test.mjs
+@@ -8 +8 @@ import { createCalloutShortcode } from '../../eleventy.config.mjs';
+-test('callout renders content without inner footnotes block', () => {
++test('callout merges footnotes into page pipeline', () => {
+@@ -12 +12,2 @@ test('callout renders content without inner footnotes block', () => {
+-  const ctx = { env: { filters: { escape: (s) => s } } };
++  const env = {};
++  const ctx = { ctx: env, env: { filters: { escape: (s) => s } } };
+@@ -15 +15,0 @@ test('callout renders content without inner footnotes block', () => {
+-  assert.ok(!html.includes('footnotes-hybrid'), 'no inner footnotes block');
+@@ -16,0 +17,4 @@ test('callout renders content without inner footnotes block', () => {
++  assert.equal(env.footnotes?.list?.length, 1, 'footnote captured in env');
++  const tokens = env.footnotes?.list?.[0]?.tokens;
++  const hasNote = tokens?.some((t) => t.content?.includes('note'));
++  assert.ok(hasNote, 'footnote definition carried over');

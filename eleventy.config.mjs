@@ -53,11 +53,11 @@ export function createCalloutShortcode(eleventyConfig) {
         ? `<span class="callout-icon" aria-hidden="true">${envEscape(icon)}</span>`
         : "";
 
-    const rendered = md.render(String(content), this.ctx ?? {});
-    const body = rendered
-      .replace(/<section class="footnotes"[\s\S]*?<\/section>/, "")
-      .replace(/<div class="footnotes-hybrid"[\s\S]*?<\/div>/, "")
-      .trim();
+    const env = this.ctx ?? {};
+    const tokens = md.parse(String(content), env);
+    const footnoteStart = tokens.findIndex((t) => t.type === "footnote_block_open");
+    const bodyTokens = footnoteStart >= 0 ? tokens.slice(0, footnoteStart) : tokens;
+    const body = md.renderer.render(bodyTokens, md.options, env).trim();
 
     return `
 <aside class="${classes}" role="note" aria-labelledby="${safeId}">
