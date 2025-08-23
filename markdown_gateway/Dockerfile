@@ -1,13 +1,13 @@
 # syntax=docker/dockerfile:1.7
 
 # builder stage
-FROM python:3.12 AS builder
+FROM python:3.13 AS builder
 WORKDIR /app
 COPY requirements.txt .
 RUN --mount=type=cache,target=/root/.cache/pip pip wheel --wheel-dir /wheels -r requirements.txt
 
 # final stage
-FROM python:3.12-slim AS final
+FROM python:3.13-slim AS final
 WORKDIR /app
 COPY --from=builder /wheels /wheels
 COPY requirements.txt .
