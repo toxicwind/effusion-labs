@@ -1,3 +1,9 @@
+{# ─────────────────────────────────────────────────────────────
+  FILE: (landing md frontmatter shell)
+  Changes:
+  • Keep metaDisable/showTitle/prose as before
+  • Wrap main shell in neon field; set intensity by intent
+─────────────────────────────────────────────────────────────── #}
 ---
 layout: "layout.njk"
 metaDisable: true
@@ -5,7 +11,7 @@ showTitle: false
 prose: false
 ---
 
-<div id="page-shell" data-mschf="auto" data-mschf-intensity="lite" data-mschf-seed-mode="page">
+<div id="page-shell" data-mschf="auto" data-mschf-intensity="lite" data-mschf-seed-mode="page" class="hb-neon hb-intensity-bold">
   <div id="mschf-overlay-root" aria-hidden="true"></div>
 
   {% include "components/hero.njk" %}

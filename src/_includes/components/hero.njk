@@ -1,61 +1,75 @@
-{# components/hero.njk #}
+
+
+
+{# ─────────────────────────────────────────────────────────────
+  FILE: components/hero.njk
+  Changes:
+  • Hero becomes a neon field with a readable inlay “card”
+  • Logo + headings sit on neutral inlay; CTAs gain cutout option
+  • Optional MSCHF decals preserved; add subtle halo for vibe
+─────────────────────────────────────────────────────────────── #}
 {% from "components/hero-tile.njk" import heroTile %}
 
-<header class="hero relative mx-auto w-full">
-  <div class="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8 py-28 text-center text-base-content">
-    {# logo — brand sentinel #}
-    <img
-      class="hero-logo mx-auto mb-6 w-28 md:w-40"
-      src="{{ branding.logoSrc }}"
-      alt="{{ branding.logoAlt }}"
-      sizes="{{ branding.logoSizes }}"
-      loading="eager"
-      fetchpriority="high"
-    />
+<header class="hero relative mx-auto w-full hb-neon hb-intensity-bold">
+  <div class="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8 py-20 md:py-28">
 
-    {# eyebrow #}
-    {% if eyebrow %}
-      <p class="eyebrow font-mono text-xs uppercase tracking-[0.18em] text-base-content/90">
-        {{ eyebrow }}
-      </p>
-    {% endif %}
+    <div class="hb-inlay mx-auto max-w-4xl px-6 sm:px-10 py-10 text-center">
+      {# logo — brand sentinel #}
+      <img
+        class="hero-logo mx-auto mb-6 w-28 md:w-40"
+        src="{{ branding.logoSrc }}"
+        alt="{{ branding.logoAlt }}"
+        sizes="{{ branding.logoSizes }}"
+        loading="eager"
+        fetchpriority="high"
+        style="filter: drop-shadow(0 0 12px color-mix(in oklab, var(--neon-a) 30%, transparent));"
+      />
 
-    {# single, authoritative H1 with fluid size #}
-    <h1 class="font-heading font-black uppercase tracking-[-0.025em] leading-[0.95]
-               text-[clamp(2.75rem,6vw,6.5rem)] text-base-content">
-      {{ title }}
-    </h1>
+      {# eyebrow #}
+      {% if eyebrow %}
+        <p class="eyebrow font-mono text-xs uppercase tracking-[0.18em] hb-ink-soft">
+          {{ eyebrow }}
+        </p>
+      {% endif %}
 
-    {# lede + optional sublede #}
-    {% if lede %}
-      <p class="lede mx-auto mt-4 max-w-3xl font-body text-base md:text-lg text-base-content/90">
-        {{ lede }}
-      </p>
-    {% endif %}
-    {% if sublede %}
-      <p class="mx-auto mt-2 max-w-3xl font-body text-base md:text-lg text-base-content/90">
-        {{ sublede }}
-      </p>
-    {% endif %}
+      {# single, authoritative H1 with fluid size #}
+      <h1 class="font-heading font-black uppercase tracking-[-0.025em] leading-[0.95]
+                 text-[clamp(2.75rem,6vw,6.5rem)] hb-ink">
+        {{ title }}
+      </h1>
 
-    {# CTAs #}
-    {% if ctas and ctas.length %}
-      <div class="cta-row mt-6 flex flex-col items-center justify-center gap-4 sm:flex-row">
-        {% for c in ctas %}
-          {% set isPrimary = (c.kind or 'primary') == 'primary' %}
-          <a
-            href="{{ c.href }}"
-            class="{% if isPrimary %}btn btn-primary{% else %}btn btn-ghost{% endif %} px-7 py-3 font-heading font-bold focus-visible:ring focus-visible:ring-primary/40"
-          >
-            {{ c.label }}
-          </a>
-        {% endfor %}
-      </div>
-    {% endif %}
+      {# lede + optional sublede #}
+      {% if lede %}
+        <p class="lede mx-auto mt-4 max-w-3xl font-body text-base md:text-lg hb-ink-soft">
+          {{ lede }}
+        </p>
+      {% endif %}
+      {% if sublede %}
+        <p class="mx-auto mt-2 max-w-3xl font-body text-base md:text-lg hb-ink-soft">
+          {{ sublede }}
+        </p>
+      {% endif %}
+
+      {# CTAs — primary cutout, secondary ghost #}
+      {% if ctas and ctas.length %}
+        <div class="cta-row mt-6 flex flex-col items-center justify-center gap-4 sm:flex-row">
+          {% for c in ctas %}
+            {% set isPrimary = (c.kind or 'primary') == 'primary' %}
+            <a
+              href="{{ c.href }}"
+              class="{% if isPrimary %}btn btn-cutout hb-ring-a{% else %}btn btn-ghost hb-ring-c{% endif %} px-7 py-3 font-heading font-bold"
+              {% if not isPrimary %}data-variant="c"{% endif %}
+            >
+              {{ c.label }}
+            </a>
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
 
     {# feature tiles (bento) #}
     {% if tiles and tiles.length %}
-      <div class="bento mt-12 grid gap-4 sm:grid-cols-3">
+      <div class="bento mt-10 grid gap-4 sm:grid-cols-3">
         {% for t in tiles %}
           {{ heroTile(t.k, t.h, t.s, t.url, t.featured or false) }}
         {% endfor %}
@@ -63,23 +77,8 @@
     {% endif %}
 
     {# build meta #}
-    <div class="mt-10 border-t border-base-content/20 pt-2 font-mono text-[11px] text-base-content/90">
+    <div class="mt-8 text-center font-mono text-[11px] hb-ink-soft">
       {{ build.branch }} · {{ build.hash }} · {{ build.builtAtIso }}
     </div>
   </div>
-
-  {# MSCHF mode — optional decals & micro-chaos #}
-  {% if (variant or '') == 'mschf' %}
-    <div class="pointer-events-none absolute inset-x-0 top-[10%] flex justify-center gap-2 text-base-content">
-      <span class="inline-block rotate-[-2deg] rounded px-2 py-1 font-mono text-[11px]
-                   ring-1 ring-current shadow-[4px_4px_0_0_currentColor]">
-        LAB DROP
-      </span>
-      <span class="inline-block rotate-[1.5deg] rounded bg-current px-2 py-1 font-mono text-[11px]
-                   text-[color:var(--paper,#fff)]">
-        DO NOT TRUST
-      </span>
-    </div>
-  {% endif %}
-  <span class="lab-seal" aria-hidden="true"></span>
 </header>

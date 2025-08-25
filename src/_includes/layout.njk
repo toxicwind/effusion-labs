@@ -10,33 +10,42 @@
   <meta name="color-scheme" content="light dark">
   <title>{{ title }} | Effusion Labs</title>
 
-  <!-- Early theme: honor stored; else OS → sunset (dark) / nord (light). Also updates color-scheme. -->
+  {# Early theme (daisyUI): OS → dark: cyberpunk, light: winter. Also updates color-scheme. #}
   <script>
     (function () {
       try {
-        var LIGHT = "nord";
-        var DARK  = "sunset";
-        var mapLegacy = { light: LIGHT, dark: DARK };
-
+        var THEMES = {
+          lightDefault: "winter",
+          darkDefault:  "cyberpunk",
+          allowed: ["winter","cyberpunk","night","dim","acid","dracula"]
+        };
         var meta = document.querySelector('meta[name="color-scheme"]') ||
           (function () { var m = document.createElement("meta"); m.name = "color-scheme"; document.head.appendChild(m); return m; })();
 
         var stored = localStorage.getItem("theme");
         var picked = (stored && stored.trim()) ? stored.trim() : null;
-        if (picked && mapLegacy[picked]) picked = mapLegacy[picked]; // translate legacy
+        if (picked && !THEMES.allowed.includes(picked)) picked = null;
 
         if (!picked) {
           var prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
-          picked = prefersDark ? DARK : LIGHT;
+          picked = prefersDark ? THEMES.darkDefault : THEMES.lightDefault;
           document.documentElement.dataset.themeSource = prefersDark ? "os-dark" : "os-light";
         } else {
           document.documentElement.dataset.themeSource = "storage";
         }
 
         document.documentElement.setAttribute("data-theme", picked);
-        meta.content = picked === LIGHT ? "light dark" : "dark light";
+        meta.content = (picked === THEMES.lightDefault) ? "light dark" : "dark light";
+
+        window.__setTheme = function (name) {
+          if (!THEMES.allowed.includes(name)) return;
+          document.documentElement.setAttribute("data-theme", name);
+          localStorage.setItem("theme", name);
+          document.documentElement.dataset.themeSource = "storage";
+          meta.content = (name === THEMES.lightDefault) ? "light dark" : "dark light";
+        };
       } catch (_) {
-        document.documentElement.setAttribute("data-theme", "nord");
+        document.documentElement.setAttribute("data-theme", "cyberpunk");
         document.documentElement.dataset.themeSource = "fallback";
       }
     })();
@@ -50,6 +59,37 @@
   <!-- Tailwind v4 + daisyUI v5 CSS (cache-busted) -->
   <link rel="stylesheet" href="/assets/css/app.css?v={{ build.hash or build.commit or build.version or buildTime }}">
 
+  <!-- Hypebrüt overlay CSS -->
+  <link rel="stylesheet" href="/assets/css/mschf-overlay.css?v={{ build.hash or build.commit or build.version or buildTime }}">
+
+  <!-- Aesthetic utilities (optional, safe globals for inlays/cutouts/focus) -->
+  <style>
+    :root { --neon-a:#00E0FF; --neon-b:#9AFF00; --neon-c:#FF1CF7; --neon-edge:#ffffff; --focus-clr: var(--neon-a); }
+    :where(a,button,[role="button"],[tabindex],.focusable):focus-visible {
+      outline: 2px solid transparent;
+      box-shadow:
+        0 0 0 2px color-mix(in oklab, var(--focus-clr) 65%, transparent),
+        0 0 0 6px color-mix(in oklab, var(--focus-clr) 22%, transparent);
+      border-radius: 8px;
+      transition: box-shadow 120ms ease-out;
+    }
+    .hb-inlay {
+      background: color-mix(in oklab, #0b0b0e 86%, #000 14%);
+      color: #F2F2F2;
+      border: 1px solid rgba(255,255,255,.12);
+      box-shadow: 0 1px 0 rgba(0,0,0,.75), 0 12px 30px rgba(0,0,0,.7);
+      border-radius: 16px;
+    }
+    .btn-cutout {
+      --c: var(--neon-a);
+      color: var(--neon-edge); background: transparent;
+      border: 2px solid color-mix(in oklab, var(--c) 85%, #fff 15%);
+      box-shadow: inset 0 0 0 2px rgba(0,0,0,.65);
+    }
+    .btn-cutout[data-variant="b"] { --c: var(--neon-b); }
+    .btn-cutout[data-variant="c"] { --c: var(--neon-c); }
+  </style>
+
   <!-- Icons / PWA -->
   <link rel="icon" href="/favicon.ico" sizes="any">
   <link rel="icon" type="image/svg+xml" href="/assets/icons/favicon.svg">
@@ -57,9 +97,194 @@
   <link rel="manifest" href="/site.webmanifest">
 </head>
 
-<body class="bg-base-100 text-base-content font-body antialiased selection:bg-primary/20">
+{# Always-on Hypebrüt overlay controls live on <body> as data-* (page can override via front matter) #}
+<body
+  data-mschf="auto"
+  data-mschf-intensity="{{ page.mschfIntensity or site.mschfIntensity or 'lite' }}"
+  data-mschf-seed-mode="{{ page.mschfSeedMode or site.mschfSeedMode or 'page' }}"
+  class="bg-base-100 text-base-content font-body antialiased selection:bg-primary/20"
+>
   <a href="#main" class="skip-link">Skip to main content</a>
   {{ header(nav, page) }}
+
+  {# Always-on decals & micro-chaos (layout-level, never blocking) — Hypebrüt v2 #}
+  {# Dynamic picks seeded by build/time/title — no extra CSS/JS required. #}
+  {% set __phrases = [
+    "LAB DROP","FIELD TEST","ARCHIVE","KEEP OFF","FOR DISPLAY ONLY","RED TEAM",
+    "VOID","PROTOTYPE","UNSTABLE","RECALIBRATE","SIMULACRUM","THREADMASS","AGENT","SPARK",
+
+    "SPECIMEN","ARTIFACT","EVIDENCE","PROVENANCE","BLUEPRINT","DRAFT",
+    "ALPHA","BETA","RC1","NIGHTLY","CANARY","WIP","HOTFIX","PATCH",
+
+    "REDACTED","DECLASSIFIED","CLASSIFIED","NONCANON","UNSANCTIONED","UNVERIFIED","UNREVIEWED",
+    "NULL RESULT","RETRY","RECALC","REINDEX","REHYDRATE","RESAMPLE","REPLAY",
+
+    "GRAPH","NODE","EDGE","ONTOLOGY","SCHEMA","EMBEDDING","VECTOR","RAG","EVAL","BENCH","TRACE","CHECKSUM",
+
+    "KEEP OUT","OFF LIMITS","NO ENTRY","DO NOT TOUCH","HANDLE WITH CARE","HANDLE WITH GLOVES",
+    "KEEP SEALED","KEEP COOL","KEEP DRY","KEEP CLEAN","KEEP OFF GRID","KEEP CLEAR","SECURED AREA",
+
+    "FOR RESEARCH ONLY","FOR INTERNAL USE","FOR LAB USE","TEST RIG","SANDBOX","SIMULATION","SIM",
+    "FAIR USE","PROTECTED WORK","ARCHIVAL COPY","COLD STORAGE","STAGING","PLAYGROUND",
+
+    "SIGNED","UNSIGNED","SEALED","UNSEALED","HASHED","UNHASHED","VERIFIED","UNVERIFIED SIG","CHECKSUM OK","CHECKSUM FAIL",
+
+    "GHOST MODE","LOW POWER","SAFE MODE","DIAGNOSTIC","CALIBRATE","CALIBRATED","OVERFITTED","UNDERFITTED","ANOMALY","MUTATION","ENTROPY",
+
+    "KILL SWITCH","PANIC SAVE","OFF RECORD","ON RECORD","NO INDEX","NO SCRAPING","NO ROBOTS","NO EXPORT","NO EDITS","READ ONLY",
+
+    "SAMPLE","DEMO","PLACEHOLDER","STUB","MOCK","FIXTURE","SNAPSHOT","CAPTURE LOG","EVENT STREAM","DATA LAKE","DELTA",
+
+    "THREAD","SPARKLINE","BREADCRUMB","WAYFIND","WORKBOARD","KNOWLEDGE","CONCEPT MAP","ATLAS","WORKS","CATALOG",
+
+    "HYPERPOP","FLOWERBURST","GLITCH","SPECTRAL","HALFTONE","TOPO","CROSSHAIR","BRACKETS","RINGS","HOLOGRAM","STARFIELD",
+
+    "LAB SEAL","SEED","PAYLOAD","BEACON","PULSE","PING","HEARTBEAT","TELEMETRY","CHECKPOINT","WAYPOINT",
+
+    "\"OBJECT\"","\"INTERFACE\"","\"ARTIFACT\"","\"SYSTEM\"","\"SPECIMEN\"","\"EVIDENCE\"","\"PROTOTYPE\"","\"KNOWLEDGE\"","\"GRAPH\"","\"SPARK\""
+  ] %}
+
+  {% set __seedstr = (build.hash or build.commit or build.version or buildTime or '') ~ (title or '') %}
+  {% set __len = __seedstr | length %}
+  {% set __p1 = __phrases[ __len % __phrases.length ] %}
+  {% set __p2 = __phrases[ (__len + 3) % __phrases.length ] %}
+  {% set __p3 = __phrases[ (__len + 7) % __phrases.length ] %}
+  {% set __p4 = __phrases[ (__len + 9) % __phrases.length ] %}
+
+  <div class="pointer-events-none fixed inset-x-0 top-[6%] z-[45] flex flex-col items-center gap-1 text-primary">
+    {# ——— SVG micro-instrumentation band (rings + crosshair + brackets) ——— #}
+    <svg width="100%" height="84" viewBox="0 0 1200 84" aria-hidden="true" class="block">
+      <!-- left bracket -->
+      <path d="M24 18 h26 v-8 M24 66 h26 v8" fill="none" stroke="currentColor" stroke-width="2" opacity=".22"/>
+      <!-- right bracket -->
+      <path d="M1176 18 h-26 v-8 M1176 66 h-26 v8" fill="none" stroke="currentColor" stroke-width="2" opacity=".22"/>
+      <!-- spectral rings -->
+      <g opacity=".20">
+        <circle cx="600" cy="42" r="18" fill="none" stroke="currentColor" stroke-width="1"/>
+        <circle cx="600" cy="42" r="30" fill="none" stroke="currentColor" stroke-width="1"/>
+        <circle cx="600" cy="42" r="42" fill="none" stroke="currentColor" stroke-width="1"/>
+      </g>
+      <!-- crosshair -->
+      <g opacity=".28">
+        <line x1="600" y1="10" x2="600" y2="74" stroke="currentColor" stroke-width="1"/>
+        <line x1="560" y1="42" x2="640" y2="42" stroke="currentColor" stroke-width="1"/>
+        <circle cx="600" cy="42" r="12" fill="none" stroke="currentColor" stroke-width="1"/>
+      </g>
+      <!-- faint topographic wiggle -->
+      <path d="M0,58 C120,34 240,74 360,50 480,26 600,66 720,44 840,22 960,62 1080,40 1140,30 1200,42 1200,42"
+            fill="none" stroke="currentColor" stroke-width="1" opacity=".10"/>
+    </svg>
+
+    {# ——— Badge cluster: MSCHF-ish tape + Off-White quotes + rubber stamp ——— #}
+    <div class="pointer-events-none relative flex flex-wrap items-center justify-center gap-2 -mt-3">
+      <!-- tape: angled, pastel hazard vibe -->
+      <span
+        class="inline-block select-none font-mono text-[11px] font-semibold uppercase tracking-[0.14em]"
+        style="
+          transform: rotate(-2.5deg) translateY(-2px);
+          padding: 6px 10px;
+          color: #0b0b0e;
+          background: repeating-linear-gradient(90deg, #fff0b8 0 10px, #fff8d6 10px 20px);
+          border: 1px dashed rgba(0,0,0,.35);
+          box-shadow: 0 1px 0 rgba(0,0,0,.6), 0 8px 18px rgba(0,0,0,.35);
+        ">
+        {{ __p1 }}
+      </span>
+
+      <!-- rubber stamp: multiply red -->
+      <span
+        class="inline-block select-none font-mono text-[11px] font-bold uppercase tracking-[0.16em]"
+        style="
+          transform: rotate(1.8deg);
+          padding: 6px 10px;
+          color: color-mix(in oklab, #ff2e63 90%, currentColor 10%);
+          border: 2px solid currentColor;
+          mix-blend-mode: multiply;
+          box-shadow: 0 2px 0 rgba(0,0,0,.25);
+          background: transparent;
+        ">
+        {{ __p2 }}
+      </span>
+
+      <!-- Off-White style quotes tag -->
+      <span
+        class="inline-block select-none font-mono text-[11px] font-extrabold uppercase tracking-[0.14em]"
+        style="
+          transform: rotate(-0.8deg) translateY(1px);
+          padding: 5px 8px;
+          color: currentColor;
+          background: color-mix(in oklab, #000 70%, transparent);
+          border: 1px solid color-mix(in oklab, currentColor 24%, transparent);
+          border-radius: 6px;
+          backdrop-filter: blur(2px);
+        ">
+        "INTERFACE"
+      </span>
+
+      <!-- specimen plate (seeded by build/time) -->
+      <span
+        class="inline-flex select-none items-center gap-2 font-mono text-[11px] font-semibold uppercase tracking-[0.12em]"
+        style="
+          transform: rotate(1.2deg);
+          padding: 6px 10px;
+          color: color-mix(in oklab, currentColor 85%, #fff 15%);
+          background: color-mix(in oklab, #0c0c0c 85%, transparent);
+          border: 1px solid color-mix(in oklab, currentColor 22%, transparent);
+          border-radius: 6px;
+          box-shadow: 0 0 0 1px rgba(255,255,255,.04) inset, 0 8px 18px rgba(0,0,0,.4);
+        ">
+        <span>SPECIMEN</span>
+        <span aria-hidden="true">•</span>
+        <span>ID {{ (__seedstr | slice(-6, 6)) | upper }}</span>
+        <span aria-hidden="true">•</span>
+        <span>{{ (build.builtAtIso or buildTime or '' ) | slice(0,10) }}</span>
+      </span>
+
+      <!-- neon chip (magenta fill) -->
+      <span
+        class="inline-block select-none font-mono text-[11px] font-semibold uppercase tracking-[0.14em]"
+        style="
+          transform: rotate(2.2deg) translateY(-1px);
+          padding: 6px 10px;
+          color: color-mix(in oklab, #fff 96%, currentColor 4%);
+          background: color-mix(in oklab, hsl(var(--p)) 10%, #ff1cf7 90%);
+          border-radius: 6px;
+          box-shadow: 0 0 16px color-mix(in oklab, #ff1cf7 45%, transparent);
+        ">
+        {{ __p3 }}
+      </span>
+
+      <!-- cyan cutout chip -->
+      <span
+        class="inline-block select-none font-mono text-[11px] font-bold uppercase tracking-[0.14em]"
+        style="
+          transform: rotate(-1.5deg) translateY(1px);
+          padding: 6px 10px;
+          color: color-mix(in oklab, #fff 98%, currentColor 2%);
+          background: transparent;
+          border: 2px solid color-mix(in oklab, #00E0FF 85%, #fff 15%);
+          box-shadow: inset 0 0 0 2px rgba(0,0,0,.65), 0 0 0 6px color-mix(in oklab, #00E0FF 18%, transparent);
+        ">
+        {{ __p4 }}
+      </span>
+    </div>
+  </div>
+
+  {# Lab seal — subtle neon frame with faint glow + inner hairline #}
+  <span
+    class="pointer-events-none fixed inset-0 z-[40]"
+    aria-hidden="true"
+    style="
+      box-shadow:
+        inset 0 0 0 1px color-mix(in oklab, hsl(var(--p)) 18%, transparent),
+        inset 0 0 0 2px color-mix(in oklab, hsl(var(--p)) 6%, transparent),
+        inset 0 0 24px color-mix(in oklab, hsl(var(--p)) 10%, transparent);
+    ">
+  </span>
+
+
+  {# Overlay root (always present). Color follows theme primary. #}
+  <div id="mschf-overlay-root" class="text-primary" aria-hidden="true"></div>
 
   <div class="mx-auto max-w-screen-2xl px-6">
     {% set metaOff = metaDisable == true or metaDisable == 'true' %}
@@ -121,7 +346,10 @@
     {{ footer(buildTime) }}
   </div>
 
+  <!-- Site JS -->
   <script src="/assets/js/footnote-nav.js" defer></script>
   <script src="/assets/js/code-copy.js" defer></script>
+  <!-- Always-on Hypebrüt overlay (module for tree-shaking + strict mode) -->
+  <script type="module" src="/assets/js/mschf-overlay.js" defer></script>
 </body>
 </html>

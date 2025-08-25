@@ -1,5 +1,15 @@
-<section aria-labelledby="map-heading" class="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8 text-center space-y-4">
-  <h2 id="map-heading" class="text-2xl font-heading text-base-content">Explore the Interactive Concept Map</h2>
-  <p class="mx-auto max-w-prose text-lg text-base-content/90">Navigate the living knowledge graph that links every spark, concept, and project in the lab.</p>
-  <a href="/map/" class="btn btn-secondary">Launch the Map</a>
+{# ─────────────────────────────────────────────────────────────
+  FILE: components/map-cta.njk (your "map" section snippet)
+  Changes:
+  • Neon-backed band with neutral inlay for copy
+  • Cutout CTA variant for aesthetic-first look
+─────────────────────────────────────────────────────────────── #}
+<section aria-labelledby="map-heading" class="hb-neon hb-intensity-lite">
+  <div class="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8 text-center space-y-4 py-12">
+    <div class="hb-inlay mx-auto max-w-3xl p-6 sm:p-8">
+      <h2 id="map-heading" class="text-2xl font-heading hb-ink">Explore the Interactive Concept Map</h2>
+      <p class="mx-auto max-w-prose text-lg hb-ink-soft">Navigate the living knowledge graph that links every spark, concept, and project in the lab.</p>
+      <a href="/map/" class="btn btn-cutout hb-ring-b mt-2" data-variant="b">Launch the Map</a>
+    </div>
+  </div>
 </section>
