@@ -235,7 +235,7 @@
         ">
         <span>SPECIMEN</span>
         <span aria-hidden="true">•</span>
-        <span>ID {{ (__seedstr | slice(-6, 6)) | upper }}</span>
+        <span>ID {{ (__seedstr | slice(-6, 6)) | safe_upper('', true) }}</span>
         <span aria-hidden="true">•</span>
         <span>{{ (build.builtAtIso or buildTime or '' ) | slice(0,10) }}</span>
       </span>
