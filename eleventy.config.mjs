@@ -24,6 +24,13 @@ const escapeHtml = (str) =>
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#39;");
 
+// Uppercase only when safe
+const safeUpper = (value, fallback = "", coerce = false) => {
+  if (typeof value === "string") return value.toUpperCase();
+  if (value == null) return fallback;
+  return coerce ? String(value).toUpperCase() : fallback;
+};
+
 export function createCalloutShortcode(eleventyConfig) {
   return function (content, opts = {}) {
     const md = eleventyConfig.markdownLibrary;
@@ -135,6 +142,7 @@ export default function (eleventyConfig) {
   });
 
   eleventyConfig.addFilter("seededShuffle", (arr, seed) => seeded.seededShuffle(arr, seed));
+  eleventyConfig.addFilter("safe_upper", safeUpper);
 
   // ---------- unified callout shortcode ----------
   const callout = createCalloutShortcode(eleventyConfig);

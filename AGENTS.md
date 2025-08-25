@@ -257,6 +257,10 @@ Result: diffstat, change table, artifacts (logs/ & patches/), URLs, Acceptance M
 
 ---
 
+## Template Safety Filters
+
+- `safe_upper(value, fallback='', coerce=false)` — uppercases only strings; returns `fallback` for null/undefined; set `coerce` to `true` to cast others.
+
 ## 10) Rapid Recovery (EXTENDED)
 
 When something misbehaves (non-zero exit, timeouts, or partial refactors):
