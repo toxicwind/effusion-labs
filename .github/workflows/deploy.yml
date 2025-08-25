@@ -56,11 +56,17 @@ jobs:
             gateway:
               - 'markdown_gateway/**'
 
+      - name: 🧪 Validate frontmatter
+        if: steps.changes.outputs.web == 'true'
+        run: |
+          npm ci --ignore-scripts
+          node scripts/validate-frontmatter.mjs
+
       # Optional safety: only for direct pushes to main (PR merges already ran CI)
       - name: ⚡ Direct-push smoke (tests + Eleventy)
         if: steps.mergecheck.outputs.merge == 'false'
         run: |
-          if [ -f package-lock.json ]; then npm ci --ignore-scripts; fi
+          if [ ! -d node_modules ] && [ -f package-lock.json ]; then npm ci --ignore-scripts; fi
           if npm run -s test >/dev/null 2>&1; then npm test; else echo "no tests"; fi
           if npm run -s build >/dev/null 2>&1; then npm run build; else echo "no build"; fi
 
