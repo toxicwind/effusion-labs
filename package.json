@@ -69,6 +69,8 @@
     "postcss-cli": "11.0.1",
     "prettier": "3.3.3",
     "proxy-chain": "^2.5.0",
-    "tailwindcss": "4.1.12"
+    "ripgrep-bin": "13.0.0",
+    "tailwindcss": "4.1.12",
+    "tree-cli": "0.6.7"
   }
 }
