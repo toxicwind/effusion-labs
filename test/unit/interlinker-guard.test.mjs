@@ -4,8 +4,11 @@ import { createRequire } from 'node:module';
 import { dirname, join } from 'node:path';
 
 const require = createRequire(import.meta.url);
-const pkgPath = require.resolve('@photogabble/eleventy-plugin-interlinker/package.json');
-const parserPath = join(dirname(pkgPath), 'src', 'wikilink-parser.js');
+
+// Resolve the package entry and walk to the parser source. This avoids relying on
+// package.json being exported.
+const entryPath = require.resolve('@photogabble/eleventy-plugin-interlinker');
+const parserPath = join(dirname(entryPath), 'src', 'wikilink-parser.js');
 
 const ParserModule = await import(parserPath);
 const ParserClass = ParserModule.default || ParserModule.WikilinkParser || ParserModule;
