@@ -11,8 +11,9 @@ const strategies = [
   },
   {
     name: 'npm_exec',
+    // use npm exec to launch the command without extra argument separators
     spawn: (cmd, args, opts) =>
-      cp.spawn(path.resolve('./bin/npm'), ['exec', '--', cmd, ...args], {
+      cp.spawn(path.resolve('./bin/npm'), ['exec', cmd, ...args], {
         ...opts,
         stdio: 'inherit',
       }),
