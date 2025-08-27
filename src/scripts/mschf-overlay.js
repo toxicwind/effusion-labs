@@ -104,9 +104,12 @@ function initOverlay() {
 
   // Profiles tune density/probabilities per intensity
   const P = profile(intensity);
+  const styleAttr = scope.dataset.mschfStyle;
   const style =
-    scope.dataset.mschfStyle ||
-    pick(rand, ['collage', 'structural', 'playful']);
+    !styleAttr || styleAttr === 'auto'
+      ? pick(rand, ['collage', 'structural', 'playful'])
+      : styleAttr;
+  root.dataset.mschfStyle = style;
 
   const groups = {
     base() {

@@ -11,6 +11,9 @@ test('collage style includes base, ephemera, and lab modules', () => {
     runScripts: 'outside-only',
     url: 'http://localhost',
   });
+  
+  dom.window.matchMedia = dom.window.matchMedia || (() => ({ matches: false, addListener() {}, removeListener() {} }));
+
   const scriptPath = path.resolve('src/scripts/mschf-overlay.js');
   dom.window.eval(readFileSync(scriptPath, 'utf8'));
   dom.window.document.dispatchEvent(new dom.window.Event('DOMContentLoaded'));
@@ -28,4 +31,18 @@ test('collage style includes base, ephemera, and lab modules', () => {
       '.mschf-callout, .mschf-graph, .mschf-rings, .mschf-topo, .mschf-halftone, .mschf-crt, .mschf-perf, .mschf-starfield',
     ),
   );
+});
+
+test('auto style selects deterministic variant based on seed', () => {
+  const html = `<!doctype html><html><body data-mschf="on" data-mschf-intensity="test" data-mschf-style="auto"></body></html>`;
+  const dom = new JSDOM(html, {
+    runScripts: 'outside-only',
+    url: 'http://localhost/?mschf-seed=1',
+  });
+  dom.window.matchMedia = dom.window.matchMedia || (() => ({ matches: false, addListener() {}, removeListener() {} }));
+  const scriptPath = path.resolve('src/scripts/mschf-overlay.js');
+  dom.window.eval(readFileSync(scriptPath, 'utf8'));
+  dom.window.document.dispatchEvent(new dom.window.Event('DOMContentLoaded'));
+  const root = dom.window.document.getElementById('mschf-overlay-root');
+  assert.equal(root.dataset.mschfStyle, 'structural');
 });
