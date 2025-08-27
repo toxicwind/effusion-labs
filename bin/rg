@@ -2,23 +2,11 @@
 set -euo pipefail
 . "$(cd "$(dirname "$0")" && pwd)/_lib.sh"
 
-# Prefer npm-provided ripgrep when functional
-if "$REPO_ROOT/node_modules/.bin/rg" --version >/dev/null 2>&1; then
-  exec "$REPO_ROOT/node_modules/.bin/rg" "$@"
-fi
-if "$REPO_ROOT/node_modules/.bin/ripgrep" --version >/dev/null 2>&1; then
-  exec "$REPO_ROOT/node_modules/.bin/ripgrep" "$@"
-fi
-
-# Then try repo cache, system, then apt
 retry_exec "$@" -- \
-  "$TOOLS_DIR/rg/rg" \
-  rg
-# Install via apt if missing
-apt_install ripgrep >/dev/null 2>&1 || true
-retry_exec "$@" -- \
+  "$REPO_ROOT/node_modules/.bin/rg" \
+  "$REPO_ROOT/node_modules/.bin/ripgrep" \
   "$TOOLS_DIR/rg/rg" \
   rg
 
-echo "❌ ripgrep (rg) not available; install devDeps or system package." >&2
+echo "❌ ripgrep (rg) not available; ensure devDeps installed or provide a system 'rg'." >&2
 exit 127
