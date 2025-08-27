@@ -100,7 +100,7 @@ _prettier_bin(){
 llm_cat(){
   local p="${1:-}"
   if [[ -z "$p" ]]; then command cat | _llm_fold; return; fi
-  if [[ ! -f "$p" ]]; then command cat -vt -- "$p" | _llm_fold; return; fi
+  if [[ ! -f "$p" ]]; then command cat -- "$p" 2>&1 | _llm_fold; return; fi
   local size ext parser bin; size=$(wc -c <"$p" 2>/dev/null || echo 0); ext="${p##*.}"; parser=""
   case "$ext" in
     js|mjs|cjs) parser="babel" ;;
@@ -117,7 +117,7 @@ llm_cat(){
     command cat -- "$p" | $bin --parser "$parser" --print-width "${LLM_FOLD_WIDTH:-100}" 2>/dev/null | _llm_fold
   else
     _llm_emit cat.raw file="$p" bytes="$size" reason="$([[ -z "$bin" ]] && echo no-prettier || ([[ -z "$parser" ]] && echo unknown-type || echo size-cap))"
-    command cat -vt -- "$p" | _llm_fold
+    command cat -- "$p" | _llm_fold
   fi
 }
 export -f llm_cat
