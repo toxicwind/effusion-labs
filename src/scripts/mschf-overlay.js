@@ -70,7 +70,7 @@ function initOverlay() {
   // Root
   let root = doc.getElementById("mschf-overlay-root");
   if (!root) root = el("div", "", doc.body), (root.id = "mschf-overlay-root");
-  css(root, { pointerEvents:"none", position:"fixed", inset:"0", zIndex:"44", color:"hsl(var(--p))" });
+  css(root, { pointerEvents:"none", position:"fixed", inset:"0", width:"100vw", height:"100vh", zIndex:"44", color:"hsl(var(--p))" });
   root.setAttribute("aria-hidden","true");
   root.innerHTML = "";
 
