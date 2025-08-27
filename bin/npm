@@ -1,0 +1,24 @@
+#!/bin/sh
+# A smart shim for npm that handles output buffering for test commands.
+set -e
+
+# Get the absolute path of the directory containing this script.
+DIR="$(cd "$(dirname "$0")" && pwd)"
+NPM_CLI="$DIR/../node_modules/npm/bin/npm-cli.js"
+
+# Check if the command is 'test'. This is often the command that suffers
+# from I/O buffering when run in non-interactive shells.
+if [ "$1" = "test" ]; then
+  # For 'npm test', we use a pseudo-terminal (PTY) to force line-buffering.
+  # This tricks the Node.js test runner into streaming its output immediately.
+  # The `script` command is a standard Linux utility for this purpose.
+  # -q = quiet mode (no start/done messages)
+  # -e = return the exit code of the child command (crucial for CI)
+  # -c = the command to run, with all arguments passed through
+  # The final /dev/null argument is for the typescript log file, which we don't need.
+  echo "::notice:: NPM-SHIM: Using PTY wrapper for 'npm test' to ensure output streaming." >&2
+  exec script -q -e -c "\"$DIR/node\" \"$NPM_CLI\" \"$@\"" /dev/null
+else
+  # For all other commands (install, run build, etc.), execute directly.
+  exec "$DIR/node" "$NPM_CLI" "$@"
+fi

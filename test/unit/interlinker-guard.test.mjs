@@ -4,6 +4,7 @@ import { createRequire } from 'node:module';
 import { dirname, join } from 'node:path';
 
 const require = createRequire(import.meta.url);
+
 // Resolve the package entry and walk to the parser source. This avoids relying on
 // package.json being exported.
 const entryPath = require.resolve('@photogabble/eleventy-plugin-interlinker');
