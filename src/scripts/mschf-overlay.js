@@ -247,7 +247,7 @@
       function draw(cx, cy, baseR, color) {
         g.clear();
         g.alpha = .15;
-        g.blendMode = PIXI.BLEND_MODES.ADD;
+        g.blendMode = PIXI.BLEND_MODES?.ADD ?? 'add';
         g.lineStyle(1, color, 1);
         for (let i=0;i<3;i++) g.drawCircle(cx, cy, baseR + i*baseR*.33);
         g.endFill();
@@ -271,7 +271,7 @@
       const g = new PIXI.Graphics(); container.addChild(g);
 
       function draw(){
-        g.clear(); g.blendMode = PIXI.BLEND_MODES.SCREEN;
+        g.clear(); g.blendMode = PIXI.BLEND_MODES?.SCREEN ?? 'screen';
         const w = innerWidth, h = innerHeight;
         const lines = 18;
         for (let i=0;i<lines;i++){
@@ -295,7 +295,7 @@
 
     makeStars(PIXI) {
       const container = new PIXI.Container(); container.alpha = .12;
-      container.blendMode = PIXI.BLEND_MODES.SCREEN;
+      container.blendMode = PIXI.BLEND_MODES?.SCREEN ?? 'screen';
       const starTex = PIXI.Texture.WHITE;
       const sprites = [];
 
