@@ -1,0 +1,4 @@
+name,brand,size_label,price,weight_g,price_per_oz,report_category,is_bundle,aud_suspect,suspect_reason
+Flower Pound - Furious George,,1 oz,119.48,28.0,119.47999999999999,Flower,False,False,
+Flower Pound - Pinot Nova,,1 oz,119.48,28.0,119.47999999999999,Flower,False,False,
+Flower Pound - Space Force,,1 oz,119.48,28.0,119.47999999999999,Flower,False,False,
