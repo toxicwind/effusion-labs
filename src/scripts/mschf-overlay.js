@@ -42,6 +42,12 @@
     return null;
   }
 
+  // Resolve blend modes across Pixi versions
+  function resolveBlend(PIXI, name) {
+    const map = PIXI?.BLEND_MODES;
+    return map && map[name] !== undefined ? map[name] : name.toLowerCase().replace(/_/g, '-');
+  }
+
   // ————————————————————————————————————————
   // Global State
   // ————————————————————————————————————————
@@ -247,7 +253,8 @@
       function draw(cx, cy, baseR, color) {
         g.clear();
         g.alpha = .15;
-        g.blendMode = PIXI.BLEND_MODES?.ADD ?? 'add';
+
+        g.blendMode = resolveBlend(PIXI,'ADD');
         g.lineStyle(1, color, 1);
         for (let i=0;i<3;i++) g.drawCircle(cx, cy, baseR + i*baseR*.33);
         g.endFill();
@@ -271,7 +278,7 @@
       const g = new PIXI.Graphics(); container.addChild(g);
 
       function draw(){
-        g.clear(); g.blendMode = PIXI.BLEND_MODES?.SCREEN ?? 'screen';
+        g.clear(); g.blendMode = resolveBlend(PIXI,'SCREEN');
         const w = innerWidth, h = innerHeight;
         const lines = 18;
         for (let i=0;i<lines;i++){
@@ -295,7 +302,7 @@
 
     makeStars(PIXI) {
       const container = new PIXI.Container(); container.alpha = .12;
-      container.blendMode = PIXI.BLEND_MODES?.SCREEN ?? 'screen';
+      container.blendMode = resolveBlend(PIXI,'SCREEN');
       const starTex = PIXI.Texture.WHITE;
       const sprites = [];
 
