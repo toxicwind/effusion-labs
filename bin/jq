@@ -2,23 +2,21 @@
 set -euo pipefail
 . "$(cd "$(dirname "$0")" && pwd)/_lib.sh"
 
-# 1) repo cache 2) system 3) apt 4) static
 retry_exec "$@" -- \
-  "$TOOLS_DIR/jq/jq" \
-  jq
-apt_install jq >/dev/null 2>&1 || true
-retry_exec "$@" -- \
+  "$REPO_ROOT/node_modules/.bin/jq" \
   "$TOOLS_DIR/jq/jq" \
   jq
 
-# Static fallback
 if [[ ! -x "$TOOLS_DIR/jq/jq" ]]; then
   mkdir -p "$TOOLS_DIR/jq"
   url="https://github.com/jqlang/jq/releases/latest/download/jq-linux-amd64"
   echo "⬇️  Downloading jq static build..." >&2
   curl -fsSL "$url" -o "$TOOLS_DIR/jq/jq" && chmod +x "$TOOLS_DIR/jq/jq"
 fi
-retry_exec "$@" -- "$TOOLS_DIR/jq/jq"
 
-echo "❌ jq not available; apt denied and static download failed." >&2
+retry_exec "$@" -- \
+  "$REPO_ROOT/node_modules/.bin/jq" \
+  "$TOOLS_DIR/jq/jq"
+
+echo "❌ jq not available; ensure devDeps installed." >&2
 exit 127

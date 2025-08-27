@@ -2,24 +2,21 @@
 set -euo pipefail
 . "$(cd "$(dirname "$0")" && pwd)/_lib.sh"
 
-# Prefer Mike Farah yq (Go static binary), not Python yq.
 retry_exec "$@" -- \
-  "$TOOLS_DIR/yq/yq" \
-  yq
-# Try apt (some Ubuntu distribs ship the Go yq)
-apt_install yq >/dev/null 2>&1 || true
-retry_exec "$@" -- \
+  "$REPO_ROOT/node_modules/.bin/yq" \
   "$TOOLS_DIR/yq/yq" \
   yq
 
-# Static fallback
 if [[ ! -x "$TOOLS_DIR/yq/yq" ]]; then
   mkdir -p "$TOOLS_DIR/yq"
   url="https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64"
   echo "⬇️  Downloading yq static build..." >&2
   curl -fsSL "$url" -o "$TOOLS_DIR/yq/yq" && chmod +x "$TOOLS_DIR/yq/yq"
 fi
-retry_exec "$@" -- "$TOOLS_DIR/yq/yq"
 
-echo "❌ yq not available; apt denied and static download failed." >&2
+retry_exec "$@" -- \
+  "$REPO_ROOT/node_modules/.bin/yq" \
+  "$TOOLS_DIR/yq/yq"
+
+echo "❌ yq not available; ensure devDeps installed." >&2
 exit 127

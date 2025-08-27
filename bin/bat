@@ -2,16 +2,11 @@
 set -euo pipefail
 . "$(cd "$(dirname "$0")" && pwd)/_lib.sh"
 
-# Ubuntu may name it 'batcat'
 retry_exec "$@" -- \
-  "$TOOLS_DIR/bat/bat" \
-  bat \
-  batcat
-apt_install bat >/dev/null 2>&1 || true
-retry_exec "$@" -- \
+  "$REPO_ROOT/node_modules/.bin/bat" \
   "$TOOLS_DIR/bat/bat" \
   bat \
   batcat
 
-echo "❌ bat not available. Try: sudo apt-get install bat (binary may be 'batcat')." >&2
+echo "❌ bat not available; ensure devDeps installed or provide a system 'bat'." >&2
 exit 127
