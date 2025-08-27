@@ -18,9 +18,7 @@ Use `localStorage.setItem('mschf:off','1')` to opt out persistently.
 ## Aesthetic Strategies
 
 `data-mschf-style="auto"` (default) randomly selects an aesthetic strategy per page seed. If `data-mschf-intensity` is omitted, the overlay picks a random intensity so each visit feels fresh.
-
 `collage` fuses four groups: base scaffold, culture-coded ephemera, lab/blueprint motifs, and framing stickers. Other styles limit the mix:
-
 - **structural** – base + lab motifs only.
 - **playful** – base + culture-coded ephemera.
 

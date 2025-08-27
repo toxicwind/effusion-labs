@@ -11,7 +11,9 @@ test('collage style includes base, ephemera, and lab modules', () => {
     runScripts: 'outside-only',
     url: 'http://localhost',
   });
+  
   dom.window.matchMedia = dom.window.matchMedia || (() => ({ matches: false, addListener() {}, removeListener() {} }));
+
   const scriptPath = path.resolve('src/scripts/mschf-overlay.js');
   dom.window.eval(readFileSync(scriptPath, 'utf8'));
   dom.window.document.dispatchEvent(new dom.window.Event('DOMContentLoaded'));
@@ -30,6 +32,7 @@ test('collage style includes base, ephemera, and lab modules', () => {
     ),
   );
 });
+
 test('auto style selects deterministic variant based on seed', () => {
   const html = `<!doctype html><html><body data-mschf="on" data-mschf-intensity="test" data-mschf-style="auto"></body></html>`;
   const dom = new JSDOM(html, {
