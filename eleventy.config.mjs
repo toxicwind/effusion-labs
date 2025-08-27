@@ -176,7 +176,15 @@ export default function (eleventyConfig) {
   });
   const build = getBuildInfo();
   eleventyConfig.addGlobalData("build", build);
-
+  eleventyConfig.on("eleventy.after", async ({ dir, results }) => {
+    // Iterate all templates that Eleventy just processed
+    for (const r of results) {
+      // r.content should be a string; if not, log it
+      if (typeof r?.content !== "string") {
+        console.error("[Probe] Non-string output:", r.inputPath, "type=", typeof r?.content);
+      }
+    }
+  });
   return {
     dir: dirs,
     markdownTemplateEngine: "njk",
