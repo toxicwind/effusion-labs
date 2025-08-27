@@ -27,17 +27,17 @@ export default {
     tiles: data => {
       const all = data.collections.work || [];
       const categories = [
-        { kind: "project", heading: "Latest Project", subheading: "The newest prototype you can test" },
-        { kind: "concept", heading: "Core Concepts", subheading: "Frameworks and structural notes" },
-        { kind: "spark",   heading: "Fresh Sparks",  subheading: "Quick ideas and early sketches" },
-        { kind: "meta",    heading: "Meta Notes",    subheading: "Process and methodology context" }
+        { k: "project", h: "Latest Project", s: "The newest prototype you can test" },
+        { k: "concept", h: "Core Concepts", s: "Frameworks and structural notes" },
+        { k: "spark",   h: "Fresh Sparks",  s: "Quick ideas and early sketches" },
+        { k: "meta",    h: "Meta Notes",    s: "Process and methodology context" }
       ];
       return categories.map(cat => {
-        const item = all.find(i => i.type === cat.kind);
+        const item = all.find(i => i.type === cat.k);
         return {
           ...cat,
           url: item ? item.url : "/work",
-          featured: cat.kind === "project"
+          featured: cat.k === "project"
         };
       });
     },
