@@ -5,13 +5,16 @@
 2. `prepare-docs` script no longer auto-installs ripgrep.
 3. README reflects manual ripgrep requirement.
 
+4. Remove `ripgrep-bin` dev dependency to avoid build tool requirement.
+
 ## Proofs
 - `test/unit/ripgrep.test.mjs` checks absence of `@vscode/ripgrep` and script content.
 - `docs/knowledge/ripgrep/test-success.log` shows passing tests.
 - `docs/knowledge/ripgrep/docs-validate.log` records successful docs validation.
+- package.json and package-lock.json omit `ripgrep-bin`.
 
 ## Index
-3/3 criteria satisfied.
+4/4 criteria satisfied.
 
 ## Delta Queue
 - none
