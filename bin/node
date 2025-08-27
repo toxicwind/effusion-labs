@@ -1,2 +1,7 @@
 #!/usr/bin/env bash
+# This shim simply executes the 'node' command found in the shell's PATH.
+# It relies on the environment being pre-configured with the correct Node.js version.
+# The output streaming compatibility with llm_run is handled upstream by the npm shim.
+set -e
+
 exec node "$@"
