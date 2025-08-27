@@ -76,41 +76,55 @@ function initOverlay() {
 
   // Profiles tune density/probabilities per intensity
   const P = profile(intensity);
+  const style = scope.dataset.mschfStyle || 'collage';
 
-  // ——— Base scaffold (kept minimal) ———
-  if (chance(rand, P.grid))      addGrid(root, rand, intensity);
-  if (chance(rand, P.cross))     addCrosshair(root, rand, intensity);
-  addCorners(root, intensity);
-  addFrame(root, intensity);
-  if (chance(rand, P.scan))      addScanline(root);
+  const groups = {
+    base() {
+      if (chance(rand, P.grid)) addGrid(root, rand, intensity);
+      if (chance(rand, P.cross)) addCrosshair(root, rand, intensity);
+      addCorners(root, intensity);
+      addFrame(root, intensity);
+      if (chance(rand, P.scan)) addScanline(root);
+    },
+    ephemera() {
+      if (chance(rand, P.tape)) addTapeLabels(root, rand, intensity);
+      if (chance(rand, P.stamp)) addStamp(root, rand);
+      if (chance(rand, P.quotes)) addQuotes(root, rand);
+      if (chance(rand, P.barcode)) addPlate(root, rand, seed, build);
+      if (chance(rand, P.specimen)) addSpecimenLabel(root, rand, build);
+    },
+    lab() {
+      if (chance(rand, P.callout)) addBlueprintCallout(root, rand);
+      if (chance(rand, P.graph)) addGraphCluster(root, rand, intensity);
+      if (chance(rand, P.rings)) addSpectralRings(root, rand, intensity);
+      if (chance(rand, P.topo)) addTopo(root, rand);
+      if (chance(rand, P.halftone)) addHalftone(root, rand);
+      if (chance(rand, P.crt)) addCRTMask(root, rand);
+      if (chance(rand, P.perf)) addPerforation(root, rand);
+      if (chance(rand, P.starfield)) addStarfield(root, rand);
+    },
+    frame() {
+      if (chance(rand, P.brackets)) addBrackets(root, rand);
+      if (chance(rand, P.glitch)) addGlitchSlices(root, rand, intensity);
+      if (chance(rand, P.rulers)) addRulers(root);
+      if (chance(rand, P.watermark)) addWatermark(root);
+      if (chance(rand, P.flowers)) addFlowers(root, rand, intensity);
+      if (chance(rand, P.holo)) addHolo(root, intensity);
+      if (chance(rand, P.reg)) addRegMarks(root, intensity);
+      if (chance(rand, P.dims)) addDims(root, rand);
+      if (chance(rand, P.stickers)) addStickers(root, rand);
+    },
+  };
 
-  // ——— Culture-coded ephemera ———
-  if (chance(rand, P.tape))      addTapeLabels(root, rand, intensity);
-  if (chance(rand, P.stamp))     addStamp(root, rand);
-  if (chance(rand, P.quotes))    addQuotes(root, rand);
-  if (chance(rand, P.barcode))   addPlate(root, rand, seed, build);
-  if (chance(rand, P.specimen))  addSpecimenLabel(root, rand, build);
+  const styles = {
+    collage: ['base', 'ephemera', 'lab', 'frame'],
+    structural: ['base', 'lab'],
+    playful: ['base', 'ephemera'],
+  };
 
-  // ——— Lab/blueprint/OSINT aesthetics ———
-  if (chance(rand, P.callout))   addBlueprintCallout(root, rand);
-  if (chance(rand, P.graph))     addGraphCluster(root, rand, intensity);
-  if (chance(rand, P.rings))     addSpectralRings(root, rand, intensity);
-  if (chance(rand, P.topo))      addTopo(root, rand);
-  if (chance(rand, P.halftone))  addHalftone(root, rand);
-  if (chance(rand, P.crt))       addCRTMask(root, rand);
-  if (chance(rand, P.perf))      addPerforation(root, rand);
-  if (chance(rand, P.starfield)) addStarfield(root, rand);
-
-  // ——— Framing and stickers ———
-  if (chance(rand, P.brackets))  addBrackets(root, rand);
-  if (chance(rand, P.glitch))    addGlitchSlices(root, rand, intensity);
-  if (chance(rand, P.rulers))    addRulers(root);
-  if (chance(rand, P.watermark)) addWatermark(root);
-  if (chance(rand, P.flowers))   addFlowers(root, rand, intensity);
-  if (chance(rand, P.holo))      addHolo(root, intensity);
-  if (chance(rand, P.reg))       addRegMarks(root, intensity);
-  if (chance(rand, P.dims))      addDims(root, rand);
-  if (chance(rand, P.stickers))  addStickers(root, rand);
+  for (const key of styles[style] || styles.collage) {
+    groups[key]();
+  }
 
   // Dev toggles
   window.__mschfOff = () => { localStorage.setItem("mschf:off","1"); root.remove(); };
@@ -143,9 +157,11 @@ function profile(intensity) {
     callout:.25, graph:.30, rings:.20, topo:.18, halftone:.15, crt:.10, perf:.12, specimen:.20, starfield:.15,
     brackets:.22, glitch:.12, rulers:.20, watermark:.12, flowers:.18, holo:.12, reg:.30, dims:.18, stickers:.15
   };
+  const all = Object.fromEntries(Object.keys(base).map(k => [k, 1]));
   if (intensity === "bold") return bold;
   if (intensity === "loud") return loud;
   if (intensity === "calm") return calm;
+  if (intensity === "test") return all;
   return base; // "lite"
 }
 
