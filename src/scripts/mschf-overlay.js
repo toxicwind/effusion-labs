@@ -253,6 +253,7 @@
       function draw(cx, cy, baseR, color) {
         g.clear();
         g.alpha = .15;
+
         g.blendMode = resolveBlend(PIXI,'ADD');
         g.lineStyle(1, color, 1);
         for (let i=0;i<3;i++) g.drawCircle(cx, cy, baseR + i*baseR*.33);
