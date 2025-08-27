@@ -6,6 +6,9 @@
 FROM node:24-alpine AS deps
 WORKDIR /app
 
+# Install build tools needed for native modules like ripgrep-bin
+RUN apk add --no-cache build-base
+
 # Reduce npm noise & avoid audits during CI
 ENV npm_config_fund=false \
     npm_config_audit=false

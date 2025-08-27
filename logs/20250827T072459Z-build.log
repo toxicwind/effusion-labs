@@ -1,0 +1,61 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> effusion_labs_final@1.0.0 build
+> eleventy
+
+🗂  Archives loaded from "src/content/archives": 88 items (44 products, 4 characters, 40 series)
+🚀 Eleventy build starting with enhanced footnote system...
+/*! 🌼 daisyUI 5.0.50 */
+[PostCSS] Compiled src/styles/app.tailwind.css -> src/assets/css/app.css
+[11ty] Writing ./_site/concept-map.json from ./src/concept-map.json.njk
+[11ty] Writing ./_site/feed.xml from ./src/feed.njk
+[11ty/eleventy-img] Processing ./src/assets/static/logo.png (transform)
+[11ty] Writing ./_site/map/index.html from ./src/map.njk
+[11ty] Writing ./_site/404.html from ./src/404.njk
+[11ty] Writing ./_site/archives/index.html from ./src/archives/index.njk
+[11ty] Writing ./_site/work/1/index.html from ./src/work/index.njk
+[11ty] Writing ./_site/archives/collectables/index.html from ./src/archives/collectables/index.njk
+[11ty] Writing ./_site/meta/index.html from ./src/content/meta/index.njk
+[11ty] Writing ./_site/archives/collectables/designer-toys/index.html from ./src/archives/collectables/designer-toys/index.njk
+[11ty] Writing ./_site/archives/collectables/designer-toys/pop-mart/index.html from ./src/archives/collectables/designer-toys/pop-mart/index.njk
+[11ty] Writing ./_site/archives/collectables/designer-toys/pop-mart/the-monsters/index.html from ./src/archives/collectables/designer-toys/pop-mart/the-monsters/index.njk
+[11ty] Writing ./_site/work/index.html from ./src/work.njk
+[11ty] Writing ./_site/content/concepts/aesthetic-inquiry/index.html from ./src/content/concepts/aesthetic-inquiry.md (njk)
+[11ty] Writing ./_site/content/concepts/atlas-process/index.html from ./src/content/concepts/atlas-process.md (njk)
+[11ty] Writing ./_site/content/concepts/autocatalytic-system/index.html from ./src/content/concepts/autocatalytic-system.md (njk)
+[11ty] Writing ./_site/work/block-ledger/index.html from ./src/content/concepts/block-ledger.md (njk)
+[11ty] Writing ./_site/content/concepts/compliant-spire/index.html from ./src/content/concepts/compliant-spire.md (njk)
+[11ty] Writing ./_site/content/concepts/ghost-byline/index.html from ./src/content/concepts/ghost-byline.md (njk)
+[11ty] Writing ./_site/content/concepts/ghost-engine/index.html from ./src/content/concepts/ghost-engine.md (njk)
+[11ty] Writing ./_site/content/concepts/parroting-mimicry/index.html from ./src/content/concepts/parroting-mimicry.md (njk)
+[11ty] Writing ./_site/content/concepts/readers-journey/index.html from ./src/content/concepts/readers-journey.md (njk)
+[11ty] Writing ./_site/content/concepts/rhizomatic-protocol/index.html from ./src/content/concepts/rhizomatic-protocol.md (njk)
+[11ty] Writing ./_site/content/concepts/three-studies-sensory/index.html from ./src/content/concepts/three-studies-sensory.md (njk)
+[11ty] Writing ./_site/content/concepts/verification-is-an-ecology/index.html from ./src/content/concepts/verification-is-an-ecology.md (njk)
+[11ty] Writing ./_site/content/concepts/workshop-weather/index.html from ./src/content/concepts/workshop-weather.md (njk)
+[11ty] Writing ./_site/content/meta/a-b-curatorial-protocolist/index.html from ./src/content/meta/a-b-curatorial-protocolist.md (njk)
+[11ty] Writing ./_site/content/meta/core-concept/index.html from ./src/content/meta/core-concept.md (njk)
+[11ty] Writing ./_site/content/meta/curatorial-generativism/index.html from ./src/content/meta/curatorial-generativism.md (njk)
+[11ty] Writing ./_site/content/meta/methodology/index.html from ./src/content/meta/methodology.md (njk)
+[11ty] Writing ./_site/content/meta/protocolist/index.html from ./src/content/meta/protocolist.md (njk)
+[11ty] Writing ./_site/content/meta/style-guide/index.html from ./src/content/meta/style-guide.md (njk)
+[11ty] Writing ./_site/content/meta/unified-referencing-syntax/index.html from ./src/content/meta/unified-referencing-syntax.md (njk)
+[11ty] Writing ./_site/content/projects/project-dandelion/index.html from ./src/content/projects/project-dandelion.md (njk)
+[11ty] Writing ./_site/content/sparks/academic-blindness/index.html from ./src/content/sparks/academic-blindness.md (njk)
+[11ty] Writing ./_site/content/sparks/breakfast-eggs/index.html from ./src/content/sparks/breakfast-eggs.md (njk)
+[11ty] Writing ./_site/content/sparks/george-eastman-obscure/index.html from ./src/content/sparks/george-eastman-obscure.md (njk)
+[11ty] Writing ./_site/content/sparks/illusion-japan-nicotine/index.html from ./src/content/sparks/illusion-japan-nicotine.md (njk)
+[11ty] Writing ./_site/content/sparks/murakami-market-analysis-2025/index.html from ./src/content/sparks/murakami-market-analysis-2025.md (njk)
+[11ty] Writing ./_site/content/sparks/paulin-paulin-paulin-marketing/index.html from ./src/content/sparks/paulin-paulin-paulin-marketing.md (njk)
+[11ty] Writing ./_site/content/sparks/smoker-sysadmin/index.html from ./src/content/sparks/smoker-sysadmin.md (njk)
+[11ty] Writing ./_site/content/sparks/vapor-linked-governance/index.html from ./src/content/sparks/vapor-linked-governance.md (njk)
+[11ty] Writing ./_site/work/drop/index.html from ./src/work/drop.11ty.js
+[11ty] Writing ./_site/work/latest/index.html from ./src/work/latest.11ty.js
+[11ty] Writing ./_site/concepts/index.html from ./src/content/concepts/index.njk
+[11ty] Writing ./_site/projects/index.html from ./src/content/projects/index.njk
+[11ty] Writing ./_site/sparks/index.html from ./src/content/sparks/index.njk
+[11ty] Writing ./_site/work/2/index.html from ./src/work/index.njk
+[11ty] Writing ./_site/index.html from ./src/index.njk
+✅ Eleventy build completed. Generated 48 files.
+[11ty/eleventy-img] 1 image optimized (1 cached)
+[11ty] Copied 11 Wrote 48 files in 4.47 seconds (93.2ms each, v3.1.2)
