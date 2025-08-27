@@ -1,0 +1,44 @@
+<!doctype html><html><head><meta charset='utf-8'>
+<style>
+:root{color-scheme:dark light;}
+body{font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Noto Sans, Ubuntu, Cantarell, Helvetica Neue, Arial, "Apple Color Emoji","Segoe UI Emoji"; 
+     background: radial-gradient(1200px 600px at 10% -10%, rgba(80,160,255,0.10), transparent 60%),
+                 radial-gradient(1000px 500px at 90% 110%, rgba(160,255,200,0.10), transparent 60%),
+                 #0b0d10; margin:0; padding:32px; color:#E6EAF2;}
+.header{display:flex; align-items:baseline; gap:12px; margin-bottom:18px;}
+.h1{font-size:20px; font-weight:700; letter-spacing:0.2px;}
+.sub{opacity:0.7; font-size:12px;}
+.grid{display:grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap:14px;}
+.card{background:linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02)); border:1px solid rgba(255,255,255,0.08);
+      border-radius:14px; padding:14px; box-shadow:0 6px 24px rgba(0,0,0,0.25);}
+.card h3{margin:0 0 8px 0; font-size:16px; letter-spacing:0.2px;}
+.row{display:flex; align-items:center; justify-content:space-between; font-size:13px; margin:4px 0;}
+.badge{font-size:11px; padding:2px 8px; border-radius:999px; background:rgba(255,255,255,0.10); border:1px solid rgba(255,255,255,0.14);}
+.kv{display:flex; gap:8px; align-items:center;}
+.k{opacity:0.7; font-size:12px; min-width:88px;}
+.v{font-variant-numeric:tabular-nums;}
+hr{border:none; border-top:1px dashed rgba(255,255,255,0.12); margin:8px 0;}
+.footer{opacity:0.7; font-size:11px; margin-top:14px;}
+.nodata{border:1px dashed rgba(255,255,255,0.20); background:rgba(255,255,255,0.04); padding:16px; border-radius:12px;}
+.small{font-size:11px; opacity:0.8;}
+@media (prefers-reduced-motion: no-preference){
+  .card{transition: transform 0.15s ease;}
+  .card:hover{transform: translateY(-2px);}
+}
+</style>
+<title>Nearby Value Leaderboard</title></head><body>
+<div class="header">
+  <div class="h1">Distance-Adjusted Value Leaderboard</div>
+  <div class="sub">Adjusted $/oz = raw $/oz × (1 + 0.02 × miles) • Generated 2025-08-25 22:47:42</div>
+</div>
+
+    <div class="nodata">
+      <div style="font-weight:600; margin-bottom:6px;">No data available</div>
+      <div class="small">Missing LATLNG (expected tuple of (lat, lon)).</div>
+      <div class="small">Expected: LATLNG tuple and listings_df with columns [slug, lat, lon, name].</div>
+    </div>
+    
+<div class="footer">
+  <span class="small">Bars scale within this view (lower is better). Values computed from local cache only; missing menus are shown without pricing.</span>
+</div>
+</body></html>
