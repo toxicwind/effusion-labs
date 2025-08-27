@@ -19,6 +19,9 @@ set -Euo pipefail
 
 _llm_ts(){ date -u +"%Y-%m-%dT%H:%M:%SZ"; }
 _llm_has(){ command -v "$1" >/dev/null 2>&1; }
+# (FIX ADDED) Helper to check if a feature flag is enabled.
+_llm_on() { [[ "$1" == "1" || "$1" == "true" ]]; }
+
 
 # The core aesthetic emitter. All themed output flows through here.
 _llm_emit() {
@@ -249,6 +252,12 @@ export -f llm_snapshot
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd 2>/dev/null || pwd)"
 _llm_emit "INFO :: Effusion Labs HYPEBRUT OS activated."
 _llm_emit "INFO :: Repo Root: $repo_root"
+
+# (FIX ADDED) Add the repo's /bin directory to the PATH.
+if [[ -d "$repo_root/bin" ]]; then
+    export PATH="$repo_root/bin:$PATH"
+    _llm_emit "INFO :: Added '$repo_root/bin' to PATH."
+fi
 
 # Auto-install dependencies if package-lock.json has changed.
 if _llm_on "$LLM_DEPS_AUTOINSTALL"; then
