@@ -6,7 +6,7 @@ retry_exec "$@" -- \
   "$REPO_ROOT/node_modules/.bin/rg" \
   "$REPO_ROOT/node_modules/.bin/ripgrep" \
   "$TOOLS_DIR/rg/rg" \
-  rg
+  /usr/bin/rg
 
-echo "❌ ripgrep (rg) not available; ensure devDeps installed or provide a system 'rg'." >&2
+echo "❌ ripgrep (rg) not available; install via package manager or provide a system 'rg'." >&2
 exit 127
