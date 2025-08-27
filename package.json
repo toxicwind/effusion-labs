@@ -17,7 +17,8 @@
     "data:all": "npm run data:merge-sections && npm run data:synthesize && npm run data:merge-golden",
     "data:merge-sections": "node tools/merge-sections.mjs --verbose",
     "data:synthesize": "node tools/synthesize.mjs --verbose",
-    "data:merge-golden": "node tools/merge-golden.mjs --verbose"
+    "data:merge-golden": "node tools/merge-golden.mjs --verbose",
+    "postinstall": "patch-package"
   },
   "engines": {
     "node": ">=24"
@@ -31,7 +32,7 @@
     "@11ty/eleventy-img": "^6.0.4",
     "@11ty/eleventy-navigation": "^1.0.4",
     "@11ty/eleventy-plugin-rss": "^2.0.4",
-    "@photogabble/eleventy-plugin-interlinker": "^1.1.0",
+    "@photogabble/eleventy-plugin-interlinker": "1.1.0",
     "@quasibit/eleventy-plugin-schema": "1.11.1",
     "@quasibit/eleventy-plugin-sitemap": "^2.2.0",
     "@shikijs/markdown-it": "3.11.0",
@@ -62,6 +63,7 @@
     "markdown-link-check": "^3.13.7",
     "natural": "^8.1.0",
     "npm-registry-fetch": "19.0.0",
+    "patch-package": "^8.0.0",
     "playwright-extra": "^4.3.6",
     "postcss": "8.5.6",
     "postcss-cli": "11.0.1",
