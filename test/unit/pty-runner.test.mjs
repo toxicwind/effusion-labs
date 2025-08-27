@@ -4,7 +4,8 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const runner = path.resolve(__dirname, '../tools/pty-runner.mjs');
+// pty-runner lives in the project-level tools directory
+const runner = path.resolve(__dirname, '../../tools/pty-runner.mjs');
 
 const res = spawnSync(process.execPath, [runner, '--', 'node', '-e', "console.log('ok')"], {
   encoding: 'utf8',
