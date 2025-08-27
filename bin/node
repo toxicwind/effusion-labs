@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
-# This shim simply executes the 'node' command found in the shell's PATH.
-# It relies on the environment being pre-configured with the correct Node.js version.
-# The output streaming compatibility with llm_run is handled upstream by the npm shim.
-set -e
-
-exec node "$@"
+set -euo pipefail
+DIR="$(cd "$(dirname "$0")" && pwd)"
+PATH_WITHOUT_DIR=$(printf "%s" "$PATH" | sed "s|$DIR:||;s|:$DIR||;s|$DIR||")
+REAL_NODE="$(PATH="$PATH_WITHOUT_DIR" command -v node)"
+if [ -z "$REAL_NODE" ]; then
+  echo "node binary not found" >&2
+  exit 127
+fi
+exec "$REAL_NODE" "$@"

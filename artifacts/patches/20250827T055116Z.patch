@@ -1,0 +1,86 @@
+diff --git a/bin/node b/bin/node
+index c1a69da..941a1d4 100755
+--- a/bin/node
++++ b/bin/node
+@@ -1,7 +1,10 @@
+ #!/usr/bin/env bash
+-# This shim simply executes the 'node' command found in the shell's PATH.
+-# It relies on the environment being pre-configured with the correct Node.js version.
+-# The output streaming compatibility with llm_run is handled upstream by the npm shim.
+-set -e
+-
+-exec node "$@"
+\ No newline at end of file
++set -euo pipefail
++DIR="$(cd "$(dirname "$0")" && pwd)"
++PATH_WITHOUT_DIR=$(printf "%s" "$PATH" | sed "s|$DIR:||;s|:$DIR||;s|$DIR||")
++REAL_NODE="$(PATH="$PATH_WITHOUT_DIR" command -v node)"
++if [ -z "$REAL_NODE" ]; then
++  echo "node binary not found" >&2
++  exit 127
++fi
++exec "$REAL_NODE" "$@"
+diff --git a/bin/npm b/bin/npm
+index 3f05367..983e733 100755
+--- a/bin/npm
++++ b/bin/npm
+@@ -1,24 +1,44 @@
+-#!/bin/sh
++#!/usr/bin/env bash
+ # A smart shim for npm that handles output buffering for test commands.
+-set -e
++set -euo pipefail
+ 
+-# Get the absolute path of the directory containing this script.
++# Compute real npm binary, skipping this shim
+ DIR="$(cd "$(dirname "$0")" && pwd)"
+-NPM_CLI="$DIR/../node_modules/npm/bin/npm-cli.js"
++PATH_WITHOUT_DIR=$(printf "%s" "$PATH" | sed "s|$DIR:||;s|:$DIR||;s|$DIR||")
++NPM_BIN="$(PATH="$PATH_WITHOUT_DIR" command -v npm)"
++if [ -z "$NPM_BIN" ]; then
++  echo "npm binary not found" >&2
++  exit 127
++fi
++
++# Helper to run npm with a PTY so output streams in real time
++run_with_pty() {
++  if command -v script >/dev/null 2>&1; then
++    cmd="$NPM_BIN $(printf '%q ' "$@")"
++    script -q -e -c "$cmd" /dev/null
++    return $?
++  elif command -v unbuffer >/dev/null 2>&1; then
++    unbuffer "$NPM_BIN" "$@"
++    return $?
++  elif command -v expect >/dev/null 2>&1; then
++    expect -c "spawn -noecho $NPM_BIN $(printf '%q ' "$@"); interact"
++    return $?
++  elif command -v stdbuf >/dev/null 2>&1; then
++    stdbuf -oL -eL "$NPM_BIN" "$@"
++    return $?
++  else
++    "$NPM_BIN" "$@"
++    return $?
++  fi
++}
+ 
+ # Check if the command is 'test'. This is often the command that suffers
+ # from I/O buffering when run in non-interactive shells.
+ if [ "$1" = "test" ]; then
+-  # For 'npm test', we use a pseudo-terminal (PTY) to force line-buffering.
+-  # This tricks the Node.js test runner into streaming its output immediately.
+-  # The `script` command is a standard Linux utility for this purpose.
+-  # -q = quiet mode (no start/done messages)
+-  # -e = return the exit code of the child command (crucial for CI)
+-  # -c = the command to run, with all arguments passed through
+-  # The final /dev/null argument is for the typescript log file, which we don't need.
++  # For 'npm test', use PTY/line buffering strategies to ensure streaming.
+   echo "::notice:: NPM-SHIM: Using PTY wrapper for 'npm test' to ensure output streaming." >&2
+-  exec script -q -e -c "\"$DIR/node\" \"$NPM_CLI\" \"$@\"" /dev/null
++  run_with_pty "$@"
+ else
+   # For all other commands (install, run build, etc.), execute directly.
+-  exec "$DIR/node" "$NPM_CLI" "$@"
+-fi
+\ No newline at end of file
++  exec "$NPM_BIN" "$@"
++fi
