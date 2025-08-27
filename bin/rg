@@ -2,7 +2,15 @@
 set -euo pipefail
 . "$(cd "$(dirname "$0")" && pwd)/_lib.sh"
 
-# Try repo cache, then system, then apt
+# Prefer npm-provided ripgrep when functional
+if "$REPO_ROOT/node_modules/.bin/rg" --version >/dev/null 2>&1; then
+  exec "$REPO_ROOT/node_modules/.bin/rg" "$@"
+fi
+if "$REPO_ROOT/node_modules/.bin/ripgrep" --version >/dev/null 2>&1; then
+  exec "$REPO_ROOT/node_modules/.bin/ripgrep" "$@"
+fi
+
+# Then try repo cache, system, then apt
 retry_exec "$@" -- \
   "$TOOLS_DIR/rg/rg" \
   rg
@@ -12,5 +20,5 @@ retry_exec "$@" -- \
   "$TOOLS_DIR/rg/rg" \
   rg
 
-echo "❌ ripgrep (rg) not available and static fallback is not configured for this host. Install via: sudo apt-get install ripgrep" >&2
+echo "❌ ripgrep (rg) not available; install devDeps or system package." >&2
 exit 127

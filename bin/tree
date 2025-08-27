@@ -2,13 +2,11 @@
 set -euo pipefail
 . "$(cd "$(dirname "$0")" && pwd)/_lib.sh"
 
+# Prefer npm-provided tree-cli, then repo cache, then system
 retry_exec "$@" -- \
-  "$TOOLS_DIR/tree/tree" \
-  tree
-apt_install tree >/dev/null 2>&1 || true
-retry_exec "$@" -- \
+  "$REPO_ROOT/node_modules/.bin/tree" \
   "$TOOLS_DIR/tree/tree" \
   tree
 
-echo "❌ tree not available and no static fallback configured. Install via: sudo apt-get install tree" >&2
+echo "❌ tree not available; ensure devDeps are installed or provide a system 'tree'." >&2
 exit 127
