@@ -36,6 +36,8 @@ export default {
         const item = all.find(i => i.type === cat.k);
         return {
           ...cat,
+          h: item && item.data && item.data.title ? item.data.title : cat.h,
+          s: item && item.data && item.data.description ? item.data.description : cat.s,
           url: item ? item.url : "/work",
           featured: cat.k === "project"
         };
