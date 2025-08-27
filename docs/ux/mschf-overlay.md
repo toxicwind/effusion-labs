@@ -6,18 +6,20 @@ The MSCHF overlay decorates pages with seeded decals and grid textures while kee
 
 Attach attributes to the `#page-shell` wrapper:
 
-| Attribute | Values | Default | Description |
-| --- | --- | --- | --- |
-| `data-mschf` | `on` \| `off` \| `auto` | `auto` | Enable overlay or force disable. |
-| `data-mschf-intensity` | `lite` \| `loud` | `lite` | Governs element counts and probabilities. |
-| `data-mschf-seed-mode` | `page` \| `session` | `page` | Ephemeral seed per load or stable for a tab session. |
-| `data-mschf-style` | `collage` \| `structural` \| `playful` \| `auto` | `auto` | Aesthetic strategy mix; `auto` picks a style randomly each load. |
+| Attribute              | Values                                         | Default | Description |
+| ---------------------- | ---------------------------------------------- | ------- | ----------- |
+| `data-mschf`           | `on` \| `off` \| `auto`                        | `auto`  | Enable overlay or force disable. |
+| `data-mschf-intensity` | `lite` \| `bold` \| `loud` \| `calm`           | random  | Governs element counts and probabilities. |
+| `data-mschf-seed-mode` | `page` \| `session`                            | `page`  | Ephemeral seed per load or stable for a tab session. |
+| `data-mschf-style`     | `collage` \| `structural` \| `playful` \| `auto` | `auto`  | Aesthetic strategy mix; `auto` picks a style randomly each load. |
 
 Use `localStorage.setItem('mschf:off','1')` to opt out persistently.
 
 ## Aesthetic Strategies
 
-`auto` (default) randomly selects an aesthetic strategy. `collage` fuses four groups: base scaffold, culture-coded ephemera, lab/blueprint motifs, and framing stickers. Other styles limit the mix:
+`data-mschf-style="auto"` (default) randomly selects an aesthetic strategy per page seed. If `data-mschf-intensity` is omitted, the overlay picks a random intensity so each visit feels fresh.
+
+`collage` fuses four groups: base scaffold, culture-coded ephemera, lab/blueprint motifs, and framing stickers. Other styles limit the mix:
 
 - **structural** – base + lab motifs only.
 - **playful** – base + culture-coded ephemera.

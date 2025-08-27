@@ -100,7 +100,9 @@
 {# Always-on Hypebrüt overlay controls live on <body> as data-* (page can override via front matter) #}
 <body
   data-mschf="auto"
-  data-mschf-intensity="{{ page.mschfIntensity or site.mschfIntensity or 'lite' }}"
+  {% if page.mschfIntensity or site.mschfIntensity %}
+  data-mschf-intensity="{{ page.mschfIntensity or site.mschfIntensity }}"
+  {% endif %}
   data-mschf-seed-mode="{{ page.mschfSeedMode or site.mschfSeedMode or 'page' }}"
   data-mschf-style="auto"
   class="bg-base-100 text-base-content font-body antialiased selection:bg-primary/20"
