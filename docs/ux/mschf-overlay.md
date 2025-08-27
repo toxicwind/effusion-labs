@@ -6,18 +6,21 @@ The MSCHF overlay decorates pages with seeded decals and grid textures while kee
 
 Attach attributes to the `#page-shell` wrapper:
 
-| Attribute | Values | Default | Description |
-| --- | --- | --- | --- |
-| `data-mschf` | `on` \| `off` \| `auto` | `auto` | Enable overlay or force disable. |
-| `data-mschf-intensity` | `lite` \| `loud` | `lite` | Governs element counts and probabilities. |
-| `data-mschf-seed-mode` | `page` \| `session` | `page` | Ephemeral seed per load or stable for a tab session. |
-| `data-mschf-style` | `collage` \| `structural` \| `playful` | `collage` | Aesthetic strategy mix. |
+| Attribute              | Values                                 | Default | Description                                          |
+| ---------------------- | -------------------------------------- | ------- | ---------------------------------------------------- |
+| `data-mschf`           | `on` \| `off` \| `auto`                | `auto`  | Enable overlay or force disable.                     |
+| `data-mschf-intensity` | `lite` \| `bold` \| `loud` \| `calm`   | random  | Governs element counts and probabilities.            |
+| `data-mschf-seed-mode` | `page` \| `session`                    | `page`  | Ephemeral seed per load or stable for a tab session. |
+| `data-mschf-style`     | `collage` \| `structural` \| `playful` | random  | Aesthetic strategy mix.                              |
 
 Use `localStorage.setItem('mschf:off','1')` to opt out persistently.
 
 ## Aesthetic Strategies
 
-`collage` (default) fuses four groups: base scaffold, culture-coded ephemera,
+If `data-mschf-intensity` or `data-mschf-style` are omitted, the overlay picks
+random values per page seed so each visit feels fresh.
+
+`collage` fuses four groups: base scaffold, culture-coded ephemera,
 lab/blueprint motifs, and framing stickers. Other styles limit the mix:
 
 - **structural** – base + lab motifs only.
