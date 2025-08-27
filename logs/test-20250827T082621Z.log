@@ -1,0 +1,116 @@
+[1mnpm[22m [33mwarn[39m [94mUnknown env config "http-proxy". This will stop working in the next major version of npm.[39m
+
+> effusion_labs_final@1.0.0 test
+> c8 node tools/runner.mjs
+
+[1G[0K🚀 Launching test runner...
+🔍 Found 14 test files.
+
+🏗️  Performing single Eleventy build...
+[1mnpm[22m [33mwarn[39m [94mUnknown env config "http-proxy". This will stop working in the next major version of npm.[39m
+[1G[0K⠙[1G[0K⠹[1G[0K⠸[1G[0K⠼[1G[0K⠴[1G[0K🗂  Archives loaded from "src/content/archives": 88 items (44 products, 4 characters, 40 series)
+[90m[11ty][39m Writing /tmp/eleventy-build/concept-map.json [90mfrom ./src/concept-map.json.njk[39m
+[90m[11ty][39m Writing /tmp/eleventy-build/feed.xml [90mfrom ./src/feed.njk[39m
+[90m[11ty][39m Writing /tmp/eleventy-build/map/index.html [90mfrom ./src/map.njk[39m
+[90m[11ty][39m Writing /tmp/eleventy-build/404.html [90mfrom ./src/404.njk[39m
+[90m[11ty][39m Writing /tmp/eleventy-build/archives/index.html [90mfrom ./src/archives/index.njk[39m
+[90m[11ty][39m Writing /tmp/eleventy-build/work/1/index.html [90mfrom ./src/work/index.njk[39m
+[90m[11ty][39m Writing /tmp/eleventy-build/archives/collectables/index.html [90mfrom ./src/archives/collectables/index.njk[39m
+[90m[11ty][39m Writing /tmp/eleventy-build/meta/index.html [90mfrom ./src/content/meta/index.njk[39m
+[90m[11ty][39m Writing /tmp/eleventy-build/archives/collectables/designer-toys/index.html [90mfrom ./src/archives/collectables/designer-toys/index.njk[39m
+[90m[11ty][39m Writing /tmp/eleventy-build/archives/collectables/designer-toys/pop-mart/index.html [90mfrom ./src/archives/collectables/designer-toys/pop-mart/index.njk[39m
+[90m[11ty][39m Writing /tmp/eleventy-build/archives/collectables/designer-toys/pop-mart/the-monsters/index.html [90mfrom ./src/archives/collectables/designer-toys/pop-mart/the-monsters/index.njk[39m
+[90m[11ty][39m Writing /tmp/eleventy-build/index.html [90mfrom ./src/index.njk[39m
+[90m[11ty][39m Writing /tmp/eleventy-build/work/index.html [90mfrom ./src/work.njk[39m
+[90m[11ty][39m Writing /tmp/eleventy-build/content/concepts/aesthetic-inquiry/index.html [90mfrom ./src/content/concepts/aesthetic-inquiry.md (njk)[39m
+[90m[11ty][39m Writing /tmp/eleventy-build/content/concepts/atlas-process/index.html [90mfrom ./src/content/concepts/atlas-process.md (njk)[39m
+[90m[11ty][39m Writing /tmp/eleventy-build/content/concepts/autocatalytic-system/index.html [90mfrom ./src/content/concepts/autocatalytic-system.md (njk)[39m
+[90m[11ty][39m Writing /tmp/eleventy-build/work/block-ledger/index.html [90mfrom ./src/content/concepts/block-ledger.md (njk)[39m
+[90m[11ty][39m Writing /tmp/eleventy-build/content/concepts/compliant-spire/index.html [90mfrom ./src/content/concepts/compliant-spire.md (njk)[39m
+[90m[11ty][39m Writing /tmp/eleventy-build/content/concepts/ghost-byline/index.html [90mfrom ./src/content/concepts/ghost-byline.md (njk)[39m
+[90m[11ty][39m Writing /tmp/eleventy-build/content/concepts/ghost-engine/index.html [90mfrom ./src/content/concepts/ghost-engine.md (njk)[39m
+[90m[11ty][39m Writing /tmp/eleventy-build/content/concepts/parroting-mimicry/index.html [90mfrom ./src/content/concepts/parroting-mimicry.md (njk)[39m
+[90m[11ty][39m Writing /tmp/eleventy-build/content/concepts/readers-journey/index.html [90mfrom ./src/content/concepts/readers-journey.md (njk)[39m
+[90m[11ty][39m Writing /tmp/eleventy-build/content/concepts/rhizomatic-protocol/index.html [90mfrom ./src/content/concepts/rhizomatic-protocol.md (njk)[39m
+[90m[11ty][39m Writing /tmp/eleventy-build/content/concepts/three-studies-sensory/index.html [90mfrom ./src/content/concepts/three-studies-sensory.md (njk)[39m
+[90m[11ty][39m Writing /tmp/eleventy-build/content/concepts/verification-is-an-ecology/index.html [90mfrom ./src/content/concepts/verification-is-an-ecology.md (njk)[39m
+[90m[11ty][39m Writing /tmp/eleventy-build/content/concepts/workshop-weather/index.html [90mfrom ./src/content/concepts/workshop-weather.md (njk)[39m
+[90m[11ty][39m Writing /tmp/eleventy-build/content/meta/a-b-curatorial-protocolist/index.html [90mfrom ./src/content/meta/a-b-curatorial-protocolist.md (njk)[39m
+[90m[11ty][39m Writing /tmp/eleventy-build/content/meta/core-concept/index.html [90mfrom ./src/content/meta/core-concept.md (njk)[39m
+[90m[11ty][39m Writing /tmp/eleventy-build/content/meta/curatorial-generativism/index.html [90mfrom ./src/content/meta/curatorial-generativism.md (njk)[39m
+[90m[11ty][39m Writing /tmp/eleventy-build/content/meta/methodology/index.html [90mfrom ./src/content/meta/methodology.md (njk)[39m
+[90m[11ty][39m Writing /tmp/eleventy-build/content/meta/protocolist/index.html [90mfrom ./src/content/meta/protocolist.md (njk)[39m
+[90m[11ty][39m Writing /tmp/eleventy-build/content/meta/style-guide/index.html [90mfrom ./src/content/meta/style-guide.md (njk)[39m
+[90m[11ty][39m Writing /tmp/eleventy-build/content/meta/unified-referencing-syntax/index.html [90mfrom ./src/content/meta/unified-referencing-syntax.md (njk)[39m
+[90m[11ty][39m Writing /tmp/eleventy-build/content/projects/project-dandelion/index.html [90mfrom ./src/content/projects/project-dandelion.md (njk)[39m
+[90m[11ty][39m Writing /tmp/eleventy-build/content/sparks/academic-blindness/index.html [90mfrom ./src/content/sparks/academic-blindness.md (njk)[39m
+[90m[11ty][39m Writing /tmp/eleventy-build/content/sparks/breakfast-eggs/index.html [90mfrom ./src/content/sparks/breakfast-eggs.md (njk)[39m
+[90m[11ty][39m Writing /tmp/eleventy-build/content/sparks/george-eastman-obscure/index.html [90mfrom ./src/content/sparks/george-eastman-obscure.md (njk)[39m
+[90m[11ty][39m Writing /tmp/eleventy-build/content/sparks/illusion-japan-nicotine/index.html [90mfrom ./src/content/sparks/illusion-japan-nicotine.md (njk)[39m
+[90m[11ty][39m Writing /tmp/eleventy-build/content/sparks/murakami-market-analysis-2025/index.html [90mfrom ./src/content/sparks/murakami-market-analysis-2025.md (njk)[39m
+[90m[11ty][39m Writing /tmp/eleventy-build/content/sparks/paulin-paulin-paulin-marketing/index.html [90mfrom ./src/content/sparks/paulin-paulin-paulin-marketing.md (njk)[39m
+[90m[11ty][39m Writing /tmp/eleventy-build/content/sparks/smoker-sysadmin/index.html [90mfrom ./src/content/sparks/smoker-sysadmin.md (njk)[39m
+[90m[11ty][39m Writing /tmp/eleventy-build/content/sparks/vapor-linked-governance/index.html [90mfrom ./src/content/sparks/vapor-linked-governance.md (njk)[39m
+[90m[11ty][39m Writing /tmp/eleventy-build/work/latest/index.html [90mfrom ./src/work/latest.11ty.js[39m
+[90m[11ty][39m Writing /tmp/eleventy-build/work/drop/index.html [90mfrom ./src/work/drop.11ty.js[39m
+[90m[11ty][39m Writing /tmp/eleventy-build/concepts/index.html [90mfrom ./src/content/concepts/index.njk[39m
+[90m[11ty][39m Writing /tmp/eleventy-build/projects/index.html [90mfrom ./src/content/projects/index.njk[39m
+[90m[11ty][39m Writing /tmp/eleventy-build/sparks/index.html [90mfrom ./src/content/sparks/index.njk[39m
+[90m[11ty][39m Writing /tmp/eleventy-build/work/2/index.html [90mfrom ./src/work/index.njk[39m
+[32m[90m[11ty][39m[32m Copied [1m10[22m Wrote [1m48[22m files in [1m3.09[22m seconds (64.5ms each, v3.1.2)[39m
+[1G[0K⠙[1G[0K✅ Eleventy build complete.
+
+🧪 Running 14 tests...
+[32m✔ callout merges footnotes into page pipeline [90m(10.493919ms)[39m[39m
+[32m✔ defines improved background colors [90m(1.658854ms)[39m[39m
+[32m✔ text contrast meets WCAG AA [90m(0.691325ms)[39m[39m
+[32m✔ tailwind exposes readable font families [90m(0.351523ms)[39m[39m
+[32m✔ includes fluid type scale tokens [90m(0.195943ms)[39m[39m
+[32m✔ footnote popover separates source line [90m(104.659775ms)[39m[39m
+[32m✔ projects computed picks latest entries by date [90m(5.386287ms)[39m[39m
+^C----------------------------|---------|----------|---------|---------|------------------------------
+File                        | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s            
+----------------------------|---------|----------|---------|---------|------------------------------
+[32;1mAll files                  [0m | [32;1m   80.3[0m | [33;1m   79.26[0m | [33;1m  68.14[0m | [32;1m   80.3[0m | [31;1m                            [0m 
+[33;1m effusion-labs             [0m | [33;1m  70.52[0m | [33;1m   72.97[0m | [31;1m  42.85[0m | [33;1m  70.52[0m | [31;1m                            [0m 
+[32;1m  eleventy.config.mjs      [0m | [32;1m  86.15[0m | [33;1m   71.42[0m | [33;1m     50[0m | [32;1m  86.15[0m | [31;1m...1,153-157,160-162,184-185[0m 
+[32;1m  postcss.config.mjs       [0m | [32;1m    100[0m | [32;1m     100[0m | [32;1m    100[0m | [32;1m    100[0m | [33;1m                            [0m 
+[31;1m  tailwind.config.mjs      [0m | [31;1m     38[0m | [32;1m     100[0m | [31;1m      0[0m | [31;1m     38[0m | [31;1m34-95                       [0m 
+[33;1m effusion-labs/lib         [0m | [33;1m  65.82[0m | [33;1m   67.12[0m | [31;1m  41.66[0m | [33;1m  65.82[0m | [31;1m                            [0m 
+[32;1m  archive-nav.js           [0m | [32;1m    100[0m | [32;1m     100[0m | [32;1m    100[0m | [32;1m    100[0m | [33;1m                            [0m 
+[32;1m  build-info.js            [0m | [32;1m    100[0m | [31;1m   33.33[0m | [32;1m    100[0m | [32;1m    100[0m | [33;1m10-26                       [0m 
+[33;1m  concept-map.js           [0m | [33;1m  73.17[0m | [33;1m   66.66[0m | [33;1m     60[0m | [33;1m  73.17[0m | [31;1m10-12,21-29,56-65           [0m 
+[32;1m  config.js                [0m | [32;1m    100[0m | [32;1m     100[0m | [32;1m    100[0m | [32;1m    100[0m | [33;1m                            [0m 
+[32;1m  constants.js             [0m | [32;1m    100[0m | [32;1m     100[0m | [32;1m    100[0m | [32;1m    100[0m | [33;1m                            [0m 
+[33;1m  filters.js               [0m | [33;1m  68.51[0m | [33;1m   55.55[0m | [31;1m  41.17[0m | [33;1m  68.51[0m | [31;1m...0,113-119,126-142,158-159[0m 
+[31;1m  flareClient.js           [0m | [31;1m  23.21[0m | [32;1m     100[0m | [31;1m      0[0m | [31;1m  23.21[0m | [31;1m5-7,9,11-49                 [0m 
+[31;1m  outboundProxy.js         [0m | [31;1m     16[0m | [32;1m     100[0m | [31;1m      0[0m | [31;1m     16[0m | [31;1m1-3,6-23                    [0m 
+[32;1m  plugins.js               [0m | [32;1m    100[0m | [31;1m   42.85[0m | [32;1m    100[0m | [32;1m    100[0m | [33;1m20-21                       [0m 
+[31;1m  postcss.js               [0m | [31;1m     25[0m | [32;1m     100[0m | [31;1m      0[0m | [31;1m     25[0m | [31;1m15-56                       [0m 
+[31;1m  postcssPlugins.mjs       [0m | [31;1m     30[0m | [32;1m     100[0m | [31;1m      0[0m | [31;1m     30[0m | [31;1m4-10                        [0m 
+[31;1m  seeded.js                [0m | [31;1m  37.83[0m | [33;1m   66.66[0m | [31;1m     25[0m | [31;1m  37.83[0m | [31;1m10-17,19-25,28-35           [0m 
+[33;1m  shortcodes.js            [0m | [33;1m  59.25[0m | [32;1m     100[0m | [31;1m      0[0m | [33;1m  59.25[0m | [31;1m15-25                       [0m 
+[32;1m  utils.js                 [0m | [32;1m  95.65[0m | [32;1m   81.81[0m | [32;1m    100[0m | [32;1m  95.65[0m | [31;1m34-35                       [0m 
+[33;1m  webpageToMarkdown.js     [0m | [33;1m  61.36[0m | [31;1m   33.33[0m | [31;1m      0[0m | [33;1m  61.36[0m | [31;1m14-15,26-30,33-42           [0m 
+[32;1m effusion-labs/lib/eleventy[0m | [32;1m  91.91[0m | [32;1m   86.36[0m | [32;1m     80[0m | [32;1m  91.91[0m | [31;1m                            [0m 
+[32;1m  archives.mjs             [0m | [32;1m  98.71[0m | [32;1m   87.69[0m | [32;1m    100[0m | [32;1m  98.71[0m | [31;1m208-210                     [0m 
+[32;1m  register.mjs             [0m | [32;1m   82.2[0m | [32;1m    82.6[0m | [31;1m     40[0m | [32;1m   82.2[0m | [31;1m27-29,41,44,120-135,155-162 [0m 
+[32;1m effusion-labs/lib/markdown[0m | [32;1m  96.05[0m | [32;1m   86.48[0m | [32;1m    100[0m | [32;1m  96.05[0m | [31;1m                            [0m 
+[32;1m  footnotes.js             [0m | [32;1m  97.16[0m | [32;1m   87.93[0m | [32;1m    100[0m | [32;1m  97.16[0m | [31;1m89-90,103-104,116-118       [0m 
+[32;1m  index.js                 [0m | [32;1m  96.66[0m | [33;1m      75[0m | [32;1m    100[0m | [32;1m  96.66[0m | [31;1m31-32                       [0m 
+[32;1m  inlineMacros.js          [0m | [32;1m  81.48[0m | [32;1m      80[0m | [32;1m    100[0m | [32;1m  81.48[0m | [31;1m12-14,23-24                 [0m 
+[32;1m  links.js                 [0m | [32;1m    100[0m | [32;1m   85.71[0m | [32;1m    100[0m | [32;1m    100[0m | [33;1m8                           [0m 
+[32;1m effusion-labs/src         [0m | [32;1m    100[0m | [32;1m   85.71[0m | [32;1m    100[0m | [32;1m    100[0m | [33;1m                            [0m 
+[32;1m  index.11tydata.js        [0m | [32;1m    100[0m | [32;1m   84.61[0m | [32;1m    100[0m | [32;1m    100[0m | [33;1m10,29,59,84                 [0m 
+[32;1m  work.11tydata.js         [0m | [32;1m    100[0m | [32;1m     100[0m | [32;1m    100[0m | [32;1m    100[0m | [33;1m                            [0m 
+[32;1m effusion-labs/src/_data   [0m | [32;1m     95[0m | [32;1m   89.47[0m | [32;1m    100[0m | [32;1m     95[0m | [31;1m                            [0m 
+[32;1m  archivesNav.js           [0m | [32;1m    100[0m | [32;1m     100[0m | [32;1m    100[0m | [32;1m    100[0m | [33;1m                            [0m 
+[32;1m  branding.js              [0m | [32;1m    100[0m | [32;1m     100[0m | [32;1m    100[0m | [32;1m    100[0m | [33;1m                            [0m 
+[32;1m  eleventyComputed.js      [0m | [32;1m  89.47[0m | [32;1m   85.71[0m | [32;1m    100[0m | [32;1m  89.47[0m | [31;1m4,6                         [0m 
+[32;1m  nav.js                   [0m | [32;1m    100[0m | [32;1m     100[0m | [32;1m    100[0m | [32;1m    100[0m | [33;1m                            [0m 
+[32;1m effusion-labs/src/work    [0m | [32;1m    100[0m | [33;1m      60[0m | [32;1m    100[0m | [32;1m    100[0m | [33;1m                            [0m 
+[32;1m  drop.11ty.js             [0m | [32;1m    100[0m | [33;1m   55.55[0m | [32;1m    100[0m | [32;1m    100[0m | [33;1m9-13,20                     [0m 
+[32;1m  latest.11ty.js           [0m | [32;1m    100[0m | [33;1m   63.63[0m | [32;1m    100[0m | [32;1m    100[0m | [33;1m8-9,16                      [0m 
+[32;1m effusion-labs/tools       [0m | [32;1m   87.5[0m | [33;1m   76.92[0m | [32;1m     80[0m | [32;1m   87.5[0m | [31;1m                            [0m 
+[32;1m  pty-runner.mjs           [0m | [32;1m   87.5[0m | [33;1m   76.92[0m | [32;1m     80[0m | [32;1m   87.5[0m | [31;1m42-43,45-46,52-54           [0m 
+----------------------------|---------|----------|---------|---------|------------------------------
