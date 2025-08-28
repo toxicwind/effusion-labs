@@ -109,6 +109,7 @@
     bars:  { last: now(), dur: 4200 },
     safeZones: [],
     occupancy: [],
+    cornerSlots: { tl:null, tr:null, bl:null, br:null },
     readingPressure: 0,
     gridCols: 10,
     gridRows: 6,
@@ -277,6 +278,20 @@
   function resetOccupancy() { State.occupancy = new Array(State.gridCols*State.gridRows).fill(0); }
   function isCellFree(c,r){ return !State.occupancy[r*State.gridCols + c]; }
   function claimCell(c,r){ State.occupancy[r*State.gridCols + c] = 1; }
+
+  // Corner occupancy manager — prevents stacking actors in corners
+  const CNR = {
+    all: ['tl','tr','bl','br'],
+    free(){ return this.all.filter(c => !State.cornerSlots[c]); },
+    isFree(c){ return !State.cornerSlots[c]; },
+    can(corners){ return corners.every(c => !State.cornerSlots[c]); },
+    pick(){ const f = this.free(); return f.length ? pick(f) : null; },
+    claim(actor, corners){
+      actor._corners = actor._corners || [];
+      for (const c of corners){ State.cornerSlots[c] = actor; actor._corners.push(c); }
+    },
+    release(actor){ if (!actor || !actor._corners) return; for(const c of actor._corners){ if (State.cornerSlots[c]===actor) State.cornerSlots[c]=null; } actor._corners.length=0; }
+  };
 
   // Zoned placement with optional affinity
   function findSpot(w,h,aff='anywhere') {
@@ -576,6 +591,18 @@
 
     const isArticle = !!document.querySelector('.prose,[data-kind="spark"],[data-kind="concept"],[data-kind="project"],article,main .prose');
 
+    // Preflight: corner occupancy (avoid stacking multiple corner-bound actors)
+    const wantsCorners = (k)=> ['reg','pips','corners'].includes(k||'');
+    if ((actor.kind||'') === 'stickers'){
+      const chosen = CNR.pick();
+      if (!chosen){ DEBUG && warn('bail: no free corner for stickers'); return DEBUG && groupEnd(), false; }
+      actor.corner = chosen; // handed to actor.mount
+      CNR.claim(actor, [chosen]);
+    } else if (wantsCorners(actor.kind)){
+      if (!CNR.can(['tl','tr','bl','br'])){ DEBUG && warn('bail: corners occupied'); return DEBUG && groupEnd(), false; }
+      CNR.claim(actor, ['tl','tr','bl','br']);
+    }
+
     // small screens: only minimal scaffold & frame affordances
     if ((State.tiers.xs || State.tiers.sm) && family !== 'scaffold') {
       const allow = ['frame','corners','rulers','brackets','reg','dims'];
@@ -593,7 +620,7 @@
     State.families[family].add(actor);
     State.actors.add(actor);
     State.nodeCount += cost;
-    try { actor.mount(State.domLayer); } catch (e) { DEBUG && warn('actor.mount threw', e); }
+    try { actor.mount(State.domLayer); } catch (e) { DEBUG && warn('actor.mount threw', e); CNR.release(actor); return DEBUG && groupEnd(), false; }
     State._mountCtx = null;
     // If primary node exists, tag it too
     try {
@@ -614,12 +641,14 @@
       scaffold: State.families.scaffold.size, ephemera: State.families.ephemera.size, lab: State.families.lab.size, frame: State.families.frame.size
     }});
     DEBUG && groupEnd();
+    return true;
   }
   function retire(actor){
     if (!actor) return;
     if (DEBUG) group(`retire: ${actor.kind || 'unknown'}`);
     try { actor.retire && actor.retire(); } catch (e) { DEBUG && warn('actor.retire threw', e); }
     try { actor.node && actor.node.remove(); } catch {}
+    try { CNR.release(actor); } catch {}
     try { const lab = State._labels.get(actor._id); if (lab) { lab.remove(); State._labels.delete(actor._id); } } catch {}
     State.actors.delete(actor);
     for (const k in State.families) State.families[k].delete(actor);
@@ -966,7 +995,7 @@
       kind:'stickers', cost:1, ...stickersMeta,
       mount(p){
         cluster = el('div','mschf-stickers',p);
-        const corner = pick(['br','bl','tr','tl']); const off = 18 + Math.floor(Math.random()*18);
+        const corner = this.corner || pick(['br','bl','tr','tl']); const off = 18 + Math.floor(Math.random()*18);
         const s={}; if (corner.includes('b')) s.bottom=off+'px'; else s.top=off+'px'; if (corner.includes('r')) s.right=off+'px'; else s.left=off+'px'; css(cluster,s);
         const badges = ['ALPHA','BETA','RC1','SIGNED','VOID','UNLOCKED','PASS','LAB','SIM','ARCHIVE','SANDBOX','RAG','EVAL','GRAPH','SPARK','VECTOR','EMBED','SPECIMEN','PROTO'];
         const n = 2 + Math.floor(Math.random()*3);
@@ -1086,7 +1115,15 @@
     const bag = [A.brackets, A.watermark, A.reg, A.dims, A.stickers, A.edgeGlow, A.cornerPips];
     const pool = State.readingPressure > 0.25 ? bag.filter(f => (f.meta?.complexity || 1) <= 2) : bag;
     const n = Math.floor(lerp(min, max, State.density));
-    for (let i=0;i<n;i++){ const fn = pick(pool.length?pool:bag); mount(fn(), 'frame'); }
+    for (let i=0;i<n;i++){
+      const candidates = (pool.length?pool:bag).slice();
+      let placed = false;
+      for (let t=0;t<candidates.length && !placed; t++){
+        const idx = Math.floor(Math.random()*candidates.length);
+        const fn = candidates.splice(idx,1)[0];
+        placed = !!mount(fn(), 'frame');
+      }
+    }
   }
 
   function recompose(){
