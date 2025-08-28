@@ -1,5 +1,6 @@
 // eleventy.config.mjs (root)
 import register from "./lib/eleventy/register.mjs";
+import { DateTime } from "luxon";
 import { dirs } from "./lib/config.js";
 import seeded from "./lib/seeded.js";
 import registerArchive from "./lib/eleventy/archives.mjs";
@@ -120,6 +121,19 @@ export default function (eleventyConfig) {
   });
 
   // ---- Filters that play nicely with archive data ----
+  // Date formatter filter (Nunjucks): {{ someDate | date('yyyy-MM-dd') }}
+  eleventyConfig.addFilter("date", (value, fmt = "yyyy-LL-dd") => {
+    try {
+      let dt;
+      if (value instanceof Date) dt = DateTime.fromJSDate(value, { zone: "utc" });
+      else if (typeof value === "number") dt = DateTime.fromMillis(value, { zone: "utc" });
+      else if (typeof value === "string") dt = DateTime.fromISO(value, { zone: "utc" });
+      else return "";
+      return dt.isValid ? dt.toFormat(fmt) : "";
+    } catch {
+      return "";
+    }
+  });
   // Match products by character (accepts name or slug)
   eleventyConfig.addFilter("byCharacter", (items, id) => {
     const target = slug(id);
