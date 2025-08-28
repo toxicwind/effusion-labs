@@ -128,7 +128,12 @@
     },
     _didRecompose: false,
     _t0: now(),
-    debug: { labelsOn: true, hudOn: true, lastLabelUpdate: 0 },
+    debug: {
+      // Aggressive when DEBUG=true (?mschfDebug=1), quiet otherwise
+      labelsOn: (() => { const p = qparam('mschfLabels'); const d = scope.dataset.mschfLabels; return (p!=null? p!=='0' : (d!=null? d!=='0' : DEBUG)); })(),
+      hudOn:     (() => { const p = qparam('mschfHUD');    const d = scope.dataset.mschfHud;   return (p!=null? p!=='0' : (d!=null? d!=='0' : DEBUG)); })(),
+      lastLabelUpdate: 0,
+    },
     _labels: new Map(),
     labelLayer: null,
     hud: null,
