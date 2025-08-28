@@ -128,6 +128,10 @@
       // Visual toggles for specific lab elements
       rings: (() => { const a = scope.dataset.mschfRings; const p = qparam('mschfRings'); return a!=null ? a!=='0' : (p!=null ? p!=='0' : false); })(),
       topo:  (() => { const a = scope.dataset.mschfTopo;  const p = qparam('mschfTopo');  return a!=null ? a!=='0' : (p!=null ? p!=='0' : false); })(),
+      // GPU-layer toggles (default off for calm sites)
+      gpuRings: (() => { const a = scope.dataset.mschfGpuRings; const p = qparam('mschfGpuRings'); return a!=null ? a!=='0' : (p!=null ? p!=='0' : false); })(),
+      gpuTopo:  (() => { const a = scope.dataset.mschfGpuTopo;  const p = qparam('mschfGpuTopo');  return a!=null ? a!=='0' : (p!=null ? p!=='0' : false); })(),
+      gpuStars: (() => { const a = scope.dataset.mschfGpuStars; const p = qparam('mschfGpuStars'); return a!=null ? a!=='0' : (p!=null ? p!=='0' : false); })(),
     },
     _didRecompose: false,
     _t0: now(),
@@ -382,17 +386,23 @@
       // Mask that punches holes over safe zones (so GPU never overlays prose)
       this.updateMask();
 
-      // Rings
-      this.rings = this.makeRings(PIXI);
-      stage.addChild(this.rings.container);
+      // Rings (GPU) — optional
+      if (State.config.gpuRings) {
+        this.rings = this.makeRings(PIXI);
+        stage.addChild(this.rings.container);
+      }
 
-      // Topo
-      this.topo = this.makeTopo(PIXI);
-      stage.addChild(this.topo.container);
+      // Topo (GPU) — optional
+      if (State.config.gpuTopo) {
+        this.topo = this.makeTopo(PIXI);
+        stage.addChild(this.topo.container);
+      }
 
-      // Starfield (very subtle)
-      this.starfield = this.makeStars(PIXI);
-      stage.addChild(this.starfield.container);
+      // Starfield (very subtle) — optional
+      if (State.config.gpuStars) {
+        this.starfield = this.makeStars(PIXI);
+        stage.addChild(this.starfield.container);
+      }
 
       // No CRT by default (was visually heavy over text)
 
@@ -1386,7 +1396,31 @@
   window.__mschfHUD = (on=1) => { State.debug.hudOn = !!(+on); if (State.debug.hudOn) updateHUD(); else if(State.hud) State.hud.textContent=''; };
   window.__mschfAutoPick = (on=1) => { State.debug.autoPick = !!(+on); };
   window.__mschfCull = (kind='rings') => { const culled=[]; for (const a of Array.from(State.actors)){ if ((a.kind||'')===kind){ retire(a); culled.push(a._id); } } console.log('[MSCHF] culled', kind, culled); return culled.length; };
-  window.__mschfToggle = (what, on=1) => { if (what==='rings') State.config.rings=!!(+on); if (what==='topo') State.config.topo=!!(+on); if (!on) __mschfCull(what==='rings'?'rings':'topo'); else recompose(); };
+  window.__mschfToggle = (what, on=1) => {
+    const enable = !!(+on);
+    if (what==='rings') { State.config.rings=enable; if (!enable) __mschfCull('rings'); else recompose(); return; }
+    if (what==='topo')  { State.config.topo=enable;  if (!enable) __mschfCull('topo');  else recompose(); return; }
+    if (!State.app || !GPU.stage) { console.warn('[MSCHF] GPU not active'); return; }
+    const PIXI = globalThis.PIXI;
+    if (what==='gpuRings') {
+      State.config.gpuRings = enable;
+      if (enable && !GPU.rings && PIXI) { GPU.rings = GPU.makeRings(PIXI); GPU.stage.addChild(GPU.rings.container); }
+      if (!enable && GPU.rings) { GPU.rings.container.removeFromParent(); GPU.rings=null; }
+      return;
+    }
+    if (what==='gpuTopo') {
+      State.config.gpuTopo = enable;
+      if (enable && !GPU.topo && PIXI) { GPU.topo = GPU.makeTopo(PIXI); GPU.stage.addChild(GPU.topo.container); }
+      if (!enable && GPU.topo) { GPU.topo.container.removeFromParent(); GPU.topo=null; }
+      return;
+    }
+    if (what==='gpuStars') {
+      State.config.gpuStars = enable;
+      if (enable && !GPU.starfield && PIXI) { GPU.starfield = GPU.makeStars(PIXI); GPU.stage.addChild(GPU.starfield.container); }
+      if (!enable && GPU.starfield) { GPU.starfield.container.removeFromParent(); GPU.starfield=null; }
+      return;
+    }
+  };
   // Turn on live dev labels: __mschfLabels(1)
   window.__mschfLabels = (on=1) => { State.debug.labelsOn = !!(+on); if (on) updateDevLabels(); else { for (const [,lab] of State._labels){ try{ lab.remove(); }catch{} } State._labels.clear(); } };
   // Dump actors to console (optionally filter by '@family' or 'kind')
