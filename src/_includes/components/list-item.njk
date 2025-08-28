@@ -9,7 +9,7 @@
   <div class="flex items-center justify-between">
     <h3 class="font-heading text-lg text-base-content">{{ item.data.title }}</h3>
     {% if item.date | isNew %}
-    <span class="hb-pill hb-pill-xs hb-pill-new" aria-label="New item">New</span>
+    <span class="pill pill--new" aria-label="New item">New</span>
     {% endif %}
   </div>
   {% if item.data.description %}

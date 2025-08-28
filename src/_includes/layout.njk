@@ -95,47 +95,7 @@
     .btn-cutout[data-variant="b"] { --c: var(--neon-b); }
     .btn-cutout[data-variant="c"] { --c: var(--neon-c); }
 
-    /* Neon Pills — compact gradient chips with subtle sheen + respectful motion */
-    .hb-pill {
-      --hb-pill-fg: hsl(var(--pc));
-      --hb-pill-a: color-mix(in oklab, hsl(var(--p)) 72%, var(--neon-a) 28%);
-      --hb-pill-b: color-mix(in oklab, hsl(var(--p)) 56%, var(--neon-c) 44%);
-      --hb-pill-border: color-mix(in oklab, hsl(var(--p)) 60%, #fff 10%);
-      display: inline-flex; align-items: center; justify-content: center; gap: .25rem;
-      padding: .125rem .5rem; border-radius: 9999px;
-      color: var(--hb-pill-fg); font: 600 10px/1.1 var(--font-sans, ui-sans-serif, system-ui, sans-serif);
-      letter-spacing: .03em; text-transform: uppercase;
-      background: linear-gradient(135deg, var(--hb-pill-a), var(--hb-pill-b));
-      box-shadow:
-        0 0 0 1px color-mix(in oklab, var(--hb-pill-border) 85%, transparent),
-        0 1px 0 rgba(0,0,0,.5),
-        0 8px 22px color-mix(in oklab, hsl(var(--p)) 18%, transparent);
-      position: relative; isolation: isolate;
-      transform: translateZ(0);
-    }
-    .hb-pill::after{
-      content:""; position:absolute; inset:0; border-radius:inherit; pointer-events:none;
-      background: linear-gradient( to bottom, rgba(255,255,255,.18), rgba(255,255,255,0) 44% );
-      mix-blend-mode: screen;
-    }
-    .hb-pill.hb-pill-xs { padding: .1rem .45rem; font-size: 10px; }
-    .hb-pill.hb-pill-sm { padding: .15rem .6rem;  font-size: 11px; }
-
-    .hb-pill-new { --hb-pulse: color-mix(in oklab, var(--neon-b) 40%, hsl(var(--p)) 60%); }
-
-    @media (prefers-reduced-motion: no-preference) {
-      .hb-pill { background-size: 200% 200%; animation: hb-pill-sheen 6s linear infinite; }
-      .hb-pill-new { animation: hb-pill-sheen 6s linear infinite, hb-pill-pulse 2.6s ease-in-out infinite; }
-    }
-    @keyframes hb-pill-sheen {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-    @keyframes hb-pill-pulse {
-      0%,100% { box-shadow: 0 0 0 1px color-mix(in oklab, var(--hb-pill-border) 85%, transparent), 0 1px 0 rgba(0,0,0,.5), 0 8px 16px color-mix(in oklab, var(--hb-pulse) 16%, transparent); }
-      50% { box-shadow: 0 0 0 1px color-mix(in oklab, var(--hb-pill-border) 85%, transparent), 0 2px 0 rgba(0,0,0,.55), 0 10px 28px color-mix(in oklab, var(--hb-pulse) 28%, transparent); }
-    }
+    /* (Removed custom pill block — use DaisyUI badges + .pill utilities) */
 
     /* Neon Tiles — subtle spectral lift/hover for list cards */
     .hb-tile {

@@ -8,7 +8,7 @@
            focus:outline-none focus-visible:ring focus-visible:ring-primary/40"
   >
     <div class="flex items-start justify-between">
-      <span class="chip badge badge-ghost badge-xs uppercase tracking-wider">{{ item.type | capitalize }}</span>
+      <span class="pill pill--ghost">{{ item.type | capitalize }}</span>
       {% if item.date %}
         <time datetime="{{ item.date.toISOString() }}" class="text-[0.7rem] opacity-90">
           {{ item.date.toISOString().slice(0, 10) }}

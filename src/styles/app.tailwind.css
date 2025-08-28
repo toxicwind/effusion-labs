@@ -327,5 +327,15 @@
   .market-table th { @apply bg-slate-100 font-semibold dark:bg-slate-800; }
 }
 
+/* Pills: compose DaisyUI badges for consistent chips */
+@layer components {
+  .pill { @apply badge badge-xs uppercase tracking-wider font-semibold; }
+  .pill--new { @apply badge-primary badge-outline; }
+  .pill--ghost { @apply badge-ghost; }
+  .pill--ok { @apply badge-success; }
+  .pill--warn { @apply badge-warning; }
+  .pill--error { @apply badge-error; }
+}
+
 /* Tailwind v4 content discovery */
 @source "../**/*.{njk,md,html,js}";
