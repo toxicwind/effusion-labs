@@ -24,6 +24,7 @@
   );
   const SID = `${Date.now().toString(36)}-${Math.random().toString(36).slice(2,7)}`;
   const C = { mount:0, retire:0, composeInitial:0, recompose:0, rare:0, io:0, beats:0, bars:0 };
+  const qparam = (name) => { try { return new URLSearchParams(q).get(name); } catch { return null; } };
   const log = (...a) => { if (DEBUG) try { console.log('[MSCHF]', ...a); } catch {} };
   const warn = (...a) => { if (DEBUG) try { console.warn('[MSCHF]', ...a); } catch {} };
   const group = (label) => DEBUG && console.groupCollapsed && console.groupCollapsed(`[MSCHF] ${label}`);
@@ -105,7 +106,16 @@
     // hard caps per family to bound DOM churn; recomputed by tier/pressure
     caps: { scaffold: 6, ephemera: 6, lab: 4, frame: 5 },
     alpha: 0.85, // overall overlay alpha (debuggable)
-    gpu: { maskOn: true, stageAlpha: 1.0 }
+    gpu: { maskOn: true, stageAlpha: 1.0 },
+    // runtime config knobs
+    config: {
+      // 'auto' (default): periodic recomposes; 'once': single recomposition; 'off': never recompose after initial
+      recompose: (scope.dataset.mschfRecompose || qparam('mschfRecompose') || 'auto').toLowerCase(),
+      // set data-mschf-rare="0" or ?mschfRare=0 to disable rare moments
+      rare: (() => { const a = scope.dataset.mschfRare; const b = qparam('mschfRare'); return a !== undefined ? a !== '0' : b !== '0'; })(),
+    },
+    _didRecompose: false,
+    _t0: now()
   };
 
   // Density from token (softened a touch)
@@ -991,9 +1001,16 @@
     if (t - State.bars.last  > State.bars.dur)  {
       State.bars.last = t; C.bars++;
       DEBUG && log('bar tick', { bars: C.bars, mood: State.mood, density: State.density, actors: State.actors.size });
-      if (Math.random()<.7) applyMood(nextMood(State.mood));
-      recompose();
-      if (Math.random()<.06) rareMoment();
+      const mode = State.config.recompose;
+      if (mode === 'auto') {
+        if (Math.random()<.7) applyMood(nextMood(State.mood));
+        recompose();
+        if (State.config.rare && Math.random()<.06) rareMoment();
+      } else if (mode === 'once') {
+        if (!State._didRecompose) { recompose(); State._didRecompose = true; }
+      } else {
+        // 'off' → no periodic recomposition
+      }
     }
 
     for (const a of Array.from(State.actors)) {
@@ -1060,6 +1077,10 @@
     applyMood(State.mood);
     composeInitial();
     wireSections();
+    // In 'once' mode, schedule a single recompose shortly after initial compose
+    if (State.config.recompose === 'once') {
+      setTimeout(() => { if (!State._didRecompose) { try { recompose(); } finally { State._didRecompose = true; } } }, 600);
+    }
     requestAnimationFrame(tick);
   }
 
@@ -1086,6 +1107,8 @@
   window.__mschfMask = (on=1) => { State.gpu.maskOn = !!(+on); GPU.updateMask(); };
   window.__mschfAlpha = (x) => { State.alpha = clamp(+x||State.alpha, 0.3, 1.0); if(State.root) State.root.style.opacity = State.alpha; };
   window.__mschfDebug = (on=1) => { localStorage.setItem('mschf:debug', on? '1':'0'); location.reload(); };
+  window.__mschfRecompose = (mode='auto') => { State.config.recompose = String(mode).toLowerCase(); };
+  window.__mschfRare = (on=1) => { State.config.rare = !!(+on); };
   window.__mschfStats = () => ({ counters: { ...C }, sizes: {
     scaffold: State.families.scaffold.size, ephemera: State.families.ephemera.size, lab: State.families.lab.size, frame: State.families.frame.size
   }, nodeBudget: State.nodeBudget, nodeCount: State.nodeCount, caps: { ...State.caps }, density: State.density, readingPressure: State.readingPressure, mood: State.mood, visible: State.visible });
