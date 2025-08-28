@@ -76,6 +76,22 @@
   .pink{ @apply text-pink-500;} .rose{ @apply text-rose-500;} .blackout{ @apply text-black bg-black; }
 }
 
+/* Stronger separation for dark theme (sunset): thicker borders and a faint card surface */
+@layer components {
+  [data-theme="sunset"] .card.card-border { @apply border; }
+  [data-theme="sunset"] .card.card-border {
+    /* Use DaisyUI tokens but boost contrast a touch */
+    border-color: color-mix(in oklab, var(--color-base-content) 16%, transparent);
+    background-color: color-mix(in oklab, var(--color-base-100) 85%, black 15%);
+  }
+}
+
+/* Theme variable nudge: 2px borders on sunset for clearer delineation */
+@layer base {
+  :root:has(input.theme-controller[value=sunset]:checked),
+  [data-theme=sunset] { --border: 2px; }
+}
+
 /* Inline footnote popover (theme-aware) */
 @layer components {
   .annotation-ref { @apply relative inline-block; }

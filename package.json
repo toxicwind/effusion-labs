@@ -5,7 +5,11 @@
   "main": "index.js",
   "scripts": {
     "//-- CORE COMMANDS --//": "",
-    "dev": "eleventy --serve",
+    "dev": "CSS_WATCH=1 npx concurrently -k -r -n css,11ty -c green,cyan \"npm:css:watch\" \"npm:dev:11ty\"",
+    "dev:11ty": "ELEVENTY_SERVE=true eleventy --serve",
+    "css:watch": "npx concurrently -k -r -n app,overlay -c magenta,blue \"npm:css:watch:app\" \"npm:css:watch:overlay\"",
+    "css:watch:app": "postcss src/styles/app.tailwind.css -o src/assets/css/app.css -w --verbose",
+    "css:watch:overlay": "postcss src/styles/mschf-overlay.css -o src/assets/css/mschf-overlay.css -w --verbose",
     "build": "eleventy",
     "test": "c8 node tools/runner.mjs",
     "format": "prettier -w .",
