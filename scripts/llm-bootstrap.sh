@@ -14,6 +14,14 @@ set -Euo pipefail
 : "${LLM_TEST_PRESETS:=1}"               # Auto-set CI=1 etc. for `npm test`.
 : "${LLM_SUPPRESS_PATTERNS:='^npm ERR! cb'}" # Regex to filter out common, low-signal noise from streams.
 
+# Profile control for different shells (local vs online CI/Codex envs)
+# Set LLM_PROFILE=online to disable noisy/privileged steps without forking this script.
+: "${LLM_PROFILE:=local}"                # local | online
+if [[ "${LLM_PROFILE}" == "online" ]]; then
+  : "${LLM_DEPS_AUTOINSTALL:=0}"
+  : "${LLM_GIT_HOOKS:=0}"
+fi
+
 # --- AESTHETIC HELPERS ---
 # For injecting personality into the shell.
 
@@ -262,11 +270,11 @@ fi
 # Auto-install dependencies if package-lock.json has changed.
 if _llm_on "$LLM_DEPS_AUTOINSTALL"; then
     mkdir -p "$repo_root/tmp"
-    local hash_file="$repo_root/tmp/.deps_hash"
-    local lock_file="$repo_root/package-lock.json"
+    hash_file="$repo_root/tmp/.deps_hash"
+    lock_file="$repo_root/package-lock.json"
     if [[ -f "$lock_file" ]]; then
-        local current_hash; current_hash=$(sha256sum "$lock_file" | awk '{print $1}')
-        local stored_hash; stored_hash=$(cat "$hash_file" 2>/dev/null || echo "")
+        current_hash=$(sha256sum "$lock_file" | awk '{print $1}')
+        stored_hash=$(cat "$hash_file" 2>/dev/null || echo "")
         if [[ "$current_hash" != "$stored_hash" ]]; then
             _llm_emit "INFO :: Dependencies have changed. Running 'npm ci'..."
             (cd "$repo_root" && hype_run -- npm ci)
@@ -277,10 +285,10 @@ fi
 
 # Install git hooks to ensure the bootstrap script is always active.
 if _llm_on "$LLM_GIT_HOOKS"; then
-    local hooks_dir="$repo_root/.git/hooks"
+    hooks_dir="$repo_root/.git/hooks"
     if [[ -d "$hooks_dir" ]]; then
         for hook in post-checkout post-merge; do
-            local hook_path="$hooks_dir/$hook"
+            hook_path="$hooks_dir/$hook"
             printf '%s\n' '#!/usr/bin/env bash' 'source "$(git rev-parse --show-toplevel)/scripts/llm-bootstrap.sh" >/dev/null 2>&1' > "$hook_path"
             chmod +x "$hook_path"
         done

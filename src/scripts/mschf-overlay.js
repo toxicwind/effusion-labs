@@ -77,6 +77,8 @@
     paused: false,
     fps: { samples: [], bad: false },
     tiers: { xs: false, sm: false, md: false, lg: false },
+    // hard caps per family to bound DOM churn; recomputed by tier/pressure
+    caps: { scaffold: 6, ephemera: 6, lab: 4, frame: 5 },
     alpha: 0.85, // overall overlay alpha (debuggable)
     gpu: { maskOn: true, stageAlpha: 1.0 }
   };
@@ -121,6 +123,8 @@
     // tiered budgets
     State.nodeBudget = State.tiers.lg ? 110 : State.tiers.md ? 90 : 60;
     if (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4) State.nodeBudget = Math.min(State.nodeBudget, 70);
+
+    computeCaps();
   }
 
   // ————————————————————————————————————————
@@ -158,7 +162,23 @@
     const total = W * H || 1;
     State.readingPressure = clamp(area / total, 0, 1);
   }
-  function computeContext(){ computeSafeZones(); computeReadingPressure(); }
+  function computeContext(){ computeSafeZones(); computeReadingPressure(); computeCaps(); }
+
+  // Recompute per-family caps by tier, density, motion, and reading pressure
+  function computeCaps(){
+    const base = State.tiers.lg ? { ephemera: 8, lab: 6, frame: 6 }
+               : State.tiers.md ? { ephemera: 6, lab: 4, frame: 5 }
+               :                  { ephemera: 3, lab: 2, frame: 3 };
+    const pressureMod = State.readingPressure > 0.25 ? 0.6 : 1.0;
+    const motionMod   = State.reduceMotion ? 0.75 : 1.0;
+    const densityMod  = lerp(0.6, 1.0, clamp(State.density, 0.2, 0.8));
+    State.caps = {
+      scaffold: 6,
+      ephemera: Math.max(1, Math.floor(base.ephemera * pressureMod * motionMod * densityMod)),
+      lab:      Math.max(1, Math.floor(base.lab      * pressureMod * motionMod * densityMod)),
+      frame:    Math.max(1, Math.floor(base.frame    * pressureMod * motionMod * densityMod)),
+    };
+  }
   function rectOverlap(a,b) {
     const x = Math.max(0, Math.min(a.x+a.w, b.x+b.w) - Math.max(a.x, b.x));
     const y = Math.max(0, Math.min(a.y+a.h, b.y+b.h) - Math.max(a.y, b.y));
@@ -453,6 +473,10 @@
     // honor budget
     const cost = actor.cost || 1;
     if (State.nodeCount + cost > State.nodeBudget) return;
+
+    // family caps: bail if at capacity
+    const cap = (State.caps && State.caps[family]) || Infinity;
+    if (State.families[family] && State.families[family].size >= cap) return;
 
     const isArticle = !!document.querySelector('.prose,[data-kind="spark"],[data-kind="concept"],[data-kind="project"],article,main .prose');
 
