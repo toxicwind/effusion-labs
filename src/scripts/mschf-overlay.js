@@ -125,6 +125,9 @@
       recompose: (scope.dataset.mschfRecompose || qparam('mschfRecompose') || 'once').toLowerCase(),
       // Default rare moments OFF; enable with data-mschf-rare="1" or ?mschfRare=1
       rare: (() => { const a = scope.dataset.mschfRare; const b = qparam('mschfRare'); return a !== undefined ? a === '1' : b === '1'; })(),
+      // Visual toggles for specific lab elements
+      rings: (() => { const a = scope.dataset.mschfRings; const p = qparam('mschfRings'); return a!=null ? a!=='0' : (p!=null ? p!=='0' : false); })(),
+      topo:  (() => { const a = scope.dataset.mschfTopo;  const p = qparam('mschfTopo');  return a!=null ? a!=='0' : (p!=null ? p!=='0' : false); })(),
     },
     _didRecompose: false,
     _t0: now(),
@@ -1061,7 +1064,9 @@
   }
   function spawnLab(min,max){
     const gpuOK = !!State.app && !State.reduceData;
-    const bag = gpuOK ? [A.callout, A.graph, A.perf] : [A.callout, A.graph, A.ringsDOM, A.topoDOM, A.halftone, A.perf, A.starfieldDOM];
+    const base = [A.callout, A.graph, A.perf];
+    const domExtras = [State.config.rings? A.ringsDOM : null, State.config.topo? A.topoDOM : null, A.halftone, A.starfieldDOM].filter(Boolean);
+    const bag = gpuOK ? base : base.concat(domExtras);
     const pool = State.readingPressure > 0.25 ? bag.filter(f => (f.meta?.complexity || 1) <= 3) : bag;
     const n = Math.floor(lerp(min, max, State.density));
     for (let i=0;i<n;i++){ const fn = pick(pool.length?pool:bag); mount(fn(), 'lab'); }
@@ -1288,7 +1293,7 @@
         if (e.target?.dataset?.mschfSeen === '1') { io.unobserve(e.target); continue; }
         C.io++;
         DEBUG && log('io fired', { which: e.target === hero ? 'hero' : e.target === cta ? 'cta' : e.target === feed ? 'feed' : 'unknown', count: C.io });
-        if (hero && e.target===hero) { mount(A.ringsDOM(),'lab'); mount(A.quotes(),'ephemera'); }
+        if (hero && e.target===hero) { if (State.config.rings) mount(A.ringsDOM(),'lab'); mount(A.quotes(),'ephemera'); }
         if (cta && e.target===cta)   { mount(A.plate(),'ephemera'); if (State.config.rare) rareMoment(); }
         if (feed && e.target===feed) { mount(A.stickers(),'frame'); mount(A.dims(),'frame'); }
 
@@ -1380,6 +1385,8 @@
   window.__mschfDebug = (on=1) => { localStorage.setItem('mschf:debug', on? '1':'0'); location.reload(); };
   window.__mschfHUD = (on=1) => { State.debug.hudOn = !!(+on); if (State.debug.hudOn) updateHUD(); else if(State.hud) State.hud.textContent=''; };
   window.__mschfAutoPick = (on=1) => { State.debug.autoPick = !!(+on); };
+  window.__mschfCull = (kind='rings') => { const culled=[]; for (const a of Array.from(State.actors)){ if ((a.kind||'')===kind){ retire(a); culled.push(a._id); } } console.log('[MSCHF] culled', kind, culled); return culled.length; };
+  window.__mschfToggle = (what, on=1) => { if (what==='rings') State.config.rings=!!(+on); if (what==='topo') State.config.topo=!!(+on); if (!on) __mschfCull(what==='rings'?'rings':'topo'); else recompose(); };
   // Turn on live dev labels: __mschfLabels(1)
   window.__mschfLabels = (on=1) => { State.debug.labelsOn = !!(+on); if (on) updateDevLabels(); else { for (const [,lab] of State._labels){ try{ lab.remove(); }catch{} } State._labels.clear(); } };
   // Dump actors to console (optionally filter by '@family' or 'kind')
