@@ -1,9 +1,0 @@
-commit 061044b2d4a4feb3d671515bb9f0067c7ab052e6
-Author: Codex <codex@openai.com>
-Date:   Sat Aug 23 09:23:38 2025 +0000
-
-    feat: merge callout footnotes into global pipeline
-
- eleventy.config.mjs                  | 10 +++++-----
- test/unit/callout-shortcode.test.mjs | 10 +++++++---
- 2 files changed, 12 insertions(+), 8 deletions(-)
