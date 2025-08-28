@@ -128,9 +128,10 @@
     },
     _didRecompose: false,
     _t0: now(),
-    debug: { labelsOn: false, lastLabelUpdate: 0 },
+    debug: { labelsOn: true, hudOn: true, lastLabelUpdate: 0 },
     _labels: new Map(),
     labelLayer: null,
+    hud: null,
   };
 
   // Density from token (softened a touch)
@@ -163,7 +164,9 @@
     // dev label layer
     const labelLayer = el('div','mschf-devlayer',root);
     css(labelLayer,{ position:'absolute', inset:0, pointerEvents:'none', userSelect:'none' });
-    State.root = root; State.domLayer = domLayer; State.labelLayer = labelLayer;
+    const hud = el('div','mschf-hud',root);
+    css(hud,{ position:'fixed', left:'6px', top:'6px', pointerEvents:'none', userSelect:'none', zIndex: '999999', color:'#00ff41', background:'rgba(0,0,0,.58)', border:'1px solid rgba(0,255,65,.6)', borderRadius:'6px', padding:'6px 8px', font:'700 10px/1.2 ui-monospace,Menlo,monospace', letterSpacing:'.06em' });
+    State.root = root; State.domLayer = domLayer; State.labelLayer = labelLayer; State.hud = hud;
     if (DEBUG && 'MutationObserver' in window) {
       const mo = new MutationObserver((muts)=>{
         let added=0, removed=0; for (const m of muts){ added += (m.addedNodes?.length||0); removed += (m.removedNodes?.length||0); }
@@ -1070,10 +1073,8 @@
     GPU.step(t);
 
     // Debug dev-labels (throttled)
-    if (State.debug.labelsOn && (t - (State.debug.lastLabelUpdate||0) > 500)) {
-      try { updateDevLabels(); } catch {}
-      State.debug.lastLabelUpdate = t;
-    }
+    if (State.debug.labelsOn) { try { updateDevLabels(); } catch {} }
+    if (State.debug.hudOn)    { try { updateHUD(); } catch {} }
   }
 
   // ————————————————————————————————————————
@@ -1103,6 +1104,26 @@
     }
     // hide labels for retired actors
     for (const [id, lab] of State._labels){ if (!seen.has(id)) { try{ lab.remove(); }catch{} State._labels.delete(id); } }
+  }
+
+  function updateHUD(){
+    if (!State.hud) return;
+    const sizes = {
+      scaffold: State.families.scaffold.size,
+      ephemera: State.families.ephemera.size,
+      lab: State.families.lab.size,
+      frame: State.families.frame.size,
+    };
+    const line1 = `bars:${C.bars} beats:${C.beats} mood:${State.mood} d:${State.density.toFixed(2)}`;
+    const line2 = `scaf:${sizes.scaffold} eph:${sizes.ephemera} lab:${sizes.lab} frame:${sizes.frame}`;
+    const line3 = `actors:${State.actors.size} nodes:${State.nodeCount}`;
+    // brief legend of kinds by frame/ephemera
+    const kinds = (fam)=>{
+      const m = Object.create(null); for (const a of State.families[fam]) m[a.kind||'?']=(m[a.kind||'?']||0)+1; return Object.entries(m).map(([k,v])=>`${k}×${v}`).join(' ');
+    };
+    const line4 = `@ephemera ${kinds('ephemera')}`;
+    const line5 = `@frame ${kinds('frame')}`;
+    State.hud.textContent = `${line1}\n${line2}\n${line3}\n${line4}\n${line5}`;
   }
   function wireSections(){
     const hero = document.querySelector('.hero,[data-component~="hero"],section[id*="hero"]');
@@ -1188,6 +1209,7 @@
   window.__mschfMask = (on=1) => { State.gpu.maskOn = !!(+on); GPU.updateMask(); };
   window.__mschfAlpha = (x) => { State.alpha = clamp(+x||State.alpha, 0.3, 1.0); if(State.root) State.root.style.opacity = State.alpha; };
   window.__mschfDebug = (on=1) => { localStorage.setItem('mschf:debug', on? '1':'0'); location.reload(); };
+  window.__mschfHUD = (on=1) => { State.debug.hudOn = !!(+on); if (State.debug.hudOn) updateHUD(); else if(State.hud) State.hud.textContent=''; };
   // Turn on live dev labels: __mschfLabels(1)
   window.__mschfLabels = (on=1) => { State.debug.labelsOn = !!(+on); if (on) updateDevLabels(); else { for (const [,lab] of State._labels){ try{ lab.remove(); }catch{} } State._labels.clear(); } };
   // Dump actors to console (optionally filter by '@family' or 'kind')
