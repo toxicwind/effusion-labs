@@ -830,17 +830,38 @@
   A.specimen.meta = specimenMeta;
 
   // Lab / blueprint
-  const calloutMeta = { affinity:'anywhere', complexity:2 };
+  const calloutMeta = { affinity:'gutters', complexity:1 };
   A.callout = () => {
     let node; return {
       kind:'callout', cost:1, ...calloutMeta,
       mount(p){
         node = el('div','mschf-callout',p);
-        const x = 8 + Math.random()*84, y = 18 + Math.random()*64, len = 8 + Math.random()*16;
-        node.style.setProperty('--x', `${x}vw`); node.style.setProperty('--y', `${y}vh`); node.style.setProperty('--len', `${len}vh`);
-        const labels = ['NODE','EDGE','BAYES p','Z','Δt','ID'];
+        const labels = ['NODE','EDGE','VECTOR','EVAL','β','Δt','ID'];
         const val = Math.random().toString(36).slice(2,5).toUpperCase();
         node.textContent = `${pick(labels)} ${val} • ${(Math.random()*0.99).toFixed(2)}`;
+
+        // Place in a safe, non-overlapping spot (avoid prose)
+        // Temporarily attach for measurement
+        node.style.visibility = 'hidden';
+        requestAnimationFrame(()=>{
+          try{
+            const r = node.getBoundingClientRect();
+            const spot = findSpot(Math.max(60, r.width||120), Math.max(18, r.height||18), 'gutters');
+            node.style.setProperty('--x', `${(spot.x/innerWidth)*100}vw`);
+            node.style.setProperty('--y', `${(spot.y/innerHeight)*100}vh`);
+            const len = 6 + Math.random()*10; node.style.setProperty('--len', `${len}vh`);
+            node.style.visibility = '';
+          } catch { node.style.visibility=''; }
+        });
+      },
+      update(t){
+        if (!node) return;
+        const base = /(loud|storm|studio)/.test(State.mood)? .74 : .66;
+        const o = lerp(base*0.6, base, 1 - clamp(State.readingPressure,0,1));
+        node.style.setProperty('--o', o.toFixed(3));
+        if (State.reduceMotion) return;
+        // very subtle glow “breath”
+        if (Math.random()<0.02) node.style.filter = `drop-shadow(0 0 ${Math.random()<0.5?4:6}px color-mix(in oklab, currentColor 40%, transparent))`;
       },
       node
     };

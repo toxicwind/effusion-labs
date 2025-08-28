@@ -110,10 +110,13 @@
 
 .mschf-callout{
   position:fixed; left: calc(var(--x) - 0.5vw); top: var(--y);
-  color: color-mix(in oklab, currentColor 90%, #fff 10%);
+  color: color-mix(in oklab, currentColor 92%, #fff 8%);
   font:700 10px/1 ui-monospace, Menlo, monospace; letter-spacing:.06em; text-transform:uppercase;
-  padding:4px 6px; border:1px solid color-mix(in oklab,currentColor 30%, transparent); border-radius:6px;
-  background: color-mix(in oklab, #0b0b0e 76%, transparent); backdrop-filter: blur(1.5px);
+  padding:4px 6px; border:1px solid color-mix(in oklab,currentColor 26%, transparent); border-radius:6px;
+  background: color-mix(in oklab, #0b0b0e 58%, transparent); /* lighter to avoid obscuring text */
+  opacity: var(--o,.72);
+  mix-blend-mode: screen;
+  backdrop-filter: blur(1.5px);
 }
 .mschf-callout::after{
   content:""; position:fixed; left: var(--x); top: var(--y); width:1px; height: var(--len);
