@@ -87,7 +87,7 @@ permalink: "/resume/"
 } %}
 
 <!doctype html>
-<html lang="en" data-theme="winter">
+<html lang="en" data-theme="corporate">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -95,31 +95,40 @@ permalink: "/resume/"
   <link rel="canonical" href="{{ '/resume/' | url }}">
   <title>{{ title or ('Resume — ' ~ R.name) }}</title>
 
-  <!-- Tailwind + daisyUI (CDN) -->
+  <!-- Tailwind + daisyUI (CDN) + Inter font -->
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.10/dist/full.min.css" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800;900&display=swap" rel="stylesheet">
   <script>
     tailwind.config = {
       theme: {
         extend: {
           container: { center: true },
-          fontFamily: { sans: ['ui-sans-serif','system-ui'] }
+          fontFamily: { sans: ['Inter','ui-sans-serif','system-ui'] }
         }
       }
     }
   </script>
 
   <style>
-    /* Glass intensity for header only */
-    :root { --glass-blur: 10px; --glass-opacity: .72; --glass-border-opacity: .28; }
+    /* Compact resume tuning */
+    :root { --glass-blur: 8px; --glass-opacity: .68; --glass-border-opacity: .2; }
+    body { font-feature-settings: "ss01" on, "ss02" on, "case" on; }
+    .resume h1, .resume h2, .resume h3 { letter-spacing: -0.01em; }
+    .card-compact .card-body { padding: .85rem 1rem; }
+    .badge { border-color: color-mix(in oklab, currentColor 28%, transparent); }
+    .mini-stat { padding:.75rem 1rem; border:1px solid var(--fallback-bc, hsl(var(--bc)/.15)); border-radius:.75rem; }
+    .mini-stat .k { font-size:.72rem; opacity:.7; }
+    .mini-stat .v { font-weight:600; }
     @media print {
       :root { color-scheme: light; }
       body { background: #fff !important; }
       .no-print { display:none !important; }
       .shadow, .shadow-lg, .shadow-xl, .shadow-2xl { box-shadow:none !important; }
       .glass { background: #fff !important; }
-      .stats { display:block !important; }
-      .stats .stat { border:none !important; }
+      .mini-stat { border-color:#ddd !important; }
       .card { border-color:#ddd !important; }
       a { color:#000 !important; text-decoration:none !important; }
     }
@@ -127,15 +136,15 @@ permalink: "/resume/"
 </head>
 
 <body class="bg-base-100 text-base-content">
-  <main class="container max-w-[820px] px-6 py-10 md:py-14 space-y-10 md:space-y-12">
+  <main class="resume container max-w-[780px] px-5 md:px-6 py-8 md:py-10 space-y-8 md:space-y-10">
 
     <!-- Header / Identity -->
-    <header class="card glass shadow-xl border border-base-300">
-      <div class="card-body md:flex md:items-end md:justify-between gap-6">
+    <header class="card glass shadow-lg border border-base-300">
+      <div class="card-body md:flex md:items-end md:justify-between gap-4">
         <div>
-          <h1 class="text-3xl md:text-4xl font-black tracking-tight">{{ R.name }}</h1>
-          <p class="mt-2 text-base md:text-lg opacity-80">{{ R.headline }}</p>
-          <div class="mt-4 flex flex-wrap items-center gap-2">
+          <h1 class="text-2xl md:text-3xl font-black tracking-tight">{{ R.name }}</h1>
+          <p class="mt-1 text-[15px] md:text-base opacity-80">{{ R.headline }}</p>
+          <div class="mt-3 flex flex-wrap items-center gap-2">
             {# Location — show Denver only #}
             <span class="badge badge-outline" aria-label="Location">{{ R.location_display }}</span>
 
@@ -152,14 +161,14 @@ permalink: "/resume/"
           </div>
         </div>
 
-        <div class="flex items-center gap-3 no-print">
+        <div class="flex items-center gap-2 no-print">
           {% if R.pdf %}
-            <a class="btn btn-sm md:btn-md btn-outline" href="{{ R.pdf }}" download>Download PDF</a>
+            <a class="btn btn-sm btn-outline" href="{{ R.pdf }}" download>Download PDF</a>
           {% endif %}
           <label class="swap swap-rotate">
             <input type="checkbox" class="theme-controller" value="dim" />
-            <svg class="swap-off fill-current size-6" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12a7 7 0 0 0 14 0c0-3.866-3.134-7-7-7v14a7 7 0 0 1-7-7Z"/></svg>
-            <svg class="swap-on fill-current size-6" viewBox="0 0 24 24" aria-hidden="true"><path d="M21.64 13a9 9 0 1 1-9-11 7 7 0 0 0 9 9Z"/></svg>
+            <svg class="swap-off fill-current size-5" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12a7 7 0 0 0 14 0c0-3.866-3.134-7-7-7v14a7 7 0 0 1-7-7Z"/></svg>
+            <svg class="swap-on fill-current size-5" viewBox="0 0 24 24" aria-hidden="true"><path d="M21.64 13a9 9 0 1 1-9-11 7 7 0 0 0 9 9Z"/></svg>
           </label>
         </div>
       </div>
@@ -168,22 +177,22 @@ permalink: "/resume/"
     <!-- Summary -->
     <section aria-labelledby="summary">
       <h2 id="summary" class="text-xs tracking-widest uppercase opacity-60">Summary</h2>
-      <div class="card bg-base-100 border border-base-300 shadow">
+      <div class="card card-compact bg-base-100 border border-base-300 shadow">
         <div class="card-body">
-          <p class="text-base md:text-[17px] leading-7 md:leading-8">{{ R.summary }}</p>
+          <p class="text-[15px] md:text-base leading-7 md:leading-8">{{ R.summary }}</p>
         </div>
       </div>
     </section>
 
     <!-- Career Highlights (as stats) -->
     <section aria-labelledby="highlights">
-      <h2 id="highlights" class="text-xs tracking-widest uppercase opacity-60">Career Highlights & Recognition</h2>
-      <div class="stats stats-vertical md:stats-horizontal bg-base-100 border border-base-300 shadow">
+      <h2 id="highlights" class="text-xs tracking-widest uppercase opacity-60">Career Highlights</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 md:gap-3">
         {% for h in R.highlights %}
-        <div class="stat">
-          <div class="stat-title">{{ h.k }}</div>
-          <div class="stat-value text-lg md:text-xl">{{ h.v }}</div>
-          <div class="stat-desc">{{ h.d }}</div>
+        <div class="mini-stat bg-base-100">
+          <div class="k">{{ h.k }}</div>
+          <div class="v text-sm md:text-base">{{ h.v }}</div>
+          <div class="d text-xs opacity-70">{{ h.d }}</div>
         </div>
         {% endfor %}
       </div>
@@ -192,35 +201,28 @@ permalink: "/resume/"
     <!-- Experience (timeline + role cards) -->
     <section aria-labelledby="experience">
       <h2 id="experience" class="text-xs tracking-widest uppercase opacity-60">Experience</h2>
-      <ul class="timeline timeline-vertical timeline-compact">
+      <ul class="space-y-3">
         {% for job in R.experience %}
-        <li class="timeline-item">
-          <div class="timeline-start text-xs opacity-70">{{ job.dates }}</div>
-          <div class="timeline-middle">
-            <div class="w-2 h-2 rounded-full bg-base-content/60"></div>
-          </div>
-          <div class="timeline-end mb-8">
-            <article class="card card-compact bg-base-100 border border-base-300 shadow-sm">
-              <div class="card-body">
-                <div class="flex flex-col md:flex-row md:items-baseline md:justify-between gap-1">
-                  <h3 class="text-base md:text-lg font-semibold">
-                    {{ job.company }}
-                    <span class="font-normal">— {{ job.role }}</span>
-                  </h3>
-                  <span class="text-sm opacity-70">{{ job.location }}</span>
-                </div>
-                <ul class="mt-3 space-y-2 text-sm leading-6">
-                  {% for b in job.bullets %}
-                    <li class="pl-4 relative">
-                      <span class="absolute left-0 top-2 w-1.5 h-1.5 rounded-full bg-base-content/30"></span>
-                      {{ b }}
-                    </li>
-                  {% endfor %}
-                </ul>
+        <li>
+          <article class="card card-compact bg-base-100 border border-base-300 shadow-sm">
+            <div class="card-body">
+              <div class="grid grid-cols-1 md:grid-cols-[1fr_auto] md:items-baseline gap-1">
+                <h3 class="text-base md:text-lg font-semibold">
+                  {{ job.company }} <span class="font-normal">— {{ job.role }}</span>
+                </h3>
+                <div class="text-xs md:text-sm opacity-70 md:text-right">{{ job.dates }}</div>
               </div>
-            </article>
-          </div>
-          {% if not loop.last %}<hr/>{% endif %}
+              <div class="text-sm opacity-70">{{ job.location }}</div>
+              <ul class="mt-2 space-y-2 text-sm leading-6">
+                {% for b in job.bullets %}
+                <li class="pl-4 relative">
+                  <span class="absolute left-0 top-2 w-1.5 h-1.5 rounded-full bg-base-content/30"></span>
+                  {{ b }}
+                </li>
+                {% endfor %}
+              </ul>
+            </div>
+          </article>
         </li>
         {% endfor %}
       </ul>
@@ -229,7 +231,7 @@ permalink: "/resume/"
     <!-- Selected Projects (bento) -->
     <section aria-labelledby="projects">
       <h2 id="projects" class="text-xs tracking-widest uppercase opacity-60">Selected Projects</h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
         {% for p in R.projects %}
         <article class="card card-compact bg-base-100 border border-base-300 hover:shadow-md transition-shadow">
           <div class="card-body">
@@ -250,34 +252,34 @@ permalink: "/resume/"
     <section aria-labelledby="skills">
       <h2 id="skills" class="text-xs tracking-widest uppercase opacity-60">Skills & Tools</h2>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div class="card bg-base-100 border border-base-300">
+        <div class="card card-compact bg-base-100 border border-base-300">
           <div class="card-body">
             <h3 class="text-sm font-semibold">AI / LLM</h3>
-            <div class="mt-3 flex flex-wrap gap-2">
+            <div class="mt-2 flex flex-wrap gap-2">
               {% for s in R.skills.llm %}<span class="badge badge-outline">{{ s }}</span>{% endfor %}
             </div>
           </div>
         </div>
-        <div class="card bg-base-100 border border-base-300">
+        <div class="card card-compact bg-base-100 border border-base-300">
           <div class="card-body">
             <h3 class="text-sm font-semibold">Backend & Data</h3>
-            <div class="mt-3 flex flex-wrap gap-2">
+            <div class="mt-2 flex flex-wrap gap-2">
               {% for s in R.skills.backend %}<span class="badge badge-outline">{{ s }}</span>{% endfor %}
             </div>
           </div>
         </div>
-        <div class="card bg-base-100 border border-base-300">
+        <div class="card card-compact bg-base-100 border border-base-300">
           <div class="card-body">
             <h3 class="text-sm font-semibold">Cloud & DevOps</h3>
-            <div class="mt-3 flex flex-wrap gap-2">
+            <div class="mt-2 flex flex-wrap gap-2">
               {% for s in R.skills.cloud %}<span class="badge badge-outline">{{ s }}</span>{% endfor %}
             </div>
           </div>
         </div>
-        <div class="card bg-base-100 border border-base-300">
+        <div class="card card-compact bg-base-100 border border-base-300">
           <div class="card-body">
             <h3 class="text-sm font-semibold">APIs & Practices</h3>
-            <div class="mt-3 flex flex-wrap gap-2">
+            <div class="mt-2 flex flex-wrap gap-2">
               {% for s in R.skills.api %}<span class="badge badge-outline">{{ s }}</span>{% endfor %}
               {% for s in R.skills.practices %}<span class="badge badge-outline">{{ s }}</span>{% endfor %}
             </div>
@@ -289,9 +291,9 @@ permalink: "/resume/"
     <!-- Education -->
     <section aria-labelledby="education">
       <h2 id="education" class="text-xs tracking-widest uppercase opacity-60">Education</h2>
-      <div class="grid grid-cols-1 gap-3">
+      <div class="grid grid-cols-1 gap-2">
         {% for e in R.education %}
-        <div class="card bg-base-100 border border-base-300">
+        <div class="card card-compact bg-base-100 border border-base-300">
           <div class="card-body py-4">
             <p class="text-sm"><span class="font-medium">{{ e.school }}</span> — {{ e.degree }} ({{ e.year }})</p>
           </div>
@@ -301,12 +303,12 @@ permalink: "/resume/"
     </section>
 
     <!-- Footer -->
-    <footer class="pt-4 pb-10 flex items-center justify-between no-print">
+    <footer class="pt-3 pb-8 flex items-center justify-between no-print">
       <small class="opacity-60">Last updated: {{ collections and collections.all and collections.all | last and (collections.all | last).date | date('yyyy-MM-dd') or "" }}</small>
       <div class="join">
-        <input class="join-item btn btn-sm btn-outline theme-controller" type="radio" name="theme" aria-label="Winter" value="winter" checked />
+        <input class="join-item btn btn-sm btn-outline theme-controller" type="radio" name="theme" aria-label="Corporate" value="corporate" checked />
         <input class="join-item btn btn-sm btn-outline theme-controller" type="radio" name="theme" aria-label="Dim" value="dim" />
-        <input class="join-item btn btn-sm btn-outline theme-controller" type="radio" name="theme" aria-label="Corporate" value="corporate" />
+        <input class="join-item btn btn-sm btn-outline theme-controller" type="radio" name="theme" aria-label="Winter" value="winter" />
       </div>
     </footer>
 
