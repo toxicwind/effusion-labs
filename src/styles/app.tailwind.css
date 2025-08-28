@@ -11,7 +11,7 @@
 
 /* daisyUI v5 — enable themes with explicit defaults */
 @plugin "daisyui" {
-  themes: silk --default, abyss --prefersdark;
+  themes: nord --default, sunset --prefersdark;
   /* logs: false;  // uncomment to silence plugin logs */
 }
 
@@ -76,20 +76,20 @@
   .pink{ @apply text-pink-500;} .rose{ @apply text-rose-500;} .blackout{ @apply text-black bg-black; }
 }
 
-/* Stronger separation for dark theme (abyss): thicker borders and a faint card surface */
+/* Stronger separation for dark theme (sunset): thicker borders and a faint card surface */
 @layer components {
-  [data-theme="abyss"] .card.card-border { @apply border; }
-  [data-theme="abyss"] .card.card-border {
+  [data-theme="sunset"] .card.card-border { @apply border; }
+  [data-theme="sunset"] .card.card-border {
     /* Use DaisyUI tokens but boost contrast a touch */
     border-color: color-mix(in oklab, var(--color-base-content) 16%, transparent);
     background-color: color-mix(in oklab, var(--color-base-100) 85%, black 15%);
   }
 }
 
-/* Theme variable nudge: 2px borders on abyss for clearer delineation */
+/* Theme variable nudge: 2px borders on sunset for clearer delineation */
 @layer base {
-  :root:has(input.theme-controller[value=abyss]:checked),
-  [data-theme=abyss] { --border: 2px; }
+  :root:has(input.theme-controller[value=sunset]:checked),
+  [data-theme=sunset] { --border: 2px; }
 }
 
 /* Inline footnote popover (theme-aware) */
@@ -346,7 +346,8 @@
 /* Pills: compose DaisyUI badges for consistent chips */
 @layer components {
   .pill { @apply badge badge-xs uppercase tracking-wider font-semibold; }
-  .pill--new { @apply badge-primary badge-outline; }
+  /* Make NEW a solid primary by default for visibility */
+  .pill--new { @apply badge-primary; }
   .pill--ghost { @apply badge-ghost; }
   .pill--ok { @apply badge-success; }
   .pill--warn { @apply badge-warning; }
