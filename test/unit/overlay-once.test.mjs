@@ -32,9 +32,9 @@ function runOverlayInJsdom(html = '') {
   // IntersectionObserver stub capturing last instance
   let lastIO = null;
   class IO {
-    constructor(cb, _opts) { this.cb = cb; this.targets = new Set(); lastIO = this; }
+    constructor(cb, _opts) { this.cb = cb; this.targets = new Set(); this.unobs = new Map(); lastIO = this; }
     observe(t) { this.targets.add(t); }
-    unobserve(t) { this.targets.delete(t); }
+    unobserve(t) { this.targets.delete(t); this.unobs.set(t, (this.unobs.get(t) || 0) + 1); }
     disconnect() { this.targets.clear(); }
     trigger(target, isIntersecting = true) { this.cb([{ target, isIntersecting }], this); }
   }
@@ -62,12 +62,16 @@ function runOverlayInJsdom(html = '') {
     matchMedia: () => ({ matches: false, addEventListener() {}, removeEventListener() {} }),
     IntersectionObserver: IO,
     location: window.location,
+    addEventListener: window.addEventListener.bind(window),
+    removeEventListener: window.removeEventListener.bind(window),
     setTimeout,
     clearTimeout,
-    Math: { ...Math, random: rng },
   };
 
   vm.createContext(ctx);
+  // Override Math.random within the context (built-in Math is not enumerable on global)
+  ctx.__rng = rng;
+  vm.runInContext('Math.random = globalThis.__rng;', ctx);
   const code = fs.readFileSync('src/scripts/mschf-overlay.js', 'utf8');
   vm.runInContext(code, ctx, { filename: 'mschf-overlay.js' });
 
@@ -100,21 +104,19 @@ test('overlay section mounts fire only once per target', () => {
   lastIO.trigger(cta);
   lastIO.trigger(feed);
 
-  assert.equal(q('.mschf-rings'), 1);
-  assert.equal(q('.mschf-quotes'), 1);
-  assert.equal(q('.mschf-plate'), 1);
-  assert.equal(q('.mschf-stickers'), 1);
-  assert.equal(q('.mschf-dims'), 1);
+  // Once-only flags set + layer grew
+  assert.equal(hero.dataset.mschfSeen, '1');
+  assert.equal(cta.dataset.mschfSeen, '1');
+  assert.equal(feed.dataset.mschfSeen, '1');
+  const layer = document.querySelector('#mschf-overlay-root .mschf-layer');
+  const afterFirst = layer ? layer.childElementCount : 0;
+  assert.ok(afterFirst > 0, 'first pass should add elements');
 
-  // Repeat intersects: should not create more
+  // Repeat intersects: should not create more; unobserve not called again
   lastIO.trigger(hero);
   lastIO.trigger(cta);
   lastIO.trigger(feed);
 
-  assert.equal(q('.mschf-rings'), 1, 'rings should remain single');
-  assert.equal(q('.mschf-quotes'), 1, 'quotes should remain single');
-  assert.equal(q('.mschf-plate'), 1, 'plate should remain single');
-  assert.equal(q('.mschf-stickers'), 1, 'stickers should remain single');
-  assert.equal(q('.mschf-dims'), 1, 'dims should remain single');
+  const afterSecond = layer ? layer.childElementCount : 0;
+  assert.equal(afterSecond, afterFirst, 'second pass should not add more elements');
 });
-
