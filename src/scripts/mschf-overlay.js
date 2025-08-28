@@ -83,7 +83,7 @@
   const State = {
     root: null, domLayer: null, app: null,
     style: scope.dataset.mschfStyle || 'auto',
-    densityToken: scope.dataset.mschfDensity || 'lite',
+    densityToken: scope.dataset.mschfDensity || 'calm',
     density: 0.38, // gentler default
     mood: 'calm', // calm → lite → bold → loud → storm → studio
     tempo: 1.0,
@@ -109,10 +109,10 @@
     gpu: { maskOn: true, stageAlpha: 1.0 },
     // runtime config knobs
     config: {
-      // 'auto' (default): periodic recomposes; 'once': single recomposition; 'off': never recompose after initial
-      recompose: (scope.dataset.mschfRecompose || qparam('mschfRecompose') || 'auto').toLowerCase(),
-      // set data-mschf-rare="0" or ?mschfRare=0 to disable rare moments
-      rare: (() => { const a = scope.dataset.mschfRare; const b = qparam('mschfRare'); return a !== undefined ? a !== '0' : b !== '0'; })(),
+      // 'once' (default): single recomposition; 'auto': periodic; 'off': never after initial
+      recompose: (scope.dataset.mschfRecompose || qparam('mschfRecompose') || 'once').toLowerCase(),
+      // Default rare moments OFF; enable with data-mschf-rare="1" or ?mschfRare=1
+      rare: (() => { const a = scope.dataset.mschfRare; const b = qparam('mschfRare'); return a !== undefined ? a === '1' : b === '1'; })(),
     },
     _didRecompose: false,
     _t0: now()
@@ -122,8 +122,8 @@
   const densityMap = { calm: 0.22, lite: 0.38, bold: 0.58, loud: 0.75 };
   if (densityMap[State.densityToken]) State.density = densityMap[State.densityToken];
 
-  // Style
-  if (State.style === 'auto') State.style = pick(['structural','collage','playful']); // structural first for “garden”
+  // Style: default to calm+structural for clarity
+  if (State.style === 'auto') State.style = 'structural';
 
   // ————————————————————————————————————————
   // Root mount
@@ -865,12 +865,12 @@
     DEBUG && group('composeInitial');
     C.composeInitial++;
     DEBUG && log('style/mood/density', { style: State.style, mood: State.mood, density: State.density, tiers: { ...State.tiers }, caps: { ...State.caps } });
-    // Scaffold (always)
+    // Scaffold (calm by default)
     mount(A.grid(),    'scaffold');
     mount(A.frame(),   'scaffold');
     mount(A.corners(), 'scaffold');
     mount(A.rulers(),  'scaffold');
-    if (!State.reduceMotion && !State.tiers.xs) mount(A.scanline(), 'scaffold');
+    // Removed moving scanline by default for readability
 
     const isArticle = !!document.querySelector('.prose,article,main .prose');
 
@@ -901,7 +901,8 @@
     for (let i=0;i<n;i++){ const fn = pick(pool.length?pool:bag); mount(fn(), 'lab'); }
   }
   function spawnFrame(min,max){
-    const bag = [A.brackets, A.glitch, A.watermark, A.flowers, A.holo, A.reg, A.dims, A.stickers];
+    // Calm default set excludes heavy/glossy effects (holo, glitch, flowers)
+    const bag = [A.brackets, A.watermark, A.reg, A.dims, A.stickers];
     const pool = State.readingPressure > 0.25 ? bag.filter(f => (f.meta?.complexity || 1) <= 2) : bag;
     const n = Math.floor(lerp(min, max, State.density));
     for (let i=0;i<n;i++){ const fn = pick(pool.length?pool:bag); mount(fn(), 'frame'); }
