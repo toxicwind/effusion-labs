@@ -1,3 +1,46 @@
+diff --git a/node_modules/@photogabble/eleventy-plugin-interlinker/src/html-link-parser.js b/node_modules/@photogabble/eleventy-plugin-interlinker/src/html-link-parser.js
+index 5c98846..c387a05 100644
+--- a/node_modules/@photogabble/eleventy-plugin-interlinker/src/html-link-parser.js
++++ b/node_modules/@photogabble/eleventy-plugin-interlinker/src/html-link-parser.js
+@@ -62,6 +62,11 @@ export default class HTMLLinkParser {
+    * @return {Array<import('@photogabble/eleventy-plugin-interlinker').LinkMeta>}
+    */
+   find(document, pageDirectory) {
++    // Eleventy v3 + custom templates can surface non-strings here.
++    // Coerce defensively to avoid crashes during computed data.
++    if (typeof document !== 'string') {
++      document = document == null ? '' : String(document);
++    }
+     const dom = new JSDOM(document);
+     const anchors = dom.window.document.getElementsByTagName('a');
+     const toParse = [];
+diff --git a/node_modules/@photogabble/eleventy-plugin-interlinker/src/interlinker.js b/node_modules/@photogabble/eleventy-plugin-interlinker/src/interlinker.js
+index c64053f..e5f035f 100644
+--- a/node_modules/@photogabble/eleventy-plugin-interlinker/src/interlinker.js
++++ b/node_modules/@photogabble/eleventy-plugin-interlinker/src/interlinker.js
+@@ -65,7 +65,8 @@ export default class Interlinker {
+     const template = await currentPage.template.read();
+ 
+     if (template?.content) {
+-      const pageContent = template.content;
++      // Coerce template.content defensively; Eleventy may surface non-strings
++      const pageContent = typeof template.content === 'string' ? template.content : String(template.content ?? '');
+       const outboundLinks = [
+         ...this.wikiLinkParser.find(pageContent, pageDirectory, currentPage.filePathStem),
+         ...this.HTMLLinkParser.find(pageContent, pageDirectory),
+diff --git a/node_modules/@photogabble/eleventy-plugin-interlinker/src/markdown-ext.js b/node_modules/@photogabble/eleventy-plugin-interlinker/src/markdown-ext.js
+index b67c8c7..b117ebf 100644
+--- a/node_modules/@photogabble/eleventy-plugin-interlinker/src/markdown-ext.js
++++ b/node_modules/@photogabble/eleventy-plugin-interlinker/src/markdown-ext.js
+@@ -9,6 +9,8 @@ export const wikilinkInlineRule = (wikilinkParser) => (state, silent) => {
+   if (state.src.charAt(state.pos) === '[' && state.src.charAt(state.pos + 1) !== '[') return false; // Not wikilink opening
+   if (state.src.charAt(state.pos) === '!' && state.src.substring(state.pos, state.pos + 3) !== '![[') return false; // Not embed opening
+ 
++  // Guard: ensure src is a string (rare, but defensive for custom renderers)
++  if (typeof state.src !== 'string') return false;
+   const matches = state.src.match(wikilinkParser.wikiLinkRegExp);
+   if (!matches) return false;
+ 
 diff --git a/node_modules/@photogabble/eleventy-plugin-interlinker/src/wikilink-parser.js b/node_modules/@photogabble/eleventy-plugin-interlinker/src/wikilink-parser.js
 index fbd6206..0b02fa7 100644
 --- a/node_modules/@photogabble/eleventy-plugin-interlinker/src/wikilink-parser.js
