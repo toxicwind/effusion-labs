@@ -36,6 +36,7 @@ tools/search2serp/package-lock.json
 coverage/
 .llm-bash-env
 .dead-links.json
+tmp/
 
 # Generated CSS
 src/assets/css/*

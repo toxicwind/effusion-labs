@@ -42,8 +42,10 @@ export const data = () => ({
   eleventyComputed: {
     pagination: () => {
       const files = walkJsonl(ARCHIVES_BASE).map((abs) => ({ abs, ...parseParts(abs) }));
-      // Scope to provenance only if present
       const filtered = files.filter((f) => f.section === 'provenance');
+      if (process.env.DEBUG_JSONL === '1') {
+        console.log(`[jsonl-viewer] found ${filtered.length} provenance JSONL files`);
+      }
       return { data: filtered, size: 1, alias: 'entry' };
     },
     title: ({ entry }) => `Provenance — ${entry?.base ?? ''}`,
