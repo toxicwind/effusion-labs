@@ -201,15 +201,17 @@
 
 /* ————————————————— Frame & stickers ————————————————— */
 
-.mschf-brackets{ position:fixed; inset:0; pointer-events:none }
+.mschf-brackets{ position:fixed; inset:0; pointer-events:none; mix-blend-mode:screen }
 .mschf-brackets::before,
 .mschf-brackets::after{
-  content:""; position:fixed; width:28vmin; height:28vmin; border:4px solid currentColor; opacity:.18;
+  content:""; position:fixed; width:28vmin; height:28vmin; border: var(--b,3px) solid currentColor; opacity: var(--o,.18);
+  filter: drop-shadow(0 0 6px color-mix(in oklab,currentColor 25%, transparent));
 }
-.mschf-brackets.tight::before{ top:5vmin; left:5vmin; border-right:none; border-bottom:none }
-.mschf-brackets.tight::after { bottom:5vmin; right:5vmin; border-left:none; border-top:none }
-.mschf-brackets.wide::before { top:2vmin; left:2vmin; border-right:none; border-bottom:none }
-.mschf-brackets.wide::after  { bottom:2vmin; right:2vmin; border-left:none; border-top:none }
+.mschf-brackets.tight::before{ top:var(--pad,5vmin); left:var(--pad,5vmin); border-right:none; border-bottom:none }
+.mschf-brackets.tight::after { bottom:var(--pad,5vmin); right:var(--pad,5vmin); border-left:none; border-top:none }
+.mschf-brackets.wide::before { top:var(--pad,2vmin); left:var(--pad,2vmin); border-right:none; border-bottom:none }
+.mschf-brackets.wide::after  { bottom:var(--pad,2vmin); right:var(--pad,2vmin); border-left:none; border-top:none }
+.mschf-brackets[data-variant="lite"]::before, .mschf-brackets[data-variant="lite"]::after{ opacity: var(--o,.12); border-width: var(--b,2px); }
 
 .mschf-glitch{ position:fixed; height:12px;
   background: linear-gradient(90deg, color-mix(in oklab,currentColor 60%, transparent) 0%, color-mix(in oklab,currentColor 10%, transparent) 100%);
@@ -238,12 +240,15 @@
 .mschf-pip-bl{ bottom:8px; left:8px }
 .mschf-pip-br{ bottom:8px; right:8px }
 
-.mschf-watermark{
-  position:fixed; inset:0; pointer-events:none; overflow:hidden; opacity:.08; mix-blend-mode:overlay;
-  font:700 14px/1.6 ui-monospace, Menlo, monospace; letter-spacing:.2em; text-transform:uppercase;
-  color: color-mix(in oklab,currentColor 85%, #fff 15%);
-  transform: rotate(-18deg); display:flex; align-items:center; justify-content:center;
+.mschf-watermark{ position:fixed; pointer-events:none; color: color-mix(in oklab,currentColor 85%, #fff 15%); }
+.mschf-watermark[data-variant="full"]{
+  inset:0; overflow:hidden; opacity:var(--o,.08); mix-blend-mode:overlay; font:700 14px/1.6 ui-monospace, Menlo, monospace; letter-spacing:.2em; text-transform:uppercase; transform: rotate(-18deg); display:flex; align-items:center; justify-content:center;
 }
+.mschf-watermark[data-variant="stripe"]{
+  left:-10vw; right:-10vw; top: var(--y,20%); height: var(--h,40px); opacity:var(--o,.08); mix-blend-mode:overlay; transform: rotate(var(--rot,-12deg)); display:flex; align-items:center; overflow:hidden;
+  font:700 14px/1.6 ui-monospace, Menlo, monospace; text-transform:uppercase; letter-spacing:.2em;
+}
+.mschf-watermark[data-variant="stripe"] > .mschf-wm-line{ white-space:nowrap; will-change: transform; }
 
 /* Stickers */
 .mschf-stickers{ position:fixed; display:flex; gap:6px; pointer-events:none }

@@ -848,13 +848,60 @@
 
   // Frame & stickers
   const bracketsMeta = { affinity:'corners', complexity:1 };
-  A.brackets = () => { let node; return { kind:'brackets', cost:1, ...bracketsMeta, mount(p){ node=el('div','mschf-brackets',p); node.classList.add(pick(['tight','wide'])); }, node }; };
+  A.brackets = () => {
+    let node; return {
+      kind:'brackets', cost:1, ...bracketsMeta,
+      mount(p){
+        node = el('div','mschf-brackets',p);
+        node.classList.add(pick(['tight','wide']));
+        const isArticle = !!document.querySelector('.prose,article,main .prose');
+        node.dataset.variant = (State.readingPressure>0.18 || isArticle) ? 'lite' : 'bold';
+        const pad = (node.classList.contains('wide')? (2 + Math.random()*2) : (5 + Math.random()*3));
+        const stroke = node.dataset.variant==='lite' ? 2 : 3;
+        node.style.setProperty('--pad', pad+'vmin');
+        node.style.setProperty('--b', stroke+'px');
+      },
+      update(){ if(!node) return; const base = node.dataset.variant==='lite' ? .12 : .18; const o = lerp(base*0.4, base, 1 - clamp(State.readingPressure,0,1)); node.style.setProperty('--o', o.toFixed(3)); },
+      node
+    };
+  };
   A.brackets.meta = bracketsMeta;
   const glitchMeta = { affinity:'gutters', complexity:3 };
   A.glitch = () => { let node; return { kind:'glitch', cost:1, ...glitchMeta, mount(p){ node=el('div','mschf-glitch',p); if (State.reduceMotion) node.classList.add('static'); css(node,{ top:Math.floor(Math.random()*100)+'%', left:0, right:0 }); }, node }; };
   A.glitch.meta = glitchMeta;
   const watermarkMeta = { affinity:'header', complexity:2 };
-  A.watermark = () => { let node; return { kind:'watermark', cost:1, ...watermarkMeta, mount(p){ node=el('div','mschf-watermark',p); node.textContent='EFFUSION LABS • PROTOTYPE • '; }, node }; };
+  A.watermark = () => {
+    let node, inner; const LEX = ['EFFUSION LABS','EXPERIMENTAL','INTERNAL','READ ONLY','NONCANON','SANDBOX','PROTOTYPE','ARCHIVE'];
+    const phrase = () => `${pick(LEX)} • ${pick(LEX)} • ${pick(LEX)} •`;
+    return {
+      kind:'watermark', cost:1, ...watermarkMeta,
+      mount(p){
+        node = el('div','mschf-watermark',p);
+        const isArticle = !!document.querySelector('.prose,article,main .prose');
+        const variant = (State.readingPressure>0.25 || isArticle) ? 'stripe' : pick(['stripe','full']);
+        node.dataset.variant = variant;
+        const rot = (Math.random()<.5? -1:1) * (12 + Math.random()*10);
+        const y = Math.round(8 + Math.random()*74);
+        const h = Math.round(26 + Math.random()*28);
+        node.style.setProperty('--rot', rot+'deg');
+        node.style.setProperty('--y', y+'%');
+        node.style.setProperty('--h', h+'px');
+        node.style.setProperty('--o', (/(loud|storm)/.test(State.mood)? .12 : .08).toString());
+        inner = document.createElement('span'); inner.className='mschf-wm-line';
+        inner.textContent = (phrase()+" ").repeat(12);
+        node.appendChild(inner);
+      },
+      update(t){
+        if (!node) return; const base = parseFloat(getComputedStyle(node).getPropertyValue('--o')||'0.08')||0.08;
+        const o = lerp(base*0.35, base, 1 - clamp(State.readingPressure,0,1)); node.style.opacity = o.toFixed(3);
+        if (State.reduceMotion) return;
+        const dir = node.dataset.dir || (node.dataset.dir = (Math.random()<.5? '1':'-1'));
+        const speed = (State.tiers.lg? 18:12) * (/(studio|loud)/.test(State.mood)?1.3:1.0);
+        const tx = ((t/1000) * speed * (dir==='1'?1:-1)) % 100; if (inner) inner.style.transform = `translateX(${tx.toFixed(1)}px)`;
+      },
+      node
+    };
+  };
   A.watermark.meta = watermarkMeta;
   const flowersMeta = { affinity:'anywhere', complexity:2 };
   A.flowers = () => { const nodes=[]; return { kind:'flowers', cost:1, ...flowersMeta, mount(p){ const n=1+Math.floor(Math.random()*(/(loud|storm)/.test(State.mood)?2:1)); for(let i=0;i<n;i++){ const fl=el('div','mschf-flower',p); const s=34+Math.floor(Math.random()*26), x=10+Math.floor(Math.random()*80), y=10+Math.floor(Math.random()*70); css(fl,{ width:s+'px', height:s+'px', left:x+'%', top:y+'%', transform:`rotate(${Math.floor((Math.random()-0.5)*160)}deg)` }); nodes.push(fl);} }, node:{ remove(){ nodes.forEach(n=>n.remove()); } } }; };
