@@ -1,6 +1,13 @@
 #!/usr/bin/env bash
 # HYPEBRUT Operating System --- Effusion Labs
 # Strict, robust defaults. Let's create.
+
+# IMPORTANT: This file is intended to be sourced.
+# Do not leak strict mode into the caller. Save current shell options
+# and restore them automatically when sourcing returns.
+_LLM_BOOT_OLD_SET_OPTS="$(set +o)"
+trap 'eval "$\_LLM_BOOT_OLD_SET_OPTS"' RETURN
+
 set -Euo pipefail
 
 # --- CONFIGURATION & TUNING KNOBS ---
