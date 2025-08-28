@@ -68,6 +68,7 @@
     bars:  { last: now(), dur: 3200 },
     safeZones: [],
     occupancy: [],
+    readingPressure: 0,
     gridCols: 10,
     gridRows: 6,
     paused: false,
@@ -124,6 +125,17 @@
       .map(r => ({ x: clamp(r.left - pad, 0, innerWidth), y: clamp(r.top - pad, 0, innerHeight), w: clamp(r.width + pad*2, 0, innerWidth), h: clamp(r.height + pad*2, 0, innerHeight) }));
     State.safeZones = rects;
   }
+  function computeReadingPressure() {
+    const nodes = document.querySelectorAll('p, li, blockquote');
+    let area = 0;
+    nodes.forEach(n => {
+      const r = n.getBoundingClientRect();
+      area += r.width * r.height;
+    });
+    const total = innerWidth * innerHeight;
+    State.readingPressure = total ? Math.min(1, area / total) : 0;
+  }
+  function computeContext(){ computeSafeZones(); computeReadingPressure(); }
   function rectOverlap(a,b) {
     const x = Math.max(0, Math.min(a.x+a.w, b.x+b.w) - Math.max(a.x, b.x));
     const y = Math.max(0, Math.min(a.y+a.h, b.y+b.h) - Math.max(a.y, b.y));
@@ -138,9 +150,8 @@
   function isCellFree(c,r){ return !State.occupancy[r*State.gridCols + c]; }
   function claimCell(c,r){ State.occupancy[r*State.gridCols + c] = 1; }
 
-  // Gutter-first placement (avoid text columns)
-  function findSpot(w,h) {
-    // prefer gutters: left 0–10vw or right 90–100vw; else random grid
+  // Zoned placement with optional affinity
+  function findSpot(w,h,aff='anywhere') {
     const tryGutter = () => {
       const left = Math.random() < 0.5;
       const x = left ? Math.round(Math.random()*Math.min(innerWidth*0.1, 120)) : Math.round(innerWidth - w - Math.random()*Math.min(innerWidth*0.1, 120));
@@ -148,8 +159,28 @@
       const rect = { x, y, w, h }; if (!collidesSafe(rect)) return rect;
       return null;
     };
-    for (let i=0;i<16;i++){ const r = tryGutter(); if (r) return r; }
-
+    const tryCorners = () => {
+      const pad = 8;
+      const pos = pick(['tl','tr','bl','br']);
+      const x = pos.includes('l') ? pad : innerWidth - w - pad;
+      const y = pos.includes('t') ? pad : innerHeight - h - pad;
+      const rect = { x, y, w, h }; if (!collidesSafe(rect)) return rect;
+      return null;
+    };
+    const tryHeader = () => {
+      const pad = 12;
+      const x = Math.round(Math.random()*(innerWidth - w));
+      const y = pad;
+      const rect = { x, y, w, h }; if (!collidesSafe(rect)) return rect;
+      return null;
+    };
+    const primary = aff==='corners'?tryCorners:aff==='gutters'?tryGutter:aff==='header'?tryHeader:null;
+    if (primary) {
+      for (let i=0;i<10;i++){ const r=primary(); if (r) return r; }
+    }
+    if (aff!=='gutters') {
+      for (let i=0;i<6;i++){ const r=tryGutter(); if(r) return r; }
+    }
     const maxTry = 28;
     for (let i=0;i<maxTry;i++) {
       const cx = Math.floor(Math.random()*State.gridCols);
@@ -170,10 +201,14 @@
   function nextMood(cur){
     const idx = moods.indexOf(cur);
     const roll = Math.random();
-    const step = roll < 0.6 ? 1 : roll < 0.85 ? 2 : 3;
-    return moods[(idx + step) % moods.length];
+    let step = roll < 0.6 ? 1 : roll < 0.85 ? 2 : 3;
+    if (State.readingPressure < 0.1 && Math.random() < 0.5) step++;
+    let next = moods[Math.min(idx + step, moods.length - 1)];
+    if (State.readingPressure > 0.3 && ['bold','loud','storm','studio'].includes(next)) next = 'lite';
+    return next;
   }
   function applyMood(mood){
+    if (State.readingPressure > 0.3 && ['bold','loud','storm','studio'].includes(mood)) mood = 'lite';
     State.mood = mood;
     const t = { calm:.9, lite:1.0, bold:1.15, loud:1.25, storm:1.35, studio:.95 }[mood] || 1.0;
     State.tempo = t;
@@ -399,44 +434,54 @@
   const A = {}; // actor factory bag
 
   // Scaffold
+  const gridMeta = { affinity:'anywhere', complexity:2 };
   A.grid = () => {
     let node; return {
-      kind:'grid', cost:1,
+      kind:'grid', cost:1, ...gridMeta,
       mount(p){ node = el('div','mschf-grid',p); node.dataset.variant = Math.random()<.5?'dots':'lines'; },
       update(){ if (Math.random()< .002 * State.tempo) node.dataset.variant = node.dataset.variant==='dots'?'lines':'dots'; },
       node
     };
   };
+  A.grid.meta = gridMeta;
+  const frameMeta = { affinity:'anywhere', complexity:2 };
   A.frame = () => {
     let node; return {
-      kind:'frame', cost:1,
+      kind:'frame', cost:1, ...frameMeta,
       mount(p){ node = el('div','mschf-frame',p); },
       update(t){ node.style.setProperty('--mschf-glow', (0.12 + Math.sin(t/2200)*0.05*State.tempo).toFixed(3)); },
       node
     };
   };
+  A.frame.meta = frameMeta;
+  const cornersMeta = { affinity:'corners', complexity:1 };
   A.corners = () => {
     const nodes=[]; return {
-      kind:'corners', cost:1,
+      kind:'corners', cost:1, ...cornersMeta,
       mount(p){ ['tl','tr','bl','br'].forEach(pos=>nodes.push(el('div',`mschf-corner mschf-corner-${pos}`,p))); },
       node:{ remove(){ nodes.forEach(n=>n.remove()); } }
     };
   };
+  A.corners.meta = cornersMeta;
+  const rulersMeta = { affinity:'anywhere', complexity:1 };
   A.rulers = () => {
     let top,left; return {
-      kind:'rulers', cost:1,
+      kind:'rulers', cost:1, ...rulersMeta,
       mount(p){ top=el('div','mschf-ruler mschf-ruler-top',p); left=el('div','mschf-ruler mschf-ruler-left',p); },
       node:{ remove(){ top.remove(); left.remove(); } }
     };
   };
+  A.rulers.meta = rulersMeta;
+  const scanMeta = { affinity:'anywhere', complexity:2 };
   A.scanline = () => {
     let node; return {
-      kind:'scan', cost:1,
+      kind:'scan', cost:1, ...scanMeta,
       mount(p){ node = el('div','mschf-scanline',p); if (State.reduceMotion) node.classList.add('static'); },
       update(){ if (!State.reduceMotion && Math.random()<0.002) node.classList.toggle('static', Math.random()<0.5); },
       node
     };
   };
+  A.scanline.meta = scanMeta;
 
   // Ephemera
   const TAPE_LEX = [
@@ -444,10 +489,11 @@
     '"ALPHA"','"BETA"','"RC1"','"NIGHTLY"','"CANARY"','"WIP"','"READ ONLY"','"NO INDEX"',
     '"GRAPH"','"VECTOR"','"RAG"','"EVAL"','"INTERFACE"','"ATLAS"','"SPARK"'
   ];
+  const tapeMeta = { affinity:'corners', complexity:2 };
   A.tape = () => {
     let node, rect={x:0,y:0,w:0,h:0}, life=1;
     return {
-      kind:'tape', cost:1,
+      kind:'tape', cost:1, ...tapeMeta,
       mount(p){
         node = el('div','mschf-tape',p);
         node.classList.add(pick(['tone-a','tone-b','tone-c']));
@@ -456,7 +502,7 @@
         if (Math.random() < 0.16) node.dataset.clear='1';
         const wvw = Math.round(28 + Math.random()*52);
         const h = 26 + Math.random()*12;
-        rect = findSpot(innerWidth*(wvw/100), h);
+        rect = findSpot(innerWidth*(wvw/100), h, this.affinity);
         const rot = (Math.random()-0.5) * (/(loud|storm)/.test(State.mood)?14:6);
         css(node,{ top:rect.y+'px', left:rect.x+'px', width:wvw+'vw', transform:`rotate(${rot}deg)`, opacity: State.mood==='calm'?'.20':'.32' });
       },
@@ -472,10 +518,12 @@
       node
     };
   };
+  A.tape.meta = tapeMeta;
   const STAMPS = ['LAB DROP','EXPERIMENTAL','UNSTABLE','READ ONLY','DECLASSIFIED','NONCANON','FOR INTERNAL USE','RETRY','RECALIBRATE','ARCHIVE ONLY'];
+  const stampMeta = { affinity:'corners', complexity:2 };
   A.stamp = () => {
     let node; return {
-      kind:'stamp', cost:1,
+      kind:'stamp', cost:1, ...stampMeta,
       mount(p){
         node = el('div','mschf-stamp',p); node.textContent = pick(STAMPS);
         const pos = pick(['top-right','top-left','bottom-right','bottom-left']);
@@ -488,9 +536,11 @@
       node
     };
   };
+  A.stamp.meta = stampMeta;
+  const quotesMeta = { affinity:'anywhere', complexity:1 };
   A.quotes = () => {
     let node; return {
-      kind:'quotes', cost:1,
+      kind:'quotes', cost:1, ...quotesMeta,
       mount(p){
         node = el('div','mschf-quotes',p);
         const idtail = Math.random().toString(36).slice(2,5).toUpperCase();
@@ -503,9 +553,11 @@
       node
     };
   };
+  A.quotes.meta = quotesMeta;
+  const plateMeta = { affinity:'gutters', complexity:3 };
   A.plate = () => {
     let node, code; return {
-      kind:'plate', cost:1,
+      kind:'plate', cost:1, ...plateMeta,
       mount(p){
         node = el('div','mschf-plate',p); el('div','mschf-barcode',node); code = el('div','mschf-code',node);
         const tail = Math.random().toString(16).slice(-6).toUpperCase();
@@ -516,9 +568,11 @@
       node
     };
   };
+  A.plate.meta = plateMeta;
+  const specimenMeta = { affinity:'gutters', complexity:2 };
   A.specimen = () => {
     let node; return {
-      kind:'specimen', cost:1,
+      kind:'specimen', cost:1, ...specimenMeta,
       mount(p){
         node = el('div','mschf-specimen',p);
         const id = Math.random().toString(36).slice(2,7).toUpperCase();
@@ -534,11 +588,13 @@
       node
     };
   };
+  A.specimen.meta = specimenMeta;
 
   // Lab / blueprint
+  const calloutMeta = { affinity:'anywhere', complexity:2 };
   A.callout = () => {
     let node; return {
-      kind:'callout', cost:1,
+      kind:'callout', cost:1, ...calloutMeta,
       mount(p){
         node = el('div','mschf-callout',p);
         const x = 8 + Math.random()*84, y = 18 + Math.random()*64, len = 8 + Math.random()*16;
@@ -550,9 +606,11 @@
       node
     };
   };
+  A.callout.meta = calloutMeta;
+  const graphMeta = { affinity:'gutters', complexity:5 };
   A.graph = () => {
     let cluster, nodes=[], edges=[]; return {
-      kind:'graph', cost:2,
+      kind:'graph', cost:2, ...graphMeta,
       mount(p){
         cluster = el('div','mschf-graph',p);
         const n = 5 + Math.floor(Math.random()*(/(loud|storm)/.test(State.mood)?12:8));
@@ -576,28 +634,52 @@
       node:{ remove(){ cluster.remove(); } }
     };
   };
+  A.graph.meta = graphMeta;
+  const ringsMeta = { affinity:'anywhere', complexity:2 };
   A.ringsDOM = () => { // fallback if GPU disabled
     let node; return {
-      kind:'rings', cost:1,
+      kind:'rings', cost:1, ...ringsMeta,
       mount(p){ node = el('div','mschf-rings',p); if (State.reduceMotion) node.classList.add('static'); const s = 120 + Math.floor(Math.random()*220); css(node,{ left:`${10+Math.random()*80}%`, top:`${10+Math.random()*70}%`, width:s+'px', height:s+'px' }); },
       node
     };
   };
-  A.topoDOM = () => { let node; return { kind:'topo', cost:1, mount(p){ node=el('div','mschf-topo',p); node.style.setProperty('--rot', `${Math.floor((Math.random()-0.5)*30)}deg`); }, node }; };
-  A.halftone = () => { let node; return { kind:'halftone', cost:1, mount(p){ node=el('div','mschf-halftone '+pick(['tl','tr','bl','br']),p); }, node }; };
-  A.perf = () => { let node; return { kind:'perf', cost:1, mount(p){ node=el('div','mschf-perf',p); node.dataset.side = pick(['top','bottom','left','right']); }, node }; };
-  A.starfieldDOM = () => { let node; return { kind:'stars', cost:1, mount(p){ node=el('div','mschf-stars',p); node.style.setProperty('--density', `${0.15 + Math.random()*0.35}`); }, node }; };
+  A.ringsDOM.meta = ringsMeta;
+  const topoMeta = { affinity:'anywhere', complexity:3 };
+  A.topoDOM = () => { let node; return { kind:'topo', cost:1, ...topoMeta, mount(p){ node=el('div','mschf-topo',p); node.style.setProperty('--rot', `${Math.floor((Math.random()-0.5)*30)}deg`); }, node }; };
+  A.topoDOM.meta = topoMeta;
+  const halftoneMeta = { affinity:'anywhere', complexity:3 };
+  A.halftone = () => { let node; return { kind:'halftone', cost:1, ...halftoneMeta, mount(p){ node=el('div','mschf-halftone '+pick(['tl','tr','bl','br']),p); }, node }; };
+  A.halftone.meta = halftoneMeta;
+  const perfMeta = { affinity:'gutters', complexity:2 };
+  A.perf = () => { let node; return { kind:'perf', cost:1, ...perfMeta, mount(p){ node=el('div','mschf-perf',p); node.dataset.side = pick(['top','bottom','left','right']); }, node }; };
+  A.perf.meta = perfMeta;
+  const starMeta = { affinity:'anywhere', complexity:4 };
+  A.starfieldDOM = () => { let node; return { kind:'stars', cost:1, ...starMeta, mount(p){ node=el('div','mschf-stars',p); node.style.setProperty('--density', `${0.15 + Math.random()*0.35}`); }, node }; };
+  A.starfieldDOM.meta = starMeta;
 
   // Frame & stickers
-  A.brackets = () => { let node; return { kind:'brackets', cost:1, mount(p){ node=el('div','mschf-brackets',p); node.classList.add(pick(['tight','wide'])); }, node }; };
-  A.glitch = () => { let node; return { kind:'glitch', cost:1, mount(p){ node=el('div','mschf-glitch',p); if (State.reduceMotion) node.classList.add('static'); css(node,{ top:Math.floor(Math.random()*100)+'%', left:0, right:0 }); }, node }; };
-  A.watermark = () => { let node; return { kind:'watermark', cost:1, mount(p){ node=el('div','mschf-watermark',p); node.textContent='EFFUSION LABS • PROTOTYPE • '; }, node }; };
-  A.flowers = () => { const nodes=[]; return { kind:'flowers', cost:1, mount(p){ const n=1+Math.floor(Math.random()*(/(loud|storm)/.test(State.mood)?3:2)); for(let i=0;i<n;i++){ const fl=el('div','mschf-flower',p); const s=38+Math.floor(Math.random()*32), x=10+Math.floor(Math.random()*80), y=10+Math.floor(Math.random()*70); css(fl,{ width:s+'px', height:s+'px', left:x+'%', top:y+'%', transform:`rotate(${Math.floor((Math.random()-0.5)*180)}deg)` }); nodes.push(fl);} }, node:{ remove(){ nodes.forEach(n=>n.remove()); } } }; };
-  A.holo = () => { let node; return { kind:'holo', cost:1, mount(p){ node=el('div','mschf-holo',p); if (State.reduceMotion) node.classList.add('static'); }, node }; };
-  A.reg = () => { const nodes=[]; return { kind:'reg', cost:1, mount(p){ ['tl','tr','bl','br'].forEach(pos=>nodes.push(el('div','mschf-reg '+pos,p))); }, node:{ remove(){ nodes.forEach(n=>n.remove()); } } }; };
+  const bracketsMeta = { affinity:'corners', complexity:1 };
+  A.brackets = () => { let node; return { kind:'brackets', cost:1, ...bracketsMeta, mount(p){ node=el('div','mschf-brackets',p); node.classList.add(pick(['tight','wide'])); }, node }; };
+  A.brackets.meta = bracketsMeta;
+  const glitchMeta = { affinity:'gutters', complexity:3 };
+  A.glitch = () => { let node; return { kind:'glitch', cost:1, ...glitchMeta, mount(p){ node=el('div','mschf-glitch',p); if (State.reduceMotion) node.classList.add('static'); css(node,{ top:Math.floor(Math.random()*100)+'%', left:0, right:0 }); }, node }; };
+  A.glitch.meta = glitchMeta;
+  const watermarkMeta = { affinity:'header', complexity:2 };
+  A.watermark = () => { let node; return { kind:'watermark', cost:1, ...watermarkMeta, mount(p){ node=el('div','mschf-watermark',p); node.textContent='EFFUSION LABS • PROTOTYPE • '; }, node }; };
+  A.watermark.meta = watermarkMeta;
+  const flowersMeta = { affinity:'anywhere', complexity:2 };
+  A.flowers = () => { const nodes=[]; return { kind:'flowers', cost:1, ...flowersMeta, mount(p){ const n=1+Math.floor(Math.random()*(/(loud|storm)/.test(State.mood)?3:2)); for(let i=0;i<n;i++){ const fl=el('div','mschf-flower',p); const s=38+Math.floor(Math.random()*32), x=10+Math.floor(Math.random()*80), y=10+Math.floor(Math.random()*70); css(fl,{ width:s+'px', height:s+'px', left:x+'%', top:y+'%', transform:`rotate(${Math.floor((Math.random()-0.5)*180)}deg)` }); nodes.push(fl);} }, node:{ remove(){ nodes.forEach(n=>n.remove()); } } }; };
+  A.flowers.meta = flowersMeta;
+  const holoMeta = { affinity:'gutters', complexity:4 };
+  A.holo = () => { let node; return { kind:'holo', cost:1, ...holoMeta, mount(p){ node=el('div','mschf-holo',p); if (State.reduceMotion) node.classList.add('static'); }, node }; };
+  A.holo.meta = holoMeta;
+  const regMeta = { affinity:'corners', complexity:1 };
+  A.reg = () => { const nodes=[]; return { kind:'reg', cost:1, ...regMeta, mount(p){ ['tl','tr','bl','br'].forEach(pos=>nodes.push(el('div','mschf-reg '+pos,p))); }, node:{ remove(){ nodes.forEach(n=>n.remove()); } } }; };
+  A.reg.meta = regMeta;
+  const dimsMeta = { affinity:'anywhere', complexity:2 };
   A.dims = () => {
     let node; return {
-      kind:'dims', cost:1,
+      kind:'dims', cost:1, ...dimsMeta,
       mount(p){
         node = el('div','mschf-dims',p);
         const x1 = 10 + Math.floor(Math.random()*30), x2 = x1 + 20 + Math.floor(Math.random()*35), y = 20 + Math.floor(Math.random()*60);
@@ -608,9 +690,11 @@
       node
     };
   };
+  A.dims.meta = dimsMeta;
+  const stickersMeta = { affinity:'gutters', complexity:3 };
   A.stickers = () => {
     let cluster; return {
-      kind:'stickers', cost:1,
+      kind:'stickers', cost:1, ...stickersMeta,
       mount(p){
         cluster = el('div','mschf-stickers',p);
         const corner = pick(['br','bl','tr','tl']); const off = 18 + Math.floor(Math.random()*18);
@@ -629,6 +713,7 @@
       node:{ remove(){ cluster.remove(); } }
     };
   };
+  A.stickers.meta = stickersMeta;
 
   // ————————————————————————————————————————
   // Orchestration
@@ -652,31 +737,35 @@
 
   function spawnEphemera(min,max){
     const bag = [A.tape, A.stamp, A.quotes, A.plate, A.specimen];
+    const pool = State.readingPressure > 0.3 ? bag.filter(f => (f.meta?.complexity || 1) <= 2) : bag;
     const n = Math.floor(lerp(min, max, State.density));
-    for (let i=0;i<n;i++) mount(pick(bag)(), 'ephemera');
+    for (let i=0;i<n;i++){ const fn = pick(pool.length?pool:bag); mount(fn(), 'ephemera'); }
   }
   function spawnLab(min,max){
     const gpuOK = !!State.app && !State.reduceData;
     const bag = gpuOK ? [A.callout, A.graph, A.perf] : [A.callout, A.graph, A.ringsDOM, A.topoDOM, A.halftone, A.perf, A.starfieldDOM];
+    const pool = State.readingPressure > 0.3 ? bag.filter(f => (f.meta?.complexity || 1) <= 3) : bag;
     const n = Math.floor(lerp(min, max, State.density));
-    for (let i=0;i<n;i++) mount(pick(bag)(), 'lab');
+    for (let i=0;i<n;i++){ const fn = pick(pool.length?pool:bag); mount(fn(), 'lab'); }
   }
   function spawnFrame(min,max){
     const bag = [A.brackets, A.glitch, A.watermark, A.flowers, A.holo, A.reg, A.dims, A.stickers];
+    const pool = State.readingPressure > 0.3 ? bag.filter(f => (f.meta?.complexity || 1) <= 2) : bag;
     const n = Math.floor(lerp(min, max, State.density));
-    for (let i=0;i<n;i++) mount(pick(bag)(), 'frame');
+    for (let i=0;i<n;i++){ const fn = pick(pool.length?pool:bag); mount(fn(), 'frame'); }
   }
 
   function recompose(){
-    resetOccupancy(); computeSafeZones();
-    // retire some to keep it fresh
+    resetOccupancy(); computeContext();
     for (const fam of ['ephemera','lab','frame']) {
-      const toRemove = Math.floor(State.families[fam].size * (0.15 + Math.random()*0.25));
-      for (let i=0;i<toRemove;i++){ const a = State.families[fam].values().next().value; if (a) retire(a); }
+      const actors = Array.from(State.families[fam]).sort((a,b)=>(b.complexity||1)-(a.complexity||1));
+      const toRemove = Math.floor(actors.length * (0.15 + Math.random()*0.25));
+      for (let i=0;i<toRemove;i++){ const a = actors[i]; if (a) retire(a); }
     }
-    spawnEphemera(1, Math.round(5*State.density));
-    spawnLab(1, Math.round(4*State.density + (/(storm)/.test(State.mood)?2:0)));
-    spawnFrame(1, Math.round(5*State.density));
+    const mod = State.readingPressure > 0.3 ? 0.6 : 1;
+    spawnEphemera(1, Math.round(5*State.density*mod));
+    spawnLab(1, Math.round((4*State.density + (/(storm)/.test(State.mood)?2:0))*mod));
+    spawnFrame(1, Math.round(5*State.density*mod));
   }
 
   function rareMoment(){
@@ -756,7 +845,7 @@
   // Boot
   // ————————————————————————————————————————
   async function boot(){
-    mountRoot(); computeTiers(); computeSafeZones(); resetOccupancy();
+    mountRoot(); computeTiers(); computeContext(); resetOccupancy();
     applyMood(State.mood);
 
     // GPU init (only on MD+ and if not reduced-data)
@@ -770,7 +859,7 @@
   }
 
   // Events
-  addEventListener('resize', () => { computeTiers(); computeSafeZones(); resetOccupancy(); });
+  addEventListener('resize', () => { computeTiers(); computeContext(); resetOccupancy(); });
   document.addEventListener('visibilitychange', onVisibility, false);
 
   // Reduced motion/data immediate adjustments
