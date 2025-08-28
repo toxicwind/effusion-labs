@@ -222,15 +222,13 @@ Requires **Node ≥ 24** (see `package.json` / `.nvmrc`). Run from the repo root
 
 ## Dependency Patches
 
-We maintain curated fixes for third‑party packages using patch-package.
+We maintain fixes for third‑party packages using `patch-package`.
 
-- Source: put patch files in `appliedpatches/` (e.g., `appliedpatches/tree-cli+0.6.7.patch`).
-- Install flow: `postinstall` runs `node scripts/sync-patches.js && patch-package`.
-  - The sync step copies everything from `appliedpatches/` to `patches/`.
-  - patch-package then applies them to `node_modules/` deterministically.
-- Purpose: ensures patches apply automatically with `npm ci` in CI/agents.
+- Store patch files in `patches/` (e.g., `patches/tree-cli+0.6.7.patch`).
+- `postinstall` runs `patch-package`, so patches apply automatically on `npm ci`.
+- Keep patch diffs small and focused; upstream when possible.
 
-Note: avoid editing `node_modules/` directly. If you must prototype a change, capture it as a patch file in `appliedpatches/` so it survives fresh installs.
+Note: avoid editing `node_modules/` directly. If you must prototype a change, run `npx patch-package <pkg>` to capture your edits into `patches/` and commit the patch file.
 
 ---
 
