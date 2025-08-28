@@ -1,0 +1,23 @@
+
+> effusion_labs_final@1.0.0 postinstall
+> if [ -x node_modules/.bin/patch-package ]; then patch-package; fi
+
+patch-package 8.0.0
+Applying patches...
+@photogabble/eleventy-plugin-interlinker@1.1.0 ✔
+tree-cli@0.6.7 ✔
+
+added 39 packages, removed 1 package, and audited 927 packages in 2s
+
+203 packages are looking for funding
+  run `npm fund` for details
+
+15 vulnerabilities (4 low, 4 moderate, 3 high, 4 critical)
+
+To address issues that do not require attention, run:
+  npm audit fix
+
+Some issues need review, and may require choosing
+a different dependency.
+
+Run `npm audit` for details.

@@ -1,0 +1,93 @@
+::notice:: NPM-SHIM: Using PTY wrapper for 'npm test' to ensure output streaming.
+
+> effusion_labs_final@1.0.0 test
+> c8 node tools/runner.mjs
+
+🚀 Launching test runner...
+🔍 Found 17 test files.
+
+🏗️  Performing single Eleventy build...
+🗂  Archives loaded from "src/content/archives": 88 items (44 products, 4 characters, 40 series)
+[31m[90m[11ty][39m[31m Problem writing Eleventy templates:[39m
+[90m[11ty][39m 1. Error generating template page(s) for ./src/archives/_dynamic/jsonl-viewer.11ty.js. (via EleventyMapPagesError)
+[90m[11ty][39m 2. Cannot read properties of undefined (reading 'base') (via TypeError)
+[90m[11ty][39m 
+[90m[11ty][39m Original error stack trace: TypeError: Cannot read properties of undefined (reading 'base')
+[90m[11ty][39m     at Object.title (file:///home/toxic/effusion_labs_final/src/archives/_dynamic/jsonl-viewer.11ty.js?_cache_bust=1756395332202:49:49)
+[90m[11ty][39m     at ComputedDataProxy.findVarsUsed (file:///home/toxic/effusion_labs_final/node_modules/@11ty/eleventy/src/Data/ComputedDataProxy.js:124:9)
+[90m[11ty][39m     at ComputedData.resolveVarOrder (file:///home/toxic/effusion_labs_final/node_modules/@11ty/eleventy/src/Data/ComputedData.js:75:29)
+[90m[11ty][39m     at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+[90m[11ty][39m     at async ComputedData.setupData (file:///home/toxic/effusion_labs_final/node_modules/@11ty/eleventy/src/Data/ComputedData.js:105:3)
+[90m[11ty][39m     at async Template.addComputedData (file:///home/toxic/effusion_labs_final/node_modules/@11ty/eleventy/src/Template.js:629:4)
+[90m[11ty][39m     at async Template.getTemplates (file:///home/toxic/effusion_labs_final/node_modules/@11ty/eleventy/src/Template.js:800:4)
+[90m[11ty][39m     at async #initDependencyMapEntry (file:///home/toxic/effusion_labs_final/node_modules/@11ty/eleventy/src/TemplateMap.js:192:17)
+[90m[11ty][39m     at async TemplateMap.initDependencyMap (file:///home/toxic/effusion_labs_final/node_modules/@11ty/eleventy/src/TemplateMap.js:186:4)
+[90m[11ty][39m     at async TemplateMap.cache (file:///home/toxic/effusion_labs_final/node_modules/@11ty/eleventy/src/TemplateMap.js:274:3)
+[31m[90m[11ty][39m[31m Copied [1m17[22m Wrote [1m0[22m files in [1m1.28[22m seconds (v3.1.2)[39m
+[31m[90m[11ty][39m[31m Eleventy Fatal Error (CLI):[39m
+[90m[11ty][39m 1. Error generating template page(s) for ./src/archives/_dynamic/jsonl-viewer.11ty.js. (via EleventyMapPagesError)
+[90m[11ty][39m 2. Cannot read properties of undefined (reading 'base') (via TypeError)
+[90m[11ty][39m 
+[90m[11ty][39m Original error stack trace: TypeError: Cannot read properties of undefined (reading 'base')
+[90m[11ty][39m     at Object.title (file:///home/toxic/effusion_labs_final/src/archives/_dynamic/jsonl-viewer.11ty.js?_cache_bust=1756395332202:49:49)
+[90m[11ty][39m     at ComputedDataProxy.findVarsUsed (file:///home/toxic/effusion_labs_final/node_modules/@11ty/eleventy/src/Data/ComputedDataProxy.js:124:9)
+[90m[11ty][39m     at ComputedData.resolveVarOrder (file:///home/toxic/effusion_labs_final/node_modules/@11ty/eleventy/src/Data/ComputedData.js:75:29)
+[90m[11ty][39m     at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+[90m[11ty][39m     at async ComputedData.setupData (file:///home/toxic/effusion_labs_final/node_modules/@11ty/eleventy/src/Data/ComputedData.js:105:3)
+[90m[11ty][39m     at async Template.addComputedData (file:///home/toxic/effusion_labs_final/node_modules/@11ty/eleventy/src/Template.js:629:4)
+[90m[11ty][39m     at async Template.getTemplates (file:///home/toxic/effusion_labs_final/node_modules/@11ty/eleventy/src/Template.js:800:4)
+[90m[11ty][39m     at async #initDependencyMapEntry (file:///home/toxic/effusion_labs_final/node_modules/@11ty/eleventy/src/TemplateMap.js:192:17)
+[90m[11ty][39m     at async TemplateMap.initDependencyMap (file:///home/toxic/effusion_labs_final/node_modules/@11ty/eleventy/src/TemplateMap.js:186:4)
+[90m[11ty][39m     at async TemplateMap.cache (file:///home/toxic/effusion_labs_final/node_modules/@11ty/eleventy/src/TemplateMap.js:274:3)
+❌ Eleventy build failed. Aborting tests.
+---------------------------------------|---------|----------|---------|---------|-------------------
+File                                   | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+---------------------------------------|---------|----------|---------|---------|-------------------
+All files                              |   62.47 |    74.52 |    41.6 |   62.47 |                   
+ effusion_labs_final                   |   53.46 |      100 |      40 |   53.46 |                   
+  eleventy.config.mjs                  |   51.79 |      100 |      40 |   51.79 | ...60-162,180-186 
+  postcss.config.mjs                   |     100 |      100 |     100 |     100 |                   
+ effusion_labs_final/lib               |   53.72 |    78.78 |    13.2 |   53.72 |                   
+  archive-nav.js                       |     100 |      100 |     100 |     100 |                   
+  build-info.js                        |     100 |    33.33 |     100 |     100 | 10-26             
+  concept-map.js                       |    43.9 |      100 |       0 |    43.9 | ...43,50-68,76-82 
+  config.js                            |     100 |      100 |     100 |     100 |                   
+  constants.js                         |     100 |      100 |     100 |     100 |                   
+  filters.js                           |   46.88 |      100 |       0 |   46.88 | ...36,239-242,245 
+  flareClient.js                       |   23.21 |      100 |       0 |   23.21 | 5-7,9,11-49       
+  outboundProxy.js                     |      16 |      100 |       0 |      16 | 1-3,6-23          
+  plugins.js                           |   91.17 |      100 |      50 |   91.17 | 20-22             
+  postcss.js                           |   33.33 |      100 |       0 |   33.33 | 15-56,66-69       
+  postcssPlugins.mjs                   |      30 |      100 |       0 |      30 | 4-10              
+  seeded.js                            |   37.83 |    66.66 |      25 |   37.83 | 10-17,19-25,28-35 
+  shortcodes.js                        |   59.25 |      100 |       0 |   59.25 | 15-25             
+  utils.js                             |   63.04 |      100 |       0 |   63.04 | 18-21,30-42       
+  webpageToMarkdown.js                 |   61.36 |    33.33 |       0 |   61.36 | 14-15,26-30,33-42 
+ effusion_labs_final/lib/eleventy      |   84.02 |    88.23 |   70.58 |   84.02 |                   
+  archives.mjs                         |   98.81 |     93.1 |     100 |   98.81 | 222-224           
+  register.mjs                         |   65.51 |       60 |   16.66 |   65.51 | ...80-186,191-202 
+ effusion_labs_final/lib/markdown      |   55.77 |    73.68 |    42.1 |   55.77 |                   
+  footnotes.js                         |   44.12 |    66.66 |   33.33 |   44.12 | ...36-150,161-219 
+  index.js                             |   96.66 |       75 |     100 |   96.66 | 31-32             
+  inlineMacros.js                      |   74.07 |      100 |     100 |   74.07 | 10-14,23-24       
+  links.js                             |   52.38 |    66.66 |      50 |   52.38 | 8-17              
+ effusion_labs_final/src               |    92.5 |    39.13 |     100 |    92.5 |                   
+  index.11tydata.js                    |      92 |    33.33 |     100 |      92 | 60-65             
+  work.11tydata.js                     |     100 |      100 |     100 |     100 |                   
+ effusion_labs_final/src/_data         |   69.07 |    73.91 |      70 |   69.07 |                   
+  archivesNav.js                       |     100 |      100 |     100 |     100 |                   
+  branding.js                          |     100 |      100 |     100 |     100 |                   
+  eleventyComputed.js                  |   89.47 |       75 |     100 |   89.47 | 4,6               
+  nav.js                               |     100 |      100 |     100 |     100 |                   
+  provenance.11ty.js                   |   50.87 |       50 |      40 |   50.87 | 11-14,23-29,34-50 
+ ...n_labs_final/src/archives/_dynamic |   27.47 |      100 |   18.18 |   27.47 |                   
+  jsonl-viewer.11ty.js                 |   27.47 |      100 |   18.18 |   27.47 | ...38,44-47,57-90 
+ ...esigner-toys/pop-mart/the-monsters |   40.42 |    61.53 |    87.5 |   40.42 |                   
+  products.11ty.js                     |   40.42 |    61.53 |    87.5 |   40.42 | 7-9,22-46         
+ effusion_labs_final/src/work          |      90 |       60 |   66.66 |      90 |                   
+  drop.11ty.js                         |    90.9 |       60 |   66.66 |    90.9 | 20-21             
+  latest.11ty.js                       |   88.88 |       60 |   66.66 |   88.88 | 16-17             
+ effusion_labs_final/tools             |   74.43 |    66.66 |     100 |   74.43 |                   
+  runner.mjs                           |   62.22 |       50 |     100 |   62.22 | ...71,77-84,88-89 
+  select.mjs                           |     100 |    85.71 |     100 |     100 | 11                
+---------------------------------------|---------|----------|---------|---------|-------------------

@@ -1,0 +1,6 @@
+npm error code ENOTEMPTY
+npm error syscall rmdir
+npm error path /home/toxic/effusion_labs_final/node_modules/rxjs/ajax
+npm error errno -39
+npm error ENOTEMPTY: directory not empty, rmdir '/home/toxic/effusion_labs_final/node_modules/rxjs/ajax'
+npm error A complete log of this run can be found in: /home/toxic/.npm/_logs/2025-08-28T15_34_54_154Z-debug-0.log
