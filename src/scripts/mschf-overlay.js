@@ -3,8 +3,32 @@
 // Console: __mschfOn(), __mschfOff(), __mschfPulse(), __mschfMood(m), __mschfDensity(x), __mschfMask(0|1), __mschfAlpha(x)
 
 (() => {
-  if (window.__mschfBooted) return;
+  if (window.__mschfBooted) {
+    try { console.warn('[MSCHF] Boot skipped — already booted.'); } catch {}
+    return;
+  }
   window.__mschfBooted = true;
+
+  // ————————————————————————————————————————
+  // Debug toggles & helpers
+  // Enable with: body[data-mschf-debug="1"], localStorage.setItem('mschf:debug','1'),
+  // window.__MSCHF_DEBUG = true, or URL ?mschfDebug=1
+  // ————————————————————————————————————————
+  const q = typeof location !== 'undefined' ? location.search : '';
+  const scope0 = (typeof document !== 'undefined' ? (document.body || document.documentElement) : null);
+  const DEBUG = !!(
+    (scope0 && scope0.dataset && scope0.dataset.mschfDebug === '1') ||
+    (typeof localStorage !== 'undefined' && localStorage.getItem('mschf:debug') === '1') ||
+    (typeof window !== 'undefined' && window.__MSCHF_DEBUG) ||
+    /(^|[?&])mschfDebug=1(&|$)/.test(q)
+  );
+  const SID = `${Date.now().toString(36)}-${Math.random().toString(36).slice(2,7)}`;
+  const C = { mount:0, retire:0, composeInitial:0, recompose:0, rare:0, io:0, beats:0, bars:0 };
+  const log = (...a) => { if (DEBUG) try { console.log('[MSCHF]', ...a); } catch {} };
+  const warn = (...a) => { if (DEBUG) try { console.warn('[MSCHF]', ...a); } catch {} };
+  const group = (label) => DEBUG && console.groupCollapsed && console.groupCollapsed(`[MSCHF] ${label}`);
+  const groupEnd = () => DEBUG && console.groupEnd && console.groupEnd();
+  try { if (DEBUG) console.info('[MSCHF] Debug ON — session', SID); } catch {}
 
   // ————————————————————————————————————————
   // Guards / kill switch
@@ -13,6 +37,7 @@
   if (!scope) return;
   if (scope.dataset.mschf === 'off') return;
   if (localStorage.getItem('mschf:off') === '1') return;
+  if (DEBUG) { scope.dataset.mschfDebug = '1'; log('Booting overlay…', { session: SID, dataset: { ...scope.dataset } }); }
 
   // ————————————————————————————————————————
   // Utilities
@@ -95,7 +120,8 @@
   // ————————————————————————————————————————
   function mountRoot() {
     let root = document.getElementById('mschf-overlay-root');
-    if (!root) { root = el('div','',document.body); root.id = 'mschf-overlay-root'; }
+    if (!root) { root = el('div','',document.body); root.id = 'mschf-overlay-root'; DEBUG && log('Created overlay root'); }
+    else { DEBUG && log('Reusing overlay root', { childCount: root.childElementCount }); }
     css(root, {
       pointerEvents:'none', userSelect:'none',
       position:'fixed', inset:'0', width:'100vw', height:'100vh',
@@ -104,10 +130,25 @@
       opacity: State.alpha // global soften
     });
     root.setAttribute('aria-hidden','true');
+    root.dataset.mschfSession = SID;
+    if (root.childElementCount) DEBUG && warn('Root was not empty before mount; clearing');
     root.innerHTML = '';
     const domLayer = el('div','mschf-layer',root);
     css(domLayer,{ position:'absolute', inset:0, pointerEvents:'none', userSelect:'none' });
     State.root = root; State.domLayer = domLayer;
+    if (DEBUG && 'MutationObserver' in window) {
+      const mo = new MutationObserver((muts)=>{
+        let added=0, removed=0; for (const m of muts){ added += (m.addedNodes?.length||0); removed += (m.removedNodes?.length||0); }
+        if (added||removed) log('DOM layer mutation', {
+          added, removed, childCount: State.domLayer?.childElementCount||0,
+          actors: State.actors.size,
+          families: { scaffold: State.families.scaffold.size, ephemera: State.families.ephemera.size, lab: State.families.lab.size, frame: State.families.frame.size },
+          caps: State.caps, nodeBudget: State.nodeBudget, nodeCount: State.nodeCount
+        });
+      });
+      mo.observe(domLayer, { childList: true });
+      State._mo = mo;
+    }
   }
 
   // ————————————————————————————————————————
@@ -281,8 +322,9 @@
       if (State.reduceData) return null;
       // Only on large screens by default
       if (!State.tiers.lg) return null;
+      DEBUG && log('GPU.init start');
       const PIXI = await loadPixi();
-      if (!PIXI) return null;
+      if (!PIXI) { DEBUG && warn('GPU.init failed: PIXI not available'); return null; }
 
       const app = new PIXI.Application();
       await app.init({
@@ -295,6 +337,7 @@
 
       const stage = app.stage;
       this.app = app; this.stage = stage;
+      DEBUG && log('GPU.init ok');
 
       // Mask that punches holes over safe zones (so GPU never overlays prose)
       this.updateMask();
@@ -342,10 +385,12 @@
         this.maskG.endFill();
         this.stage.mask = this.maskG;
         if (!this.maskG.parent) this.stage.addChild(this.maskG);
+        DEBUG && log('GPU.mask on', { holes: State.safeZones.length });
       } else {
         // mask off
         if (this.stage.mask) this.stage.mask = null;
         if (this.maskG.parent) this.maskG.removeFromParent();
+        DEBUG && log('GPU.mask off');
       }
     },
 
@@ -469,40 +514,52 @@
   // ————————————————————————————————————————
   function mount(actor, family){
     if (!actor) return;
+    if (DEBUG) group(`mount try: ${actor.kind || 'unknown'} → ${family}`);
 
     // honor budget
     const cost = actor.cost || 1;
-    if (State.nodeCount + cost > State.nodeBudget) return;
+    if (State.nodeCount + cost > State.nodeBudget) { DEBUG && warn('bail: nodeBudget cap', { nodeCount: State.nodeCount, cost, nodeBudget: State.nodeBudget }); return void(groupEnd()); }
 
     // family caps: bail if at capacity
     const cap = (State.caps && State.caps[family]) || Infinity;
-    if (State.families[family] && State.families[family].size >= cap) return;
+    if (State.families[family] && State.families[family].size >= cap) { DEBUG && warn('bail: family cap', { family, size: State.families[family].size, cap }); return void(groupEnd()); }
 
     const isArticle = !!document.querySelector('.prose,[data-kind="spark"],[data-kind="concept"],[data-kind="project"],article,main .prose');
 
     // small screens: only minimal scaffold & frame affordances
     if ((State.tiers.xs || State.tiers.sm) && family !== 'scaffold') {
       const allow = ['frame','corners','rulers','brackets','reg','dims'];
-      if (!allow.includes(actor.kind || '')) return;
+      if (!allow.includes(actor.kind || '')) { DEBUG && warn('bail: small-screen filter', { kind: actor.kind, family }); return void(groupEnd()); }
     }
     // articles: quiet only
     if (isArticle && family !== 'scaffold') {
       const quiet = ['tape','quotes','specimen','plate','dims','reg','brackets','stickers'];
-      if (!quiet.includes(actor.kind || '') && State.density > .45) return;
+      if (!quiet.includes(actor.kind || '') && State.density > .45) { DEBUG && warn('bail: article quiet filter', { kind: actor.kind, density: State.density }); return void(groupEnd()); }
     }
 
     State.families[family].add(actor);
     State.actors.add(actor);
     State.nodeCount += cost;
-    try { actor.mount(State.domLayer); } catch {}
+    try { actor.mount(State.domLayer); } catch (e) { DEBUG && warn('actor.mount threw', e); }
+    C.mount++;
+    DEBUG && log('mounted', { kind: actor.kind, family, cost, nodeCount: State.nodeCount, sizes: {
+      scaffold: State.families.scaffold.size, ephemera: State.families.ephemera.size, lab: State.families.lab.size, frame: State.families.frame.size
+    }});
+    DEBUG && groupEnd();
   }
   function retire(actor){
     if (!actor) return;
-    try { actor.retire && actor.retire(); } catch {}
+    if (DEBUG) group(`retire: ${actor.kind || 'unknown'}`);
+    try { actor.retire && actor.retire(); } catch (e) { DEBUG && warn('actor.retire threw', e); }
     try { actor.node && actor.node.remove(); } catch {}
     State.actors.delete(actor);
     for (const k in State.families) State.families[k].delete(actor);
     State.nodeCount = Math.max(0, State.nodeCount - (actor.cost || 1));
+    C.retire++;
+    DEBUG && log('retired', { nodeCount: State.nodeCount, sizes: {
+      scaffold: State.families.scaffold.size, ephemera: State.families.ephemera.size, lab: State.families.lab.size, frame: State.families.frame.size
+    }});
+    DEBUG && groupEnd();
   }
 
   const A = {}; // actor factory bag
@@ -795,6 +852,9 @@
   // Orchestration
   // ————————————————————————————————————————
   function composeInitial() {
+    DEBUG && group('composeInitial');
+    C.composeInitial++;
+    DEBUG && log('style/mood/density', { style: State.style, mood: State.mood, density: State.density, tiers: { ...State.tiers }, caps: { ...State.caps } });
     // Scaffold (always)
     mount(A.grid(),    'scaffold');
     mount(A.frame(),   'scaffold');
@@ -810,6 +870,11 @@
       playful:    () => { spawnEphemera(2,3); spawnFrame(1,2); }
     };
     (waves[State.style] || waves.structural)();
+    DEBUG && log('post-compose sizes', {
+      scaffold: State.families.scaffold.size, ephemera: State.families.ephemera.size, lab: State.families.lab.size, frame: State.families.frame.size,
+      nodeCount: State.nodeCount
+    });
+    DEBUG && groupEnd();
   }
 
   function spawnEphemera(min,max){
@@ -833,7 +898,13 @@
   }
 
   function recompose(){
+    DEBUG && group('recompose');
+    C.recompose++;
     resetOccupancy(); computeContext();
+    DEBUG && log('pre-prune sizes', {
+      scaffold: State.families.scaffold.size, ephemera: State.families.ephemera.size, lab: State.families.lab.size, frame: State.families.frame.size,
+      caps: { ...State.caps }, density: State.density, readingPressure: State.readingPressure
+    });
     // prune some high-complexity actors
     for (const fam of ['ephemera','lab','frame']) {
       const actors = Array.from(State.families[fam]).sort((a,b)=>(b.complexity||1)-(a.complexity||1));
@@ -844,10 +915,17 @@
     spawnEphemera(1, Math.round(4*State.density*mod));
     spawnLab(1, Math.round((3*State.density + (/(storm)/.test(State.mood)?1:0))*mod));
     spawnFrame(1, Math.round(4*State.density*mod));
+    DEBUG && log('post-recompose sizes', {
+      scaffold: State.families.scaffold.size, ephemera: State.families.ephemera.size, lab: State.families.lab.size, frame: State.families.frame.size,
+      nodeCount: State.nodeCount
+    });
+    DEBUG && groupEnd();
   }
 
   function rareMoment(){
     if (State.reduceMotion || State.tiers.xs) return;
+    C.rare++;
+    DEBUG && log('rareMoment');
     mount(A.holo(), 'frame');
     for (let i=0;i<2;i++) mount(A.glitch(), 'frame');
     mount(A.tape(), 'ephemera');
@@ -880,8 +958,14 @@
       if (State.fps.bad) degradeDensity();
     }
 
-    if (t - State.beats.last > State.beats.dur) State.beats.last = t;
-    if (t - State.bars.last  > State.bars.dur)  { State.bars.last = t; if (Math.random()<.7) applyMood(nextMood(State.mood)); recompose(); if (Math.random()<.06) rareMoment(); }
+    if (t - State.beats.last > State.beats.dur) { State.beats.last = t; C.beats++; DEBUG && (C.beats % 20 === 0) && log('beat', { beats: C.beats, bars: C.bars }); }
+    if (t - State.bars.last  > State.bars.dur)  {
+      State.bars.last = t; C.bars++;
+      DEBUG && log('bar tick', { bars: C.bars, mood: State.mood, density: State.density, actors: State.actors.size });
+      if (Math.random()<.7) applyMood(nextMood(State.mood));
+      recompose();
+      if (Math.random()<.06) rareMoment();
+    }
 
     for (const a of Array.from(State.actors)) {
       try { a.update && a.update(t, dt); } catch {}
@@ -897,6 +981,7 @@
     const hero = document.querySelector('.hero,[data-component~="hero"],section[id*="hero"]');
     const cta  = document.querySelector('.map-cta,[class*="map-cta"],[data-component~="map-cta"]');
     const feed = document.querySelector('.work-feed,[data-component~="work-feed"]');
+    DEBUG && log('wireSections', { hero: !!hero, cta: !!cta, feed: !!feed });
 
     // Observe once per section: prevent repeated mounts when crossing thresholds
     const io = new IntersectionObserver((entries)=>{
@@ -904,7 +989,8 @@
         if (!e.isIntersecting) continue;
         // Skip if we've already handled this target
         if (e.target?.dataset?.mschfSeen === '1') { io.unobserve(e.target); continue; }
-
+        C.io++;
+        DEBUG && log('io fired', { which: e.target === hero ? 'hero' : e.target === cta ? 'cta' : e.target === feed ? 'feed' : 'unknown', count: C.io });
         if (hero && e.target===hero) { mount(A.ringsDOM(),'lab'); mount(A.quotes(),'ephemera'); }
         if (cta && e.target===cta)   { mount(A.plate(),'ephemera'); rareMoment(); }
         if (feed && e.target===feed) { mount(A.stickers(),'frame'); mount(A.dims(),'frame'); }
@@ -923,13 +1009,14 @@
   function onVisibility(){
     State.visible = !document.hidden;
     if (!State.visible) State.paused = true;
-    else { State.paused = false; State.beats.last = now(); State.bars.last = now(); requestAnimationFrame(tick); }
+    else { State.paused = false; State.beats.last = now(); State.bars.last = now(); DEBUG && log('visibility: resume'); requestAnimationFrame(tick); }
   }
 
   // ————————————————————————————————————————
   // Boot
   // ————————————————————————————————————————
   async function boot(){
+    DEBUG && log('boot()');
     mountRoot(); computeTiers(); computeContext(); resetOccupancy();
 
     // GPU init (LG only, not reduced-data, and avoid truly weak CPUs)
@@ -969,4 +1056,8 @@
   window.__mschfDensity = (x) => { State.density = clamp(+x||State.density, .1, .9); recompose(); };
   window.__mschfMask = (on=1) => { State.gpu.maskOn = !!(+on); GPU.updateMask(); };
   window.__mschfAlpha = (x) => { State.alpha = clamp(+x||State.alpha, 0.3, 1.0); if(State.root) State.root.style.opacity = State.alpha; };
+  window.__mschfDebug = (on=1) => { localStorage.setItem('mschf:debug', on? '1':'0'); location.reload(); };
+  window.__mschfStats = () => ({ counters: { ...C }, sizes: {
+    scaffold: State.families.scaffold.size, ephemera: State.families.ephemera.size, lab: State.families.lab.size, frame: State.families.frame.size
+  }, nodeBudget: State.nodeBudget, nodeCount: State.nodeCount, caps: { ...State.caps }, density: State.density, readingPressure: State.readingPressure, mood: State.mood, visible: State.visible });
 })();

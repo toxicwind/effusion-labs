@@ -1,8 +1,8 @@
 {
   "id": "/",
   "name": "Effusion Labs",
-  "short_name": "Effusion",
-  "description": "Autonomous Aesthetic Engine — Effusion Labs.",
+  "short_name": "Effusion Labs",
+  "description": "Ideas, prototypes, and projects, shipped straight from the lab.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
