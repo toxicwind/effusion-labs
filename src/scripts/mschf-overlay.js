@@ -1080,7 +1080,7 @@
     // Debug dev-labels (throttled)
     // enforce pass-through unless picking
     try {
-      if (State.root && !State._picking) State.root.style.pointerEvents = 'none';
+      if (State.root) State.root.style.pointerEvents = State._picking ? 'auto' : 'none';
       if (State.domLayer) State.domLayer.style.pointerEvents = State._picking ? 'auto' : 'none';
       if (State.labelLayer) State.labelLayer.style.pointerEvents = 'none';
       if (State.app?.canvas) State.app.canvas.style.pointerEvents = 'none';
