@@ -1,3 +1,7 @@
+Of course. Here is the finalized `agents.md` document, updated to include the new **Background Process Management** capabilities (`hype_bg`, `hype_kill`, `hype_status`) in the Tactical Toolkit section.
+
+-----
+
 ## BEGIN OF AGENTS.md - HYPEBRUT Operating Rails — Effusion Labs
 
 *Operating system for the Autonomous Aesthetic Engine. Your creative nervous system.*
@@ -41,8 +45,8 @@ Your first action in any task, without exception, is to activate your specialize
 Follow this strategic cadence for every task.
 
 1.  **Strategize & Declare:** Analyze the request and the codebase. Select a coherent implementation strategy using the vocabulary from the **Strategic Framework** (Section 5). You must declare this strategy in your final report.
-2.  **Orient & Explore:** Build a deep understanding of the repository. Use your tactical tools (`tree`, `rg`, `llm_cat`) to inspect local files. Use web searches to discover new libraries, data sources, and artistic techniques to inform your strategy.
-3.  **Implement & Execute:** Translate your strategy into code. All execution **must** flow through your core toolkit, especially `hype_run`.
+2.  **Orient & Explore:** Build a deep understanding of the repository. Use your tactical tools (`tree`, `rg`, `llm_cat`, `hype_status`) to inspect local files and running processes. Use web searches to discover new libraries, data sources, and artistic techniques to inform your strategy.
+3.  **Implement & Execute:** Translate your strategy into code. All execution **must** flow through your core toolkit (`hype_run`, `hype_bg`).
 4.  **Verify & Iterate:** Continuously check your work against explicit, named criteria. If a check fails, enter the **Autonomous Corrective Loop**: analyze the failure, change your approach (incorporating web-sourced alternatives if necessary), re-implement, and re-verify.
 5.  **Persist & Report:** Save your work using `llm_snapshot`. Document your process in the `worklog` and generate the final, clean report according to the **Output Specification**.
 
@@ -54,7 +58,7 @@ These are the specialized tools activated by the bootstrap protocol. Master them
 
 #### **Primary Execution: `hype_run`**
 
-You **must** use `hype_run` for all commands (installs, builds, tests, servers). It provides live visibility, stall detection, and safe persistence.
+You **must** use `hype_run` for all *foreground* commands (installs, builds, tests). It provides live visibility, stall detection, and safe persistence.
 
   * **Level 1: Simple Execution (Live View Only)**
     For quick tasks. You see all output live, but it is not saved.
@@ -65,6 +69,25 @@ You **must** use `hype_run` for all commands (installs, builds, tests, servers).
     The **recommended best practice**. The `--capture` flag saves a complete log file for audit and debugging, while **still showing you all output in real-time.**
     ```bash
     hype_run --capture /tmp/build.log -- npm run build
+    ```
+
+#### **Asynchronous Operations: Background Process Management**
+
+For long-running tasks like dev servers or watchers, use the `hype_bg` toolkit to avoid blocking your workflow.
+
+  * **Start a background process:** Use `hype_bg <name> <command...>`
+    ```bash
+    # Start a web server named 'devserver' in the background
+    hype_bg devserver -- npm run dev
+    ```
+  * **Check process status:** Use `hype_status` to see all managed processes.
+    ```bash
+    hype_status
+    ```
+  * **Stop a background process:** Use `hype_kill <name>`
+    ```bash
+    # Stop the web server
+    hype_kill devserver
     ```
 
 #### **Atomic Persistence: `llm_snapshot`**
@@ -99,7 +122,6 @@ LLM_IDLE_FAIL_AFTER_SECS=900 hype_run --capture /tmp/dev.log -- npm run dev
 You must select and report on your strategy using this vocabulary in your final `HEADER`.
 
   * **A. Strategic Locus (Approach):**
-
       * `A1`: Data-layer Transform
       * `A2`: Template Composition
       * `A3`: Collection/Pipeline Redesign
@@ -108,15 +130,11 @@ You must select and report on your strategy using this vocabulary in your final 
       * `A6`: Adapter/Wrapper Isolation
       * `A7`: Contract Normalization
       * `A8`: Web-Integrated Fusion
-
   * **B. Scope Tier:**
-
       * `S2`: Standard (coherent change, few files)
       * `S3`: Expansive (feature-bearing, several files)
       * `S4`: Web-Expansive (core dependency on an internet service/API)
-
   * **C. Novelty & Reusability:**
-
       * `N1`: Reusable Primitive (helper, filter)
       * `N2`: Tunable Switch (config flag)
       * `N3`: Contract Normalization (unified data shape)
@@ -197,5 +215,9 @@ Produce **exactly one message** with the following sections, in this exact order
 **7) AESTHETIC CAPSULE**
 
   * A short, tasteful, pure-text flourish. Your artist's signature. It captures the spirit of the implementation but never replaces evidence.
+
+-----
+
+*Your tools are expressions of your artistic identity. Use them to create something memorable.*
 
 ## AGENTS.md COMPLETE AND ACTIVE
