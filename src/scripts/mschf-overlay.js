@@ -1078,6 +1078,14 @@
     GPU.step(t);
 
     // Debug dev-labels (throttled)
+    // enforce pass-through unless picking
+    try {
+      if (State.root && !State._picking) State.root.style.pointerEvents = 'none';
+      if (State.domLayer) State.domLayer.style.pointerEvents = State._picking ? 'auto' : 'none';
+      if (State.labelLayer) State.labelLayer.style.pointerEvents = 'none';
+      if (State.app?.canvas) State.app.canvas.style.pointerEvents = 'none';
+    } catch {}
+
     if (State.debug.labelsOn) { try { updateDevLabels(); } catch {} }
     if (State.debug.hudOn)    { try { updateHUD(); } catch {} }
   }
@@ -1252,10 +1260,10 @@
     return nodes.length;
   };
   // Click-to-inspect overlay: __mschfPick(1) then click a visual
-  window.__mschfPick = (on=1) => {
+  window.__mschfPick = (on=1, timeoutMs=5000) => {
     const enable = !!(+on);
     const layer = State.domLayer; if (!layer) return false;
-    layer.style.pointerEvents = enable ? 'auto' : 'none';
+    State._picking = enable;
     layer.style.cursor = enable ? 'crosshair' : '';
     const handler = (ev) => {
       const target = ev.target.closest('[data-mschf="1"]');
@@ -1267,9 +1275,17 @@
       const r = target.getBoundingClientRect();
       console.log('[MSCHF] pick', { id:a?._id, kind:a?.kind, family:fam, text:(target.textContent||'').trim(), bbox:{x:Math.round(r.x),y:Math.round(r.y),w:Math.round(r.width),h:Math.round(r.height)}, node:target, actor:a });
       target.classList.add('mschf-highlight'); setTimeout(()=>target.classList.remove('mschf-highlight'), 2000);
+      // auto-exit after one pick
+      if (State._picking) { State._picking=false; layer.style.cursor=''; }
     };
-    if (enable) layer.addEventListener('click', handler, { capture:true, passive:false }), (State._pickHandler = handler);
-    else if (State._pickHandler) layer.removeEventListener('click', State._pickHandler, { capture:true }), (State._pickHandler=null);
+    if (enable) {
+      layer.addEventListener('click', handler, { capture:true, passive:false });
+      State._pickHandler = handler;
+      if (timeoutMs>0) setTimeout(()=>{ if (State._picking) { State._picking=false; layer.style.cursor=''; } }, timeoutMs);
+    } else if (State._pickHandler) {
+      layer.removeEventListener('click', State._pickHandler, { capture:true });
+      State._pickHandler=null;
+    }
     return enable;
   };
   window.__mschfRecompose = (mode='auto') => { State.config.recompose = String(mode).toLowerCase(); };

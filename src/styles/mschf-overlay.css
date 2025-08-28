@@ -3,7 +3,7 @@
    Theme-tinted via currentColor + color-mix() clamps. Mobile-sane, print-safe. */
 
 #mschf-overlay-root{
-  pointer-events:none; position:fixed; inset:0; width:100vw; height:100vh;
+  pointer-events:none !important; position:fixed; inset:0; width:100vw; height:100vh;
   z-index:44; color:hsl(var(--p, 210 6% 96%));
   contain:layout style paint; content-visibility:auto;
 }
