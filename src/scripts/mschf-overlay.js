@@ -905,6 +905,57 @@
   A.stickers.meta = stickersMeta;
 
   // ————————————————————————————————————————
+  // Frame Enhancements — subtle, procedural, autonomous
+  // ————————————————————————————————————————
+  const edgeMeta = { affinity:'anywhere', complexity:2 };
+  A.edgeGlow = () => {
+    let nodes = [];
+    function make(pos){
+      const n = el('div', `mschf-edge mschf-edge-${pos}` , State.domLayer);
+      return n;
+    }
+    return {
+      kind:'edgeGlow', cost:1, ...edgeMeta,
+      mount(p){ nodes = ['top','right','bottom','left'].map(make); },
+      update(t){
+        const pressure = State.readingPressure || 0; // 0..1
+        const base = /(loud|storm|studio)/.test(State.mood) ? 0.11 : 0.07;
+        const o = Math.max(0.03, base * (1 - pressure*0.8));
+        const k = (State.tempo || 1) * (State.tiers.lg ? 1 : 0.8);
+        const phase = (t/1000) * 0.2 * k; // slow drift
+        for (const n of nodes){
+          n.style.setProperty('--o', o.toFixed(3));
+          n.style.setProperty('--p', (phase % 1).toFixed(3));
+        }
+      },
+      node:{ remove(){ nodes.forEach(n=>n.remove()); } }
+    };
+  };
+  A.edgeGlow.meta = edgeMeta;
+
+  const pipsMeta = { affinity:'corners', complexity:1 };
+  A.cornerPips = () => {
+    const nodes = [];
+    return {
+      kind:'pips', cost:1, ...pipsMeta,
+      mount(p){
+        ['tl','tr','bl','br'].forEach(c=>{
+          const n = el('div', `mschf-pip mschf-pip-${c}`, p);
+          nodes.push(n);
+        });
+      },
+      update(t){
+        if (State.reduceMotion) return;
+        const beat = (Math.sin(t/900) + 1)/2; // 0..1
+        const s = 0.9 + beat*0.15;
+        for (const n of nodes){ n.style.transform = `scale(${s.toFixed(3)})`; }
+      },
+      node:{ remove(){ nodes.forEach(n=>n.remove()); } }
+    };
+  };
+  A.cornerPips.meta = pipsMeta;
+
+  // ————————————————————————————————————————
   // Orchestration
   // ————————————————————————————————————————
   function composeInitial() {
@@ -949,8 +1000,8 @@
     for (let i=0;i<n;i++){ const fn = pick(pool.length?pool:bag); mount(fn(), 'lab'); }
   }
   function spawnFrame(min,max){
-    // Calm default set excludes heavy/glossy effects (holo, glitch, flowers)
-    const bag = [A.brackets, A.watermark, A.reg, A.dims, A.stickers];
+    // Calm set plus tasteful autonomous accents
+    const bag = [A.brackets, A.watermark, A.reg, A.dims, A.stickers, A.edgeGlow, A.cornerPips];
     const pool = State.readingPressure > 0.25 ? bag.filter(f => (f.meta?.complexity || 1) <= 2) : bag;
     const n = Math.floor(lerp(min, max, State.density));
     for (let i=0;i<n;i++){ const fn = pick(pool.length?pool:bag); mount(fn(), 'frame'); }

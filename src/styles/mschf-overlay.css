@@ -226,6 +226,18 @@
   background: linear-gradient(to bottom, currentColor 1px, transparent 1px) repeat-y 100% 0 / 1px 10px;
 }
 
+.mschf-edge{ position:fixed; pointer-events:none; mix-blend-mode:screen; opacity:var(--o,.07); }
+.mschf-edge-top{ left:0; right:0; top:0; height:10px; background:linear-gradient(90deg, transparent 0%, color-mix(in oklab,currentColor 45%, transparent) 50%, transparent 100%); background-size:200% 100%; background-position: calc(var(--p,0)*100%) 0; }
+.mschf-edge-bottom{ left:0; right:0; bottom:0; height:10px; background:linear-gradient(90deg, transparent 0%, color-mix(in oklab,currentColor 45%, transparent) 50%, transparent 100%); background-size:200% 100%; background-position: calc((1 - var(--p,0))*100%) 0; }
+.mschf-edge-left{ left:0; top:0; bottom:0; width:10px; background:linear-gradient(180deg, transparent 0%, color-mix(in oklab,currentColor 45%, transparent) 50%, transparent 100%); background-size:100% 200%; background-position: 0 calc(var(--p,0)*100%); }
+.mschf-edge-right{ right:0; top:0; bottom:0; width:10px; background:linear-gradient(180deg, transparent 0%, color-mix(in oklab,currentColor 45%, transparent) 50%, transparent 100%); background-size:100% 200%; background-position: 0 calc((1 - var(--p,0))*100%); }
+
+.mschf-pip{ position:fixed; width:10px; height:10px; border-radius:50%; background: color-mix(in oklab,currentColor 85%, #fff 15%); box-shadow: 0 0 10px color-mix(in oklab, currentColor 55%, transparent); opacity:.65; transform: scale(1); pointer-events:none }
+.mschf-pip-tl{ top:8px; left:8px }
+.mschf-pip-tr{ top:8px; right:8px }
+.mschf-pip-bl{ bottom:8px; left:8px }
+.mschf-pip-br{ bottom:8px; right:8px }
+
 .mschf-watermark{
   position:fixed; inset:0; pointer-events:none; overflow:hidden; opacity:.08; mix-blend-mode:overlay;
   font:700 14px/1.6 ui-monospace, Menlo, monospace; letter-spacing:.2em; text-transform:uppercase;
