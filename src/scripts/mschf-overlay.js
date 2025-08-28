@@ -55,6 +55,18 @@
     // harden pass-through on *every* node we create
     n.style.pointerEvents = 'none';
     n.style.userSelect = 'none';
+    // Debug tagging: attach actor metadata to all created nodes during a mount()
+    try {
+      if (State && State._mountCtx) {
+        n.dataset.mschf = '1';
+        n.dataset.mschfKind = State._mountCtx.kind || 'unknown';
+        n.dataset.mschfFamily = State._mountCtx.family || 'unknown';
+        n.dataset.mschfId = String(State._mountCtx.id || '0');
+        // helper classes for quick CSS targeting
+        if (State._mountCtx.kind) n.classList.add(`mschf-k-${State._mountCtx.kind}`);
+        if (State._mountCtx.family) n.classList.add(`mschf-f-${State._mountCtx.family}`);
+      }
+    } catch {}
     return n;
   };
 
@@ -547,12 +559,26 @@
       if (!quiet.includes(actor.kind || '') && State.density > .45) { DEBUG && warn('bail: article quiet filter', { kind: actor.kind, density: State.density }); return void(groupEnd()); }
     }
 
+    // assign uid and expose mount context for debug tagging
+    actor._id = (State.seq = (State.seq||0) + 1);
+    State._mountCtx = { id: actor._id, kind: actor.kind, family };
     State.families[family].add(actor);
     State.actors.add(actor);
     State.nodeCount += cost;
     try { actor.mount(State.domLayer); } catch (e) { DEBUG && warn('actor.mount threw', e); }
+    State._mountCtx = null;
+    // If primary node exists, tag it too
+    try {
+      if (actor.node && actor.node.nodeType === 1) {
+        actor.node.dataset.mschf = '1';
+        actor.node.dataset.mschfKind = actor.kind || 'unknown';
+        actor.node.dataset.mschfFamily = family;
+        actor.node.dataset.mschfId = String(actor._id);
+        actor.node.classList.add(`mschf-k-${actor.kind||'unknown'}`, `mschf-f-${family}`);
+      }
+    } catch {}
     C.mount++;
-    DEBUG && log('mounted', { kind: actor.kind, family, cost, nodeCount: State.nodeCount, sizes: {
+    DEBUG && log('mounted', { id: actor._id, kind: actor.kind, family, cost, nodeCount: State.nodeCount, sizes: {
       scaffold: State.families.scaffold.size, ephemera: State.families.ephemera.size, lab: State.families.lab.size, frame: State.families.frame.size
     }});
     DEBUG && groupEnd();
@@ -880,9 +906,11 @@
       playful:    () => { spawnEphemera(2,3); spawnFrame(1,2); }
     };
     (waves[State.style] || waves.structural)();
+    const kindsSummary = (fam) => { const m = Object.create(null); for (const a of State.families[fam]) m[a.kind||'unknown']=(m[a.kind||'unknown']||0)+1; return m; };
     DEBUG && log('post-compose sizes', {
       scaffold: State.families.scaffold.size, ephemera: State.families.ephemera.size, lab: State.families.lab.size, frame: State.families.frame.size,
-      nodeCount: State.nodeCount
+      nodeCount: State.nodeCount,
+      kinds: { ephemera: kindsSummary('ephemera'), lab: kindsSummary('lab'), frame: kindsSummary('frame') }
     });
     DEBUG && groupEnd();
   }
@@ -912,6 +940,11 @@
     DEBUG && group('recompose');
     C.recompose++;
     resetOccupancy(); computeContext();
+    const kindsSummary = (fam) => {
+      const m = Object.create(null);
+      for (const a of State.families[fam]) m[a.kind||'unknown'] = (m[a.kind||'unknown']||0)+1;
+      return m;
+    };
     const sizes = {
       ephemera: State.families.ephemera.size,
       lab:      State.families.lab.size,
@@ -957,7 +990,12 @@
       ephemera: State.families.ephemera.size,
       lab:      State.families.lab.size,
       frame:    State.families.frame.size,
-      nodeCount: State.nodeCount
+      nodeCount: State.nodeCount,
+      kinds: {
+        ephemera: kindsSummary('ephemera'),
+        lab: kindsSummary('lab'),
+        frame: kindsSummary('frame'),
+      }
     });
     DEBUG && groupEnd();
   }
