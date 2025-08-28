@@ -11,7 +11,7 @@
 
 /* daisyUI v5 — enable themes with explicit defaults */
 @plugin "daisyui" {
-  themes: nord --default, sunset --prefersdark;
+  themes: silk --default, sunset --prefersdark;
   /* logs: false;  // uncomment to silence plugin logs */
 }
 

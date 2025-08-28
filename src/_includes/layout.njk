@@ -16,14 +16,14 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>{{ title }} | Effusion Labs</title>
 
-  {# Early theme (daisyUI): align with compiled themes (nord, sunset). #}
+  {# Early theme (daisyUI): align with compiled themes (silk, sunset). #}
   <script>
     (function () {
       try {
         var THEMES = {
-          lightDefault: "nord",
+          lightDefault: "silk",
           darkDefault:  "sunset",
-          allowed: ["nord","sunset"]
+          allowed: ["silk","sunset"]
         };
         var meta = document.querySelector('meta[name="color-scheme"]') ||
           (function () { var m = document.createElement("meta"); m.name = "color-scheme"; document.head.appendChild(m); return m; })();
