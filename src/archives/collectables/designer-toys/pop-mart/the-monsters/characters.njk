@@ -43,6 +43,7 @@ permalink: "/archives/collectables/designer-toys/{{ companySlug }}/{{ lineSlug }
   {% set matches = [] %}
   {% for p in products %}
     {% if p.data.charSlug and p.data.charSlug == charSlug %}
+      {% if matches.indexOf(p.data.productSlug) == -1 %}{% set _ = matches.push(p.data.productSlug) %}{% endif %}
       <li>
         {{ badge(
           p.data.product_id or p.data.productSlug,
