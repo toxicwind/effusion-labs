@@ -220,6 +220,20 @@ Requires **Node ≥ 24** (see `package.json` / `.nvmrc`). Run from the repo root
 
 ---
 
+## Dependency Patches
+
+We maintain curated fixes for third‑party packages using patch-package.
+
+- Source: put patch files in `appliedpatches/` (e.g., `appliedpatches/tree-cli+0.6.7.patch`).
+- Install flow: `postinstall` runs `node scripts/sync-patches.js && patch-package`.
+  - The sync step copies everything from `appliedpatches/` to `patches/`.
+  - patch-package then applies them to `node_modules/` deterministically.
+- Purpose: ensures patches apply automatically with `npm ci` in CI/agents.
+
+Note: avoid editing `node_modules/` directly. If you must prototype a change, capture it as a patch file in `appliedpatches/` so it survives fresh installs.
+
+---
+
 ## For Autonomous Agents
 
 If you’re running this repo under an automated coding agent (Codex-style, CI sandboxes, etc.), **read `AGENTS.md`**. It defines the operating protocol, canonical run shapes, and log/artifact expectations.

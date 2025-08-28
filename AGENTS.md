@@ -1,9 +1,3 @@
-Of course. The instructions need to be direct and explicit. The agent must be told not just *what* to do, but *why* it's the essential first step.
-
-Here is the revised document with a more direct command structure, making it clear that the bootstrap script's primary purpose is to modify the `PATH` and activate the custom tools.
-
------
-
 ## BEGIN OF AGENTS.md - HYPEBRUT Operating Rails — Effusion Labs
 
 *Operating system for the Autonomous Aesthetic Engine. Your creative nervous system.*
@@ -40,12 +34,16 @@ Sourcing this script unlocks your core instruments:
 ## 1\) Unbreakable Protocol: Your Activated Toolset
 
 After running the bootstrap script, your environment is active. Your available tools are now:
-
-  * **Repository Commands**: All scripts in the `/bin` directory are now in your `PATH`. Use them directly as commands. They are your primary helper tools.
+  * All external binaries (node, npm, jq, rg, fd, tree, bat, yq, prettier) are exposed via repo-scoped shims in `./bin/`.  
+  * Each shim:
+  * - auto-installs its package on first use.
+  * - always prefers the repo’s copy over global state.
+  * - lives under `$repo_root/bin/`
+  * **Repository Commands**: All binaries in the `$repo_root/bin/` directory are now in your `PATH`. Use them directly as commands. They are your primary helper tools.
   * **Node Binaries**: Always use `npx <package-name>` for Node.js-based tools.
   * **System Tools**: A standard POSIX environment (`rg`, `fd`, `jq`) is available.
 
-**Your `PATH` has been correctly configured by the bootstrap.** Do not modify it further. Do not create your own temporary scripts or shims; rely on the tools provided.
+**Your `PATH` has been correctly configured by the bootstrap.** Rely on the tools provided.
 
 -----
 
@@ -66,19 +64,12 @@ Extract: scripts, dependencies, collections, filters, asset pipeline configurati
 
 ## 3\) Golden Execution Patterns
 
-**Streaming with aesthetic output (default):**
+**Streaming with aesthetic output (YOU MUST RUN COMMANDS IN THIS WAY):**
 
 ```bash
 hype_run -- npm run dev
 hype_run -- npm run build
 hype_run -- npm test
-```
-
-**Capture full output for analysis:**
-
-```bash
-hype_run --capture /tmp/dev.log --tail 120 -- npm run dev
-hype_run --capture /tmp/build.log -- npm run build
 ```
 
 **Signals you'll see:**
@@ -95,7 +86,7 @@ The npm registry is your palette. The web is your muse.
 
 ```bash
 # Discover capabilities
-hype_run --capture /tmp/search.log -- npm search --searchlimit 20 "generative art"
+hype_run -- npm search --searchlimit 20 "generative art"
 
 # Inspect packages
 hype_run -- npm view three@latest dist-tags time --json
@@ -116,15 +107,6 @@ Effusion Labs champions **neon brutalist** aesthetics with psychedelic elements:
 **Typography:** Bold, condensed, high-contrast
 **Interactions:** Glitch effects, hover animations, unexpected surprises
 **Generative:** Procedural backgrounds, animated ASCII, dynamic gradients
-
-**Configuration switches:**
-
-```javascript
-const HYPE_MODE = process.env.HYPE_MODE === '1';
-const BRUT_INTENSITY = process.env.BRUT_INTENSITY || 'medium';
-```
-
-Apply aesthetic enhancements through tunable parameters with safe defaults.
 
 -----
 
@@ -173,31 +155,7 @@ hype_run --capture /tmp/dev.log --tail 120 -- npm run dev
 
 -----
 
-## 9\) Configuration Tuning
-
-**Core variables:**
-
-  * `HYPE_FOLD_WIDTH=4000` → line folding width
-  * `HYPE_IDLE_SECS=7` → idle detection interval
-  * `HYPE_IDLE_FAIL_SECS=300` → stall timeout
-  * `HYPE_SUPPRESS_PATTERNS` → noise filtering regex
-  * `HYPE_TAIL_MAX_LINES=5000` → bounded tail protection
-  * `HYPE_HEAD_MAX_LINES=2000` → bounded head protection
-  * `HYPE_CAT_MAX_BYTES=0` → file size limit for pretty-printing (0=unlimited)
-  * `HYPE_DEPS_AUTOINSTALL=1` → automatic dependency management (`npm ci`)
-  * `HYPE_TEST_PRESETS=1` → test environment configuration
-  * `HYPE_STRICT_MODE=0` → enforces strict operational checks
-  * `HYPE_STREAM_BUFFER=line` → output buffering strategy (`line` or `block`)
-
-**Per-command override:**
-
-```bash
-HYPE_IDLE_FAIL_SECS=1200 hype_run --capture /tmp/slow.log -- <long-task>
-```
-
------
-
-## 10\) Completion Criteria
+## 9\) Completion Criteria
 
 Mark complete when:
 
@@ -211,14 +169,14 @@ Mark complete when:
 
 -----
 
-## 11\) Rapid Recovery Protocol
+## 10\) Rapid Recovery Protocol
 
 When execution encounters issues:
 
 1.  **Persist**: `cp /tmp/*.log logs/`
 2.  **Snapshot**: `llm_snapshot "WIP(fail): <reason>"`
 3.  **Document**: Create `docs/wip/<UTC>-failure.md` with context
-4.  **Resume**: Clear path forward documented
+4.  **Resume**: Clear path forward documented and continue without user approval.
 
 **Philosophy:** Failure is data. Persistence enables iteration. Recovery is built into the process.
 

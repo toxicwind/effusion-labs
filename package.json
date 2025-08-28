@@ -18,7 +18,7 @@
     "data:merge-sections": "node tools/merge-sections.mjs --verbose",
     "data:synthesize": "node tools/synthesize.mjs --verbose",
     "data:merge-golden": "node tools/merge-golden.mjs --verbose",
-    "postinstall": "patch-package"
+    "postinstall": "node scripts/sync-patches.js && patch-package"
   },
   "engines": {
     "node": ">=24"

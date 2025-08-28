@@ -6,7 +6,7 @@ set -Euo pipefail
 # --- CONFIGURATION & TUNING KNOBS ---
 # These are the dials for your session.
 : "${LLM_VERBOSE:=1}"
-: "${LLM_FOLD_WIDTH:=4000}"             # Max line width before folding.
+: "${LLM_FOLD_WIDTH:=3996}"             # Max line width before folding.
 : "${LLM_IDLE_SECS:=10}"                # Seconds before an idle process emits a heartbeat.
 : "${LLM_IDLE_FAIL_AFTER_SECS:=360}"    # Seconds of total idle time before a process is considered stalled.
 : "${LLM_DEPS_AUTOINSTALL:=1}"          # Auto-run `npm ci` if package-lock.json changes.
