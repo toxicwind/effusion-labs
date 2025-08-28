@@ -1,0 +1,29 @@
+npm warn deprecated inflight@1.0.6: This module is not supported, and leaks memory. Do not use it. Check out lru-cache if you want a good and tested way to coalesce async requests by a key value, which is much more comprehensive and powerful.
+npm warn deprecated rimraf@2.7.1: Rimraf versions prior to v4 are no longer supported
+npm warn deprecated har-validator@5.1.5: this library is no longer supported
+npm warn deprecated glob@7.2.3: Glob versions prior to v9 are no longer supported
+npm warn deprecated uuid@3.4.0: Please upgrade  to version 7 or higher.  Older versions may use Math.random() in certain circumstances, which is known to be problematic.  See https://v8.dev/blog/math-random for details.
+npm warn deprecated request@2.88.2: request has been deprecated, see https://github.com/request/request/issues/3142
+
+> effusion_labs_final@1.0.0 postinstall
+> if [ "${PATCH_PACKAGE_RUN:-1}" != "0" ] && [ -x node_modules/.bin/patch-package ]; then patch-package; fi
+
+patch-package 8.0.0
+Applying patches...
+@photogabble/eleventy-plugin-interlinker@1.1.0 ✔
+tree-cli@0.6.7 ✔
+
+added 926 packages, and audited 927 packages in 7s
+
+203 packages are looking for funding
+  run `npm fund` for details
+
+15 vulnerabilities (4 low, 4 moderate, 3 high, 4 critical)
+
+To address issues that do not require attention, run:
+  npm audit fix
+
+Some issues need review, and may require choosing
+a different dependency.
+
+Run `npm audit` for details.
