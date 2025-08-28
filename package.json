@@ -22,7 +22,7 @@
     "data:merge-sections": "node tools/merge-sections.mjs --verbose",
     "data:synthesize": "node tools/synthesize.mjs --verbose",
     "data:merge-golden": "node tools/merge-golden.mjs --verbose",
-    "postinstall": "if [ -x node_modules/.bin/patch-package ]; then patch-package; fi"
+    "postinstall": "if [ \"${PATCH_PACKAGE_RUN:-1}\" != \"0\" ] && [ -x node_modules/.bin/patch-package ]; then patch-package; fi"
   },
   "engines": {
     "node": ">=24"
