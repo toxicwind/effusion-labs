@@ -186,7 +186,7 @@
           <ul class="flex flex-wrap gap-2">
             {% for l in p.market_listings %}
               <li class="tooltip" data-tip="{{ l.currency }} {{ l.price }}">
-                <span class="badge badge-primary badge-outline">
+                <span class="badge badge-info badge-outline">
                   {{ l.market }}{% if l.currency or l.price %} · {{ l.currency }} {{ l.price }}{% endif %}
                 </span>
               </li>

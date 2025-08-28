@@ -4,10 +4,11 @@ eleventyComputed:
   companySlug: "pop-mart"
   lineSlug: "the-monsters"
   title: "POP MART — The Monsters"
-  lineProducts: "{{ collections.archiveProducts | byCompany(companySlug) | byLine(lineSlug) | byLocale('en') }}"
-  lineCharacters: "{{ collections.archiveCharacters | byCompany(companySlug) | byLine(lineSlug) | byLocale('en') }}"
-  lineSeries: "{{ collections.archiveSeries | byCompany(companySlug) | byLine(lineSlug) | byLocale('en') }}"
 ---
+
+{% set lineProducts   = collections.archiveProducts   | byCompany(companySlug) | byLine(lineSlug) | byLocale('en') | uniqueBy('productSlug') %}
+{% set lineCharacters = collections.archiveCharacters | byCompany(companySlug) | byLine(lineSlug) | byLocale('en') | uniqueBy('charSlug') %}
+{% set lineSeries     = collections.archiveSeries     | byCompany(companySlug) | byLine(lineSlug) | byLocale('en') | uniqueBy('seriesSlug') %}
 
 <header class="mb-6">
   <h1 class="font-heading text-3xl uppercase tracking-[-0.02em] text-primary mb-0">POP MART — The Monsters</h1>
@@ -25,7 +26,7 @@ eleventyComputed:
            href="/archives/collectables/designer-toys/{{ companySlug }}/{{ lineSlug }}/products/{{ p.data.productSlug }}/">
           <h3 class="card-title text-base m-0">{{ p.data.product_id or p.data.title or p.data.productSlug }}</h3>
           {% if p.data.character %}
-            <span class="badge badge-outline badge-primary mt-2">{{ p.data.character }}</span>
+            <span class="badge badge-ghost mt-2">{{ p.data.character }}</span>
           {% endif %}
         </a>
       </li>
@@ -40,7 +41,7 @@ eleventyComputed:
   <ul class="flex flex-wrap gap-2">
     {% for c in lineCharacters %}
       <li>
-        <a class="badge badge-outline hover:badge-primary transition"
+        <a class="badge badge-outline hover:badge-info transition"
            href="/archives/collectables/designer-toys/{{ companySlug }}/{{ lineSlug }}/characters/{{ c.data.charSlug }}/">
           {{ c.data.name or c.data.slug or c.data.charSlug }}
         </a>

@@ -48,7 +48,7 @@ permalink: "/archives/collectables/designer-toys/{{ companySlug }}/{{ lineSlug }
   <ul class="flex flex-wrap gap-2">
     {% for p in matches %}
       <li>
-        <a class="badge badge-outline hover:badge-primary transition"
+        <a class="badge badge-outline hover:badge-info transition"
            href="/archives/collectables/designer-toys/{{ companySlug }}/{{ lineSlug }}/products/{{ p.data.productSlug }}/">
           {{ p.data.product_id or p.data.productSlug }}
         </a>
