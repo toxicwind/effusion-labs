@@ -132,6 +132,7 @@
       // Aggressive when DEBUG=true (?mschfDebug=1), quiet otherwise
       labelsOn: (() => { const p = qparam('mschfLabels'); const d = scope.dataset.mschfLabels; return (p!=null? p!=='0' : (d!=null? d!=='0' : DEBUG)); })(),
       hudOn:     (() => { const p = qparam('mschfHUD');    const d = scope.dataset.mschfHud;   return (p!=null? p!=='0' : (d!=null? d!=='0' : DEBUG)); })(),
+      autoPick:  (() => { const p = qparam('mschfAutoPick'); const d = scope.dataset.mschfPick; return (p!=null? p!=='0' : (d!=null? d!=='0' : DEBUG)); })(),
       lastLabelUpdate: 0,
     },
     _labels: new Map(),
@@ -1119,6 +1120,23 @@
     for (const [id, lab] of State._labels){ if (!seen.has(id)) { try{ lab.remove(); }catch{} State._labels.delete(id); } }
   }
 
+  // Alt-click picking without toggling pointer-events globally
+  function pickFromPoint(x, y){
+    try {
+      const root = State.domLayer || document;
+      const nodes = [...root.querySelectorAll('[data-mschf="1"]')];
+      const hits = nodes.filter(n=>{ const r=n.getBoundingClientRect(); return x>=r.left && x<=r.right && y>=r.top && y<=r.bottom; });
+      const target = hits[hits.length-1]; // last in DOM order ≈ on top
+      if (!target) return false;
+      const id = +target.dataset.mschfId; const kind = target.dataset.mschfKind; const family = target.dataset.mschfFamily;
+      const r = target.getBoundingClientRect();
+      const a = [...State.actors].find(x=>x._id===id);
+      console.log('[MSCHF] pick@point', { id, kind, family, bbox:{x:Math.round(r.x),y:Math.round(r.y),w:Math.round(r.width),h:Math.round(r.height)}, text:(target.textContent||'').trim(), node:target, actor:a });
+      target.classList.add('mschf-highlight'); setTimeout(()=>target.classList.remove('mschf-highlight'), 2000);
+      return true;
+    } catch (e) { DEBUG && warn('pickFromPoint error', e); return false; }
+  }
+
   function updateHUD(){
     if (!State.hud) return;
     const sizes = {
@@ -1173,6 +1191,20 @@
     else { State.paused = false; State.beats.last = now(); State.bars.last = now(); DEBUG && log('visibility: resume'); requestAnimationFrame(tick); }
   }
 
+  // Auto-enable Alt-click picking in DEBUG
+  const _autoPickClick = (ev) => {
+    if (!DEBUG || !State.debug.autoPick) return;
+    if (!ev.altKey) return; // hold Alt/Option to pick
+    // don't let the page handle this click
+    ev.preventDefault(); ev.stopPropagation();
+    pickFromPoint(ev.clientX, ev.clientY);
+  };
+  const _autoPickKey = (ev) => {
+    if (!DEBUG || !State.debug.autoPick || !State.root) return;
+    if (ev.type === 'keydown' && ev.key === 'Alt') State.root.style.cursor = 'crosshair';
+    if (ev.type === 'keyup'   && ev.key === 'Alt') State.root.style.cursor = '';
+  };
+
   // ————————————————————————————————————————
   // Boot
   // ————————————————————————————————————————
@@ -1196,6 +1228,12 @@
     if (State.config.recompose === 'once') {
       setTimeout(() => { if (!State._didRecompose) { try { recompose(); } finally { State._didRecompose = true; } } }, 600);
     }
+    // Bind debug auto-pick handlers (Alt-click)
+    try {
+      document.addEventListener('click', _autoPickClick, true);
+      document.addEventListener('keydown', _autoPickKey, true);
+      document.addEventListener('keyup', _autoPickKey, true);
+    } catch {}
     requestAnimationFrame(tick);
   }
 
@@ -1223,6 +1261,7 @@
   window.__mschfAlpha = (x) => { State.alpha = clamp(+x||State.alpha, 0.3, 1.0); if(State.root) State.root.style.opacity = State.alpha; };
   window.__mschfDebug = (on=1) => { localStorage.setItem('mschf:debug', on? '1':'0'); location.reload(); };
   window.__mschfHUD = (on=1) => { State.debug.hudOn = !!(+on); if (State.debug.hudOn) updateHUD(); else if(State.hud) State.hud.textContent=''; };
+  window.__mschfAutoPick = (on=1) => { State.debug.autoPick = !!(+on); };
   // Turn on live dev labels: __mschfLabels(1)
   window.__mschfLabels = (on=1) => { State.debug.labelsOn = !!(+on); if (on) updateDevLabels(); else { for (const [,lab] of State._labels){ try{ lab.remove(); }catch{} } State._labels.clear(); } };
   // Dump actors to console (optionally filter by '@family' or 'kind')
