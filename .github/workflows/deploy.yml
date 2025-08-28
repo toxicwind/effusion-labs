@@ -66,7 +66,8 @@ jobs:
       - name: ⚡ Direct-push smoke (tests + Eleventy)
         if: steps.mergecheck.outputs.merge == 'false'
         run: |
-          if [ ! -d node_modules ] && [ -f package-lock.json ]; then npm ci --ignore-scripts; fi
+          # Ensure devDependencies are present and patches applied for a faithful smoke test
+          npm ci
           if npm run -s test >/dev/null 2>&1; then npm test; else echo "no tests"; fi
           if npm run -s build >/dev/null 2>&1; then npm run build; else echo "no build"; fi
 

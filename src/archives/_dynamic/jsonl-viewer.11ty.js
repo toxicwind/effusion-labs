@@ -46,7 +46,9 @@ export const data = () => {
       permalink: ({ entry }) => entry
         ? `/archives/${entry.industry}/${entry.category}/${entry.company}/${entry.line}/provenance/${normalizeSlug(entry.base)}/index.html`
         : false,
-      rawUrl: ({ entry }) => entry ? `/content/${entry.rel}` : '#',
+      downloadUrl: ({ entry }) => entry
+        ? `/archives/${entry.industry}/${entry.category}/${entry.company}/${entry.line}/provenance/${normalizeSlug(entry.base)}.jsonl`
+        : '#',
     },
   };
 };
@@ -59,7 +61,7 @@ export const render = async (data) => {
     lang: 'jsonl',
     themes: { light: 'github-light', dark: 'github-dark' },
   });
-  const downloadHref = `data:application/x-ndjson;charset=utf-8,${encodeURIComponent(code)}`;
+  const downloadHref = data.downloadUrl;
   const filename = `${data.entry.base}.jsonl`;
 
   return `
@@ -77,7 +79,6 @@ export const render = async (data) => {
   <header class="mb-4">
     <h1 class="font-heading text-3xl uppercase tracking-[-0.02em] text-primary mb-1">${data.entry.base}</h1>
     <div class="text-sm opacity-80 space-x-3">
-      <a class="link" href="${data.rawUrl}">View raw JSONL</a>
       <a class="link" href="${downloadHref}" download="${filename}">Download</a>
     </div>
   </header>

@@ -230,12 +230,15 @@
                 </li>
               {% endfor %}
             </ul>
-            <div class="mt-1 text-xs opacity-70">
-              <a class="link link-hover" href="{{ p.provenance_ref }}">View raw .jsonl</a>
-              {% if prov.length > 8 %}<span> · showing 8 of {{ prov.length }}</span>{% endif %}
+            <div class="mt-1 text-xs opacity-90 space-x-3">
+              <a class="link link-hover" href="{{ p.provenance_ref | provenanceViewerUrl }}">View .jsonl</a>
+              <a class="link" href="{{ p.provenance_ref | provenanceDownloadUrl }}" download>Download</a>
+              {% if prov.length > 8 %}<span class="opacity-60"> · showing 8 of {{ prov.length }}</span>{% endif %}
             </div>
           {% else %}
-            <a class="link link-primary" href="{{ p.provenance_ref }}">{{ p.provenance_ref | safe }}</a>
+            <a class="link link-primary" href="{{ p.provenance_ref | provenanceViewerUrl }}">View .jsonl</a>
+            <span class="opacity-60">·</span>
+            <a class="link" href="{{ p.provenance_ref | provenanceDownloadUrl }}" download>Download</a>
           {% endif %}
         </dd>
       {% endif %}

@@ -121,7 +121,9 @@ hype_bg() {
     _llm_emit "BG :: Starting background process '$name': $(printf '%q ' "$@")"
     local log_file="${_LLM_LOG_DIR}/${name}.log"
     _llm_emit "BG :: Logging output to $log_file"
-    ( "$@" >"$log_file" 2>&1 ) &; echo $! > "$pid_file"; sleep 0.5
+    ( "$@" >"$log_file" 2>&1 ) &
+    echo $! > "$pid_file"
+    sleep 0.5
     if ! kill -0 "$(cat "$pid_file")" 2>/dev/null; then
         _llm_emit "FAIL :: Process '$name' failed to start. Check log: $log_file"; rm -f "$pid_file"; return 1
     fi

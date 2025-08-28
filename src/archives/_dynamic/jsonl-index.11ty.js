@@ -2,8 +2,8 @@ export const data = () => ({
   layout: 'layout.njk',
   pagination: { data: 'collections.jsonlDirs', size: 1, alias: 'dir' },
   eleventyComputed: {
-    title: ({ dir }) => `Index — /content/archives/${dir?.rel ?? ''}`,
-    permalink: ({ dir }) => dir ? `/content/archives/${dir.rel}/index.html` : false,
+    title: ({ dir }) => `Provenance — ${dir?.rel ?? ''}`,
+    permalink: ({ dir }) => dir ? `/archives/${dir.rel}/provenance/index.html` : false,
   },
 });
 
@@ -22,8 +22,8 @@ export const render = ({ dir }) => {
 
   return `
   <header class="mb-4">
-    <h1 class="font-heading text-3xl uppercase tracking-[-0.02em] text-primary mb-1">Index of /content/archives/${dir.rel}</h1>
-    <p class="opacity-70 text-sm">Provenance files in this line.</p>
+    <h1 class="font-heading text-3xl uppercase tracking-[-0.02em] text-primary mb-1">Provenance Files</h1>
+    <p class="opacity-70 text-sm">${dir.rel}</p>
   </header>
   <section class="card bg-base-100 border shadow-sm">
     <div class="card-body p-4 sm:p-6">
@@ -32,4 +32,3 @@ export const render = ({ dir }) => {
   </section>
   `;
 };
-
