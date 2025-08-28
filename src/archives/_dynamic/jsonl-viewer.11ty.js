@@ -37,24 +37,19 @@ function normalizeSlug(base) {
   return String(base).replace(/--+/g, '-');
 }
 
-export const data = () => ({
-  layout: 'layout.njk',
-  eleventyComputed: {
-    pagination: () => {
-      const files = walkJsonl(ARCHIVES_BASE).map((abs) => ({ abs, ...parseParts(abs) }));
-      const filtered = files.filter((f) => f.section === 'provenance');
-      if (process.env.DEBUG_JSONL === '1') {
-        console.log(`[jsonl-viewer] found ${filtered.length} provenance JSONL files`);
-      }
-      return { data: filtered, size: 1, alias: 'entry' };
+export const data = () => {
+  return {
+    layout: 'layout.njk',
+    pagination: { data: 'collections.jsonlProvenance', size: 1, alias: 'entry' },
+    eleventyComputed: {
+      title: ({ entry }) => `Provenance — ${entry?.base ?? ''}`,
+      permalink: ({ entry }) => entry
+        ? `/archives/${entry.industry}/${entry.category}/${entry.company}/${entry.line}/provenance/${normalizeSlug(entry.base)}/index.html`
+        : false,
+      rawUrl: ({ entry }) => entry ? `/content/${entry.rel}` : '#',
     },
-    title: ({ entry }) => `Provenance — ${entry?.base ?? ''}`,
-    permalink: ({ entry }) => entry
-      ? `/archives/${entry.industry}/${entry.category}/${entry.company}/${entry.line}/provenance/${normalizeSlug(entry.base)}/index.html`
-      : false,
-    rawUrl: ({ entry }) => entry ? `/content/${entry.rel}` : '#',
-  },
-});
+  };
+};
 
 export const render = async (data) => {
   if (!data.entry) return '';
@@ -64,6 +59,8 @@ export const render = async (data) => {
     lang: 'jsonl',
     themes: { light: 'github-light', dark: 'github-dark' },
   });
+  const downloadHref = `data:application/x-ndjson;charset=utf-8,${encodeURIComponent(code)}`;
+  const filename = `${data.entry.base}.jsonl`;
 
   return `
   <nav class="breadcrumbs text-sm mb-2 overflow-x-auto whitespace-nowrap" aria-label="Breadcrumb">
@@ -79,8 +76,9 @@ export const render = async (data) => {
 
   <header class="mb-4">
     <h1 class="font-heading text-3xl uppercase tracking-[-0.02em] text-primary mb-1">${data.entry.base}</h1>
-    <div class="text-sm opacity-80">
+    <div class="text-sm opacity-80 space-x-3">
       <a class="link" href="${data.rawUrl}">View raw JSONL</a>
+      <a class="link" href="${downloadHref}" download="${filename}">Download</a>
     </div>
   </header>
 
