@@ -317,3 +317,6 @@
   .mschf-rings{ animation:none }
   .mschf-glitch{ animation:none }
 }
+
+/* ————————————————— Dev helpers (debug only) ————————————————— */
+.mschf-highlight{ outline:2px dashed #00ff41; filter: drop-shadow(0 0 6px rgba(0,255,65,.7)); }

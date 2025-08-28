@@ -127,7 +127,10 @@
       rare: (() => { const a = scope.dataset.mschfRare; const b = qparam('mschfRare'); return a !== undefined ? a === '1' : b === '1'; })(),
     },
     _didRecompose: false,
-    _t0: now()
+    _t0: now(),
+    debug: { labelsOn: false, lastLabelUpdate: 0 },
+    _labels: new Map(),
+    labelLayer: null,
   };
 
   // Density from token (softened a touch)
@@ -157,7 +160,10 @@
     root.innerHTML = '';
     const domLayer = el('div','mschf-layer',root);
     css(domLayer,{ position:'absolute', inset:0, pointerEvents:'none', userSelect:'none' });
-    State.root = root; State.domLayer = domLayer;
+    // dev label layer
+    const labelLayer = el('div','mschf-devlayer',root);
+    css(labelLayer,{ position:'absolute', inset:0, pointerEvents:'none', userSelect:'none' });
+    State.root = root; State.domLayer = domLayer; State.labelLayer = labelLayer;
     if (DEBUG && 'MutationObserver' in window) {
       const mo = new MutationObserver((muts)=>{
         let added=0, removed=0; for (const m of muts){ added += (m.addedNodes?.length||0); removed += (m.removedNodes?.length||0); }
@@ -578,7 +584,11 @@
       }
     } catch {}
     C.mount++;
-    DEBUG && log('mounted', { id: actor._id, kind: actor.kind, family, cost, nodeCount: State.nodeCount, sizes: {
+    // text and bbox for quicker mapping
+    let text='';
+    try { text = (actor.node && actor.node.textContent || '').trim().slice(0,48); } catch {}
+    let bbox=null; try { const r = actor.node?.getBoundingClientRect?.(); if (r) bbox = { x:Math.round(r.x), y:Math.round(r.y), w:Math.round(r.width), h:Math.round(r.height) }; } catch {}
+    DEBUG && log('mounted', { id: actor._id, kind: actor.kind, family, text, bbox, node: actor.node, cost, nodeCount: State.nodeCount, sizes: {
       scaffold: State.families.scaffold.size, ephemera: State.families.ephemera.size, lab: State.families.lab.size, frame: State.families.frame.size
     }});
     DEBUG && groupEnd();
@@ -588,11 +598,12 @@
     if (DEBUG) group(`retire: ${actor.kind || 'unknown'}`);
     try { actor.retire && actor.retire(); } catch (e) { DEBUG && warn('actor.retire threw', e); }
     try { actor.node && actor.node.remove(); } catch {}
+    try { const lab = State._labels.get(actor._id); if (lab) { lab.remove(); State._labels.delete(actor._id); } } catch {}
     State.actors.delete(actor);
     for (const k in State.families) State.families[k].delete(actor);
     State.nodeCount = Math.max(0, State.nodeCount - (actor.cost || 1));
     C.retire++;
-    DEBUG && log('retired', { nodeCount: State.nodeCount, sizes: {
+    DEBUG && log('retired', { id: actor._id, kind: actor.kind, nodeCount: State.nodeCount, sizes: {
       scaffold: State.families.scaffold.size, ephemera: State.families.ephemera.size, lab: State.families.lab.size, frame: State.families.frame.size
     }});
     DEBUG && groupEnd();
@@ -1057,11 +1068,42 @@
       if (a.dead) retire(a);
     }
     GPU.step(t);
+
+    // Debug dev-labels (throttled)
+    if (State.debug.labelsOn && (t - (State.debug.lastLabelUpdate||0) > 500)) {
+      try { updateDevLabels(); } catch {}
+      State.debug.lastLabelUpdate = t;
+    }
   }
 
   // ————————————————————————————————————————
   // Observers & context
   // ————————————————————————————————————————
+  function updateDevLabels(){
+    if (!State.labelLayer) return;
+    const seen = new Set();
+    for (const a of State.actors){
+      if (!a || !a.node || !a.node.getBoundingClientRect) continue;
+      const id = a._id;
+      seen.add(id);
+      let lab = State._labels.get(id);
+      if (!lab){
+        lab = document.createElement('div');
+        lab.className = 'mschf-devlabel';
+        lab.style.cssText = 'position:fixed;z-index:999999;font:700 10px/1 ui-monospace,Menlo,monospace;letter-spacing:.06em;color:#00ff41;background:rgba(0,0,0,.6);border:1px solid rgba(0,255,65,.6);padding:2px 4px;border-radius:4px;pointer-events:none;user-select:none;';
+        State.labelLayer.appendChild(lab);
+        State._labels.set(id, lab);
+      }
+      const r = a.node.getBoundingClientRect();
+      lab.style.left = Math.round(r.left + 2) + 'px';
+      lab.style.top  = Math.round(r.top  + 2) + 'px';
+      const txt = `#${id} ${a.kind||'?'} @${Object.entries(State.families).find(([,set])=>set.has(a))?.[0]||'?'}${(a.node?.textContent?.trim()?` — ${a.node.textContent.trim().slice(0,18)}`:'')}`;
+      lab.textContent = txt;
+      lab.hidden = false;
+    }
+    // hide labels for retired actors
+    for (const [id, lab] of State._labels){ if (!seen.has(id)) { try{ lab.remove(); }catch{} State._labels.delete(id); } }
+  }
   function wireSections(){
     const hero = document.querySelector('.hero,[data-component~="hero"],section[id*="hero"]');
     const cta  = document.querySelector('.map-cta,[class*="map-cta"],[data-component~="map-cta"]');
@@ -1146,6 +1188,63 @@
   window.__mschfMask = (on=1) => { State.gpu.maskOn = !!(+on); GPU.updateMask(); };
   window.__mschfAlpha = (x) => { State.alpha = clamp(+x||State.alpha, 0.3, 1.0); if(State.root) State.root.style.opacity = State.alpha; };
   window.__mschfDebug = (on=1) => { localStorage.setItem('mschf:debug', on? '1':'0'); location.reload(); };
+  // Turn on live dev labels: __mschfLabels(1)
+  window.__mschfLabels = (on=1) => { State.debug.labelsOn = !!(+on); if (on) updateDevLabels(); else { for (const [,lab] of State._labels){ try{ lab.remove(); }catch{} } State._labels.clear(); } };
+  // Dump actors to console (optionally filter by '@family' or 'kind')
+  window.__mschfDump = (filter='') => {
+    const norm = String(filter||'').trim();
+    const out = [];
+    for (const a of State.actors){
+      const fam = Object.entries(State.families).find(([,set])=>set.has(a))?.[0]||'?';
+      if (!norm || (norm.startsWith('@') && norm.slice(1)===fam) || (!norm.startsWith('@') && (a.kind||'')===norm)){
+        const r = a.node?.getBoundingClientRect?.();
+        out.push({ id:a._id, kind:a.kind, family:fam, complexity:a.complexity||1, text:(a.node?.textContent||'').trim().slice(0,48), bbox:r?{x:Math.round(r.x),y:Math.round(r.y),w:Math.round(r.width),h:Math.round(r.height)}:null, node:a.node });
+      }
+    }
+    console.table(out);
+    return out;
+  };
+  // Highlight matches for a few seconds: __mschfSelect('stamp') or __mschfSelect('@frame') or __mschfSelect('*')
+  window.__mschfSelect = (q='*', seconds=2) => {
+    const root = State.domLayer || document;
+    let sel = [];
+    if (q==='*') sel = [...root.querySelectorAll('[data-mschf="1"]')];
+    else if (q.startsWith('@')) sel = [...root.querySelectorAll(`[data-mschf-family="${q.slice(1)}"]`)];
+    else sel = [...root.querySelectorAll(`[data-mschf-kind="${q}"]`)];
+    sel.forEach(n=>n.classList.add('mschf-highlight'));
+    setTimeout(()=> sel.forEach(n=>n.classList.remove('mschf-highlight')), seconds*1000);
+    return sel.length;
+  };
+  // Find overlay nodes containing text (e.g., 'READ ONLY') and highlight
+  window.__mschfFind = (text, seconds=3) => {
+    const t = String(text||'').toLowerCase(); if (!t) return 0;
+    const nodes = [...(State.domLayer||document).querySelectorAll('[data-mschf="1"]')].filter(n => (n.textContent||'').toLowerCase().includes(t));
+    nodes.forEach(n=>n.classList.add('mschf-highlight'));
+    setTimeout(()=> nodes.forEach(n=>n.classList.remove('mschf-highlight')), seconds*1000);
+    console.log('[MSCHF] __mschfFind', t, nodes);
+    return nodes.length;
+  };
+  // Click-to-inspect overlay: __mschfPick(1) then click a visual
+  window.__mschfPick = (on=1) => {
+    const enable = !!(+on);
+    const layer = State.domLayer; if (!layer) return false;
+    layer.style.pointerEvents = enable ? 'auto' : 'none';
+    layer.style.cursor = enable ? 'crosshair' : '';
+    const handler = (ev) => {
+      const target = ev.target.closest('[data-mschf="1"]');
+      if (!target) return;
+      ev.preventDefault(); ev.stopPropagation();
+      const id = +target.dataset.mschfId;
+      const a = [...State.actors].find(x=>x._id===id);
+      const fam = Object.entries(State.families).find(([,set])=>set.has(a))?.[0]||'?';
+      const r = target.getBoundingClientRect();
+      console.log('[MSCHF] pick', { id:a?._id, kind:a?.kind, family:fam, text:(target.textContent||'').trim(), bbox:{x:Math.round(r.x),y:Math.round(r.y),w:Math.round(r.width),h:Math.round(r.height)}, node:target, actor:a });
+      target.classList.add('mschf-highlight'); setTimeout(()=>target.classList.remove('mschf-highlight'), 2000);
+    };
+    if (enable) layer.addEventListener('click', handler, { capture:true, passive:false }), (State._pickHandler = handler);
+    else if (State._pickHandler) layer.removeEventListener('click', State._pickHandler, { capture:true }), (State._pickHandler=null);
+    return enable;
+  };
   window.__mschfRecompose = (mode='auto') => { State.config.recompose = String(mode).toLowerCase(); };
   window.__mschfRare = (on=1) => { State.config.rare = !!(+on); };
   window.__mschfStats = () => ({ counters: { ...C }, sizes: {
