@@ -10,6 +10,25 @@ trap 'eval "$_LLM_BOOT_OLD_SET_OPTS"' RETURN
 
 set -Euo pipefail
 
+# --- EARLY-IDEMPOTENCE GUARD -------------------------------------------------
+# If this bootstrap has already successfully run in the current shell for this
+# repo, skip the rest to avoid duplicate work and noisy logs. You can force a
+# re-run with `LLM_BOOTSTRAP_FORCE=1`.
+
+# Resolve repo root as early as possible (directory of this file, then up one).
+_llm_repo_root_guess="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd 2>/dev/null || pwd)"
+
+# If previously bootstrapped in this shell for the same repo and not forced,
+# return immediately. Keep a minimal, friendly note when verbose.
+if [[ "${HYPEBRUT_ENV_READY:-}" == "1" \
+   && "${HYPEBRUT_ENV_ROOT:-}" == "${_llm_repo_root_guess}" \
+   && "${LLM_BOOTSTRAP_FORCE:-0}" != "1" ]]; then
+  if [[ "${LLM_VERBOSE:-1}" == "1" ]]; then
+    printf 'HYPEBRUT INFO :: Already activated for this shell (repo: %s).\n' "${_llm_repo_root_guess}"
+  fi
+  return 0
+fi
+
 # --- CONFIGURATION & TUNING KNOBS ---
 # These are the dials for your session.
 : "${LLM_VERBOSE:=1}"
@@ -32,6 +51,12 @@ set -Euo pipefail
 _llm_ts(){ date -u +"%Y-%m-%dT%H:%M:%SZ"; }
 _llm_has(){ command -v "$1" >/dev/null 2>&1; }
 _llm_on() { [[ "$1" == "1" || "$1" == "true" ]]; }
+
+# PATH helpers to avoid duplication across repeated sourcing.
+_llm_path_prepend_unique() {
+    local dir="$1"; [[ -d "$dir" ]] || return 0
+    case ":$PATH:" in *":$dir:") ;; *) PATH="$dir:$PATH" ;; esac
+}
 
 
 # The core aesthetic emitter. All themed output flows through here.
@@ -230,17 +255,20 @@ export -f hype_status
 # --- ENVIRONMENT SETUP ---
 # Final setup steps to make the shell ready.
 
-repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd 2>/dev/null || pwd)"
+repo_root="${_llm_repo_root_guess}"
 _llm_emit "INFO :: Effusion Labs HYPEBRUT OS activated."
 _llm_emit "INFO :: Repo Root: $repo_root"
 
 # Create directories for background process management
 mkdir -p "$_LLM_PID_DIR" "$_LLM_LOG_DIR"
 
-# Add the repo's /bin directory to the PATH.
-if [[ -d "$repo_root/bin" ]]; then
-    export PATH="$repo_root/bin:$PATH"
-    _llm_emit "INFO :: Added '$repo_root/bin' to PATH."
+# Add the repo's /bin directory to the PATH (idempotent across re-sourcing).
+if [[ "${HYPEBRUT_PATH_ADDED:-}" != "1" || "${HYPEBRUT_ENV_ROOT:-}" != "$repo_root" ]]; then
+    _llm_path_prepend_unique "$repo_root/bin"
+    export HYPEBRUT_PATH_ADDED=1
+fi
+if [[ "${LLM_VERBOSE}" == "1" && -d "$repo_root/bin" ]]; then
+    _llm_emit "INFO :: Ensured '$repo_root/bin' is on PATH."
 fi
 
 # Auto-install dependencies if package-lock.json has changed.
@@ -274,3 +302,7 @@ if _llm_on "$LLM_GIT_HOOKS"; then
 fi
 
 _llm_emit "DONE :: Environment ready. Go create something amazing."
+
+# Mark this shell as bootstrapped for this repo.
+export HYPEBRUT_ENV_READY=1
+export HYPEBRUT_ENV_ROOT="$repo_root"
