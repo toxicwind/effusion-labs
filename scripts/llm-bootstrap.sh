@@ -6,7 +6,7 @@
 # Do not leak strict mode into the caller. Save current shell options
 # and restore them automatically when sourcing returns.
 _LLM_BOOT_OLD_SET_OPTS="$(set +o)"
-trap 'eval "$\_LLM_BOOT_OLD_SET_OPTS"' RETURN
+trap 'eval "$_LLM_BOOT_OLD_SET_OPTS"' RETURN
 
 set -Euo pipefail
 
@@ -16,17 +16,21 @@ set -Euo pipefail
 : "${LLM_FOLD_WIDTH:=3996}"             # Max line width before folding.
 : "${LLM_IDLE_SECS:=10}"                # Seconds before an idle process emits a heartbeat.
 : "${LLM_IDLE_FAIL_AFTER_SECS:=360}"    # Seconds of total idle time before a process is considered stalled.
-: "${LLM_DEPS_AUTOINSTALL:=1}"          # Auto-run `npm ci` if package-lock.json changes.
-: "${LLM_GIT_HOOKS:=1}"                  # Auto-install git hooks to keep this script active.
 : "${LLM_TEST_PRESETS:=1}"               # Auto-set CI=1 etc. for `npm test`.
 : "${LLM_SUPPRESS_PATTERNS:='^npm ERR! cb'}" # Regex to filter out common, low-signal noise from streams.
 
-# Profile control for different shells (local vs online CI/Codex envs)
-# Set LLM_PROFILE=online to disable noisy/privileged steps without forking this script.
-: "${LLM_PROFILE:=local}"                # local | online
-if [[ "${LLM_PROFILE}" == "online" ]]; then
-  : "${LLM_DEPS_AUTOINSTALL:=0}"
-  : "${LLM_GIT_HOOKS:=0}"
+# Auto-detect environment to adjust heavy steps (no manual profile flag needed)
+_llm_is_online_env() {
+    [[ -n "${CI:-}" || -n "${GITHUB_ACTIONS:-}" || -n "${CODESPACES:-}" || -n "${CLOUD_SHELL:-}" || ! -t 1 ]]
+}
+
+# Default behavior: avoid heavy install + hooks in online/CI shells; enable locally.
+if _llm_is_online_env; then
+    : "${LLM_DEPS_AUTOINSTALL:=0}"
+    : "${LLM_GIT_HOOKS:=0}"
+else
+    : "${LLM_DEPS_AUTOINSTALL:=1}"
+    : "${LLM_GIT_HOOKS:=1}"
 fi
 
 # --- AESTHETIC HELPERS ---
@@ -126,18 +130,13 @@ hype_run() {
     # Process the stream from the pipe in real-time.
     local reader_pid
     (
-        local stream_processor
-        # If capturing, `tee` the output to the file; otherwise, just print.
+        # If capturing, tee to file while echoing to stdout; otherwise just print.
         if [[ -n "$capture_file" ]]; then
-            # Ensure the capture file is writable.
             : > "$capture_file" 2>/dev/null || { _llm_emit "FAIL :: Capture file '$capture_file' is not writable."; exit 1; }
-            stream_processor="tee -a -- '$capture_file'"
+            _llm_stream_filter < "$pipe" | _llm_fold | tee -a -- "$capture_file"
         else
-            stream_processor="cat"
+            _llm_stream_filter < "$pipe" | _llm_fold
         fi
-        
-        # The main pipeline: read from pipe -> filter noise -> fold lines -> process/tee
-        bash -c "_llm_stream_filter < '$pipe' | _llm_fold | $stream_processor"
     ) &
     reader_pid=$!
 
@@ -283,8 +282,10 @@ if _llm_on "$LLM_DEPS_AUTOINSTALL"; then
         current_hash=$(sha256sum "$lock_file" | awk '{print $1}')
         stored_hash=$(cat "$hash_file" 2>/dev/null || echo "")
         if [[ "$current_hash" != "$stored_hash" ]]; then
-            _llm_emit "INFO :: Dependencies have changed. Running 'npm ci'..."
-            (cd "$repo_root" && hype_run -- npm ci)
+            _llm_emit "INFO :: Dependencies changed. Running 'npm ci' with capture..."
+            mkdir -p "$repo_root/logs"
+            ci_log="$repo_root/logs/npm-ci.$(_llm_ts).log"
+            (cd "$repo_root" && hype_run --capture "$ci_log" --tail 80 -- npm ci)
             echo "$current_hash" > "$hash_file"
         fi
     fi
