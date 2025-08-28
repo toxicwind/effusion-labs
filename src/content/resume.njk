@@ -3,45 +3,43 @@ title: "Resume — Christopher Ortega"
 permalink: "/resume/"
 ---
 
-{# =============================================================================
-   Standalone Eleventy (.njk) Resume Page
-   - No layout.njk dependency
-   - Tailwind via CDN + daisyUI (prebuilt CSS) for 2025, glassy aesthetic
-   - Mobile-first, dark-mode aware, print-friendly
-   - Data priority: site.data.resume → page.resume → internal fallback
-   ========================================================================== #}
+{# =====================================================================
+  Standalone Eleventy (.njk) resume — 2025 daisyUI/Tailwind aesthetic
+  • Cards + badges (refined), stats for highlights, timeline for experience
+  • Privacy: NO literal phone number or "Aurora" string in this file
+    - Displays "Denver, CO" only
+    - Phone is "On request" (no digits in DOM/HTML)
+  • Print-friendly (2–3 pages), ATS-friendly semantics
+  • Data source: site.data.resume → page.resume → internal fallback
+  ===================================================================== #}
 
 {% set R = site.data.resume or page.resume or {
   name: "Christopher Ortega",
   headline: "LLM Engineering • LLMOps • Data Platforms",
-  location: "Aurora, CO (Denver Metro)",
-  phone: "(303) 667-3831",
+  location_display: "Denver, CO",     /* do not place the precise city here */
+  phone_display: "Phone on request",  /* keep digits out of the template/DOM */
   email: "denverchrisortega@gmail.com",
   linkedin: "https://linkedin.com/in/denverchrisortega",
-  summary: [
-    "Engineer with 6+ years across backend and streaming data systems, now centered on LLM applications and LLMOps.",
-    "Built APIs and pipelines on AWS (EMR, Lambda, Kinesis, S3), containerized services on Kubernetes, and delivered search/analytics with Elasticsearch.",
-    "Focus: retrieval that returns the right context, evaluation that blocks bad releases, and observability that surfaces drift early."
-  ],
+  summary: "Software engineer with 6+ years across backend services and streaming data systems, now centered on LLM applications and LLMOps. Built and operated APIs and pipelines on AWS (EMR, Lambda, Kinesis, S3), containerized services on Kubernetes, and delivered search/analytics with Elasticsearch. Focus areas: retrieval that returns the right context, evaluation gates that block bad releases, and dashboards that surface drift early. Collaborative, documentation-forward, and comfortable setting clear acceptance criteria.",
   highlights: [
-    {title:"High-throughput data", body:"Kept Scala/Spark services moving 10+ TB/day with streaming via Kafka/Kinesis/Lambda; enabled near-real-time triggers for partner teams."},
-    {title:"API security & governance", body:"Standardized RBAC (Spring Security + JWT) and OpenAPI contracts/versioning across org boundaries to reduce integration regressions."},
-    {title:"Release hygiene", body:"Introduced GitLab CI/CD release checks and containerized services on Kubernetes; stabilized a three-week release train and reduced rollback risk."},
-    {title:"Retrieval quality", body:"Added risk-scenario checks for chunking/indexing; tracked accuracy, latency, and safety-conformance across prompt/model variants."},
-    {title:"LLM safety evaluation", body:"HackAPrompt 2025 — Top-10 (7th); created reproducible prompt-safety tests and turned findings into evaluation sets with remediation steps."}
+    {k:"High-throughput data", v:"10+ TB/day", d:"Scala/Spark with Kafka·Kinesis·Lambda for near-real-time triggers"},
+    {k:"API security & governance", v:"RBAC + OpenAPI", d:"Spring Security + JWT; versioned contracts across partner teams"},
+    {k:"Release hygiene", v:"CI/CD + K8s", d:"GitLab checks; containerized services; stabilized 3-week release cadence"},
+    {k:"Retrieval quality", v:"RAG QA", d:"Risk-scenario checks for chunking/indexing; accuracy·latency·safety tracking"},
+    {k:"LLM safety evaluation", v:"Top-10 (HackAPrompt ‘25)", d:"Reproducible prompt-safety tests → evaluation sets + remediation steps"}
   ],
   experience: [
     {
       company: "Independent Engineering & Security Research",
-      location: "Aurora, CO",
+      location: "Denver, CO",
       role: "Engineer / Consultant",
       dates: "Dec 2023 – Present",
       bullets: [
-        "Patent Intelligence Agent (consulting, private client): constrained Q&A over patent corpora—hybrid semantic + CPC/IPC filtering, claim/abstract parsing, citation-trail review, inline citations, limitation mapping; added RBAC, prompt-safety controls, and clear notices.",
+        "Patent Intelligence Agent (consulting, private client): constrained Q&A over patent corpora with hybrid semantic + CPC/IPC filtering, claim/abstract parsing, citation-trail review, and landscape digests; outputs include inline citations and limitation mapping; added RBAC, prompt-safety controls, and clear notices.",
         "Built local LLM workflows with modular orchestration (prompt-rewrite steps, LoRA adapters, graph-style configs) to compare prompts/models offline with reproducible inputs.",
-        "Prototyped retrieval evaluation: sanity tests for chunking/indexing, small positive/negative/risk-scenario sets, and accuracy/latency/safety-conformance tracking used to set gate thresholds.",
-        "Engineered a modular Eleventy (11ty) 3.x system (Nunjucks, Tailwind 4) with markdown-it extensions (footnote popovers, inline audio embeds, QR shortcodes), interlinking/navigation plugins, and GitHub Actions for reproducible builds.",
-        "Automated a video-scheduling process (Python + pandas + Excel) for an accessibility team; reduced coordination time and made exceptions obvious."
+        "Prototyped retrieval evaluation: sanity tests for chunking/indexing, small positive/negative/risk-scenario sets, and accuracy·latency·safety-conformance tracking to set gate thresholds.",
+        "Engineered a modular Eleventy (11ty) 3.x system (Nunjucks, Tailwind 4) with markdown-it extensions (footnote popovers, audio embeds, QR shortcodes), interlinking/navigation plugins, and GitHub Actions for reproducible builds.",
+        "Automated a video-scheduling process (Python + pandas + Excel) for an accessibility team, reducing coordination time and surfacing exceptions clearly."
       ]
     },
     {
@@ -51,8 +49,8 @@ permalink: "/resume/"
       dates: "Feb 2019 – Nov 2023",
       bullets: [
         "Shaped backend architecture for segmentation/measurement across millions of subscribers; aligned product, SRE, and engineering on release criteria and operational readiness.",
-        "Implemented RBAC with Spring Security + JWT; enforced OpenAPI hygiene and versioning to keep partner integrations stable across releases.",
-        "Built Scala/Spark batch + stream services processing 10+ TB/day; added Kafka/Kinesis/Lambda pathways to support near-real-time activation triggers.",
+        "Implemented role-based access with Spring Security + JWT; enforced OpenAPI hygiene and versioning to keep partner integrations stable across releases.",
+        "Built Scala/Spark batch + stream services processing 10+ TB/day; added Kafka·Kinesis·Lambda pathways to support near-real-time activation triggers.",
         "Drove Elasticsearch indexing/aggregation patterns for complex eligibility queries; containerized on Kubernetes and enforced CI/CD checks in GitLab.",
         "Authored technical requirement docs mapped to BDD-style acceptance; mentored engineers; ran cross-team architecture reviews; improved on-call by pairing release checks with response playbooks."
       ]
@@ -63,16 +61,16 @@ permalink: "/resume/"
       role: "Software Engineer (Frontend/Platform)",
       dates: "Sep 2017 – Feb 2019",
       bullets: [
-        "Moved legacy interfaces to React + TypeScript; introduced shared components/patterns adopted across internal tools.",
+        "Moved legacy interfaces to React + TypeScript; introduced shared components and patterns adopted across internal tools.",
         "Delivered accessible dashboards tied to real-time targeting APIs; partnered with backend and QA on staged rollouts."
       ]
     }
   ],
   projects: [
-    {name:"Patent Intelligence Agent", body:"Agentic Q&A over patent corpora; hybrid semantic + CPC/IPC filters; claim/limitation mapping; citation-graph hops; inline citations; RBAC; prompt-safety controls."},
-    {name:"LLMOps Gatekeeper", body:"Release checks tied to accuracy, latency, and safety-conformance thresholds; paired with a concise response playbook and rollback steps."},
-    {name:"RAG Quality Kit", body:"Small evaluation sets (positive/negative/risk-scenario), chunking/index heuristics checks, and scripts to catch retrieval regressions early."},
-    {name:"Local-LLM Inference Graphs", body:"Reproducible configs for prompt/model/tool A/Bs with LoRA adapters and rewrite nodes."}
+    {name:"Patent Intelligence Agent", tag:"client", body:"Agentic Q&A over patent corpora; hybrid semantic + CPC/IPC filters; claim/limitation mapping; citation-graph hops; inline citations; RBAC; prompt-safety controls."},
+    {name:"LLMOps Gatekeeper", tag:"ops", body:"Release checks tied to accuracy, latency, and safety-conformance thresholds; paired with a concise response playbook and rollback steps."},
+    {name:"RAG Quality Kit", tag:"evals", body:"Small evaluation sets (positive/negative/risk-scenario), chunking/index heuristics checks, and scripts to catch retrieval regressions early."},
+    {name:"Local-LLM Inference Graphs", tag:"infra", body:"Reproducible configs for prompt/model/tool A/Bs with LoRA adapters and rewrite nodes."}
   ],
   skills: {
     llm:["Prompt design","Retrieval/RAG","Evaluation/metrics","Safety controls","PyTorch","Hugging Face Transformers","LangChain","Ollama"],
@@ -80,240 +78,252 @@ permalink: "/resume/"
     cloud:["AWS (EMR, Lambda, Kinesis, S3, CloudWatch, RDS)","Kubernetes","Terraform","Docker","GitLab CI/CD"],
     api:["REST","OpenAPI","JWT/OAuth2"],
     practices:["Release checks","Observability","Response playbooks","TRDs","BDD acceptance"]
-  },
+  ],
   education: [
     {school:"Metropolitan State University of Denver", degree:"B.S., Computer Information Systems", year:"2016"},
     {school:"Front Range Community College", degree:"A.S., Business Management", year:"2012"}
-  ]
+  ],
+  pdf: "/assets/Christopher_Ortega_Resume_2025.pdf"
 } %}
 
 <!doctype html>
-<html lang="en" data-theme="dim">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <meta name="description" content="Resume — {{ R.name }} — LLM Engineering, LLMOps, Data Platforms (Denver Metro)" />
-    <title>{{ title or "Resume — " ~ R.name }}</title>
+<html lang="en" data-theme="winter">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="Resume — {{ R.name }} — LLM Engineering, LLMOps, Data Platforms (Denver Metro)" />
+  <link rel="canonical" href="{{ '/resume/' | url }}">
+  <title>{{ title or ('Resume — ' ~ R.name) }}</title>
 
-    {# Tailwind + daisyUI (CDN build) #}
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.10/dist/full.min.css" rel="stylesheet" />
-    <script>
-      // Tailwind config (optional tweak)
-      tailwind.config = {
-        theme: {
-          extend: {
-            fontFamily: { display: ['ui-sans-serif', 'system-ui'], body: ['ui-sans-serif','system-ui'] }
-          }
+  <!-- Tailwind + daisyUI (CDN) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.10/dist/full.min.css" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          container: { center: true },
+          fontFamily: { sans: ['ui-sans-serif','system-ui'] }
         }
-      };
-      // Theme persistence
-      (function(){
-        const t = localStorage.getItem('theme');
-        if (t) document.documentElement.setAttribute('data-theme', t);
-      })();
-    </script>
-
-    <style>
-      /* Subtle glass + print polish */
-      .glass { backdrop-filter: blur(10px); background: color-mix(in oklab, white 70%, transparent); }
-      @media (prefers-color-scheme: dark) {
-        .glass { background: color-mix(in oklab, oklch(22% 0 0) 70%, transparent); }
       }
-      @media print {
-        .no-print { display: none !important; }
-        .print-plain { background: transparent !important; box-shadow: none !important; }
-        .rounded-box, .card, .btn, .badge { box-shadow: none !important; }
-        a { color: inherit; text-decoration: none; }
-        html { background: white; }
-      }
-    </style>
-  </head>
-
-  <body class="min-h-screen bg-base-100 text-base-content">
-    <div class="absolute -z-10 inset-0 opacity-60 pointer-events-none">
-      <div class="absolute -top-24 -left-16 w-96 h-96 bg-gradient-to-br from-primary/20 via-secondary/10 to-accent/20 blur-3xl rounded-full"></div>
-      <div class="absolute -bottom-24 -right-16 w-[28rem] h-[28rem] bg-gradient-to-tr from-accent/20 via-primary/10 to-secondary/20 blur-3xl rounded-full"></div>
-    </div>
-
-    <main class="mx-auto max-w-5xl px-6 py-10 md:py-14">
-      <!-- Header / Identity -->
-      <header class="print-plain card glass border border-base-300 shadow-lg">
-        <div class="card-body md:flex md:items-end md:justify-between gap-6">
-          <div>
-            <h1 class="text-3xl md:text-4xl font-black tracking-tight">{{ R.name }}</h1>
-            <p class="mt-2 text-base md:text-lg opacity-80">{{ R.headline }}</p>
-            <ul class="mt-4 flex flex-wrap gap-x-6 gap-y-2 text-sm opacity-90">
-              <li class="inline-flex items-center gap-2"><span class="i-lucide-map-pin"></span>{{ R.location }}</li>
-              <li class="inline-flex items-center gap-2"><span class="i-lucide-phone"></span><a class="link link-hover" href="tel:{{ R.phone | replace(' ', '') | replace('(', '') | replace(')', '') | replace('-', '') }}">{{ R.phone }}</a></li>
-              <li class="inline-flex items-center gap-2"><span class="i-lucide-mail"></span><a class="link link-hover" href="mailto:{{ R.email }}">{{ R.email }}</a></li>
-              <li class="inline-flex items-center gap-2"><span class="i-lucide-link"></span><a class="link link-hover" href="{{ R.linkedin }}">LinkedIn</a></li>
-            </ul>
-          </div>
-          <div class="no-print flex items-center gap-3">
-            <button class="btn btn-sm md:btn-md btn-outline" onclick="(function(){const t=document.documentElement.getAttribute('data-theme');const next=t==='light'?'dim':'light';document.documentElement.setAttribute('data-theme',next);localStorage.setItem('theme',next)})();">
-              Toggle Theme
-            </button>
-            <button class="btn btn-sm md:btn-md btn-primary" onclick="window.print()">Print</button>
-          </div>
-        </div>
-      </header>
-
-      <!-- Summary -->
-      <section class="mt-10">
-        <h2 class="text-xs tracking-widest uppercase opacity-60">Summary</h2>
-        <div class="mt-4 grid gap-4 md:grid-cols-3">
-          {% for s in R.summary %}
-          <div class="card glass border border-base-300">
-            <div class="card-body">
-              <p class="text-sm leading-6">{{ s }}</p>
-            </div>
-          </div>
-          {% endfor %}
-        </div>
-      </section>
-
-      <!-- Highlights -->
-      <section class="mt-10">
-        <h2 class="text-xs tracking-widest uppercase opacity-60">Career Highlights & Recognition</h2>
-        <div class="mt-4 grid gap-4 md:grid-cols-2">
-          {% for h in R.highlights %}
-          <div class="card glass border border-base-300 hover:shadow-md transition-shadow">
-            <div class="card-body">
-              <h3 class="card-title text-sm">{{ h.title }}</h3>
-              <p class="mt-2 text-sm leading-6 opacity-90">{{ h.body }}</p>
-            </div>
-          </div>
-          {% endfor %}
-        </div>
-      </section>
-
-      <!-- Experience -->
-      <section class="mt-10">
-        <h2 class="text-xs tracking-widest uppercase opacity-60">Experience</h2>
-        <div class="mt-4 space-y-6">
-          {% for job in R.experience %}
-          <article class="card glass border border-base-300">
-            <div class="card-body">
-              <div class="md:flex md:items-baseline md:justify-between gap-2">
-                <div>
-                  <h3 class="text-base md:text-lg font-semibold">{{ job.company }}</h3>
-                  <p class="text-sm opacity-80">{{ job.role }} • {{ job.location }}</p>
-                </div>
-                <time class="text-sm opacity-70">{{ job.dates }}</time>
-              </div>
-              <ul class="mt-4 space-y-2 text-sm leading-6">
-                {% for b in job.bullets %}
-                <li class="relative pl-4">
-                  <span class="absolute left-0 top-2 w-1.5 h-1.5 rounded-full bg-base-content/40"></span>
-                  {{ b }}
-                </li>
-                {% endfor %}
-              </ul>
-            </div>
-          </article>
-          {% endfor %}
-        </div>
-      </section>
-
-      <!-- Projects -->
-      <section class="mt-10">
-        <h2 class="text-xs tracking-widest uppercase opacity-60">Selected Projects</h2>
-        <div class="mt-4 grid gap-4 md:grid-cols-2">
-          {% for p in R.projects %}
-          <div class="card glass border border-base-300">
-            <div class="card-body">
-              <div class="flex items-center gap-2">
-                <h3 class="card-title text-sm">{{ p.name }}</h3>
-                <span class="badge badge-outline badge-sm">project</span>
-              </div>
-              <p class="mt-2 text-sm leading-6 opacity-90">{{ p.body }}</p>
-            </div>
-          </div>
-          {% endfor %}
-        </div>
-      </section>
-
-      <!-- Skills -->
-      <section class="mt-10">
-        <h2 class="text-xs tracking-widest uppercase opacity-60">Skills & Tools</h2>
-        <div class="mt-4 grid gap-4 md:grid-cols-2">
-          <div class="card glass border border-base-300">
-            <div class="card-body">
-              <h3 class="text-sm font-semibold">AI / LLM</h3>
-              <div class="mt-3 flex flex-wrap gap-2">
-                {% for s in R.skills.llm %}<span class="badge badge-outline">{{ s }}</span>{% endfor %}
-              </div>
-            </div>
-          </div>
-          <div class="card glass border border-base-300">
-            <div class="card-body">
-              <h3 class="text-sm font-semibold">Backend & Data</h3>
-              <div class="mt-3 flex flex-wrap gap-2">
-                {% for s in R.skills.backend %}<span class="badge badge-outline">{{ s }}</span>{% endfor %}
-              </div>
-            </div>
-          </div>
-          <div class="card glass border border-base-300">
-            <div class="card-body">
-              <h3 class="text-sm font-semibold">Cloud & DevOps</h3>
-              <div class="mt-3 flex flex-wrap gap-2">
-                {% for s in R.skills.cloud %}<span class="badge badge-outline">{{ s }}</span>{% endfor %}
-              </div>
-            </div>
-          </div>
-          <div class="card glass border border-base-300">
-            <div class="card-body">
-              <h3 class="text-sm font-semibold">APIs & Practices</h3>
-              <div class="mt-3 flex flex-wrap gap-2">
-                {% for s in R.skills.api %}<span class="badge badge-outline">{{ s }}</span>{% endfor %}
-                {% for s in R.skills.practices %}<span class="badge badge-outline">{{ s }}</span>{% endfor %}
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Education -->
-      <section class="mt-10 mb-16">
-        <h2 class="text-xs tracking-widest uppercase opacity-60">Education</h2>
-        <ul class="mt-4 grid gap-3">
-          {% for e in R.education %}
-          <li class="card glass border border-base-300">
-            <div class="card-body py-4">
-              <p class="text-sm"><span class="font-medium">{{ e.school }}</span> — {{ e.degree }} ({{ e.year }})</p>
-            </div>
-          </li>
-          {% endfor %}
-        </ul>
-      </section>
-    </main>
-
-    {# Minimal icon shim (Lucide-esque via CSS) — optional aesthetic #}
-    <style>
-      .i-lucide-map-pin::before { content: "📍"; }
-      .i-lucide-phone::before { content: "📞"; }
-      .i-lucide-mail::before { content: "✉️"; }
-      .i-lucide-link::before { content: "🔗"; }
-    </style>
-
-    {# Structured data for SEO/ATS #}
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Person",
-      "name": "{{ R.name }}",
-      "jobTitle": "Software Engineer — LLM Applications",
-      "address": {
-        "@type": "PostalAddress",
-        "addressLocality": "Aurora",
-        "addressRegion": "CO",
-        "addressCountry": "US"
-      },
-      "email": "mailto:{{ R.email }}",
-      "telephone": "{{ R.phone }}",
-      "sameAs": ["{{ R.linkedin }}"]
     }
-    </script>
-  </body>
+  </script>
+
+  <style>
+    /* Glass intensity for header only */
+    :root { --glass-blur: 10px; --glass-opacity: .72; --glass-border-opacity: .28; }
+    @media print {
+      :root { color-scheme: light; }
+      body { background: #fff !important; }
+      .no-print { display:none !important; }
+      .shadow, .shadow-lg, .shadow-xl, .shadow-2xl { box-shadow:none !important; }
+      .glass { background: #fff !important; }
+      .stats { display:block !important; }
+      .stats .stat { border:none !important; }
+      .card { border-color:#ddd !important; }
+      a { color:#000 !important; text-decoration:none !important; }
+    }
+  </style>
+</head>
+
+<body class="bg-base-100 text-base-content">
+  <main class="container max-w-[820px] px-6 py-10 md:py-14 space-y-10 md:space-y-12">
+
+    <!-- Header / Identity -->
+    <header class="card glass shadow-xl border border-base-300">
+      <div class="card-body md:flex md:items-end md:justify-between gap-6">
+        <div>
+          <h1 class="text-3xl md:text-4xl font-black tracking-tight">{{ R.name }}</h1>
+          <p class="mt-2 text-base md:text-lg opacity-80">{{ R.headline }}</p>
+          <div class="mt-4 flex flex-wrap items-center gap-2">
+            {# Location — show Denver only #}
+            <span class="badge badge-outline" aria-label="Location">{{ R.location_display }}</span>
+
+            {# Phone — do NOT reveal digits. Display a pleasant badge with tooltip and a mailto fallback #}
+            <span class="tooltip tooltip-bottom" data-tip="Shareable on request via email">
+              <a class="badge badge-outline" href="mailto:{{ R.email }}?subject=Phone%20request%20for%20{{ R.name | urlencode }}">
+                {{ R.phone_display }}
+              </a>
+            </span>
+
+            {# Email + LinkedIn #}
+            <a class="badge badge-outline" href="mailto:{{ R.email }}" rel="noopener">Email</a>
+            <a class="badge badge-outline" href="{{ R.linkedin }}" rel="noopener">LinkedIn</a>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-3 no-print">
+          {% if R.pdf %}
+            <a class="btn btn-sm md:btn-md btn-outline" href="{{ R.pdf }}" download>Download PDF</a>
+          {% endif %}
+          <label class="swap swap-rotate">
+            <input type="checkbox" class="theme-controller" value="dim" />
+            <svg class="swap-off fill-current size-6" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12a7 7 0 0 0 14 0c0-3.866-3.134-7-7-7v14a7 7 0 0 1-7-7Z"/></svg>
+            <svg class="swap-on fill-current size-6" viewBox="0 0 24 24" aria-hidden="true"><path d="M21.64 13a9 9 0 1 1-9-11 7 7 0 0 0 9 9Z"/></svg>
+          </label>
+        </div>
+      </div>
+    </header>
+
+    <!-- Summary -->
+    <section aria-labelledby="summary">
+      <h2 id="summary" class="text-xs tracking-widest uppercase opacity-60">Summary</h2>
+      <div class="card bg-base-100 border border-base-300 shadow">
+        <div class="card-body">
+          <p class="text-base md:text-[17px] leading-7 md:leading-8">{{ R.summary }}</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Career Highlights (as stats) -->
+    <section aria-labelledby="highlights">
+      <h2 id="highlights" class="text-xs tracking-widest uppercase opacity-60">Career Highlights & Recognition</h2>
+      <div class="stats stats-vertical md:stats-horizontal bg-base-100 border border-base-300 shadow">
+        {% for h in R.highlights %}
+        <div class="stat">
+          <div class="stat-title">{{ h.k }}</div>
+          <div class="stat-value text-lg md:text-xl">{{ h.v }}</div>
+          <div class="stat-desc">{{ h.d }}</div>
+        </div>
+        {% endfor %}
+      </div>
+    </section>
+
+    <!-- Experience (timeline + role cards) -->
+    <section aria-labelledby="experience">
+      <h2 id="experience" class="text-xs tracking-widest uppercase opacity-60">Experience</h2>
+      <ul class="timeline timeline-vertical timeline-compact">
+        {% for job in R.experience %}
+        <li class="timeline-item">
+          <div class="timeline-start text-xs opacity-70">{{ job.dates }}</div>
+          <div class="timeline-middle">
+            <div class="w-2 h-2 rounded-full bg-base-content/60"></div>
+          </div>
+          <div class="timeline-end mb-8">
+            <article class="card card-compact bg-base-100 border border-base-300 shadow-sm">
+              <div class="card-body">
+                <div class="flex flex-col md:flex-row md:items-baseline md:justify-between gap-1">
+                  <h3 class="text-base md:text-lg font-semibold">
+                    {{ job.company }}
+                    <span class="font-normal">— {{ job.role }}</span>
+                  </h3>
+                  <span class="text-sm opacity-70">{{ job.location }}</span>
+                </div>
+                <ul class="mt-3 space-y-2 text-sm leading-6">
+                  {% for b in job.bullets %}
+                    <li class="pl-4 relative">
+                      <span class="absolute left-0 top-2 w-1.5 h-1.5 rounded-full bg-base-content/30"></span>
+                      {{ b }}
+                    </li>
+                  {% endfor %}
+                </ul>
+              </div>
+            </article>
+          </div>
+          {% if not loop.last %}<hr/>{% endif %}
+        </li>
+        {% endfor %}
+      </ul>
+    </section>
+
+    <!-- Selected Projects (bento) -->
+    <section aria-labelledby="projects">
+      <h2 id="projects" class="text-xs tracking-widest uppercase opacity-60">Selected Projects</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {% for p in R.projects %}
+        <article class="card card-compact bg-base-100 border border-base-300 hover:shadow-md transition-shadow">
+          <div class="card-body">
+            <div class="flex items-center gap-2">
+              <h3 class="card-title text-sm">{{ p.name }}</h3>
+              {% if p.tag %}
+                <span class="badge badge-neutral badge-sm">{{ p.tag }}</span>
+              {% endif %}
+            </div>
+            <p class="mt-2 text-sm leading-6">{{ p.body }}</p>
+          </div>
+        </article>
+        {% endfor %}
+      </div>
+    </section>
+
+    <!-- Skills & Tools (badges, calmer) -->
+    <section aria-labelledby="skills">
+      <h2 id="skills" class="text-xs tracking-widest uppercase opacity-60">Skills & Tools</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="card bg-base-100 border border-base-300">
+          <div class="card-body">
+            <h3 class="text-sm font-semibold">AI / LLM</h3>
+            <div class="mt-3 flex flex-wrap gap-2">
+              {% for s in R.skills.llm %}<span class="badge badge-outline">{{ s }}</span>{% endfor %}
+            </div>
+          </div>
+        </div>
+        <div class="card bg-base-100 border border-base-300">
+          <div class="card-body">
+            <h3 class="text-sm font-semibold">Backend & Data</h3>
+            <div class="mt-3 flex flex-wrap gap-2">
+              {% for s in R.skills.backend %}<span class="badge badge-outline">{{ s }}</span>{% endfor %}
+            </div>
+          </div>
+        </div>
+        <div class="card bg-base-100 border border-base-300">
+          <div class="card-body">
+            <h3 class="text-sm font-semibold">Cloud & DevOps</h3>
+            <div class="mt-3 flex flex-wrap gap-2">
+              {% for s in R.skills.cloud %}<span class="badge badge-outline">{{ s }}</span>{% endfor %}
+            </div>
+          </div>
+        </div>
+        <div class="card bg-base-100 border border-base-300">
+          <div class="card-body">
+            <h3 class="text-sm font-semibold">APIs & Practices</h3>
+            <div class="mt-3 flex flex-wrap gap-2">
+              {% for s in R.skills.api %}<span class="badge badge-outline">{{ s }}</span>{% endfor %}
+              {% for s in R.skills.practices %}<span class="badge badge-outline">{{ s }}</span>{% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Education -->
+    <section aria-labelledby="education">
+      <h2 id="education" class="text-xs tracking-widest uppercase opacity-60">Education</h2>
+      <div class="grid grid-cols-1 gap-3">
+        {% for e in R.education %}
+        <div class="card bg-base-100 border border-base-300">
+          <div class="card-body py-4">
+            <p class="text-sm"><span class="font-medium">{{ e.school }}</span> — {{ e.degree }} ({{ e.year }})</p>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="pt-4 pb-10 flex items-center justify-between no-print">
+      <small class="opacity-60">Last updated: {{ collections and collections.all and collections.all | last and (collections.all | last).date | date('yyyy-MM-dd') or "" }}</small>
+      <div class="join">
+        <input class="join-item btn btn-sm btn-outline theme-controller" type="radio" name="theme" aria-label="Winter" value="winter" checked />
+        <input class="join-item btn btn-sm btn-outline theme-controller" type="radio" name="theme" aria-label="Dim" value="dim" />
+        <input class="join-item btn btn-sm btn-outline theme-controller" type="radio" name="theme" aria-label="Corporate" value="corporate" />
+      </div>
+    </footer>
+
+  </main>
+
+  <!-- JSON-LD for SEO/ATS (omit telephone for privacy) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "{{ R.name }}",
+    "jobTitle": "Software Engineer — LLM Applications",
+    "address": { "@type": "PostalAddress", "addressLocality": "Denver", "addressRegion": "CO", "addressCountry": "US" },
+    "email": "mailto:{{ R.email }}",
+    "sameAs": ["{{ R.linkedin }}"],
+    "url": "{{ '/resume/' | url }}"
+  }
+  </script>
+</body>
 </html>

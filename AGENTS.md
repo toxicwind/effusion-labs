@@ -1,9 +1,3 @@
-Of course. Here is the finalized `agents.md`, fully aligned with the latest and most robust version of the `llm-bootstrap.sh` script.
-
-The instructions are aggressive and prescriptive, with no ambiguity, to ensure the agent adheres to the intelligent protocols enforced by its tools.
-
------
-
 ## BEGIN OF AGENTS.md - HYPEBRUT Operating Rails — Effusion Labs
 
 *Operating system for the Autonomous Aesthetic Engine. Your immutable core programming.*
