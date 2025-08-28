@@ -9,6 +9,7 @@ eleventyComputed:
 {% set lineProducts   = collections.archiveProducts   | byCompany(companySlug) | byLine(lineSlug) | byLocale('en') | uniqueBy('productSlug') %}
 {% set lineCharacters = collections.archiveCharacters | byCompany(companySlug) | byLine(lineSlug) | byLocale('en') | uniqueBy('charSlug') %}
 {% set lineSeries     = collections.archiveSeries     | byCompany(companySlug) | byLine(lineSlug) | byLocale('en') | uniqueBy('seriesSlug') %}
+{% set productsAll = collections.archiveProducts | byCompany(companySlug) | byLine(lineSlug) %}
 
 <header class="mb-6">
   <h1 class="font-heading text-3xl uppercase tracking-[-0.02em] text-primary mb-0">POP MART — The Monsters</h1>
@@ -27,6 +28,15 @@ eleventyComputed:
           {% if p.data.character %}
             <span class="badge badge-ghost mt-2">{{ p.data.character }}</span>
           {% endif %}
+          {% set fc = p.data | fieldCounts([]) %}
+          <div class="mt-3 flex flex-wrap gap-2">
+            <span class="badge badge-outline badge-xs">vars: {{ fc.present }}/{{ fc.total }}</span>
+            {% if p.data.market_listings %}<span class="badge badge-outline badge-xs">markets: {{ p.data.market_listings | len }}</span>{% endif %}
+            {% if provenance and provenance.byProduct and provenance.byProduct[p.data.productSlug] %}
+              <span class="badge badge-outline badge-xs">prov: {{ provenance.byProduct[p.data.productSlug].entries | len }}</span>
+            {% endif %}
+            {% if p.data.Deltas %}<span class="badge badge-outline badge-xs">deltas: {{ p.data.Deltas | len }}</span>{% endif %}
+          </div>
         </a>
       </li>
     {% endfor %}
@@ -40,9 +50,9 @@ eleventyComputed:
   <ul class="flex flex-wrap gap-2">
     {% for c in lineCharacters %}
       <li>
-        <a class="badge badge-outline hover:badge-info transition" href="{{ c.data.url }}">
-          {{ c.data.name or c.data.slug or c.data.charSlug }}
-        </a>
+        {% set countForChar = productsAll | byCharacter(c.data.charSlug) | len %}
+        <a class="badge badge-outline hover:badge-info transition" href="{{ c.data.url }}">{{ c.data.name or c.data.slug or c.data.charSlug }}</a>
+        <span class="badge badge-ghost badge-xs">{{ countForChar }}</span>
       </li>
     {% endfor %}
   </ul>
@@ -59,6 +69,10 @@ eleventyComputed:
         <a class="card-body p-4 sm:p-5 block" href="{{ s.data.url }}">
           <h3 class="card-title text-base m-0">{{ s.data.title or s.data.seriesSlug }}</h3>
           {% if s.data.notes %}<p class="mt-1 text-base-content/80">{{ s.data.notes }}</p>{% endif %}
+          {% set seriesCount = productsAll | bySeries(s.data.seriesSlug) | len %}
+          <div class="mt-3 flex flex-wrap gap-2">
+            <span class="badge badge-outline badge-xs">products: {{ seriesCount }}</span>
+          </div>
         </a>
       </li>
     {% endfor %}
