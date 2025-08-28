@@ -127,8 +127,8 @@
       // Default rare moments OFF; enable with data-mschf-rare="1" or ?mschfRare=1
       rare: (() => { const a = scope.dataset.mschfRare; const b = qparam('mschfRare'); return a !== undefined ? a === '1' : b === '1'; })(),
       // Visual toggles for specific lab elements
-      rings: (() => { const a = scope.dataset.mschfRings; const p = qparam('mschfRings'); return a!=null ? a!=='0' : (p!=null ? p!=='0' : false); })(),
-      topo:  (() => { const a = scope.dataset.mschfTopo;  const p = qparam('mschfTopo');  return a!=null ? a!=='0' : (p!=null ? p!=='0' : false); })(),
+      rings: (() => { const a = scope.dataset.mschfRings; const p = qparam('mschfRings'); return a!=null ? a!=='0' : (p!=null ? p!=='0' : true); })(),
+      topo:  (() => { const a = scope.dataset.mschfTopo;  const p = qparam('mschfTopo');  return a!=null ? a!=='0' : (p!=null ? p!=='0' : true); })(),
       // GPU-layer toggles (default off for calm sites)
       gpuRings: (() => { const a = scope.dataset.mschfGpuRings; const p = qparam('mschfGpuRings'); return a!=null ? a!=='0' : (p!=null ? p!=='0' : false); })(),
       gpuTopo:  (() => { const a = scope.dataset.mschfGpuTopo;  const p = qparam('mschfGpuTopo');  return a!=null ? a!=='0' : (p!=null ? p!=='0' : false); })(),
@@ -420,6 +420,12 @@
       }
 
       // No CRT by default (was visually heavy over text)
+
+      // Context loss handling (recover or gracefully degrade)
+      try {
+        app.canvas.addEventListener('webglcontextlost', (ev)=>{ ev.preventDefault(); State._gpuLost = true; DEBUG && warn('GPU context lost'); }, false);
+        app.canvas.addEventListener('webglcontextrestored', ()=>{ State._gpuLost = false; DEBUG && log('GPU context restored'); this.topo?.resize?.(); this.rings?.resize?.(); this.starfield?.resize?.(); }, false);
+      } catch {}
 
       // Resize
       addEventListener('resize', () => {
@@ -1255,6 +1261,18 @@
       if (State.domLayer) State.domLayer.style.pointerEvents = State._picking ? 'auto' : 'none';
       if (State.labelLayer) State.labelLayer.style.pointerEvents = 'none';
       if (State.app?.canvas) State.app.canvas.style.pointerEvents = 'none';
+    } catch {}
+
+    // GPU self-heal: if desired but lost/absent, try to reinit occasionally
+    try {
+      const wantGPU = !!(State.config.gpuRings || State.config.gpuTopo || State.config.gpuStars);
+      if (wantGPU && (!State.app || State._gpuLost)){
+        const due = !State._gpuRetryAt || t > State._gpuRetryAt;
+        if (due){
+          State._gpuRetryAt = t + 4000; // backoff
+          GPU.init().then(app=>{ if(app){ State._gpuLost=false; DEBUG&&log('GPU reinit ok'); } });
+        }
+      }
     } catch {}
 
     if (State.debug.labelsOn) { try { updateDevLabels(); } catch {} }
