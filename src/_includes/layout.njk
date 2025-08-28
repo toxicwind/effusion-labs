@@ -16,14 +16,14 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>{{ title }} | Effusion Labs</title>
 
-  {# Early theme (daisyUI): align with compiled themes (silk, sunset). #}
+  {# Early theme (daisyUI): align with compiled themes (silk, abyss). #}
   <script>
     (function () {
       try {
         var THEMES = {
           lightDefault: "silk",
-          darkDefault:  "sunset",
-          allowed: ["silk","sunset"]
+          darkDefault:  "abyss",
+          allowed: ["silk","abyss"]
         };
         var meta = document.querySelector('meta[name="color-scheme"]') ||
           (function () { var m = document.createElement("meta"); m.name = "color-scheme"; document.head.appendChild(m); return m; })();
@@ -51,7 +51,7 @@
           meta.content = (name === THEMES.lightDefault) ? "light dark" : "dark light";
         };
       } catch (_) {
-        document.documentElement.setAttribute("data-theme", "sunset");
+        document.documentElement.setAttribute("data-theme", "abyss");
         document.documentElement.dataset.themeSource = "fallback";
       }
     })();
