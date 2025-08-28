@@ -181,6 +181,7 @@
     css(labelLayer,{ position:'absolute', inset:0, pointerEvents:'none', userSelect:'none' });
     const hud = el('div','mschf-hud',root);
     css(hud,{ position:'fixed', left:'6px', top:'6px', pointerEvents:'none', userSelect:'none', zIndex: '999999', color:'#00ff41', background:'rgba(0,0,0,.58)', border:'1px solid rgba(0,255,65,.6)', borderRadius:'6px', padding:'6px 8px', font:'700 10px/1.2 ui-monospace,Menlo,monospace', letterSpacing:'.06em' });
+    if (!State.debug.hudOn) { hud.style.display = 'none'; }
     State.root = root; State.domLayer = domLayer; State.labelLayer = labelLayer; State.hud = hud;
     if (DEBUG && 'MutationObserver' in window) {
       const mo = new MutationObserver((muts)=>{
@@ -1364,6 +1365,7 @@
 
   function updateHUD(){
     if (!State.hud) return;
+    State.hud.style.display = 'block';
     const sizes = {
       scaffold: State.families.scaffold.size,
       ephemera: State.families.ephemera.size,
@@ -1485,7 +1487,11 @@
   window.__mschfMask = (on=1) => { State.gpu.maskOn = !!(+on); GPU.updateMask(); };
   window.__mschfAlpha = (x) => { State.alpha = clamp(+x||State.alpha, 0.3, 1.0); if(State.root) State.root.style.opacity = State.alpha; };
   window.__mschfDebug = (on=1) => { localStorage.setItem('mschf:debug', on? '1':'0'); location.reload(); };
-  window.__mschfHUD = (on=1) => { State.debug.hudOn = !!(+on); if (State.debug.hudOn) updateHUD(); else if(State.hud) State.hud.textContent=''; };
+  window.__mschfHUD = (on=1) => {
+    State.debug.hudOn = !!(+on);
+    if (State.debug.hudOn) { updateHUD(); }
+    else if(State.hud) { State.hud.textContent=''; State.hud.style.display='none'; }
+  };
   window.__mschfAutoPick = (on=1) => { State.debug.autoPick = !!(+on); };
   window.__mschfCull = (kind='rings') => { const culled=[]; for (const a of Array.from(State.actors)){ if ((a.kind||'')===kind){ retire(a); culled.push(a._id); } } console.log('[MSCHF] culled', kind, culled); return culled.length; };
   window.__mschfToggle = (what, on=1) => {

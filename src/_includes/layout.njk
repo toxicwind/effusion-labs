@@ -70,6 +70,7 @@
 
   <!-- Aesthetic utilities (optional, safe globals for inlays/cutouts/focus) -->
   <style>
+    :root { --mschf-z: 30; }
     :root { --neon-a:#00E0FF; --neon-b:#9AFF00; --neon-c:#FF1CF7; --neon-edge:#ffffff; --focus-clr: var(--neon-a); }
     :where(a,button,[role="button"],[tabindex],.focusable):focus-visible {
       outline: 2px solid transparent;
@@ -132,6 +133,10 @@
   data-mschf-style="auto"
   class="bg-base-100 text-base-content font-body antialiased selection:bg-primary/20"
 >
+  <script>
+    // Disable overlay on small screens to avoid interfering with mobile nav
+    try { if (matchMedia('(max-width: 768px)').matches) document.body.setAttribute('data-mschf','off'); } catch {}
+  </script>
   <a href="#main" class="skip-link">Skip to main content</a>
   {{ header(nav, page) }}
 
@@ -162,17 +167,15 @@
   </div>
   {% endif %}
 
-  {# Lab seal — subtle neon frame with faint glow + inner hairline #}
-  <span
-    class="pointer-events-none fixed inset-0 z-[40]"
-    aria-hidden="true"
-    style="
-      box-shadow:
-        inset 0 0 0 1px color-mix(in oklab, hsl(var(--p)) 18%, transparent),
-        inset 0 0 0 2px color-mix(in oklab, hsl(var(--p)) 6%, transparent),
-        inset 0 0 24px color-mix(in oklab, hsl(var(--p)) 10%, transparent);
-    ">
+  {# Lab seal frame: opt-in only (controlled via page.labSeal or site.labSeal) #}
+  {% if page.labSeal or site.labSeal %}
+  <span class="hb-lab-seal pointer-events-none fixed inset-0 z-[40]" aria-hidden="true"
+    style="box-shadow:
+      inset 0 0 0 1px color-mix(in oklab, hsl(var(--p)) 18%, transparent),
+      inset 0 0 0 2px color-mix(in oklab, hsl(var(--p)) 6%, transparent),
+      inset 0 0 24px color-mix(in oklab, hsl(var(--p)) 10%, transparent);">
   </span>
+  {% endif %}
 
 
   {# Overlay root (always present). Color follows theme primary. #}
