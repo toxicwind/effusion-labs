@@ -2,14 +2,14 @@
 <a
   href="{{ item.url }}"
   aria-label="{{ item.data.title }}"
-  class="block rounded-xl border border-base-content/15 bg-base-100/80 backdrop-blur p-6 shadow-sm
-         transition hover:-translate-y-0.5 hover:shadow-xl hover:border-primary/50
+  class="block rounded-xl hb-tile bg-base-100/80 backdrop-blur p-6 shadow-sm
+         transition hover:-translate-y-0.5
          focus:outline-none focus-visible:ring focus-visible:ring-primary/40"
 >
   <div class="flex items-center justify-between">
     <h3 class="font-heading text-lg text-base-content">{{ item.data.title }}</h3>
     {% if item.date | isNew %}
-    <span class="rounded-full bg-primary text-primary-content px-2 py-0.5 text-[10px] font-medium">New</span>
+    <span class="hb-pill hb-pill-xs hb-pill-new" aria-label="New item">New</span>
     {% endif %}
   </div>
   {% if item.data.description %}

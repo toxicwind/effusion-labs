@@ -109,6 +109,7 @@
     bars:  { last: now(), dur: 4200 },
     safeZones: [],
     occupancy: [],
+    actorBoxes: new Map(), // id -> rect {x,y,w,h}
     cornerSlots: { tl:null, tr:null, bl:null, br:null },
     readingPressure: 0,
     gridCols: 10,
@@ -275,6 +276,12 @@
     for (const z of State.safeZones) if (rectOverlap(r,z)/area > 0.02) return true; // stricter
     return false;
   }
+  function collidesActors(r){
+    const area = Math.max(1, r.w * r.h);
+    for (const [,z] of State.actorBoxes){ if (rectOverlap(r,z)/area > 0.06) return true; }
+    return false;
+  }
+  function collidesAny(r){ return collidesSafe(r) || collidesActors(r); }
   function resetOccupancy() { State.occupancy = new Array(State.gridCols*State.gridRows).fill(0); }
   function isCellFree(c,r){ return !State.occupancy[r*State.gridCols + c]; }
   function claimCell(c,r){ State.occupancy[r*State.gridCols + c] = 1; }
@@ -299,7 +306,7 @@
       const left = Math.random() < 0.5;
       const x = left ? Math.round(Math.random()*Math.min(innerWidth*0.1, 120)) : Math.round(innerWidth - w - Math.random()*Math.min(innerWidth*0.1, 120));
       const y = Math.round(Math.random()*(innerHeight - h));
-      const rect = { x, y, w, h }; if (!collidesSafe(rect)) return rect;
+      const rect = { x, y, w, h }; if (!collidesAny(rect)) return rect;
       return null;
     };
     const tryCorners = () => {
@@ -307,19 +314,19 @@
       const pos = pick(['tl','tr','bl','br']);
       const x = pos.includes('l') ? pad : innerWidth - w - pad;
       const y = pos.includes('t') ? pad : innerHeight - h - pad;
-      const rect = { x, y, w, h }; if (!collidesSafe(rect)) return rect;
+      const rect = { x, y, w, h }; if (!collidesAny(rect)) return rect;
       return null;
     };
     const tryHeader = () => {
       const pad = 12;
       const x = Math.round(Math.random()*(innerWidth - w));
       const y = pad;
-      const rect = { x, y, w, h }; if (!collidesSafe(rect)) return rect;
+      const rect = { x, y, w, h }; if (!collidesAny(rect)) return rect;
       return null;
     };
     const primary = aff==='corners'?tryCorners:aff==='gutters'?tryGutter:aff==='header'?tryHeader:null;
-    if (primary) for (let i=0;i<10;i++){ const r=primary(); if (r) return r; }
-    if (aff!=='gutters') for (let i=0;i<6;i++){ const r=tryGutter(); if(r) return r; }
+    if (primary) for (let i=0;i<12;i++){ const r=primary(); if (r) return r; }
+    if (aff!=='gutters') for (let i=0;i<8;i++){ const r=tryGutter(); if(r) return r; }
 
     const maxTry = 28;
     for (let i=0;i<maxTry;i++) {
@@ -329,7 +336,7 @@
       const rx = Math.round((cx/State.gridCols)*innerWidth);
       const ry = Math.round((cy/State.gridRows)*innerHeight);
       const rect = { x: clamp(rx - w*0.1, 0, innerWidth - w), y: clamp(ry - h*0.1, 0, innerHeight - h), w, h };
-      if (!collidesSafe(rect)) { claimCell(cx,cy); return rect; }
+      if (!collidesAny(rect)) { claimCell(cx,cy); return rect; }
     }
     return { x: Math.round(Math.random()*(innerWidth - w)), y: Math.round(Math.random()*(innerHeight - h)), w, h };
   }
@@ -627,6 +634,14 @@
     State.actors.add(actor);
     State.nodeCount += cost;
     try { actor.mount(State.domLayer); } catch (e) { DEBUG && warn('actor.mount threw', e); CNR.release(actor); return DEBUG && groupEnd(), false; }
+    // record bounding box to discourage future overlaps
+    try {
+      const r = actor.node?.getBoundingClientRect?.();
+      if (r && isFinite(r.width) && isFinite(r.height)) {
+        const rect = { x: Math.max(0, r.left), y: Math.max(0, r.top), w: Math.max(0, r.width), h: Math.max(0, r.height) };
+        State.actorBoxes.set(actor._id, rect);
+      }
+    } catch {}
     State._mountCtx = null;
     // If primary node exists, tag it too
     try {
@@ -654,6 +669,7 @@
     if (DEBUG) group(`retire: ${actor.kind || 'unknown'}`);
     try { actor.retire && actor.retire(); } catch (e) { DEBUG && warn('actor.retire threw', e); }
     try { actor.node && actor.node.remove(); } catch {}
+    try { State.actorBoxes.delete(actor._id); } catch {}
     try { CNR.release(actor); } catch {}
     try { const lab = State._labels.get(actor._id); if (lab) { lab.remove(); State._labels.delete(actor._id); } } catch {}
     State.actors.delete(actor);
