@@ -215,7 +215,28 @@
       {% if p.provenance_ref %}
         <dt class="sm:col-span-3 text-base-content/70">Provenance</dt>
         <dd class="sm:col-span-9">
-          <a class="link link-primary" href="{{ p.provenance_ref }}">{{ p.provenance_ref | safe }}</a>
+          {% set prov = (p.provenance_ref | provenanceSources) %}
+          {% if prov and prov.length %}
+            <ul class="space-y-1">
+              {% for s in prov | slice(0,8) %}
+                <li>
+                  {% if s.url %}
+                    <a class="external-link" href="{{ s.url }}" target="_blank" rel="noopener noreferrer">{{ hostname(s.url) or s.url }}</a>
+                  {% endif %}
+                  {% if s.title %}<span class="opacity-80"> — {{ s.title | safe }}</span>{% endif %}
+                  {% if s.currency and s.price %}<span class="opacity-70"> — {{ s.currency }} {{ s.price }}</span>{% endif %}
+                  {% if s.market %}<span class="opacity-70"> — {{ s.market }}</span>{% endif %}
+                  {% if s.retrieved_at %}<span class="opacity-60"> ({{ s.retrieved_at }})</span>{% endif %}
+                </li>
+              {% endfor %}
+            </ul>
+            <div class="mt-1 text-xs opacity-70">
+              <a class="link link-hover" href="{{ p.provenance_ref }}">View raw .jsonl</a>
+              {% if prov.length > 8 %}<span> · showing 8 of {{ prov.length }}</span>{% endif %}
+            </div>
+          {% else %}
+            <a class="link link-primary" href="{{ p.provenance_ref }}">{{ p.provenance_ref | safe }}</a>
+          {% endif %}
         </dd>
       {% endif %}
 

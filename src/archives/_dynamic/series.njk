@@ -1,0 +1,38 @@
+---
+layout: "layout.njk"
+pagination:
+  data: archiveSeriesEn
+  size: 1
+  alias: series
+eleventyComputed:
+  permalink: "{{ series.data.url }}"
+  title: "{{ series.data.title or series.data.seriesSlug }}"
+---
+{% from "components/back-link.njk" import backLink %}
+
+<nav class="breadcrumbs text-sm mb-2 overflow-x-auto whitespace-nowrap" aria-label="Breadcrumb">
+  <ul>
+    <li><a href="/archives/">Archives</a></li>
+    <li><a href="/archives/collectables/designer-toys/{{ series.data.companySlug }}/">{{ series.data.companyTitle }}</a></li>
+    <li><a href="/archives/collectables/designer-toys/{{ series.data.companySlug }}/{{ series.data.lineSlug }}/">{{ series.data.lineTitle }}</a></li>
+    <li class="opacity-70">{{ series.data.title or series.data.seriesSlug }}</li>
+  </ul>
+</nav>
+
+<div class="mb-6">{{ backLink('Back', '/archives/collectables/designer-toys/' + series.data.companySlug + '/' + series.data.lineSlug + '/') }}</div>
+
+<header class="mb-6">
+  <h1 class="font-heading text-3xl uppercase tracking-[-0.02em] text-primary mb-0">{{ series.data.title or series.data.seriesSlug }}</h1>
+</header>
+
+{% set inLine = collections.archiveProducts | byCompany(series.data.companySlug) | byLine(series.data.lineSlug) %}
+{% if inLine.length %}
+  <h2 class="text-lg font-semibold mt-6 mb-3">Products in this series</h2>
+  <ul class="flex flex-wrap gap-2">
+    {% for p in inLine %}
+      {% if p.data.seriesSlug and p.data.seriesSlug == series.data.seriesSlug %}
+      <li><a class="badge badge-outline hover:badge-info transition" href="{{ p.data.url }}">{{ p.data.product_id or p.data.productSlug }}</a></li>
+      {% endif %}
+    {% endfor %}
+  </ul>
+{% endif %}

@@ -352,7 +352,14 @@
   .pill--error { @apply badge-error; }
 
   /* Map types → theme tokens (no heavy solid backgrounds) */
+  /* Project pill: stronger, always-visible treatment */
   .pill--project { --badge-color: var(--color-primary); --badge-fg: var(--color-primary-content); }
+  .pill--project {
+    @apply badge-outline;
+    background-color: hsl(var(--p)/.24);
+    border-color: hsl(var(--p)/.55);
+    color: hsl(var(--p));
+  }
   .pill--concept { --badge-color: var(--color-info);    --badge-fg: var(--color-info-content); }
   .pill--spark   { --badge-color: var(--color-warning); --badge-fg: var(--color-warning-content); }
   .pill--meta    { --badge-color: var(--color-neutral); --badge-fg: var(--color-neutral-content); }
