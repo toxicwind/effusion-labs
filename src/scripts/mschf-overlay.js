@@ -1,9 +1,6 @@
-// assets/js/mschf-overlay.js
-// Effusion Labs — Hypebrüt Overlay v2 (Autonomous / Emergent / 2025-tier)
-// Theme-tinted, non-blocking, SPA-safe, mobile-sane, reduced-motion/data aware.
-// External deps: PixiJS v8 (loaded dynamically if not provided via import map/build).
-// Usage: keep <div id="mschf-overlay-root" class="text-primary" aria-hidden="true"></div> in layout.
-// Console: __mschfOn(), __mschfOff(), __mschfPulse(), __mschfMood(m), __mschfDensity(x)
+// Effusion Labs — Hypebrüt Overlay v2.1 (Garden-Calm)
+// Non-blocking, prose-safe, SPA-safe, mobile-sane, reduced-motion/data aware.
+// Console: __mschfOn(), __mschfOff(), __mschfPulse(), __mschfMood(m), __mschfDensity(x), __mschfMask(0|1), __mschfAlpha(x)
 
 (() => {
   if (window.__mschfBooted) return;
@@ -23,12 +20,19 @@
   const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
   const lerp  = (a, b, t) => a + (b - a) * t;
   const now   = () => performance.now();
-  const pick  = (arr) => arr[Math.floor(Math.random() * arr.length)]; // unseeded by design
+  const pick  = (arr) => arr[Math.floor(Math.random() * arr.length)];
+  const css   = (el, obj) => { for (const k in obj) el.style[k] = obj[k]; return el; };
+  const el    = (tag, cls, parent) => {
+    const n = document.createElement(tag);
+    if (cls) n.className = cls;
+    (parent||document.body).appendChild(n);
+    // harden pass-through on *every* node we create
+    n.style.pointerEvents = 'none';
+    n.style.userSelect = 'none';
+    return n;
+  };
 
-  const css = (el, obj) => { for (const k in obj) el.style[k] = obj[k]; return el; };
-  const el  = (tag, cls, parent) => { const n = document.createElement(tag); if (cls) n.className = cls; (parent||document.body).appendChild(n); return n; };
-
-  // External dep loader (PixiJS v8). You may swap to your own import map.
+  // External dep loader (PixiJS v8)
   async function loadPixi() {
     if (globalThis.PIXI && globalThis.PIXI.Application) return globalThis.PIXI;
     const sources = [
@@ -42,7 +46,6 @@
     return null;
   }
 
-  // Resolve blend modes across Pixi versions
   function resolveBlend(PIXI, name) {
     const map = PIXI?.BLEND_MODES;
     return map && map[name] !== undefined ? map[name] : name.toLowerCase().replace(/_/g, '-');
@@ -52,20 +55,20 @@
   // Global State
   // ————————————————————————————————————————
   const State = {
-    root: null, domLayer: null, gpu: null, app: null,
+    root: null, domLayer: null, app: null,
     style: scope.dataset.mschfStyle || 'auto',
     densityToken: scope.dataset.mschfDensity || 'lite',
-    density: 0.45,
+    density: 0.38, // gentler default
     mood: 'calm', // calm → lite → bold → loud → storm → studio
     tempo: 1.0,
     reduceMotion: matchMedia?.('(prefers-reduced-motion: reduce)').matches || false,
     reduceData: !!(navigator.connection && (navigator.connection.saveData || /2g/.test(navigator.connection.effectiveType||''))),
     visible: !document.hidden,
-    nodeBudget: 160, nodeCount: 0,
+    nodeBudget: 120, nodeCount: 0,
     actors: new Set(),
     families: { scaffold: new Set(), ephemera: new Set(), lab: new Set(), frame: new Set() },
-    beats: { last: now(), dur: 640 },
-    bars:  { last: now(), dur: 3200 },
+    beats: { last: now(), dur: 680 },
+    bars:  { last: now(), dur: 4200 },
     safeZones: [],
     occupancy: [],
     readingPressure: 0,
@@ -74,14 +77,16 @@
     paused: false,
     fps: { samples: [], bad: false },
     tiers: { xs: false, sm: false, md: false, lg: false },
+    alpha: 0.85, // overall overlay alpha (debuggable)
+    gpu: { maskOn: true, stageAlpha: 1.0 }
   };
 
-  // Density from token
-  const densityMap = { calm: 0.25, lite: 0.45, bold: 0.7, loud: 0.9 };
+  // Density from token (softened a touch)
+  const densityMap = { calm: 0.22, lite: 0.38, bold: 0.58, loud: 0.75 };
   if (densityMap[State.densityToken]) State.density = densityMap[State.densityToken];
 
   // Style
-  if (State.style === 'auto') State.style = pick(['collage','structural','playful']);
+  if (State.style === 'auto') State.style = pick(['structural','collage','playful']); // structural first for “garden”
 
   // ————————————————————————————————————————
   // Root mount
@@ -90,19 +95,21 @@
     let root = document.getElementById('mschf-overlay-root');
     if (!root) { root = el('div','',document.body); root.id = 'mschf-overlay-root'; }
     css(root, {
-      pointerEvents:'none', position:'fixed', inset:'0', width:'100vw', height:'100vh',
+      pointerEvents:'none', userSelect:'none',
+      position:'fixed', inset:'0', width:'100vw', height:'100vh',
       zIndex: getComputedStyle(document.documentElement).getPropertyValue('--mschf-z')?.trim() || '44',
-      color:'currentColor', contain:'layout style paint', contentVisibility:'auto'
+      color:'currentColor', contain:'layout style paint', contentVisibility:'auto',
+      opacity: State.alpha // global soften
     });
     root.setAttribute('aria-hidden','true');
     root.innerHTML = '';
     const domLayer = el('div','mschf-layer',root);
-    css(domLayer,{ position:'absolute', inset:0 });
+    css(domLayer,{ position:'absolute', inset:0, pointerEvents:'none', userSelect:'none' });
     State.root = root; State.domLayer = domLayer;
   }
 
   // ————————————————————————————————————————
-  // Mobile tiers
+  // Mobile tiers + budgets
   // ————————————————————————————————————————
   function computeTiers() {
     const w = innerWidth;
@@ -110,30 +117,46 @@
     State.tiers.sm = w >= 480 && w < 768;
     State.tiers.md = w >= 768 && w < 1024;
     State.tiers.lg = w >= 1024;
+
+    // tiered budgets
+    State.nodeBudget = State.tiers.lg ? 110 : State.tiers.md ? 90 : 60;
+    if (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4) State.nodeBudget = Math.min(State.nodeBudget, 70);
   }
 
   // ————————————————————————————————————————
   // Safe zones & placement
   // ————————————————————————————————————————
   function computeSafeZones() {
-    const selFallback = '.prose, header, nav, .map-cta, [data-safe], [data-mschf-safe], [data-occlude="avoid"]';
+    const selFallback = '.prose, main, article, header, nav, .map-cta, [data-safe], [data-mschf-safe], [data-occlude="avoid"]';
     const sel = scope.getAttribute('data-mschf-safe') || selFallback;
-    const pad = 16;
+    const pad = 24; // ↑ from 16
     const rects = [...document.querySelectorAll(sel)]
       .map(n => n.getBoundingClientRect())
       .filter(r => r.width * r.height > 0)
-      .map(r => ({ x: clamp(r.left - pad, 0, innerWidth), y: clamp(r.top - pad, 0, innerHeight), w: clamp(r.width + pad*2, 0, innerWidth), h: clamp(r.height + pad*2, 0, innerHeight) }));
+      .map(r => ({
+        x: clamp(r.left - pad, 0, innerWidth),
+        y: clamp(r.top - pad, 0, innerHeight),
+        w: clamp(r.width + pad*2, 0, innerWidth),
+        h: clamp(r.height + pad*2, 0, innerHeight)
+      }));
     State.safeZones = rects;
+    GPU.updateMask(); // keep GPU from painting over prose
   }
+
+  // Clip each rect to the viewport; measure visible text only
   function computeReadingPressure() {
-    const nodes = document.querySelectorAll('p, li, blockquote');
+    const W = innerWidth, H = innerHeight;
+    const clip = r =>
+      Math.max(0, Math.min(r.right, W) - Math.max(r.left, 0)) *
+      Math.max(0, Math.min(r.bottom, H) - Math.max(r.top, 0));
+
     let area = 0;
-    nodes.forEach(n => {
+    document.querySelectorAll('p, li, blockquote').forEach(n => {
       const r = n.getBoundingClientRect();
-      area += r.width * r.height;
+      area += clip(r);
     });
-    const total = innerWidth * innerHeight;
-    State.readingPressure = total ? Math.min(1, area / total) : 0;
+    const total = W * H || 1;
+    State.readingPressure = clamp(area / total, 0, 1);
   }
   function computeContext(){ computeSafeZones(); computeReadingPressure(); }
   function rectOverlap(a,b) {
@@ -143,7 +166,7 @@
   }
   function collidesSafe(r) {
     const area = Math.max(1, r.w * r.h);
-    for (const z of State.safeZones) if (rectOverlap(r,z)/area > 0.08) return true;
+    for (const z of State.safeZones) if (rectOverlap(r,z)/area > 0.02) return true; // stricter
     return false;
   }
   function resetOccupancy() { State.occupancy = new Array(State.gridCols*State.gridRows).fill(0); }
@@ -175,12 +198,9 @@
       return null;
     };
     const primary = aff==='corners'?tryCorners:aff==='gutters'?tryGutter:aff==='header'?tryHeader:null;
-    if (primary) {
-      for (let i=0;i<10;i++){ const r=primary(); if (r) return r; }
-    }
-    if (aff!=='gutters') {
-      for (let i=0;i<6;i++){ const r=tryGutter(); if(r) return r; }
-    }
+    if (primary) for (let i=0;i<10;i++){ const r=primary(); if (r) return r; }
+    if (aff!=='gutters') for (let i=0;i<6;i++){ const r=tryGutter(); if(r) return r; }
+
     const maxTry = 28;
     for (let i=0;i<maxTry;i++) {
       const cx = Math.floor(Math.random()*State.gridCols);
@@ -195,113 +215,157 @@
   }
 
   // ————————————————————————————————————————
-  // Mood machine
+  // Mood machine (calmer + article caps)
   // ————————————————————————————————————————
   const moods = ['calm','lite','bold','loud','storm','studio'];
   function nextMood(cur){
     const idx = moods.indexOf(cur);
     const roll = Math.random();
-    let step = roll < 0.6 ? 1 : roll < 0.85 ? 2 : 3;
-    if (State.readingPressure < 0.1 && Math.random() < 0.5) step++;
+    let step = roll < 0.7 ? 1 : roll < 0.92 ? 2 : 3; // drift slower
+    if (State.readingPressure < 0.1 && Math.random() < 0.4) step++;
     let next = moods[Math.min(idx + step, moods.length - 1)];
-    if (State.readingPressure > 0.3 && ['bold','loud','storm','studio'].includes(next)) next = 'lite';
+    if (State.readingPressure > 0.25 && ['bold','loud','storm','studio'].includes(next)) next = 'lite';
     return next;
   }
   function applyMood(mood){
-    if (State.readingPressure > 0.3 && ['bold','loud','storm','studio'].includes(mood)) mood = 'lite';
+    if (State.readingPressure > 0.25 && ['bold','loud','storm','studio'].includes(mood)) mood = 'lite';
     State.mood = mood;
-    const t = { calm:.9, lite:1.0, bold:1.15, loud:1.25, storm:1.35, studio:.95 }[mood] || 1.0;
-    State.tempo = t;
-    State.bars.dur  = lerp(2600, 4000, 1/(State.tempo+.01));
-    State.beats.dur = lerp(520, 760, 1/(State.tempo+.01));
-    const base = { calm:.25, lite:.45, bold:.65, loud:.8, storm:.95, studio:.4 }[mood] || .5;
-    State.density = clamp(lerp(State.density, base, .6), .2, .96);
 
-    // Page-type caps (reading pages calmer)
-    const isArticle = !!document.querySelector('.prose,[data-kind="spark"],[data-kind="concept"],[data-kind="project"]');
-    if (isArticle) State.density = Math.min(State.density, .5);
-    if (State.tiers.xs || State.tiers.sm) State.density = Math.min(State.density, .5);
+    const t = { calm:.95, lite:1.0, bold:1.1, loud:1.18, storm:1.25, studio:.95 }[mood] || 1.0;
+    State.tempo = t;
+
+    // calmer bar/beat lengths
+    State.bars.dur  = lerp(3400, 5200, 1/(State.tempo+.01));
+    State.beats.dur = lerp(580,  820,  1/(State.tempo+.01));
+
+    // density settles toward base, then capped by page type
+    const base = { calm:.22, lite:.38, bold:.55, loud:.7, storm:.85, studio:.35 }[mood] || .4;
+    State.density = clamp(lerp(State.density, base, .6), .18, .9);
+
+    const isArticle = !!document.querySelector('.prose,[data-kind="spark"],[data-kind="concept"],[data-kind="project"],article,main .prose');
+    if (isArticle) State.density = Math.min(State.density, .45);
+    if (State.tiers.xs || State.tiers.sm) State.density = Math.min(State.density, .45);
 
     if (State.root) State.root.dataset.mood = mood;
+
+    // GPU flourish guardrails
+    GPU.toggleGlow(!isArticle && /loud|storm/.test(mood));
   }
 
   // ————————————————————————————————————————
-  // GPU (PixiJS) layer
+  // GPU (PixiJS) layer — prose-masked
   // ————————————————————————————————————————
   const GPU = {
-    app: null, stage: null, rings: null, topo: null, crt: null, starfield: null, glow: null,
+    app: null, stage: null, rings: null, topo: null, starfield: null, glow: null, maskG: null,
     async init() {
       if (State.reduceData) return null;
+      // Only on large screens by default
+      if (!State.tiers.lg) return null;
       const PIXI = await loadPixi();
       if (!PIXI) return null;
 
       const app = new PIXI.Application();
       await app.init({
         width: innerWidth, height: innerHeight, antialias: true, autoDensity: true, backgroundAlpha: 0,
-        powerPreference: 'high-performance', useBackBuffer: false, resolution: devicePixelRatio > 2 ? 2 : devicePixelRatio
+        powerPreference: 'high-performance', useBackBuffer: false,
+        resolution: devicePixelRatio > 2 ? 2 : devicePixelRatio
       });
       State.root.appendChild(app.canvas);
-      css(app.canvas, { position:'absolute', inset:0 });
+      css(app.canvas, { position:'absolute', inset:0, pointerEvents:'none', userSelect:'none' });
 
       const stage = app.stage;
       this.app = app; this.stage = stage;
 
-      // Post effects (glow/bloom)
-      try {
-        const { GlowFilter } = await import('https://cdn.jsdelivr.net/npm/@pixi/filter-glow@5.2.1/dist/filter-glow.min.mjs').catch(()=>({}));
-        if (GlowFilter && !State.reduceMotion) {
-          this.glow = new GlowFilter({ distance: 12, outerStrength: 0.25, innerStrength: 0.0, color: 0xffffff, quality: .25 });
-          stage.filters = [this.glow];
-        }
-      } catch {}
+      // Mask that punches holes over safe zones (so GPU never overlays prose)
+      this.updateMask();
 
-      // Rings: SDF concentric rings with subtle pulse
+      // Rings
       this.rings = this.makeRings(PIXI);
       stage.addChild(this.rings.container);
 
-      // Topo: procedural stripes (cheap, sine-based)
+      // Topo
       this.topo = this.makeTopo(PIXI);
       stage.addChild(this.topo.container);
 
-      // Starfield
+      // Starfield (very subtle)
       this.starfield = this.makeStars(PIXI);
       stage.addChild(this.starfield.container);
 
-      // CRT mask lines (very subtle)
-      this.crt = this.makeCRT(PIXI);
-      stage.addChild(this.crt.container);
+      // No CRT by default (was visually heavy over text)
 
       // Resize
       addEventListener('resize', () => {
         app.renderer.resize(innerWidth, innerHeight);
-        this.rings.resize(); this.topo.resize(); this.starfield.resize(); this.crt.resize();
+        this.rings?.resize(); this.topo?.resize(); this.starfield?.resize();
+        this.updateMask();
       });
 
       return app;
     },
 
+    updateMask() {
+      if (!this.stage || !this.app) return;
+      const PIXI = this.app.renderer.plugins?.graphics?.graphicsFactory?.renderer?.PIXI || globalThis.PIXI;
+      if (!PIXI) return;
+
+      if (!this.maskG) this.maskG = new PIXI.Graphics();
+      this.maskG.clear();
+
+      if (State.gpu.maskOn) {
+        this.maskG.beginFill(0xffffff, 1);
+        this.maskG.drawRect(0,0,innerWidth,innerHeight);
+        for (const z of State.safeZones) {
+          this.maskG.beginHole();
+          this.maskG.drawRoundedRect(z.x, z.y, z.w, z.h, 8);
+          this.maskG.endHole();
+        }
+        this.maskG.endFill();
+        this.stage.mask = this.maskG;
+        if (!this.maskG.parent) this.stage.addChild(this.maskG);
+      } else {
+        // mask off
+        if (this.stage.mask) this.stage.mask = null;
+        if (this.maskG.parent) this.maskG.removeFromParent();
+      }
+    },
+
+    toggleGlow(enable) {
+      if (!this.stage || State.reduceMotion) return;
+      const want = !!enable;
+      if (want && !this.glow) {
+        (async () => {
+          try {
+            const { GlowFilter } = await import('https://cdn.jsdelivr.net/npm/@pixi/filter-glow@5.2.1/dist/filter-glow.min.mjs').catch(()=>({}));
+            if (GlowFilter) {
+              this.glow = new GlowFilter({ distance: 10, outerStrength: 0.18, innerStrength: 0.0, color: 0xffffff, quality: .25 });
+              this.stage.filters = [this.glow];
+            }
+          } catch {}
+        })();
+      } else if (!want && this.glow) {
+        this.stage.filters = null; this.glow = null;
+      }
+    },
+
     makeRings(PIXI) {
-      const container = new PIXI.Container();
-      const g = new PIXI.Graphics();
-      container.addChild(g);
+      const container = new PIXI.Container(); container.alpha = .08; // softer
+      const g = new PIXI.Graphics(); container.addChild(g);
 
       function draw(cx, cy, baseR, color) {
         g.clear();
-        g.alpha = .15;
-
         g.blendMode = resolveBlend(PIXI,'ADD');
         g.lineStyle(1, color, 1);
         for (let i=0;i<3;i++) g.drawCircle(cx, cy, baseR + i*baseR*.33);
         g.endFill();
       }
 
-      let cx = innerWidth*0.5, cy = innerHeight*0.3, base = Math.min(innerWidth, innerHeight)*0.06;
+      let cx = innerWidth*0.5, cy = innerHeight*0.28, base = Math.min(innerWidth, innerHeight)*0.052;
       let tint = 0xffffff;
 
-      function resize(){ cx = innerWidth*0.5; cy = Math.max(64, innerHeight*0.28); base = Math.min(innerWidth, innerHeight)*0.055; }
+      function resize(){ cx = innerWidth*0.5; cy = Math.max(64, innerHeight*0.26); base = Math.min(innerWidth, innerHeight)*0.05; }
       function step(t){
         if (State.reduceMotion) { draw(cx, cy, base, tint); return; }
-        const beat = 1 + Math.sin(t/1200) * .06 * State.tempo;
+        const beat = 1 + Math.sin(t/1400) * .05 * State.tempo;
         draw(cx, cy, base*beat, tint);
       }
       resize();
@@ -309,19 +373,19 @@
     },
 
     makeTopo(PIXI) {
-      const container = new PIXI.Container(); container.alpha = .12;
+      const container = new PIXI.Container(); container.alpha = .06;
       const g = new PIXI.Graphics(); container.addChild(g);
 
       function draw(){
         g.clear(); g.blendMode = resolveBlend(PIXI,'SCREEN');
         const w = innerWidth, h = innerHeight;
-        const lines = 18;
+        const lines = 14;
         for (let i=0;i<lines;i++){
-          const y = (h/lines)*i + Math.sin(i*1.23)*6;
-          g.lineStyle(1, 0xffffff, .35);
+          const y = (h/lines)*i + Math.sin(i*1.23)*4;
+          g.lineStyle(1, 0xffffff, .32);
           g.moveTo(0, y);
-          for (let x=0;x<=w;x+=24){
-            const yy = y + Math.sin((x*0.01)+(i*0.6))*6 + Math.sin((x*0.031)-(i))*3;
+          for (let x=0;x<=w;x+=28){
+            const yy = y + Math.sin((x*0.01)+(i*0.6))*4 + Math.sin((x*0.031)-(i))*2.5;
             g.lineTo(x, yy);
           }
         }
@@ -329,25 +393,25 @@
       function resize(){ draw(); }
       function step(t){
         if (State.reduceMotion) return;
-        if (Math.random() < 0.02 * State.tempo) draw();
+        if (Math.random() < 0.015 * State.tempo) draw();
       }
       draw();
       return { container, step, resize };
     },
 
     makeStars(PIXI) {
-      const container = new PIXI.Container(); container.alpha = .12;
+      const container = new PIXI.Container(); container.alpha = .05;
       container.blendMode = resolveBlend(PIXI,'SCREEN');
       const starTex = PIXI.Texture.WHITE;
       const sprites = [];
 
       function populate(){
         container.removeChildren(); sprites.length = 0;
-        const n = Math.floor(60 + (State.density*80) * (State.tiers.lg ? 1 : .6));
+        const n = Math.floor(40 + (State.density*60) * (State.tiers.lg ? 1 : .6));
         for (let i=0;i<n;i++){
           const s = new PIXI.Sprite(starTex);
-          const size = Math.random()*2 + .5;
-          s.tint = 0xffffff; s.alpha = Math.random()*.75 + .25;
+          const size = Math.random()*1.6 + .4;
+          s.tint = 0xffffff; s.alpha = Math.random()*.6 + .2;
           s.width = size; s.height = size;
           s.x = Math.random()*innerWidth; s.y = Math.random()*innerHeight;
           container.addChild(s); sprites.push(s);
@@ -356,8 +420,8 @@
       function resize(){ populate(); }
       function step(){
         if (State.reduceMotion || State.tiers.xs) return;
-        if (Math.random() < 0.2) return;
-        const k = (State.tempo * 0.12) * (State.tiers.lg ? 1 : .6);
+        if (Math.random() < 0.25) return;
+        const k = (State.tempo * 0.1) * (State.tiers.lg ? 1 : .6);
         for (let i=0;i<sprites.length;i+=7){
           const s = sprites[i];
           s.y += (Math.random() - .5) * k;
@@ -370,32 +434,13 @@
       return { container, step, resize };
     },
 
-    makeCRT(PIXI) {
-      const container = new PIXI.Container();
-      const g = new PIXI.Graphics(); container.addChild(g);
-      function draw(){
-        g.clear(); container.alpha = .06;
-        const w = innerWidth, h = innerHeight;
-        g.beginFill(0xff0000, .25);
-        for (let y=0; y<h; y+=6) g.drawRect(0, y, w, 1);
-        g.beginFill(0x00ff00, .25);
-        for (let y=2; y<h; y+=6) g.drawRect(0, y, w, 1);
-        g.beginFill(0x0000ff, .25);
-        for (let y=4; y<h; y+=6) g.drawRect(0, y, w, 1);
-        g.endFill();
-      }
-      function resize(){ draw(); }
-      function step() {}
-      draw();
-      return { container, step, resize };
-    },
-
     step(t){
       if (!this.stage) return;
-      if (this.rings) this.rings.step(t);
-      if (this.topo)  this.topo.step(t);
-      if (this.starfield) this.starfield.step(t);
-      if (this.crt) this.crt.step(t);
+      this.rings?.step(t);
+      this.topo?.step(t);
+      this.starfield?.step(t);
+      // stage alpha adapts slightly to pressure
+      this.stage.alpha = State.gpu.stageAlpha = lerp(0.75, 1.0, 1 - State.readingPressure*0.5);
     }
   };
 
@@ -404,22 +449,27 @@
   // ————————————————————————————————————————
   function mount(actor, family){
     if (!actor) return;
-    // mobile + article constraints
-    const isArticle = !!document.querySelector('.prose,[data-kind="spark"],[data-kind="concept"],[data-kind="project"]');
+
+    // honor budget
+    const cost = actor.cost || 1;
+    if (State.nodeCount + cost > State.nodeBudget) return;
+
+    const isArticle = !!document.querySelector('.prose,[data-kind="spark"],[data-kind="concept"],[data-kind="project"],article,main .prose');
+
+    // small screens: only minimal scaffold & frame affordances
     if ((State.tiers.xs || State.tiers.sm) && family !== 'scaffold') {
-      // On small screens only allow minimal ornaments below
-      const allow = ['frame','corners','rulers'];
+      const allow = ['frame','corners','rulers','brackets','reg','dims'];
       if (!allow.includes(actor.kind || '')) return;
     }
+    // articles: quiet only
     if (isArticle && family !== 'scaffold') {
-      // Articles: allow only quiet elements
-      const quiet = ['tape','quotes','specimen','plate','dims','reg','brackets'];
-      if (!quiet.includes(actor.kind || '') && State.density > .5) return;
+      const quiet = ['tape','quotes','specimen','plate','dims','reg','brackets','stickers'];
+      if (!quiet.includes(actor.kind || '') && State.density > .45) return;
     }
 
     State.families[family].add(actor);
     State.actors.add(actor);
-    State.nodeCount += actor.cost || 1;
+    State.nodeCount += cost;
     try { actor.mount(State.domLayer); } catch {}
   }
   function retire(actor){
@@ -433,13 +483,13 @@
 
   const A = {}; // actor factory bag
 
-  // Scaffold
+  // Scaffold (always gentle + pass-through nodes already enforced by el())
   const gridMeta = { affinity:'anywhere', complexity:2 };
   A.grid = () => {
     let node; return {
       kind:'grid', cost:1, ...gridMeta,
       mount(p){ node = el('div','mschf-grid',p); node.dataset.variant = Math.random()<.5?'dots':'lines'; },
-      update(){ if (Math.random()< .002 * State.tempo) node.dataset.variant = node.dataset.variant==='dots'?'lines':'dots'; },
+      update(){ if (Math.random()< .0015 * State.tempo) node.dataset.variant = node.dataset.variant==='dots'?'lines':'dots'; },
       node
     };
   };
@@ -449,7 +499,7 @@
     let node; return {
       kind:'frame', cost:1, ...frameMeta,
       mount(p){ node = el('div','mschf-frame',p); },
-      update(t){ node.style.setProperty('--mschf-glow', (0.12 + Math.sin(t/2200)*0.05*State.tempo).toFixed(3)); },
+      update(t){ node.style.setProperty('--mschf-glow', (0.10 + Math.sin(t/2600)*0.04*State.tempo).toFixed(3)); },
       node
     };
   };
@@ -477,13 +527,13 @@
     let node; return {
       kind:'scan', cost:1, ...scanMeta,
       mount(p){ node = el('div','mschf-scanline',p); if (State.reduceMotion) node.classList.add('static'); },
-      update(){ if (!State.reduceMotion && Math.random()<0.002) node.classList.toggle('static', Math.random()<0.5); },
+      update(){ if (!State.reduceMotion && Math.random()<0.0015) node.classList.toggle('static', Math.random()<0.5); },
       node
     };
   };
   A.scanline.meta = scanMeta;
 
-  // Ephemera
+  // Ephemera (mostly gutters/corners)
   const TAPE_LEX = [
     '"KEEP OFF"','"FOR RESEARCH ONLY"','"SANDBOX"','"SPECIMEN"','"ARCHIVE"','"EVIDENCE"','"PROTOTYPE"',
     '"ALPHA"','"BETA"','"RC1"','"NIGHTLY"','"CANARY"','"WIP"','"READ ONLY"','"NO INDEX"',
@@ -498,18 +548,18 @@
         node = el('div','mschf-tape',p);
         node.classList.add(pick(['tone-a','tone-b','tone-c']));
         node.textContent = `${pick(TAPE_LEX)} • RIG-${Math.floor(Math.random()*0xffff).toString(16).padStart(4,'0').toUpperCase()}`;
-        if (Math.random() < (/(bold|loud|storm)/.test(State.mood)?0.4:0.18)) node.dataset.hazard='1';
-        if (Math.random() < 0.16) node.dataset.clear='1';
-        const wvw = Math.round(28 + Math.random()*52);
-        const h = 26 + Math.random()*12;
+        if (Math.random() < (/(bold|loud|storm)/.test(State.mood)?0.35:0.15)) node.dataset.hazard='1';
+        if (Math.random() < 0.14) node.dataset.clear='1';
+        const wvw = Math.round(24 + Math.random()*44);
+        const h = 24 + Math.random()*10;
         rect = findSpot(innerWidth*(wvw/100), h, this.affinity);
-        const rot = (Math.random()-0.5) * (/(loud|storm)/.test(State.mood)?14:6);
-        css(node,{ top:rect.y+'px', left:rect.x+'px', width:wvw+'vw', transform:`rotate(${rot}deg)`, opacity: State.mood==='calm'?'.20':'.32' });
+        const rot = (Math.random()-0.5) * (/(loud|storm)/.test(State.mood)?12:5);
+        css(node,{ top:rect.y+'px', left:rect.x+'px', width:wvw+'vw', transform:`rotate(${rot}deg)`, opacity: State.mood==='calm'?'.18':'.28' });
       },
       update(_t,dt){
         if (State.tiers.xs) return;
-        rect.x = clamp(rect.x + (Math.random()-0.5)*0.35*State.tempo, 0, innerWidth - node.offsetWidth);
-        rect.y = clamp(rect.y + (Math.random()-0.5)*0.25*State.tempo, 0, innerHeight - node.offsetHeight);
+        rect.x = clamp(rect.x + (Math.random()-0.5)*0.28*State.tempo, 0, innerWidth - (node.offsetWidth||0));
+        rect.y = clamp(rect.y + (Math.random()-0.5)*0.20*State.tempo, 0, innerHeight - (node.offsetHeight||0));
         node.style.left = rect.x+'px'; node.style.top = rect.y+'px';
         life -= dt * 0.00005 * (0.6 + State.tempo);
         if (life < 0) this.dead = true;
@@ -519,7 +569,8 @@
     };
   };
   A.tape.meta = tapeMeta;
-  const STAMPS = ['LAB DROP','EXPERIMENTAL','UNSTABLE','READ ONLY','DECLASSIFIED','NONCANON','FOR INTERNAL USE','RETRY','RECALIBRATE','ARCHIVE ONLY'];
+
+  const STAMPS = ['LAB DROP','EXPERIMENTAL','UNSTABLE','READ ONLY','DECLASSIFIED','NONCANON','INTERNAL','RETRY','RECALIBRATE','ARCHIVE ONLY'];
   const stampMeta = { affinity:'corners', complexity:2 };
   A.stamp = () => {
     let node; return {
@@ -527,7 +578,7 @@
       mount(p){
         node = el('div','mschf-stamp',p); node.textContent = pick(STAMPS);
         const pos = pick(['top-right','top-left','bottom-right','bottom-left']);
-        const rot = (Math.random()-0.5)*12, ix=6+Math.floor(Math.random()*14), iy=8+Math.floor(Math.random()*16);
+        const rot = (Math.random()-0.5)*10, ix=6+Math.floor(Math.random()*14), iy=8+Math.floor(Math.random()*16);
         const s={ transform:`rotate(${rot}deg)` };
         if (pos.includes('top')) s.top=iy+'%'; else s.bottom=iy+'%';
         if (pos.includes('right')) s.right=ix+'%'; else s.left=ix+'%';
@@ -537,6 +588,7 @@
     };
   };
   A.stamp.meta = stampMeta;
+
   const quotesMeta = { affinity:'anywhere', complexity:1 };
   A.quotes = () => {
     let node; return {
@@ -544,16 +596,17 @@
       mount(p){
         node = el('div','mschf-quotes',p);
         const idtail = Math.random().toString(36).slice(2,5).toUpperCase();
-        node.textContent = `${pick(['"OBJECT"','"INTERFACE"','"ARTIFACT"','"SYSTEM"','"SPECIMEN"','"KNOWLEDGE"','"SANDBOX"','"SIMULATION"','"VECTOR"','"EMBEDDING"','"RAG"','"EVAL"'])} • ${idtail}`;
+        node.textContent = `${pick(['"OBJECT"','"INTERFACE"','"ARTIFACT"','"SYSTEM"','"SPECIMEN"','"SANDBOX"','"VECTOR"','"EMBEDDING"','"RAG"','"EVAL"'])} • ${idtail}`;
         const side = Math.random()<0.5?'right':'left', vertical = Math.random()<0.3?'top':'bottom';
         const offX = 12 + Math.floor(Math.random()*24), offY = 10 + Math.floor(Math.random()*18);
         const s={}; if(side==='right') s.right=offX+'px'; else s.left=offX+'px'; if(vertical==='top') s.top=offY+'px'; else s.bottom=offY+'px';
-        s.transform = `rotate(${(Math.random()-0.5)*2.2}deg)`; css(node,s);
+        s.transform = `rotate(${(Math.random()-0.5)*2.0}deg)`; css(node,s);
       },
       node
     };
   };
   A.quotes.meta = quotesMeta;
+
   const plateMeta = { affinity:'gutters', complexity:3 };
   A.plate = () => {
     let node, code; return {
@@ -569,6 +622,7 @@
     };
   };
   A.plate.meta = plateMeta;
+
   const specimenMeta = { affinity:'gutters', complexity:2 };
   A.specimen = () => {
     let node; return {
@@ -607,15 +661,16 @@
     };
   };
   A.callout.meta = calloutMeta;
+
   const graphMeta = { affinity:'gutters', complexity:5 };
   A.graph = () => {
     let cluster, nodes=[], edges=[]; return {
       kind:'graph', cost:2, ...graphMeta,
       mount(p){
         cluster = el('div','mschf-graph',p);
-        const n = 5 + Math.floor(Math.random()*(/(loud|storm)/.test(State.mood)?12:8));
+        const n = 4 + Math.floor(Math.random()*(/(loud|storm)/.test(State.mood)?8:6));
         for (let i=0;i<n;i++){ const s=el('span','mschf-graph-node',cluster); s.style.setProperty('--x', `${Math.random()*100}vw`); s.style.setProperty('--y', `${Math.random()*100}vh`); nodes.push(s); }
-        const m = 3 + Math.floor(Math.random()*5);
+        const m = 2 + Math.floor(Math.random()*4);
         for (let i=0;i<m;i++){ const e=el('i','mschf-graph-edge',cluster); e.style.setProperty('--x1', `${Math.random()*100}vw`); e.style.setProperty('--y1', `${Math.random()*100}vh`); e.style.setProperty('--x2', `${Math.random()*100}vw`); e.style.setProperty('--y2', `${Math.random()*100}vh`); edges.push(e); }
       },
       update(){
@@ -623,11 +678,11 @@
         for (const s of nodes){
           const x = parseFloat((s.style.getPropertyValue('--x')||'0vw')) || Math.random()*100;
           const y = parseFloat((s.style.getPropertyValue('--y')||'0vh')) || Math.random()*100;
-          const nx = clamp(x + (Math.random()-.5)*.6*State.tempo, 0, 100);
-          const ny = clamp(y + (Math.random()-.5)*.6*State.tempo, 0, 100);
+          const nx = clamp(x + (Math.random()-.5)*.5*State.tempo, 0, 100);
+          const ny = clamp(y + (Math.random()-.5)*.5*State.tempo, 0, 100);
           s.style.setProperty('--x', `${nx}vw`); s.style.setProperty('--y', `${ny}vh`);
         }
-        if (Math.random()<0.02*State.tempo){
+        if (Math.random()<0.015*State.tempo){
           const e = pick(edges); if (e){ e.style.setProperty('--x2', `${Math.random()*100}vw`); e.style.setProperty('--y2', `${Math.random()*100}vh`); }
         }
       },
@@ -635,26 +690,23 @@
     };
   };
   A.graph.meta = graphMeta;
+
   const ringsMeta = { affinity:'anywhere', complexity:2 };
-  A.ringsDOM = () => { // fallback if GPU disabled
-    let node; return {
-      kind:'rings', cost:1, ...ringsMeta,
-      mount(p){ node = el('div','mschf-rings',p); if (State.reduceMotion) node.classList.add('static'); const s = 120 + Math.floor(Math.random()*220); css(node,{ left:`${10+Math.random()*80}%`, top:`${10+Math.random()*70}%`, width:s+'px', height:s+'px' }); },
-      node
-    };
-  };
+  A.ringsDOM = () => { let node; return { kind:'rings', cost:1, ...ringsMeta, mount(p){ node = el('div','mschf-rings',p); if (State.reduceMotion) node.classList.add('static'); const s = 110 + Math.floor(Math.random()*200); css(node,{ left:`${10+Math.random()*80}%`, top:`${10+Math.random()*70}%`, width:s+'px', height:s+'px' }); }, node }; };
   A.ringsDOM.meta = ringsMeta;
   const topoMeta = { affinity:'anywhere', complexity:3 };
-  A.topoDOM = () => { let node; return { kind:'topo', cost:1, ...topoMeta, mount(p){ node=el('div','mschf-topo',p); node.style.setProperty('--rot', `${Math.floor((Math.random()-0.5)*30)}deg`); }, node }; };
+  A.topoDOM = () => { let node; return { kind:'topo', cost:1, ...topoMeta, mount(p){ node=el('div','mschf-topo',p); node.style.setProperty('--rot', `${Math.floor((Math.random()-0.5)*24)}deg`); }, node }; };
   A.topoDOM.meta = topoMeta;
   const halftoneMeta = { affinity:'anywhere', complexity:3 };
   A.halftone = () => { let node; return { kind:'halftone', cost:1, ...halftoneMeta, mount(p){ node=el('div','mschf-halftone '+pick(['tl','tr','bl','br']),p); }, node }; };
   A.halftone.meta = halftoneMeta;
+
   const perfMeta = { affinity:'gutters', complexity:2 };
   A.perf = () => { let node; return { kind:'perf', cost:1, ...perfMeta, mount(p){ node=el('div','mschf-perf',p); node.dataset.side = pick(['top','bottom','left','right']); }, node }; };
   A.perf.meta = perfMeta;
+
   const starMeta = { affinity:'anywhere', complexity:4 };
-  A.starfieldDOM = () => { let node; return { kind:'stars', cost:1, ...starMeta, mount(p){ node=el('div','mschf-stars',p); node.style.setProperty('--density', `${0.15 + Math.random()*0.35}`); }, node }; };
+  A.starfieldDOM = () => { let node; return { kind:'stars', cost:1, ...starMeta, mount(p){ node=el('div','mschf-stars',p); node.style.setProperty('--density', `${0.12 + Math.random()*0.25}`); }, node }; };
   A.starfieldDOM.meta = starMeta;
 
   // Frame & stickers
@@ -668,7 +720,7 @@
   A.watermark = () => { let node; return { kind:'watermark', cost:1, ...watermarkMeta, mount(p){ node=el('div','mschf-watermark',p); node.textContent='EFFUSION LABS • PROTOTYPE • '; }, node }; };
   A.watermark.meta = watermarkMeta;
   const flowersMeta = { affinity:'anywhere', complexity:2 };
-  A.flowers = () => { const nodes=[]; return { kind:'flowers', cost:1, ...flowersMeta, mount(p){ const n=1+Math.floor(Math.random()*(/(loud|storm)/.test(State.mood)?3:2)); for(let i=0;i<n;i++){ const fl=el('div','mschf-flower',p); const s=38+Math.floor(Math.random()*32), x=10+Math.floor(Math.random()*80), y=10+Math.floor(Math.random()*70); css(fl,{ width:s+'px', height:s+'px', left:x+'%', top:y+'%', transform:`rotate(${Math.floor((Math.random()-0.5)*180)}deg)` }); nodes.push(fl);} }, node:{ remove(){ nodes.forEach(n=>n.remove()); } } }; };
+  A.flowers = () => { const nodes=[]; return { kind:'flowers', cost:1, ...flowersMeta, mount(p){ const n=1+Math.floor(Math.random()*(/(loud|storm)/.test(State.mood)?2:1)); for(let i=0;i<n;i++){ const fl=el('div','mschf-flower',p); const s=34+Math.floor(Math.random()*26), x=10+Math.floor(Math.random()*80), y=10+Math.floor(Math.random()*70); css(fl,{ width:s+'px', height:s+'px', left:x+'%', top:y+'%', transform:`rotate(${Math.floor((Math.random()-0.5)*160)}deg)` }); nodes.push(fl);} }, node:{ remove(){ nodes.forEach(n=>n.remove()); } } }; };
   A.flowers.meta = flowersMeta;
   const holoMeta = { affinity:'gutters', complexity:4 };
   A.holo = () => { let node; return { kind:'holo', cost:1, ...holoMeta, mount(p){ node=el('div','mschf-holo',p); if (State.reduceMotion) node.classList.add('static'); }, node }; };
@@ -700,14 +752,14 @@
         const corner = pick(['br','bl','tr','tl']); const off = 18 + Math.floor(Math.random()*18);
         const s={}; if (corner.includes('b')) s.bottom=off+'px'; else s.top=off+'px'; if (corner.includes('r')) s.right=off+'px'; else s.left=off+'px'; css(cluster,s);
         const badges = ['ALPHA','BETA','RC1','SIGNED','VOID','UNLOCKED','PASS','LAB','SIM','ARCHIVE','SANDBOX','RAG','EVAL','GRAPH','SPARK','VECTOR','EMBED','SPECIMEN','PROTO'];
-        const n = 2 + Math.floor(Math.random()*4);
+        const n = 2 + Math.floor(Math.random()*3);
         for (let i=0;i<n;i++){
           const b = el('span','mschf-badge',cluster); b.textContent = pick(badges);
           pick([()=>{ b.style.fontSize='10px'; b.style.padding='5px 7px'; },()=>{ b.style.fontSize='11px'; b.style.padding='6px 8px'; },()=>{ b.style.fontSize='12px'; b.style.padding='7px 9px'; }])();
-          b.style.setProperty('--rx', `${Math.floor((Math.random()-0.5)*18)}deg`);
-          b.style.setProperty('--offx', `${Math.floor((Math.random()-0.5)*18)}px`);
-          b.style.setProperty('--offy', `${Math.floor((Math.random()-0.5)*12)}px`);
-          if (Math.random() < .25) b.style.boxShadow='0 0 0 1px color-mix(in oklab, currentColor 35%, transparent), 0 10px 18px rgba(0,0,0,.35)';
+          b.style.setProperty('--rx', `${Math.floor((Math.random()-0.5)*16)}deg`);
+          b.style.setProperty('--offx', `${Math.floor((Math.random()-0.5)*14)}px`);
+          b.style.setProperty('--offy', `${Math.floor((Math.random()-0.5)*10)}px`);
+          if (Math.random() < .22) b.style.boxShadow='0 0 0 1px color-mix(in oklab, currentColor 35%, transparent), 0 10px 18px rgba(0,0,0,.35)';
         }
       },
       node:{ remove(){ cluster.remove(); } }
@@ -726,46 +778,48 @@
     mount(A.rulers(),  'scaffold');
     if (!State.reduceMotion && !State.tiers.xs) mount(A.scanline(), 'scaffold');
 
-    // DOM fallback ornaments depending on style (GPU may add more)
+    const isArticle = !!document.querySelector('.prose,article,main .prose');
+
     const waves = {
-      collage:    () => { spawnEphemera(2,4); spawnLab(2,3); spawnFrame(2,4); },
-      structural: () => { spawnLab(2,3); spawnFrame(1,2); },
-      playful:    () => { spawnEphemera(3,5); spawnFrame(2,4); }
+      structural: () => { spawnLab(1,2); spawnFrame(1,2); if (!isArticle) spawnEphemera(1,2); },
+      collage:    () => { spawnEphemera(1,3); spawnLab(1,2); spawnFrame(1,2); },
+      playful:    () => { spawnEphemera(2,3); spawnFrame(1,2); }
     };
-    (waves[State.style] || waves.collage)();
+    (waves[State.style] || waves.structural)();
   }
 
   function spawnEphemera(min,max){
     const bag = [A.tape, A.stamp, A.quotes, A.plate, A.specimen];
-    const pool = State.readingPressure > 0.3 ? bag.filter(f => (f.meta?.complexity || 1) <= 2) : bag;
+    const pool = State.readingPressure > 0.25 ? bag.filter(f => (f.meta?.complexity || 1) <= 2) : bag;
     const n = Math.floor(lerp(min, max, State.density));
     for (let i=0;i<n;i++){ const fn = pick(pool.length?pool:bag); mount(fn(), 'ephemera'); }
   }
   function spawnLab(min,max){
     const gpuOK = !!State.app && !State.reduceData;
     const bag = gpuOK ? [A.callout, A.graph, A.perf] : [A.callout, A.graph, A.ringsDOM, A.topoDOM, A.halftone, A.perf, A.starfieldDOM];
-    const pool = State.readingPressure > 0.3 ? bag.filter(f => (f.meta?.complexity || 1) <= 3) : bag;
+    const pool = State.readingPressure > 0.25 ? bag.filter(f => (f.meta?.complexity || 1) <= 3) : bag;
     const n = Math.floor(lerp(min, max, State.density));
     for (let i=0;i<n;i++){ const fn = pick(pool.length?pool:bag); mount(fn(), 'lab'); }
   }
   function spawnFrame(min,max){
     const bag = [A.brackets, A.glitch, A.watermark, A.flowers, A.holo, A.reg, A.dims, A.stickers];
-    const pool = State.readingPressure > 0.3 ? bag.filter(f => (f.meta?.complexity || 1) <= 2) : bag;
+    const pool = State.readingPressure > 0.25 ? bag.filter(f => (f.meta?.complexity || 1) <= 2) : bag;
     const n = Math.floor(lerp(min, max, State.density));
     for (let i=0;i<n;i++){ const fn = pick(pool.length?pool:bag); mount(fn(), 'frame'); }
   }
 
   function recompose(){
     resetOccupancy(); computeContext();
+    // prune some high-complexity actors
     for (const fam of ['ephemera','lab','frame']) {
       const actors = Array.from(State.families[fam]).sort((a,b)=>(b.complexity||1)-(a.complexity||1));
-      const toRemove = Math.floor(actors.length * (0.15 + Math.random()*0.25));
+      const toRemove = Math.floor(actors.length * (0.12 + Math.random()*0.22));
       for (let i=0;i<toRemove;i++){ const a = actors[i]; if (a) retire(a); }
     }
-    const mod = State.readingPressure > 0.3 ? 0.6 : 1;
-    spawnEphemera(1, Math.round(5*State.density*mod));
-    spawnLab(1, Math.round((4*State.density + (/(storm)/.test(State.mood)?2:0))*mod));
-    spawnFrame(1, Math.round(5*State.density*mod));
+    const mod = State.readingPressure > 0.25 ? 0.55 : 0.95;
+    spawnEphemera(1, Math.round(4*State.density*mod));
+    spawnLab(1, Math.round((3*State.density + (/(storm)/.test(State.mood)?1:0))*mod));
+    spawnFrame(1, Math.round(4*State.density*mod));
   }
 
   function rareMoment(){
@@ -777,9 +831,11 @@
   }
 
   function degradeDensity(){
+    // drop some actors and reduce target density
     const fams = ['lab','frame','ephemera'];
+    State.density = Math.max(.18, State.density - 0.06);
     for (const fam of fams) {
-      const n = Math.ceil(State.families[fam].size * 0.25);
+      const n = Math.ceil(State.families[fam].size * 0.3);
       for (let i=0;i<n;i++){ const a = State.families[fam].values().next().value; if (a) retire(a); }
       if (!State.fps.bad) break;
     }
@@ -793,22 +849,20 @@
     requestAnimationFrame(tick);
     const dt = t - (State._t || t); State._t = t;
 
-    // FPS sentinel
-    const S = State.fps.samples; S.push(dt); if (S.length>16) S.shift();
-    if (S.length===16){
-      const avg = S.reduce((a,b)=>a+b,0)/S.length; State.fps.bad = avg>45;
+    // FPS sentinel (sooner + gentler)
+    const S = State.fps.samples; S.push(dt); if (S.length>18) S.shift();
+    if (S.length===18){
+      const avg = S.reduce((a,b)=>a+b,0)/S.length; State.fps.bad = avg>24; // ~ < 41 FPS
       if (State.fps.bad) degradeDensity();
     }
 
     if (t - State.beats.last > State.beats.dur) State.beats.last = t;
-    if (t - State.bars.last  > State.bars.dur)  { State.bars.last = t; if (Math.random()<.75) applyMood(nextMood(State.mood)); recompose(); if (Math.random()<.08) rareMoment(); }
+    if (t - State.bars.last  > State.bars.dur)  { State.bars.last = t; if (Math.random()<.7) applyMood(nextMood(State.mood)); recompose(); if (Math.random()<.06) rareMoment(); }
 
-    // DOM actors
     for (const a of Array.from(State.actors)) {
       try { a.update && a.update(t, dt); } catch {}
       if (a.dead) retire(a);
     }
-    // GPU
     GPU.step(t);
   }
 
@@ -846,13 +900,17 @@
   // ————————————————————————————————————————
   async function boot(){
     mountRoot(); computeTiers(); computeContext(); resetOccupancy();
-    applyMood(State.mood);
 
-    // GPU init (only on MD+ and if not reduced-data)
-    if (!State.tiers.xs && !State.tiers.sm && !State.reduceData) {
+    // GPU init (LG only, not reduced-data, and avoid truly weak CPUs)
+    const weakCPU = navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4;
+    if (!State.tiers.xs && !State.tiers.sm && !State.reduceData && !weakCPU) {
       State.app = await GPU.init();
     }
 
+    // Prefer structural on obvious reading pages
+    if (document.querySelector('.prose,article,main .prose') && State.style === 'collage') State.style = 'structural';
+
+    applyMood(State.mood);
     composeInitial();
     wireSections();
     requestAnimationFrame(tick);
@@ -863,8 +921,8 @@
   document.addEventListener('visibilitychange', onVisibility, false);
 
   // Reduced motion/data immediate adjustments
-  if (State.reduceMotion) State.density = Math.min(State.density, .5);
-  if (State.reduceData)   State.density = Math.min(State.density, .45);
+  if (State.reduceMotion) State.density = Math.min(State.density, .45);
+  if (State.reduceData)   State.density = Math.min(State.density, .4);
 
   // Start
   if (document.readyState === 'complete' || document.readyState === 'interactive') requestAnimationFrame(boot);
@@ -876,6 +934,8 @@
   window.__mschfOff = () => { localStorage.setItem('mschf:off','1'); try{ State.root?.remove(); }catch{} };
   window.__mschfOn  = () => { localStorage.removeItem('mschf:off'); location.reload(); };
   window.__mschfPulse = () => rareMoment();
-  window.__mschfMood  = (m) => { if (moods.includes(m)) applyMood(m); };
-  window.__mschfDensity = (x) => { State.density = clamp(+x||State.density, .1, .96); recompose(); };
+  window.__mschfMood  = (m) => { if (['calm','lite','bold','loud','storm','studio'].includes(m)) applyMood(m); };
+  window.__mschfDensity = (x) => { State.density = clamp(+x||State.density, .1, .9); recompose(); };
+  window.__mschfMask = (on=1) => { State.gpu.maskOn = !!(+on); GPU.updateMask(); };
+  window.__mschfAlpha = (x) => { State.alpha = clamp(+x||State.alpha, 0.3, 1.0); if(State.root) State.root.style.opacity = State.alpha; };
 })();
