@@ -874,12 +874,19 @@
     const cta  = document.querySelector('.map-cta,[class*="map-cta"],[data-component~="map-cta"]');
     const feed = document.querySelector('.work-feed,[data-component~="work-feed"]');
 
+    // Observe once per section: prevent repeated mounts when crossing thresholds
     const io = new IntersectionObserver((entries)=>{
       for (const e of entries){
         if (!e.isIntersecting) continue;
+        // Skip if we've already handled this target
+        if (e.target?.dataset?.mschfSeen === '1') { io.unobserve(e.target); continue; }
+
         if (hero && e.target===hero) { mount(A.ringsDOM(),'lab'); mount(A.quotes(),'ephemera'); }
         if (cta && e.target===cta)   { mount(A.plate(),'ephemera'); rareMoment(); }
         if (feed && e.target===feed) { mount(A.stickers(),'frame'); mount(A.dims(),'frame'); }
+
+        // Mark handled and stop observing to avoid duplicate mounts
+        try { e.target.dataset.mschfSeen = '1'; io.unobserve(e.target); } catch {}
       }
     }, { rootMargin:'0px 0px -20% 0px', threshold:[0.25, 0.6] });
 
