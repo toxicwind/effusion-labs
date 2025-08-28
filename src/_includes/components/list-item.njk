@@ -2,26 +2,28 @@
 <a
   href="{{ item.url }}"
   aria-label="{{ item.data.title }}"
-  class="block rounded-xl hb-tile bg-base-100/80 backdrop-blur p-6 shadow-sm
-         transition hover:-translate-y-0.5
-         focus:outline-none focus-visible:ring focus-visible:ring-primary/40"
+  class="card card-border bg-base-100/80 backdrop-blur transition hover:-translate-y-0.5 hover:shadow-xl focus:outline-none focus-visible:ring focus-visible:ring-primary/40"
 >
-  <div class="flex items-center justify-between">
-    <h3 class="font-heading text-lg text-base-content">{{ item.data.title }}</h3>
-    {% if item.date | isNew %}
-    <span class="pill pill--new" aria-label="New item">New</span>
+  <div class="card-body">
+    <div class="flex items-center justify-between">
+      <h3 class="card-title font-heading text-base-content">{{ item.data.title }}</h3>
+      {% if item.date | isNew %}
+      <span class="pill pill--new" aria-label="New item">New</span>
+      {% endif %}
+    </div>
+    {% if item.data.description %}
+      <p class="text-base-content/80">{{ item.data.description | truncate(120) }}</p>
     {% endif %}
-  </div>
-  {% if item.data.description %}
-  <p class="mt-1 text-sm text-base-content/80">{{ item.data.description | truncate(120) }}</p>
-  {% endif %}
-  <div class="mt-2 flex items-center justify-between text-xs text-base-content/70">
-    {% if item.data.type %}
-    <span class="capitalize">{{ item.data.type }}{% if item.data.status %} [{{ item.data.status }}]{% endif %}</span>
-    {% elif item.data.status %}
-    <span>[{{ item.data.status }}]</span>
-    {% endif %}
-    {% if item.date %}<time datetime="{{ item.date | htmlDateString }}">{{ item.date | readableDate }}</time>{% endif %}
+    <div class="mt-1 flex items-center justify-between text-xs text-base-content/70">
+      {% if item.data.type %}
+        <span class="capitalize">{{ item.data.type }}{% if item.data.status %} [{{ item.data.status }}]{% endif %}</span>
+      {% elif item.data.status %}
+        <span>[{{ item.data.status }}]</span>
+      {% endif %}
+      {% if item.date %}
+        <time datetime="{{ item.date | htmlDateString }}">{{ item.date | readableDate }}</time>
+      {% endif %}
+    </div>
   </div>
 </a>
 {% endmacro %}

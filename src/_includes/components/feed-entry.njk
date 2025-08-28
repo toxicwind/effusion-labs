@@ -1,30 +1,25 @@
 {# Feed entry: convert to a daisyUI-flavored cardish anchor #}
 {% macro feedEntry(item) -%}
 <li data-type="{{ item.type }}">
-  <a
-    href="{{ item.url }}"
-    class="group block rounded-xl border border-base-content/15 bg-base-100/80 backdrop-blur transition
-           hover:-translate-y-1 hover:shadow-xl hover:border-primary/50
-           focus:outline-none focus-visible:ring focus-visible:ring-primary/40"
-  >
-    <div class="flex items-start justify-between">
-      <span class="pill pill--ghost">{{ item.type | capitalize }}</span>
-      {% if item.date %}
-        <time datetime="{{ item.date.toISOString() }}" class="text-[0.7rem] opacity-90">
-          {{ item.date.toISOString().slice(0, 10) }}
-        </time>
+  <a href="{{ item.url }}" class="card card-border bg-base-100/80 backdrop-blur transition hover:-translate-y-1 hover:shadow-xl focus:outline-none focus-visible:ring focus-visible:ring-primary/40">
+    <div class="card-body">
+      <div class="flex items-start justify-between">
+        <span class="pill pill--ghost">{{ item.type | capitalize }}</span>
+        {% if item.date %}
+          <time datetime="{{ item.date.toISOString() }}" class="text-[0.7rem] opacity-90">
+            {{ item.date.toISOString().slice(0, 10) }}
+          </time>
+        {% endif %}
+      </div>
+      <h3 class="card-title font-heading text-base-content group-hover:text-primary transition-colors">
+        {{ item.data.title }}
+      </h3>
+      {% if item.data.description %}
+        <p class="text-sm text-base-content/90 line-clamp-2">
+          {{ item.data.description | truncate(140, true, '…') }}
+        </p>
       {% endif %}
     </div>
-
-    <h3 class="mt-2 font-heading text-lg text-base-content group-hover:text-primary transition-colors">
-      {{ item.data.title }}
-    </h3>
-
-    {% if item.data.description %}
-      <p class="mt-2 text-sm text-base-content/90 line-clamp-2">
-        {{ item.data.description | truncate(140, true, '…') }}
-      </p>
-    {% endif %}
   </a>
 </li>
 {%- endmacro %}
