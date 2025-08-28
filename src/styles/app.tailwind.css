@@ -273,6 +273,13 @@
   .external-link:hover{ color: hsl(var(--pf)); }
 }
 
+/* Prose-only link hover: underline just the hovered link (not all) */
+@layer components {
+  .prose a { text-decoration: none; text-underline-offset: 2px; }
+  .prose a:hover { text-decoration: underline; }
+  .prose a:focus-visible { text-decoration: underline; outline: none; }
+}
+
 /* Callout */
 @layer components {
   .callout { @apply relative w-full rounded-xl border p-4 md:p-5 shadow-sm; background-color: hsl(var(--b1)); border-color: hsl(var(--bc)/.14); color: hsl(var(--bc)); }
