@@ -1,6 +1,12 @@
 {
+  "id": "/",
   "name": "Effusion Labs",
   "short_name": "Effusion",
+  "description": "Autonomous Aesthetic Engine — Effusion Labs.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
   "icons": [
     {
       "src": "/web-app-manifest-192x192.png",
@@ -15,7 +21,6 @@
       "purpose": "maskable"
     }
   ],
-  "theme_color": "#ffffff",
-  "background_color": "#ffffff",
-  "display": "standalone"
+  "theme_color": "#0b0b0e",
+  "background_color": "#0b0b0e"
 }
