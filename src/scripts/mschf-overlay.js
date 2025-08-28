@@ -1038,7 +1038,7 @@
         C.io++;
         DEBUG && log('io fired', { which: e.target === hero ? 'hero' : e.target === cta ? 'cta' : e.target === feed ? 'feed' : 'unknown', count: C.io });
         if (hero && e.target===hero) { mount(A.ringsDOM(),'lab'); mount(A.quotes(),'ephemera'); }
-        if (cta && e.target===cta)   { mount(A.plate(),'ephemera'); rareMoment(); }
+        if (cta && e.target===cta)   { mount(A.plate(),'ephemera'); if (State.config.rare) rareMoment(); }
         if (feed && e.target===feed) { mount(A.stickers(),'frame'); mount(A.dims(),'frame'); }
 
         // Mark handled and stop observing to avoid duplicate mounts
