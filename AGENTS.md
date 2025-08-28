@@ -1,7 +1,3 @@
-Of course. Here is the finalized `agents.md` document, updated to include the new **Background Process Management** capabilities (`hype_bg`, `hype_kill`, `hype_status`) in the Tactical Toolkit section.
-
------
-
 ## BEGIN OF AGENTS.md - HYPEBRUT Operating Rails — Effusion Labs
 
 *Operating system for the Autonomous Aesthetic Engine. Your creative nervous system.*
