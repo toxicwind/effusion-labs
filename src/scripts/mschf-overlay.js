@@ -901,22 +901,51 @@
     DEBUG && group('recompose');
     C.recompose++;
     resetOccupancy(); computeContext();
+    const sizes = {
+      ephemera: State.families.ephemera.size,
+      lab:      State.families.lab.size,
+      frame:    State.families.frame.size,
+    };
     DEBUG && log('pre-prune sizes', {
-      scaffold: State.families.scaffold.size, ephemera: State.families.ephemera.size, lab: State.families.lab.size, frame: State.families.frame.size,
+      scaffold: State.families.scaffold.size,
+      ephemera: sizes.ephemera,
+      lab:      sizes.lab,
+      frame:    sizes.frame,
       caps: { ...State.caps }, density: State.density, readingPressure: State.readingPressure
     });
-    // prune some high-complexity actors
-    for (const fam of ['ephemera','lab','frame']) {
+
+    // Compute stable targets per family based on caps, density, and reading pressure.
+    const d = clamp(State.density, 0.2, 0.9);
+    const pressureMod = State.readingPressure > 0.25 ? 0.6 : 1.0; // quieter when reading
+    const want = {
+      ephemera: Math.min(State.caps.ephemera, Math.round(lerp(1, State.caps.ephemera, d) * pressureMod)),
+      lab:      Math.min(State.caps.lab,      Math.round(lerp(1, State.caps.lab,      d) * pressureMod)),
+      frame:    Math.min(State.caps.frame,    Math.round(lerp(1, State.caps.frame,    d) * pressureMod)),
+    };
+
+    // Prefer to shed high-complexity actors when above target.
+    for (const fam of ['ephemera','lab','frame']){
+      const have = sizes[fam];
+      const needToRemove = Math.max(0, have - want[fam]);
+      if (!needToRemove) continue;
       const actors = Array.from(State.families[fam]).sort((a,b)=>(b.complexity||1)-(a.complexity||1));
-      const toRemove = Math.floor(actors.length * (0.12 + Math.random()*0.22));
-      for (let i=0;i<toRemove;i++){ const a = actors[i]; if (a) retire(a); }
+      for (let i=0;i<needToRemove;i++){ const a = actors[i]; if (a) retire(a); }
+      sizes[fam] -= needToRemove;
     }
-    const mod = State.readingPressure > 0.25 ? 0.55 : 0.95;
-    spawnEphemera(1, Math.round(4*State.density*mod));
-    spawnLab(1, Math.round((3*State.density + (/(storm)/.test(State.mood)?1:0))*mod));
-    spawnFrame(1, Math.round(4*State.density*mod));
+
+    // Top up gently to targets (idempotent: does nothing once at/over target)
+    const addEphemera = Math.max(0, want.ephemera - sizes.ephemera);
+    const addLab      = Math.max(0, want.lab      - sizes.lab);
+    const addFrame    = Math.max(0, want.frame    - sizes.frame);
+    if (addEphemera) spawnEphemera(addEphemera, addEphemera);
+    if (addLab)      spawnLab(addLab, addLab);
+    if (addFrame)    spawnFrame(addFrame, addFrame);
+
     DEBUG && log('post-recompose sizes', {
-      scaffold: State.families.scaffold.size, ephemera: State.families.ephemera.size, lab: State.families.lab.size, frame: State.families.frame.size,
+      scaffold: State.families.scaffold.size,
+      ephemera: State.families.ephemera.size,
+      lab:      State.families.lab.size,
+      frame:    State.families.frame.size,
       nodeCount: State.nodeCount
     });
     DEBUG && groupEnd();
