@@ -3,8 +3,14 @@
 <li data-type="{{ item.type }}">
   <a href="{{ item.url }}" class="group card card-border rounded-xl border-primary/60 ring-1 ring-primary/20 bg-base-100/80 backdrop-blur bg-gradient-to-br from-primary/5 to-transparent transition hover:-translate-y-1 hover:shadow-xl focus:outline-none focus-visible:ring focus-visible:ring-primary/40 p-6 text-left">
     <div class="card-body">
+      {% set t = (item.type or item.data.type) | lower %}
+      {% set typeClass = 'pill--meta' %}
+      {% if t == 'project' %}{% set typeClass = 'pill--project' %}
+      {% elif t == 'concept' %}{% set typeClass = 'pill--concept' %}
+      {% elif t == 'spark' %}{% set typeClass = 'pill--spark' %}
+      {% elif t == 'meta' %}{% set typeClass = 'pill--meta' %}{% endif %}
       <div class="flex items-start justify-between">
-        <span class="pill pill--ghost">{{ item.type | capitalize }}</span>
+        <span class="pill {{ typeClass }}">{{ item.type | capitalize }}</span>
         {% if item.date %}
           <time datetime="{{ item.date.toISOString() }}" class="text-[0.7rem] opacity-90">
             {{ item.date.toISOString().slice(0, 10) }}

@@ -343,15 +343,28 @@
   .market-table th { @apply bg-slate-100 font-semibold dark:bg-slate-800; }
 }
 
-/* Pills: compose DaisyUI badges for consistent chips */
+/* Pills: composed on DaisyUI badges, but with a softer fill tuned to theme tokens */
 @layer components {
-  .pill { @apply badge badge-xs uppercase tracking-wider font-semibold; }
-  /* Make NEW a solid primary by default for visibility */
-  .pill--new { @apply badge-primary; }
+  .pill { @apply badge badge-xs uppercase tracking-wider font-semibold rounded-full; }
   .pill--ghost { @apply badge-ghost; }
   .pill--ok { @apply badge-success; }
   .pill--warn { @apply badge-warning; }
   .pill--error { @apply badge-error; }
+
+  /* Map types → theme tokens (no heavy solid backgrounds) */
+  .pill--project { --badge-color: var(--color-primary); --badge-fg: var(--color-primary-content); }
+  .pill--concept { --badge-color: var(--color-info);    --badge-fg: var(--color-info-content); }
+  .pill--spark   { --badge-color: var(--color-warning); --badge-fg: var(--color-warning-content); }
+  .pill--meta    { --badge-color: var(--color-neutral); --badge-fg: var(--color-neutral-content); }
+  .pill--new     { --badge-color: var(--color-primary); --badge-fg: var(--color-primary-content); }
+
+  /* Soft-fill treatment for readability on both nord/sunset */
+  .pill-soft, .pill--project, .pill--concept, .pill--spark, .pill--meta, .pill--new {
+    @apply badge-outline; /* keep border radius/height consistent */
+    background-color: color-mix(in oklab, var(--badge-color, hsl(var(--p))) 14%, transparent);
+    border-color: color-mix(in oklab, var(--badge-color, hsl(var(--p))) 48%, transparent);
+    color: color-mix(in oklab, var(--badge-color, hsl(var(--p))) 85%, white 15%);
+  }
 }
 
 /* Tailwind v4 content discovery */

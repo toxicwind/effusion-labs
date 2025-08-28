@@ -5,23 +5,24 @@
   class="group card card-border rounded-xl border-primary/60 ring-1 ring-primary/20 bg-base-100/80 backdrop-blur bg-gradient-to-br from-primary/5 to-transparent transition hover:-translate-y-0.5 hover:shadow-xl focus:outline-none focus-visible:ring focus-visible:ring-primary/40 p-6 text-left"
 >
   <div class="card-body">
-    <div class="flex items-center justify-between">
-      <h3 class="card-title font-heading text-base-content group-hover:text-primary transition-colors">{{ item.data.title }}</h3>
-      {% if item.date | isNew %}
-      <span class="pill pill--new" aria-label="New item">New</span>
-      {% endif %}
+    {% set t = (item.data.type or item.type) | lower %}
+    {% set typeClass = 'pill--meta' %}
+    {% if t == 'project' %}{% set typeClass = 'pill--project' %}
+    {% elif t == 'concept' %}{% set typeClass = 'pill--concept' %}
+    {% elif t == 'spark' %}{% set typeClass = 'pill--spark' %}
+    {% elif t == 'meta' %}{% set typeClass = 'pill--meta' %}{% endif %}
+    <div class="flex items-start justify-between">
+      {% if item.data.type %}<span class="pill {{ typeClass }}">{{ item.data.type | capitalize }}</span>{% endif %}
+      {% if item.date %}<time datetime="{{ item.date | htmlDateString }}" class="text-[0.7rem] opacity-90">{{ item.date | readableDate }}</time>{% endif %}
     </div>
+    <h3 class="card-title font-heading text-base-content group-hover:text-primary transition-colors">{{ item.data.title }}</h3>
+    {% if item.date | isNew %}<span class="sr-only">New</span>{% endif %}
     {% if item.data.description %}
       <p class="text-sm text-base-content/90">{{ item.data.description | truncate(120) }}</p>
     {% endif %}
     <div class="mt-1 flex items-center justify-between text-xs text-base-content/70">
-      {% if item.data.type %}
-        <span class="capitalize">{{ item.data.type }}{% if item.data.status %} [{{ item.data.status }}]{% endif %}</span>
-      {% elif item.data.status %}
-        <span>[{{ item.data.status }}]</span>
-      {% endif %}
-      {% if item.date %}
-        <time datetime="{{ item.date | htmlDateString }}">{{ item.date | readableDate }}</time>
+      {% if item.data.status %}
+        <span class="capitalize">[{{ item.data.status }}]</span>
       {% endif %}
     </div>
   </div>
