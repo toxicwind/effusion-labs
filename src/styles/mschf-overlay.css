@@ -297,13 +297,26 @@
 .mschf-dims{
   position:fixed; pointer-events:none; color: color-mix(in oklab, currentColor 85%, #fff 15%);
   top: var(--y); left: 0; right: 0;
-  font:700 10px/1 ui-monospace, Menlo, monospace; letter-spacing:.06em; text-shadow: 0 1px 0 rgba(0,0,0,.5);
+  font:700 10px/1 ui-monospace, Menlo, monospace; letter-spacing:.06em;
   padding-top:6px; padding-left: calc(var(--x1) + 10px); width: calc(var(--x2) - var(--x1));
+  opacity: var(--o, .22);
+  mix-blend-mode: screen;
 }
 .mschf-dims::before, .mschf-dims::after, .mschf-dims span{ content:""; position:fixed; top:var(--y); height:1px; background: currentColor }
 .mschf-dims::before{ left: var(--x1); right: calc(100vw - var(--x2)) }
 .mschf-dims::after{ left: var(--x1); width: 8px; transform: translateY(-6px) rotate(45deg) }
 .mschf-dims span{ right: calc(100vw - var(--x2)); width: 8px; transform: translateY(6px) rotate(-45deg) }
+
+.mschf-dims .mschf-dims-label{
+  position:fixed; top: calc(var(--y) - 16px);
+  left: calc((var(--x1) + var(--x2)) / 2);
+  transform: translateX(-50%) scale(var(--s,1));
+  padding: 3px 6px; border-radius: 6px;
+  background: color-mix(in oklab, #0c0c0c 82%, transparent);
+  border: 1px solid color-mix(in oklab, currentColor 24%, transparent);
+  color: color-mix(in oklab, currentColor 85%, #fff 15%);
+  text-shadow: 0 1px 0 rgba(0,0,0,.45);
+}
 
 /* Rulers subtle */
 .mschf-ruler-top, .mschf-ruler-left{ opacity:.18; mix-blend-mode:screen }

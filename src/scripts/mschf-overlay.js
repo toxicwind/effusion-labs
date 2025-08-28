@@ -912,16 +912,36 @@
   const regMeta = { affinity:'corners', complexity:1 };
   A.reg = () => { const nodes=[]; return { kind:'reg', cost:1, ...regMeta, mount(p){ ['tl','tr','bl','br'].forEach(pos=>nodes.push(el('div','mschf-reg '+pos,p))); }, node:{ remove(){ nodes.forEach(n=>n.remove()); } } }; };
   A.reg.meta = regMeta;
-  const dimsMeta = { affinity:'anywhere', complexity:2 };
+  const dimsMeta = { affinity:'anywhere', complexity:1 };
   A.dims = () => {
-    let node; return {
+    let node, label; return {
       kind:'dims', cost:1, ...dimsMeta,
       mount(p){
         node = el('div','mschf-dims',p);
-        const x1 = 10 + Math.floor(Math.random()*30), x2 = x1 + 20 + Math.floor(Math.random()*35), y = 20 + Math.floor(Math.random()*60);
-        node.style.setProperty('--x1', `${x1}vw`); node.style.setProperty('--x2', `${x2}vw`); node.style.setProperty('--y', `${y}vh`);
-        node.textContent = `${Math.abs(x2 - x1)}vw`;
-        el('span','',node);
+        // Prefer top/bottom gutters to avoid center text
+        const edgeTop = Math.random() < 0.5;
+        const y = edgeTop ? (8 + Math.random()*12) : (78 + Math.random()*12);
+        const x1 = 6 + Math.floor(Math.random()*24);
+        const span = 24 + Math.floor(Math.random()*32);
+        const x2 = Math.min(92, x1 + span);
+        node.style.setProperty('--x1', `${x1}vw`);
+        node.style.setProperty('--x2', `${x2}vw`);
+        node.style.setProperty('--y', `${y}vh`);
+        node.style.setProperty('--o', (/(loud|storm)/.test(State.mood)? .26 : .22).toString());
+        label = document.createElement('em');
+        label.className = 'mschf-dims-label';
+        label.textContent = `${Math.abs(x2 - x1)}vw`;
+        node.appendChild(label);
+        el('span','',node); // right tick
+      },
+      update(t){
+        if (!node) return;
+        const base = /(studio|loud)/.test(State.mood) ? .22 : .18;
+        const o = lerp(base*0.6, base, 1 - clamp(State.readingPressure,0,1));
+        node.style.setProperty('--o', o.toFixed(3));
+        if (State.reduceMotion || !label) return;
+        const s = 0.98 + Math.sin(t/1200)*0.02; // soft breathing
+        label.style.setProperty('--s', s.toFixed(3));
       },
       node
     };
