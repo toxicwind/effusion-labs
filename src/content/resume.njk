@@ -1,331 +1,456 @@
+{# src/resume/index.njk #}
 ---
-title: "Resume — Christopher Ortega"
 permalink: "/resume/"
+title: "Resume"
+layout: false
+eleventyExcludeFromCollections: true
 ---
 
-{# =====================================================================
-  Standalone Eleventy (.njk) resume — 2025 daisyUI/Tailwind aesthetic
-  • Cards + badges (refined), stats for highlights, timeline for experience
-  • Privacy: NO literal phone number or "Aurora" string in this file
-    - Displays "Denver, CO" only
-    - Phone is "On request" (no digits in DOM/HTML)
-  • Print-friendly (2–3 pages), ATS-friendly semantics
-  • Data source: site.data.resume → page.resume → internal fallback
-  ===================================================================== #}
-
-{% set R = site.data.resume or page.resume or {
-  name: "Christopher Ortega",
-  headline: "LLM Engineering • LLMOps • Data Platforms",
-  location_display: "Denver, CO",
-  phone_display: "Phone on request",
-  email: "denverchrisortega@gmail.com",
-  linkedin: "https://linkedin.com/in/denverchrisortega",
-  summary: "Software engineer with 6+ years across backend services and streaming data systems, now centered on LLM applications and LLMOps. Built and operated APIs and pipelines on AWS (EMR, Lambda, Kinesis, S3), containerized services on Kubernetes, and delivered search/analytics with Elasticsearch. Focus areas: retrieval that returns the right context, evaluation gates that block bad releases, and dashboards that surface drift early. Collaborative, documentation-forward, and comfortable setting clear acceptance criteria.",
-  highlights: [
-    {k:"High-throughput data", v:"10+ TB/day", d:"Scala/Spark with Kafka·Kinesis·Lambda for near-real-time triggers"},
-    {k:"API security & governance", v:"RBAC + OpenAPI", d:"Spring Security + JWT; versioned contracts across partner teams"},
-    {k:"Release hygiene", v:"CI/CD + K8s", d:"GitLab checks; containerized services; stabilized 3-week release cadence"},
-    {k:"Retrieval quality", v:"RAG QA", d:"Risk-scenario checks for chunking/indexing; accuracy·latency·safety tracking"},
-    {k:"LLM safety evaluation", v:"Top-10 (HackAPrompt ‘25)", d:"Reproducible prompt-safety tests → evaluation sets + remediation steps"}
-  ],
-  experience: [
-    {
-      company: "Independent Engineering & Security Research",
-      location: "Denver, CO",
-      role: "Engineer / Consultant",
-      dates: "Dec 2023 – Present",
-      bullets: [
-        "Patent Intelligence Agent (consulting, private client): constrained Q&A over patent corpora with hybrid semantic + CPC/IPC filtering, claim/abstract parsing, citation-trail review, and landscape digests; outputs include inline citations and limitation mapping; added RBAC, prompt-safety controls, and clear notices.",
-        "Built local LLM workflows with modular orchestration (prompt-rewrite steps, LoRA adapters, graph-style configs) to compare prompts\/models offline with reproducible inputs.",
-        "Prototyped retrieval evaluation: sanity tests for chunking/indexing, small positive/negative/risk-scenario sets, and accuracy·latency·safety-conformance tracking to set gate thresholds.",
-        "Engineered a modular Eleventy (11ty) 3.x system (Nunjucks, Tailwind 4) with markdown-it extensions (footnote popovers, audio embeds, QR shortcodes), interlinking/navigation plugins, and GitHub Actions for reproducible builds.",
-        "Automated a video-scheduling process (Python + pandas + Excel) for an accessibility team, reducing coordination time and surfacing exceptions clearly."
-      ]
-    },
-    {
-      company: "Charter Communications",
-      location: "Denver, CO",
-      role: "Senior Software Engineer / Platform Tech Lead",
-      dates: "Feb 2019 – Nov 2023",
-      bullets: [
-        "Shaped backend architecture for segmentation/measurement across millions of subscribers; aligned product, SRE, and engineering on release criteria and operational readiness.",
-        "Implemented role-based access with Spring Security + JWT; enforced OpenAPI hygiene and versioning to keep partner integrations stable across releases.",
-        "Built Scala/Spark batch + stream services processing 10+ TB/day; added Kafka·Kinesis·Lambda pathways to support near-real-time activation triggers.",
-        "Drove Elasticsearch indexing/aggregation patterns for complex eligibility queries; containerized on Kubernetes and enforced CI/CD checks in GitLab.",
-        "Authored technical requirement docs mapped to BDD-style acceptance; mentored engineers; ran cross-team architecture reviews; improved on-call by pairing release checks with response playbooks."
-      ]
-    },
-    {
-      company: "Access Data Consulting (Contract @ Charter)",
-      location: "Denver, CO",
-      role: "Software Engineer (Frontend/Platform)",
-      dates: "Sep 2017 – Feb 2019",
-      bullets: [
-        "Moved legacy interfaces to React + TypeScript; introduced shared components and patterns adopted across internal tools.",
-        "Delivered accessible dashboards tied to real-time targeting APIs; partnered with backend and QA on staged rollouts."
-      ]
-    }
-  ],
-  projects: [
-    {name:"Patent Intelligence Agent", tag:"client", body:"Agentic Q&A over patent corpora; hybrid semantic + CPC/IPC filters; claim/limitation mapping; citation-graph hops; inline citations; RBAC; prompt-safety controls."},
-    {name:"LLMOps Gatekeeper", tag:"ops", body:"Release checks tied to accuracy, latency, and safety-conformance thresholds; paired with a concise response playbook and rollback steps."},
-    {name:"RAG Quality Kit", tag:"evals", body:"Small evaluation sets (positive/negative/risk-scenario), chunking/index heuristics checks, and scripts to catch retrieval regressions early."},
-    {name:"Local-LLM Inference Graphs", tag:"infra", body:"Reproducible configs for prompt/model/tool A/Bs with LoRA adapters and rewrite nodes."}
-  ],
-  skills: {
-    llm:["Prompt design","Retrieval/RAG","Evaluation/metrics","Safety controls","PyTorch","Hugging Face Transformers","LangChain","Ollama"],
-    backend:["Python","Scala (background)","Java (background)","Spark","Elasticsearch","Kafka","Kinesis","pandas","NumPy"],
-    cloud:["AWS (EMR, Lambda, Kinesis, S3, CloudWatch, RDS)","Kubernetes","Terraform","Docker","GitLab CI/CD"],
-    api:["REST","OpenAPI","JWT/OAuth2"],
-    practices:["Release checks","Observability","Response playbooks","TRDs","BDD acceptance"]
-  },
-  education: [
-    {school:"Metropolitan State University of Denver", degree:"B.S., Computer Information Systems", year:"2016"},
-    {school:"Front Range Community College", degree:"A.S., Business Management", year:"2012"}
-  ],
-  pdf: "/assets/Christopher_Ortega_Resume_2025.pdf"
-} %}
-
-<!doctype html>
-<html lang="en" data-theme="corporate">
+<!DOCTYPE html>
+<html lang="en" class="scroll-pt-16" data-mschf="off">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <meta name="description" content="Resume — {{ R.name }} — LLM Engineering, LLMOps, Data Platforms (Denver Metro)" />
-  <link rel="canonical" href="{{ '/resume/' | url }}">
-  <title>{{ title or ('Resume — ' ~ R.name) }}</title>
+  <!-- Meta -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0b0b0e">
+  <meta name="msapplication-TileColor" content="#0b0b0e">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
-  <!-- Tailwind + daisyUI (CDN) + Inter font -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.10/dist/full.min.css" rel="stylesheet" />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800;900&display=swap" rel="stylesheet">
+  {# Title / description via reusable macros #}
+  {% from "macros/meta.njk" import buildPageTitle, buildPageDesc %}
+  {% set pageTitle = buildPageTitle(resume, title) %}
+  {% set pageDesc  = buildPageDesc(resume) %}
+  {% set canonicalHref = "/resume/" | url %}
+  <title>{{ pageTitle }}</title>
+  <link rel="canonical" href="{{ canonicalHref }}">
+
+  <meta name="description" content="{{ pageDesc }}">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="profile">
+  <meta property="og:title" content="{{ pageTitle }}">
+  <meta property="og:description" content="{{ pageDesc }}">
+  <meta property="og:url" content="{{ canonicalHref }}">
+  {% if resume and resume.ogImage %}
+  <meta property="og:image" content="{{ resume.ogImage | url }}">
+  {% endif %}
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{{ pageTitle }}">
+  <meta name="twitter:description" content="{{ pageDesc }}">
+  {% if resume and resume.ogImage %}
+  <meta name="twitter:image" content="{{ resume.ogImage | url }}">
+  {% endif %}
+
+  {# Early theme boot (prevents flash; aligns with daisyUI token system) #}
   <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          container: { center: true },
-          fontFamily: { sans: ['Inter','ui-sans-serif','system-ui'] }
+    (function () {
+      try {
+        var THEMES = { lightDefault:"winter", darkDefault:"dim", allowed:["winter","dim","corporate"] };
+        var meta = document.querySelector('meta[name="color-scheme"]') ||
+          (function () { var m = document.createElement("meta"); m.name = "color-scheme"; document.head.appendChild(m); return m; })();
+        var stored = localStorage.getItem("theme");
+        var picked = (stored && THEMES.allowed.includes(stored)) ? stored : null;
+        if (!picked) {
+          var prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+          picked = prefersDark ? THEMES.darkDefault : THEMES.lightDefault;
+          document.documentElement.dataset.themeSource = prefersDark ? "os-dark" : "os-light";
+        } else {
+          document.documentElement.dataset.themeSource = "storage";
         }
+        document.documentElement.setAttribute("data-theme", picked);
+        meta.content = (picked === THEMES.lightDefault) ? "light dark" : "dark light";
+        window.__setTheme = function (name) {
+          if (!THEMES.allowed.includes(name)) return;
+          document.documentElement.setAttribute("data-theme", name);
+          localStorage.setItem("theme", name);
+          document.documentElement.dataset.themeSource = "storage";
+          meta.content = (name === THEMES.lightDefault) ? "light dark" : "dark light";
+        };
+      } catch (_) {
+        document.documentElement.setAttribute("data-theme", "winter");
+        document.documentElement.dataset.themeSource = "fallback";
       }
-    }
+    })();
   </script>
 
+  <!-- Fonts (match site) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Rubik:wght@400..900&family=Space+Grotesk:wght@400..700&display=swap" rel="stylesheet">
+
+  <!-- Site CSS bundle -->
+  <link rel="stylesheet" href="/assets/css/app.css?v={{ build.hash or build.commit or build.version or buildTime }}">
+
+  <!-- Small aesthetic/util CSS (theme-safe; prints clean) -->
   <style>
-    /* Compact resume tuning */
-    :root { --glass-blur: 8px; --glass-opacity: .68; --glass-border-opacity: .2; }
-    body { font-feature-settings: "ss01" on, "ss02" on, "case" on; }
-    .resume h1, .resume h2, .resume h3 { letter-spacing: -0.01em; }
-    .card-compact .card-body { padding: .85rem 1rem; }
-    .badge { border-color: color-mix(in oklab, currentColor 28%, transparent); }
-    .mini-stat { padding:.75rem 1rem; border:1px solid var(--fallback-bc, hsl(var(--bc)/.15)); border-radius:.75rem; }
-    .mini-stat .k { font-size:.72rem; opacity:.7; }
-    .mini-stat .v { font-weight:600; }
+    :root { --glass-blur: 10px; --glass-opacity:.85; --glass-border-opacity:.22; }
+    .skip-link { position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden; }
+    .skip-link:focus { left:1rem; top:1rem; width:auto; height:auto; padding:.5rem .75rem; z-index:1000; }
+
+    /* Drawer sizing for the left rail */
+    .resume-drawer-side { width: 20rem; }
+    @media (min-width: 1024px) { .resume-drawer-side { width: 22rem; } }
+
+    /* Card polish (let daisyUI handle the tokens; we only tweak radius/shadow rhythm) */
+    .card.rounded-2xl { border-radius: 1rem; }
+    .card-compact .card-body { padding: 1rem 1rem; }
+
+    /* Timeline alignment nits */
+    .t-meta { white-space: nowrap; opacity:.7; }
+
+    /* Print—remove glass/shadows, ensure black text, hide controls */
     @media print {
-      :root { color-scheme: light; }
-      body { background: #fff !important; }
-      .no-print { display:none !important; }
-      .shadow, .shadow-lg, .shadow-xl, .shadow-2xl { box-shadow:none !important; }
-      .glass { background: #fff !important; }
-      .mini-stat { border-color:#ddd !important; }
-      .card { border-color:#ddd !important; }
+      @page { margin: 0.6in; }
+      .no-print, .drawer-toggle, .drawer-button, .navbar { display:none !important; }
+      .glass, .shadow, .shadow-lg, .shadow-xl { box-shadow:none !important; backdrop-filter:none !important; }
+      .card, .stats { background:#fff !important; border-color:#ddd !important; }
+      body { background:#fff !important; color:#000 !important; }
       a { color:#000 !important; text-decoration:none !important; }
     }
   </style>
+
+  <!-- Icons / PWA -->
+  <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-title" content="{{ site and site.name or 'Site' }}">
+  <link rel="manifest" href="/site.webmanifest">
 </head>
 
-<body class="bg-base-100 text-base-content">
-  <main class="resume container max-w-[780px] px-5 md:px-6 py-8 md:py-10 space-y-8 md:space-y-10">
+<body class="bg-base-100 text-base-content font-body antialiased selection:bg-primary/20">
+  <a href="#main" class="skip-link btn btn-sm">{{ 'Skip to main content' }}</a>
 
-    <!-- Header / Identity -->
-    <header class="card glass shadow-lg border border-base-300">
-      <div class="card-body md:flex md:items-end md:justify-between gap-4">
-        <div>
-          <h1 class="text-2xl md:text-3xl font-black tracking-tight">{{ R.name }}</h1>
-          <p class="mt-1 text-[15px] md:text-base opacity-80">{{ R.headline }}</p>
-          <div class="mt-3 flex flex-wrap items-center gap-2">
-            {# Location — show Denver only #}
-            <span class="badge badge-outline" aria-label="Location">{{ R.location_display }}</span>
-
-            {# Phone — do NOT reveal digits. Display a pleasant badge with tooltip and a mailto fallback #}
-            <span class="tooltip tooltip-bottom" data-tip="Shareable on request via email">
-              <a class="badge badge-outline" href="mailto:{{ R.email }}?subject=Phone%20request%20for%20{{ R.name | urlencode }}">
-                {{ R.phone_display }}
-              </a>
-            </span>
-
-            {# Email + LinkedIn #}
-            <a class="badge badge-outline" href="mailto:{{ R.email }}" rel="noopener">Email</a>
-            <a class="badge badge-outline" href="{{ R.linkedin }}" rel="noopener">LinkedIn</a>
-          </div>
-        </div>
-
-        <div class="flex items-center gap-2 no-print">
-          {% if R.pdf %}
-            <a class="btn btn-sm btn-outline" href="{{ R.pdf }}" download>Download PDF</a>
-          {% endif %}
-          <label class="swap swap-rotate">
-            <input type="checkbox" class="theme-controller" value="dim" />
-            <svg class="swap-off fill-current size-5" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12a7 7 0 0 0 14 0c0-3.866-3.134-7-7-7v14a7 7 0 0 1-7-7Z"/></svg>
-            <svg class="swap-on fill-current size-5" viewBox="0 0 24 24" aria-hidden="true"><path d="M21.64 13a9 9 0 1 1-9-11 7 7 0 0 0 9 9Z"/></svg>
+  <!-- Drawer layout: Left rail inside drawer-side; content in drawer-content -->
+  <div class="drawer lg:drawer-open">
+    <input id="resume-drawer" type="checkbox" class="drawer-toggle">
+    <div class="drawer-content">
+      <!-- Top nav (mobile actions, theme switch, print) -->
+      <div class="navbar bg-base-100/80 backdrop-blur supports-[backdrop-filter]:bg-base-100/70 sticky top-0 z-[45] border-b border-base-200">
+        <div class="flex-1">
+          <label for="resume-drawer" class="btn btn-ghost drawer-button lg:hidden" aria-label="Open panel">
+            <!-- hamburger -->
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
           </label>
+          <a href="{{ '/' | url }}" class="btn btn-ghost text-base font-semibold">
+            {{ resume and resume.name or 'Resume' }}
+          </a>
+        </div>
+        <div class="flex-none gap-2">
+          <div class="join no-print">
+            <input class="join-item btn btn-sm btn-outline theme-controller" type="radio" name="theme" aria-label="Winter" value="winter">
+            <input class="join-item btn btn-sm btn-outline theme-controller" type="radio" name="theme" aria-label="Dim" value="dim">
+            <input class="join-item btn btn-sm btn-outline theme-controller" type="radio" name="theme" aria-label="Corporate" value="corporate">
+          </div>
+          <button class="btn btn-sm btn-outline no-print" onclick="window.print()" title="Print / Save PDF">Print</button>
         </div>
       </div>
-    </header>
 
-    <!-- Summary -->
-    <section aria-labelledby="summary">
-      <h2 id="summary" class="text-xs tracking-widest uppercase opacity-60">Summary</h2>
-      <div class="card card-compact bg-base-100 border border-base-300 shadow">
-        <div class="card-body">
-          <p class="text-[15px] md:text-base leading-7 md:leading-8">{{ R.summary }}</p>
-        </div>
-      </div>
-    </section>
+      <!-- Main content (right column) -->
+      <main id="main" class="mx-auto max-w-screen-2xl px-6 my-8 space-y-8">
+        {% if resume and resume.experience %}
+        <section class="card bg-base-100 border border-base-300 rounded-2xl shadow-sm">
+          <div class="card-body p-6">
+            <h2 class="text-[11px] uppercase tracking-widest opacity-60">Experience</h2>
+            <ul class="timeline timeline-vertical mt-4">
+              {% for job in resume.experience %}
+              <li class="my-4">
+                <hr/>
+                <div class="timeline-start t-meta text-sm">
+                  {{ job.start }}{% if job.end %} — {{ job.end }}{% else %} — Present{% endif %}
+                </div>
+                <div class="timeline-middle"><span class="status"></span></div>
+                <div class="timeline-end w-full">
+                  <article class="card card-compact bg-base-100 border border-base-300 rounded-2xl shadow-sm">
+                    <div class="card-body">
+                      <div class="flex items-baseline justify-between gap-3 flex-wrap">
+                        <h3 class="text-lg font-semibold tracking-tight m-0">
+                          {{ job.company }}{% if job.role %} <span class="font-normal">— {{ job.role }}</span>{% endif %}
+                        </h3>
+                        <span class="text-sm opacity-70">{{ job.location }}</span>
+                      </div>
+                      {% if job.highlights %}
+                      <ul class="mt-3 space-y-2 text-[15px] leading-6">
+                        {% for h in job.highlights %}
+                          <li class="pl-4 relative">
+                            <span class="absolute left-0 top-2 w-1.5 h-1.5 rounded-full bg-base-content/30"></span>
+                            {{ h }}
+                          </li>
+                        {% endfor %}
+                      </ul>
+                      {% endif %}
+                      {% if job.tags %}
+                      <div class="mt-3 flex flex-wrap gap-2">
+                        {% for tag in job.tags %}<span class="badge badge-ghost rounded-full">{{ tag }}</span>{% endfor %}
+                      </div>
+                      {% endif %}
+                    </div>
+                  </article>
+                </div>
+                <hr/>
+              </li>
+              {% endfor %}
+            </ul>
+          </div>
+        </section>
+        {% endif %}
 
-    <!-- Career Highlights (as stats) -->
-    <section aria-labelledby="highlights">
-      <h2 id="highlights" class="text-xs tracking-widest uppercase opacity-60">Career Highlights</h2>
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 md:gap-3">
-        {% for h in R.highlights %}
-        <div class="mini-stat bg-base-100">
-          <div class="k">{{ h.k }}</div>
-          <div class="v text-sm md:text-base">{{ h.v }}</div>
-          <div class="d text-xs opacity-70">{{ h.d }}</div>
-        </div>
-        {% endfor %}
-      </div>
-    </section>
-
-    <!-- Experience (timeline + role cards) -->
-    <section aria-labelledby="experience">
-      <h2 id="experience" class="text-xs tracking-widest uppercase opacity-60">Experience</h2>
-      <ul class="space-y-3">
-        {% for job in R.experience %}
-        <li>
-          <article class="card card-compact bg-base-100 border border-base-300 shadow-sm">
-            <div class="card-body">
-              <div class="grid grid-cols-1 md:grid-cols-[1fr_auto] md:items-baseline gap-1">
-                <h3 class="text-base md:text-lg font-semibold">
-                  {{ job.company }} <span class="font-normal">— {{ job.role }}</span>
-                </h3>
-                <div class="text-xs md:text-sm opacity-70 md:text-right">{{ job.dates }}</div>
-              </div>
-              <div class="text-sm opacity-70">{{ job.location }}</div>
-              <ul class="mt-2 space-y-2 text-sm leading-6">
-                {% for b in job.bullets %}
-                <li class="pl-4 relative">
-                  <span class="absolute left-0 top-2 w-1.5 h-1.5 rounded-full bg-base-content/30"></span>
-                  {{ b }}
-                </li>
-                {% endfor %}
-              </ul>
+        {% if resume and resume.projects %}
+        <section class="card bg-base-100 border border-base-300 rounded-2xl shadow-sm">
+          <div class="card-body p-6">
+            <h2 class="text-[11px] uppercase tracking-widest opacity-60">Selected Projects</h2>
+            <div class="grid grid-cols-2 gap-5 mt-3 max-[1040px]:grid-cols-1">
+              {% for p in resume.projects %}
+              <article class="card card-compact bg-base-100 border border-base-300 rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow">
+                <div class="flex items-center gap-2">
+                  <h3 class="card-title text-sm">
+                    {% if p.url %}<a href="{{ p.url }}" target="_blank" rel="noopener">{{ p.name }}</a>{% else %}{{ p.name }}{% endif %}
+                  </h3>
+                  {% if p.badge %}<span class="badge badge-neutral badge-sm rounded-full">{{ p.badge }}</span>{% endif %}
+                </div>
+                {% if p.subtitle %}<p class="mt-1 text-xs opacity-70">{{ p.subtitle }}</p>{% endif %}
+                {% if p.blurb %}<p class="mt-2 text-sm leading-6">{{ p.blurb }}</p>{% endif %}
+                {% if p.tags %}
+                <div class="mt-3 flex flex-wrap gap-2">
+                  {% for t in p.tags %}<span class="badge badge-ghost rounded-full">{{ t }}</span>{% endfor %}
+                </div>
+                {% endif %}
+              </article>
+              {% endfor %}
             </div>
-          </article>
-        </li>
-        {% endfor %}
-      </ul>
-    </section>
+          </div>
+        </section>
+        {% endif %}
 
-    <!-- Selected Projects (bento) -->
-    <section aria-labelledby="projects">
-      <h2 id="projects" class="text-xs tracking-widest uppercase opacity-60">Selected Projects</h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-        {% for p in R.projects %}
-        <article class="card card-compact bg-base-100 border border-base-300 hover:shadow-md transition-shadow">
-          <div class="card-body">
-            <div class="flex items-center gap-2">
-              <h3 class="card-title text-sm">{{ p.name }}</h3>
-              {% if p.tag %}
-                <span class="badge badge-neutral badge-sm">{{ p.tag }}</span>
+        {% if resume and resume.education %}
+        <section class="card bg-base-100 border border-base-300 rounded-2xl shadow-sm">
+          <div class="card-body p-6">
+            <h2 class="text-[11px] uppercase tracking-widest opacity-60">Education</h2>
+            <div class="grid grid-cols-2 gap-4 max-[1040px]:grid-cols-1 text-sm mt-3">
+              {% for e in resume.education %}
+              <div class="card border border-base-300 rounded-2xl shadow-sm">
+                <div class="card-body p-4">
+                  <div class="flex items-baseline justify-between gap-3 flex-wrap">
+                    <h3 class="text-base font-medium m-0">{{ e.school }}</h3>
+                    <div class="text-sm opacity-80">{{ e.start }}{% if e.end %} — {{ e.end }}{% endif %}</div>
+                  </div>
+                  <div class="text-sm opacity-90 mt-1">
+                    {{ e.degree }}{% if e.meta %} — {{ e.meta }}{% endif %}
+                  </div>
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+        </section>
+        {% endif %}
+
+        <!-- Footer -->
+        <footer class="flex items-center justify-between pt-2 pb-10 no-print">
+          <small class="opacity-60">
+            Last updated: {{ collections and collections.all and collections.all | last and (collections.all | last).date | date('yyyy-MM-dd') or "" }}
+          </small>
+          <div class="join">
+            <input class="join-item btn btn-sm btn-outline theme-controller" type="radio" name="theme-foot" aria-label="Winter" value="winter">
+            <input class="join-item btn btn-sm btn-outline theme-controller" type="radio" name="theme-foot" aria-label="Dim" value="dim">
+            <input class="join-item btn btn-sm btn-outline theme-controller" type="radio" name="theme-foot" aria-label="Corporate" value="corporate">
+          </div>
+        </footer>
+      </main>
+    </div>
+
+    <!-- LEFT RAIL (drawer-side) -->
+    <div class="drawer-side z-[40]">
+      <label for="resume-drawer" aria-label="Close panel" class="drawer-overlay"></label>
+      <aside class="resume-drawer-side bg-base-100 border-r border-base-200 max-h-dvh overflow-y-auto px-5 py-6">
+        <div class="space-y-6 lg:sticky lg:top-6">
+          <!-- Identity / hero -->
+          <section class="card glass border border-base-300 rounded-2xl shadow-xl">
+            <div class="card-body p-6">
+              <h1 class="text-4xl md:text-5xl font-black tracking-tight">
+                {{ resume and resume.name or "Your Name" }}
+              </h1>
+              <p class="mt-2 text-lg opacity-80">
+                {{ resume and resume.title or "Creative Technologist & Engineer" }}
+              </p>
+
+              <div class="mt-4 flex flex-wrap gap-2 text-sm items-center">
+                {% if resume and resume.location %}
+                  <span class="badge badge-outline rounded-full">{{ resume.location }}</span>
+                {% endif %}
+                {% if resume and resume.phoneNote %}
+                  <span class="tooltip tooltip-bottom" data-tip="{{ resume.phoneNote }}">
+                    <span class="badge badge-outline rounded-full">Phone on request</span>
+                  </span>
+                {% endif %}
+                {% if resume and resume.email %}
+                  <a class="badge badge-outline rounded-full" href="mailto:{{ resume.email }}" onclick="copyToClipboard('{{ resume.email | escape }}'); return false;" title="Copy email">{{ resume.email }}</a>
+                {% endif %}
+                {% if resume and resume.linkedin %}
+                  <a class="badge badge-outline rounded-full" href="{{ resume.linkedin }}" target="_blank" rel="noopener">LinkedIn</a>
+                {% endif %}
+                {% if resume and resume.website %}
+                  <a class="badge badge-outline rounded-full" href="{{ resume.website }}" target="_blank" rel="noopener">Website</a>
+                {% endif %}
+              </div>
+
+              {% if resume and resume.downloadPdf %}
+              <div class="mt-6">
+                <a href="{{ resume.downloadPdf | url }}" class="btn btn-outline btn-sm rounded-full no-print">Download PDF</a>
+              </div>
               {% endif %}
             </div>
-            <p class="mt-2 text-sm leading-6">{{ p.body }}</p>
-          </div>
-        </article>
-        {% endfor %}
-      </div>
-    </section>
+          </section>
 
-    <!-- Skills & Tools (badges, calmer) -->
-    <section aria-labelledby="skills">
-      <h2 id="skills" class="text-xs tracking-widest uppercase opacity-60">Skills & Tools</h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div class="card card-compact bg-base-100 border border-base-300">
-          <div class="card-body">
-            <h3 class="text-sm font-semibold">AI / LLM</h3>
-            <div class="mt-2 flex flex-wrap gap-2">
-              {% for s in R.skills.llm %}<span class="badge badge-outline">{{ s }}</span>{% endfor %}
+          <!-- Summary -->
+          {% if resume and resume.summary %}
+          <section class="card bg-base-100 border border-base-300 rounded-2xl shadow-sm">
+            <div class="card-body p-6 prose prose-sm sm:prose-base dark:prose-invert max-w-none">
+              <h2 class="m-0">Summary</h2>
+              <p class="mt-2">{{ resume.summary }}</p>
             </div>
-          </div>
-        </div>
-        <div class="card card-compact bg-base-100 border border-base-300">
-          <div class="card-body">
-            <h3 class="text-sm font-semibold">Backend & Data</h3>
-            <div class="mt-2 flex flex-wrap gap-2">
-              {% for s in R.skills.backend %}<span class="badge badge-outline">{{ s }}</span>{% endfor %}
+          </section>
+          {% endif %}
+
+          <!-- Highlights -->
+          {% if resume and resume.highlights %}
+          <section class="card bg-base-100 border border-base-300 rounded-2xl shadow-sm">
+            <div class="card-body p-6">
+              <h2 class="text-[11px] uppercase tracking-widest opacity-60">Highlights</h2>
+              <div class="stats stats-horizontal w-full mt-2 divide-x divide-base-300">
+                {% for s in resume.highlights %}
+                <div class="stat px-4">
+                  <div class="stat-title">{{ s.title }}</div>
+                  <div class="stat-value text-2xl">{{ s.value }}</div>
+                  {% if s.sub %}<div class="stat-desc">{{ s.sub }}</div>{% endif %}
+                </div>
+                {% endfor %}
+              </div>
             </div>
-          </div>
-        </div>
-        <div class="card card-compact bg-base-100 border border-base-300">
-          <div class="card-body">
-            <h3 class="text-sm font-semibold">Cloud & DevOps</h3>
-            <div class="mt-2 flex flex-wrap gap-2">
-              {% for s in R.skills.cloud %}<span class="badge badge-outline">{{ s }}</span>{% endfor %}
+          </section>
+          {% endif %}
+
+          <!-- Skills & Tools -->
+          {% if resume and (resume.skills or resume.tools) %}
+          <section class="card bg-base-100 border border-base-300 rounded-2xl shadow-sm">
+            <div class="card-body p-6">
+              <h2 class="text-[11px] uppercase tracking-widest opacity-60">Skills &amp; Tools</h2>
+
+              {# Support either grouped skills or a flat list #}
+              {% if resume.skills and resume.skills.groups %}
+                {% for g in resume.skills.groups %}
+                  <h3 class="mt-3 text-sm font-semibold">{{ g.name }}</h3>
+                  <div class="mt-2 flex flex-wrap gap-2">
+                    {% for item in g.items %}
+                      {% if item.hint %}
+                        <span class="badge badge-ghost rounded-full tooltip" data-tip="{{ item.hint }}">{{ item.name }}</span>
+                      {% else %}
+                        <span class="badge badge-ghost rounded-full">{{ item.name }}</span>
+                      {% endif %}
+                    {% endfor %}
+                  </div>
+                {% endfor %}
+              {% elif resume.skills %}
+                <div class="mt-2 flex flex-wrap gap-2">
+                  {% for s in resume.skills %}<span class="badge badge-ghost rounded-full">{{ s }}</span>{% endfor %}
+                </div>
+              {% endif %}
+
+              {% if resume.tools %}
+                <h3 class="mt-4 text-sm font-semibold">Tools</h3>
+                <div class="mt-2 flex flex-wrap gap-2">
+                  {% for t in resume.tools %}<span class="badge badge-ghost rounded-full">{{ t }}</span>{% endfor %}
+                </div>
+              {% endif %}
             </div>
-          </div>
+          </section>
+          {% endif %}
         </div>
-        <div class="card card-compact bg-base-100 border border-base-300">
-          <div class="card-body">
-            <h3 class="text-sm font-semibold">APIs & Practices</h3>
-            <div class="mt-2 flex flex-wrap gap-2">
-              {% for s in R.skills.api %}<span class="badge badge-outline">{{ s }}</span>{% endfor %}
-              {% for s in R.skills.practices %}<span class="badge badge-outline">{{ s }}</span>{% endfor %}
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+      </aside>
+    </div>
+  </div>
 
-    <!-- Education -->
-    <section aria-labelledby="education">
-      <h2 id="education" class="text-xs tracking-widest uppercase opacity-60">Education</h2>
-      <div class="grid grid-cols-1 gap-2">
-        {% for e in R.education %}
-        <div class="card card-compact bg-base-100 border border-base-300">
-          <div class="card-body py-4">
-            <p class="text-sm"><span class="font-medium">{{ e.school }}</span> — {{ e.degree }} ({{ e.year }})</p>
-          </div>
-        </div>
-        {% endfor %}
-      </div>
-    </section>
+  <!-- Toasts (copy, theme) -->
+  <div id="toaster" class="toast toast-end z-[100]"></div>
 
-    <!-- Footer -->
-    <footer class="pt-3 pb-8 flex items-center justify-between no-print">
-      <small class="opacity-60">Last updated: {{ collections and collections.all and collections.all | last and (collections.all | last).date | date('yyyy-MM-dd') or "" }}</small>
-      <div class="join">
-        <input class="join-item btn btn-sm btn-outline theme-controller" type="radio" name="theme" aria-label="Corporate" value="corporate" checked />
-        <input class="join-item btn btn-sm btn-outline theme-controller" type="radio" name="theme" aria-label="Dim" value="dim" />
-        <input class="join-item btn btn-sm btn-outline theme-controller" type="radio" name="theme" aria-label="Winter" value="winter" />
-      </div>
-    </footer>
-
-  </main>
-
-  <!-- JSON-LD for SEO/ATS (omit telephone for privacy) -->
+  <!-- JSON-LD (privacy: omit phone) -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "Person",
-    "name": "{{ R.name }}",
-    "jobTitle": "Software Engineer — LLM Applications",
-    "address": { "@type": "PostalAddress", "addressLocality": "Denver", "addressRegion": "CO", "addressCountry": "US" },
-    "email": "mailto:{{ R.email }}",
-    "sameAs": ["{{ R.linkedin }}"],
-    "url": "{{ '/resume/' | url }}"
+    "name": {{ (resume and resume.name) | dump | safe }},
+    "jobTitle": {{ (resume and resume.title) | dump | safe }},
+    {% if resume and resume.address %}
+    "address": {{ resume.address | dump | safe }},
+    {% else %}
+    "address": { "@type": "PostalAddress", "addressLocality": {{ (resume and resume.location) | dump | safe }} },
+    {% endif %}
+    {% if resume and resume.email %}"email": "mailto:{{ resume.email }}",{% endif %}
+    {% if resume and resume.sameAs %}
+    "sameAs": {{ resume.sameAs | dump | safe }},
+    {% else %}
+    "sameAs": [{% if resume and resume.linkedin %}{{ resume.linkedin | dump | safe }}{% endif %}],
+    {% endif %}
+    "url": {{ canonicalHref | dump | safe }}
   }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": {{ "/" | url | dump | safe }} },
+      { "@type": "ListItem", "position": 2, "name": "Resume", "item": {{ canonicalHref | dump | safe }} }
+    ]
+  }
+  </script>
+
+  <!-- Little JS helpers -->
+  <script>
+    function toast(msg) {
+      var wrap = document.getElementById('toaster');
+      if (!wrap) return;
+      var el = document.createElement('div');
+      el.className = 'alert alert-info shadow';
+      el.innerHTML = '<span>'+msg+'</span>';
+      wrap.appendChild(el);
+      setTimeout(function(){ el.style.opacity='0'; }, 2200);
+      setTimeout(function(){ el.remove(); }, 2600);
+    }
+    function copyToClipboard(text) {
+      try {
+        navigator.clipboard.writeText(text).then(function(){ toast('Copied: ' + text); });
+      } catch(e) {
+        var t = document.createElement('textarea');
+        t.value = text; document.body.appendChild(t); t.select();
+        try { document.execCommand('copy'); toast('Copied: ' + text); } catch(_) {}
+        t.remove();
+      }
+    }
+    // Hook theme-controller radios to our __setTheme + toast
+    (function(){
+      function syncRadiosToTheme(name){
+        document.querySelectorAll('.theme-controller').forEach(function(r){
+          if (r.value === name) { r.checked = true; }
+        });
+      }
+      // Initial sync
+      syncRadiosToTheme(document.documentElement.getAttribute('data-theme') || 'winter');
+
+      document.addEventListener('change', function(e){
+        var t = e.target;
+        if (t && t.classList && t.classList.contains('theme-controller')) {
+          var v = t.value;
+          if (window.__setTheme) { __setTheme(v); toast('Theme: ' + v); }
+          syncRadiosToTheme(v);
+        }
+      });
+    })();
   </script>
 </body>
 </html>
