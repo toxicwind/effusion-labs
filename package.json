@@ -42,7 +42,7 @@
     "@quasibit/eleventy-plugin-schema": "1.11.1",
     "@quasibit/eleventy-plugin-sitemap": "^2.2.0",
     "@shikijs/markdown-it": "3.11.0",
-    "@shikijs/transformers": "3.11.0",
+    "@shikijs/transformers": "3.12.1",
     "@tailwindcss/postcss": "4.1.12",
     "@tailwindcss/typography": "0.5.16",
     "ajv": "8.17.1",
