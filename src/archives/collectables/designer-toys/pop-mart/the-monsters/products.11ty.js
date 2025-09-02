@@ -1,9 +1,9 @@
-import { lineProducts } from "../../../../../../lib/archive-utils.mjs";
+import { lineCollection } from "../../../../../../lib/archive-utils.mjs";
 
-export const data = ({ archiveProducts } = {}) => {
+export const data = ({ collections } = {}) => {
   const companySlug = "pop-mart";
   const lineSlug = "the-monsters";
-  const items = lineProducts(archiveProducts, companySlug, lineSlug);
+  const items = lineCollection(collections, "archiveProducts", companySlug, lineSlug);
   if (!items.length) return { permalink: false };
   return {
     layout: "layout.njk",
