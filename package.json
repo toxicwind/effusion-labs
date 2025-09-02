@@ -16,6 +16,7 @@
     "//-- CI & VALIDATION --//": "",
     "dead-links": "markdown-link-check -c link-check.config.json README.md",
     "validate:docs": "node tools/validate-docs.js",
+    "check:archives": "node tools/validate-archive-build.mjs",
     "deps:playwright": "playwright install chromium || true",
     "//-- DATA PIPELINE --//": "",
     "data:all": "npm run data:merge-sections && npm run data:synthesize && npm run data:merge-golden",

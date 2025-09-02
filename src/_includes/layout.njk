@@ -141,6 +141,7 @@
   {{ header(nav, page) }}
 
   {% if page.heroBand or site.heroBand %}
+  {% set showHeroRings = page.heroBandRings if page.heroBandRings is defined else site.heroBandRings %}
   <div class="pointer-events-none fixed inset-x-0 top-[6%] z-[45] flex flex-col items-center gap-1 text-primary">
     {# ——— SVG micro-instrumentation band (rings + crosshair + brackets) ——— #}
     <svg width="100%" height="84" viewBox="0 0 1200 84" aria-hidden="true" class="block">
@@ -148,12 +149,14 @@
       <path d="M24 18 h26 v-8 M24 66 h26 v8" fill="none" stroke="currentColor" stroke-width="2" opacity=".22"/>
       <!-- right bracket -->
       <path d="M1176 18 h-26 v-8 M1176 66 h-26 v8" fill="none" stroke="currentColor" stroke-width="2" opacity=".22"/>
+      {% if showHeroRings %}
       <!-- spectral rings -->
       <g opacity=".20">
         <circle cx="600" cy="42" r="18" fill="none" stroke="currentColor" stroke-width="1"/>
         <circle cx="600" cy="42" r="30" fill="none" stroke="currentColor" stroke-width="1"/>
         <circle cx="600" cy="42" r="42" fill="none" stroke="currentColor" stroke-width="1"/>
       </g>
+      {% endif %}
       <!-- crosshair -->
       <g opacity=".28">
         <line x1="600" y1="10" x2="600" y2="74" stroke="currentColor" stroke-width="1"/>
