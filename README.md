@@ -114,6 +114,25 @@ Nothing exotic—just a normal Eleventy dev loop, with nicer defaults if you opt
 
 ---
 
+## Archive Dynamics by Default
+
+This repository treats archive-linked wikilinks as canonical dynamic routes. Namespaced links resolve to short, predictable URLs at build time.
+
+- Namespace contract: `series:` → `/archives/series/<slug>/`, `character:` → `/archives/character/<slug>/`, `product:` → `/archives/product/<slug>/`.
+- Slug normalization rules: lowercase; Unicode NFKD; strip punctuation; collapse whitespace to `-`; collapse consecutive dashes.
+- Recommended default: always author archive entities as namespaced links.
+
+Examples
+
+- `[[series:Let’s Checkmate]]` → `/archives/series/lets-checkmate/`
+- `[[character:Momo Fox]]` → `/archives/character/momo-fox/`
+- `[[product:Tempura Shrimp]]` → `/archives/product/tempura-shrimp/`
+
+Notes
+
+- If a target isn’t yet present in the dataset, links still resolve to the canonical dynamic route (the page may 404 until data exists). This keeps authoring consistent and future‑proof.
+- Internal templates and resolvers use the same canonical mapping; avoid hardcoding long, hierarchical legacy paths.
+
 ## Project Layout (high-level)
 
 > This is a bird’s-eye view. The exact tree can change—see `AGENTS.md` for auto-orientation commands.

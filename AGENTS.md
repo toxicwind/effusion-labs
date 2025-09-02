@@ -211,3 +211,11 @@ Produce **exactly one message** with the following sections, in this exact order
   - A short, tasteful, pure-text flourish. Your artist's signature. It captures the spirit of the implementation but never replaces evidence.
 
 ## AGENTS.md COMPLETE AND ACTIVE
+
+---
+
+### Archive Link Policy (Canon)
+
+- If an entity exists in the archive dataset you MUST link it with namespaced wikilinks: `[[<type>:<name>]]` where `<type>` ∈ {`series`, `character`, `product`}.
+- Prefer dynamic routes of the form `/archives/<type>/<slug>/` for anchors (short canonical), not legacy hierarchical paths.
+- On ambiguity (multiple possible targets or missing data), emit a TODO note instead of guessing and proceed with the best-effort canonical link.

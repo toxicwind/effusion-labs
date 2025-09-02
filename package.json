@@ -12,6 +12,7 @@
     "css:watch:overlay": "postcss src/styles/mschf-overlay.css -o src/assets/css/mschf-overlay.css -w --verbose",
     "build": "eleventy",
     "test": "c8 node tools/runner.mjs",
+    "lint:advisory": "node tools/lint-archive-namespace.mjs",
     "format": "prettier -w .",
     "//-- CI & VALIDATION --//": "",
     "dead-links": "markdown-link-check -c link-check.config.json README.md",

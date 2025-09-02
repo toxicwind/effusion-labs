@@ -5,7 +5,7 @@ pagination:
   size: 1
   alias: series
 eleventyComputed:
-  permalink: "{{ series.data.url }}"
+  permalink: "/archives/series/{{ series.data.seriesSlug }}/"
   title: "{{ series.data.title or series.data.seriesSlug }}"
 ---
 {% from "components/back-link.njk" import backLink %}
@@ -31,7 +31,7 @@ eleventyComputed:
   <ul class="flex flex-wrap gap-2">
     {% for p in inLine %}
       {% if p.data.seriesSlug and p.data.seriesSlug == series.data.seriesSlug %}
-      <li><a class="badge badge-outline hover:badge-info transition" href="{{ p.data.url }}">{{ p.data.product_id or p.data.productSlug }}</a></li>
+      <li><a class="badge badge-outline hover:badge-info transition" href="{{ p.data.canonicalUrl }}">{{ p.data.product_id or p.data.productSlug }}</a></li>
       {% endif %}
     {% endfor %}
   </ul>

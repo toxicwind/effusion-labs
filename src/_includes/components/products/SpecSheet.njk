@@ -44,7 +44,7 @@
           {% if p.line %}<span class="badge badge-outline">{{ p.line | titleizeSlug }}</span>{% endif %}
           {% if p.character %}
             <a class="badge badge-ghost hover:badge-outline transition"
-               href="/archives/collectables/designer-toys/pop-mart/the-monsters/characters/{{ (p.character) | slug }}/">
+               href="/archives/character/{{ (p.character) | slug }}/">
               {{ p.character | titleizeSlug }}
             </a>
           {% endif %}
