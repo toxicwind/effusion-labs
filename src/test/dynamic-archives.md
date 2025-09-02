@@ -1,6 +1,6 @@
 ---
 title: Dynamic Archives — Canon Defaults
-layout: layouts/embed.njk
+layout: layout.njk
 ---
 
 This page verifies that archive-linked wikilinks resolve to canonical dynamic archive routes by default.
@@ -8,4 +8,3 @@ This page verifies that archive-linked wikilinks resolve to canonical dynamic ar
 - Series: [[series:Let’s Checkmate]]
 - Character: [[character:Momo Fox]]
 - Product: [[product:Tempura Shrimp]]
-

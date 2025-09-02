@@ -16,6 +16,13 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>{{ title }} | Effusion Labs</title>
 
+  {# Canonical and social tags for canonicalized archive pages #}
+  {% set canon = canonicalUrl or page.canonicalUrl or (product and product.data and product.data.canonicalUrl) %}
+  {% if canon %}
+  <link rel="canonical" href="{{ canon }}">
+  <meta property="og:url" content="https://effusionlabs.com{{ canon }}">
+  {% endif %}
+
   {# Early theme (daisyUI): align with compiled themes (nord, sunset). #}
   <script>
     (function () {

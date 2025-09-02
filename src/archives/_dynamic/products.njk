@@ -5,7 +5,8 @@ pagination:
   size: 1
   alias: product
 eleventyComputed:
-  permalink: "/archives/product/{{ product.data.productSlug }}/"
+  permalink: "/archives/product/{{ product.data.slugCanonical }}/"
+  canonicalUrl: "/archives/product/{{ product.data.slugCanonical }}/"
   title: "{{ product.data.title or product.data.product_id or product.data.productSlug }}"
 ---
 {% from "components/products/SpecSheet.njk" import specSheet %}
