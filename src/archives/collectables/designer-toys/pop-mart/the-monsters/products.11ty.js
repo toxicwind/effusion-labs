@@ -1,22 +1,27 @@
-export const data = () => ({
-  layout: 'layout.njk',
-  eleventyComputed: {
-    pagination: (data) => {
-      const all = Array.isArray(data.collections?.archiveProducts) ? data.collections.archiveProducts : [];
-      const filtered = all.filter(p => (
-        p?.data?.companySlug === 'pop-mart' &&
-        p?.data?.lineSlug === 'the-monsters' &&
-        p?.data?.locale === 'en'
-      ));
-      return { data: filtered, size: 1, alias: 'product' };
+import { lineProducts } from "../../../../../../lib/archive-utils.mjs";
+
+export const data = ({ archiveProducts } = {}) => {
+  const companySlug = "pop-mart";
+  const lineSlug = "the-monsters";
+  const items = lineProducts(archiveProducts, companySlug, lineSlug);
+  if (!items.length) return { permalink: false };
+  return {
+    layout: "layout.njk",
+    pagination: { data: items, size: 1, alias: "product" },
+    eleventyComputed: {
+      companySlug: () => companySlug,
+      lineSlug: () => lineSlug,
+      productSlug: ({ product }) => product?.data?.productSlug,
+      title: ({ product }) =>
+        `POP MART — The Monsters — ${
+          product?.data?.product_id ||
+          product?.data?.title ||
+          product?.data?.productSlug
+        }`,
+      permalink: ({ product }) => product?.data?.url,
     },
-    companySlug: () => 'pop-mart',
-    lineSlug: () => 'the-monsters',
-    productSlug: ({ product }) => product?.data?.productSlug,
-    title: ({ product }) => `POP MART — The Monsters — ${product?.data?.product_id || product?.data?.title || product?.data?.productSlug}`,
-    permalink: ({ companySlug, lineSlug, productSlug }) => `/archives/collectables/designer-toys/${companySlug}/${lineSlug}/products/${productSlug}/index.html`,
-  },
-});
+  };
+};
 
 export const render = (data) => `
 <nav class="breadcrumbs text-sm mb-2 overflow-x-auto whitespace-nowrap" aria-label="Breadcrumb">
@@ -45,4 +50,3 @@ export const render = (data) => `
   </div>
 </section>
 `;
-
