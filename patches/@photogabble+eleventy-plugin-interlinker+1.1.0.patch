@@ -1,19 +1,28 @@
 diff --git a/node_modules/@photogabble/eleventy-plugin-interlinker/src/html-link-parser.js b/node_modules/@photogabble/eleventy-plugin-interlinker/src/html-link-parser.js
-index 5c98846..c387a05 100644
+index 5c98846..a4105c0 100644
 --- a/node_modules/@photogabble/eleventy-plugin-interlinker/src/html-link-parser.js
 +++ b/node_modules/@photogabble/eleventy-plugin-interlinker/src/html-link-parser.js
-@@ -62,6 +62,11 @@ export default class HTMLLinkParser {
+@@ -57,12 +57,17 @@ export default class HTMLLinkParser {
+ 
+   /**
+    * Find's all internal href links within an HTML document and returns the parsed result.
+-   * @param {string} document
++   * @param {string} html
+    * @param {import('@photogabble/eleventy-plugin-interlinker').PageDirectoryService} pageDirectory
     * @return {Array<import('@photogabble/eleventy-plugin-interlinker').LinkMeta>}
     */
-   find(document, pageDirectory) {
+-  find(document, pageDirectory) {
+-    const dom = new JSDOM(document);
++  find(html, pageDirectory) {
 +    // Eleventy v3 + custom templates can surface non-strings here.
 +    // Coerce defensively to avoid crashes during computed data.
-+    if (typeof document !== 'string') {
-+      document = document == null ? '' : String(document);
++    if (typeof html !== 'string') {
++      html = html == null ? '' : String(html);
 +    }
-     const dom = new JSDOM(document);
++    const dom = new JSDOM(html);
      const anchors = dom.window.document.getElementsByTagName('a');
      const toParse = [];
+ 
 diff --git a/node_modules/@photogabble/eleventy-plugin-interlinker/src/interlinker.js b/node_modules/@photogabble/eleventy-plugin-interlinker/src/interlinker.js
 index c64053f..e5f035f 100644
 --- a/node_modules/@photogabble/eleventy-plugin-interlinker/src/interlinker.js
@@ -42,18 +51,29 @@ index b67c8c7..b117ebf 100644
    if (!matches) return false;
  
 diff --git a/node_modules/@photogabble/eleventy-plugin-interlinker/src/wikilink-parser.js b/node_modules/@photogabble/eleventy-plugin-interlinker/src/wikilink-parser.js
-index fbd6206..0b02fa7 100644
+index fbd6206..8853346 100644
 --- a/node_modules/@photogabble/eleventy-plugin-interlinker/src/wikilink-parser.js
 +++ b/node_modules/@photogabble/eleventy-plugin-interlinker/src/wikilink-parser.js
-@@ -158,6 +158,11 @@ export default class WikilinkParser {
+@@ -152,14 +152,19 @@ export default class WikilinkParser {
+    * Finds all wikilinks within a document (HTML or otherwise) and returns their
+    * parsed result.
+    *
+-   * @param {string} document
++   * @param {string} content
+    * @param {import('@photogabble/eleventy-plugin-interlinker').PageDirectoryService} pageDirectory
+    * @param {string|undefined} filePathStem
     * @return {Array<import('@photogabble/eleventy-plugin-interlinker').WikilinkMeta>}
     */
-   find(document, pageDirectory, filePathStem) {
+-  find(document, pageDirectory, filePathStem) {
++  find(content, pageDirectory, filePathStem) {
 +    // Eleventy v3 can surface non-string "document" during computed data.
 +    // Coerce defensively so builds don’t crash.
-+    if (typeof document !== 'string') {
-+      document = document == null ? '' : String(document);
++    if (typeof content !== 'string') {
++      content = content == null ? '' : String(content);
 +    }
      return this.parseMultiple(
-       (document.match(this.wikiLinkRegExp) || []),
+-      (document.match(this.wikiLinkRegExp) || []),
++      (content.match(this.wikiLinkRegExp) || []),
        pageDirectory,
+       filePathStem
+     )
