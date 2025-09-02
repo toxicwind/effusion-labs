@@ -1,5 +1,5 @@
 diff --git a/node_modules/@photogabble/eleventy-plugin-interlinker/src/html-link-parser.js b/node_modules/@photogabble/eleventy-plugin-interlinker/src/html-link-parser.js
-index 5c98846..b2c7835 100644
+index 5c98846..0761f76 100644
 --- a/node_modules/@photogabble/eleventy-plugin-interlinker/src/html-link-parser.js
 +++ b/node_modules/@photogabble/eleventy-plugin-interlinker/src/html-link-parser.js
 @@ -1,4 +1,5 @@
@@ -8,20 +8,12 @@ index 5c98846..b2c7835 100644
  export default class HTMLLinkParser {
  
    /**
-@@ -57,12 +58,13 @@ export default class HTMLLinkParser {
- 
-   /**
-    * Find's all internal href links within an HTML document and returns the parsed result.
--   * @param {string} document
-+   * @param {string} html
-    * @param {import('@photogabble/eleventy-plugin-interlinker').PageDirectoryService} pageDirectory
+@@ -62,7 +63,7 @@ export default class HTMLLinkParser {
     * @return {Array<import('@photogabble/eleventy-plugin-interlinker').LinkMeta>}
     */
--  find(document, pageDirectory) {
+   find(document, pageDirectory) {
 -    const dom = new JSDOM(document);
-+  find(html, pageDirectory) {
-+    html = toHtmlString(html);
-+    const dom = new JSDOM(html);
++    const dom = new JSDOM(toHtmlString(document));
      const anchors = dom.window.document.getElementsByTagName('a');
      const toParse = [];
  
@@ -61,18 +53,19 @@ index b67c8c7..b117ebf 100644
  
 diff --git a/node_modules/@photogabble/eleventy-plugin-interlinker/src/to-html.js b/node_modules/@photogabble/eleventy-plugin-interlinker/src/to-html.js
 new file mode 100644
-index 0000000..a0f5bd8
+index 0000000..752c547
 --- /dev/null
 +++ b/node_modules/@photogabble/eleventy-plugin-interlinker/src/to-html.js
-@@ -0,0 +1,6 @@
+@@ -0,0 +1,7 @@
 +export function toHtmlString(value) {
 +  if (typeof value === 'string') return value;
 +  if (value?.documentElement?.outerHTML) return value.documentElement.outerHTML;
 +  if (value?.outerHTML) return value.outerHTML;
 +  return String(value ?? '');
 +}
++
 diff --git a/node_modules/@photogabble/eleventy-plugin-interlinker/src/wikilink-parser.js b/node_modules/@photogabble/eleventy-plugin-interlinker/src/wikilink-parser.js
-index fbd6206..b2603a7 100644
+index fbd6206..0f9522a 100644
 --- a/node_modules/@photogabble/eleventy-plugin-interlinker/src/wikilink-parser.js
 +++ b/node_modules/@photogabble/eleventy-plugin-interlinker/src/wikilink-parser.js
 @@ -1,3 +1,5 @@
@@ -81,22 +74,11 @@ index fbd6206..b2603a7 100644
  export default class WikilinkParser {
    /**
     * This regex finds all WikiLink style links: [[id|optional text]] as well as WikiLink style embeds: ![[id]]
-@@ -152,14 +154,15 @@ export default class WikilinkParser {
-    * Finds all wikilinks within a document (HTML or otherwise) and returns their
-    * parsed result.
-    *
--   * @param {string} document
-+   * @param {string} content
-    * @param {import('@photogabble/eleventy-plugin-interlinker').PageDirectoryService} pageDirectory
-    * @param {string|undefined} filePathStem
+@@ -158,6 +160,7 @@ export default class WikilinkParser {
     * @return {Array<import('@photogabble/eleventy-plugin-interlinker').WikilinkMeta>}
     */
--  find(document, pageDirectory, filePathStem) {
-+  find(content, pageDirectory, filePathStem) {
-+    content = toHtmlString(content);
+   find(document, pageDirectory, filePathStem) {
++    document = toHtmlString(document);
      return this.parseMultiple(
--      (document.match(this.wikiLinkRegExp) || []),
-+      (content.match(this.wikiLinkRegExp) || []),
+       (document.match(this.wikiLinkRegExp) || []),
        pageDirectory,
-       filePathStem
-     )

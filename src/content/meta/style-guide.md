@@ -131,6 +131,23 @@ This syntax preserves aesthetic uniformity and enables automated indexing via ha
 
 Backlink handles should remain stable across refactors. All links must point to real nodes with `title:` metadata fields. Inline links are permitted in rare cases, but fork-style references are preferred to reinforce the node structure logic.
 
+#### ⸻ Archives: Dynamic Link Namespace (Required)
+
+Archive pages (products, characters, series) are generated dynamically from JSON sources. To reference them, use namespaced wikilinks so an LLM cannot confuse static vs dynamic paths:
+
+```markdown
+[[product:lab010]]           → dynamic product page
+[[character:labubu]]         → dynamic character page
+[[series:lets-checkmate]]    → dynamic series page
+
+# Synonyms (equivalent, more explicit):
+[[archive:product:lab010]]
+[[archive:character:labubu]]
+[[archive:series:lets-checkmate]]
+```
+
+Do not hardcode `/archives/...` URLs in prose. The resolver maps slugs to the correct dynamic page at build time, keeping structure stable across reorganizations.
+
 ---
 
 ## ⌬ Authorial Stance
