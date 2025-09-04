@@ -5,6 +5,8 @@ import { dirs } from "./lib/config.js";
 import seeded from "./lib/seeded.js";
 import registerArchive from "./lib/eleventy/archives.mjs";
 import { getBuildInfo } from "./lib/build-info.js";
+import fs from "node:fs";
+import path from "node:path";
 
 // tiny local slugger (keeps filters resilient)
 const slug = (s) =>
@@ -191,14 +193,20 @@ export default function (eleventyConfig) {
   const build = getBuildInfo();
   eleventyConfig.addGlobalData("build", build);
   eleventyConfig.on("eleventy.after", async ({ dir, results }) => {
-    // Iterate all templates that Eleventy just processed
-    for (const r of results) {
-      // r.content should be a string; if not, log it
-      if (typeof r?.content !== "string") {
-        console.error("[Probe] Non-string output:", r.inputPath, "type=", typeof r?.content);
+    const redirectsFile = path.join(dir.output, "_redirects");
+    if (fs.existsSync(redirectsFile)) {
+      const lines = fs.readFileSync(redirectsFile, "utf8").split(/\n/).filter(Boolean);
+      for (const line of lines) {
+        const [from, to] = line.split(/\s+/);
+        if (!from || !to) continue;
+        const outPath = path.join(dir.output, from, "index.html");
+        fs.mkdirSync(path.dirname(outPath), { recursive: true });
+        const html = `<!DOCTYPE html><html><head><meta http-equiv="refresh" content="0; url=${to}"><link rel="canonical" href="${to}"></head><body><p>Redirecting to <a href="${to}">${to}</a></p></body></html>`;
+        fs.writeFileSync(outPath, html);
       }
     }
   });
+  eleventyConfig.addPassthroughCopy('_redirects');
   return {
     dir: dirs,
     markdownTemplateEngine: "njk",

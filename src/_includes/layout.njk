@@ -16,6 +16,11 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>{{ title }} | Effusion Labs</title>
 
+  {% if canonicalUrl %}
+  <link rel="canonical" href="{{ canonicalUrl }}">
+  <meta property="og:url" content="{{ canonicalUrl | absoluteUrl }}">
+  {% endif %}
+
   {# Early theme (daisyUI): align with compiled themes (nord, sunset). #}
   <script>
     (function () {
