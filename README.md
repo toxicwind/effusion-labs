@@ -252,6 +252,13 @@ We maintain fixes for third‑party packages using `patch-package`.
 
 Note: avoid editing `node_modules/` directly. If you must prototype a change, run `npx patch-package <pkg>` to capture your edits into `patches/` and commit the patch file.
 
+### Debugging Interlinker Links
+
+During builds the Interlinker plugin records any unresolved wiki-style links.
+After running `npx @11ty/eleventy` or `npm test`, inspect `artifacts/reports/interlinker-unresolved.json`.
+Each object looks like `{ "kind": "product", "key": "missing-item", "sourcePage": "src/content/foo.md" }` and represents a link
+that fell back to a soft canonical URL. Fix the slug or update archive data to resolve.
+
 ---
 
 ## For Autonomous Agents
