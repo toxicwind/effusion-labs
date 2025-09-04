@@ -1,0 +1,6 @@
+version: '3'
+services:
+  gateway:
+    build: ..
+    expose:
+      - "${PORT_HTTP:-3000}"

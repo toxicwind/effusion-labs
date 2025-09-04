@@ -1,0 +1,8 @@
+name: validate-docs
+on: [push]
+jobs:
+  docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: test -f mcp-stack/docs/README.md

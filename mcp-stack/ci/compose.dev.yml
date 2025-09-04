@@ -1,0 +1,6 @@
+version: '3'
+services:
+  gateway:
+    build: ..
+    ports:
+      - "${PORT_HTTP:-0}:${PORT_HTTP:-0}"

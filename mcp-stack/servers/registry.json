@@ -1,0 +1,8 @@
+[
+  {"name":"filesystem","cmd":"node","args":["../servers/stdio-echo.js"]},
+  {"name":"readweb","cmd":"node","args":["../servers/stdio-echo.js"]},
+  {"name":"screenshot","cmd":"node","args":["../servers/stdio-echo.js"]},
+  {"name":"playwright","cmd":"node","args":["../servers/stdio-echo.js"]},
+  {"name":"curl","cmd":"node","args":["../servers/stdio-echo.js"],"capabilities":{}},
+  {"name":"searxng","cmd":"node","args":["../servers/stdio-echo.js"]}
+]
