@@ -27,7 +27,9 @@
     "data:merge-sections": "node tools/merge-sections.mjs --verbose",
     "data:synthesize": "node tools/synthesize.mjs --verbose",
     "data:merge-golden": "node tools/merge-golden.mjs --verbose",
-    "postinstall": "if [ \"${PATCH_PACKAGE_RUN:-1}\" != \"0\" ] && [ -x node_modules/.bin/patch-package ]; then patch-package; fi"
+    "postinstall": "if [ \"${PATCH_PACKAGE_RUN:-1}\" != \"0\" ] && [ -x node_modules/.bin/patch-package ]; then patch-package; fi",
+    "mcp:dev": "node mcp-stack/gateway/server.mjs",
+    "mcp:test": "node mcp-stack/tests/smoke.mjs"
   },
   "engines": {
     "node": ">=24"
