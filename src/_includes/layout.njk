@@ -126,3 +126,12 @@
   <meta name="apple-mobile-web-app-title" content="Effusion Labs">
   <link rel="manifest" href="/site.webmanifest">
 </head>
+<body>
+  {{ header(nav, page) }}
+  <main id="main" class="min-h-[60vh]">
+    {{ content | safe }}
+  </main>
+  {{ footer() }}
+  <script src="/assets/js/work-filters.js" defer></script>
+</body>
+</html>

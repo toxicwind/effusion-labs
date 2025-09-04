@@ -1,5 +1,6 @@
 import { fetch } from "undici";
-import { htmlToMarkdown } from "../../lib/webpageToMarkdown.js";
+// Prefer the local gateway implementation to keep container builds self-contained.
+import { htmlToMarkdown } from "./lib/webToMd.js";
 import { resolveSidecar } from "../sidecars/resolver.mjs";
 
 function normUrl(u) {

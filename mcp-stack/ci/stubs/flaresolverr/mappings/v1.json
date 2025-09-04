@@ -1,0 +1,13 @@
+{
+  "request": { "method": "POST", "urlPath": "/v1" },
+  "response": {
+    "status": 200,
+    "headers": { "Content-Type": "application/json" },
+    "jsonBody": {
+      "status": "ok",
+      "version": "3.3.17",
+      "solution": { "url": "https://stubbed.local", "status": 200, "response": "<html>ok</html>" }
+    }
+  }
+}
+

@@ -1,0 +1,19 @@
+version: "3.8"
+services:
+  mcp-gateway:
+    build: ./mcp-stack/gateway
+    environment:
+      - PROFILE=prod
+      - LOG_LEVEL=info
+    expose:
+      - "3000"
+    depends_on:
+      - flaresolverr
+  flaresolverr:
+    image: ghcr.io/flaresolverr/flaresolverr:latest
+    expose:
+      - "8191"
+networks:
+  default:
+    internal: true
+

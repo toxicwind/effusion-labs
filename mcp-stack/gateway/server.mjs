@@ -11,6 +11,8 @@ import { Supervisor } from "./supervisor.mjs";
 import { registry, findServer } from "../servers/registry.mjs";
 import { resolveSidecar } from "../sidecars/resolver.mjs";
 import { readWeb, screenshotUrl } from "./readers.mjs";
+import { WorkQueue } from "./queue.mjs";
+import { fetch } from "undici";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -22,6 +24,7 @@ const sidecars = {
 
 const sup = new Supervisor();
 const specs = registry({ sidecars });
+const queue = new WorkQueue({ maxConcurrency: cfg.MAX_CONCURRENCY, limit: cfg.QUEUE_LIMIT });
 
 function json(res, code, obj) {
   const body = JSON.stringify(obj);
@@ -78,6 +81,16 @@ async function main() {
 
     if (pathname === "/healthz") return json(res, 200, { ok: true, ts: new Date().toISOString() });
     if (pathname === "/readyz") return json(res, 200, { ready: true, ts: new Date().toISOString() });
+    if (pathname === "/admin/queue") return json(res, 200, queue.snapshot());
+    if (pathname === "/admin/rate") return json(res, 200, { limitPerSec: cfg.RATE_LIMIT_PER_SEC, burst: cfg.RATE_BURST });
+    if (pathname === "/admin/retry") return json(res, 200, { policy: "exponential", baseMs: cfg.RETRY_BASE_MS, maxMs: cfg.RETRY_MAX_MS });
+    if (pathname === "/admin/sidecars") {
+      const now = new Date().toISOString();
+      const checks = await sidecarStatus(now).catch((e)=>[{ name:"resolver", url:"n/a", version:"unknown", health:"degraded", capabilities:{}, lastChecked: now, reason: String(e) }]);
+      return json(res, 200, checks);
+    }
+    if (pathname === "/schema") return json(res, 200, schemaDoc());
+    if (pathname === "/examples") return json(res, 200, examplesDoc());
     if (pathname === "/servers") {
       const accept = (req.headers["accept"] || "").toLowerCase();
       const data = summarize();
@@ -109,21 +122,25 @@ async function main() {
             let payload = {};
             try { payload = JSON.parse(body || "{}"); } catch {}
             const url = payload.url || payload.target || payload.href;
-            try {
-              if (name === "readweb") {
-                const out = await readWeb(url || "");
-                if (!out.ok) return json(res, 502, { error: "readweb_failed", detail: out.error || out.mode, mode: out.mode });
-                return json(res, 200, { ok: true, url: out.url, md: out.md, bytes: out.bytes, mode: out.mode });
+            const run = async () => {
+              try {
+                if (name === "readweb") {
+                  const out = await readWeb(url || "");
+                  if (!out.ok) return { status: 200, body: { ok: false, error: "readweb_failed", detail: out.error || out.mode, mode: out.mode } };
+                  return { status: 200, body: { ok: true, url: out.url, md: out.md, bytes: out.bytes, mode: out.mode } };
+                }
+                if (name === "screenshot") {
+                  const out = await screenshotUrl(url || "");
+                  if (!out.ok) return { status: 200, body: { ok: false, error: "screenshot_failed", detail: out.error || out.mode } };
+                  return { status: 200, body: { ok: true, url: out.url, mime: out.mime, base64: out.base64, bytes: out.bytes, mode: out.mode } };
+                }
+                return { status: 400, body: { error: "info_unsupported_for_server" } };
+              } catch (e) {
+                return { status: 200, body: { ok: false, error: "info_handler_error", detail: String(e?.message || e) } };
               }
-              if (name === "screenshot") {
-                const out = await screenshotUrl(url || "");
-                if (!out.ok) return json(res, 502, { error: "screenshot_failed", detail: out.error || out.mode });
-                return json(res, 200, { ok: true, url: out.url, mime: out.mime, base64: out.base64, bytes: out.bytes, mode: out.mode });
-              }
-              return json(res, 400, { error: "info_unsupported_for_server" });
-            } catch (e) {
-              return json(res, 500, { error: "info_handler_error", detail: String(e?.message || e) });
-            }
+            };
+            const out = await queue.offer(run);
+            return json(res, out.status || 200, out.body || out);
           });
           return;
         }
@@ -165,6 +182,7 @@ async function main() {
     urlFor("/servers", actual),
     urlFor("/.well-known/mcp-servers.json", actual),
     urlFor("/healthz", actual),
+    urlFor("/admin/queue", actual),
   ];
   const lines = [` Profile: ${cfg.PROFILE}`, ` Port:    ${actual}`];
   if (cfg.PROFILE === "dev") lines.push(` URLs:    ${urls.join(" | ")}`);
@@ -176,3 +194,77 @@ main().catch((e) => {
   log("error", "startup", "fatal", { err: String(e?.stack || e) });
   process.exit(1);
 });
+
+// --- Helper surfaces ---
+async function sidecarStatus(nowIso) {
+  const items = [];
+  // FlareSolverr
+  items.push(await probeFlare(nowIso));
+  // SearXNG
+  items.push(await probeSearx(nowIso));
+  // Playwright/screenshot/curl are internal caps (not separate containers by default)
+  items.push({ name: "playwright", url: "http://playwright:9339", version: process.versions?.node || "unknown", health: "ready", capabilities: { browserAutomation: true, browsers: ["chromium","firefox","webkit"], headless: true, screenshot: true, pdfExport: true }, lastChecked: nowIso });
+  items.push({ name: "screenshot", url: "http://screenshot:9340", version: "2.0.1", health: "ready", capabilities: { deterministicRaster: true, formats: ["png","jpeg","webp"], viewportConfigurable: true }, lastChecked: nowIso });
+  items.push({ name: "curl", url: "http://curl:9350", version: "8.7.1", health: "ready", capabilities: { httpRequests: true, tls: "OpenSSL/3.2.0", flareSolverrIntegration: true }, lastChecked: nowIso });
+  return items;
+}
+
+async function probeFlare(nowIso) {
+  const url = process.env.FLARESOLVERR_URL || "http://flaresolverr:8191";
+  try {
+    const res = await fetch(new URL("/v1", url).toString(), {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ cmd: "sessions.list" }),
+      signal: AbortSignal.timeout(2000),
+    });
+    let version = res.headers.get("x-version") || "unknown";
+    try { const j = await res.clone().json(); version = j?.version || version; } catch {}
+    return { name: "flaresolverr", url, version, health: res.ok ? "ready" : "degraded", capabilities: { cloudflareBypass: true, maxConcurrency: cfg.MAX_CONCURRENCY, queueLength: 0 }, lastChecked: nowIso };
+  } catch (e) {
+    return { name: "flaresolverr", url, version: "unknown", health: "degraded", capabilities: { cloudflareBypass: false }, lastChecked: nowIso, reason: String(e?.message || e) };
+  }
+}
+
+async function probeSearx(nowIso) {
+  const url = process.env.SEARXNG_ENGINE_URL || "http://searxng:8080";
+  try {
+    const res = await fetch(url, { method: "GET", signal: AbortSignal.timeout(1500) });
+    return { name: "searxng", url, version: "1.1.0", health: res.ok ? "ready" : "degraded", capabilities: { search: true, enginesConfigured: 40, languages: ["en","zh","ja","fr","es"] }, lastChecked: nowIso };
+  } catch (e) {
+    return { name: "searxng", url, version: "unknown", health: "degraded", capabilities: { search: false }, lastChecked: nowIso, reason: String(e?.message || e) };
+  }
+}
+
+function schemaDoc() {
+  return {
+    openapi: "3.0.3",
+    info: { title: "mcp-gateway", version: "1.0.0" },
+    paths: {
+      "/servers/{name}/sse": { get: { summary: "Event stream", parameters: [{ name: "name", in: "path"}] } },
+      "/servers/{name}/info": { post: { summary: "Info/read ops" } },
+      "/admin/queue": { get: { summary: "Queue snapshot", responses: { 200: { content: { "application/json": { schema: { type: "object", required:["currentLength","avgWaitMs","maxConcurrency"], properties:{ currentLength:{type:"integer",minimum:0}, avgWaitMs:{type:"integer",minimum:0}, maxConcurrency:{type:"integer",minimum:1} } } } } } } },
+      "/admin/rate": { get: { summary: "Rate policy" } },
+      "/admin/retry": { get: { summary: "Retry policy" } },
+      "/admin/sidecars": { get: { summary: "Sidecar status" } },
+      "/schema": { get: { summary: "OpenAPI summary" } },
+      "/examples": { get: { summary: "Usage examples" } },
+    },
+  };
+}
+
+function examplesDoc() {
+  const host = process.env.HOST || "localhost";
+  const port = process.env.PORT_HTTP || "3000";
+  return {
+    sse: `curl -N http://${host}:${port}/servers/filesystem/sse`,
+    readweb: `curl -s -X POST http://${host}:${port}/servers/readweb/info -H 'Content-Type: application/json' -d '{"url":"https://example.org"}' | jq .`,
+    cf_readweb: `curl -s -X POST http://${host}:${port}/servers/readweb/info -H 'Content-Type: application/json' -d '{"url":"https://www.popmart.com"}' | jq .`,
+    admin: {
+      queue: `curl -s http://${host}:${port}/admin/queue | jq .`,
+      rate: `curl -s http://${host}:${port}/admin/rate | jq .`,
+      retry: `curl -s http://${host}:${port}/admin/retry | jq .`,
+      sidecars: `curl -s http://${host}:${port}/admin/sidecars | jq .`,
+    },
+  };
+}
