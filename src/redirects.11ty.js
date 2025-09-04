@@ -2,7 +2,10 @@
  * Generates a Netlify-compatible _redirects file mapping legacy product paths
  * and alias slugs to canonical /archives/product/<slugCanonical>/.
  */
-export const permalink = () => '/_redirects';
+export const data = {
+  permalink: '/_redirects',
+  eleventyExcludeFromCollections: true,
+};
 
 export default function (data) {
   const on = (process.env.ARCHIVE_CANON_ROUTES ?? 'true') !== 'false';
@@ -20,4 +23,3 @@ export default function (data) {
   }
   return lines.sort().join('\n') + '\n';
 }
-
