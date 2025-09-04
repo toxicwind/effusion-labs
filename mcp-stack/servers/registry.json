@@ -1,0 +1,7 @@
+{
+  "echo": {
+    "command": "node",
+    "args": ["servers/echo-server.js"],
+    "capabilities": {}
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "name": "mcp-stack",
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "start": "node gateway/index.js",
+    "test": "node tests/smoke/test_smoke.js && node tests/integration/test_discovery.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "get-port": "^7.0.0",
+    "eventsource": "^2.0.2"
+  },
+  "devDependencies": {
+    "node-fetch": "^3.3.2"
+  }
+}

@@ -1,0 +1,7 @@
+services:
+  gateway:
+    image: node:18
+    working_dir: /app
+    volumes:
+      - ..:/app
+    command: ["npm","start"]

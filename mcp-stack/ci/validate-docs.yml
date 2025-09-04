@@ -1,0 +1,10 @@
+name: validate-docs
+on: [push]
+jobs:
+  docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: test -f mcp-stack/docs/README.md
+      - run: npm --prefix mcp-stack install
+      - run: npm --prefix mcp-stack test
