@@ -18,6 +18,8 @@
     "//-- CI & VALIDATION --//": "",
     "dead-links": "markdown-link-check -c link-check.config.json README.md",
     "validate:docs": "node tools/validate-docs.js",
+    "report:products": "node tools/archive-products-report.mjs",
+    "lint:product-links": "node tools/lint-product-links.mjs",
     "check:archives": "node tools/validate-archive-build.mjs",
     "deps:playwright": "playwright install chromium || true",
     "//-- DATA PIPELINE --//": "",

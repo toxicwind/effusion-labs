@@ -16,9 +16,11 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>{{ title }} | Effusion Labs</title>
 
-  {% if canonicalUrl %}
-  <link rel="canonical" href="{{ canonicalUrl }}">
-  <meta property="og:url" content="{{ canonicalUrl | absoluteUrl }}">
+  {# Canonical and social tags for canonicalized archive pages #}
+  {% set canon = canonicalUrl or page.canonicalUrl or (product and product.data and product.data.canonicalUrl) %}
+  {% if canon %}
+    <link rel="canonical" href="{{ canon }}">
+    <meta property="og:url" content="{{ canon | absoluteUrl }}">
   {% endif %}
 
   {# Early theme (daisyUI): align with compiled themes (nord, sunset). #}
@@ -101,8 +103,6 @@
     .btn-cutout[data-variant="b"] { --c: var(--neon-b); }
     .btn-cutout[data-variant="c"] { --c: var(--neon-c); }
 
-    /* (Removed custom pill block — use DaisyUI badges + .pill utilities) */
-
     /* Neon Tiles — subtle spectral lift/hover for list cards */
     .hb-tile {
       border: 1px solid color-mix(in oklab, hsl(var(--bc)) 14%, transparent);
@@ -126,133 +126,3 @@
   <meta name="apple-mobile-web-app-title" content="Effusion Labs">
   <link rel="manifest" href="/site.webmanifest">
 </head>
-
-{# Always-on Hypebrüt overlay controls live on <body> as data-* (page can override via front matter) #}
-<body
-  class="bg-base-100 text-base-content"
-  data-mschf="auto"
-  {% if page.mschfIntensity or site.mschfIntensity %}
-  data-mschf-intensity="{{ page.mschfIntensity or site.mschfIntensity }}"
-  {% endif %}
-  data-mschf-seed-mode="{{ page.mschfSeedMode or site.mschfSeedMode or 'page' }}"
-  data-mschf-style="auto"
-  class="bg-base-100 text-base-content font-body antialiased selection:bg-primary/20"
->
-  <script>
-    // Disable overlay on small screens to avoid interfering with mobile nav
-    try { if (matchMedia('(max-width: 768px)').matches) document.body.setAttribute('data-mschf','off'); } catch {}
-  </script>
-  <a href="#main" class="skip-link">Skip to main content</a>
-  {{ header(nav, page) }}
-
-  {% if page.heroBand or site.heroBand %}
-  {% set showHeroRings = page.heroBandRings if page.heroBandRings is defined else site.heroBandRings %}
-  <div class="pointer-events-none fixed inset-x-0 top-[6%] z-[45] flex flex-col items-center gap-1 text-primary">
-    {# ——— SVG micro-instrumentation band (rings + crosshair + brackets) ——— #}
-    <svg width="100%" height="84" viewBox="0 0 1200 84" aria-hidden="true" class="block">
-      <!-- left bracket -->
-      <path d="M24 18 h26 v-8 M24 66 h26 v8" fill="none" stroke="currentColor" stroke-width="2" opacity=".22"/>
-      <!-- right bracket -->
-      <path d="M1176 18 h-26 v-8 M1176 66 h-26 v8" fill="none" stroke="currentColor" stroke-width="2" opacity=".22"/>
-      {% if showHeroRings %}
-      <!-- spectral rings -->
-      <g opacity=".20">
-        <circle cx="600" cy="42" r="18" fill="none" stroke="currentColor" stroke-width="1"/>
-        <circle cx="600" cy="42" r="30" fill="none" stroke="currentColor" stroke-width="1"/>
-        <circle cx="600" cy="42" r="42" fill="none" stroke="currentColor" stroke-width="1"/>
-      </g>
-      {% endif %}
-      <!-- crosshair -->
-      <g opacity=".28">
-        <line x1="600" y1="10" x2="600" y2="74" stroke="currentColor" stroke-width="1"/>
-        <line x1="560" y1="42" x2="640" y2="42" stroke="currentColor" stroke-width="1"/>
-        <circle cx="600" cy="42" r="12" fill="none" stroke="currentColor" stroke-width="1"/>
-      </g>
-      <!-- faint topographic wiggle -->
-      <path d="M0,58 C120,34 240,74 360,50 480,26 600,66 720,44 840,22 960,62 1080,40 1140,30 1200,42 1200,42"
-            fill="none" stroke="currentColor" stroke-width="1" opacity=".10"/>
-    </svg>
-  </div>
-  {% endif %}
-
-  {# Lab seal frame: opt-in only (controlled via page.labSeal or site.labSeal) #}
-  {% if page.labSeal or site.labSeal %}
-  <span class="hb-lab-seal pointer-events-none fixed inset-0 z-[40]" aria-hidden="true"
-    style="box-shadow:
-      inset 0 0 0 1px color-mix(in oklab, hsl(var(--p)) 18%, transparent),
-      inset 0 0 0 2px color-mix(in oklab, hsl(var(--p)) 6%, transparent),
-      inset 0 0 24px color-mix(in oklab, hsl(var(--p)) 10%, transparent);">
-  </span>
-  {% endif %}
-
-
-  {# Overlay root (always present). Color follows theme primary. #}
-  <div id="mschf-overlay-root" class="text-primary" aria-hidden="true"></div>
-
-  <div class="mx-auto max-w-screen-2xl px-6">
-    {% set metaOff = metaDisable == true or metaDisable == 'true' %}
-    {% set hasMeta = (status or certainty or importance or tags or memory_ref) and not metaOff %}
-    {% set proseOn = prose != false %}
-
-    <main id="main" class="
-      {% if not metaOff %}xl:grid xl:gap-10 xl:grid-cols-[1fr_16rem]{% endif %}
-      {% if showTitle != false %} mt-12{% endif %}
-    ">
-      <article class="
-        {% if proseOn %}
-          prose dark:prose-invert max-w-none m-0
-          prose-headings:font-heading prose-h1:tracking-tight
-          prose-a:text-primary prose-a:no-underline
-          prose-blockquote:border-l-4 prose-blockquote:border-base-content/20 prose-blockquote:opacity-90
-        {% else %}
-          m-0
-        {% endif %}
-        {% if not metaOff %} xl:col-span-1 {% else %} w-full {% endif %}
-      ">
-        {% if showTitle != false %}
-          <header class="mb-8">
-            <h1 class="font-heading text-primary text-4xl uppercase tracking-[-0.025em]">{{ title }}</h1>
-          </header>
-        {% endif %}
-        {{ content | safe }}
-      </article>
-
-      {% if hasMeta %}
-      <aside class="w-full mt-10 text-sm opacity-90 border-t border-base-content/20 pt-4 xl:mt-0 xl:w-64 xl:pl-4 xl:border-t-0 xl:border-l">
-        <div class="space-y-2 xl:sticky xl:top-28">
-          <h2 class="font-heading text-lg font-semibold tracking-wide">Meta</h2>
-          <ul class="space-y-1">
-            {% if status %}<li><strong>Status:</strong> {{ status }}</li>{% endif %}
-            {% if date %}
-              <li><strong>Date:</strong>
-                <time datetime="{{ date | htmlDateString }}">{{ date | readableDate }}</time>
-              </li>
-            {% endif %}
-            {% if certainty %}<li><strong>Certainty:</strong> {{ certainty }}</li>{% endif %}
-            {% if importance %}<li><strong>Importance:</strong> {{ importance }}</li>{% endif %}
-            {% if tags %}
-              <li><strong>Tags:</strong>
-                <ul class="pl-4 list-disc">{% for tag in tags %}<li>{{ tag }}</li>{% endfor %}</ul>
-              </li>
-            {% endif %}
-            {% if memory_ref %}
-              <li><strong>Memory Ref:</strong>
-                <ul class="pl-4 list-disc">{% for ref in memory_ref %}<li>{{ ref }}</li>{% endfor %}</ul>
-              </li>
-            {% endif %}
-          </ul>
-        </div>
-      </aside>
-      {% endif %}
-    </main>
-
-    {{ footer(buildTime) }}
-  </div>
-
-  <!-- Site JS -->
-  <script src="/assets/js/footnote-nav.js" defer></script>
-  <script src="/assets/js/code-copy.js" defer></script>
-  <!-- Always-on Hypebrüt overlay (module for tree-shaking + strict mode) -->
-  <script type="module" src="/assets/js/mschf-overlay.js" defer></script>
-</body>
-</html>

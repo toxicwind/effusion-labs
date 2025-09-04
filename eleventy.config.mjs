@@ -205,6 +205,16 @@ export default function (eleventyConfig) {
         fs.writeFileSync(outPath, html);
       }
     }
+    // Snapshot archive product mapping for external tools/tests
+    try {
+      const fs = await import('node:fs');
+      const path = await import('node:path');
+      const items = eleventyConfig.globalData?.archiveProductMap || [];
+      if (items && items.length) {
+        fs.mkdirSync('logs', { recursive: true });
+        fs.writeFileSync(path.join('logs','archiveProductMap.cache.json'), JSON.stringify(items, null, 2));
+      }
+    } catch {}
   });
   eleventyConfig.addPassthroughCopy('_redirects');
   return {

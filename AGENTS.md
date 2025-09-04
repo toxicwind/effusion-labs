@@ -123,7 +123,7 @@ git push origin main
 
 All references to archived entities **MUST** resolve through the canonical system.
 
-* Use namespaced wikilinks:
+* You must use namespaced wikilinks — must use [[<type>:<name>]]:
 
   ```text
   [[<type>:<name>]]
@@ -131,7 +131,7 @@ All references to archived entities **MUST** resolve through the canonical syste
 
   where `<type>` ∈ {`series`, `character`, `product`}.
 
-* Anchors **MUST** be short canonical routes of the form:
+* Prefer dynamic archive routes. Anchors **MUST** be short canonical routes of the form:
 
   ```text
   /archives/<type>/<slug>/
