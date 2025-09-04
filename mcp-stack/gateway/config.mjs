@@ -24,6 +24,12 @@ export function loadConfig() {
   const LOG_LEVEL = process.env.LOG_LEVEL || "info";
   const HEALTH_TIMEOUT_MS = envInt("HEALTH_TIMEOUT_MS", 10_000);
   const INTERNAL_HOST = process.env.INTERNAL_HOST || "mcp-gateway";
+  const MAX_CONCURRENCY = envInt("MAX_CONCURRENCY", 20);
+  const QUEUE_LIMIT = envInt("QUEUE_LIMIT", 10_000);
+  const RATE_LIMIT_PER_SEC = envInt("RATE_LIMIT_PER_SEC", 50);
+  const RATE_BURST = envInt("RATE_BURST", 100);
+  const RETRY_BASE_MS = envInt("RETRY_BASE_MS", 200);
+  const RETRY_MAX_MS = envInt("RETRY_MAX_MS", 10_000);
 
   const cfg = {
     PROFILE,
@@ -33,6 +39,12 @@ export function loadConfig() {
     LOG_LEVEL,
     HEALTH_TIMEOUT_MS,
     INTERNAL_HOST,
+    MAX_CONCURRENCY,
+    QUEUE_LIMIT,
+    RATE_LIMIT_PER_SEC,
+    RATE_BURST,
+    RETRY_BASE_MS,
+    RETRY_MAX_MS,
     SIDEcars: {
       searxng: process.env.SEARXNG_ENGINE_URL,
       flaresolverr: process.env.FLARESOLVERR_URL,

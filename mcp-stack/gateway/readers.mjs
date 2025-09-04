@@ -1,5 +1,6 @@
 import { fetch } from "undici";
 import { htmlToMarkdown } from "../../lib/webpageToMarkdown.js";
+import { resolveSidecar } from "../sidecars/resolver.mjs";
 
 function normUrl(u) {
   try {
@@ -39,10 +40,10 @@ async function directFetch(url, { headers }) {
   };
 }
 
-async function flareFetch(url, { headers }) {
-  const base = process.env.FLARESOLVERR_URL;
-  if (!base) throw new Error("flaresolverr_not_configured");
-  const res = await fetch(new URL("/v1", base).toString(), {
+async function flareFetch(url, { headers, base }) {
+  const baseUrl = base || process.env.FLARESOLVERR_URL;
+  if (!baseUrl) throw new Error("flaresolverr_not_configured");
+  const res = await fetch(new URL("/v1", baseUrl).toString(), {
     method: "POST",
     headers: { "content-type": "application/json" },
     body: JSON.stringify({ cmd: "request.get", url, maxTimeout: 60_000, headers: { "user-agent": UA, ...(headers || {}) } }),
@@ -73,9 +74,11 @@ export async function readWeb(inputUrl, opts = {}) {
     const md = htmlToMarkdown(last.body, last.url);
     return { ok: true, url: last.url, status: last.status, contentType: last.headers?.["content-type"], md, bytes: last.bytes, mode: "direct" };
   }
-  // If CF hinted and FlareSolverr configured, try it
-  if (process.env.FLARESOLVERR_URL) {
-    const via = await flareFetch(url, opts).catch((e) => ({ ok: false, error: String(e) }));
+  // If CF hinted, auto-discover FlareSolverr (env or DNS) and try it
+  const flareSidecar = resolveSidecar("flaresolverr");
+  const flareBase = await discoverFlareBase(flareSidecar?.url).catch(()=>null);
+  if (flareBase || process.env.FLARESOLVERR_URL) {
+    const via = await flareFetch(url, { ...opts, base: flareBase || process.env.FLARESOLVERR_URL }).catch((e) => ({ ok: false, error: String(e) }));
     if (via.ok) {
       const md = htmlToMarkdown(via.body, via.url);
       return { ok: true, url: via.url, status: via.status, contentType: via.headers?.["content-type"], md, bytes: via.bytes, mode: "flaresolverr" };
@@ -107,3 +110,23 @@ export async function screenshotUrl(inputUrl, opts = {}) {
   }
 }
 
+async function discoverFlareBase(candidate) {
+  const base = candidate || process.env.FLARESOLVERR_URL || "http://flaresolverr:8191";
+  // Try a very quick probe to see if something is listening; many containers respond 404 on '/'
+  const url = new URL("/", base).toString();
+  try {
+    const res = await fetch(url, { method: "GET", signal: AbortSignal.timeout(1500) });
+    if (res.status >= 200 && res.status < 500) return base; // something is there
+  } catch {}
+  // Try POST /v1 with a harmless command expecting 200/4xx
+  try {
+    const res = await fetch(new URL("/v1", base).toString(), {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ cmd: "sessions.list" }) ,
+      signal: AbortSignal.timeout(1500),
+    });
+    if (res.status >= 200 && res.status < 500) return base;
+  } catch {}
+  throw new Error("flaresolverr_unreachable");
+}

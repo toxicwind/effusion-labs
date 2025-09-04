@@ -6,7 +6,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import process from 'node:process';
 import natural from 'natural';
-import { routeRegistry, getByPath } from '../lib/interlinkers/route-registry.mjs';
+import { routeRegistry } from '../lib/interlinkers/route-registry.mjs';
 
 const HELP = `
 Usage: node tools/interlinker-audit.mjs [--apply] [--min <score>] [--kind <kind>]
@@ -21,14 +21,56 @@ function readJson(p) { return JSON.parse(fs.readFileSync(p, 'utf8')); }
 function uniq(arr) { return Array.from(new Set(arr)); }
 function toSlug(s) { return String(s ?? '').normalize('NFKD').toLowerCase().replace(/[^\w\s-]/g,'').trim().replace(/\s+/g,'-').replace(/-+/g,'-'); }
 
-function getDataset(kind, currentPageData) {
-  const def = routeRegistry.kinds[kind];
-  if (!def) return [];
-  for (const key of def.datasetKeys) {
-    const arr = getByPath(currentPageData, key);
-    if (Array.isArray(arr) && arr.length) return arr;
+function collectJsonFiles(dirParts) {
+  const base = path.join(...dirParts);
+  if (!fs.existsSync(base)) return [];
+  const out = [];
+  const walk = (d) => {
+    for (const ent of fs.readdirSync(d, { withFileTypes: true })) {
+      const p = path.join(d, ent.name);
+      if (ent.isDirectory()) walk(p);
+      else if (ent.isFile() && /\.json$/i.test(p)) out.push(p);
+    }
+  };
+  walk(base);
+  return out;
+}
+
+function readJson(p) { return JSON.parse(fs.readFileSync(p, 'utf8')); }
+
+function datasetFor(kind) {
+  const out = [];
+  if (kind === 'product') {
+    const files = collectJsonFiles(['src','content','archives']).filter(p => /\/products\//.test(p));
+    for (const p of files) {
+      const d = readJson(p); d.__source = p;
+      const slug = d.slugCanonical || d.productSlug || d.slug;
+      out.push({ data: d, href: `/archives/product/${slug}/` });
+    }
+  } else if (kind === 'character') {
+    const files = collectJsonFiles(['src','content','archives']).filter(p => /\/characters\//.test(p));
+    for (const p of files) { const d = readJson(p); d.__source = p; const slug = d.charSlug || d.slug; out.push({ data: d, href: `/archives/character/${slug}/` }); }
+  } else if (kind === 'series') {
+    const files = collectJsonFiles(['src','content','archives']).filter(p => /\/series\//.test(p));
+    for (const p of files) { const d = readJson(p); d.__source = p; const slug = d.seriesSlug || d.slug; out.push({ data: d, href: `/archives/series/${slug}/` }); }
+  } else if (['spark','concept','project','meta'].includes(kind)) {
+    const dir = kind + 's';
+    const base = path.join('src','content',dir);
+    if (fs.existsSync(base)) {
+      const walk = (d) => {
+        for (const ent of fs.readdirSync(d, { withFileTypes: true })) {
+          const p = path.join(d, ent.name);
+          if (ent.isDirectory()) walk(p);
+          else if (ent.isFile() && /\.(md|markdown)$/i.test(p)) {
+            const fileSlug = path.basename(p).replace(/\.(md|markdown)$/i,'');
+            out.push({ data: { fileSlug, title: fileSlug }, href: `/${dir}/${fileSlug}/` });
+          }
+        }
+      };
+      walk(base);
+    }
   }
-  return [];
+  return out;
 }
 
 function indexFor(kind, dataset) {
@@ -92,24 +134,12 @@ async function main() {
   const report = readJson(reportPath);
   const unresolved = Array.isArray(report.items) ? report.items : [];
 
-  // We cannot recreate full Eleventy context; best-effort: use global data snapshot files exported by archive loader.
-  // Here we read a synthetic page-like data object from global data writer in lib/eleventy/archives.mjs
-  // which exposes archive* globals. For collections.* we cannot get during CLI; so we only handle archive kinds for --apply.
-  const globals = {};
-  try {
-    const g = ['archiveProductsEn','archiveAllProducts','archiveProducts','archiveCharactersEn','archiveAllCharacters','archiveCharacters','archiveSeriesEn','archiveAllSeries','archiveSeries'];
-    for (const key of g) {
-      const p = path.join('.eleventy.js'); // placeholder to satisfy path roots; we cannot load Eleventy
-      globals[key] = globals[key] || [];
-    }
-  } catch {}
-
   const results = [];
   for (const item of unresolved) {
     const kinds = onlyKind ? [onlyKind] : (Array.isArray(item.attemptedKinds) && item.attemptedKinds.length ? item.attemptedKinds : routeRegistry.defaultKindsPriority);
     for (const kind of kinds) {
       if (!routeRegistry.kinds[kind]) continue;
-      const dataset = getDataset(kind, globals);
+      const dataset = datasetFor(kind);
       const proposals = propose(kind, item.key, dataset);
       const best = proposals[0];
       results.push({ item, kind, proposals });
@@ -125,4 +155,3 @@ async function main() {
 }
 
 main().catch((e) => { console.error(e); process.exit(1); });
-
