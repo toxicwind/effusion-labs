@@ -1,41 +1,11 @@
 {
-  "count": 6,
+  "count": 1,
   "items": [
     {
-      "kind": "product",
-      "key": "lab010",
-      "page": "./src/content/meta/style-guide.md",
-      "when": "2025-09-04T17:42:34.541Z"
-    },
-    {
       "kind": "character",
-      "key": "Momo Fox",
-      "page": "./src/test/dynamic-archives.md",
-      "when": "2025-09-04T17:42:34.587Z"
-    },
-    {
-      "kind": "product",
-      "key": "Tempura Shrimp",
-      "page": "./src/test/dynamic-archives.md",
-      "when": "2025-09-04T17:42:34.588Z"
-    },
-    {
-      "kind": "character",
-      "key": "product",
-      "page": "./src/content/meta/style-guide.md",
-      "when": "2025-09-04T17:42:34.588Z"
-    },
-    {
-      "kind": "character",
-      "key": "character",
-      "page": "./src/content/meta/style-guide.md",
-      "when": "2025-09-04T17:42:34.588Z"
-    },
-    {
-      "kind": "character",
-      "key": "series",
-      "page": "./src/content/meta/style-guide.md",
-      "when": "2025-09-04T17:42:34.588Z"
+      "key": "momo-fox",
+      "page": "./test.md",
+      "when": "2025-09-04T17:44:26.396Z"
     }
   ]
 }
