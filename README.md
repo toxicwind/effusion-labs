@@ -252,12 +252,55 @@ We maintain fixes for third‑party packages using `patch-package`.
 
 Note: avoid editing `node_modules/` directly. If you must prototype a change, run `npx patch-package <pkg>` to capture your edits into `patches/` and commit the patch file.
 
-### Debugging Interlinker Links
+### Multi‑Scaffold Dynamic Linking
 
-During builds the Interlinker plugin records any unresolved wiki-style links.
-After running `npx @11ty/eleventy` or `npm test`, inspect `artifacts/reports/interlinker-unresolved.json`.
-Each object looks like `{ "kind": "product", "key": "missing-item", "sourcePage": "src/content/foo.md" }` and represents a link
-that fell back to a soft canonical URL. Fix the slug or update archive data to resolve.
+This site treats namespaced wikilinks as dynamic routes across multiple scaffolds, not just `/archives/`.
+
+- Supported kinds: `product`, `character`, `series`, `spark`, `concept`, `project`, `meta`, and the aggregate `work`.
+- Omitted kinds (e.g., `[[labubu]]`) resolve by priority: `work → character → product → series → concept → project → spark → meta`.
+- Canonicalization always emits stable URLs (e.g., `/archives/product/<slug>/`), resolving aliases and legacy paths.
+- Back‑compat synonyms: `[[archive:product:...]]`, `[[archive:series:...]]`, etc.
+
+Route behavior is centralized in `lib/interlinkers/route-registry.mjs` and `lib/interlinkers/resolvers.mjs`.
+
+### Wikilink Debugging
+
+Builds produce a stable report at `artifacts/reports/interlinker-unresolved.json`:
+
+```json
+{
+  "schemaVersion": 1,
+  "generatedAt": "YYYY-MM-DDTHH:mm:ss.sssZ",
+  "count": 1,
+  "items": [
+    {
+      "kind": "work",
+      "key": "my-missing-work",
+      "sourcePage": "src/content/foo.md",
+      "guessedKind": "work",
+      "attemptedKinds": ["work","character","project"],
+      "when": "YYYY-MM-DDTHH:mm:ss.sssZ"
+    }
+  ]
+}
+```
+
+Environment-driven thresholds (CI friendly):
+
+- `INTERLINKER_MAX_UNRESOLVED`: Max unresolved to tolerate. Default: unlimited in dev, `200` in CI.
+- `INTERLINKER_FAIL_ON_UNRESOLVED`: When `true`, fail build if `count > threshold`.
+
+After each `eleventy` run, you’ll see: `Interlinker: unresolved=<N> threshold=<T> action=<warn|fail>`.
+
+CLI audit tool: `tools/interlinker-audit.mjs`
+
+- `node tools/interlinker-audit.mjs` — print ranked suggestions for unresolved links.
+- `node tools/interlinker-audit.mjs --apply --kind product --min 0.86` — add `slugAliases` to best archive JSON match.
+
+### Plugin Hardening
+
+We patch `@photogabble/eleventy-plugin-interlinker@1.1.0` via `patch-package` to guard non‑string inputs in both ESM & CJS paths
+so that neither `RegExp#match` nor JSDOM instantiation receive non‑strings.
 
 ---
 

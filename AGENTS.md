@@ -119,19 +119,22 @@ After persisting work locally, you **MUST** push to `origin/main` so the remote 
 git push origin main
 ```
 
-#### **Archive Linking Protocol (`[[type:name]]`)**
+#### **Interlinking Protocol (`[[kind:name]]`)**
 
-All references to archived entities **MUST** resolve through the canonical system.
+All wikilinks **MUST** be namespaced and resolve to canonical, dynamic routes. Use the `[[<kind>:<name>]]` form by default.
 
-* You must use namespaced wikilinks — must use [[<type>:<name>]]:
+* Valid `<kind>` values: `product`, `character`, `series`, `spark`, `concept`, `project`, `meta`, and aggregate `work`.
+* Omitted kinds are allowed but will be resolved in priority order (`work → character → product → series → concept → project → spark → meta`). Prefer explicit kinds in authored content.
+
+* Syntax:
 
   ```text
   [[<type>:<name>]]
   ```
 
-  where `<type>` ∈ {`series`, `character`, `product`}.
+  where `<kind>` ∈ {`series`, `character`, `product`, `spark`, `concept`, `project`, `meta`, `work`}.
 
-* Prefer dynamic archive routes. Anchors **MUST** be short canonical routes of the form:
+* Prefer dynamic canonical routes. Anchors **MUST** be short canonical routes of the form:
 
   ```text
   /archives/<type>/<slug>/
@@ -139,7 +142,9 @@ All references to archived entities **MUST** resolve through the canonical syste
 
   not legacy hierarchical paths.
 
-* Any link that cannot be resolved in this form is **FORBIDDEN**.
+* Soft links may be emitted during authoring for unknown slugs; these are recorded to `artifacts/reports/interlinker-unresolved.json` for remediation and are discouraged in final commits.
+
+* Autonomous remediation: use `node tools/interlinker-audit.mjs` to rank and optionally apply alias fixes for archive kinds.
 
 #### **⋂ RESEARCH & TOOL PROTOCOL (REQUIRED)**
 
