@@ -59,7 +59,7 @@
     "jq": "1.7.2",
     "jsdom": "^26.1.0",
     "libnpmsearch": "9.0.0",
-    "lucide": "^0.534.0",
+    "lucide": "^0.542.0",
     "luxon": "^3.6.1",
     "markdown-it": "14.1.0",
     "markdown-it-anchor": "^9.2.0",
