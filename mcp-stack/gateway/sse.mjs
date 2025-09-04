@@ -3,9 +3,12 @@ export function startSSE(res, headers = {}) {
     "Content-Type": "text/event-stream",
     "Cache-Control": "no-cache, no-transform",
     Connection: "keep-alive",
+    // Helpful for proxies like Nginx
+    "X-Accel-Buffering": "no",
     ...headers,
   });
-  res.write("\n");
+  // Recommend client retry window and flush initial padding
+  res.write("retry: 15000\n\n");
   return {
     send(event, data) {
       if (!res.writableEnded) {
@@ -22,4 +25,3 @@ export function startSSE(res, headers = {}) {
     },
   };
 }
-

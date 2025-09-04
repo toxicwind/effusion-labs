@@ -10,6 +10,7 @@ import { startSSE } from "./sse.mjs";
 import { Supervisor } from "./supervisor.mjs";
 import { registry, findServer } from "../servers/registry.mjs";
 import { resolveSidecar } from "../sidecars/resolver.mjs";
+import { readWeb, screenshotUrl } from "./readers.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -51,6 +52,7 @@ function manifest(port) {
     servers: specs.map((s) => ({
       name: s.name,
       enabled: !!s.enabled,
+      health: sup.state(s.name).status,
       transport: {
         sse: urlFor(`/servers/${encodeURIComponent(s.name)}/sse`, port),
         info: urlFor(`/servers/${encodeURIComponent(s.name)}/info`, port),
@@ -62,7 +64,7 @@ function manifest(port) {
 }
 
 function urlFor(path, port) {
-  const host = process.env.HOST || "localhost";
+  const host = cfg.PROFILE === "prod" ? cfg.INTERNAL_HOST : (process.env.HOST || "localhost");
   return `http://${host}:${port}${path}`;
 }
 
@@ -74,8 +76,8 @@ async function main() {
     const method = req.method || "GET";
     log("debug", "http", "req", { method, pathname });
 
-    if (pathname === "/healthz") return json(res, 200, { ok: true });
-    if (pathname === "/readyz") return json(res, 200, { ready: true });
+    if (pathname === "/healthz") return json(res, 200, { ok: true, ts: new Date().toISOString() });
+    if (pathname === "/readyz") return json(res, 200, { ready: true, ts: new Date().toISOString() });
     if (pathname === "/servers") {
       const accept = (req.headers["accept"] || "").toLowerCase();
       const data = summarize();
@@ -96,8 +98,36 @@ async function main() {
       const spec = findServer(specs, name);
       if (!spec) return json(res, 404, { error: "server_not_found" });
       if (action === "info") {
-        const st = sup.state(name);
-        return json(res, 200, { name, enabled: !!spec.enabled, state: st });
+        if (method === "GET") {
+          const st = sup.state(name);
+          return json(res, 200, { name, enabled: !!spec.enabled, state: st });
+        }
+        if (method === "POST") {
+          let body = "";
+          req.on("data", (c) => (body += c));
+          req.on("end", async () => {
+            let payload = {};
+            try { payload = JSON.parse(body || "{}"); } catch {}
+            const url = payload.url || payload.target || payload.href;
+            try {
+              if (name === "readweb") {
+                const out = await readWeb(url || "");
+                if (!out.ok) return json(res, 502, { error: "readweb_failed", detail: out.error || out.mode, mode: out.mode });
+                return json(res, 200, { ok: true, url: out.url, md: out.md, bytes: out.bytes, mode: out.mode });
+              }
+              if (name === "screenshot") {
+                const out = await screenshotUrl(url || "");
+                if (!out.ok) return json(res, 502, { error: "screenshot_failed", detail: out.error || out.mode });
+                return json(res, 200, { ok: true, url: out.url, mime: out.mime, base64: out.base64, bytes: out.bytes, mode: out.mode });
+              }
+              return json(res, 400, { error: "info_unsupported_for_server" });
+            } catch (e) {
+              return json(res, 500, { error: "info_handler_error", detail: String(e?.message || e) });
+            }
+          });
+          return;
+        }
+        return json(res, 405, { error: "method_not_allowed" });
       }
       if (action === "sse") {
         const sse = startSSE(res);
@@ -136,11 +166,9 @@ async function main() {
     urlFor("/.well-known/mcp-servers.json", actual),
     urlFor("/healthz", actual),
   ];
-  banner([
-    ` Profile: ${cfg.PROFILE}`,
-    ` Port:    ${actual}`,
-    ` URLs:    ${urls.join(" | ")}`,
-  ]);
+  const lines = [` Profile: ${cfg.PROFILE}`, ` Port:    ${actual}`];
+  if (cfg.PROFILE === "dev") lines.push(` URLs:    ${urls.join(" | ")}`);
+  banner(lines);
   log("info", "startup", "listening", { port: actual, profile: cfg.PROFILE });
 }
 
@@ -148,4 +176,3 @@ main().catch((e) => {
   log("error", "startup", "fatal", { err: String(e?.stack || e) });
   process.exit(1);
 });
-

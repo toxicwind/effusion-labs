@@ -20,7 +20,7 @@ export function registry({ sidecars }) {
     DEMO,
     {
       name: "filesystem",
-      enabled: false,
+      enabled: true,
       cmd: process.execPath,
       args: [resolve(__dirname, "templates/stdio-demo.mjs"), "filesystem"],
       cwd: resolve(__dirname, "templates"),
@@ -72,4 +72,3 @@ export function registry({ sidecars }) {
 export function findServer(specs, name) {
   return specs.find((s) => s.name === name);
 }
-
