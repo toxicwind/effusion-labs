@@ -35,7 +35,7 @@ jobs:
       # NOTE: This approval is from github-actions[bot]; it won't satisfy CODEOWNERS unless your policy allows it.
       - name: Approve PR (native)
         if: ${{ !github.event.pull_request.draft }}
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
           script: |
             const {owner, repo} = context.repo;
@@ -50,7 +50,7 @@ jobs:
       # Enable native auto-merge; GitHub will merge once required checks pass.
       - name: Enable auto-merge (squash, native)
         if: ${{ !github.event.pull_request.draft }}
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
           script: |
             const pr = context.payload.pull_request;              // has node_id in payload
