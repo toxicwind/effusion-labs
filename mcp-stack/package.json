@@ -1,0 +1,8 @@
+{
+  "name": "mcp-stack",
+  "type": "module",
+  "dependencies": {
+    "express": "^4.19.2",
+    "undici": "^7.13.0"
+  }
+}

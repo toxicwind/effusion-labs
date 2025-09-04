@@ -1,0 +1,6 @@
+services:
+  gateway:
+    build: ..
+    command: node mcp-stack/gateway/index.js
+    expose:
+      - "3000"

@@ -1,0 +1,20 @@
+[
+  {
+    "name": "filesystem",
+    "command": "node",
+    "args": ["mcp-stack/servers/echo-server.js"],
+    "capabilities": {"read": true}
+  },
+  {
+    "name": "curl",
+    "command": "node",
+    "args": ["mcp-stack/servers/echo-server.js"],
+    "capabilities": {}
+  },
+  {
+    "name": "searxng",
+    "command": "node",
+    "args": ["mcp-stack/servers/echo-server.js"],
+    "capabilities": {}
+  }
+]

@@ -1,0 +1,6 @@
+services:
+  gateway:
+    build: ..
+    command: node mcp-stack/gateway/index.js
+    ports:
+      - "${PORT_HTTP:-0}:0"
