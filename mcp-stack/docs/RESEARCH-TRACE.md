@@ -22,3 +22,12 @@ Bench snapshot (2025-09-04):
 - Profiles: `dev` shows absolute URLs; `prod` hides URLs and uses `INTERNAL_HOST` in manifest.
 - Sidecar: `readweb` degrades on CF without `FLARESOLVERR_URL`; succeeds via FlareSolverr when set.
 - Load (k6, 50 VUs, 30s, 3s client timeout): p95 ≈ 3.0s (timeout‑bounded), no crashes; gateway RSS ~92 MB steady.
+
+Queue/Rate observations:
+- Queue-first policy: 200 concurrent one-shots enqueue, no 429s; `/admin/queue` reflects backlog and drains FIFO.
+- `/admin/rate` reports policy `{ limitPerSec: 50, burst: 100 }` (advisory; enforcement delegated to queue throughput).
+
+Auto-correction notes:
+- CF detection: server header `cloudflare` or content markers (`__cf_bm`, "Just a moment", `cf-mitigated: challenge`, `/cdn-cgi/challenge-platform/`).
+- When detected, gateway probes `FLARESOLVERR_URL` or `http://flaresolverr:8191` with `POST /v1 {cmd:sessions.list}`; success triggers retry via FlareSolverr.
+- In CI, WireMock provides deterministic `/v1` responses to exercise the same path without egress.

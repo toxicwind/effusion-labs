@@ -10,6 +10,13 @@ Key endpoints:
 - `POST /servers/screenshot/info` — One‑shot URL screenshot (PNG, Playwright).
 - `GET /.well-known/mcp-servers.json` — Live discovery manifest (per‑profile URLs, health).
 - `GET /healthz`, `GET /readyz` — Liveness and readiness.
+ - Admin (always responsive):
+   - `GET /admin/queue` — FIFO queue snapshot `{ currentLength, avgWaitMs, maxConcurrency }`.
+   - `GET /admin/rate` — `{ limitPerSec, burst }`.
+   - `GET /admin/retry` — `{ policy: 'exponential', baseMs, maxMs }`.
+   - `GET /admin/sidecars` — live status of sidecars with runtime UTC `lastChecked`.
+   - `GET /schema` — OpenAPI/JSON schema summary.
+   - `GET /examples` — ready‑to‑run cURL snippets.
 
 ### Configuration
 - `PROFILE`: `dev` prints host URLs in banner; `prod` hides URLs and uses `INTERNAL_HOST` in manifest.
@@ -74,3 +81,24 @@ EOF
 
 Where `BASE=http://localhost:<port>` from the startup banner.
 
+### Containerization
+
+Local (Podman, real network):
+```sh
+podman build -t mcp-gateway ./mcp-stack/gateway
+podman run --rm -p 3000:3000 -e PROFILE=dev --name mcp-gateway mcp-gateway
+```
+
+Compose overlays:
+- Dev (host-published): `podman-compose -f mcp-stack/ci/compose.dev.yml up -d`
+- Prod (internal-only): `podman-compose -f mcp-stack/ci/compose.prod.yml up -d`
+
+CI (Docker, no egress, stubbed sidecars):
+```sh
+docker-compose -f mcp-stack/ci/compose.ci.yml up -d
+```
+
+### POSIX scripts
+
+- `mcp-stack/scripts/run.sh` — starts gateway; honors `PORT_SSE=0` for ephemeral ports.
+- `mcp-stack/scripts/check-health.sh` — probes `/healthz`, `/readyz`, `/.well-known`, `/admin/queue`.

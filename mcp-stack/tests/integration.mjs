@@ -98,9 +98,21 @@ async function main() {
     console.log("    -> Pass");
 
 
-    // ## Test 3: Optional Internet Tests
+    // ## Test 3: Admin helper endpoints
+    console.log("  - Running Test 3: Admin endpoints...");
+    const q = await (await fetch(`${base}/admin/queue`)).json();
+    if (typeof q.currentLength !== 'number' || typeof q.maxConcurrency !== 'number') throw new Error('admin_queue_shape');
+    const rate = await (await fetch(`${base}/admin/rate`)).json();
+    if (typeof rate.limitPerSec !== 'number') throw new Error('admin_rate_shape');
+    const retry = await (await fetch(`${base}/admin/retry`)).json();
+    if (retry.policy !== 'exponential') throw new Error('admin_retry_shape');
+    const sc = await (await fetch(`${base}/admin/sidecars`)).json();
+    if (!Array.isArray(sc) || !sc[0]?.lastChecked) throw new Error('admin_sidecars_shape');
+    console.log("    -> Pass");
+
+    // ## Test 4: Optional Internet Tests
     if (process.env.INTERNET_TESTS === '1') {
-        console.log("  - Running Test 3: Internet Connectivity...");
+        console.log("  - Running Test 4: Internet Connectivity...");
         const readWebRes = await fetch(`${base}/servers/readweb/info`, { method:'POST', body: JSON.stringify({ url:'https://example.org' }) });
         const readWebJson = await readWebRes.json();
         if(!readWebJson?.ok || !readWebJson?.md) throw new Error('readweb_example_failed');
