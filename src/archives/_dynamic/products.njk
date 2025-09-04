@@ -15,16 +15,30 @@ eleventyComputed:
 <nav class="breadcrumbs text-sm mb-2 overflow-x-auto whitespace-nowrap" aria-label="Breadcrumb">
   <ul>
     <li><a href="/archives/">Archives</a></li>
-    <li><a href="/archives/collectables/designer-toys/{{ product.data.companySlug }}/">{{ product.data.companyTitle }}</a></li>
-    <li><a href="/archives/collectables/designer-toys/{{ product.data.companySlug }}/{{ product.data.lineSlug }}/">{{ product.data.lineTitle }}</a></li>
-    <li class="opacity-70">{{ product.data.product_id or product.data.title or product.data.productSlug }}</li>
+    <li>
+      <a href="/archives/collectables/designer-toys/{{ product.data.companySlug }}/">
+        {{ product.data.companyTitle }}
+      </a>
+    </li>
+    <li>
+      <a href="/archives/collectables/designer-toys/{{ product.data.companySlug }}/{{ product.data.lineSlug }}/">
+        {{ product.data.lineTitle }}
+      </a>
+    </li>
+    <li class="opacity-70">
+      {{ product.data.product_id or product.data.title or product.data.productSlug }}
+    </li>
   </ul>
 </nav>
 
-<div class="mb-6">{{ backLink('Back', '/archives/collectables/designer-toys/' + product.data.companySlug + '/' + product.data.lineSlug + '/') }}</div>
+<div class="mb-6">
+  {{ backLink('Back', '/archives/collectables/designer-toys/' + product.data.companySlug + '/' + product.data.lineSlug + '/') }}
+</div>
 
 <header class="mb-6">
-  <h1 class="font-heading text-3xl uppercase tracking-[-0.02em] text-primary mb-0">{{ product.data.product_id or product.data.title or product.data.productSlug }}</h1>
+  <h1 class="font-heading text-3xl uppercase tracking-[-0.02em] text-primary mb-0">
+    {{ product.data.product_id or product.data.title or product.data.productSlug }}
+  </h1>
 </header>
 
 <section class="card bg-base-100 border shadow-sm">

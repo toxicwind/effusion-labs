@@ -108,7 +108,6 @@ Nothing exotic—just a normal Eleventy dev loop, with nicer defaults if you opt
 
 - **Homepage**: Multi-column “Work” feed, filter toolbar, concept-map CTA, animated lab seal flourish.
 - **Work Section**: `/work` aggregates projects, concepts, and sparks with category filters & deep links.
-- **Product Pages**: Surfaces provenance metadata; links related “character” pages where applicable.
 - **Utilities**: Helpers like ordinal suffixing (including negative numbers) and robust file caching.
 - **Collections**: Curated Eleventy collections (e.g., `sparks`, `concepts`, `projects`, `archives`, `meta`) plus convenience composites (`nodes`, `featured`, `interactive`, `recentAll`).
 
@@ -132,6 +131,10 @@ Notes
 
 - If a target isn’t yet present in the dataset, links still resolve to the canonical dynamic route (the page may 404 until data exists). This keeps authoring consistent and future‑proof.
 - Internal templates and resolvers use the same canonical mapping; avoid hardcoding long, hierarchical legacy paths.
+
+## Product Archive Canon
+
+All product entities resolve to `/archives/product/<slugCanonical>/` using a stable naming canon. Legacy deep routes and verbose slugs emit `308` redirects or stub pages that point back to the canonical URL. Product JSON now records `slugCanonical`, `slugAliases`, and `legacyPaths` to drive this layer.
 
 ## Project Layout (high-level)
 

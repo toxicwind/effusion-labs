@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import { slugCanonicalProduct } from '../lib/naming-canon.mjs';
 
 // Tiny slugifier mirroring lib/eleventy/archives.mjs
 export function slugify(input) {
@@ -32,13 +33,20 @@ export function collectArchivePages(baseDir) {
     if (!['products', 'characters', 'series'].includes(section)) return [];
     const raw = JSON.parse(fs.readFileSync(abs, 'utf8'));
     const fileSlug = path.basename(abs, '.json');
-    let slug = fileSlug;
-    if (section === 'products') slug = slugify(raw.product_id ?? raw.id ?? raw.slug ?? fileSlug);
-    else if (section === 'characters') slug = slugify(raw.slug ?? raw.name ?? fileSlug);
-    else if (section === 'series') slug = slugify(raw.slug ?? raw.title ?? fileSlug);
-    const url = `/archives/${industry}/${category}/${company}/${line}/${section}/${slug}/`;
-    return { url, abs };
-  });
+    let url;
+    if (section === 'products') {
+      const slug = slugCanonicalProduct(raw);
+      if (!slug || slug === 'item') return null;
+      url = `/archives/product/${slug}/`;
+    } else if (section === 'characters') {
+      const slug = slugify(raw.slug ?? raw.name ?? fileSlug);
+      url = `/archives/character/${slug}/`;
+    } else if (section === 'series') {
+      const slug = slugify(raw.slug ?? raw.title ?? fileSlug);
+      url = `/archives/series/${slug}/`;
+    }
+    return url ? { url, abs } : null;
+  }).filter(Boolean);
 }
 
 export function validateArchiveBuild({ base = 'src/content/archives', outDir = '_site' } = {}) {
