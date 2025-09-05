@@ -106,7 +106,6 @@ hype_run() {
     # writer (child)
     (
       set -o pipefail
-      # NOTE: fix: check correct 'stdbuf' command (was 'stbuf')
       if _llm_has stdbuf; then
         stdbuf -oL -eL "$@" >"$pipe" 2>&1
       else
@@ -165,6 +164,7 @@ hype_run() {
     fi
 
     # local cleanup to avoid endless waits or leaked fifos
+    # NOTE: This is now only used by the trap below.
     local _cleanup() {
       [[ -n "${timer_pid:-}" ]]    && kill -TERM "$timer_pid" 2>/dev/null || true
       [[ -n "${watchdog_pid:-}" ]] && kill -TERM "$watchdog_pid" 2>/dev/null || true
@@ -174,7 +174,7 @@ hype_run() {
     }
 
     # ensure cleanup on signals, but do not 'exit' the parent shell
-    trap '_llm_emit "FAIL :: Interrupted."; kill -TERM '"$child_pid"' 2>/dev/null || true; _cleanup' INT TERM HUP
+    trap '_llm_emit "FAIL :: Interrupted."; kill -TERM '"$child_pid"' 2>/dev/null || true; _cleanup; trap - INT TERM HUP' INT TERM HUP
 
     local status=0
     wait "$child_pid" 2>/dev/null || status=$?
@@ -195,6 +195,11 @@ hype_run() {
       _llm_emit "INFO :: Final output tail:"
       command tail -n "$tail_on_complete" -- "$capture_file" | _llm_fold
     fi
+
+    # Restore original signal handlers to prevent leaking the trap
+    trap - INT TERM HUP
+
+    if [[ -n "$tmp_capture" && -f "$tmp_capture" ]]; then rm -f "$tmp_capture" 2>/dev/null || true; fi
     return "$status"
 }; export -f hype_run
 
@@ -330,9 +335,12 @@ if _llm_on "$LLM_DEPS_AUTOINSTALL"; then
         if [[ "$current_hash" != "$stored_hash" ]]; then
             _llm_emit "INFO :: Dependencies changed. Running 'npm ci' with capture..."
             mkdir -p "$repo_root/logs"; ci_log="$repo_root/logs/npm-ci.$(_llm_ts).log"
-            # Use a hard timeout to guarantee completion even under low/no output conditions
-            (cd "$repo_root" && hype_run --timeout "${LLM_MAX_RUN_SECS:-600}" --capture "$ci_log" --tail 80 -- npm ci)
-            echo "$current_hash" > "$hash_file"
+            # Only write the new hash if the install command succeeds.
+            if (cd "$repo_root" && hype_run --timeout "${LLM_MAX_RUN_SECS:-600}" --capture "$ci_log" --tail 80 -- npm ci); then
+              echo "$current_hash" > "$hash_file"
+            else
+              _llm_emit "FAIL :: 'npm ci' failed. The dependency hash file was not updated."
+            fi
         fi
     fi
 fi
