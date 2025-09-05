@@ -60,3 +60,5 @@
 {"ts":"2025-09-05T07:25:35.352Z","level":"debug","comp":"server","msg":"stdout","server":"filesystem","obj":{"type":"heartbeat","server":"filesystem","seq":1,"ts":"2025-09-05T07:25:35.351Z"}}
 {"ts":"2025-09-05T07:25:43.051Z","level":"info","comp":"startup","msg":"listening","port":33413,"profile":"dev"}
 {"ts":"2025-09-05T07:25:43.078Z","level":"info","comp":"supervisor","msg":"spawn","server":"filesystem","cmd":"/home/toxic/.nvm/versions/node/v24.3.0/bin/node","args":["/home/toxic/effusion_labs_final/mcp-stack/servers/templates/stdio-demo.mjs","filesystem"]}
+{"ts":"2025-09-05T07:49:04.940Z","level":"info","comp":"startup","msg":"listening","port":45165,"profile":"dev"}
+{"ts":"2025-09-05T07:49:04.975Z","level":"info","comp":"supervisor","msg":"spawn","server":"filesystem","cmd":"/home/toxic/.nvm/versions/node/v24.3.0/bin/node","args":["/home/toxic/effusion_labs_final/mcp-stack/servers/templates/stdio-demo.mjs","filesystem"]}

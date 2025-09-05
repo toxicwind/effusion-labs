@@ -1,6 +1,7 @@
 {# src/_includes/layout.njk #}
 {% from "components/header.njk" import header %}
 {% from "components/footer.njk" import footer %}
+{% from "components/meta-aside.njk" import metaAside %}
 <!DOCTYPE html>
 <html lang="en" class="scroll-pt-16">
 <head>
@@ -128,10 +129,37 @@
 </head>
 <body>
   {{ header(nav, page) }}
-  <main id="main" class="min-h-[60vh]">
-    {{ content | safe }}
+
+  {# Sidebar/meta logic — restored #}
+  {% set metaOff = metaDisable == true or metaDisable == 'true' %}
+  {% set hasMeta = (status or certainty or importance or tags or memory_ref or date or page.date) and not metaOff %}
+
+  <main id="main" class="min-h-[60vh] mx-auto max-w-screen-2xl px-6">
+    <div class="
+      {% if hasMeta %} xl:grid xl:grid-cols-[1fr_18rem] xl:gap-10 {% endif %}
+      {% if showTitle != false %} mt-8 lg:mt-10 {% endif %}
+    ">
+      <article class="prose dark:prose-invert max-w-none m-0 {% if hasMeta %} xl:col-span-1 {% endif %}">
+        {% if showTitle != false %}
+          <header class="mb-6 lg:mb-8">
+            <h1 class="font-heading text-3xl lg:text-4xl tracking-wide">{{ title }}</h1>
+          </header>
+        {% endif %}
+        {{ content | safe }}
+      </article>
+
+      {% if hasMeta %}
+        {% set d = date or page.date %}
+        {{ metaAside(status, d, certainty, importance, tags, memory_ref) }}
+      {% endif %}
+    </div>
   </main>
-  {{ footer() }}
+
+  {{ footer(buildTime) }}
+
+  <!-- Feature scripts -->
   <script src="/assets/js/work-filters.js" defer></script>
+  <script src="/assets/js/mschf-overlay.js" defer></script>
+  <script src="/assets/js/theme-toggle.js" defer></script>
 </body>
 </html>

@@ -1,6 +1,308 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2025-09-05T07:18:45.622Z",
-  "count": 0,
-  "items": []
+  "generatedAt": "2025-09-05T08:44:57.772Z",
+  "count": 28,
+  "items": [
+    {
+      "kind": "product",
+      "key": "lab010",
+      "sourcePage": "./src/content/meta/style-guide.md",
+      "guessedKind": "product",
+      "attemptedKinds": [
+        "product"
+      ],
+      "when": "2025-09-05T08:44:52.143Z"
+    },
+    {
+      "kind": "product",
+      "key": "product",
+      "sourcePage": "./src/content/meta/style-guide.md",
+      "guessedKind": "product",
+      "attemptedKinds": [
+        "product"
+      ],
+      "when": "2025-09-05T08:44:52.192Z"
+    },
+    {
+      "kind": "character",
+      "key": "product",
+      "sourcePage": "./src/content/meta/style-guide.md",
+      "guessedKind": "character",
+      "attemptedKinds": [
+        "character"
+      ],
+      "when": "2025-09-05T08:44:52.192Z"
+    },
+    {
+      "kind": "series",
+      "key": "product",
+      "sourcePage": "./src/content/meta/style-guide.md",
+      "guessedKind": "series",
+      "attemptedKinds": [
+        "series"
+      ],
+      "when": "2025-09-05T08:44:52.192Z"
+    },
+    {
+      "kind": "spark",
+      "key": "product",
+      "sourcePage": "./src/content/meta/style-guide.md",
+      "guessedKind": "spark",
+      "attemptedKinds": [
+        "spark"
+      ],
+      "when": "2025-09-05T08:44:52.193Z"
+    },
+    {
+      "kind": "concept",
+      "key": "product",
+      "sourcePage": "./src/content/meta/style-guide.md",
+      "guessedKind": "concept",
+      "attemptedKinds": [
+        "concept"
+      ],
+      "when": "2025-09-05T08:44:52.193Z"
+    },
+    {
+      "kind": "project",
+      "key": "product",
+      "sourcePage": "./src/content/meta/style-guide.md",
+      "guessedKind": "project",
+      "attemptedKinds": [
+        "project"
+      ],
+      "when": "2025-09-05T08:44:52.193Z"
+    },
+    {
+      "kind": "meta",
+      "key": "product",
+      "sourcePage": "./src/content/meta/style-guide.md",
+      "guessedKind": "meta",
+      "attemptedKinds": [
+        "meta"
+      ],
+      "when": "2025-09-05T08:44:52.193Z"
+    },
+    {
+      "kind": "work",
+      "key": "product",
+      "sourcePage": "./src/content/meta/style-guide.md",
+      "guessedKind": "work",
+      "attemptedKinds": [
+        "work"
+      ],
+      "when": "2025-09-05T08:44:52.193Z"
+    },
+    {
+      "kind": "unknown",
+      "key": "product",
+      "sourcePage": "./src/content/meta/style-guide.md",
+      "guessedKind": "product",
+      "attemptedKinds": [
+        "product",
+        "character",
+        "series",
+        "spark",
+        "concept",
+        "project",
+        "meta",
+        "work"
+      ],
+      "when": "2025-09-05T08:44:52.193Z"
+    },
+    {
+      "kind": "product",
+      "key": "character",
+      "sourcePage": "./src/content/meta/style-guide.md",
+      "guessedKind": "product",
+      "attemptedKinds": [
+        "product"
+      ],
+      "when": "2025-09-05T08:44:52.194Z"
+    },
+    {
+      "kind": "character",
+      "key": "character",
+      "sourcePage": "./src/content/meta/style-guide.md",
+      "guessedKind": "character",
+      "attemptedKinds": [
+        "character"
+      ],
+      "when": "2025-09-05T08:44:52.194Z"
+    },
+    {
+      "kind": "series",
+      "key": "character",
+      "sourcePage": "./src/content/meta/style-guide.md",
+      "guessedKind": "series",
+      "attemptedKinds": [
+        "series"
+      ],
+      "when": "2025-09-05T08:44:52.194Z"
+    },
+    {
+      "kind": "spark",
+      "key": "character",
+      "sourcePage": "./src/content/meta/style-guide.md",
+      "guessedKind": "spark",
+      "attemptedKinds": [
+        "spark"
+      ],
+      "when": "2025-09-05T08:44:52.194Z"
+    },
+    {
+      "kind": "concept",
+      "key": "character",
+      "sourcePage": "./src/content/meta/style-guide.md",
+      "guessedKind": "concept",
+      "attemptedKinds": [
+        "concept"
+      ],
+      "when": "2025-09-05T08:44:52.194Z"
+    },
+    {
+      "kind": "project",
+      "key": "character",
+      "sourcePage": "./src/content/meta/style-guide.md",
+      "guessedKind": "project",
+      "attemptedKinds": [
+        "project"
+      ],
+      "when": "2025-09-05T08:44:52.194Z"
+    },
+    {
+      "kind": "meta",
+      "key": "character",
+      "sourcePage": "./src/content/meta/style-guide.md",
+      "guessedKind": "meta",
+      "attemptedKinds": [
+        "meta"
+      ],
+      "when": "2025-09-05T08:44:52.194Z"
+    },
+    {
+      "kind": "work",
+      "key": "character",
+      "sourcePage": "./src/content/meta/style-guide.md",
+      "guessedKind": "work",
+      "attemptedKinds": [
+        "work"
+      ],
+      "when": "2025-09-05T08:44:52.194Z"
+    },
+    {
+      "kind": "unknown",
+      "key": "character",
+      "sourcePage": "./src/content/meta/style-guide.md",
+      "guessedKind": "product",
+      "attemptedKinds": [
+        "product",
+        "character",
+        "series",
+        "spark",
+        "concept",
+        "project",
+        "meta",
+        "work"
+      ],
+      "when": "2025-09-05T08:44:52.194Z"
+    },
+    {
+      "kind": "product",
+      "key": "series",
+      "sourcePage": "./src/content/meta/style-guide.md",
+      "guessedKind": "product",
+      "attemptedKinds": [
+        "product"
+      ],
+      "when": "2025-09-05T08:44:52.195Z"
+    },
+    {
+      "kind": "character",
+      "key": "series",
+      "sourcePage": "./src/content/meta/style-guide.md",
+      "guessedKind": "character",
+      "attemptedKinds": [
+        "character"
+      ],
+      "when": "2025-09-05T08:44:52.195Z"
+    },
+    {
+      "kind": "series",
+      "key": "series",
+      "sourcePage": "./src/content/meta/style-guide.md",
+      "guessedKind": "series",
+      "attemptedKinds": [
+        "series"
+      ],
+      "when": "2025-09-05T08:44:52.195Z"
+    },
+    {
+      "kind": "spark",
+      "key": "series",
+      "sourcePage": "./src/content/meta/style-guide.md",
+      "guessedKind": "spark",
+      "attemptedKinds": [
+        "spark"
+      ],
+      "when": "2025-09-05T08:44:52.195Z"
+    },
+    {
+      "kind": "concept",
+      "key": "series",
+      "sourcePage": "./src/content/meta/style-guide.md",
+      "guessedKind": "concept",
+      "attemptedKinds": [
+        "concept"
+      ],
+      "when": "2025-09-05T08:44:52.195Z"
+    },
+    {
+      "kind": "project",
+      "key": "series",
+      "sourcePage": "./src/content/meta/style-guide.md",
+      "guessedKind": "project",
+      "attemptedKinds": [
+        "project"
+      ],
+      "when": "2025-09-05T08:44:52.195Z"
+    },
+    {
+      "kind": "meta",
+      "key": "series",
+      "sourcePage": "./src/content/meta/style-guide.md",
+      "guessedKind": "meta",
+      "attemptedKinds": [
+        "meta"
+      ],
+      "when": "2025-09-05T08:44:52.195Z"
+    },
+    {
+      "kind": "work",
+      "key": "series",
+      "sourcePage": "./src/content/meta/style-guide.md",
+      "guessedKind": "work",
+      "attemptedKinds": [
+        "work"
+      ],
+      "when": "2025-09-05T08:44:52.195Z"
+    },
+    {
+      "kind": "unknown",
+      "key": "series",
+      "sourcePage": "./src/content/meta/style-guide.md",
+      "guessedKind": "product",
+      "attemptedKinds": [
+        "product",
+        "character",
+        "series",
+        "spark",
+        "concept",
+        "project",
+        "meta",
+        "work"
+      ],
+      "when": "2025-09-05T08:44:52.195Z"
+    }
+  ]
 }

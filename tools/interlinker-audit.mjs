@@ -135,6 +135,7 @@ async function main() {
   const unresolved = Array.isArray(report.items) ? report.items : [];
 
   const results = [];
+  const didApply = [];
   for (const item of unresolved) {
     const kinds = onlyKind ? [onlyKind] : (Array.isArray(item.attemptedKinds) && item.attemptedKinds.length ? item.attemptedKinds : routeRegistry.defaultKindsPriority);
     for (const kind of kinds) {
@@ -144,13 +145,32 @@ async function main() {
       const best = proposals[0];
       results.push({ item, kind, proposals });
       if (args.get('apply') && best && best.score >= threshold && /^(product|character|series)$/.test(kind)) {
-        const { applied, reason } = applyAlias(kind, toSlug(item.key), best);
+        const keySlug = toSlug(item.key);
+        const { applied, reason } = applyAlias(kind, keySlug, best);
         console.log(`[apply] kind=${kind} key=${item.key} → ${best.canon} score=${best.score.toFixed(3)} :: ${applied ? 'ok' : 'skipped'} (${reason})`);
+        if (applied) didApply.push({ kind, key: item.key, keySlug, target: best.canon, score: best.score, source: best.data?.__source });
       } else {
         const head = proposals.slice(0, 3).map(p => `${p.slug} (${p.score.toFixed(3)})`).join(', ');
         console.log(`[suggest] kind=${kind} key=${item.key} ⇒ ${head}`);
       }
     }
+  }
+
+  if (didApply.length) {
+    const outDir = path.join('artifacts','worklogs');
+    fs.mkdirSync(outDir, { recursive: true });
+    const ts = new Date().toISOString().replace(/[:.-]/g,'').slice(0,15) + 'Z';
+    const p = path.join(outDir, `interlinker-alias-apply.${ts}.md`);
+    const lines = [
+      `# Interlinker Alias Apply — ${new Date().toISOString()}`,
+      '',
+      '| kind | key | slug | target | score | source |',
+      '|---|---|---|---|---:|---|',
+      ...didApply.map(r => `| ${r.kind} | ${r.key} | ${r.keySlug} | ${r.target} | ${r.score.toFixed(3)} | ${r.source || ''} |`),
+      '',
+    ];
+    fs.writeFileSync(p, lines.join('\n'));
+    console.log(`[worklog] wrote ${p}`);
   }
 }
 

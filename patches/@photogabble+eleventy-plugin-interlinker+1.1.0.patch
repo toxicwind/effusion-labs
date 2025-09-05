@@ -6,7 +6,6 @@ index 4f87dc3..5c922ce 100644
  var eleventy = require('@11ty/eleventy');
  var entities = require('entities');
  
-+// Patched-By: ARACA-INTERLINKER-HOTFIX-V3
 +function toHtmlString(value) {
 +  if (typeof value === 'string') return value;
 +  if (value && typeof value === 'object') {
@@ -15,11 +14,6 @@ index 4f87dc3..5c922ce 100644
 +  }
 +  return String(value ?? '');
 +}
-+
-++function safeMatch(maybeStr, re) {
-++  const s = toHtmlString(maybeStr);
-++  return s.match(re);
-++}
 +
  /**
   * This rule will be looped through an inline token by markdown-it.
@@ -53,9 +47,10 @@ index 4f87dc3..5c922ce 100644
     * @return {Array<import('@photogabble/eleventy-plugin-interlinker').WikilinkMeta>}
     */
    find(document, pageDirectory, filePathStem) {
++    const text = toHtmlString(document);
      return this.parseMultiple(
 -      (document.match(this.wikiLinkRegExp) || []),
-      (safeMatch(document, this.wikiLinkRegExp) || []),
++      (text.match(this.wikiLinkRegExp) || []),
        pageDirectory,
        filePathStem
      )
@@ -81,9 +76,8 @@ diff --git a/node_modules/@photogabble/eleventy-plugin-interlinker/src/html-link
 index 5c98846..31cea61 100644
 --- a/node_modules/@photogabble/eleventy-plugin-interlinker/src/html-link-parser.js
 +++ b/node_modules/@photogabble/eleventy-plugin-interlinker/src/html-link-parser.js
-@@ -1,4 +1,6 @@
+@@ -1,4 +1,5 @@
  import {JSDOM} from 'jsdom';
-+// Patched-By: ARACA-INTERLINKER-HOTFIX-V3
 +import { toHtmlString } from './util.js';
  export default class HTMLLinkParser {
  
@@ -101,12 +95,11 @@ diff --git a/node_modules/@photogabble/eleventy-plugin-interlinker/src/interlink
 index c64053f..a58591f 100644
 --- a/node_modules/@photogabble/eleventy-plugin-interlinker/src/interlinker.js
 +++ b/node_modules/@photogabble/eleventy-plugin-interlinker/src/interlinker.js
-@@ -2,6 +2,8 @@ import HTMLLinkParser from './html-link-parser.js';
+@@ -2,6 +2,7 @@ import HTMLLinkParser from './html-link-parser.js';
  import WikilinkParser from './wikilink-parser.js';
  import DeadLinks from './dead-links.js';
  import {pageLookup} from './find-page.js';
- // Patched-By: ARACA-INTERLINKER-HOTFIX-V3
- +import { toHtmlString } from './util.js';
++import { toHtmlString } from './util.js';
  
  /**
   * Interlinker:
@@ -123,33 +116,30 @@ diff --git a/node_modules/@photogabble/eleventy-plugin-interlinker/src/markdown-
 index b67c8c7..893c31a 100644
 --- a/node_modules/@photogabble/eleventy-plugin-interlinker/src/markdown-ext.js
 +++ b/node_modules/@photogabble/eleventy-plugin-interlinker/src/markdown-ext.js
-@@ -5,6 +5,8 @@
+@@ -5,6 +5,7 @@
   * @returns {(function(*, *): (boolean|undefined))|*}
   */
  export const wikilinkInlineRule = (wikilinkParser) => (state, silent) => {
-   // Patched-By: ARACA-INTERLINKER-HOTFIX-V3
-   +  if (!state || typeof state.src !== 'string') return false;
++  if (!state || typeof state.src !== 'string') return false;
    // Have we found the start of a WikiLink Embed `![[`
    if (state.src.charAt(state.pos) === '[' && state.src.charAt(state.pos + 1) !== '[') return false; // Not wikilink opening
    if (state.src.charAt(state.pos) === '!' && state.src.substring(state.pos, state.pos + 3) !== '![[') return false; // Not embed opening
-@@ -55,6 +57,8 @@ export const wikilinkInlineRule = (wikilinkParser) => (state, silent) => {
- * @return {(function(*, *, *, *): boolean)|*}
- */
-export const wikilinkBlockRule = (wikilinkParser) => (state, startLine, endLine, silent) => {
-   // Patched-By: ARACA-INTERLINKER-HOTFIX-V3
-   +  if (!state || typeof state.src !== 'string') return false;
-  let pos = state.bMarks[startLine] + state.tShift[startLine]
-  let max = state.eMarks[startLine]
+@@ -55,6 +56,7 @@ export const wikilinkInlineRule = (wikilinkParser) => (state, silent) => {
+  * @return {(function(*, *, *, *): boolean)|*}
+  */
+ export const wikilinkBlockRule = (wikilinkParser) => (state, startLine, endLine, silent) => {
++  if (!state || typeof state.src !== 'string') return false;
+   let pos = state.bMarks[startLine] + state.tShift[startLine]
+   let max = state.eMarks[startLine]
  
 diff --git a/node_modules/@photogabble/eleventy-plugin-interlinker/src/resolvers.js b/node_modules/@photogabble/eleventy-plugin-interlinker/src/resolvers.js
 index e111636..470e2cd 100644
 --- a/node_modules/@photogabble/eleventy-plugin-interlinker/src/resolvers.js
 +++ b/node_modules/@photogabble/eleventy-plugin-interlinker/src/resolvers.js
-@@ -1,5 +1,7 @@
+@@ -1,5 +1,6 @@
  import {EleventyRenderPlugin} from "@11ty/eleventy";
  import {encodeHTML} from 'entities';
- // Patched-By: ARACA-INTERLINKER-HOTFIX-V3
- +import { toHtmlString } from './util.js';
++import { toHtmlString } from './util.js';
  
  /**
   * Default Resolving function for converting Wikilinks into html links.
@@ -167,8 +157,7 @@ new file mode 100644
 index 0000000..2b4c094
 --- /dev/null
 +++ b/node_modules/@photogabble/eleventy-plugin-interlinker/src/util.js
-@@ -0,0 +1,15 @@
-+// Patched-By: ARACA-INTERLINKER-HOTFIX-V3
+@@ -0,0 +1,8 @@
 +export const toHtmlString = (value) => {
 +  if (typeof value === 'string') return value;
 +  if (value && typeof value === 'object') {
@@ -177,18 +166,12 @@ index 0000000..2b4c094
 +  }
 +  return String(value ?? '');
 +};
-+
-+export const safeMatch = (maybeStr, re) => {
-+  const s = toHtmlString(maybeStr);
-+  return s.match(re);
-+};
 diff --git a/node_modules/@photogabble/eleventy-plugin-interlinker/src/wikilink-parser.js b/node_modules/@photogabble/eleventy-plugin-interlinker/src/wikilink-parser.js
 index fbd6206..9759cca 100644
 --- a/node_modules/@photogabble/eleventy-plugin-interlinker/src/wikilink-parser.js
 +++ b/node_modules/@photogabble/eleventy-plugin-interlinker/src/wikilink-parser.js
-@@ -1,3 +1,6 @@
-+// Patched-By: ARACA-INTERLINKER-HOTFIX-V3
-+import { toHtmlString, safeMatch } from './util.js';
+@@ -1,3 +1,5 @@
++import { toHtmlString } from './util.js';
 +
  export default class WikilinkParser {
    /**
@@ -197,9 +180,10 @@ index fbd6206..9759cca 100644
     * @return {Array<import('@photogabble/eleventy-plugin-interlinker').WikilinkMeta>}
     */
    find(document, pageDirectory, filePathStem) {
++    const text = toHtmlString(document);
      return this.parseMultiple(
 -      (document.match(this.wikiLinkRegExp) || []),
-+      (safeMatch(document, this.wikiLinkRegExp) || []),
++      (text.match(this.wikiLinkRegExp) || []),
        pageDirectory,
        filePathStem
      )

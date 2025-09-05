@@ -1,0 +1,29 @@
+{# src/_includes/components/meta-aside.njk #}
+{% macro metaAside(status, date, certainty, importance, tags, memory_ref) %}
+  <aside class="w-full mt-10 xl:mt-0 xl:pl-6 xl:border-l xl:border-base-content/10 text-sm opacity-90">
+    <div class="xl:sticky xl:top-28 space-y-3">
+      <h2 class="font-heading text-base uppercase tracking-widest opacity-70">Meta</h2>
+      <ul class="space-y-1">
+        {% if status %}<li><strong>Status:</strong> {{ status }}</li>{% endif %}
+        {% if date %}
+          <li><strong>Date:</strong>
+            <time datetime="{{ date | htmlDateString }}">{{ date | readableDate }}</time>
+          </li>
+        {% endif %}
+        {% if certainty %}<li><strong>Certainty:</strong> {{ certainty }}</li>{% endif %}
+        {% if importance %}<li><strong>Importance:</strong> {{ importance }}</li>{% endif %}
+        {% if tags %}
+          <li><strong>Tags:</strong>
+            <ul class="pl-4 list-disc">{% for tag in tags %}<li>{{ tag }}</li>{% endfor %}</ul>
+          </li>
+        {% endif %}
+        {% if memory_ref %}
+          <li><strong>Memory Ref:</strong>
+            <ul class="pl-4 list-disc">{% for ref in memory_ref %}<li>{{ ref }}</li>{% endfor %}</ul>
+          </li>
+        {% endif %}
+      </ul>
+    </div>
+  </aside>
+{% endmacro %}
+

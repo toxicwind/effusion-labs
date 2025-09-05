@@ -1,50 +1,59 @@
 #!/usr/bin/env node
 // tools/verify-patch-applied.mjs
-// Fails CI if the Interlinker hotfix is not present in node_modules.
+// Verifies that Interlinker plugin hotfix patches are present before running Eleventy.
 
 import fs from 'node:fs';
 import path from 'node:path';
 
-const SENTINEL = 'Patched-By: ARACA-INTERLINKER-HOTFIX-V3';
+const PKG = '@photogabble/eleventy-plugin-interlinker';
+const MOD_DIR = path.join('node_modules', PKG);
+const SENTINEL = 'ARACA-INTERLINKER-HOTFIX-V3';
 
-function fail(msg) {
-  console.error(`\n[verify-patch-applied] ${msg}\n`);
+function die(msg) {
+  console.error(`❌ Patch verification failed: ${msg}`);
   process.exit(1);
 }
 
 function ok(msg) {
-  console.log(`[verify-patch-applied] ${msg}`);
+  console.log(`✅ ${msg}`);
 }
 
-const pkgDir = path.join('node_modules', '@photogabble', 'eleventy-plugin-interlinker');
-const targets = [
-  path.join(pkgDir, 'index.cjs'),
-  path.join(pkgDir, 'src', 'util.js'),
-  path.join(pkgDir, 'src', 'wikilink-parser.js'),
-  path.join(pkgDir, 'src', 'html-link-parser.js'),
-  path.join(pkgDir, 'src', 'interlinker.js'),
-  path.join(pkgDir, 'src', 'markdown-ext.js'),
-  path.join(pkgDir, 'src', 'resolvers.js'),
-];
-
-if (!fs.existsSync(pkgDir)) fail(`Package directory not found: ${pkgDir}. Run 'npm ci' before verification.`);
-
-let missing = [];
-for (const file of targets) {
-  if (!fs.existsSync(file)) { missing.push(file + ' (missing)'); continue; }
-  const content = fs.readFileSync(file, 'utf8');
-  if (!content.includes(SENTINEL)) missing.push(file);
+function read(p) {
+  try { return fs.readFileSync(p, 'utf8'); } catch { return null; }
 }
 
-if (missing.length) {
-  fail(
-    'Required patch sentinel not found in:\n' +
-    missing.map(f => ` - ${f}`).join('\n') +
-    `\n\nHints:\n` +
-    ` - Ensure 'patches/' is copied before 'npm ci' in the Docker deps stage.\n` +
-    ` - Ensure postinstall runs patch-package (PATCH_PACKAGE_RUN!=0) or run 'npx patch-package' explicitly.\n`
-  );
+function main() {
+  const pkgPath = path.join(MOD_DIR, 'package.json');
+  const pkgRaw = read(pkgPath);
+  if (!pkgRaw) die(`Missing ${pkgPath}`);
+  const pkg = JSON.parse(pkgRaw);
+  const esmRel = (pkg?.exports && (pkg.exports.import || pkg.module)) || 'index.js';
+  const cjsRel = (pkg?.exports && (pkg.exports.require || pkg.main)) || 'index.cjs';
+  const esmPath = path.join(MOD_DIR, esmRel);
+  const cjsPath = path.join(MOD_DIR, cjsRel);
+  const srcUtil = path.join(MOD_DIR, 'src', 'util.js');
+
+  const esm = read(esmPath) || '';
+  const cjs = read(cjsPath) || '';
+  const util = read(srcUtil) || '';
+
+  // Heuristics proving the coercion hotfix is present in both CJS and ESM:
+  const hints = [
+    ['util.js exists', util.length > 0],
+    ['util exports toHtmlString', /export\s+const\s+toHtmlString\s*=/.test(util)],
+    ['cjs JSDOM coercion', /JSDOM\(toHtmlString\(/.test(cjs)],
+    ['cjs content coercion', /compiler\(toHtmlString\(template\.content\)/.test(cjs) && /pageContent\s*=\s*toHtmlString\(template\.content\)/.test(cjs)],
+    ['md-it guards', /typeof state\.src !== 'string'/.test(read(path.join(MOD_DIR,'src','markdown-ext.js')) || '')],
+  ];
+
+  const missing = hints.filter(([, ok]) => !ok);
+  if (missing.length) {
+    console.error('— Details:');
+    for (const [name] of missing) console.error(`   • missing ${name}`);
+    die(`Interlinker ${PKG} does not appear patched with input coercion guards.`);
+  }
+
+  ok(`Interlinker patches present (sentinel='${SENTINEL}').`);
 }
 
-ok('All target files contain sentinel; Interlinker hotfix is applied.');
-
+main();

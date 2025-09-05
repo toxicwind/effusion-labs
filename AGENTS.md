@@ -144,6 +144,10 @@ All wikilinks **MUST** be namespaced and resolve to canonical, dynamic routes. U
 
 * Soft links may be emitted during authoring for unknown slugs; these are recorded to `artifacts/reports/interlinker-unresolved.json` for remediation and are discouraged in final commits.
 
+* Omitted kind `[[Name]]` is allowed and resolves by priority: `work → character → product → series → concept → project → spark → meta`. Attempts are logged for audit.
+
+* When i18n is enabled and the page locale differs from the default, canonical links are automatically prefixed with the locale (e.g., `/zh/archives/product/...`).
+
 * Autonomous remediation: use `node tools/interlinker-audit.mjs` to rank and optionally apply alias fixes for archive kinds.
 
 #### **⋂ RESEARCH & TOOL PROTOCOL (REQUIRED)**
