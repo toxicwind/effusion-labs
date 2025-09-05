@@ -37,11 +37,13 @@ function main() {
   const cjs = read(cjsPath) || '';
   const util = read(srcUtil) || '';
 
+  // Heuristics proving the coercion hotfix is present in both CJS and ESM:
   const hints = [
-    ['util.js sentinel', util.includes(SENTINEL)],
-    ['cjs toHtmlString()', /function\s+toHtmlString\s*\(/.test(cjs)],
-    ['cjs safeMatch()', /function\s+safeMatch\s*\(/.test(cjs)],
-    ['esm imports util', /from\s+['"]\.\/src\/markdown-ext\.js/.test(esm) || /from\s+['"]\.\/src\//.test(esm)],
+    ['util.js exists', util.length > 0],
+    ['util exports toHtmlString', /export\s+const\s+toHtmlString\s*=/.test(util)],
+    ['cjs JSDOM coercion', /JSDOM\(toHtmlString\(/.test(cjs)],
+    ['cjs content coercion', /compiler\(toHtmlString\(template\.content\)/.test(cjs) && /pageContent\s*=\s*toHtmlString\(template\.content\)/.test(cjs)],
+    ['md-it guards', /typeof state\.src !== 'string'/.test(read(path.join(MOD_DIR,'src','markdown-ext.js')) || '')],
   ];
 
   const missing = hints.filter(([, ok]) => !ok);
@@ -55,4 +57,3 @@ function main() {
 }
 
 main();
-
