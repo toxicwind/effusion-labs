@@ -132,6 +132,14 @@ Notes
 - If a target isn’t yet present in the dataset, links still resolve to the canonical dynamic route (the page may 404 until data exists). This keeps authoring consistent and future‑proof.
 - Internal templates and resolvers use the same canonical mapping; avoid hardcoding long, hierarchical legacy paths.
 
+## Multi-Scaffold Dynamic Linking
+
+All wikilinks resolve against a dynamic registry spanning work, concepts, projects, sparks, and archive entities. If the kind is omitted (e.g. `[[Labubu]]`), resolution falls back through `work`, `character`, `product`, `series`, `concept`, `project`, then `spark`.
+
+## Wikilink Debugging
+
+Builds write unresolved links to `artifacts/reports/interlinker-unresolved.json` with guessed kinds and attempted resolutions. Use `node tools/interlinker-audit.mjs` to inspect and patch aliases.
+
 ## Product Archive Canon
 
 All product entities resolve to `/archives/product/<slugCanonical>/` using a stable naming canon. Legacy deep routes and verbose slugs emit `308` redirects or stub pages that point back to the canonical URL. Product JSON now records `slugCanonical`, `slugAliases`, and `legacyPaths` to drive this layer.

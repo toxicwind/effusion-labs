@@ -1,24 +1,189 @@
 diff --git a/node_modules/@photogabble/eleventy-plugin-interlinker/index.cjs b/node_modules/@photogabble/eleventy-plugin-interlinker/index.cjs
-index 2d0d8b8..b8a66f3 100644
+index 4f87dc3..5c922ce 100644
 --- a/node_modules/@photogabble/eleventy-plugin-interlinker/index.cjs
 +++ b/node_modules/@photogabble/eleventy-plugin-interlinker/index.cjs
-@@ -18,6 +18,9 @@ const wikilinkInlineRule = (wikilinkParser) => (state, silent) => {
+@@ -7,6 +7,15 @@ var fs = require('node:fs');
+ var eleventy = require('@11ty/eleventy');
+ var entities = require('entities');
+ 
++function toHtmlString(value) {
++  if (typeof value === 'string') return value;
++  if (value && typeof value === 'object') {
++    if ('outerHTML' in value) return String(value.outerHTML);
++    if ('innerHTML' in value) return String(value.innerHTML);
++  }
++  return String(value ?? '');
++}
++
+ /**
+  * This rule will be looped through an inline token by markdown-it.
+  *
+@@ -14,6 +23,7 @@ var entities = require('entities');
+  * @returns {(function(*, *): (boolean|undefined))|*}
+  */
+ const wikilinkInlineRule = (wikilinkParser) => (state, silent) => {
++  if (!state || typeof state.src !== 'string') return false;
    // Have we found the start of a WikiLink Embed `![[`
    if (state.src.charAt(state.pos) === '[' && state.src.charAt(state.pos + 1) !== '[') return false; // Not wikilink opening
    if (state.src.charAt(state.pos) === '!' && state.src.substring(state.pos, state.pos + 3) !== '![[') return false; // Not embed opening
-+
-+  // Guard: ensure src is a string to avoid .match on non-strings
-+  if (typeof state.src !== 'string') return false;
+@@ -64,6 +74,7 @@ const wikilinkInlineRule = (wikilinkParser) => (state, silent) => {
+  * @return {(function(*, *, *, *): boolean)|*}
+  */
+ const wikilinkBlockRule = (wikilinkParser) => (state, startLine, endLine, silent) => {
++  if (!state || typeof state.src !== 'string') return false;
+   let pos = state.bMarks[startLine] + state.tShift[startLine];
+   let max = state.eMarks[startLine];
  
-   const matches = state.src.match(wikilinkParser.wikiLinkRegExp);
-   if (!matches) return false;
-@@ -166,7 +169,7 @@ class HTMLLinkParser {
+@@ -165,7 +176,7 @@ class HTMLLinkParser {
     * @return {Array<import('@photogabble/eleventy-plugin-interlinker').LinkMeta>}
     */
    find(document, pageDirectory) {
 -    const dom = new jsdom.JSDOM(document);
-+    const dom = new jsdom.JSDOM(String(document ?? ''));
++    const dom = new jsdom.JSDOM(toHtmlString(document));
      const anchors = dom.window.document.getElementsByTagName('a');
      const toParse = [];
  
-     for (const anchor of anchors) {
+@@ -343,8 +354,9 @@ class WikilinkParser {
+    * @return {Array<import('@photogabble/eleventy-plugin-interlinker').WikilinkMeta>}
+    */
+   find(document, pageDirectory, filePathStem) {
++    const text = toHtmlString(document);
+     return this.parseMultiple(
+-      (document.match(this.wikiLinkRegExp) || []),
++      (text.match(this.wikiLinkRegExp) || []),
+       pageDirectory,
+       filePathStem
+     )
+@@ -532,7 +544,7 @@ class Interlinker {
+     const template = await currentPage.template.read();
+ 
+     if (template?.content) {
+-      const pageContent = template.content;
++      const pageContent = toHtmlString(template.content);
+       const outboundLinks = [
+         ...this.wikiLinkParser.find(pageContent, pageDirectory, currentPage.filePathStem),
+         ...this.HTMLLinkParser.find(pageContent, pageDirectory),
+@@ -621,7 +633,7 @@ const defaultEmbedFn = async (link, currentPage, interlinker) => {
+   const compiler = eleventy.EleventyRenderPlugin.String;
+ 
+   // Compile template.content
+-  const contentFn = await compiler(template.content, language, {
++  const contentFn = await compiler(toHtmlString(template.content), language, {
+     templateConfig: interlinker.templateConfig,
+     extensionMap: interlinker.extensionMap
+   });
+diff --git a/node_modules/@photogabble/eleventy-plugin-interlinker/src/html-link-parser.js b/node_modules/@photogabble/eleventy-plugin-interlinker/src/html-link-parser.js
+index 5c98846..31cea61 100644
+--- a/node_modules/@photogabble/eleventy-plugin-interlinker/src/html-link-parser.js
++++ b/node_modules/@photogabble/eleventy-plugin-interlinker/src/html-link-parser.js
+@@ -1,4 +1,5 @@
+ import {JSDOM} from 'jsdom';
++import { toHtmlString } from './util.js';
+ export default class HTMLLinkParser {
+ 
+   /**
+@@ -62,7 +63,7 @@ export default class HTMLLinkParser {
+    * @return {Array<import('@photogabble/eleventy-plugin-interlinker').LinkMeta>}
+    */
+   find(document, pageDirectory) {
+-    const dom = new JSDOM(document);
++    const dom = new JSDOM(toHtmlString(document));
+     const anchors = dom.window.document.getElementsByTagName('a');
+     const toParse = [];
+ 
+diff --git a/node_modules/@photogabble/eleventy-plugin-interlinker/src/interlinker.js b/node_modules/@photogabble/eleventy-plugin-interlinker/src/interlinker.js
+index c64053f..a58591f 100644
+--- a/node_modules/@photogabble/eleventy-plugin-interlinker/src/interlinker.js
++++ b/node_modules/@photogabble/eleventy-plugin-interlinker/src/interlinker.js
+@@ -2,6 +2,7 @@ import HTMLLinkParser from './html-link-parser.js';
+ import WikilinkParser from './wikilink-parser.js';
+ import DeadLinks from './dead-links.js';
+ import {pageLookup} from './find-page.js';
++import { toHtmlString } from './util.js';
+ 
+ /**
+  * Interlinker:
+@@ -65,7 +66,7 @@ export default class Interlinker {
+     const template = await currentPage.template.read();
+ 
+     if (template?.content) {
+-      const pageContent = template.content;
++      const pageContent = toHtmlString(template.content);
+       const outboundLinks = [
+         ...this.wikiLinkParser.find(pageContent, pageDirectory, currentPage.filePathStem),
+         ...this.HTMLLinkParser.find(pageContent, pageDirectory),
+diff --git a/node_modules/@photogabble/eleventy-plugin-interlinker/src/markdown-ext.js b/node_modules/@photogabble/eleventy-plugin-interlinker/src/markdown-ext.js
+index b67c8c7..893c31a 100644
+--- a/node_modules/@photogabble/eleventy-plugin-interlinker/src/markdown-ext.js
++++ b/node_modules/@photogabble/eleventy-plugin-interlinker/src/markdown-ext.js
+@@ -5,6 +5,7 @@
+  * @returns {(function(*, *): (boolean|undefined))|*}
+  */
+ export const wikilinkInlineRule = (wikilinkParser) => (state, silent) => {
++  if (!state || typeof state.src !== 'string') return false;
+   // Have we found the start of a WikiLink Embed `![[`
+   if (state.src.charAt(state.pos) === '[' && state.src.charAt(state.pos + 1) !== '[') return false; // Not wikilink opening
+   if (state.src.charAt(state.pos) === '!' && state.src.substring(state.pos, state.pos + 3) !== '![[') return false; // Not embed opening
+@@ -55,6 +56,7 @@ export const wikilinkInlineRule = (wikilinkParser) => (state, silent) => {
+  * @return {(function(*, *, *, *): boolean)|*}
+  */
+ export const wikilinkBlockRule = (wikilinkParser) => (state, startLine, endLine, silent) => {
++  if (!state || typeof state.src !== 'string') return false;
+   let pos = state.bMarks[startLine] + state.tShift[startLine]
+   let max = state.eMarks[startLine]
+ 
+diff --git a/node_modules/@photogabble/eleventy-plugin-interlinker/src/resolvers.js b/node_modules/@photogabble/eleventy-plugin-interlinker/src/resolvers.js
+index e111636..470e2cd 100644
+--- a/node_modules/@photogabble/eleventy-plugin-interlinker/src/resolvers.js
++++ b/node_modules/@photogabble/eleventy-plugin-interlinker/src/resolvers.js
+@@ -1,5 +1,6 @@
+ import {EleventyRenderPlugin} from "@11ty/eleventy";
+ import {encodeHTML} from 'entities';
++import { toHtmlString } from './util.js';
+ 
+ /**
+  * Default Resolving function for converting Wikilinks into html links.
+@@ -51,7 +52,7 @@ export const defaultEmbedFn = async (link, currentPage, interlinker) => {
+   const compiler = EleventyRenderPlugin.String;
+ 
+   // Compile template.content
+-  const contentFn = await compiler(template.content, language, {
++  const contentFn = await compiler(toHtmlString(template.content), language, {
+     templateConfig: interlinker.templateConfig,
+     extensionMap: interlinker.extensionMap
+   });
+diff --git a/node_modules/@photogabble/eleventy-plugin-interlinker/src/util.js b/node_modules/@photogabble/eleventy-plugin-interlinker/src/util.js
+new file mode 100644
+index 0000000..2b4c094
+--- /dev/null
++++ b/node_modules/@photogabble/eleventy-plugin-interlinker/src/util.js
+@@ -0,0 +1,8 @@
++export const toHtmlString = (value) => {
++  if (typeof value === 'string') return value;
++  if (value && typeof value === 'object') {
++    if ('outerHTML' in value) return String(value.outerHTML);
++    if ('innerHTML' in value) return String(value.innerHTML);
++  }
++  return String(value ?? '');
++};
+diff --git a/node_modules/@photogabble/eleventy-plugin-interlinker/src/wikilink-parser.js b/node_modules/@photogabble/eleventy-plugin-interlinker/src/wikilink-parser.js
+index fbd6206..9759cca 100644
+--- a/node_modules/@photogabble/eleventy-plugin-interlinker/src/wikilink-parser.js
++++ b/node_modules/@photogabble/eleventy-plugin-interlinker/src/wikilink-parser.js
+@@ -1,3 +1,5 @@
++import { toHtmlString } from './util.js';
++
+ export default class WikilinkParser {
+   /**
+    * This regex finds all WikiLink style links: [[id|optional text]] as well as WikiLink style embeds: ![[id]]
+@@ -158,8 +160,9 @@ export default class WikilinkParser {
+    * @return {Array<import('@photogabble/eleventy-plugin-interlinker').WikilinkMeta>}
+    */
+   find(document, pageDirectory, filePathStem) {
++    const text = toHtmlString(document);
+     return this.parseMultiple(
+-      (document.match(this.wikiLinkRegExp) || []),
++      (text.match(this.wikiLinkRegExp) || []),
+       pageDirectory,
+       filePathStem
+     )
