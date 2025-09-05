@@ -1,0 +1,9 @@
+{
+  "request": { "method": "GET", "urlPath": "/cf" },
+  "response": {
+    "status": 403,
+    "headers": { "Content-Type": "text/html", "Server": "cloudflare" },
+    "body": "<html><title>Just a moment...</title><script>/* cf-mitigated: challenge */</script></html>"
+  }
+}
+

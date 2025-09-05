@@ -98,6 +98,16 @@ CI (Docker, no egress, stubbed sidecars):
 docker-compose -f mcp-stack/ci/compose.ci.yml up -d
 ```
 
+In CI, outbound HTTP is blocked by the gateway allowlist:
+
+- `CI=1` enables enforcement.
+- `HOST_ALLOWLIST=flaresolverr,searxng,screenshot,curl,localhost,127.0.0.1` admits only stubbed service DNS names.
+
+The integration test asserts CF auto-correction using WireMock:
+
+- `GET http://searxng:8080/cf` returns a Cloudflare-like challenge page (403 + markers).
+- Gateway routes via `POST http://flaresolverr:8191/v1` and returns `mode: "flaresolverr"`.
+
 ### POSIX scripts
 
 - `mcp-stack/scripts/run.sh` — starts gateway; honors `PORT_SSE=0` for ephemeral ports.
