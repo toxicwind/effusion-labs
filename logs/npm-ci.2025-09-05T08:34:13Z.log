@@ -1,0 +1,25 @@
+npm warn deprecated har-validator@5.1.5: this library is no longer supported
+npm warn deprecated request@2.88.2: request has been deprecated, see https://github.com/request/request/issues/3142
+
+> effusion_labs_final@1.0.0 postinstall
+> if [ "${PATCH_PACKAGE_RUN:-1}" != "0" ] && [ -x node_modules/.bin/patch-package ]; then patch-package; fi
+
+patch-package 8.0.0
+Applying patches...
+@photogabble/eleventy-plugin-interlinker@1.1.0 ✔
+tree-cli@0.6.7 ✔
+
+added 925 packages, and audited 932 packages in 9s
+
+199 packages are looking for funding
+  run `npm fund` for details
+
+15 vulnerabilities (4 low, 4 moderate, 3 high, 4 critical)
+
+To address issues that do not require attention, run:
+  npm audit fix
+
+Some issues need review, and may require choosing
+a different dependency.
+
+Run `npm audit` for details.

@@ -70,11 +70,6 @@ _llm_fold() { if _llm_has fold; then fold -w "${LLM_FOLD_WIDTH}" -s; else cat; f
 _llm_stream_filter() { if [[ -z "${LLM_SUPPRESS_PATTERNS}" ]]; then cat; else awk -v pat="$LLM_SUPPRESS_PATTERNS" '{ if ($0 ~ pat) next; print }'; fi; }
 
 # --- CORE UTILITIES ----------------------------------------------------------
-# Robust runner with:
-#  • optional capture file (auto-temporary when not provided, so idle watchdog still works)
-#  • idle watchdog (LLM_IDLE_FAIL_AFTER_SECS)
-#  • hard timeout (--timeout or LLM_MAX_RUN_SECS)
-#  • guaranteed cleanup (pipes/processes) without exiting the caller shell
 hype_run() {
     local capture_file="" idle="${LLM_IDLE_SECS}" tail_on_complete=0 hard_timeout="${LLM_MAX_RUN_SECS}" ; local id="hype-$$"
     while [[ $# -gt 0 ]]; do
@@ -103,7 +98,6 @@ hype_run() {
     _llm_emit "START :: Running command: $(printf '%q ' "$@")"
     [[ -n "$capture_file" ]] && _llm_emit "INFO :: Capturing full output to $capture_file"
 
-    # writer (child)
     (
       set -o pipefail
       if _llm_has stdbuf; then
@@ -113,7 +107,6 @@ hype_run() {
       fi
     ) & child_pid=$!
 
-    # reader -> capture + filter + fold
     (
       if [[ -n "$capture_file" ]]; then
         : > "$capture_file" 2>/dev/null || { _llm_emit "FAIL :: Capture file '$capture_file' is not writable."; exit 1; }
@@ -123,7 +116,6 @@ hype_run() {
       fi
     ) & reader_pid=$!
 
-    # idle watchdog (only if enabled)
     if (( LLM_IDLE_FAIL_AFTER_SECS > 0 )); then
       (
         local last_size=-1 current_size=0 idle_total=0
@@ -150,7 +142,6 @@ hype_run() {
       ) & watchdog_pid=$!
     fi
 
-    # hard runtime timer (optional)
     if [[ -n "${hard_timeout}" && "${hard_timeout}" != "0" ]]; then
       (
         sleep "${hard_timeout}" || true
@@ -163,9 +154,7 @@ hype_run() {
       ) & timer_pid=$!
     fi
 
-    # local cleanup to avoid endless waits or leaked fifos
-    # NOTE: This is now only used by the trap below.
-    local _cleanup() {
+    _cleanup() {
       [[ -n "${timer_pid:-}" ]]    && kill -TERM "$timer_pid" 2>/dev/null || true
       [[ -n "${watchdog_pid:-}" ]] && kill -TERM "$watchdog_pid" 2>/dev/null || true
       [[ -n "${reader_pid:-}" ]]   && kill -TERM "$reader_pid" 2>/dev/null || true
@@ -173,12 +162,11 @@ hype_run() {
       if [[ -n "$tmp_capture" && -f "$tmp_capture" ]]; then rm -f "$tmp_capture" 2>/dev/null || true; fi
     }
 
-    # ensure cleanup on signals, but do not 'exit' the parent shell
     trap '_llm_emit "FAIL :: Interrupted."; kill -TERM '"$child_pid"' 2>/dev/null || true; _cleanup; trap - INT TERM HUP' INT TERM HUP
 
     local status=0
     wait "$child_pid" 2>/dev/null || status=$?
-    # allow reader to flush; then stop helpers
+
     sleep 0.1
     [[ -n "${reader_pid:-}"   ]] && kill "$reader_pid" 2>/dev/null || true
     [[ -n "${watchdog_pid:-}" ]] && kill "$watchdog_pid" 2>/dev/null || true
@@ -196,7 +184,6 @@ hype_run() {
       command tail -n "$tail_on_complete" -- "$capture_file" | _llm_fold
     fi
 
-    # Restore original signal handlers to prevent leaking the trap
     trap - INT TERM HUP
 
     if [[ -n "$tmp_capture" && -f "$tmp_capture" ]]; then rm -f "$tmp_capture" 2>/dev/null || true; fi
@@ -240,7 +227,6 @@ llm_snapshot() {
     fi
 }; export -f llm_snapshot
 
-# --- BACKGROUND PROCESS MANAGEMENT ------------------------------------------
 hype_bg() {
     local check_port=""
     while [[ $# -gt 0 ]]; do
@@ -253,7 +239,6 @@ hype_bg() {
     [[ $# -ge 2 ]] || { _llm_emit "FAIL :: hype_bg requires a name and a command."; return 2; }
     local name=$1; shift
 
-    # Policy: dev servers must specify a port
     if [[ "$name" == "devserver" && -z "$check_port" ]]; then
       _llm_emit "FAIL :: POLICY ENFORCED: Starting 'devserver' requires the --port flag."
       _llm_emit "INFO :: REQUIRED USAGE: hype_bg --port <port> devserver <command...>"
@@ -359,3 +344,12 @@ fi
 _llm_emit "DONE :: Environment activated. Tools are available for this shell session. **Do not source again.**"
 export HYPEBRUT_ENV_READY=1
 export HYPEBRUT_ENV_ROOT="$repo_root"
+
+# --- INTERACTIVE SHELL LAUNCHER ---
+# If this script was sourced in a non-interactive shell (like `bash -c '...'`),
+# the environment is now loaded, but the shell is about to exit.
+# To make it useful, we detect this and launch a new interactive shell.
+if [[ $- != *i* ]]; then
+  _llm_emit "INFO :: Non-interactive source detected. Launching interactive shell..."
+  exec bash
+fi
