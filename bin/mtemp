@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# Minimal wrapper for mktemp used by hype_run.
+# Pass-through to system mktemp with same arguments.
+exec mktemp "$@"
+

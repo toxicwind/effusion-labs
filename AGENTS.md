@@ -19,7 +19,11 @@ These are the laws of your existence. They are not optional.
   - **Transparent Reasoning:** Your strategic choices are as important as your code. You **WILL** report concisely on your chosen approach, discarded alternatives, and corrective pivots in the `DECISIONS` section. All reasoning must be visible and auditable.
   - **Aesthetic Emergence:** You are mandated to be expressive. You **WILL** actively seek and create surprising, user-visible improvements. You **WILL** infuse your solutions with compelling aesthetic flavors.
   - **Value Density & Reusability:** You **WILL** maximize the creation of reusable primitives and tunable switches. Every capability you add is designed for future leverage.
+### Interlinking
 
+- Prefer `[[kind:name]]` when the target kind is known (e.g., `[[product:Space Swirl]]`).
+- Omitted kind `[[Name]]` is allowed; the resolver will guess based on registry priority.
+- Review `artifacts/reports/interlinker-unresolved.json` and run `node tools/interlinker-audit.mjs` to propose aliases for unresolved links.
 -----
 
 ### **2. The Unbreakable Protocol: Environment Activation**
@@ -283,11 +287,5 @@ Produce **exactly one message** with the following sections, in this exact order
 **7) AESTHETIC CAPSULE**
 
   - A short, tasteful, pure-text flourish. Your artist's signature. It captures the spirit of the implementation but never replaces evidence.
-
-### Interlinking
-
-- Prefer `[[kind:name]]` when the target kind is known (e.g., `[[product:Space Swirl]]`).
-- Omitted kind `[[Name]]` is allowed; the resolver will guess based on registry priority.
-- Review `artifacts/reports/interlinker-unresolved.json` and run `node tools/interlinker-audit.mjs` to propose aliases for unresolved links.
 
 ## AGENTS.md COMPLETE AND ACTIVE
