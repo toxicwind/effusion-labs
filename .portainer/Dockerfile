@@ -14,7 +14,9 @@ ENV npm_config_fund=false \
     npm_config_audit=false
 
 # Cache node modules efficiently across builds
+# Ensure patches are available before install so postinstall can apply them
 COPY package*.json ./
+COPY patches/ ./patches/
 RUN --mount=type=cache,target=/root/.npm \
     npm ci
 

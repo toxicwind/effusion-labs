@@ -140,6 +140,20 @@ All wikilinks resolve against a dynamic registry spanning work, concepts, projec
 
 Builds write unresolved links to `artifacts/reports/interlinker-unresolved.json` with guessed kinds and attempted resolutions. Use `node tools/interlinker-audit.mjs` to inspect and patch aliases.
 
+## Interlinker Hotfix v3
+
+- Fixes Eleventy crashes (`TypeError: document.match is not a function`) by coercing all parser inputs to strings across Interlinker ESM + CJS surfaces and guarding `.match(...)`/`JSDOM` entrypoints.
+- Applies patches via `patch-package` during Docker deps install by copying `patches/` before `npm ci`.
+- Adds a CI guard that fails if the hotfix isn’t present.
+
+What this means in practice:
+
+- Sentinel comment `Patched-By: ARACA-INTERLINKER-HOTFIX-V3` is inserted into patched plugin files.
+- Run `node tools/verify-patch-applied.mjs` after `npm ci` to verify locally or in CI.
+- Dockerfile change (Option A): `.portainer/Dockerfile` now copies `patches/` into the deps stage prior to `npm ci`, ensuring postinstall applies patches.
+
+Research trace and findings live in `artifacts/reports/interlinker-hotfix-discovery.json`.
+
 ## Product Archive Canon
 
 All product entities resolve to `/archives/product/<slugCanonical>/` using a stable naming canon. Legacy deep routes and verbose slugs emit `308` redirects or stub pages that point back to the canonical URL. Product JSON now records `slugCanonical`, `slugAliases`, and `legacyPaths` to drive this layer.

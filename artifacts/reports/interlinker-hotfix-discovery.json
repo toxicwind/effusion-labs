@@ -1,0 +1,77 @@
+{
+  "generatedAt": "2025-09-05T01:21:36.382Z",
+  "plugin": {
+    "name": "@photogabble/eleventy-plugin-interlinker",
+    "version": "1.1.0",
+    "baseDir": "/home/toxic/effusion_labs_final/node_modules/@photogabble/eleventy-plugin-interlinker",
+    "cjs": "node_modules/@photogabble/eleventy-plugin-interlinker/index.cjs",
+    "esm": [
+      "node_modules/@photogabble/eleventy-plugin-interlinker/src/wikilink-parser.js",
+      "node_modules/@photogabble/eleventy-plugin-interlinker/src/html-link-parser.js",
+      "node_modules/@photogabble/eleventy-plugin-interlinker/src/interlinker.js",
+      "node_modules/@photogabble/eleventy-plugin-interlinker/src/markdown-ext.js",
+      "node_modules/@photogabble/eleventy-plugin-interlinker/src/resolvers.js",
+      "node_modules/@photogabble/eleventy-plugin-interlinker/src/util.js"
+    ]
+  },
+  "occurrences": [
+    {
+      "file": "node_modules/@photogabble/eleventy-plugin-interlinker/index.cjs",
+      "line": 31,
+      "kind": "match-call",
+      "excerpt": "const matches = state.src.match(wikilinkParser.wikiLinkRegExp);"
+    },
+    {
+      "file": "node_modules/@photogabble/eleventy-plugin-interlinker/index.cjs",
+      "line": 359,
+      "kind": "match-call",
+      "excerpt": "(text.match(this.wikiLinkRegExp) || []),"
+    },
+    {
+      "file": "node_modules/@photogabble/eleventy-plugin-interlinker/src/wikilink-parser.js",
+      "line": 165,
+      "kind": "match-call",
+      "excerpt": "(text.match(this.wikiLinkRegExp) || []),"
+    },
+    {
+      "file": "node_modules/@photogabble/eleventy-plugin-interlinker/src/html-link-parser.js",
+      "line": 66,
+      "kind": "new-JSDOM",
+      "excerpt": "const dom = new JSDOM(toHtmlString(document));"
+    },
+    {
+      "file": "node_modules/@photogabble/eleventy-plugin-interlinker/src/markdown-ext.js",
+      "line": 13,
+      "kind": "match-call",
+      "excerpt": "const matches = state.src.match(wikilinkParser.wikiLinkRegExp);"
+    }
+  ],
+  "docker": {
+    "file": ".portainer/Dockerfile",
+    "stages": [
+      {
+        "name": "deps",
+        "from": "node:24-alpine",
+        "patchPackageRun": false,
+        "hasPatchesBeforeInstall": true
+      },
+      {
+        "name": "builder",
+        "from": "node:24-alpine",
+        "patchPackageRun": false,
+        "hasPatchesBeforeInstall": false
+      },
+      {
+        "name": "stage@46",
+        "from": "nginx:stable-alpine",
+        "patchPackageRun": false,
+        "hasPatchesBeforeInstall": false
+      }
+    ]
+  },
+  "overrides": {
+    "glob": "^10.3.10",
+    "uuid": "^9.0.1",
+    "rimraf": "^5.0.5"
+  }
+}
