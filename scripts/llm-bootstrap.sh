@@ -165,7 +165,7 @@ hype_run() {
     fi
 
     # local cleanup to avoid endless waits or leaked fifos
-    _cleanup() {
+    local _cleanup() {
       [[ -n "${timer_pid:-}" ]]    && kill -TERM "$timer_pid" 2>/dev/null || true
       [[ -n "${watchdog_pid:-}" ]] && kill -TERM "$watchdog_pid" 2>/dev/null || true
       [[ -n "${reader_pid:-}" ]]   && kill -TERM "$reader_pid" 2>/dev/null || true
@@ -237,11 +237,10 @@ llm_snapshot() {
 
 # --- BACKGROUND PROCESS MANAGEMENT ------------------------------------------
 hype_bg() {
-    local check_port=""; local force_restart=0
+    local check_port=""
     while [[ $# -gt 0 ]]; do
       case "$1" in
         --port) check_port="$2"; shift 2;;
-        --force) force_restart=1; shift;;
         --) shift; break;;
         *) break;;
       esac
@@ -256,81 +255,9 @@ hype_bg() {
       return 1
     fi
 
-    mkdir -p "${_LLM_PID_DIR}" "${_LLM_LOG_DIR}"
-    local pid_file="${_LLM_PID_DIR}/${name}.pid"
-    local log_file="${_LLM_LOG_DIR}/${name}.log"
-
-    # If a PID exists and process alive, keep it (idempotent) unless --force
-    if [[ -f "$pid_file" ]]; then
-      local pid; pid="$(cat "$pid_file" 2>/dev/null || true)"
-      if [[ -n "$pid" ]] && kill -0 "$pid" 2>/dev/null; then
-        if (( force_restart == 0 )); then
-          _llm_emit "BG :: '$name' already running (pid=$pid). Idempotent no-op."
-          echo "$pid"; return 0
-        else
-          _llm_emit "BG :: Forcing restart of '$name' (pid=$pid)."
-          kill -TERM "$pid" 2>/dev/null || true; sleep 0.5; kill -KILL "$pid" 2>/dev/null || true
-        fi
-      fi
-    fi
-
-    # Optional port contention check
     if [[ -n "$check_port" ]] && _llm_has lsof; then
       local existing_pid; existing_pid="$(lsof -t -i :"$check_port" 2>/dev/null || true)"
       if [[ -n "$existing_pid" ]]; then
-        _llm_emit "BG :: Port $check_port is already bound by pid $existing_pid. Reusing existing process."
-        echo "$existing_pid" >"$pid_file"
-        echo "$existing_pid"; return 0
-      fi
-    fi
-
-    # Start background process
-    ( nohup "$@" </dev/null >"$log_file" 2>&1 & echo $! >"$pid_file" )
-    local new_pid; new_pid="$(cat "$pid_file" 2>/dev/null || true)"
-    if [[ -n "$new_pid" ]] && kill -0 "$new_pid" 2>/dev/null; then
-      _llm_emit "BG :: Started '$name' (pid=$new_pid) → log: $log_file"
-      echo "$new_pid"; return 0
-    else
-      _llm_emit "FAIL :: Failed to start background task '$name'"
-      return 1
-    fi
-}; export -f hype_bg
-
-hype_status() {
-    mkdir -p "${_LLM_PID_DIR}" "${_LLM_LOG_DIR}"; local any=0
-    for pidfile in "${_LLM_PID_DIR}"/*.pid; do
-      [[ -e "$pidfile" ]] || continue
-      any=1
-      local name pid; name="$(basename "$pidfile" .pid)"; pid="$(cat "$pidfile" 2>/dev/null || true)"
-      if [[ -n "$pid" ]] && kill -0 "$pid" 2>/dev/null; then
-         echo "$name: running (pid=$pid)"
-      else
-         echo "$name: stale (no process)"
-      fi
-    done
-    (( any == 0 )) && echo "(no background tasks)"
-}; export -f hype_status
-
-hype_kill() {
-    local name="${1:-}"; [[ -n "$name" ]] || { _llm_emit "FAIL :: hype_kill requires a task name"; return 2; }
-    local pid_file="${_LLM_PID_DIR}/${name}.pid"
-    if [[ -f "$pid_file" ]]; then
-      local pid; pid="$(cat "$pid_file" 2>/dev/null || true)"
-      [[ -n "$pid" ]] && kill -TERM "$pid" 2>/dev/null || true
-      sleep 0.5; [[ -n "$pid" ]] && kill -0 "$pid" 2>/dev/null && kill -KILL "$pid" 2>/dev/null || true
-      rm -f "$pid_file" 2>/dev/null || true
-      _llm_emit "BG :: Killed '$name'"
-      return 0
-    else
-      _llm_emit "INFO :: No pid file for '$name'"
-      return 0
-    fi
-}; export -f hype_kill
-
-# Finalize activation banner
-_llm_emit "DONE :: Environment activated. Tools are available for this shell session. **Do not source again.**"
-export HYPEBRUT_ENV_READY=1
-export HYPEBRUT_ENV_ROOT="${_llm_repo_root_guess}"
         if [[ -d "$_LLM_PID_DIR" ]] && grep -q -s -x "$existing_pid" "$_LLM_PID_DIR"/*.pid 2>/dev/null; then
           _llm_emit "INFO :: Managed process already on port $check_port (PID: $existing_pid)."
           return 0
