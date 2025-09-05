@@ -1,4 +1,5 @@
 import { fetch } from "undici";
+import { loadConfig } from "./config.mjs";
 // Prefer the local gateway implementation to keep container builds self-contained.
 import { htmlToMarkdown } from "./lib/webToMd.js";
 import { resolveSidecar } from "../sidecars/resolver.mjs";
@@ -13,13 +14,15 @@ function normUrl(u) {
   }
 }
 
-function isCloudflare(headers, body) {
+function isCloudflare(headers, body, status) {
   const h = Object.fromEntries(
     Object.entries(headers || {}).map(([k, v]) => [String(k).toLowerCase(), String(v)])
   );
   if (h["server"]?.toLowerCase() === "cloudflare") return true;
   const txt = typeof body === "string" ? body : "";
-  return /__cf_bm|Just a moment|cf-mitigated:\s*challenge|\/cdn-cgi\/challenge-platform\//i.test(txt);
+  if (/__cf_bm|Just a moment|cf-mitigated:\s*challenge|\/cdn-cgi\/challenge-platform\//i.test(txt)) return true;
+  if (status && [401,403,429].includes(Number(status))) return true;
+  return false;
 }
 
 async function directFetch(url, { headers }) {
@@ -68,10 +71,11 @@ const UA =
 
 export async function readWeb(inputUrl, opts = {}) {
   const url = normUrl(inputUrl);
+  enforceAllowlist(url);
   let last;
   // Try direct first
   last = await directFetch(url, opts).catch((e) => ({ ok: false, error: String(e) }));
-  if (last.ok && !isCloudflare(last.headers, last.body)) {
+  if (last.ok && !isCloudflare(last.headers, last.body, last.status)) {
     const md = htmlToMarkdown(last.body, last.url);
     return { ok: true, url: last.url, status: last.status, contentType: last.headers?.["content-type"], md, bytes: last.bytes, mode: "direct" };
   }
@@ -130,4 +134,17 @@ async function discoverFlareBase(candidate) {
     if (res.status >= 200 && res.status < 500) return base;
   } catch {}
   throw new Error("flaresolverr_unreachable");
+}
+
+// --- CI egress control ---
+function enforceAllowlist(inputUrl) {
+  const cfg = loadConfig();
+  if (!cfg.CI) return; // Only enforced in CI
+  const host = new URL(inputUrl).hostname.toLowerCase();
+  if (!cfg.HOST_ALLOWLIST || cfg.HOST_ALLOWLIST.length === 0) return;
+  if (!cfg.HOST_ALLOWLIST.includes(host)) {
+    const err = new Error(`host_not_allowed_in_ci:${host}`);
+    err.code = "HOST_BLOCKED";
+    throw err;
+  }
 }

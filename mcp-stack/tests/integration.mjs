@@ -110,9 +110,20 @@ async function main() {
     if (!Array.isArray(sc) || !sc[0]?.lastChecked) throw new Error('admin_sidecars_shape');
     console.log("    -> Pass");
 
-    // ## Test 4: Optional Internet Tests
+    // ## Test 4: CF auto-correction via FlareSolverr (CI, stubbed)
+    if (process.env.CI === '1') {
+      console.log("  - Running Test 4: CF auto-correction (stubbed)...");
+      const payload = { url: 'http://searxng:8080/cf' };
+      const r = await fetch(`${base}/servers/readweb/info`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+      if (!r.ok) throw new Error(`readweb_http_${r.status}`);
+      const j = await r.json();
+      if (!j?.ok || j?.mode !== 'flaresolverr') throw new Error(`expected_flaresolverr_mode got ${JSON.stringify(j)}`);
+      console.log("    -> Pass");
+    }
+
+    // ## Test 5: Optional Internet Tests
     if (process.env.INTERNET_TESTS === '1') {
-        console.log("  - Running Test 4: Internet Connectivity...");
+        console.log("  - Running Test 5: Internet Connectivity...");
         const readWebRes = await fetch(`${base}/servers/readweb/info`, { method:'POST', body: JSON.stringify({ url:'https://example.org' }) });
         const readWebJson = await readWebRes.json();
         if(!readWebJson?.ok || !readWebJson?.md) throw new Error('readweb_example_failed');

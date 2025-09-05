@@ -10,6 +10,13 @@ function runEleventyBuild() {
   console.log(`\n🏗️  Performing single Eleventy build...`);
   spawnSync('rm', ['-rf', outputDir], { stdio: 'inherit' });
 
+  // Patch sentinel verification before any Eleventy invocation
+  const verify = spawnSync(process.execPath, ['tools/verify-patch-applied.mjs'], { stdio: 'inherit' });
+  if (verify.status !== 0) {
+    console.error('❌ Patch verification failed; aborting build.');
+    process.exit(1);
+  }
+
   const result = spawnSync('npx', ['@11ty/eleventy', `--output=${outputDir}`], {
     stdio: 'inherit',
     env: { ...process.env, ELEVENTY_ENV: 'test', WATCH: '0' },

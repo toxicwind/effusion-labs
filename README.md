@@ -140,6 +140,26 @@ All wikilinks resolve against a dynamic registry spanning work, concepts, projec
 
 Builds write unresolved links to `artifacts/reports/interlinker-unresolved.json` with guessed kinds and attempted resolutions. Use `node tools/interlinker-audit.mjs` to inspect and patch aliases.
 
+### CI Thresholds & Summary
+
+- Gate unresolved count with env vars: `INTERLINKER_MAX_UNRESOLVED` (default 200 on CI, Infinity locally) and `INTERLINKER_FAIL_ON_UNRESOLVED=true` to hard‑fail.
+- After builds, a compact line prints: `Interlinker: unresolved=<n> threshold=<t> action=<warn|fail>`.
+- For PRs, render a quick table: `node tools/unresolved-to-md.mjs`.
+
+### CLI Audit
+
+Suggest or apply aliases from the unresolved report:
+
+```bash
+# Suggest top matches (all kinds)
+node tools/interlinker-audit.mjs
+
+# Limit to products, apply best matches with a minimum score
+node tools/interlinker-audit.mjs --kind product --apply --min 0.9
+```
+
+When applying, a brief worklog entry is written under `artifacts/worklogs/`.
+
 ## Interlinker Hotfix v3
 
 - Fixes Eleventy crashes (`TypeError: document.match is not a function`) by coercing all parser inputs to strings across Interlinker ESM + CJS surfaces and guarding `.match(...)`/`JSDOM` entrypoints.

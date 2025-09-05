@@ -17,6 +17,12 @@ node -e "const v=+process.versions.node.split('.')[0]; if(v<24){console.error('N
 echo "[op] Installing deps (npm ci)"
 hype_run --capture logs/npm-ci.$(date -u +%Y-%m-%dT%H%M%SZ).log -- npm ci
 
+echo "[op] Apply patch-package (explicit guard)"
+# Some CI/Docker layouts may disable postinstall; apply explicitly where node_modules and patches coexist
+if [ -x node_modules/.bin/patch-package ]; then
+  hype_run -- node_modules/.bin/patch-package
+fi
+
 echo "[op] Discovery artifacts"
 hype_run --capture logs/discovery.$(date -u +%Y%m%dT%H%M%SZ).log -- node tools/interlinker-discover.mjs
 hype_run --capture logs/hotfix-discovery.$(date -u +%Y%m%dT%H%M%SZ).log -- node tools/interlinker-hotfix-discover.mjs
