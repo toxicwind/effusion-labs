@@ -22,13 +22,15 @@ Key endpoints:
 - `PROFILE`: `dev` prints host URLs in banner; `prod` hides URLs and uses `INTERNAL_HOST` in manifest.
 - `PORT_HTTP`/`PORT_SSE`: fixed port; `0` = ephemeral. Optional `PORT_RANGE_START/END`.
 - `FLARESOLVERR_URL`: enable Cloudflare solving for `readweb` (e.g. `http://127.0.0.1:8191`).
+- `HOST_ALLOWLIST`: comma separated hosts permitted for outbound requests (default `localhost,127.0.0.1`).
 - `SEARXNG_ENGINE_URL`: optional sidecar reference (manifest only).
 - `LOG_LEVEL`: `debug|info|warn|error` (default `info`).
 - `INTERNAL_HOST`: prod manifest host (default `mcp-gateway`).
 
-Start (dev, ephemeral port):
+Engine-aware start:
 ```bash
-PROFILE=dev PORT_SSE=0 ./scripts/run.sh
+./scripts/engine-detect.sh    # prints podman|docker|none
+./scripts/run.sh              # auto uses containers or local stubs
 ```
 
 Start FlareSolverr sidecar (Podman):
@@ -101,4 +103,4 @@ docker-compose -f mcp-stack/ci/compose.ci.yml up -d
 ### POSIX scripts
 
 - `mcp-stack/scripts/run.sh` — starts gateway; honors `PORT_SSE=0` for ephemeral ports.
-- `mcp-stack/scripts/check-health.sh` — probes `/healthz`, `/readyz`, `/.well-known`, `/admin/queue`, `/admin/rate`, `/admin/retry`.
+- `mcp-stack/scripts/check-health.sh` — probes `/healthz`, `/readyz`, `/.well-known`, `/admin/queue`, `/admin/rate`, `/admin/retry`, `/admin/sidecars`.

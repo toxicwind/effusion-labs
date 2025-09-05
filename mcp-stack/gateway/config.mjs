@@ -30,6 +30,10 @@ export function loadConfig() {
   const RATE_BURST = envInt("RATE_BURST", 100);
   const RETRY_BASE_MS = envInt("RETRY_BASE_MS", 200);
   const RETRY_MAX_MS = envInt("RETRY_MAX_MS", 10_000);
+  const HOST_ALLOWLIST = (process.env.HOST_ALLOWLIST || "localhost,127.0.0.1")
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
 
   const cfg = {
     PROFILE,
@@ -45,6 +49,7 @@ export function loadConfig() {
     RATE_BURST,
     RETRY_BASE_MS,
     RETRY_MAX_MS,
+    HOST_ALLOWLIST,
     SIDECARS: {
       searxng: process.env.SEARXNG_ENGINE_URL,
       flaresolverr: process.env.FLARESOLVERR_URL,
