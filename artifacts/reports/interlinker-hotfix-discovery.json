@@ -1,77 +1,251 @@
 {
-  "generatedAt": "2025-09-05T07:17:06.624Z",
   "plugin": {
     "name": "@photogabble/eleventy-plugin-interlinker",
     "version": "1.1.0",
-    "baseDir": "/home/toxic/effusion_labs_final/node_modules/@photogabble/eleventy-plugin-interlinker",
-    "cjs": "node_modules/@photogabble/eleventy-plugin-interlinker/index.cjs",
-    "esm": [
-      "node_modules/@photogabble/eleventy-plugin-interlinker/src/wikilink-parser.js",
-      "node_modules/@photogabble/eleventy-plugin-interlinker/src/html-link-parser.js",
-      "node_modules/@photogabble/eleventy-plugin-interlinker/src/interlinker.js",
-      "node_modules/@photogabble/eleventy-plugin-interlinker/src/markdown-ext.js",
-      "node_modules/@photogabble/eleventy-plugin-interlinker/src/resolvers.js",
-      "node_modules/@photogabble/eleventy-plugin-interlinker/src/util.js"
-    ]
-  },
-  "occurrences": [
-    {
-      "file": "node_modules/@photogabble/eleventy-plugin-interlinker/index.cjs",
-      "line": 31,
-      "kind": "match-call",
-      "excerpt": "const matches = state.src.match(wikilinkParser.wikiLinkRegExp);"
+    "entrypoints": {
+      "esm": "node_modules/@photogabble/eleventy-plugin-interlinker/index.js",
+      "cjs": "node_modules/@photogabble/eleventy-plugin-interlinker/index.cjs"
     },
-    {
-      "file": "node_modules/@photogabble/eleventy-plugin-interlinker/index.cjs",
-      "line": 359,
-      "kind": "match-call",
-      "excerpt": "(text.match(this.wikiLinkRegExp) || []),"
-    },
-    {
-      "file": "node_modules/@photogabble/eleventy-plugin-interlinker/src/wikilink-parser.js",
-      "line": 165,
-      "kind": "match-call",
-      "excerpt": "(text.match(this.wikiLinkRegExp) || []),"
-    },
-    {
-      "file": "node_modules/@photogabble/eleventy-plugin-interlinker/src/html-link-parser.js",
-      "line": 66,
-      "kind": "new-JSDOM",
-      "excerpt": "const dom = new JSDOM(toHtmlString(document));"
-    },
-    {
-      "file": "node_modules/@photogabble/eleventy-plugin-interlinker/src/markdown-ext.js",
-      "line": 13,
-      "kind": "match-call",
-      "excerpt": "const matches = state.src.match(wikilinkParser.wikiLinkRegExp);"
+    "sentinel": {
+      "string": "ARACA-INTERLINKER-HOTFIX-V3",
+      "esm": false,
+      "cjs": false
     }
-  ],
-  "docker": {
-    "file": ".portainer/Dockerfile",
-    "stages": [
-      {
-        "name": "deps",
-        "from": "node:24-alpine",
-        "patchPackageRun": false,
-        "hasPatchesBeforeInstall": true
-      },
-      {
-        "name": "builder",
-        "from": "node:24-alpine",
-        "patchPackageRun": false,
-        "hasPatchesBeforeInstall": false
-      },
-      {
-        "name": "stage@46",
-        "from": "nginx:stable-alpine",
-        "patchPackageRun": false,
-        "hasPatchesBeforeInstall": false
-      }
+  },
+  "eleventy": {
+    "collections": [
+      "work",
+      "jsonlProvenance",
+      "jsonlDirs",
+      "nodes"
+    ],
+    "globals": [],
+    "passthroughs": [
+      "{ \"src/scripts\": \"assets/js\" }",
+      "{ \"src/favicon.ico\": \"favicon.ico\" }",
+      "{ \"src/assets/static\": \"assets\" }",
+      "{ \"src/assets/css\": \"assets/css\" }",
+      "{ \"src/assets/icons\": \"assets/icons\" }",
+      "{ \"src/assets/icons/favicon.svg\": \"favicon.svg\" }",
+      "{ \"src/assets/icons/favicon-96x96.png\": \"favicon-96x96.png\" }",
+      "{ \"src/assets/icons/apple-touch-icon.png\": \"apple-touch-icon.png\" }",
+      "{ \"src/assets/icons/site.webmanifest\": \"site.webmanifest\" }",
+      "{ \"src/assets/icons/web-app-manifest-192x192.png\": \"web-app-manifest-192x192.png\" }",
+      "{ \"src/assets/icons/web-app-manifest-512x512.png\": \"web-app-manifest-512x512.png\" }"
     ]
   },
-  "overrides": {
-    "glob": "^10.3.10",
-    "uuid": "^9.0.1",
-    "rimraf": "^5.0.5"
-  }
+  "i18n": {
+    "defaultLocale": "en",
+    "localePrefixes": false
+  },
+  "scaffoldMap": [
+    {
+      "kind": "product",
+      "base": "archives/product",
+      "datasetKeys": [
+        "archiveProductsEn",
+        "archiveAllProducts",
+        "archiveProducts"
+      ],
+      "keyFields": [
+        "slugCanonical",
+        "productSlug",
+        "slug",
+        "product_id",
+        "title"
+      ],
+      "canonicalBase": "archives/product",
+      "canonicalField": "slugCanonical",
+      "aliasFields": [
+        "slugAliases[]",
+        "legacyPaths[]"
+      ],
+      "legacyPathFields": [
+        "legacyPaths[]"
+      ],
+      "idTitleFallbacks": [
+        "id",
+        "title"
+      ]
+    },
+    {
+      "kind": "character",
+      "base": "archives/character",
+      "datasetKeys": [
+        "archiveCharactersEn",
+        "archiveAllCharacters",
+        "archiveCharacters"
+      ],
+      "keyFields": [
+        "charSlug",
+        "name",
+        "title",
+        "slug"
+      ],
+      "canonicalBase": "archives/character",
+      "canonicalField": "charSlug",
+      "aliasFields": [
+        "slugAliases[]",
+        "legacyPaths[]"
+      ],
+      "legacyPathFields": [
+        "legacyPaths[]"
+      ],
+      "idTitleFallbacks": [
+        "id",
+        "title"
+      ]
+    },
+    {
+      "kind": "series",
+      "base": "archives/series",
+      "datasetKeys": [
+        "archiveSeriesEn",
+        "archiveAllSeries",
+        "archiveSeries"
+      ],
+      "keyFields": [
+        "seriesSlug",
+        "title",
+        "slug"
+      ],
+      "canonicalBase": "archives/series",
+      "canonicalField": "seriesSlug",
+      "aliasFields": [
+        "slugAliases[]",
+        "legacyPaths[]"
+      ],
+      "legacyPathFields": [
+        "legacyPaths[]"
+      ],
+      "idTitleFallbacks": [
+        "id",
+        "title"
+      ]
+    },
+    {
+      "kind": "spark",
+      "base": "sparks",
+      "datasetKeys": [
+        "collections.sparks"
+      ],
+      "keyFields": [
+        "fileSlug",
+        "data.title"
+      ],
+      "canonicalBase": "sparks",
+      "canonicalField": "fileSlug",
+      "aliasFields": [
+        "slugAliases[]",
+        "legacyPaths[]"
+      ],
+      "legacyPathFields": [
+        "legacyPaths[]"
+      ],
+      "idTitleFallbacks": [
+        "id",
+        "title"
+      ]
+    },
+    {
+      "kind": "concept",
+      "base": "concepts",
+      "datasetKeys": [
+        "collections.concepts"
+      ],
+      "keyFields": [
+        "fileSlug",
+        "data.title"
+      ],
+      "canonicalBase": "concepts",
+      "canonicalField": "fileSlug",
+      "aliasFields": [
+        "slugAliases[]",
+        "legacyPaths[]"
+      ],
+      "legacyPathFields": [
+        "legacyPaths[]"
+      ],
+      "idTitleFallbacks": [
+        "id",
+        "title"
+      ]
+    },
+    {
+      "kind": "project",
+      "base": "projects",
+      "datasetKeys": [
+        "collections.projects"
+      ],
+      "keyFields": [
+        "fileSlug",
+        "data.title"
+      ],
+      "canonicalBase": "projects",
+      "canonicalField": "fileSlug",
+      "aliasFields": [
+        "slugAliases[]",
+        "legacyPaths[]"
+      ],
+      "legacyPathFields": [
+        "legacyPaths[]"
+      ],
+      "idTitleFallbacks": [
+        "id",
+        "title"
+      ]
+    },
+    {
+      "kind": "meta",
+      "base": "meta",
+      "datasetKeys": [
+        "collections.meta"
+      ],
+      "keyFields": [
+        "fileSlug",
+        "data.title"
+      ],
+      "canonicalBase": "meta",
+      "canonicalField": "fileSlug",
+      "aliasFields": [
+        "slugAliases[]",
+        "legacyPaths[]"
+      ],
+      "legacyPathFields": [
+        "legacyPaths[]"
+      ],
+      "idTitleFallbacks": [
+        "id",
+        "title"
+      ]
+    },
+    {
+      "kind": "work",
+      "base": "work",
+      "datasetKeys": [
+        "collections.work",
+        "collections.sparks",
+        "collections.concepts",
+        "collections.projects",
+        "collections.meta"
+      ],
+      "keyFields": [
+        "fileSlug",
+        "data.title"
+      ],
+      "canonicalBase": "work",
+      "canonicalField": "fileSlug",
+      "aliasFields": [
+        "slugAliases[]",
+        "legacyPaths[]"
+      ],
+      "legacyPathFields": [
+        "legacyPaths[]"
+      ],
+      "idTitleFallbacks": [
+        "id",
+        "title"
+      ]
+    }
+  ]
 }
