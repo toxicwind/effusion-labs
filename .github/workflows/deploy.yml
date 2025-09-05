@@ -1,4 +1,4 @@
-name: CI & Production Deployment
+name: "CI & Production Deployment"
 
 on:
   push:
@@ -15,7 +15,7 @@ permissions:
   packages: write
 
 concurrency:
-  group: deploy-${{ github.ref }}
+  group: deploy-${{ github.ref_name }}
   cancel-in-progress: true
 
 jobs:
@@ -35,18 +35,9 @@ jobs:
           npm ci --ignore-scripts
           node scripts/validate-frontmatter.mjs
 
-      - name: 🧠 Check commit type (PR Merge or Direct Push)
-        id: commit_type
-        run: |
-          COMMIT_MSG=$(git log -1 --pretty=%s)
-          if [[ "$COMMIT_MSG" =~ ^Merge\ pull\ request\ # ]]; then
-            echo "is_merge=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "is_merge=false" >> "$GITHUB_OUTPUT"
-          fi
-
       - name: ⚡ Smoke tests for direct pushes
-        if: steps.commit_type.outputs.is_merge == 'false'
+        # Avoids errors on workflow_dispatch where head_commit is absent.
+        if: github.event_name != 'push' || !startsWith(github.event.head_commit.message, 'Merge pull request #')
         run: |
           npm ci
           node tools/verify-patch-applied.mjs
@@ -83,7 +74,8 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
-          build-args: COMMIT_SHA=${{ github.sha }}
+          build-args: |
+            COMMIT_SHA=${{ github.sha }}
 
   # ===================================================================
   #  BUILD THE GATEWAY SERVICE (NOT REQUIRED FOR DEPLOYMENT)
@@ -123,7 +115,8 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
-          build-args: COMMIT_SHA=${{ github.sha }}
+          build-args: |
+            COMMIT_SHA=${{ github.sha }}
 
   # ===================================================================
   #  TRIGGER PORTAINER TO REDEPLOY
@@ -131,8 +124,8 @@ jobs:
   deploy:
     name: 🚀 Deploy to Portainer
     runs-on: ubuntu-latest
-    # This job ONLY waits for the web build to succeed.
     needs: build_web
+    if: github.ref_name == 'main'
     steps:
       - name: 📞 Trigger Portainer webhook
         env:
