@@ -1,0 +1,5 @@
+[op] Activating HYPEBRUT shell toolkit (idempotent).
+✅ HYPEBRUT :: Environment already active. Sourcing skipped. **Proceed with task.**
+[op] Checking Node runtime >= 24
+[op] Installing deps (npm ci)
+environment: LLM_IDLE_SECS: unbound variable

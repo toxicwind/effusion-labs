@@ -19,6 +19,59 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  mcp_stack_ci:
+    name: 🧪 MCP-Stack CI (No Egress)
+    runs-on: ubuntu-latest
+    steps:
+      - name: ⬇️ Checkout
+        uses: actions/checkout@v4
+
+      - name: 🔧 Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+
+      - name: 📦 Install gateway runtime deps
+        working-directory: mcp-stack/gateway
+        run: npm ci --ignore-scripts
+
+      - name: 🧰 Start stub sidecars (WireMock)
+        run: |
+          docker-compose -f mcp-stack/ci/compose.ci.yml up -d flaresolverr searxng
+          sleep 3
+
+      - name: 🚦 Smoke + Integration (node, no egress)
+        env:
+          PROFILE: dev
+          LOG_LEVEL: info
+          PORT_HTTP: 0
+          FLARESOLVERR_URL: http://127.0.0.1:8191
+        run: |
+          node mcp-stack/tests/smoke.mjs
+          node mcp-stack/tests/integration.mjs
+
+      - name: 📈 k6 perf sanity (20 VUs / 10s)
+        uses: grafana/setup-k6-action@v1
+
+      - name: ▶️ Run k6 script
+        env:
+          BASE: http://127.0.0.1:3000
+        run: |
+          # Start gateway on a fixed port for the perf step
+          LOG_LEVEL=info PROFILE=dev PORT_HTTP=3000 node mcp-stack/gateway/server.mjs &
+          GW_PID=$!
+          # Wait briefly for startup
+          sleep 2
+          k6 run - <<'EOF'
+          import http from "k6/http";
+          import { sleep } from "k6";
+          export const options = { vus: 20, duration: "10s" };
+          export default function () {
+            http.get(`${__ENV.BASE}/servers/filesystem/sse`);
+            sleep(0.2);
+          }
+          EOF
+          kill $GW_PID || true
   # ===================================================================
   #  BUILD AND PUSH THE WEB SERVICE IMAGE (PRIMARY)
   # ===================================================================

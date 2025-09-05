@@ -45,7 +45,7 @@ export function loadConfig() {
     RATE_BURST,
     RETRY_BASE_MS,
     RETRY_MAX_MS,
-    SIDEcars: {
+    SIDECARS: {
       searxng: process.env.SEARXNG_ENGINE_URL,
       flaresolverr: process.env.FLARESOLVERR_URL,
     },

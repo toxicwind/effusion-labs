@@ -147,7 +147,7 @@ async function main() {
         return json(res, 405, { error: "method_not_allowed" });
       }
       if (action === "sse") {
-        const sse = startSSE(res);
+        const sse = startSSE(res, {}, cfg.RETRY_BASE_MS);
         const remove = sup.addClient(name, sse);
         const ensure = () => spec.enabled ? sup.spawn(name, spec) : null;
         try { await ensure(); } catch (e) { log("error", "spawn", "failed", { server: name, err: String(e) }); }

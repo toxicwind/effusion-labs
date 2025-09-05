@@ -1,4 +1,4 @@
-export function startSSE(res, headers = {}) {
+export function startSSE(res, headers = {}, retryMs = 15000) {
   res.writeHead(200, {
     "Content-Type": "text/event-stream",
     "Cache-Control": "no-cache, no-transform",
@@ -8,7 +8,7 @@ export function startSSE(res, headers = {}) {
     ...headers,
   });
   // Recommend client retry window and flush initial padding
-  res.write("retry: 15000\n\n");
+  res.write(`retry: ${retryMs}\n\n`);
   return {
     send(event, data) {
       if (!res.writableEnded) {

@@ -101,4 +101,4 @@ docker-compose -f mcp-stack/ci/compose.ci.yml up -d
 ### POSIX scripts
 
 - `mcp-stack/scripts/run.sh` — starts gateway; honors `PORT_SSE=0` for ephemeral ports.
-- `mcp-stack/scripts/check-health.sh` — probes `/healthz`, `/readyz`, `/.well-known`, `/admin/queue`.
+- `mcp-stack/scripts/check-health.sh` — probes `/healthz`, `/readyz`, `/.well-known`, `/admin/queue`, `/admin/rate`, `/admin/retry`.

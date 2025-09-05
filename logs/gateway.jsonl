@@ -46,3 +46,17 @@
 {"ts":"2025-09-04T19:58:34.303Z","level":"info","comp":"supervisor","msg":"spawn","server":"filesystem","cmd":"/home/toxic/.nvm/versions/node/v24.3.0/bin/node","args":["/home/toxic/effusion_labs_final/mcp-stack/servers/templates/stdio-demo.mjs","filesystem"]}
 {"ts":"2025-09-04T20:02:45.606Z","level":"info","comp":"startup","msg":"listening","port":39377,"profile":"dev"}
 {"ts":"2025-09-04T20:02:45.634Z","level":"info","comp":"supervisor","msg":"spawn","server":"filesystem","cmd":"/home/toxic/.nvm/versions/node/v24.3.0/bin/node","args":["/home/toxic/effusion_labs_final/mcp-stack/servers/templates/stdio-demo.mjs","filesystem"]}
+{"ts":"2025-09-05T07:19:04.079Z","level":"info","comp":"startup","msg":"listening","port":46615,"profile":"dev"}
+{"ts":"2025-09-05T07:19:04.116Z","level":"info","comp":"supervisor","msg":"spawn","server":"filesystem","cmd":"/home/toxic/.nvm/versions/node/v24.3.0/bin/node","args":["/home/toxic/effusion_labs_final/mcp-stack/servers/templates/stdio-demo.mjs","filesystem"]}
+{"ts":"2025-09-05T07:21:08.740Z","level":"info","comp":"startup","msg":"listening","port":36215,"profile":"dev"}
+{"ts":"2025-09-05T07:21:08.767Z","level":"info","comp":"supervisor","msg":"spawn","server":"filesystem","cmd":"/home/toxic/.nvm/versions/node/v24.3.0/bin/node","args":["/home/toxic/effusion_labs_final/mcp-stack/servers/templates/stdio-demo.mjs","filesystem"]}
+{"ts":"2025-09-05T07:25:15.181Z","level":"debug","comp":"config","msg":"loaded","PROFILE":"dev","PORT_HTTP":0,"LOG_LEVEL":"debug","HEALTH_TIMEOUT_MS":10000,"INTERNAL_HOST":"mcp-gateway","MAX_CONCURRENCY":20,"QUEUE_LIMIT":10000,"RATE_LIMIT_PER_SEC":50,"RATE_BURST":100,"RETRY_BASE_MS":200,"RETRY_MAX_MS":10000,"SIDECARS":{}}
+{"ts":"2025-09-05T07:25:15.188Z","level":"info","comp":"startup","msg":"listening","port":42791,"profile":"dev"}
+{"ts":"2025-09-05T07:25:33.615Z","level":"debug","comp":"config","msg":"loaded","PROFILE":"dev","PORT_HTTP":0,"LOG_LEVEL":"debug","HEALTH_TIMEOUT_MS":10000,"INTERNAL_HOST":"mcp-gateway","MAX_CONCURRENCY":20,"QUEUE_LIMIT":10000,"RATE_LIMIT_PER_SEC":50,"RATE_BURST":100,"RETRY_BASE_MS":200,"RETRY_MAX_MS":10000,"SIDECARS":{}}
+{"ts":"2025-09-05T07:25:33.623Z","level":"info","comp":"startup","msg":"listening","port":39823,"profile":"dev"}
+{"ts":"2025-09-05T07:25:34.328Z","level":"debug","comp":"http","msg":"req","method":"GET","pathname":"/servers/filesystem/sse"}
+{"ts":"2025-09-05T07:25:34.330Z","level":"info","comp":"supervisor","msg":"spawn","server":"filesystem","cmd":"/home/toxic/.nvm/versions/node/v24.3.0/bin/node","args":["/home/toxic/effusion_labs_final/mcp-stack/servers/templates/stdio-demo.mjs","filesystem"]}
+{"ts":"2025-09-05T07:25:34.351Z","level":"debug","comp":"server","msg":"stdout","server":"filesystem","obj":{"type":"hello","server":"filesystem","pid":35555,"ts":"2025-09-05T07:25:34.348Z"}}
+{"ts":"2025-09-05T07:25:35.352Z","level":"debug","comp":"server","msg":"stdout","server":"filesystem","obj":{"type":"heartbeat","server":"filesystem","seq":1,"ts":"2025-09-05T07:25:35.351Z"}}
+{"ts":"2025-09-05T07:25:43.051Z","level":"info","comp":"startup","msg":"listening","port":33413,"profile":"dev"}
+{"ts":"2025-09-05T07:25:43.078Z","level":"info","comp":"supervisor","msg":"spawn","server":"filesystem","cmd":"/home/toxic/.nvm/versions/node/v24.3.0/bin/node","args":["/home/toxic/effusion_labs_final/mcp-stack/servers/templates/stdio-demo.mjs","filesystem"]}
