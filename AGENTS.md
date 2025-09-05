@@ -280,4 +280,10 @@ Produce **exactly one message** with the following sections, in this exact order
 
   - A short, tasteful, pure-text flourish. Your artist's signature. It captures the spirit of the implementation but never replaces evidence.
 
+### Interlinking
+
+- Prefer `[[kind:name]]` when the target kind is known (e.g., `[[product:Space Swirl]]`).
+- Omitted kind `[[Name]]` is allowed; the resolver will guess based on registry priority.
+- Review `artifacts/reports/interlinker-unresolved.json` and run `node tools/interlinker-audit.mjs` to propose aliases for unresolved links.
+
 ## AGENTS.md COMPLETE AND ACTIVE
