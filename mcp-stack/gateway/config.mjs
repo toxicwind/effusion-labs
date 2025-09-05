@@ -31,9 +31,9 @@ export function loadConfig() {
   const RETRY_BASE_MS = envInt("RETRY_BASE_MS", 200);
   const RETRY_MAX_MS = envInt("RETRY_MAX_MS", 10_000);
   const CI = /^(1|true|yes)$/i.test(String(process.env.CI || ""));
-  const HOST_ALLOWLIST = (process.env.HOST_ALLOWLIST || "")
-    .split(/[,\s]+/)
-    .map((s) => s.trim().toLowerCase())
+  const HOST_ALLOWLIST = (process.env.HOST_ALLOWLIST || "localhost,127.0.0.1")
+    .split(",")
+    .map((s) => s.trim())
     .filter(Boolean);
 
   const cfg = {

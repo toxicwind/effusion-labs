@@ -10,3 +10,4 @@ curl -fsS "$BASE/.well-known/mcp-servers.json" >/dev/null 2>&1 && echo "WELL-KNO
 curl -fsS "$BASE/admin/queue" >/dev/null 2>&1 && echo "ADMIN-QUEUE: OK" || echo "ADMIN-QUEUE: FAIL"
 curl -fsS "$BASE/admin/rate" >/dev/null 2>&1 && echo "ADMIN-RATE: OK" || echo "ADMIN-RATE: FAIL"
 curl -fsS "$BASE/admin/retry" >/dev/null 2>&1 && echo "ADMIN-RETRY: OK" || echo "ADMIN-RETRY: FAIL"
+curl -fsS "$BASE/admin/sidecars" >/dev/null 2>&1 && echo "ADMIN-SIDECARS: OK" || echo "ADMIN-SIDECARS: FAIL"

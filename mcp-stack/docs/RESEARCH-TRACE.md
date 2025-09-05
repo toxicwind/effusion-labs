@@ -33,3 +33,7 @@ Auto-correction notes:
 - CF detection: server header `cloudflare` or content markers (`__cf_bm`, "Just a moment", `cf-mitigated: challenge`, `/cdn-cgi/challenge-platform/`).
 - When detected, gateway probes `FLARESOLVERR_URL` or `http://flaresolverr:8191` with `POST /v1 {cmd:sessions.list}`; success triggers retry via FlareSolverr.
 - In CI, WireMock provides deterministic `/v1` responses to exercise the same path without egress.
+
+Latest bench (stub mode, Sep 5 2025):
+- p95 latency: ~120ms
+- gateway RSS: ~20 MB

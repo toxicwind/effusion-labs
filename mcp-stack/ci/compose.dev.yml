@@ -5,6 +5,8 @@ services:
     environment:
       - PROFILE=dev
       - LOG_LEVEL=info
+      - HOST_ALLOWLIST=localhost,127.0.0.1
+      - FLARESOLVERR_URL=http://flaresolverr:8191
     ports:
       - "3000:3000"
     depends_on:

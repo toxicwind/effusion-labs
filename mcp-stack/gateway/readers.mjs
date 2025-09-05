@@ -2,6 +2,7 @@ import { fetch } from "undici";
 import { loadConfig } from "./config.mjs";
 // Prefer the local gateway implementation to keep container builds self-contained.
 import { htmlToMarkdown } from "./lib/webToMd.js";
+import { assertAllowed } from "./lib/host-allowlist.mjs";
 import { resolveSidecar } from "../sidecars/resolver.mjs";
 
 function normUrl(u) {
@@ -71,7 +72,7 @@ const UA =
 
 export async function readWeb(inputUrl, opts = {}) {
   const url = normUrl(inputUrl);
-  enforceAllowlist(url);
+  assertAllowed(url);
   let last;
   // Try direct first
   last = await directFetch(url, opts).catch((e) => ({ ok: false, error: String(e) }));
@@ -95,6 +96,7 @@ export async function readWeb(inputUrl, opts = {}) {
 
 export async function screenshotUrl(inputUrl, opts = {}) {
   const url = normUrl(inputUrl);
+  assertAllowed(url);
   let chromium;
   try {
     // Prefer full playwright if available
