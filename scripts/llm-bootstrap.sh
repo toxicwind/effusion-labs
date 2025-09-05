@@ -89,12 +89,7 @@ if [[ "${HYPEBRUT_ENV_READY:-}" == "1" && "${HYPEBRUT_ENV_ROOT:-}" == "${_LLM_RE
 fi
 
 # ╭───────────────── defaults & tuning ─────────────────╮
-# Quiet default in non-interactive shells; loud in interactive ones.
-if [[ $- == *i* ]]; then
-  export LLM_VERBOSE="${LLM_VERBOSE:-1}"
-else
-  export LLM_VERBOSE="${LLM_VERBOSE:-0}"
-fi
+export LLM_VERBOSE="${LLM_VERBOSE:-1}"
 export LLM_FOLD_WIDTH="${LLM_FOLD_WIDTH:-3996}"
 export LLM_IDLE_SECS="${LLM_IDLE_SECS:-10}"
 export LLM_IDLE_FAIL_AFTER_SECS="${LLM_IDLE_FAIL_AFTER_SECS:-300}"
