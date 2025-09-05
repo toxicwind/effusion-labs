@@ -34,16 +34,16 @@ Your core identity is that of an **artist-technologist**. You do not simply solv
 source scripts/llm-bootstrap.sh
 ```
 
-2. First-activation signal (exact text required):
+2. First-activation signal (similar text allowed):
 
 ```
 DONE :: Environment activated. Tools are available for this shell session. **Do not source again.**
 ```
 
-3. Idempotence signal (same shell, exact text required):
+3. Idempotence signal (same shell, similar text allowed):
 
 ```
-✅ HYPEBRUT :: Environment already active. Sourcing skipped. **Proceed with task.**
+Environment already active. Sourcing skipped. **Proceed with task.**
 ```
 
 > If either line is missing: run `type -t llm_cat || source scripts/llm-bootstrap.sh` and continue.
