@@ -305,6 +305,30 @@ CLI audit tool: `tools/interlinker-audit.mjs`
 - `node tools/interlinker-audit.mjs` — print ranked suggestions for unresolved links.
 - `node tools/interlinker-audit.mjs --apply --kind product --min 0.86` — add `slugAliases` to best archive JSON match.
 
+#### CI: Post Unresolved Table in PRs
+
+Add a summary table to your PR using GitHub Actions:
+
+```yaml
+  - name: Build site
+    run: npx @11ty/eleventy
+
+  - name: Interlinker summary
+    if: always()
+    run: node tools/unresolved-summary.mjs >> "$GITHUB_STEP_SUMMARY"
+
+  - name: Gate unresolved (optional)
+    if: always()
+    env:
+      INTERLINKER_MAX_UNRESOLVED: 200
+      INTERLINKER_FAIL_ON_UNRESOLVED: true
+    run: |
+      # Re-run summary for logs and enforce threshold
+      node tools/unresolved-summary.mjs
+      # summarizeAndGate() already ran in eleventy.after; rely on exitCode.
+      test "$?" -eq 0
+```
+
 ### Plugin Hardening
 
 We patch `@photogabble/eleventy-plugin-interlinker@1.1.0` via `patch-package` to guard non‑string inputs in both ESM & CJS paths
