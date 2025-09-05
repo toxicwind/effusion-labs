@@ -90,7 +90,6 @@ jobs:
 
       - name: ⚡ Smoke tests for direct pushes
         # Avoids errors on workflow_dispatch where head_commit is absent.
-        if: github.event_name != 'push' || !startsWith(github.event.head_commit.message, 'Merge pull request #')
         run: |
           npm ci
           node tools/verify-patch-applied.mjs
