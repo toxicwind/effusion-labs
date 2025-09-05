@@ -84,7 +84,7 @@ _LLM_LOG_DIR="/tmp/hype_logs"
 
 # ╭───────────────── idempotence gate ─────────────────╮
 if [[ "${HYPEBRUT_ENV_READY:-}" == "1" && "${HYPEBRUT_ENV_ROOT:-}" == "${_LLM_REPO_ROOT}" && "${LLM_BOOTSTRAP_FORCE:-0}" != "1" ]]; then
-  _llm_emit INFO "Environment already active. (root: ${_LLM_REPO_ROOT})"
+  _llm_emit INFO "Environment already active. Sourcing skipped. **Proceed with task.** (root: ${_LLM_REPO_ROOT})"
   return 0
 fi
 
@@ -414,7 +414,7 @@ fi
 export HYPEBRUT_ENV_READY=1
 export HYPEBRUT_ENV_ROOT="${_LLM_REPO_ROOT}"
 
-_llm_emit DONE "Environment activated. Tools are available in all bash -lc shells."
+_llm_emit DONE "Environment activated. Tools are available for this shell session. **Do not source again.**"
 # ────────────────────────────────────────────────────────────────────────────────
 # End of file
 # ────────────────────────────────────────────────────────────────────────────────
