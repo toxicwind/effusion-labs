@@ -240,16 +240,12 @@ function schemaDoc() {
   return {
     openapi: "3.0.3",
     info: { title: "mcp-gateway", version: "1.0.0" },
-    paths: {
-      "/servers/{name}/sse": { get: { summary: "Event stream", parameters: [{ name: "name", in: "path"}] } },
-      "/servers/{name}/info": { post: { summary: "Info/read ops" } },
-      "/admin/queue": { get: { summary: "Queue snapshot", responses: { 200: { content: { "application/json": { schema: { type: "object", required:["currentLength","avgWaitMs","maxConcurrency"], properties:{ currentLength:{type:"integer",minimum:0}, avgWaitMs:{type:"integer",minimum:0}, maxConcurrency:{type:"integer",minimum:1} } } } } } } },
-      "/admin/rate": { get: { summary: "Rate policy" } },
-      "/admin/retry": { get: { summary: "Retry policy" } },
-      "/admin/sidecars": { get: { summary: "Sidecar status" } },
-      "/schema": { get: { summary: "OpenAPI summary" } },
-      "/examples": { get: { summary: "Usage examples" } },
-    },
+    admin: {
+      queue: { schema: { type: "object", required:["currentLength","avgWaitMs","maxConcurrency"], properties:{ currentLength:{type:"integer",minimum:0}, avgWaitMs:{type:"integer",minimum:0}, maxConcurrency:{type:"integer",minimum:1} } } },
+      rate: { schema: { type: "object", required:["limitPerSec","burst"], properties:{ limitPerSec:{type:"integer",minimum:0}, burst:{type:"integer",minimum:0} } } },
+      retry: { schema: { type: "object", required:["policy","baseMs","maxMs"], properties:{ policy:{type:"string",enum:["exponential","linear","none"]}, baseMs:{type:"integer",minimum:0}, maxMs:{type:"integer",minimum:0} } } },
+      sidecars: { schema: { type: "array", items: { type: "object", required:["name","url","version","health","capabilities","lastChecked"], properties:{ name:{type:"string"}, url:{type:"string",format:"uri"}, version:{type:"string"}, health:{type:"string",enum:["ready","degraded","disabled"]}, capabilities:{type:"object"}, lastChecked:{type:"string",format:"date-time"}, reason:{type:"string"} } } } },
+    }
   };
 }
 
