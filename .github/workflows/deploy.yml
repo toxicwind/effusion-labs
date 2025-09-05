@@ -4,11 +4,6 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
-    inputs:
-      force_rebuild:
-        description: "Rebuild all images regardless of path changes"
-        type: boolean
-        default: false
 
 env:
   REGISTRY: ghcr.io
@@ -25,45 +20,11 @@ concurrency:
 
 jobs:
   # ===================================================================
-  #  1. DETERMINE WHICH SERVICES HAVE CHANGED
-  # ===================================================================
-  changes:
-    name: 🔍 Detect Changes
-    runs-on: ubuntu-latest
-    outputs:
-      web: ${{ steps.filter.outputs.web }}
-      gateway: ${{ steps.filter.outputs.gateway }}
-    steps:
-      - name: ⬇️ Checkout
-        uses: actions/checkout@v4
-        with:
-          # Fetches all history, which is required for paths-filter to work correctly.
-          fetch-depth: 0
-
-      - name: 🔍 Filter changed paths
-        id: filter
-        uses: dorny/paths-filter@v3
-        with:
-          filters: |
-            web:
-              - '.portainer/**'
-              - 'package.json'
-              - 'package-lock.json'
-              - 'lib/**'
-              - 'src/**'
-              - 'eleventy.config.mjs'
-            gateway:
-              - 'markdown_gateway/**'
-
-  # ===================================================================
-  #  2. BUILD AND PUSH THE WEB SERVICE IMAGE
+  #  BUILD AND PUSH THE WEB SERVICE IMAGE (PRIMARY)
   # ===================================================================
   build_web:
     name: 🏗️ Build Web Service
     runs-on: ubuntu-latest
-    needs: changes
-    # Run this job if web files changed OR if a force rebuild was triggered.
-    if: needs.changes.outputs.web == 'true' || github.event.inputs.force_rebuild == 'true'
     steps:
       - name: ⬇️ Checkout
         uses: actions/checkout@v4
@@ -75,7 +36,6 @@ jobs:
           node scripts/validate-frontmatter.mjs
 
       - name: ⚡ Smoke tests for direct pushes
-        # Only run for direct pushes; PR merges are assumed to be tested already.
         if: github.event.head_commit.message != startsWith('Merge pull request #')
         run: |
           npm ci
@@ -116,14 +76,11 @@ jobs:
           build-args: COMMIT_SHA=${{ github.sha }}
 
   # ===================================================================
-  #  3. BUILD AND PUSH THE GATEWAY SERVICE IMAGE
+  #  BUILD THE GATEWAY SERVICE (NOT REQUIRED FOR DEPLOYMENT)
   # ===================================================================
   build_gateway:
-    name: 🏗️ Build Gateway Service
+    name: 🏗️ Build Gateway Service (Optional)
     runs-on: ubuntu-latest
-    needs: changes
-    # Run this job if gateway files changed OR if a force rebuild was triggered.
-    if: needs.changes.outputs.gateway == 'true' || github.event.inputs.force_rebuild == 'true'
     steps:
       - name: ⬇️ Checkout
         uses: actions/checkout@v4
@@ -159,16 +116,13 @@ jobs:
           build-args: COMMIT_SHA=${{ github.sha }}
 
   # ===================================================================
-  #  4. TRIGGER PORTAINER TO REDEPLOY
+  #  TRIGGER PORTAINER TO REDEPLOY
   # ===================================================================
   deploy:
     name: 🚀 Deploy to Portainer
     runs-on: ubuntu-latest
-    needs: [build_web, build_gateway]
-    # Run if EITHER of the build jobs succeeded.
-    # This correctly triggers a deploy if at least one service was rebuilt successfully,
-    # but skips deployment if a required build failed.
-    if: needs.build_web.result == 'success' || needs.build_gateway.result == 'success'
+    # This job ONLY waits for the web build to succeed.
+    needs: build_web
     steps:
       - name: 📞 Trigger Portainer webhook
         env:
