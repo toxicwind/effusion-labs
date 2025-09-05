@@ -35,8 +35,9 @@ COPY --from=deps /app/node_modules /app/node_modules
 COPY package*.json ./
 COPY . .
 
-# Eleventy build; cache Eleventy/Tailwind intermediates if any
+# Verify patches and then Eleventy build; cache Eleventy/Tailwind intermediates if any
 RUN --mount=type=cache,target=/app/.cache \
+    node tools/verify-patch-applied.mjs && \
     echo "⚙️ Building site with Eleventy..." && \
     npx @11ty/eleventy
 
