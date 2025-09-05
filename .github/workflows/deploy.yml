@@ -12,6 +12,8 @@ on:
 
 env:
   REGISTRY: ghcr.io
+  WEB_IMAGE: ghcr.io/toxicwind/effusion-labs
+  GATEWAY_IMAGE: ghcr.io/toxicwind/markdown-gateway
 
 permissions:
   contents: read
@@ -22,29 +24,26 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build_and_deploy:
-    name: Build what changed → push → Portainer
+  # ===================================================================
+  #  1. DETERMINE WHICH SERVICES HAVE CHANGED
+  # ===================================================================
+  changes:
+    name: 🔍 Detect Changes
     runs-on: ubuntu-latest
-
+    outputs:
+      web: ${{ steps.filter.outputs.web }}
+      gateway: ${{ steps.filter.outputs.gateway }}
     steps:
       - name: ⬇️ Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v4
+        with:
+          # Fetches all history, which is required for paths-filter to work correctly.
+          fetch-depth: 0
 
-      - name: 🧠 Is this commit a PR merge?
-        id: mergecheck
-        run: |
-          msg="$(git log -1 --pretty=%s)"
-          if [[ "$msg" =~ ^Merge\ pull\ request\ # ]]; then
-            echo "merge=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "merge=false" >> "$GITHUB_OUTPUT"
-          fi
-
-      - name: 🔍 Detect changed areas
-        id: changes
+      - name: 🔍 Filter changed paths
+        id: filter
         uses: dorny/paths-filter@v3
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
           filters: |
             web:
               - '.portainer/**'
@@ -56,103 +55,125 @@ jobs:
             gateway:
               - 'markdown_gateway/**'
 
+  # ===================================================================
+  #  2. BUILD AND PUSH THE WEB SERVICE IMAGE
+  # ===================================================================
+  build_web:
+    name: 🏗️ Build Web Service
+    runs-on: ubuntu-latest
+    needs: changes
+    # Run this job if web files changed OR if a force rebuild was triggered.
+    if: needs.changes.outputs.web == 'true' || github.event.inputs.force_rebuild == 'true'
+    steps:
+      - name: ⬇️ Checkout
+        uses: actions/checkout@v4
+
+      # --- CI steps for the web service ---
       - name: 🧪 Validate frontmatter
-        if: steps.changes.outputs.web == 'true'
         run: |
           npm ci --ignore-scripts
           node scripts/validate-frontmatter.mjs
 
-      # Optional safety: only for direct pushes to main (PR merges already ran CI)
-      - name: ⚡ Direct-push smoke (verify patch + tests + Eleventy)
-        if: steps.mergecheck.outputs.merge == 'false'
+      - name: ⚡ Smoke tests for direct pushes
+        # Only run for direct pushes; PR merges are assumed to be tested already.
+        if: github.event.head_commit.message != startsWith('Merge pull request #')
         run: |
-          # Ensure devDependencies are present and patches applied for a faithful smoke test
           npm ci
           node tools/verify-patch-applied.mjs
-          if npm run -s test >/dev/null 2>&1; then npm test; else echo "no tests"; fi
-          if npm run -s build >/dev/null 2>&1; then npm run build; else echo "no build"; fi
+          if npm run -s test >/dev/null 2>&1; then npm test; else echo "✅ No 'test' script found, skipping."; fi
+          if npm run -s build >/dev/null 2>&1; then npm run build; else echo "✅ No 'build' script found, skipping."; fi
 
-      - name: 💤 Nothing to build
-        if: |
-          github.event.inputs.force_rebuild != 'true' &&
-          steps.changes.outputs.web != 'true' &&
-          steps.changes.outputs.gateway != 'true'
-        run: echo "No relevant changes. Skipping image build & deploy."
-
+      # --- Docker build steps ---
       - name: 🐳 Setup Buildx
-        if: |
-          github.event.inputs.force_rebuild == 'true' ||
-          steps.changes.outputs.web == 'true' || steps.changes.outputs.gateway == 'true'
         uses: docker/setup-buildx-action@v3
 
-      - name: 🔑 GHCR login
-        if: |
-          github.event.inputs.force_rebuild == 'true' ||
-          steps.changes.outputs.web == 'true' || steps.changes.outputs.gateway == 'true'
+      - name: 🔑 Login to GHCR
         uses: docker/login-action@v3
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      # ── Web image
-      - name: 🏷️ Metadata (web)
-        if: |
-          github.event.inputs.force_rebuild == 'true' || steps.changes.outputs.web == 'true'
-        id: meta_web
+      - name: 🏷️ Generate Docker metadata
+        id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ env.REGISTRY }}/toxicwind/effusion-labs
+          images: ${{ env.WEB_IMAGE }}
           tags: |
-            type=raw,value=latest,enable={{is_default_branch}}
-            type=raw,value=main,enable={{is_default_branch}}
             type=sha
-      - name: 🏗️ Build & Push (web)
-        if: |
-          github.event.inputs.force_rebuild == 'true' || steps.meta_web.outputs.tags
+            type=raw,value=latest,enable={{is_default_branch}}
+
+      - name: 🏗️ Build and push image
         uses: docker/build-push-action@v6
         with:
           context: .
           file: ./.portainer/Dockerfile
           push: true
-          tags: ${{ steps.meta_web.outputs.tags }}
-          labels: ${{ steps.meta_web.outputs.labels }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
           build-args: COMMIT_SHA=${{ github.sha }}
 
-      # ── Gateway image
-      - name: 🏷️ Metadata (gateway)
-        if: |
-          github.event.inputs.force_rebuild == 'true' || steps.changes.outputs.gateway == 'true'
-        id: meta_gateway
+  # ===================================================================
+  #  3. BUILD AND PUSH THE GATEWAY SERVICE IMAGE
+  # ===================================================================
+  build_gateway:
+    name: 🏗️ Build Gateway Service
+    runs-on: ubuntu-latest
+    needs: changes
+    # Run this job if gateway files changed OR if a force rebuild was triggered.
+    if: needs.changes.outputs.gateway == 'true' || github.event.inputs.force_rebuild == 'true'
+    steps:
+      - name: ⬇️ Checkout
+        uses: actions/checkout@v4
+
+      - name: 🐳 Setup Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: 🔑 Login to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 🏷️ Generate Docker metadata
+        id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ env.REGISTRY }}/toxicwind/markdown-gateway
+          images: ${{ env.GATEWAY_IMAGE }}
           tags: |
-            type=raw,value=latest,enable={{is_default_branch}}
-            type=raw,value=main,enable={{is_default_branch}}
             type=sha
-      - name: 🏗️ Build & Push (gateway)
-        if: |
-          github.event.inputs.force_rebuild == 'true' || steps.meta_gateway.outputs.tags
+            type=raw,value=latest,enable={{is_default_branch}}
+
+      - name: 🏗️ Build and push image
         uses: docker/build-push-action@v6
         with:
           context: ./markdown_gateway
           push: true
-          tags: ${{ steps.meta_gateway.outputs.tags }}
-          labels: ${{ steps.meta_gateway.outputs.labels }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
           build-args: COMMIT_SHA=${{ github.sha }}
 
-      - name: 🚀 Portainer redeploy
-        if: |
-          github.event.inputs.force_rebuild == 'true' ||
-          steps.changes.outputs.web == 'true' || steps.changes.outputs.gateway == 'true'
+  # ===================================================================
+  #  4. TRIGGER PORTAINER TO REDEPLOY
+  # ===================================================================
+  deploy:
+    name: 🚀 Deploy to Portainer
+    runs-on: ubuntu-latest
+    needs: [build_web, build_gateway]
+    # Run if EITHER of the build jobs succeeded.
+    # This correctly triggers a deploy if at least one service was rebuilt successfully,
+    # but skips deployment if a required build failed.
+    if: needs.build_web.result == 'success' || needs.build_gateway.result == 'success'
+    steps:
+      - name: 📞 Trigger Portainer webhook
         env:
           HOOK: ${{ secrets.PORTAINER_WEBHOOK_EFFUSION }}
         run: |
-          echo "Triggering Portainer redeploy…"
+          echo "Triggering Portainer redeploy..."
           curl --fail --retry-all-errors --retry 5 --retry-delay 3 -X POST "$HOOK"
-          echo "Redeploy signal sent."
+          echo "✅ Redeploy signal sent."
