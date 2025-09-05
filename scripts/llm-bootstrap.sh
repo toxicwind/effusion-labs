@@ -84,12 +84,12 @@ hype_run() {
     done
     [[ $# -ge 1 ]] || { _llm_emit "FAIL :: hype_run requires a command to execute."; return 2; }
 
-    local pipe; pipe="$(mktemp -u "/tmp/hype_run.${id}.pipe.XXXXXXXX")"
+    local pipe; pipe="$(mtemp -u "/tmp/hype_run.${id}.pipe.XXXXXXXX")"
     mkfifo "$pipe" || { _llm_emit "FAIL :: Could not create execution pipe."; return 2; }
 
     local tmp_capture="" # auto-capture to enable idle watchdog when none provided
     if [[ -z "$capture_file" ]]; then
-      tmp_capture="$(mktemp "/tmp/hype_run.${id}.cap.XXXXXXXX")" || true
+      tmp_capture="$(mtemp "/tmp/hype_run.${id}.cap.XXXXXXXX")" || true
       capture_file="$tmp_capture"
     fi
 
@@ -345,11 +345,3 @@ _llm_emit "DONE :: Environment activated. Tools are available for this shell ses
 export HYPEBRUT_ENV_READY=1
 export HYPEBRUT_ENV_ROOT="$repo_root"
 
-# --- INTERACTIVE SHELL LAUNCHER ---
-# If this script was sourced in a non-interactive shell (like `bash -c '...'`),
-# the environment is now loaded, but the shell is about to exit.
-# To make it useful, we detect this and launch a new interactive shell.
-if [[ $- != *i* ]]; then
-  _llm_emit "INFO :: Non-interactive source detected. Launching interactive shell..."
-  exec bash
-fi
