@@ -35,8 +35,18 @@ jobs:
           npm ci --ignore-scripts
           node scripts/validate-frontmatter.mjs
 
+      - name: 🧠 Check commit type (PR Merge or Direct Push)
+        id: commit_type
+        run: |
+          COMMIT_MSG=$(git log -1 --pretty=%s)
+          if [[ "$COMMIT_MSG" =~ ^Merge\ pull\ request\ # ]]; then
+            echo "is_merge=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "is_merge=false" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: ⚡ Smoke tests for direct pushes
-        if: github.event.head_commit.message != startsWith('Merge pull request #')
+        if: steps.commit_type.outputs.is_merge == 'false'
         run: |
           npm ci
           node tools/verify-patch-applied.mjs
@@ -86,48 +96,3 @@ jobs:
         uses: actions/checkout@v4
 
       - name: 🐳 Setup Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: 🔑 Login to GHCR
-        uses: docker/login-action@v3
-        with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: 🏷️ Generate Docker metadata
-        id: meta
-        uses: docker/metadata-action@v5
-        with:
-          images: ${{ env.GATEWAY_IMAGE }}
-          tags: |
-            type=sha
-            type=raw,value=latest,enable={{is_default_branch}}
-
-      - name: 🏗️ Build and push image
-        uses: docker/build-push-action@v6
-        with:
-          context: ./markdown_gateway
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-          build-args: COMMIT_SHA=${{ github.sha }}
-
-  # ===================================================================
-  #  TRIGGER PORTAINER TO REDEPLOY
-  # ===================================================================
-  deploy:
-    name: 🚀 Deploy to Portainer
-    runs-on: ubuntu-latest
-    # This job ONLY waits for the web build to succeed.
-    needs: build_web
-    steps:
-      - name: 📞 Trigger Portainer webhook
-        env:
-          HOOK: ${{ secrets.PORTAINER_WEBHOOK_EFFUSION }}
-        run: |
-          echo "Triggering Portainer redeploy..."
-          curl --fail --retry-all-errors --retry 5 --retry-delay 3 -X POST "$HOOK"
-          echo "✅ Redeploy signal sent."
