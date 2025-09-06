@@ -5,7 +5,7 @@
   "use strict";
 
   var STORAGE_KEY = "theme";
-  var THEMES = { light: "corporate", dark: "dim" };
+  var THEMES = { light: "light", dark: "dark" };
   var ALLOWED = [THEMES.light, THEMES.dark];
 
   function getTheme() {
@@ -18,7 +18,7 @@
         if (s && ALLOWED.indexOf(s) !== -1) t = s;
       } catch (_) {}
     }
-    return ALLOWED.indexOf(t) !== -1 ? t : THEMES.dark;
+    return ALLOWED.indexOf(t) !== -1 ? t : THEMES.light;
   }
 
   function setTheme(name, persist, source) {
@@ -44,13 +44,15 @@
     // Run as early as possible in <head> to avoid FART.
     try {
       var stored = localStorage.getItem(STORAGE_KEY);
-      var picked = (stored && ALLOWED.indexOf(stored) !== -1) ? stored : THEMES.dark; // default dark
+      var picked = (stored && ALLOWED.indexOf(stored) !== -1)
+        ? stored
+        : (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? THEMES.dark : THEMES.light);
       document.documentElement.setAttribute("data-theme", picked);
       document.documentElement.dataset.themeSource = stored ? "storage" : "default";
       var meta = document.querySelector('meta[name="color-scheme"]') || (function (){ var m=document.createElement("meta"); m.name = "color-scheme"; document.head.appendChild(m); return m; })();
       meta.content = (picked === THEMES.light) ? "light dark" : "dark light";
     } catch (_) {
-      document.documentElement.setAttribute("data-theme", THEMES.dark);
+      document.documentElement.setAttribute("data-theme", THEMES.light);
       document.documentElement.dataset.themeSource = "fallback";
     }
   }

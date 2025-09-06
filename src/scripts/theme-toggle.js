@@ -9,7 +9,7 @@
   var moon = btn.querySelector(".lucide-moon");
 
   function reflect(theme) {
-    var dark = (utils ? utils.THEMES.dark : "dim");
+    var dark = (utils ? utils.THEMES.dark : "dark");
     var isDark = theme === dark;
     btn.setAttribute("aria-pressed", String(isDark));
     btn.setAttribute("aria-label", isDark ? "Switch to light theme" : "Switch to dark theme");
@@ -20,7 +20,7 @@
   }
 
   // Initial reflect from current document state
-  reflect((utils && utils.getTheme()) || document.documentElement.getAttribute("data-theme") || "dim");
+  reflect((utils && utils.getTheme()) || document.documentElement.getAttribute("data-theme") || "light");
 
   if (utils) {
     btn.addEventListener("click", function () { reflect(utils.toggleTheme(true)); });
@@ -29,8 +29,8 @@
     // Minimal fallback toggle if ThemeUtils is not present (shouldn't happen)
     btn.addEventListener("click", function () {
       var el = document.documentElement;
-      var cur = el.getAttribute("data-theme") || "dim";
-      var next = cur === "dim" ? "corporate" : "dim";
+      var cur = el.getAttribute("data-theme") || "light";
+      var next = cur === "dark" ? "light" : "dark";
       el.setAttribute("data-theme", next);
       reflect(next);
     });

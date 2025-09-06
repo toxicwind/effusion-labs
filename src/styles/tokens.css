@@ -8,17 +8,8 @@
   --step-4: clamp(1.6rem, calc(1.48rem + 0.52vw), 2.49rem);
 }
 
-:root,
-html[data-theme="dark"] {
-  --color-bg: 18 18 18;
-  --color-surface: 35 35 35;
-  --color-text: 235 235 235;
-  --color-primary: 10 132 255;
-  --color-border: 60 60 60;
-  --color-code-bg: 40 40 40;
-  --color-code-text: 235 235 235;
-}
 
+:root,
 html[data-theme="light"] {
   --color-bg: 245 245 245;
   --color-surface: 230 230 230;
@@ -27,6 +18,16 @@ html[data-theme="light"] {
   --color-border: 200 200 200;
   --color-code-bg: 235 235 235;
   --color-code-text: 30 30 30;
+}
+
+html[data-theme="dark"] {
+  --color-bg: 18 18 18;
+  --color-surface: 35 35 35;
+  --color-text: 235 235 235;
+  --color-primary: 10 132 255;
+  --color-border: 60 60 60;
+  --color-code-bg: 40 40 40;
+  --color-code-text: 235 235 235;
 }
 
 /* Fluid page width and spectrum tokens (site-wide) */
@@ -43,4 +44,3 @@ html[data-theme="light"] {
 @media (min-width:1920px){ :root{ --page-w: min(130rem, 88vw); } }
 @media (min-width:2560px){ :root{ --page-w: min(150rem, 84vw); } }
 @media (min-width:3840px){ :root{ --page-w: min(168rem, 78vw); } }
-[data-theme="dim"]{ --spec-alpha:.42; }

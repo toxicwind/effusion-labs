@@ -53,9 +53,9 @@ Output is emitted to `_site/`, suitable for direct static hosting or containeriz
 ### Tailwind/DaisyUI Canonical Setup
 
 - Single Tailwind config at repo root: `tailwind.config.mjs` (typography, fonts, scales).
-- DaisyUI is registered exactly once in CSS: `src/styles/app.tailwind.css` via `@plugin "daisyui" { themes: dim --default, corporate --preferslight }`.
+- DaisyUI is registered exactly once in CSS: `src/styles/app.tailwind.css` via `@plugin "daisyui" { themes: light --default, dark --prefersdark }`.
 - CSS entrypoint order: `@import "tailwindcss"` after tokens and `@source` globs.
-- Dark variant is bound to DaisyUI’s dark theme using a `@custom-variant` targeting `data-theme=dim`.
+- Dark variant is bound to DaisyUI’s dark theme using a `@custom-variant` targeting `data-theme=dark`.
 - Theme toggle uses a single base script: `src/scripts/theme-toggle.js` backed by reusable `src/scripts/theme-utils.js`.
 
 Add a theme: update the `@plugin "daisyui" { themes: ... }` block in `src/styles/app.tailwind.css`. The active theme is the `data-theme` attribute on `<html>`.

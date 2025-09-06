@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="assertive-geometry" data-theme="dim">
+<html lang="en" class="assertive-geometry" data-theme="light">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -8,6 +8,8 @@
   {% set slug = projectSlug or page.fileSlug %}
   {% set proj = resume and resume.projectPages and resume.projectPages[slug] %}
   <title>{% if proj %}{{ proj.title }} — Effusion Labs{% else %}Project — Effusion Labs{% endif %}</title>
+  <script src="/assets/js/theme-utils.js"></script>
+  <script>ThemeUtils.initEarly();</script>
   <link rel="stylesheet" href="/assets/css/app.css?v={{ build.hash or build.commit or build.version or buildTime }}">
 </head>
 <body class="bg-base-100 text-base-content font-body antialiased">
@@ -15,10 +17,7 @@
     <div class="flex-1">
       <a href="{{ '/resume/' | url }}" class="btn btn-ghost text-base">← Resume</a>
     </div>
-    <div class="flex-none join" role="group" aria-label="Theme switcher">
-      <input class="join-item btn btn-sm btn-outline theme-controller" type="radio" name="theme" aria-label="Corporate" value="corporate">
-      <input class="join-item btn btn-sm btn-outline theme-controller" type="radio" name="theme" aria-label="Dim" value="dim">
-    </div>
+    <button id="theme-toggle" class="btn btn-sm btn-ghost" type="button" aria-pressed="false" aria-label="Switch theme" title="Toggle theme">Theme</button>
   </div>
 
   <main class="container mx-auto px-4 sm:px-6 lg:px-8 my-10 sm:my-12 space-y-6 sm:space-y-8">
@@ -60,16 +59,6 @@
     </section>
   </main>
 
-  <script>
-    (function(){
-      var key='theme', allowed=['corporate','dim'];
-      var radios=[].slice.call(document.querySelectorAll('.theme-controller'));
-      function pick(){ try{var q=new URLSearchParams(location.search);var t=q.get('theme');if(t&&allowed.includes(t))return t;}catch(_){ } try{var s=localStorage.getItem(key);if(s&&allowed.includes(s))return s;}catch(_){ } return 'dim'; }
-      function metaScheme(theme){ return (theme==='corporate')?'light dark':'dark light'; }
-      function apply(t){ document.documentElement.classList.add('assertive-geometry'); document.documentElement.setAttribute('data-theme',t); try{localStorage.setItem(key,t);}catch(_){ } var m=document.querySelector('meta[name="color-scheme"]'); if(m){m.content=metaScheme(t);} radios.forEach(function(r){r.checked=(r.value===t);}); }
-      apply(pick());
-      document.addEventListener('change',function(e){ var t=e.target; if(t&&t.classList&&t.classList.contains('theme-controller')){ apply(t.value); }});
-    })();
-  </script>
+  <script src="/assets/js/theme-toggle.js" defer></script>
 </body>
 </html>

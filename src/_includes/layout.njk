@@ -3,7 +3,7 @@
 {% from "components/footer.njk" import footer %}
 {% from "components/meta-aside.njk" import metaAside %}
 <!DOCTYPE html>
-<html lang="en" class="scroll-pt-16">
+<html lang="en" class="scroll-pt-16" data-theme="light">
 <head>
   <!-- Meta -->
   <meta charset="UTF-8">
@@ -24,20 +24,8 @@
     <meta property="og:url" content="{{ canon | absoluteUrl }}">
   {% endif %}
 
-  {# Early theme init: minimal write for persisted/initial theme. #}
-  <script>
-    (function () {
-      try {
-        var allowed = ["corporate","dim"]; var def = "dim";
-        var meta = document.querySelector('meta[name="color-scheme"]') || (function () { var m=document.createElement("meta"); m.name = "color-scheme"; document.head.appendChild(m); return m; })();
-        var stored = localStorage.getItem("theme");
-        var picked = (stored && allowed.includes(stored)) ? stored : def;
-        document.documentElement.setAttribute("data-theme", picked);
-        document.documentElement.dataset.themeSource = stored ? "storage" : "default";
-        meta.content = (picked === "corporate") ? "light dark" : "dark light";
-      } catch (_) { document.documentElement.setAttribute("data-theme", "dim"); document.documentElement.dataset.themeSource = "fallback"; }
-    })();
-  </script>
+  <script src="/assets/js/theme-utils.js"></script>
+  <script>ThemeUtils.initEarly();</script>
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -129,7 +117,6 @@
   <script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js" defer></script>
   <script src="/assets/js/work-filters.js" defer></script>
   <script src="/assets/js/mschf-overlay.js" defer></script>
-  <script src="/assets/js/theme-utils.js" defer></script>
   <script src="/assets/js/theme-toggle.js" defer></script>
 </body>
 </html>

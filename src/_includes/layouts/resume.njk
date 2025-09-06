@@ -1,6 +1,6 @@
 {# Standalone resume layout #}
 <!DOCTYPE html>
-<html lang="en" class="scroll-pt-16" data-mschf="off">
+<html lang="en" class="scroll-pt-16" data-mschf="off" data-theme="light">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -34,19 +34,8 @@
   <meta name="twitter:image" content="{{ resume.ogImage | url }}">
   {% endif %}
 
-  <script>
-    (function () {
-      try {
-        var allowed = ["corporate","dim"]; var def = "dim";
-        var meta = document.querySelector('meta[name="color-scheme"]') || (function () { var m=document.createElement("meta"); m.name = "color-scheme"; document.head.appendChild(m); return m; })();
-        var stored = localStorage.getItem("theme");
-        var picked = (stored && allowed.includes(stored)) ? stored : def;
-        document.documentElement.setAttribute("data-theme", picked);
-        document.documentElement.dataset.themeSource = stored ? "storage" : "default";
-        meta.content = (picked === "corporate") ? "light dark" : "dark light";
-      } catch (_) { document.documentElement.setAttribute("data-theme", "dim"); document.documentElement.dataset.themeSource = "fallback"; }
-    })();
-  </script>
+  <script src="/assets/js/theme-utils.js"></script>
+  <script>ThemeUtils.initEarly();</script>
 
   <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

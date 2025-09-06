@@ -1,4 +1,3 @@
-Snapshots for tailwind docs.
+Snapshots for Tailwind CSS docs.
 
-- Last updated: 2025-09-06T08:27:48.419Z
-- Canonical: https://tailwindcss.com/docs/configuration
+- 2025-09-06: detecting-classes-in-source-files, functions-and-directives, upgrade-guide, tailwindcss-v4-blog

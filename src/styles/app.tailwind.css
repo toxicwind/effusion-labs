@@ -3,21 +3,20 @@
 /* Source globs to prevent class stripping in TWC v4 builds */
 @source "../../src/**/*.{njk,md,html,js,mjs}";
 @source "../../lib/**/*.mjs";
-@source "../../_site/**/*.html";
 /* Minimal dynamic safelist for runtime-constructed classes */
 @source inline("dark:prose-invert");
 
 @import "./tokens.css";
 @import "tailwindcss";
 
-/* Bind Tailwind's `dark:` variant to daisyUI dark theme (dim) */
-@custom-variant dark (&:where([data-theme=dim], [data-theme=dim] *));
+/* Bind Tailwind's `dark:` variant to daisyUI dark theme */
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
 
 /* Plugins (Tailwind v4 style) */
 @plugin "@tailwindcss/typography";
 
 /* daisyUI v5 — single registration, themes defined here */
-@plugin "daisyui" { themes: dim --default, corporate --preferslight; }
+@plugin "daisyui" { themes: light --default, dark --prefersdark; }
 
 /* Project CSS */
 @import "./home.css";
@@ -193,20 +192,19 @@
   .pink{ @apply text-pink-500;} .rose{ @apply text-rose-500;} .blackout{ @apply text-black bg-black; }
 }
 
-/* Stronger separation for dark theme (business): thicker borders and a faint card surface */
+/* Stronger separation for dark theme: thicker borders and a faint card surface */
 @layer components {
-  [data-theme="dim"] .card.card-border { @apply border; }
-  [data-theme="dim"] .card.card-border {
+  [data-theme="dark"] .card.card-border { @apply border; }
+  [data-theme="dark"] .card.card-border {
     /* Use DaisyUI tokens but boost contrast a touch */
     border-color: color-mix(in oklab, var(--color-base-content) 16%, transparent);
     background-color: color-mix(in oklab, var(--color-base-100) 85%, black 15%);
   }
 }
 
-/* Theme variable nudge: 2px borders on business for clearer delineation */
+/* Theme variable nudge: 2px borders on dark for clearer delineation */
 @layer base {
-  :root:has(input.theme-controller[value=dim]:checked),
-  [data-theme=dim] { --border: 2px; }
+  [data-theme=dark] { --border: 2px; }
 }
 
 /* Assertive Geometry: square corners, sturdier borders, chunkier badges, thicker accent rail */
@@ -662,7 +660,7 @@
   .pill--meta    { --badge-color: hsl(var(--n));  --badge-fg: hsl(var(--nc)); }
   .pill--new     { --badge-color: hsl(var(--p));  --badge-fg: hsl(var(--pc)); }
 
-  /* Soft-fill treatment for readability on both corporate/dim */
+  /* Soft-fill treatment for readability on both light/dark */
   .pill-soft, .pill--project, .pill--concept, .pill--spark, .pill--meta, .pill--new {
     @apply badge-outline; /* keep border radius/height consistent */
     background-color: color-mix(in oklab, var(--badge-color, hsl(var(--p))) 14%, transparent);
@@ -685,9 +683,9 @@
     position: absolute; inset-inline-start: -1px; top: 8px; bottom: 8px; width: 3px;
     border-radius: 999px;
     background: linear-gradient(180deg,
-      color-mix(in oklab, var(--neon-a, #00E0FF) 86%, transparent) 0%,
-      color-mix(in oklab, var(--neon-b, #9AFF00) 86%, transparent) 50%,
-      color-mix(in oklab, var(--neon-c, #FF1CF7) 86%, transparent) 100%
+      color-mix(in oklab, var(--neon-a, hsl(189 100% 50%)) 86%, transparent) 0%,
+      color-mix(in oklab, var(--neon-b, hsl(84 100% 50%)) 86%, transparent) 50%,
+      color-mix(in oklab, var(--neon-c, hsl(302 100% 54%)) 86%, transparent) 100%
     );
     opacity: .55; transform: scaleY(.72); transform-origin: center; transition: transform .2s ease, opacity .2s ease;
   }
@@ -704,8 +702,8 @@
   .hb-title::after{
     content: ""; height: 1px; width: 48px; opacity: .5;
     background: linear-gradient(90deg,
-      color-mix(in oklab, var(--neon-a, #00E0FF) 75%, transparent) 0%,
-      color-mix(in oklab, var(--neon-c, #FF1CF7) 75%, transparent) 100%
+      color-mix(in oklab, var(--neon-a, hsl(189 100% 50%)) 75%, transparent) 0%,
+      color-mix(in oklab, var(--neon-c, hsl(302 100% 54%)) 75%, transparent) 100%
     );
   }
 }
@@ -716,9 +714,9 @@
   .hb-accent::before {
     content: ""; position: absolute; inset-inline-start: -1px; top: 10px; bottom: 10px; width: 3px; border-radius: 999px;
     background: linear-gradient(180deg,
-      color-mix(in oklab, var(--neon-a, #00E0FF) 86%, transparent) 0%,
-      color-mix(in oklab, var(--neon-b, #9AFF00) 86%, transparent) 50%,
-      color-mix(in oklab, var(--neon-c, #FF1CF7) 86%, transparent) 100%
+      color-mix(in oklab, var(--neon-a, hsl(189 100% 50%)) 86%, transparent) 0%,
+      color-mix(in oklab, var(--neon-b, hsl(84 100% 50%)) 86%, transparent) 50%,
+      color-mix(in oklab, var(--neon-c, hsl(302 100% 54%)) 86%, transparent) 100%
     );
     opacity: .45;
   }
@@ -738,9 +736,9 @@
   .hb-minirow::before{
     content:""; position:absolute; inset-inline-start:-1px; top:6px; bottom:6px; width:2px; border-radius:999px;
     background: linear-gradient(180deg,
-      color-mix(in oklab, var(--neon-a, #00E0FF) 86%, transparent) 0%,
-      color-mix(in oklab, var(--neon-b, #9AFF00) 86%, transparent) 50%,
-      color-mix(in oklab, var(--neon-c, #FF1CF7) 86%, transparent) 100%
+      color-mix(in oklab, var(--neon-a, hsl(189 100% 50%)) 86%, transparent) 0%,
+      color-mix(in oklab, var(--neon-b, hsl(84 100% 50%)) 86%, transparent) 50%,
+      color-mix(in oklab, var(--neon-c, hsl(302 100% 54%)) 86%, transparent) 100%
     );
     opacity: 0; /* off by default */
     transition: opacity .18s ease;
@@ -837,8 +835,8 @@
   }
 
   /* Dark theme clarity */
-  [data-page=resume][data-theme="dim"] .card{ border-color: hsl(var(--bc)/.22) !important; }
-  [data-page=resume][data-theme="dim"] .hb-sheet{ border-color: hsl(var(--bc)/.22) !important; }
+  [data-page=resume][data-theme="dark"] .card{ border-color: hsl(var(--bc)/.22) !important; }
+  [data-page=resume][data-theme="dark"] .hb-sheet{ border-color: hsl(var(--bc)/.22) !important; }
 }
 
 @layer base {
@@ -850,8 +848,8 @@
 
 @media print {
   [data-page=resume] .hb-sheet, [data-page=resume] .card, [data-page=resume] .hb-row, [data-page=resume] .hb-tabrow, [data-page=resume] .hb-minirow{
-    background: #fff !important;
-    border-color: #999 !important;
+    background: hsl(var(--b1)) !important;
+    border-color: hsl(var(--bc)/.6) !important;
     box-shadow: none !important;
   }
 }

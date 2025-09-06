@@ -7,7 +7,7 @@ eleventyExcludeFromCollections: true
 
 {# src/resume/index.njk — adaptive layout, subtle accents, canonical+absolute SEO, no rainbow #}
 <!DOCTYPE html>
-<html lang="en" class="scroll-pt-16 assertive-geometry" data-theme="dim">
+<html lang="en" class="scroll-pt-16 assertive-geometry" data-theme="light">
 <head>
   <!-- Meta -->
   <meta charset="UTF-8">
@@ -15,6 +15,8 @@ eleventyExcludeFromCollections: true
   <meta name="color-scheme" content="light dark">
   <meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
   <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0b0b0e">
+  <script src="/assets/js/theme-utils.js"></script>
+  <script>ThemeUtils.initEarly();</script>
   <meta name="msapplication-TileColor" content="#0b0b0e">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -364,10 +366,7 @@ eleventyExcludeFromCollections: true
           </small>
           <div class="flex items-center gap-3">
             
-            <div class="join" role="group" aria-label="Theme switcher">
-              <input class="join-item btn btn-sm btn-outline theme-controller hb-anim" type="radio" name="theme" aria-label="Corporate" value="corporate">
-              <input class="join-item btn btn-sm btn-outline theme-controller hb-anim" type="radio" name="theme" aria-label="Dim" value="dim">
-            </div>
+            
           </div>
         </footer>
       </section>
@@ -423,7 +422,6 @@ eleventyExcludeFromCollections: true
     }
     // Theme handled by shared ThemeUtils + theme-toggle scripts
   </script>
-  <script src="/assets/js/theme-utils.js" defer></script>
   <script src="/assets/js/theme-toggle.js" defer></script>
 </body>
 </html>

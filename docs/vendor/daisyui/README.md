@@ -1,4 +1,3 @@
-Snapshots for daisyui docs.
+Snapshots for daisyUI docs.
 
-- Last updated: 2025-09-06T08:27:48.419Z
-- Canonical: https://daisyui.com/docs/themes/
+- 2025-09-06: components, install, config, themes, base, v5, upgrade
