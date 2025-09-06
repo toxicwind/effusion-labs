@@ -1,0 +1,5 @@
+@layer base {
+  *,::before,::after { box-sizing: border-box; }
+  html,body { height:100%; }
+  body { margin:0; line-height:1.5; -webkit-font-smoothing: antialiased; }
+}

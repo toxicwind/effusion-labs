@@ -1,0 +1,4 @@
+@layer utilities {
+  .stack { @apply flex flex-col gap-4; }
+  .center { @apply mx-auto max-w-screen-lg; }
+}

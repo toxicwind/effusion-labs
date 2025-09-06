@@ -31,7 +31,8 @@
     "postinstall": "if [ \"${PATCH_PACKAGE_RUN:-1}\" != \"0\" ] && [ -x node_modules/.bin/patch-package ]; then patch-package; fi",
     "mcp:dev": "node mcp-stack/gateway/server.mjs",
     "mcp:test": "node mcp-stack/tests/smoke.mjs",
-    "mcp:integration": "node mcp-stack/tests/integration.mjs"
+    "mcp:integration": "node mcp-stack/tests/integration.mjs",
+    "style:canon": "node scripts/style-canon.mjs"
   },
   "engines": {
     "node": ">=24"

@@ -43,11 +43,11 @@
         <nav class="hidden lg:flex" aria-label="{{ navLabel }}">
           <ul class="menu menu-horizontal px-1">
             {% if navItems %}
-              {{ navItems(nav, page.url, 'hover:text-primary') }}
+              {{ navItems(nav, page.url, 'link-underline hover:text-primary') }}
             {% else %}
               {% for n in nav %}
               <li>
-                <a href="{{ n.url }}" class="hover:text-primary">
+                <a href="{{ n.url }}" class="link-underline hover:text-primary">
                   {% if n.order %}<span class="opacity-60">{{ n.order }}.</span>{% endif %}
                   <span>{{ n.title | shout }}</span>
                 </a>

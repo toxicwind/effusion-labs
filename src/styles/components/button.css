@@ -1,0 +1,3 @@
+@layer components {
+  .btn { @apply font-semibold; }
+}
