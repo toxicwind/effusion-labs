@@ -5,7 +5,7 @@
       "pages": [
         {
           "slug": "readme",
-          "url": "https://raw.githubusercontent.com/tailwindlabs/tailwindcss/v4.1.11/README.md"
+          "url": "https://raw.githubusercontent.com/tailwindlabs/tailwindcss/v4.1.12/README.md"
         }
       ]
     },
@@ -46,6 +46,10 @@
         {
           "slug": "install",
           "url": "https://daisyui.com/docs/install/"
+        },
+        {
+          "slug": "button",
+          "url": "https://daisyui.com/components/button/"
         }
       ]
     },

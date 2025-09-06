@@ -1,0 +1,18 @@
+[
+  {
+    "url": "https://daisyui.com/docs/install/",
+    "path": "docs/vendors/daisyui/5.1.6/install.html",
+    "title": "<!doctype html>",
+    "sha256": "d08f85df0639c1345d4e363dd87b96fc91310b8ca359f3d54d473afb55f57a76",
+    "retrieved_at": "2025-09-06T08:09:54Z",
+    "size": 634823
+  },
+  {
+    "url": "https://daisyui.com/components/button/",
+    "path": "docs/vendors/daisyui/5.1.6/button.html",
+    "title": "<!doctype html>",
+    "sha256": "1ee66e23e317e978e9bfb7ea7314b4c33ef902e5c691adf339cdbe9c22b7f301",
+    "retrieved_at": "2025-09-06T08:09:54Z",
+    "size": 783858
+  }
+]
