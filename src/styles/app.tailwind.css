@@ -3,15 +3,16 @@
 @import "./tokens.css";
 @import "tailwindcss";
 
-/* Bind Tailwind's `dark:` variant to the daisyUI dark theme ("sunset") */
-@custom-variant dark (&:where([data-theme=sunset], [data-theme=sunset] *));
+/* Bind Tailwind's `dark:` variant to daisyUI dark theme (business) */
+@custom-variant dark (&:where([data-theme=business], [data-theme=business] *));
 
 /* Plugins (Tailwind v4 style) */
 @plugin "@tailwindcss/typography";
 
 /* daisyUI v5 — enable themes with explicit defaults */
 @plugin "daisyui" {
-  themes: nord --default, sunset --prefersdark;
+  /* Light default = nord; Dark default = business */
+  themes: nord --default, business --prefersdark;
   /* logs: false;  // uncomment to silence plugin logs */
 }
 
@@ -76,20 +77,111 @@
   .pink{ @apply text-pink-500;} .rose{ @apply text-rose-500;} .blackout{ @apply text-black bg-black; }
 }
 
-/* Stronger separation for dark theme (sunset): thicker borders and a faint card surface */
+/* Stronger separation for dark theme (business): thicker borders and a faint card surface */
 @layer components {
-  [data-theme="sunset"] .card.card-border { @apply border; }
-  [data-theme="sunset"] .card.card-border {
+  [data-theme="business"] .card.card-border { @apply border; }
+  [data-theme="business"] .card.card-border {
     /* Use DaisyUI tokens but boost contrast a touch */
     border-color: color-mix(in oklab, var(--color-base-content) 16%, transparent);
     background-color: color-mix(in oklab, var(--color-base-100) 85%, black 15%);
   }
 }
 
-/* Theme variable nudge: 2px borders on sunset for clearer delineation */
+/* Theme variable nudge: 2px borders on business for clearer delineation */
 @layer base {
-  :root:has(input.theme-controller[value=sunset]:checked),
-  [data-theme=sunset] { --border: 2px; }
+  :root:has(input.theme-controller[value=business]:checked),
+  [data-theme=business] { --border: 2px; }
+}
+
+/* Assertive Geometry: square corners, sturdier borders, chunkier badges, thicker accent rail */
+@layer base {
+  html.assertive-geometry {
+    /* Cards: make borders stand a touch bolder while keeping theme colors */
+    --hb-card-border-w: 2px;
+  }
+  html.assertive-geometry[data-theme=abyss] { --hb-card-border-w: 3px; }
+}
+
+@layer components {
+  html.assertive-geometry .card { border-width: var(--hb-card-border-w, 2px) !important; }
+  html.assertive-geometry :is(.card, .badge, .btn, .input, .select, .textarea, .alert) {
+    border-radius: 0 !important;
+  }
+  /* Accent rail +1px under assertive geometry */
+  html.assertive-geometry .hb-accent::before { width: 4px; }
+}
+
+/* Neon Brutalism: subtle glow accents tied to theme tokens */
+@layer components {
+  /* Neon ring around accent cards */
+  .hb-neon { position: relative; }
+  .hb-neon::after {
+    content: ""; position: absolute; inset: -1px; border-radius: 0;
+    box-shadow:
+      0 0 0 1px hsl(var(--p)/.50),
+      0 0 18px hsl(var(--p)/.20),
+      0 0 2px hsl(var(--s)/.35) inset;
+    opacity: .22; pointer-events: none; transition: opacity 180ms ease;
+  }
+  .hb-neon:hover::after, .hb-neon:focus-within::after { opacity: .38; }
+
+  /* Neon title micro-glow */
+  .hb-title { text-shadow: 0 0 0 transparent; }
+  html.assertive-geometry .hb-title {
+    text-shadow: 0 0 10px hsl(var(--p)/.18);
+  }
+
+  /* Neon link hover underline and color pop */
+  .hb-link { text-decoration: underline; text-decoration-color: hsl(var(--p)/.25); text-underline-offset: 2px; }
+  .hb-link:hover { text-decoration-color: hsl(var(--p)); color: hsl(var(--pf)); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hb-neon::after { transition: none !important; }
+  }
+}
+
+/* Rail Rows: remove boxiness, keep structure with separators and rails */
+@layer components {
+  .hb-row { position: relative; padding-block: .75rem; }
+  .hb-list > .hb-row { border-top: 1px solid hsl(var(--bc)/.14); }
+  .hb-list > .hb-row:hover { background-color: hsl(var(--b2)/.35); }
+  .hb-list > .hb-row:focus-within { outline: 2px solid hsl(var(--p)/.35); outline-offset: 2px; }
+}
+
+/* Container query roots and responsive density adjustments */
+@layer utilities {
+  .cq-root { container-type: inline-size; }
+}
+
+/* Projects grid driven by container width */
+@layer components {
+  .hb-projects-grid { display: grid; gap: 1rem; grid-template-columns: 1fr; }
+  @container (min-width: 28rem) { .hb-projects-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @container (min-width: 56rem) { .hb-projects-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+}
+
+/* Chip sizing driven by container width (Skills/Tools/Tags) */
+@layer components {
+  .cq-chips { --chip-fs: 0.72rem; --chip-px: 0.5rem; --chip-py: 0.125rem; --chip-bw: 2px; }
+  .cq-chips .badge { font-size: var(--chip-fs); padding-inline: var(--chip-px); padding-block: var(--chip-py); border-width: var(--chip-bw); }
+  .cq-chips .badge-ghost { background-color: color-mix(in oklab, hsl(var(--b2)) 60%, transparent); border-color: hsl(var(--bc)/.22); }
+  @container (min-width: 40rem) { .cq-chips { --chip-fs: 0.8rem; --chip-px: 0.6rem; } }
+  @container (min-width: 56rem) { .cq-chips { --chip-fs: 0.875rem; --chip-px: 0.7rem; } }
+}
+
+/* Experience cards: subgrid alignment for title/dates and bullet flow */
+@layer components {
+  .hb-ex { display: grid; grid-template-columns: 1fr auto; row-gap: 0.25rem; }
+  .hb-ex-head { display: grid; grid-template-columns: subgrid; align-items: baseline; column-gap: 0.5rem; }
+  .hb-ex-title { grid-column: 1; }
+  .hb-ex-meta { grid-column: 2; text-align: right; }
+  .hb-ex-bullets { grid-column: 1 / -1; margin-top: 0.25rem; }
+}
+
+/* Hover/focus polish with respect for reduced motion */
+@layer utilities {
+  .hb-anim { transition-property: opacity, color, background-color, box-shadow, transform; transition-duration: 180ms; transition-timing-function: ease; }
+  @media (prefers-reduced-motion: reduce) { .hb-anim { transition: none !important; animation: none !important; } }
 }
 
 /* Inline footnote popover (theme-aware) */
