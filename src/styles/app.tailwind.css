@@ -96,17 +96,15 @@
 /* Assertive Geometry: square corners, sturdier borders, chunkier badges, thicker accent rail */
 @layer base {
   html.assertive-geometry {
-    /* Cards: make borders stand a touch bolder while keeping theme colors */
-    --hb-card-border-w: 2px;
+    /* Softer by default; individual components opt into stronger treatment */
+    --hb-card-border-w: 1px;
   }
-  html.assertive-geometry[data-theme=abyss] { --hb-card-border-w: 3px; }
 }
 
 @layer components {
-  html.assertive-geometry .card { border-width: var(--hb-card-border-w, 2px) !important; }
-  html.assertive-geometry :is(.card, .badge, .btn, .input, .select, .textarea, .alert) {
-    border-radius: 0 !important;
-  }
+  html.assertive-geometry .card { border-width: var(--hb-card-border-w, 2px) !important; border-radius: 0 !important; }
+  /* Square off common surfaces; keep chips/badges rounded for readability */
+  html.assertive-geometry :is(.btn, .input, .select, .textarea, .alert) { border-radius: 0 !important; }
   /* Accent rail +1px under assertive geometry */
   html.assertive-geometry .hb-accent::before { width: 4px; }
 }
@@ -125,6 +123,25 @@
   }
   .hb-neon:hover::after, .hb-neon:focus-within::after { opacity: .38; }
 
+  /* Remove visible borders on cards; rely on ring + inner hairlines */
+  html.assertive-geometry .card { border-color: transparent !important; }
+
+  /* Intensity modifiers (used across pages) */
+  .hb-neon.hb-intensity-lite::after {
+    box-shadow:
+      0 0 0 1px hsl(var(--p)/.35),
+      0 0 12px hsl(var(--p)/.14),
+      0 0 1px hsl(var(--s)/.25) inset;
+    opacity: .16;
+  }
+  .hb-neon.hb-intensity-bold::after {
+    box-shadow:
+      0 0 0 1px hsl(var(--p)/.65),
+      0 0 28px hsl(var(--p)/.28),
+      0 0 4px hsl(var(--s)/.45) inset;
+    opacity: .32;
+  }
+
   /* Neon title micro-glow */
   .hb-title { text-shadow: 0 0 0 transparent; }
   html.assertive-geometry .hb-title {
@@ -142,9 +159,16 @@
 
 /* Rail Rows: remove boxiness, keep structure with separators and rails */
 @layer components {
-  .hb-row { position: relative; padding-block: .75rem; }
-  .hb-list > .hb-row { border-top: 1px solid hsl(var(--bc)/.14); }
-  .hb-list > .hb-row:hover { background-color: hsl(var(--b2)/.35); }
+  .hb-row { position: relative; padding-block: .625rem; }
+  /* Default: no dividers; hover only */
+  .hb-list > .hb-row:hover { background-color: hsl(var(--b2)/.22); }
+  /* Optional: enable dividers when parent has hb-list--dividers */
+  .hb-list.hb-list--dividers > .hb-row { border-top: 1px solid hsl(var(--bc)/.10); }
+  .hb-list.hb-list--dividers > .hb-row:first-child { border-top: 0; }
+  /* Compact variant for denser lists */
+  .hb-list--compact > .hb-row { padding-block: .5rem; }
+  .hb-list--compact .card-title { margin: 0; }
+  .hb-list--compact p { margin: .25rem 0 0; }
   .hb-list > .hb-row:focus-within { outline: 2px solid hsl(var(--p)/.35); outline-offset: 2px; }
 }
 
@@ -158,6 +182,13 @@
   .hb-projects-grid { display: grid; gap: 1rem; grid-template-columns: 1fr; }
   @container (min-width: 28rem) { .hb-projects-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
   @container (min-width: 56rem) { .hb-projects-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+}
+
+/* Selected Projects: tighter internal spacing */
+@layer components {
+  .hb-proj .hb-sub { margin-top: .125rem; }
+  .hb-proj .hb-blurb { margin-top: .375rem; }
+  .hb-proj .hb-tags { margin-top: .5rem; }
 }
 
 /* Chip sizing driven by container width (Skills/Tools/Tags) */
@@ -476,10 +507,11 @@
 /* Hypebrüt: Tab-like rows & title accent for resume highlights */
 @layer components {
   .hb-tabrow {
-    @apply relative w-full p-3 sm:p-4 rounded-xl border transition-all duration-200 ease-out;
-    background-color: hsl(var(--b1)/.92);
-    border-color: hsl(var(--bc)/.12);
-    box-shadow: 0 2px 6px rgba(0,0,0,.06);
+    @apply relative w-full px-4 py-3 sm:px-5 sm:py-3.5 transition-all duration-200 ease-out;
+    border-radius: 0;
+    background: linear-gradient(180deg, hsl(var(--b1)/.96), hsl(var(--b1)/.90));
+    /* No borders — use soft inner hairlines for structure */
+    box-shadow: 0 1px 0 hsl(var(--bc)/.06) inset, 0 -1px 0 hsl(var(--bc)/.06) inset, 0 2px 6px rgba(0,0,0,.04);
   }
   .hb-tabrow::before {
     content: "";
@@ -525,10 +557,16 @@
   }
   .hb-accent:hover::before { opacity: .8; }
 
+  /* Accent intensity pairs with hb-neon */
+  .hb-accent.hb-intensity-lite::before { opacity: .28; }
+  .hb-accent.hb-intensity-bold::before { opacity: .65; }
+
   .hb-minirow {
-    @apply relative w-full px-3 py-2 rounded-lg border transition-all duration-200 ease-out;
-    background-color: hsl(var(--b1)/.9);
-    border-color: hsl(var(--bc)/.12);
+    @apply relative w-full px-3 py-2 transition-all duration-200 ease-out;
+    border-radius: 0; border: none;
+    background: linear-gradient(180deg, hsl(var(--b1)/.95), hsl(var(--b1)/.88));
+    /* Subtle separators without visible borders */
+    box-shadow: 0 1px 0 hsl(var(--bc)/.05) inset, 0 -1px 0 hsl(var(--bc)/.05) inset;
   }
   .hb-minirow::before{
     content:""; position:absolute; inset-inline-start:-1px; top:6px; bottom:6px; width:2px; border-radius:999px;
@@ -539,6 +577,8 @@
     );
     opacity:.5;
   }
+  .hb-minirow.hb-intensity-lite::before { opacity: .3; }
+  .hb-minirow.hb-intensity-bold::before { opacity: .8; }
 }
 
 /* Tailwind v4 content discovery */

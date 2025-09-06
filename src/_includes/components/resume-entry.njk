@@ -1,13 +1,17 @@
 {% macro resumeEntry(job) %}
-  <section class="mb-6">
-    <h2 class="text-xl font-semibold">{{ job.role }} — {{ job.company }}</h2>
-    <p class="text-sm opacity-70">{{ job.start }}{% if job.end %}–{{ job.end }}{% else %}–present{% endif %}</p>
+  <article class="hb-row hb-accent hb-anim mb-3">
+    <h3 class="text-lg font-semibold tracking-tight m-0">{{ job.company }}{% if job.role %} <span class="font-normal">— {{ job.role }}</span>{% endif %}</h3>
+    <div class="text-xs md:text-sm opacity-70">
+      <span>{{ job.location }}</span>
+      <span class="mx-2 hidden md:inline">•</span>
+      <span class="block md:inline">{{ job.start }}{% if job.end %} — {{ job.end }}{% else %} — Now{% endif %}</span>
+    </div>
     {% if job.highlights %}
-      <ul class="mt-2 list-disc pl-4">
-      {% for h in job.highlights %}
-        <li>{{ h }}</li>
-      {% endfor %}
+      <ul class="mt-2 space-y-1.5 text-[15px] leading-6">
+        {% for h in job.highlights %}
+          <li class="hb-minirow">{{ h }}</li>
+        {% endfor %}
       </ul>
     {% endif %}
-  </section>
+  </article>
 {% endmacro %}
