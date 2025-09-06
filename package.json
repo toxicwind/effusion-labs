@@ -11,6 +11,7 @@
     "css:watch:app": "postcss src/styles/app.tailwind.css -o src/assets/css/app.css -w --verbose",
     "css:watch:overlay": "postcss src/styles/mschf-overlay.css -o src/assets/css/mschf-overlay.css -w --verbose",
     "build": "eleventy",
+    "docs:fetch": "node tools/doc-fetcher.mjs",
     "test": "c8 node tools/runner.mjs",
     "lint:advisory": "node tools/lint-archive-namespace.mjs",
     "lint:product-links": "node tools/product-link-hygiene.mjs",

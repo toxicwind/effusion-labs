@@ -24,43 +24,18 @@
     <meta property="og:url" content="{{ canon | absoluteUrl }}">
   {% endif %}
 
-  {# Early theme (daisyUI): align with compiled themes (corporate, dim). #}
+  {# Early theme init: minimal write for persisted/initial theme. #}
   <script>
     (function () {
       try {
-        var THEMES = {
-          lightDefault: "corporate",
-          darkDefault:  "dim",
-          allowed: ["corporate","dim"]
-        };
-        var meta = document.querySelector('meta[name="color-scheme"]') ||
-          (function () { var m = document.createElement("meta"); m.name = "color-scheme"; document.head.appendChild(m); return m; })();
-
+        var allowed = ["corporate","dim"]; var def = "dim";
+        var meta = document.querySelector('meta[name="color-scheme"]') || (function () { var m=document.createElement("meta"); m.name = "color-scheme"; document.head.appendChild(m); return m; })();
         var stored = localStorage.getItem("theme");
-        var picked = (stored && stored.trim()) ? stored.trim() : null;
-        if (picked && !THEMES.allowed.includes(picked)) picked = null;
-
-        if (!picked) {
-          picked = THEMES.darkDefault; // default to dark (dim)
-          document.documentElement.dataset.themeSource = "default";
-        } else {
-          document.documentElement.dataset.themeSource = "storage";
-        }
-
+        var picked = (stored && allowed.includes(stored)) ? stored : def;
         document.documentElement.setAttribute("data-theme", picked);
-        meta.content = (picked === THEMES.lightDefault) ? "light dark" : "dark light";
-
-        window.__setTheme = function (name) {
-          if (!THEMES.allowed.includes(name)) return;
-          document.documentElement.setAttribute("data-theme", name);
-          localStorage.setItem("theme", name);
-          document.documentElement.dataset.themeSource = "storage";
-          meta.content = (name === THEMES.lightDefault) ? "light dark" : "dark light";
-        };
-      } catch (_) {
-        document.documentElement.setAttribute("data-theme", "dim");
-        document.documentElement.dataset.themeSource = "fallback";
-      }
+        document.documentElement.dataset.themeSource = stored ? "storage" : "default";
+        meta.content = (picked === "corporate") ? "light dark" : "dark light";
+      } catch (_) { document.documentElement.setAttribute("data-theme", "dim"); document.documentElement.dataset.themeSource = "fallback"; }
     })();
   </script>
 
@@ -154,6 +129,7 @@
   <script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js" defer></script>
   <script src="/assets/js/work-filters.js" defer></script>
   <script src="/assets/js/mschf-overlay.js" defer></script>
+  <script src="/assets/js/theme-utils.js" defer></script>
   <script src="/assets/js/theme-toggle.js" defer></script>
 </body>
 </html>

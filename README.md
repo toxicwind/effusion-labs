@@ -50,6 +50,22 @@ The T4DL stack (Tailwind v4, daisyUI v5, Eleventy v3, lucide-eleventy) keeps sty
 
 Output is emitted to `_site/`, suitable for direct static hosting or containerization. GitHub Actions drive deploys.
 
+### Tailwind/DaisyUI Canonical Setup
+
+- Single Tailwind config at repo root: `tailwind.config.mjs` (typography, fonts, scales).
+- DaisyUI is registered exactly once in CSS: `src/styles/app.tailwind.css` via `@plugin "daisyui" { themes: dim --default, corporate --preferslight }`.
+- CSS entrypoint order: `@import "tailwindcss"` after tokens and `@source` globs.
+- Dark variant is bound to DaisyUI’s dark theme using a `@custom-variant` targeting `data-theme=dim`.
+- Theme toggle uses a single base script: `src/scripts/theme-toggle.js` backed by reusable `src/scripts/theme-utils.js`.
+
+Add a theme: update the `@plugin "daisyui" { themes: ... }` block in `src/styles/app.tailwind.css`. The active theme is the `data-theme` attribute on `<html>`.
+
+Run the gated doc fetcher locally (never required in CI):
+
+```bash
+DOC_FETCH=1 npm run docs:fetch
+```
+
 **Runtime target:** Node.js **24+** (honor `.nvmrc` if present). The repository is ESM-first (`package.json` sets `"type": "module"`); use `import`/`export` syntax. Configuration files like `eleventy.config.mjs`, `tailwind.config.mjs`, and `postcss.config.mjs` are ESM as well.
 
 ---

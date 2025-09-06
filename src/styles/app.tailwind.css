@@ -1,5 +1,12 @@
 /* src/styles/app.tailwind.css */
 @config "../../tailwind.config.mjs";
+/* Source globs to prevent class stripping in TWC v4 builds */
+@source "../../src/**/*.{njk,md,html,js,mjs}";
+@source "../../lib/**/*.mjs";
+@source "../../_site/**/*.html";
+/* Minimal dynamic safelist for runtime-constructed classes */
+@source inline("dark:prose-invert");
+
 @import "./tokens.css";
 @import "tailwindcss";
 
@@ -9,11 +16,8 @@
 /* Plugins (Tailwind v4 style) */
 @plugin "@tailwindcss/typography";
 
-/* daisyUI v5 — enable themes with explicit defaults */
-@plugin "daisyui" {
-  /* Light = corporate; Dark = dim (dark by default; prefer light when OS prefers light) */
-  themes: dim --default, corporate --preferslight;
-}
+/* daisyUI v5 — single registration, themes defined here */
+@plugin "daisyui" { themes: dim --default, corporate --preferslight; }
 
 /* Project CSS */
 @import "./home.css";
