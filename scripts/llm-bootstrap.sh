@@ -1,37 +1,8 @@
 #!/usr/bin/env bash
 # ────────────────────────────────────────────────────────────────────────────────
 #  HYPEBRUT Operating System — Effusion Labs
-#  llm-bootstrap.sh  (finalized; self-installing; LLM-safe; bash -lc resilient)
+#  llm-bootstrap.sh  (scoped RETURN trap; deterministic hype_run teardown)
 # ────────────────────────────────────────────────────────────────────────────────
-#  PURPOSE
-#  • Make HYPEBRUT tools (llm_cat, hype_run, etc.) available in EVERY shell the
-#    LLM spawns — even when it always uses `bash -lc '<cmd>'`.
-#  • Achieves persistence by auto-installing a **login-shell hook** that is read
-#    by bash -l, and a **BASH_ENV hook** for non-interactive subshells.
-#  • Idempotent, quiet by default for non-interactive shells, and restores the
-#    caller’s shell options on return.
-#
-#  HOW IT WORKS (in 1 line):
-#    Source this once → it plants ~/.config/hypebrut/login-hook.sh and ensures
-#    ~/.bash_profile / ~/.profile source it → every `bash -lc` now auto-loads
-#    HYPEBRUT without you having to `source` again.
-#
-#  USAGE
-#    source scripts/llm-bootstrap.sh
-#    # After this, even brand-new `bash -lc` calls can use:  llm_cat, hype_run, …
-#
-#  SAFETY
-#  • No alias trapdoors; no PATH pollution beyond $repo_root/bin; no recursion.
-#  • Respects existing dotfiles; adds clearly-marked, removable blocks.
-# ────────────────────────────────────────────────────────────────────────────────
-
-# ╭───────────────── restore-on-exit guard ─────────────────╮
-# Save caller’s shell options; restore when we return.
-_LLM_BOOT_OLD_SET_OPTS="$(set +o)"
-trap 'eval "$_LLM_BOOT_OLD_SET_OPTS"' RETURN
-
-# Strict, but contained to this script’s body.
-set -Euo pipefail
 
 # ╭───────────────── ensure we are SOURCED, not executed ─────────────────╮
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
@@ -39,24 +10,23 @@ if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
   exit 1
 fi
 
-# ╭───────────────── arg parsing (internal hook flag) ─────────────────╮
-# When invoked by our login/noninteractive hook, we pass --as-hook to skip reinstall.
-_LLM_AS_HOOK=0
-for _arg in "${@:-}"; do
-  [[ "${_arg}" == "--as-hook" ]] && _LLM_AS_HOOK=1
-done
+# ╭───────────────── guard original shell opts; scope the trap ──────────╮
+_LLM_BOOT_OLD_SET_OPTS="$(set +o)"
+# NOTE: We *also* restore + clear at EOF to avoid leaving a global RETURN trap.
+trap 'eval "$_LLM_BOOT_OLD_SET_OPTS"' RETURN
+
+# Strict, but contained to this script’s body.
+set -Euo pipefail
 
 # ╭───────────────── tiny helpers ─────────────────╮
 _llm_has() { command -v "$1" >/dev/null 2>&1; }
-_llm_on()  { [[ "$1" == "1" || "$1" == "true" ]]; }
+_llm_on()  { [[ "${1:-}" == "1" || "${1:-}" == "true" ]]; }
 _llm_ts()  { date -u +"%Y-%m-%dT%H:%M:%SZ"; }
 _llm_path_prepend_unique() {
   local dir="$1"; [[ -d "$dir" ]] || return 0
   case ":$PATH:" in *":$dir:"*) ;; *) PATH="$dir:$PATH" ;; esac
 }
-
 _llm_emit() {
-  # Quiet by default in non-interactive shells unless LLM_VERBOSE=1 is set.
   [[ "${LLM_VERBOSE:-0}" != "1" ]] && return 0
   local tag="${1:-INFO}"; shift || true
   local color="\033[0;34m" icon="ℹ️"
@@ -73,7 +43,6 @@ _llm_emit() {
 }
 
 # ╭───────────────── repo + paths ─────────────────╮
-# Script path + repo root (no reliance on PWD)
 _LLM_THIS_SCRIPT="$(readlink -f "${BASH_SOURCE[0]}")"
 _LLM_REPO_ROOT="$(cd "$(dirname "$_LLM_THIS_SCRIPT")/.." && pwd -P)"
 _LLM_CFG_DIR="${HOME}/.config/hypebrut"
@@ -82,9 +51,17 @@ _LLM_NONINT_HOOK="${_LLM_CFG_DIR}/noninteractive-hook.sh"
 _LLM_PID_DIR="/tmp/hype_pids"
 _LLM_LOG_DIR="/tmp/hype_logs"
 
+# ╭───────────────── arg parsing (internal hook flag) ─────────────────╮
+_LLM_AS_HOOK=0
+for _arg in "${@:-}"; do
+  [[ "${_arg}" == "--as-hook" ]] && _LLM_AS_HOOK=1
+done
+
 # ╭───────────────── idempotence gate ─────────────────╮
 if [[ "${HYPEBRUT_ENV_READY:-}" == "1" && "${HYPEBRUT_ENV_ROOT:-}" == "${_LLM_REPO_ROOT}" && "${LLM_BOOTSTRAP_FORCE:-0}" != "1" ]]; then
   _llm_emit INFO "Environment already active. Sourcing skipped. **Proceed with task.** (root: ${_LLM_REPO_ROOT})"
+  # Explicitly restore & clear RETURN trap here too (no lingering).
+  eval "$_LLM_BOOT_OLD_SET_OPTS"; trap - RETURN
   return 0
 fi
 
@@ -110,9 +87,7 @@ _llm_path_prepend_unique "${_LLM_REPO_ROOT}/bin"
 _llm_emit INFO "Ensured '${_LLM_REPO_ROOT}/bin' is on PATH."
 
 # ╭───────────────── stream formatting helpers ─────────────────╮
-_llm_fold() {
-  if _llm_has fold; then fold -w "${LLM_FOLD_WIDTH}" -s; else cat; fi
-}
+_llm_fold() { if _llm_has fold; then fold -w "${LLM_FOLD_WIDTH}" -s; else cat; fi; }
 _llm_stream_filter() {
   if [[ -z "${LLM_SUPPRESS_PATTERNS}" ]]; then cat
   else awk -v pat="$LLM_SUPPRESS_PATTERNS" '{ if ($0 ~ pat) next; print }'
@@ -134,7 +109,7 @@ hype_run() {
   done
   [[ $# -ge 1 ]] || { _llm_emit FAIL "hype_run requires a command"; return 2; }
 
-  # Safer FIFO path: dedicate a temp dir so `-u` races aren’t a problem.
+  # Dedicated FIFO dir avoids -u races; deterministic teardown to “hand back”.
   local tmpdir; tmpdir="$(mktemp -d "/tmp/hype_run.${id}.XXXXXX")" || { _llm_emit FAIL "mktemp failed"; return 2; }
   local pipe="${tmpdir}/pipe"
   mkfifo "$pipe" || { _llm_emit FAIL "Could not create pipe"; rm -rf "$tmpdir"; return 2; }
@@ -145,6 +120,7 @@ hype_run() {
   _llm_emit START "Running: $(printf '%q ' "$@")"
   [[ -n "$capture_file" ]] && _llm_emit INFO "Capturing → $capture_file"
 
+  # ── child writer → FIFO
   (
     set -o pipefail
     if _llm_has stdbuf; then stdbuf -oL -eL "$@" >"$pipe" 2>&1
@@ -152,6 +128,7 @@ hype_run() {
     fi
   ) & child_pid=$!
 
+  # ── reader: FIFO → [filter|fold] → tee (stdout + capture)
   (
     if [[ -n "$capture_file" ]]; then
       : > "$capture_file" 2>/dev/null || { _llm_emit FAIL "Capture unwritable: $capture_file"; exit 1; }
@@ -161,6 +138,7 @@ hype_run() {
     fi
   ) & reader_pid=$!
 
+  # ── idle watchdog (optional)
   if (( LLM_IDLE_FAIL_AFTER_SECS > 0 )); then
     (
       local last_size=-1 current_size=0 idle_total=0
@@ -172,7 +150,7 @@ hype_run() {
             idle_total=$((idle_total + idle)); _llm_emit IDLE "Quiet for ${idle_total}s…"
             if (( idle_total >= LLM_IDLE_FAIL_AFTER_SECS )); then
               _llm_emit FAIL "Idle timeout ${LLM_IDLE_FAIL_AFTER_SECS}s → SIGTERM/SIGKILL"
-              kill -TERM "$child_pid" 2>/dev/null || true; sleep 3
+              kill -TERM "$child_pid" 2>/dev/null || true; sleep 0.3
               kill -0 "$child_pid" 2>/dev/null && kill -KILL "$child_pid" 2>/dev/null || true
               break
             fi
@@ -182,24 +160,36 @@ hype_run() {
     ) & watchdog_pid=$!
   fi
 
+  # ── hard timeout (optional)
   if [[ -n "${hard_timeout}" && "${hard_timeout}" != "0" ]]; then
     (
       sleep "${hard_timeout}" || true
       if kill -0 "$child_pid" 2>/dev/null; then
         _llm_emit FAIL "Hard timeout ${hard_timeout}s → terminate"
-        kill -TERM "$child_pid" 2>/dev/null || true; sleep 3
+        kill -TERM "$child_pid" 2>/dev/null || true; sleep 0.3
         kill -0 "$child_pid" 2>/dev/null && kill -KILL "$child_pid" 2>/dev/null || true
       fi
     ) & timer_pid=$!
   fi
 
+  # ── finish/teardown
   trap '_llm_emit FAIL "Interrupted"; kill -TERM '"$child_pid"' 2>/dev/null || true' INT TERM HUP
   wait "$child_pid" 2>/dev/null || status=$?
-  sleep 0.1
+  # Give the reader a moment to drain EOF naturally; then ensure it’s gone.
+  for _ in {1..50}; do
+    kill -0 "$reader_pid" 2>/dev/null || break
+    sleep 0.02
+  done
+  kill "$reader_pid" 2>/dev/null || true
+  wait "$reader_pid" 2>/dev/null || true
 
-  [[ -n "${reader_pid:-}"   ]] && kill "$reader_pid" 2>/dev/null || true
+  # Stop helpers deterministically.
   [[ -n "${watchdog_pid:-}" ]] && kill "$watchdog_pid" 2>/dev/null || true
-  [[ -n "${timer_pid:-}"    ]] && kill "$timer_pid" 2>/dev/null || true
+  [[ -n "${timer_pid:-}"    ]] && kill "$timer_pid"    2>/dev/null || true
+  wait "${watchdog_pid:-}" 2>/dev/null || true
+  wait "${timer_pid:-}"    2>/dev/null || true
+
+  # Clean FIFO + tmpdir last (after reader fully exited).
   rm -f "$pipe" 2>/dev/null || true
   rm -rf "$tmpdir" 2>/dev/null || true
 
@@ -228,7 +218,7 @@ llm_cat() {
     html|htm)   parser="html" ;;
     css|pcss)   parser="css" ;;
     yml|yaml)   parser="yaml" ;;
-  esac
+  endesac
   if [[ -n "$parser" ]] && _llm_has npx; then
     _llm_emit INFO "Pretty-printing $target (parser: $parser)"
     npx --no-install prettier --parser "$parser" --print-width "${LLM_FOLD_WIDTH}" --no-config -- "$target" 2>/dev/null | _llm_fold
@@ -319,7 +309,7 @@ hype_status() {
 _llm_install_hooks() {
   mkdir -p "$_LLM_CFG_DIR"
 
-  # 1) Non-interactive hook (BASH_ENV target) — used by `bash -c` shells.
+  # 1) Non-interactive hook (BASH_ENV target)
   cat > "$_LLM_NONINT_HOOK" <<EOF
 # >>> HYPEBRUT noninteractive hook (auto-generated) >>>
 # shellcheck source=/dev/null
@@ -334,24 +324,20 @@ EOF
   # 2) Login hook — sourced by login shells (`bash -l`).
   cat > "$_LLM_LOGIN_HOOK" <<EOF
 # >>> HYPEBRUT login hook (auto-generated) >>>
-# Ensure noninteractive shells also load this environment
 export BASH_ENV="${_LLM_NONINT_HOOK}"
 # shellcheck source=/dev/null
 HYPEBRUT_ENV_ROOT="${_LLM_REPO_ROOT}"
 if [[ "\${HYPEBRUT_ENV_READY:-}" != "1" || "\${HYPEBRUT_ENV_ROOT:-}" != "\${HYPEBRUT_ENV_ROOT}" ]]; then
-  # Pass --as-hook to suppress re-install during hook stage
   source "${_LLM_THIS_SCRIPT}" --as-hook
 fi
 # <<< HYPEBRUT login hook <<<
 EOF
   chmod 0644 "$_LLM_LOGIN_HOOK"
 
-  # 3) Ensure login shells source our hook (idempotent block inserts).
+  # 3) Ensure login shells source our hook (idempotent).
   _llm_patch_file() {
     local file="$1" marker="# >>> HYPEBRUT login sourcing >>>"
-    if [[ -f "$file" ]] && grep -Fq "$marker" "$file"; then
-      return 0
-    fi
+    if [[ -f "$file" ]] && grep -Fq "$marker" "$file"; then return 0; fi
     mkdir -p "$(dirname "$file")"
     {
       echo ""; echo "$marker"
@@ -359,8 +345,6 @@ EOF
       echo "# <<< HYPEBRUT login sourcing <<<"
     } >> "$file"
   }
-
-  # Bash prefers ~/.bash_profile for login shells; fallback ~/.profile if absent.
   if [[ -f "${HOME}/.bash_profile" || ! -f "${HOME}/.profile" ]]; then
     _llm_patch_file "${HOME}/.bash_profile"
   fi
@@ -369,10 +353,10 @@ EOF
   _llm_emit DONE "Shell hijack installed → login + noninteractive hooks ready."
 }
 
-# Install once unless invoked as a hook (hooks should stay lightweight).
+# Install once unless invoked as a hook (hooks stay lightweight).
 if (( _LLM_AS_HOOK == 0 )); then _llm_install_hooks; fi
 
-# ╭───────────────── optional: npm ci auto-install (hashed) ─────────────────╮
+# ╭───────────────── optional: npm ci auto-install (hashed) ────────────╮
 if _llm_on "${LLM_DEPS_AUTOINSTALL}"; then
   mkdir -p "${_LLM_REPO_ROOT}/tmp"; hash_file="${_LLM_REPO_ROOT}/tmp/.deps_hash"
   lock_file="${_LLM_REPO_ROOT}/package-lock.json"
@@ -392,24 +376,14 @@ if _llm_on "${LLM_DEPS_AUTOINSTALL}"; then
   fi
 fi
 
-# ╭───────────────── optional: lightweight git hooks ─────────────────╮
-if _llm_on "${LLM_GIT_HOOKS}"; then
-  hooks_dir="${_LLM_REPO_ROOT}/.git/hooks"
-  if [[ -d "$hooks_dir" ]]; then
-    for hook in post-checkout post-merge; do
-      hook_path="$hooks_dir/$hook"
-      printf '%s\n' '#!/usr/bin/env bash' \
-        "source \"${_LLM_THIS_SCRIPT}\" --as-hook >/dev/null 2>&1 || true" > "$hook_path"
-      chmod +x "$hook_path"
-    done
-  fi
-fi
-
 # ╭───────────────── export environment flags ─────────────────╮
 export HYPEBRUT_ENV_READY=1
 export HYPEBRUT_ENV_ROOT="${_LLM_REPO_ROOT}"
-
 _llm_emit DONE "Environment activated. Tools are available for this shell session. **Do not source again.**"
+
+# ╭───────────────── FINAL: restore shell opts & clear RETURN trap ─────╮
+eval "$_LLM_BOOT_OLD_SET_OPTS"
+trap - RETURN
 # ────────────────────────────────────────────────────────────────────────────────
 # End of file
 # ────────────────────────────────────────────────────────────────────────────────
