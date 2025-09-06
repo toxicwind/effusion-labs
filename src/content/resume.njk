@@ -71,6 +71,7 @@ eleventyExcludeFromCollections: true
 
   <!-- Tiny CSS: skip-link + print polish + hb-tabrow styles -->
   <style>
+    :root{--hb-accent-start:hsl(var(--p));--hb-accent-end:hsl(var(--s))}
     .skip-link{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden}
     .skip-link:focus{left:1rem;top:1rem;width:auto;height:auto;padding:.5rem .75rem;z-index:1000}
     @media print{
@@ -81,18 +82,23 @@ eleventyExcludeFromCollections: true
       a{color:#000!important;text-decoration:none!important}
       .card{background:#fff!important;border-color:#ddd!important}
     }
+    /* Subtle accent system */
+    .hb-accent{position:relative}
+    .hb-accent::before{content:"";position:absolute;inset-inline-start:-1px;top:8px;bottom:8px;width:3px;border-radius:999px;background:linear-gradient(180deg,var(--hb-accent-start),var(--hb-accent-end));opacity:.4}
     /* Hypebrüt: Tab-like row styling for Highlights on this standalone page */
     .hb-tabrow{position:relative;width:100%;padding:.75rem 1rem;border-radius:12px;border:1px solid hsl(var(--bc)/.12);background-color:hsl(var(--b1)/.92);box-shadow:0 2px 6px rgba(0,0,0,.06);transition:box-shadow .2s ease,border-color .2s ease}
-    .hb-tabrow::before{content:"";position:absolute;inset-inline-start:-1px;top:8px;bottom:8px;width:3px;border-radius:999px;background:linear-gradient(180deg,color-mix(in oklab, var(--neon-a, #00E0FF) 86%, transparent) 0%,color-mix(in oklab, var(--neon-b, #9AFF00) 86%, transparent) 50%,color-mix(in oklab, var(--neon-c, #FF1CF7) 86%, transparent) 100%);opacity:.55;transform:scaleY(.72);transform-origin:center;transition:transform .2s ease,opacity .2s ease}
+    .hb-tabrow::before{content:"";position:absolute;inset-inline-start:-1px;top:8px;bottom:8px;width:3px;border-radius:999px;background:linear-gradient(180deg,var(--hb-accent-start) 0%,var(--hb-accent-end) 100%);opacity:.5;transform:scaleY(.72);transform-origin:center;transition:transform .2s ease,opacity .2s ease}
     .hb-tabrow:hover{border-color:hsl(var(--p)/.38);box-shadow:0 6px 22px rgba(0,0,0,.10)}
-    .hb-tabrow:hover::before{opacity:.85;transform:scaleY(1)}
+    .hb-tabrow:hover::before{opacity:.75;transform:scaleY(1)}
     .hb-tabrow[data-active="true"]{border-color:hsl(var(--p)/.5);box-shadow:0 8px 28px rgba(0,0,0,.12)}
-    .hb-tabrow[data-active="true"]::before{opacity:1;transform:scaleY(1)}
+    .hb-tabrow[data-active="true"]::before{opacity:.9;transform:scaleY(1)}
     .hb-tablabel{font-size:11px;text-transform:uppercase;letter-spacing:.2em;opacity:.7}
     .hb-tabvalue{font-size:1.375rem;line-height:1.2;font-weight:700}
     .hb-tabsub{font-size:.75rem;opacity:.8}
     .hb-title{position:relative;display:inline-flex;align-items:center;gap:.5rem}
-    .hb-title::after{content:"";height:1px;width:48px;opacity:.5;background:linear-gradient(90deg,color-mix(in oklab, var(--neon-a, #00E0FF) 75%, transparent) 0%,color-mix(in oklab, var(--neon-c, #FF1CF7) 75%, transparent) 100%)}
+    .hb-title::after{content:"";height:1px;width:48px;opacity:.45;background:linear-gradient(90deg,var(--hb-accent-start) 0%,var(--hb-accent-end) 100%)}
+    .hb-minirow{position:relative;padding-left:1rem;line-height:1.45}
+    .hb-minirow::before{content:"";position:absolute;left:0;top:.6em;width:.4rem;height:.4rem;border-radius:50%;background:linear-gradient(180deg,var(--hb-accent-start),var(--hb-accent-end));opacity:.5}
   </style>
 </head>
 
