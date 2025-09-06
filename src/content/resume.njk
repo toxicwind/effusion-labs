@@ -5,10 +5,9 @@ layout: false
 eleventyExcludeFromCollections: true
 ---
 
-{# src/resume/index.njk #}
-
+{# src/resume/index.njk — rebuilt + ADAPTIVE based on array sizes; no app.css #}
 <!DOCTYPE html>
-<html lang="en" class="scroll-pt-16" data-mschf="off">
+<html lang="en" class="scroll-pt-16">
 <head>
   <!-- Meta -->
   <meta charset="UTF-8">
@@ -20,14 +19,29 @@ eleventyExcludeFromCollections: true
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
-  {# Title / description via reusable macros #}
+  {% set siteUrl = (site and site.url) or "" %}
   {% from "macros/meta.njk" import buildPageTitle, buildPageDesc %}
   {% set pageTitle = buildPageTitle(resume, title) %}
   {% set pageDesc  = buildPageDesc(resume) %}
-  {% set canonicalHref = "/resume/" | url %}
+  {% set canonicalPath = "/resume/" | url %}
+
+  {# prefer absolute if site.url exists #}
+  {% if site and site.url %}
+    {% set canonicalHref = site.url + canonicalPath %}
+  {% else %}
+    {% set canonicalHref = canonicalPath %}
+  {% endif %}
+
+  {# also precompute Home link for Breadcrumb JSON-LD #}
+  {% set homePath = "/" | url %}
+  {% if site and site.url %}
+    {% set homeHref = site.url + homePath %}
+  {% else %}
+    {% set homeHref = homePath %}
+  {% endif %}
+
   <title>{{ pageTitle }}</title>
   <link rel="canonical" href="{{ canonicalHref }}">
-
   <meta name="description" content="{{ pageDesc }}">
 
   <!-- Open Graph -->
@@ -47,244 +61,58 @@ eleventyExcludeFromCollections: true
   <meta name="twitter:image" content="{{ resume.ogImage | url }}">
   {% endif %}
 
-  {# Early theme boot (prevents flash; aligns with DaisyUI tokens) #}
-  <script>
-    (function () {
-      try {
-        var THEMES = { lightDefault:"nord", darkDefault:"sunset", allowed:["nord","sunset"] };
-        var meta = document.querySelector('meta[name="color-scheme"]') ||
-          (function () { var m = document.createElement("meta"); m.name = "color-scheme"; document.head.appendChild(m); return m; })();
-        var stored = localStorage.getItem("theme");
-        var picked = (stored && THEMES.allowed.includes(stored)) ? stored : null;
-        if (!picked) {
-          var prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
-          picked = prefersDark ? THEMES.darkDefault : THEMES.lightDefault;
-          document.documentElement.dataset.themeSource = prefersDark ? "os-dark" : "os-light";
-        } else {
-          document.documentElement.dataset.themeSource = "storage";
-        }
-        document.documentElement.setAttribute("data-theme", picked);
-        meta.content = (picked === THEMES.lightDefault) ? "light dark" : "dark light";
-        window.__setTheme = function (name) {
-          if (!THEMES.allowed.includes(name)) return;
-          document.documentElement.setAttribute("data-theme", name);
-          localStorage.setItem("theme", name);
-          document.documentElement.dataset.themeSource = "storage";
-          meta.content = (name === THEMES.lightDefault) ? "light dark" : "dark light";
-        };
-      } catch (_) {
-        document.documentElement.setAttribute("data-theme", "nord");
-        document.documentElement.dataset.themeSource = "fallback";
-      }
-    })();
-  </script>
+  <!-- DaisyUI v5 + Tailwind v4 (CDN) -->
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css">
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 
-  <!-- Fonts (match site) -->
+  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Rubik:wght@400..900&family=Space+Grotesk:wght@400..700&display=swap" rel="stylesheet">
 
-  <!-- Site CSS bundle (Tailwind v4 + DaisyUI v5) -->
-  <link rel="stylesheet" href="/assets/css/app.css?v={{ build.hash or build.commit or build.version or buildTime }}">
-
-  <!-- Small aesthetic/util CSS (theme-safe; prints clean) -->
-    <style>
-      :root { --glass-blur: 10px; --glass-opacity:.85; --glass-border-opacity:.22; }
-      .card.glass { background: linear-gradient(to bottom right, hsl(var(--p) / 0.15), hsl(var(--s) / 0.15)); }
-      .skip-link { position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden; }
-      .skip-link:focus { left:1rem; top:1rem; width:auto; height:auto; padding:.5rem .75rem; z-index:1000; }
-
-    /* Drawer sizing for the left rail + desktop offset for content */
-    :root { --rail-w: clamp(22rem, 26vw, 28rem); }
-    /* Mobile: nearly full width; Desktop: widen, fluid within bounds */
-    .resume-drawer-side { width: min(96vw, 28rem); }
-    @media (min-width: 1024px) {
-      .resume-drawer-side { width: var(--rail-w); }
-      .drawer.drawer-open .drawer-content { margin-left: var(--rail-w); }
-    }
-
-    /* Card polish (let daisyUI handle the tokens; we only tweak radius/shadow rhythm) */
-    .card.rounded-2xl { border-radius: 1rem; }
-    .card-compact .card-body { padding: 1rem 1rem; }
-
-    /* Experience timeline tweaks (use DaisyUI, soften connectors) */
-    .t-meta { white-space: nowrap; opacity:.7; }
-    /* Make the date lane compact and right-aligned on md+; hide on small */
-    @media (min-width: 768px) {
-      .timeline .timeline-start { width: 12ch; max-width: 12ch; text-align: right; }
-    }
-    .timeline hr { border-color: hsl(var(--bc) / .14); }
-    .timeline .timeline-middle .dot { width: .5rem; height: .5rem; border-radius: 9999px; background: hsl(var(--bc)/.45); }
-
-    /* Print—remove glass/shadows, ensure black text, hide controls */
-    @media print {
-      @page { margin: 0.6in; }
-      .no-print, .drawer-toggle, .drawer-button, .navbar { display:none !important; }
-      .glass, .shadow, .shadow-lg, .shadow-xl { box-shadow:none !important; backdrop-filter:none !important; }
-      .card, .stats { background:#fff !important; border-color:#ddd !important; }
-      body { background:#fff !important; color:#000 !important; }
-      a { color:#000 !important; text-decoration:none !important; }
+  <!-- Tiny CSS: skip-link + print polish only -->
+  <style>
+    .skip-link{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden}
+    .skip-link:focus{left:1rem;top:1rem;width:auto;height:auto;padding:.5rem .75rem;z-index:1000}
+    @media print{
+      @page{margin:.6in}
+      .no-print,.navbar{display:none!important}
+      .shadow,.shadow-lg,.shadow-xl{box-shadow:none!important}
+      body{background:#fff!important;color:#000!important}
+      a{color:#000!important;text-decoration:none!important}
+      .card{background:#fff!important;border-color:#ddd!important}
     }
   </style>
-
-  <!-- Icons / PWA -->
-  <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96">
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-  <link rel="shortcut icon" href="/favicon.ico">
-  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-  <meta name="apple-mobile-web-app-title" content="{{ site and site.name or 'Site' }}">
-  <link rel="manifest" href="/site.webmanifest">
 </head>
 
-<body class="bg-base-100 text-base-content font-body antialiased selection:bg-primary/20">
-  <a href="#main" class="skip-link btn btn-sm">{{ 'Skip to main content' }}</a>
+<body class="bg-base-100 text-base-content font-body antialiased selection:bg-primary/20" data-theme="nord">
+  <a href="#main" class="skip-link btn btn-sm">Skip to main content</a>
 
-  <!-- Drawer layout: Left rail inside drawer-side; content in drawer-content -->
-  <div class="drawer lg:drawer-open">
-    <input id="resume-drawer" type="checkbox" class="drawer-toggle">
-    <div class="drawer-content">
-      <!-- Top nav (mobile actions, theme switch, print) -->
-      <div class="navbar bg-base-100/80 backdrop-blur supports-[backdrop-filter]:bg-base-100/70 sticky top-0 z-[45] border-b border-base-200">
-        <div class="flex-1">
-          <label for="resume-drawer" class="btn btn-ghost drawer-button lg:hidden" aria-label="Open panel">
-            <!-- hamburger -->
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
-          </label>
-          <a href="{{ '/' | url }}" class="btn btn-ghost text-base font-semibold">
-            {{ resume and resume.name or 'Resume' }}
-          </a>
-        </div>
-        <div class="flex-none gap-2">
-          <div class="join no-print">
-            <input class="join-item btn btn-sm btn-outline theme-controller" type="radio" name="theme" aria-label="Nord" value="nord">
-            <input class="join-item btn btn-sm btn-outline theme-controller" type="radio" name="theme" aria-label="Sunset" value="sunset">
-          </div>
-          <button class="btn btn-sm btn-outline no-print" onclick="window.print()" title="Print / Save PDF">Print</button>
-        </div>
-      </div>
-
-      <!-- Main content (right column) -->
-      <main id="main" class="max-w-screen-2xl px-8 my-8 space-y-6">
-        {% if resume and resume.experience %}
-        <section class="card bg-base-100 border border-base-300 rounded-2xl shadow-sm">
-          <div class="card-body p-5">
-            <h2 class="text-[11px] uppercase tracking-widest opacity-60">Experience</h2>
-            <ul class="timeline timeline-snap-icon max-md:timeline-compact timeline-vertical mt-3">
-              {% for job in resume.experience %}
-              <li class="min-h-0 my-1.5">
-                {% set _dateLabel %}{{ job.start }}{% if job.end %} — {{ job.end }}{% else %} — Now{% endif %}{% endset %}
-                {% if not loop.first %}<hr/>{% endif %}
-                <div class="timeline-start t-meta hidden md:block text-xs md:text-[13px]">{{ _dateLabel | safe }}</div>
-                <div class="timeline-middle"><span class="dot"></span></div>
-                <div class="timeline-end w-full">
-                  <article class="card card-compact bg-base-100 border border-base-300 rounded-2xl shadow-sm">
-                    <div class="card-body p-4">
-                      <div class="flex items-baseline justify-between gap-x-3 gap-y-1 flex-wrap">
-                        <h3 class="text-lg font-semibold tracking-tight m-0">
-                          {{ job.company }}{% if job.role %} <span class="font-normal">— {{ job.role }}</span>{% endif %}
-                        </h3>
-                        <div class="flex items-baseline gap-2 text-xs md:text-sm opacity-70">
-                          <span>{{ job.location }}</span>
-                          <span class="md:hidden">• {{ _dateLabel | safe }}</span>
-                        </div>
-                      </div>
-                      {% if job.highlights %}
-                      <ul class="mt-2 space-y-1.5 text-[15px] leading-6">
-                        {% for h in job.highlights %}
-                          <li class="pl-4 relative">
-                            <span class="absolute left-0 top-2 w-1.5 h-1.5 rounded-full bg-base-content/30"></span>
-                            {{ h }}
-                          </li>
-                        {% endfor %}
-                      </ul>
-                      {% endif %}
-                      {% if job.tags %}
-                      <div class="mt-2 flex flex-wrap gap-2">
-                        {% for tag in job.tags %}<span class="badge badge-ghost rounded-full">{{ tag }}</span>{% endfor %}
-                      </div>
-                      {% endif %}
-                    </div>
-                  </article>
-                </div>
-                {% if not loop.last %}<hr/>{% endif %}
-              </li>
-              {% endfor %}
-            </ul>
-          </div>
-        </section>
-        {% endif %}
-
-        {% if resume and resume.projects %}
-        <section class="card bg-base-100 border border-base-300 rounded-2xl shadow-sm">
-          <div class="card-body p-5">
-            <h2 class="text-[11px] uppercase tracking-widest opacity-60">Selected Projects</h2>
-            <div class="grid grid-cols-3 gap-5 mt-3 max-[1280px]:grid-cols-2 max-[860px]:grid-cols-1">
-              {% for p in resume.projects %}
-              <article class="card card-compact bg-base-100 border border-base-300 rounded-2xl p-4 shadow-sm hover:shadow-md transition-shadow">
-                <div class="flex items-center gap-2">
-                  <h3 class="card-title text-sm">
-                    {% if p.url %}<a href="{{ p.url }}" target="_blank" rel="noopener">{{ p.name }}</a>{% else %}{{ p.name }}{% endif %}
-                  </h3>
-                  {% if p.badge %}<span class="badge badge-neutral badge-sm rounded-full">{{ p.badge }}</span>{% endif %}
-                </div>
-                {% if p.subtitle %}<p class="mt-1 text-xs opacity-70">{{ p.subtitle }}</p>{% endif %}
-                {% if p.blurb %}<p class="mt-2 text-sm leading-6">{{ p.blurb }}</p>{% endif %}
-                {% if p.tags %}
-                <div class="mt-3 flex flex-wrap gap-2">
-                  {% for t in p.tags %}<span class="badge badge-ghost rounded-full">{{ t }}</span>{% endfor %}
-                </div>
-                {% endif %}
-              </article>
-              {% endfor %}
-            </div>
-          </div>
-        </section>
-        {% endif %}
-
-        {% if resume and resume.education %}
-        <section class="card bg-base-100 border border-base-300 rounded-2xl shadow-sm">
-          <div class="card-body p-5">
-            <h2 class="text-[11px] uppercase tracking-widest opacity-60">Education</h2>
-            <div class="grid grid-cols-2 gap-4 max-[1040px]:grid-cols-1 text-sm mt-3">
-              {% for e in resume.education %}
-              <div class="card border border-base-300 rounded-2xl shadow-sm">
-                <div class="card-body p-4">
-                  <div class="flex items-baseline justify-between gap-3 flex-wrap">
-                    <h3 class="text-base font-medium m-0">{{ e.school }}</h3>
-                    <div class="text-sm opacity-80">{{ e.start }}{% if e.end %} — {{ e.end }}{% endif %}</div>
-                  </div>
-                  <div class="text-sm opacity-90 mt-1">
-                    {{ e.degree }}{% if e.meta %} — {{ e.meta }}{% endif %}
-                  </div>
-                </div>
-              </div>
-              {% endfor %}
-            </div>
-          </div>
-        </section>
-        {% endif %}
-
-        <!-- Footer -->
-          <footer class="flex items-center justify-between pt-2 pb-10 no-print">
-            <small class="opacity-60">
-              Last updated: {{ resume.updated | date('yyyy-MM-dd') }}
-            </small>
-            <div class="join">
-              <input class="join-item btn btn-sm btn-outline theme-controller" type="radio" name="theme-foot" aria-label="Nord" value="nord">
-            <input class="join-item btn btn-sm btn-outline theme-controller" type="radio" name="theme-foot" aria-label="Sunset" value="sunset">
-          </div>
-        </footer>
-      </main>
+  <!-- Top bar -->
+  <div class="navbar bg-base-100/80 backdrop-blur border-b border-base-200 sticky top-0 z-40">
+    <div class="flex-1">
+      <a href="{{ '/' | url }}" class="btn btn-ghost text-base font-semibold">
+        {{ resume and resume.name or 'Resume' }}
+      </a>
     </div>
+    <div class="flex-none gap-2">
+      <div class="join no-print">
+        <input class="join-item btn btn-sm btn-outline theme-controller" type="radio" name="theme-top" aria-label="Nord" value="nord">
+        <input class="join-item btn btn-sm btn-outline theme-controller" type="radio" name="theme-top" aria-label="Sunset" value="sunset">
+      </div>
+      <button class="btn btn-sm btn-outline no-print" onclick="window.print()" title="Print / Save PDF">Print</button>
+    </div>
+  </div>
 
-    <!-- LEFT RAIL (drawer-side) -->
-    <div class="drawer-side z-[40]">
-      <label for="resume-drawer" aria-label="Close panel" class="drawer-overlay"></label>
-      <aside class="resume-drawer-side bg-base-100 border-r border-base-200 max-h-dvh overflow-y-auto px-5 py-6">
+  <!-- Main grid -->
+  <main id="main" class="container mx-auto px-4 sm:px-6 lg:px-8 my-8">
+    <div class="grid grid-cols-12 gap-6">
+      <!-- LEFT RAIL (sticky on lg+) -->
+      <aside class="col-span-12 lg:col-span-4">
         <div class="space-y-6 lg:sticky lg:top-6">
-          <!-- Identity / hero -->
-          <section class="card glass border border-base-300 rounded-2xl shadow-xl">
-            <div class="card-body p-6">
+          <!-- Identity -->
+          <section class="card shadow-sm border border-base-300/40 rounded-box">
+            <div class="card-body">
               <h1 class="text-4xl md:text-5xl font-black tracking-tight">
                 {{ resume and resume.name or "Your Name" }}
               </h1>
@@ -307,13 +135,13 @@ eleventyExcludeFromCollections: true
                 {% if resume and resume.linkedin %}
                   <a class="badge badge-outline rounded-full" href="{{ resume.linkedin }}" target="_blank" rel="noopener">LinkedIn</a>
                 {% endif %}
-                  {% if resume and resume.website %}
-                    <a class="badge badge-outline rounded-full" href="{{ resume.website }}" target="_blank" rel="noopener">Website</a>
-                  {% endif %}
-                  {% if resume and resume.github %}
-                    <a class="badge badge-outline rounded-full" href="{{ resume.github }}" target="_blank" rel="noopener">GitHub</a>
-                  {% endif %}
-                </div>
+                {% if resume and resume.website %}
+                  <a class="badge badge-outline rounded-full" href="{{ resume.website }}" target="_blank" rel="noopener">Website</a>
+                {% endif %}
+                {% if resume and resume.github %}
+                  <a class="badge badge-outline rounded-full" href="{{ resume.github }}" target="_blank" rel="noopener">GitHub</a>
+                {% endif %}
+              </div>
 
               {% if resume and resume.downloadPdf %}
               <div class="mt-6">
@@ -323,64 +151,101 @@ eleventyExcludeFromCollections: true
             </div>
           </section>
 
-          <!-- Summary -->
           {% if resume and resume.summary %}
-          <section class="card bg-base-100 border border-base-300 rounded-2xl shadow-sm">
-            <div class="card-body p-6 prose prose-sm sm:prose-base dark:prose-invert max-w-none">
+          <section class="card shadow-sm border border-base-300/40 rounded-box">
+            <div class="card-body prose prose-sm sm:prose-base dark:prose-invert max-w-none">
               <h2 class="m-0">Summary</h2>
               <p class="mt-2">{{ resume.summary }}</p>
             </div>
           </section>
           {% endif %}
 
-          <!-- Highlights -->
-          {% if resume and resume.highlights %}
-          <section class="card bg-base-100 border border-base-300 rounded-2xl shadow-sm">
-            <div class="card-body p-5">
+          {# =========================
+             HIGHLIGHTS — adaptive UI
+             ========================= #}
+          {% set _hc = 0 %}
+          {% if resume and resume.highlights %}{% set _hc = resume.highlights | length %}{% endif %}
+          {% if _hc %}
+          <section class="card shadow-sm border border-base-300/40 rounded-box">
+            <div class="card-body">
               <h2 class="text-[11px] uppercase tracking-widest opacity-60">Highlights</h2>
-              <div class="stats stats-vertical sm:stats-vertical md:stats-horizontal w-full mt-2 divide-x divide-base-300">
-                {% for s in resume.highlights %}
-                <div class="stat px-4">
-                  <div class="stat-title">{{ s.title }}</div>
-                  <div class="stat-value text-2xl">{{ s.value }}</div>
-                  {% if s.sub %}<div class="stat-desc">{{ s.sub }}</div>{% endif %}
+
+              {# few (≤3): stats row; mid (4–8): compact KPI cards; many (≥9): dense compact cards #}
+              {% if _hc <= 3 %}
+                <div class="stats stats-vertical md:stats-horizontal w-full mt-2">
+                  {% for s in resume.highlights %}
+                  <div class="stat px-4">
+                    <div class="stat-title">{{ s.title }}</div>
+                    <div class="stat-value text-3xl">{{ s.value }}</div>
+                    {% if s.sub %}<div class="stat-desc">{{ s.sub }}</div>{% endif %}
+                  </div>
+                  {% endfor %}
                 </div>
-                {% endfor %}
-              </div>
+
+              {% elif _hc <= 8 %}
+                <div class="mt-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3">
+                  {% for s in resume.highlights %}
+                  <div class="card card-compact border border-base-300/40 rounded-box">
+                    <div class="card-body py-3">
+                      <div class="text-[11px] uppercase tracking-widest opacity-60">{{ s.title }}</div>
+                      <div class="text-2xl font-semibold leading-tight">{{ s.value }}</div>
+                      {% if s.sub %}<div class="text-xs opacity-70 truncate">{{ s.sub }}</div>{% endif %}
+                    </div>
+                  </div>
+                  {% endfor %}
+                </div>
+
+              {% else %}
+                <div class="mt-3 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6 gap-2">
+                  {% for s in resume.highlights %}
+                  <div class="card card-compact border border-base-300/40 rounded-box">
+                    <div class="card-body py-2">
+                      <div class="text-[10px] uppercase tracking-widest opacity-60 truncate">{{ s.title }}</div>
+                      <div class="text-lg font-semibold leading-tight">{{ s.value }}</div>
+                      {% if s.sub %}<div class="text-[11px] opacity-70 truncate">{{ s.sub }}</div>{% endif %}
+                    </div>
+                  </div>
+                  {% endfor %}
+                </div>
+              {% endif %}
             </div>
           </section>
           {% endif %}
 
-          <!-- Skills & Tools -->
           {% if resume and (resume.skills or resume.tools) %}
-          <section class="card bg-base-100 border border-base-300 rounded-2xl shadow-sm">
-            <div class="card-body p-6">
+          <section class="card shadow-sm border border-base-300/40 rounded-box">
+            <div class="card-body">
               <h2 class="text-[11px] uppercase tracking-widest opacity-60">Skills &amp; Tools</h2>
 
-              {# Support either grouped skills or a flat list #}
               {% if resume.skills and resume.skills.groups %}
                 {% for g in resume.skills.groups %}
+                  {% set _count = g.items | length %}
+                  {% set _badgeSize = 'badge-sm' %}{% if _count > 12 %}{% set _badgeSize = 'badge-xs' %}{% endif %}
                   <h3 class="mt-3 text-sm font-semibold">{{ g.name }}</h3>
                   <div class="mt-2 flex flex-wrap gap-2">
                     {% for item in g.items %}
                       {% if item.hint %}
-                        <span class="badge badge-ghost rounded-full tooltip" data-tip="{{ item.hint }}">{{ item.name }}</span>
+                        <span class="badge badge-ghost rounded-full tooltip {{ _badgeSize }}" data-tip="{{ item.hint }}">{{ item.name }}</span>
                       {% else %}
-                        <span class="badge badge-ghost rounded-full">{{ item.name }}</span>
+                        <span class="badge badge-ghost rounded-full {{ _badgeSize }}">{{ item.name }}</span>
                       {% endif %}
                     {% endfor %}
                   </div>
                 {% endfor %}
               {% elif resume.skills %}
+                {% set _flatCount = resume.skills | length %}
+                {% set _flatSize = 'badge-sm' %}{% if _flatCount > 16 %}{% set _flatSize = 'badge-xs' %}{% endif %}
                 <div class="mt-2 flex flex-wrap gap-2">
-                  {% for s in resume.skills %}<span class="badge badge-ghost rounded-full">{{ s }}</span>{% endfor %}
+                  {% for s in resume.skills %}<span class="badge badge-ghost rounded-full {{ _flatSize }}">{{ s }}</span>{% endfor %}
                 </div>
               {% endif %}
 
               {% if resume.tools %}
+                {% set _toolCount = resume.tools | length %}
+                {% set _toolSize = 'badge-sm' %}{% if _toolCount > 14 %}{% set _toolSize = 'badge-xs' %}{% endif %}
                 <h3 class="mt-4 text-sm font-semibold">Tools</h3>
                 <div class="mt-2 flex flex-wrap gap-2">
-                  {% for t in resume.tools %}<span class="badge badge-ghost rounded-full">{{ t }}</span>{% endfor %}
+                  {% for t in resume.tools %}<span class="badge badge-ghost rounded-full {{ _toolSize }}">{{ t }}</span>{% endfor %}
                 </div>
               {% endif %}
             </div>
@@ -388,81 +253,206 @@ eleventyExcludeFromCollections: true
           {% endif %}
         </div>
       </aside>
-    </div>
-  </div>
 
-  <!-- Toasts (copy, theme) -->
+      <!-- RIGHT COLUMN -->
+      <section class="col-span-12 lg:col-span-8 space-y-6">
+        {% if resume and resume.experience %}
+        <section class="card shadow-sm border border-base-300/40 rounded-box">
+          <div class="card-body">
+            <h2 class="text-[11px] uppercase tracking-widest opacity-60">Experience</h2>
+            <div class="mt-3 grid gap-4">
+              {% for job in resume.experience %}
+              <article class="card bg-base-100 shadow-sm border border-base-300/40 rounded-box">
+                <div class="card-body">
+                  <div class="flex flex-wrap items-baseline justify-between gap-2">
+                    <h3 class="text-lg font-semibold tracking-tight">
+                      {{ job.company }}{% if job.role %} <span class="font-normal">— {{ job.role }}</span>{% endif %}
+                    </h3>
+                    <div class="text-xs md:text-sm opacity-70 text-right">
+                      <span>{{ job.location }}</span>
+                      <span class="mx-2 hidden md:inline">•</span>
+                      <span class="block md:inline">{{ job.start }}{% if job.end %} — {{ job.end }}{% else %} — Now{% endif %}</span>
+                    </div>
+                  </div>
+
+                  {% if job.highlights %}
+                  {% set _maxBul = 5 %}
+                  <ul class="mt-2 space-y-1.5 text-[15px] leading-6">
+                    {% for h in job.highlights %}
+                      {% if loop.index0 < _maxBul %}
+                      <li class="pl-4 relative">
+                        <span class="absolute left-0 top-2 w-1.5 h-1.5 rounded-full bg-base-content/30"></span>
+                        {{ h }}
+                      </li>
+                      {% endif %}
+                    {% endfor %}
+                  </ul>
+                  {% if job.highlights | length > _maxBul %}
+                  <details class="mt-2">
+                    <summary class="link text-sm opacity-80">Show {{ job.highlights | length - _maxBul }} more</summary>
+                    <ul class="mt-2 space-y-1.5 text-[15px] leading-6">
+                      {% for h in job.highlights %}
+                        {% if loop.index0 >= _maxBul %}
+                        <li class="pl-4 relative">
+                          <span class="absolute left-0 top-2 w-1.5 h-1.5 rounded-full bg-base-content/20"></span>
+                          {{ h }}
+                        </li>
+                        {% endif %}
+                      {% endfor %}
+                    </ul>
+                  </details>
+                  {% endif %}
+                  {% endif %}
+
+                  {% if job.tags %}
+                  {% set _jt = job.tags | length %}
+                  {% set _jtSize = 'badge-sm' %}{% if _jt > 10 %}{% set _jtSize = 'badge-xs' %}{% endif %}
+                  <div class="mt-3 flex flex-wrap gap-2">
+                    {% for tag in job.tags %}<span class="badge badge-ghost rounded-full {{ _jtSize }}">{{ tag }}</span>{% endfor %}
+                  </div>
+                  {% endif %}
+                </div>
+              </article>
+              {% endfor %}
+            </div>
+          </div>
+        </section>
+        {% endif %}
+
+        {% if resume and resume.projects %}
+        {% set _pc = resume.projects | length %}
+        {% set _projGrid = 'grid grid-cols-1 sm:grid-cols-2 gap-4' %}
+        {% if _pc <= 1 %}
+          {% set _projGrid = 'grid grid-cols-1 gap-4' %}
+        {% elif _pc <= 6 %}
+          {% set _projGrid = 'grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4' %}
+        {% else %}
+          {% set _projGrid = 'grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4' %}
+        {% endif %}
+        <section class="card shadow-sm border border-base-300/40 rounded-box">
+          <div class="card-body">
+            <h2 class="text-[11px] uppercase tracking-widest opacity-60">Selected Projects</h2>
+            <div class="mt-3 {{ _projGrid }}">
+              {% for p in resume.projects %}
+              <article class="card card-sm bg-base-100 shadow-sm border border-base-300/40 rounded-box hover:shadow-md transition-shadow">
+                <div class="card-body">
+                  <div class="flex items-center gap-2">
+                    <h3 class="card-title text-sm">
+                      {% if p.url %}<a href="{{ p.url }}" target="_blank" rel="noopener">{{ p.name }}</a>{% else %}{{ p.name }}{% endif %}
+                    </h3>
+                    {% if p.badge %}<span class="badge badge-neutral badge-sm rounded-full">{{ p.badge }}</span>{% endif %}
+                  </div>
+                  {% if p.subtitle %}<p class="mt-1 text-xs opacity-70">{{ p.subtitle }}</p>{% endif %}
+                  {% if p.blurb %}<p class="mt-2 text-sm leading-6">{{ p.blurb }}</p>{% endif %}
+                  {% if p.tags %}
+                  {% set _pt = p.tags | length %}
+                  {% set _ptSize = 'badge-sm' %}{% if _pt > 8 %}{% set _ptSize = 'badge-xs' %}{% endif %}
+                  <div class="mt-3 flex flex-wrap gap-2">
+                    {% for t in p.tags %}<span class="badge badge-ghost rounded-full {{ _ptSize }}">{{ t }}</span>{% endfor %}
+                  </div>
+                  {% endif %}
+                </div>
+              </article>
+              {% endfor %}
+            </div>
+          </div>
+        </section>
+        {% endif %}
+
+        {% if resume and resume.education %}
+        <section class="card shadow-sm border border-base-300/40 rounded-box">
+          <div class="card-body">
+            <h2 class="text-[11px] uppercase tracking-widest opacity-60">Education</h2>
+            <div class="mt-3 grid grid-cols-1 md:grid-cols-2 gap-4">
+              {% for e in resume.education %}
+              <div class="card card-sm shadow-sm border border-base-300/40 rounded-box">
+                <div class="card-body">
+                  <div class="flex items-baseline justify-between gap-3 flex-wrap">
+                    <h3 class="text-base font-medium m-0">{{ e.school }}</h3>
+                    <div class="text-sm opacity-80">{{ e.start }}{% if e.end %} — {{ e.end }}{% endif %}</div>
+                  </div>
+                  <div class="text-sm opacity-90 mt-1">
+                    {{ e.degree }}{% if e.meta %} — {{ e.meta }}{% endif %}
+                  </div>
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+        </section>
+        {% endif %}
+
+        <!-- Footer -->
+        <footer class="flex items-center justify-between pt-2 pb-10 no-print">
+          <small class="opacity-60">
+            Last updated: {{ resume.updated | date('yyyy-MM-dd') }}
+          </small>
+          <div class="join">
+            <input class="join-item btn btn-sm btn-outline theme-controller" type="radio" name="theme-foot" aria-label="Nord" value="nord">
+            <input class="join-item btn btn-sm btn-outline theme-controller" type="radio" name="theme-foot" aria-label="Sunset" value="sunset">
+          </div>
+        </footer>
+      </section>
+    </div>
+  </main>
+
+  <!-- Toaster -->
   <div id="toaster" class="toast toast-end z-[100]"></div>
 
-    <!-- JSON-LD (privacy: omit phone) -->
-    {% set sameAsLinks = [resume.website, resume.linkedin, resume.github] | compactUnique %}
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Person",
-      "name": {{ (resume and resume.name) | dump | safe }},
-      "jobTitle": {{ (resume and resume.title) | dump | safe }},
-      {% if resume and resume.ogImage %}"image": {{ resume.ogImage | url | dump | safe }}, {% endif %}
-      {% if resume and resume.address %}
-      "address": {{ resume.address | dump | safe }},
-      {% elseif resume and resume.location %}
-      "address": { "@type": "PostalAddress", "addressLocality": {{ resume.location | dump | safe }} },
-      {% endif %}
-      {% if resume and resume.email %}"email": "mailto:{{ resume.email }}", {% endif %}
-      {% if sameAsLinks | length %}"sameAs": {{ sameAsLinks | dump | safe }}, {% endif %}
-      "url": {{ canonicalHref | dump | safe }}
-    }
-    </script>
+  <!-- JSON-LD (absolute URLs) -->
+  {% set sameAsLinks = [resume.website, resume.linkedin, resume.github] | compactUnique %}
   <script type="application/ld+json">
   {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
+    "@context":"https://schema.org",
+    "@type":"Person",
+    "name": {{ (resume and resume.name) | dump | safe }},
+    "jobTitle": {{ (resume and resume.title) | dump | safe }},
+    {% if resume and resume.ogImage %}"image": {{ resume.ogImage | url | dump | safe }},{% endif %}
+    {% if resume and resume.address %}
+    "address": {{ resume.address | dump | safe }},
+    {% elseif resume and resume.location %}
+    "address": { "@type":"PostalAddress", "addressLocality": {{ resume.location | dump | safe }} },
+    {% endif %}
+    {% if resume and resume.email %}"email":"mailto:{{ resume.email }}",{% endif %}
+    {% if sameAsLinks | length %}"sameAs": {{ sameAsLinks | dump | safe }},{% endif %}
+    "url": {{ canonicalHref | dump | safe }}
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"BreadcrumbList",
     "itemListElement": [
-      { "@type": "ListItem", "position": 1, "name": "Home", "item": {{ "/" | url | dump | safe }} },
-      { "@type": "ListItem", "position": 2, "name": "Resume", "item": {{ canonicalHref | dump | safe }} }
+      { "@type":"ListItem","position":1,"name":"Home","item": {{ homeHref | dump | safe }} },
+      { "@type":"ListItem","position":2,"name":"Resume","item": {{ canonicalHref | dump | safe }} }
     ]
   }
   </script>
 
-  <!-- Little JS helpers -->
+  <!-- Helpers -->
   <script>
-    function toast(msg) {
-      var wrap = document.getElementById('toaster');
-      if (!wrap) return;
-      var el = document.createElement('div');
-      el.className = 'alert alert-info shadow';
-      el.innerHTML = '<span>'+msg+'</span>';
-      wrap.appendChild(el);
-      setTimeout(function(){ el.style.opacity='0'; }, 2200);
-      setTimeout(function(){ el.remove(); }, 2600);
+    function toast(msg){var wrap=document.getElementById('toaster');if(!wrap) return;var el=document.createElement('div');el.className='alert alert-info shadow';el.innerHTML='<span>'+msg+'</span>';wrap.appendChild(el);setTimeout(function(){el.style.opacity='0';},2200);setTimeout(function(){el.remove();},2600);}
+    function copyToClipboard(text){
+      try{navigator.clipboard.writeText(text).then(function(){toast('Copied: '+text);});}
+      catch(e){var t=document.createElement('textarea');t.value=text;document.body.appendChild(t);t.select();try{document.execCommand('copy');toast('Copied: '+text);}catch(_){}t.remove();}
     }
-    function copyToClipboard(text) {
-      try {
-        navigator.clipboard.writeText(text).then(function(){ toast('Copied: ' + text); });
-      } catch(e) {
-        var t = document.createElement('textarea');
-        t.value = text; document.body.appendChild(t); t.select();
-        try { document.execCommand('copy'); toast('Copied: ' + text); } catch(_) {}
-        t.remove();
-      }
-    }
-    // Hook theme-controller radios to our __setTheme + toast
     (function(){
-      function syncRadiosToTheme(name){
-        document.querySelectorAll('.theme-controller').forEach(function(r){
-          if (r.value === name) { r.checked = true; }
-        });
+      var key='theme';
+      var stored=localStorage.getItem(key);
+      var radios=[].slice.call(document.querySelectorAll('.theme-controller'));
+      function apply(name){
+        document.documentElement.setAttribute('data-theme', name);
+        localStorage.setItem(key, name);
+        radios.forEach(function(r){ if(r.value===name) r.checked=true; });
+        var meta=document.querySelector('meta[name="color-scheme"]');
+        if(meta){ meta.content = (name==='nord') ? 'light dark' : 'dark light'; }
       }
-      // Initial sync
-      syncRadiosToTheme(document.documentElement.getAttribute('data-theme') || 'winter');
-
+      if(stored){ apply(stored); } else {
+        var prefersDark=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches;
+        apply(prefersDark?'sunset':'nord');
+      }
       document.addEventListener('change', function(e){
-        var t = e.target;
-        if (t && t.classList && t.classList.contains('theme-controller')) {
-          var v = t.value;
-          if (window.__setTheme) { __setTheme(v); toast('Theme: ' + v); }
-          syncRadiosToTheme(v);
-        }
+        var t=e.target; if(t && t.classList && t.classList.contains('theme-controller')){ apply(t.value); toast('Theme: '+t.value); }
       });
     })();
   </script>
