@@ -100,5 +100,10 @@ export default {
       }),
     },
   },
+  daisyui: {
+    themes: ["dim", "corporate"],
+    // Allow disabling DaisyUI's base styles to avoid conflicts
+    base: process.env.DAISYUI_BASE !== "false"
+  },
   plugins: [],
 };

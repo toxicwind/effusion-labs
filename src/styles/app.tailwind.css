@@ -9,11 +9,8 @@
 /* Plugins (Tailwind v4 style) */
 @plugin "@tailwindcss/typography";
 
-/* daisyUI v5 — enable themes with explicit defaults */
-@plugin "daisyui" {
-  /* Light = corporate; Dark = dim (dark by default; prefer light when OS prefers light) */
-  themes: dim --default, corporate --preferslight;
-}
+/* daisyUI v5 */
+@plugin "daisyui";
 
 /* Project CSS */
 @import "./home.css";
