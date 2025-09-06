@@ -72,6 +72,20 @@
   .anim-soft{ transition: color 160ms ease, background-color 160ms ease, border-color 160ms ease; }
 }
 
+/* Grounded surface primitive for readable panels and cards */
+@layer components {
+  .surface-ground {
+    background: color-mix(in oklab, hsl(var(--b1)) 86%, hsl(var(--b2)) 14%);
+    border: 1px solid hsl(var(--bc)/.14);
+    border-radius: 0.75rem;
+    box-shadow:
+      0 1px 0 hsl(var(--bc)/.06) inset,
+      0 0 0 1px hsl(var(--bc)/.08) inset,
+      0 8px 24px rgba(0,0,0,.15);
+    backdrop-filter: blur(4px);
+  }
+}
+
 /* Spectrum, structural (rails, hairlines, edges) */
 @layer components{
   .with-rail{ position:relative; }
