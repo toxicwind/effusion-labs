@@ -22,8 +22,6 @@ eleventyExcludeFromCollections: false
     <div class="flex-none join" role="group" aria-label="Theme switcher">
       <input class="join-item btn btn-sm btn-outline theme-controller" type="radio" name="theme" aria-label="Nord" value="nord">
       <input class="join-item btn btn-sm btn-outline theme-controller" type="radio" name="theme" aria-label="Business" value="business">
-      <input class="join-item btn btn-sm btn-outline theme-controller" type="radio" name="theme" aria-label="Night" value="night">
-      <input class="join-item btn btn-sm btn-outline theme-controller" type="radio" name="theme" aria-label="Abyss" value="abyss">
     </div>
   </div>
 
@@ -71,7 +69,7 @@ eleventyExcludeFromCollections: false
 
   <script>
     (function(){
-      var key='theme', allowed=['nord','business','night','abyss'];
+      var key='theme', allowed=['nord','business'];
       var radios=[].slice.call(document.querySelectorAll('.theme-controller'));
       function pick(){ try{var q=new URLSearchParams(location.search);var t=q.get('theme');if(t&&allowed.includes(t))return t;}catch(_){ } try{var s=localStorage.getItem(key);if(s&&allowed.includes(s))return s;}catch(_){ } var dark=matchMedia('(prefers-color-scheme: dark)').matches; return dark?'business':'nord'; }
       function metaScheme(theme){ return (theme==='nord')?'light dark':'dark light'; }

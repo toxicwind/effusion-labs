@@ -3,12 +3,8 @@
 @import "./tokens.css";
 @import "tailwindcss";
 
-/* Bind Tailwind's `dark:` variant to daisyUI dark themes (business, night, abyss) */
-@custom-variant dark (
-  &:where([data-theme=business], [data-theme=business] *),
-  &:where([data-theme=night], [data-theme=night] *),
-  &:where([data-theme=abyss], [data-theme=abyss] *)
-);
+/* Bind Tailwind's `dark:` variant to daisyUI dark theme (business) */
+@custom-variant dark (&:where([data-theme=business], [data-theme=business] *));
 
 /* Plugins (Tailwind v4 style) */
 @plugin "@tailwindcss/typography";
@@ -16,7 +12,7 @@
 /* daisyUI v5 — enable themes with explicit defaults */
 @plugin "daisyui" {
   /* Light default = nord; Dark default = business */
-  themes: nord --default, business --prefersdark, night, abyss;
+  themes: nord --default, business --prefersdark;
   /* logs: false;  // uncomment to silence plugin logs */
 }
 
@@ -81,28 +77,20 @@
   .pink{ @apply text-pink-500;} .rose{ @apply text-rose-500;} .blackout{ @apply text-black bg-black; }
 }
 
-/* Stronger separation for dark themes (business, night, abyss): thicker borders and a faint card surface */
+/* Stronger separation for dark theme (business): thicker borders and a faint card surface */
 @layer components {
-  [data-theme="business"] .card.card-border,
-  [data-theme="night"] .card.card-border,
-  [data-theme="abyss"] .card.card-border { @apply border; }
-  [data-theme="business"] .card.card-border,
-  [data-theme="night"] .card.card-border,
-  [data-theme="abyss"] .card.card-border {
+  [data-theme="business"] .card.card-border { @apply border; }
+  [data-theme="business"] .card.card-border {
     /* Use DaisyUI tokens but boost contrast a touch */
     border-color: color-mix(in oklab, var(--color-base-content) 16%, transparent);
     background-color: color-mix(in oklab, var(--color-base-100) 85%, black 15%);
   }
 }
 
-/* Theme variable nudge: 2–3px borders on business/night/abyss for clearer delineation */
+/* Theme variable nudge: 2px borders on business for clearer delineation */
 @layer base {
   :root:has(input.theme-controller[value=business]:checked),
   [data-theme=business] { --border: 2px; }
-  :root:has(input.theme-controller[value=night]:checked),
-  [data-theme=night] { --border: 2px; }
-  :root:has(input.theme-controller[value=abyss]:checked),
-  [data-theme=abyss] { --border: 3px; }
 }
 
 /* Assertive Geometry: square corners, sturdier borders, chunkier badges, thicker accent rail */
@@ -150,6 +138,14 @@
   @media (prefers-reduced-motion: reduce) {
     .hb-neon::after { transition: none !important; }
   }
+}
+
+/* Rail Rows: remove boxiness, keep structure with separators and rails */
+@layer components {
+  .hb-row { position: relative; padding-block: .75rem; }
+  .hb-list > .hb-row { border-top: 1px solid hsl(var(--bc)/.14); }
+  .hb-list > .hb-row:hover { background-color: hsl(var(--b2)/.35); }
+  .hb-list > .hb-row:focus-within { outline: 2px solid hsl(var(--p)/.35); outline-offset: 2px; }
 }
 
 /* Container query roots and responsive density adjustments */
