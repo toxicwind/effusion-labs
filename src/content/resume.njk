@@ -158,7 +158,12 @@ eleventyExcludeFromCollections: true
             <input class="join-item btn btn-sm btn-outline theme-controller" type="radio" name="theme" aria-label="Dim" value="dim">
             <input class="join-item btn btn-sm btn-outline theme-controller" type="radio" name="theme" aria-label="Corporate" value="corporate">
           </div>
-          <button class="btn btn-sm btn-outline no-print" onclick="window.print()" title="Print / Save PDF">Print</button>
+          <div class="join no-print">
+            {% if resume and resume.downloadPdf %}
+              <a class="join-item btn btn-sm btn-outline" href="{{ resume.downloadPdf | url }}" title="Download PDF">Download</a>
+            {% endif %}
+            <button class="join-item btn btn-sm btn-outline" onclick="window.print()" title="Print / Save PDF (⌘/Ctrl+P)">Print</button>
+          </div>
         </div>
       </div>
 
@@ -217,12 +222,13 @@ eleventyExcludeFromCollections: true
             <h2 class="text-[11px] uppercase tracking-widest opacity-60">Selected Projects</h2>
             <div class="grid grid-cols-2 gap-5 mt-3 max-[1040px]:grid-cols-1">
               {% for p in resume.projects %}
+              {% set badgeClass = (p.badge == 'client') ? 'badge-primary' : (p.badge == 'ops') ? 'badge-secondary' : (p.badge == 'evals') ? 'badge-accent' : (p.badge == 'infra') ? 'badge-info' : 'badge-ghost' %}
               <article class="card card-compact bg-base-100 border border-base-300 rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow">
                 <div class="flex items-center gap-2">
                   <h3 class="card-title text-sm">
                     {% if p.url %}<a href="{{ p.url }}" target="_blank" rel="noopener">{{ p.name }}</a>{% else %}{{ p.name }}{% endif %}
                   </h3>
-                  {% if p.badge %}<span class="badge badge-neutral badge-sm rounded-full">{{ p.badge }}</span>{% endif %}
+                  {% if p.badge %}<span class="badge {{ badgeClass }} badge-sm rounded-full capitalize">{{ p.badge }}</span>{% endif %}
                 </div>
                 {% if p.subtitle %}<p class="mt-1 text-xs opacity-70">{{ p.subtitle }}</p>{% endif %}
                 {% if p.blurb %}<p class="mt-2 text-sm leading-6">{{ p.blurb }}</p>{% endif %}
@@ -304,6 +310,9 @@ eleventyExcludeFromCollections: true
                 {% endif %}
                 {% if resume and resume.linkedin %}
                   <a class="badge badge-outline rounded-full" href="{{ resume.linkedin }}" target="_blank" rel="noopener">LinkedIn</a>
+                {% endif %}
+                {% if resume and resume.github %}
+                  <a class="badge badge-outline rounded-full" href="{{ resume.github }}" target="_blank" rel="noopener">GitHub</a>
                 {% endif %}
                 {% if resume and resume.website %}
                   <a class="badge badge-outline rounded-full" href="{{ resume.website }}" target="_blank" rel="noopener">Website</a>
