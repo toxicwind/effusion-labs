@@ -419,5 +419,35 @@
   }
 }
 
+/* Hypebrüt: shared accent utilities for cards and small rows */
+@layer components {
+  .hb-accent { position: relative; }
+  .hb-accent::before {
+    content: ""; position: absolute; inset-inline-start: -1px; top: 10px; bottom: 10px; width: 3px; border-radius: 999px;
+    background: linear-gradient(180deg,
+      color-mix(in oklab, var(--neon-a, #00E0FF) 86%, transparent) 0%,
+      color-mix(in oklab, var(--neon-b, #9AFF00) 86%, transparent) 50%,
+      color-mix(in oklab, var(--neon-c, #FF1CF7) 86%, transparent) 100%
+    );
+    opacity: .45;
+  }
+  .hb-accent:hover::before { opacity: .8; }
+
+  .hb-minirow {
+    @apply relative w-full px-3 py-2 rounded-lg border transition-all duration-200 ease-out;
+    background-color: hsl(var(--b1)/.9);
+    border-color: hsl(var(--bc)/.12);
+  }
+  .hb-minirow::before{
+    content:""; position:absolute; inset-inline-start:-1px; top:6px; bottom:6px; width:2px; border-radius:999px;
+    background: linear-gradient(180deg,
+      color-mix(in oklab, var(--neon-a, #00E0FF) 86%, transparent) 0%,
+      color-mix(in oklab, var(--neon-b, #9AFF00) 86%, transparent) 50%,
+      color-mix(in oklab, var(--neon-c, #FF1CF7) 86%, transparent) 100%
+    );
+    opacity:.5;
+  }
+}
+
 /* Tailwind v4 content discovery */
 @source "../**/*.{njk,md,html,js}";
