@@ -1,0 +1,84 @@
+{# Standalone resume layout #}
+<!DOCTYPE html>
+<html lang="en" class="scroll-pt-16" data-mschf="off">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0b0b0e">
+  <meta name="msapplication-TileColor" content="#0b0b0e">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+  {% from "macros/meta.njk" import buildPageTitle, buildPageDesc %}
+  {% set pageTitle = buildPageTitle(resume, title) %}
+  {% set pageDesc  = buildPageDesc(resume) %}
+  {% set canonicalHref = "/resume/" | url %}
+  <title>{{ pageTitle }}</title>
+  <link rel="canonical" href="{{ canonicalHref }}">
+  <meta name="description" content="{{ pageDesc }}">
+
+  <meta property="og:type" content="profile">
+  <meta property="og:title" content="{{ pageTitle }}">
+  <meta property="og:description" content="{{ pageDesc }}">
+  <meta property="og:url" content="{{ canonicalHref }}">
+  {% if resume and resume.ogImage %}
+  <meta property="og:image" content="{{ resume.ogImage | url }}">
+  {% endif %}
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{{ pageTitle }}">
+  <meta name="twitter:description" content="{{ pageDesc }}">
+  {% if resume and resume.ogImage %}
+  <meta name="twitter:image" content="{{ resume.ogImage | url }}">
+  {% endif %}
+
+  <script>
+    (function () {
+      try {
+        var THEMES = {
+          lightDefault: "nord",
+          darkDefault: "sunset",
+          allowed: ["nord","sunset"]
+        };
+        var meta = document.querySelector('meta[name="color-scheme"]') ||
+          (function () { var m = document.createElement("meta"); m.name = "color-scheme"; document.head.appendChild(m); return m; })();
+        var stored = localStorage.getItem("theme");
+        var picked = (stored && stored.trim()) ? stored.trim() : null;
+        if (picked && !THEMES.allowed.includes(picked)) picked = null;
+        if (!picked) {
+          var prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+          picked = prefersDark ? THEMES.darkDefault : THEMES.lightDefault;
+          document.documentElement.dataset.themeSource = prefersDark ? "os-dark" : "os-light";
+        } else {
+          document.documentElement.dataset.themeSource = "storage";
+        }
+        document.documentElement.setAttribute("data-theme", picked);
+        meta.content = (picked === THEMES.lightDefault) ? "light dark" : "dark light";
+        window.__setTheme = function (name) {
+          if (!THEMES.allowed.includes(name)) return;
+          document.documentElement.setAttribute("data-theme", name);
+          localStorage.setItem("theme", name);
+          document.documentElement.dataset.themeSource = "storage";
+          meta.content = (name === THEMES.lightDefault) ? "light dark" : "dark light";
+        };
+      } catch (_) {
+        document.documentElement.setAttribute("data-theme", "sunset");
+        document.documentElement.dataset.themeSource = "fallback";
+      }
+    })();
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Rubik:wght@400..900&family=Space+Grotesk:wght@400..700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="/assets/css/app.css?v={{ build.hash or build.commit or build.version or buildTime }}">
+</head>
+<body>
+  <main id="main" class="min-h-[60vh] mx-auto max-w-screen-lg px-6 py-10">
+    {{ content | safe }}
+  </main>
+</body>
+</html>
