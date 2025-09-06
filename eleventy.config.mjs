@@ -159,6 +159,7 @@ export default function (eleventyConfig) {
 
   eleventyConfig.addFilter("seededShuffle", (arr, seed) => seeded.seededShuffle(arr, seed));
   eleventyConfig.addFilter("safe_upper", safeUpper);
+  eleventyConfig.addFilter("compactUnique", (arr) => Array.from(new Set((arr || []).filter(Boolean))));
 
   // ---------- unified callout shortcode ----------
   const callout = createCalloutShortcode(eleventyConfig);

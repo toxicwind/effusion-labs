@@ -5,10 +5,11 @@
   "phoneNote": "Shareable on request via email",
   "email": "denverchrisortega@gmail.com",
   "linkedin": "https://linkedin.com/in/denverchrisortega",
-  "website": "",
-  "github": "",
+  "website": "https://effusionlabs.xyz",
+  "github": "https://github.com/denverchrisortega",
   "downloadPdf": "/assets/Christopher_Ortega_Resume_2025.pdf",
   "ogImage": "/assets/og/resume-christopher-ortega.png",
+  "updated": "2025-09-06",
 
   "address": {
     "@type": "PostalAddress",
@@ -16,9 +17,6 @@
     "addressRegion": "CO",
     "addressCountry": "US"
   },
-  "sameAs": [
-    "https://linkedin.com/in/denverchrisortega"
-  ],
 
   "summary": "Software engineer with 6+ years across backend services and streaming data systems, now centered on LLM applications and LLMOps. Built and operated APIs and pipelines on AWS (EMR, Lambda, Kinesis, S3), containerized services on Kubernetes, and delivered search/analytics with Elasticsearch. Focus areas: retrieval that returns the right context, evaluation gates that block bad releases, and dashboards that surface drift early.",
 

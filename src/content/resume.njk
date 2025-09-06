@@ -98,10 +98,11 @@ eleventyExcludeFromCollections: true
   <link rel="stylesheet" href="/assets/css/app.css?v={{ build.hash or build.commit or build.version or buildTime }}">
 
   <!-- Small aesthetic/util CSS (theme-safe; prints clean) -->
-  <style>
-    :root { --glass-blur: 10px; --glass-opacity:.85; --glass-border-opacity:.22; }
-    .skip-link { position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden; }
-    .skip-link:focus { left:1rem; top:1rem; width:auto; height:auto; padding:.5rem .75rem; z-index:1000; }
+    <style>
+      :root { --glass-blur: 10px; --glass-opacity:.85; --glass-border-opacity:.22; }
+      .card.glass { background: linear-gradient(to bottom right, hsl(var(--p) / 0.15), hsl(var(--s) / 0.15)); }
+      .skip-link { position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden; }
+      .skip-link:focus { left:1rem; top:1rem; width:auto; height:auto; padding:.5rem .75rem; z-index:1000; }
 
     /* Drawer sizing for the left rail */
     .resume-drawer-side { width: 20rem; }
@@ -262,12 +263,12 @@ eleventyExcludeFromCollections: true
         {% endif %}
 
         <!-- Footer -->
-        <footer class="flex items-center justify-between pt-2 pb-10 no-print">
-          <small class="opacity-60">
-            Last updated: {{ collections and collections.all and collections.all | last and (collections.all | last).date | date('yyyy-MM-dd') or "" }}
-          </small>
-          <div class="join">
-            <input class="join-item btn btn-sm btn-outline theme-controller" type="radio" name="theme-foot" aria-label="Winter" value="winter">
+          <footer class="flex items-center justify-between pt-2 pb-10 no-print">
+            <small class="opacity-60">
+              Last updated: {{ resume.updated | date('yyyy-MM-dd') }}
+            </small>
+            <div class="join">
+              <input class="join-item btn btn-sm btn-outline theme-controller" type="radio" name="theme-foot" aria-label="Winter" value="winter">
             <input class="join-item btn btn-sm btn-outline theme-controller" type="radio" name="theme-foot" aria-label="Dim" value="dim">
             <input class="join-item btn btn-sm btn-outline theme-controller" type="radio" name="theme-foot" aria-label="Corporate" value="corporate">
           </div>
@@ -305,10 +306,13 @@ eleventyExcludeFromCollections: true
                 {% if resume and resume.linkedin %}
                   <a class="badge badge-outline rounded-full" href="{{ resume.linkedin }}" target="_blank" rel="noopener">LinkedIn</a>
                 {% endif %}
-                {% if resume and resume.website %}
-                  <a class="badge badge-outline rounded-full" href="{{ resume.website }}" target="_blank" rel="noopener">Website</a>
-                {% endif %}
-              </div>
+                  {% if resume and resume.website %}
+                    <a class="badge badge-outline rounded-full" href="{{ resume.website }}" target="_blank" rel="noopener">Website</a>
+                  {% endif %}
+                  {% if resume and resume.github %}
+                    <a class="badge badge-outline rounded-full" href="{{ resume.github }}" target="_blank" rel="noopener">GitHub</a>
+                  {% endif %}
+                </div>
 
               {% if resume and resume.downloadPdf %}
               <div class="mt-6">
@@ -389,27 +393,25 @@ eleventyExcludeFromCollections: true
   <!-- Toasts (copy, theme) -->
   <div id="toaster" class="toast toast-end z-[100]"></div>
 
-  <!-- JSON-LD (privacy: omit phone) -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Person",
-    "name": {{ (resume and resume.name) | dump | safe }},
-    "jobTitle": {{ (resume and resume.title) | dump | safe }},
-    {% if resume and resume.address %}
-    "address": {{ resume.address | dump | safe }},
-    {% else %}
-    "address": { "@type": "PostalAddress", "addressLocality": {{ (resume and resume.location) | dump | safe }} },
-    {% endif %}
-    {% if resume and resume.email %}"email": "mailto:{{ resume.email }}",{% endif %}
-    {% if resume and resume.sameAs %}
-    "sameAs": {{ resume.sameAs | dump | safe }},
-    {% else %}
-    "sameAs": [{% if resume and resume.linkedin %}{{ resume.linkedin | dump | safe }}{% endif %}],
-    {% endif %}
-    "url": {{ canonicalHref | dump | safe }}
-  }
-  </script>
+    <!-- JSON-LD (privacy: omit phone) -->
+    {% set sameAsLinks = [resume.website, resume.linkedin, resume.github] | compactUnique %}
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": {{ (resume and resume.name) | dump | safe }},
+      "jobTitle": {{ (resume and resume.title) | dump | safe }},
+      {% if resume and resume.ogImage %}"image": {{ resume.ogImage | url | dump | safe }}, {% endif %}
+      {% if resume and resume.address %}
+      "address": {{ resume.address | dump | safe }},
+      {% elseif resume and resume.location %}
+      "address": { "@type": "PostalAddress", "addressLocality": {{ resume.location | dump | safe }} },
+      {% endif %}
+      {% if resume and resume.email %}"email": "mailto:{{ resume.email }}", {% endif %}
+      {% if sameAsLinks | length %}"sameAs": {{ sameAsLinks | dump | safe }}, {% endif %}
+      "url": {{ canonicalHref | dump | safe }}
+    }
+    </script>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
