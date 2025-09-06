@@ -103,11 +103,7 @@ eleventyExcludeFromCollections: true
       </a>
     </div>
     <div class="flex-none gap-2 items-center">
-      
-      <div class="join no-print" role="group" aria-label="Theme switcher">
-        <input class="join-item btn btn-sm btn-outline theme-controller hb-anim" type="radio" name="theme" aria-label="Corporate" value="corporate">
-        <input class="join-item btn btn-sm btn-outline theme-controller hb-anim" type="radio" name="theme" aria-label="Dim" value="dim">
-      </div>
+      <button id="theme-toggle" class="btn btn-ghost btn-square no-print" type="button" aria-pressed="false" aria-label="Switch theme" title="Toggle theme">Theme</button>
       <button class="btn btn-sm btn-outline no-print hb-anim" onclick="window.print()" title="Print / Save PDF">Print</button>
     </div>
   </div>
@@ -425,44 +421,9 @@ eleventyExcludeFromCollections: true
         try{document.execCommand('copy'); toast('Copied: '+text);}catch(_){} t.remove();
       }
     }
-    (function(){
-      var key='theme';
-      var allowed=['corporate','dim'];
-      var radios=[].slice.call(document.querySelectorAll('.theme-controller'));
-      document.documentElement.classList.add('assertive-geometry');
-
-      function fromQuery(){
-        try{
-          var p=new URLSearchParams(location.search);
-          var t=p.get('theme');
-          if(t && allowed.indexOf(t)>=0){ return t; }
-        }catch(_){}
-        return null;
-      }
-      function fromStorage(){
-        try{ var v=localStorage.getItem(key); if(v && allowed.indexOf(v)>=0) return v; }catch(_){}
-        return null;
-      }
-      function preferred(){
-        var dark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-        return dark ? 'dim' : 'corporate';
-      }
-      function metaScheme(theme){ return (theme==='corporate') ? 'light dark' : 'dark light'; }
-      function apply(name, source){
-        document.documentElement.setAttribute('data-theme', name);
-        document.documentElement.dataset.themeSource = source || 'init';
-        try{ localStorage.setItem(key, name); }catch(_){}
-        var meta=document.querySelector('meta[name="color-scheme"]');
-        if(meta){ meta.content = metaScheme(name); }
-        radios.forEach(function(r){ r.checked = (r.value === name); });
-        try{ document.dispatchEvent(new CustomEvent('themechange', { detail: { theme: name, source: source||'user' } })); }catch(_){}
-      }
-      var picked = fromQuery() || fromStorage() || 'dim';
-      apply(picked, fromQuery() ? 'query' : (fromStorage() ? 'storage' : 'os'));
-      document.addEventListener('change', function(e){
-        var t=e.target; if(t && t.classList && t.classList.contains('theme-controller')){ apply(t.value, 'radio'); toast('Theme: '+t.value); }
-      });
-    })();
+    // Theme handled by shared ThemeUtils + theme-toggle scripts
   </script>
+  <script src="/assets/js/theme-utils.js" defer></script>
+  <script src="/assets/js/theme-toggle.js" defer></script>
 </body>
 </html>
