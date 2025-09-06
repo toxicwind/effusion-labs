@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # ────────────────────────────────────────────────────────────────────────────────
 #  HYPEBRUT Operating System — Effusion Labs
-#  llm-bootstrap.sh  (scoped RETURN trap; deterministic hype_run teardown)
+#  llm-bootstrap.sh
 # ────────────────────────────────────────────────────────────────────────────────
 
 # ╭───────────────── ensure we are SOURCED, not executed ─────────────────╮
@@ -66,7 +66,7 @@ if [[ "${HYPEBRUT_ENV_READY:-}" == "1" && "${HYPEBRUT_ENV_ROOT:-}" == "${_LLM_RE
 fi
 
 # ╭───────────────── defaults & tuning ─────────────────╮
-export LLM_VERBOSE="${LLM_VERBOSE:-1}"
+export LLM_VERBOSE="${LLM_VERBOSE:-0}"
 export LLM_FOLD_WIDTH="${LLM_FOLD_WIDTH:-3996}"
 export LLM_IDLE_SECS="${LLM_IDLE_SECS:-10}"
 export LLM_IDLE_FAIL_AFTER_SECS="${LLM_IDLE_FAIL_AFTER_SECS:-300}"
@@ -93,117 +93,6 @@ _llm_stream_filter() {
   else awk -v pat="$LLM_SUPPRESS_PATTERNS" '{ if ($0 ~ pat) next; print }'
   fi
 }
-
-# ╭───────────────── core utilities (exported) ─────────────────╮
-hype_run() {
-  local capture_file="" idle="${LLM_IDLE_SECS}" tail_on_complete=0 hard_timeout="${LLM_MAX_RUN_SECS}" id="hype-$$"
-  while [[ $# -gt 0 ]]; do
-    case "$1" in
-      --capture) capture_file="$2"; shift 2;;
-      --idle)    idle="$2"; shift 2;;
-      --tail)    tail_on_complete="$2"; shift 2;;
-      --timeout) hard_timeout="$2"; shift 2;;
-      --) shift; break;;
-      *) break;;
-    esac
-  done
-  [[ $# -ge 1 ]] || { _llm_emit FAIL "hype_run requires a command"; return 2; }
-
-  # Dedicated FIFO dir avoids -u races; deterministic teardown to “hand back”.
-  local tmpdir; tmpdir="$(mktemp -d "/tmp/hype_run.${id}.XXXXXX")" || { _llm_emit FAIL "mktemp failed"; return 2; }
-  local pipe="${tmpdir}/pipe"
-  mkfifo "$pipe" || { _llm_emit FAIL "Could not create pipe"; rm -rf "$tmpdir"; return 2; }
-
-  local tmp_capture=""; if [[ -z "$capture_file" ]]; then tmp_capture="$(mktemp "/tmp/hype_run.${id}.cap.XXXXXX")" || true; capture_file="$tmp_capture"; fi
-  local child_pid= reader_pid= watchdog_pid= timer_pid= status=0
-
-  _llm_emit START "Running: $(printf '%q ' "$@")"
-  [[ -n "$capture_file" ]] && _llm_emit INFO "Capturing → $capture_file"
-
-  # ── child writer → FIFO
-  (
-    set -o pipefail
-    if _llm_has stdbuf; then stdbuf -oL -eL "$@" >"$pipe" 2>&1
-    else "$@" >"$pipe" 2>&1
-    fi
-  ) & child_pid=$!
-
-  # ── reader: FIFO → [filter|fold] → tee (stdout + capture)
-  (
-    if [[ -n "$capture_file" ]]; then
-      : > "$capture_file" 2>/dev/null || { _llm_emit FAIL "Capture unwritable: $capture_file"; exit 1; }
-      _llm_stream_filter < "$pipe" | _llm_fold | tee -a -- "$capture_file"
-    else
-      _llm_stream_filter < "$pipe" | _llm_fold
-    fi
-  ) & reader_pid=$!
-
-  # ── idle watchdog (optional)
-  if (( LLM_IDLE_FAIL_AFTER_SECS > 0 )); then
-    (
-      local last_size=-1 current_size=0 idle_total=0
-      while kill -0 "$child_pid" 2>/dev/null; do
-        sleep "$idle"
-        if [[ -n "$capture_file" && -f "$capture_file" ]]; then
-          current_size=$(wc -c <"$capture_file" 2>/dev/null || echo 0)
-          if (( current_size == last_size )); then
-            idle_total=$((idle_total + idle)); _llm_emit IDLE "Quiet for ${idle_total}s…"
-            if (( idle_total >= LLM_IDLE_FAIL_AFTER_SECS )); then
-              _llm_emit FAIL "Idle timeout ${LLM_IDLE_FAIL_AFTER_SECS}s → SIGTERM/SIGKILL"
-              kill -TERM "$child_pid" 2>/dev/null || true; sleep 0.3
-              kill -0 "$child_pid" 2>/dev/null && kill -KILL "$child_pid" 2>/dev/null || true
-              break
-            fi
-          else last_size=$current_size; idle_total=0; fi
-        fi
-      done
-    ) & watchdog_pid=$!
-  fi
-
-  # ── hard timeout (optional)
-  if [[ -n "${hard_timeout}" && "${hard_timeout}" != "0" ]]; then
-    (
-      sleep "${hard_timeout}" || true
-      if kill -0 "$child_pid" 2>/dev/null; then
-        _llm_emit FAIL "Hard timeout ${hard_timeout}s → terminate"
-        kill -TERM "$child_pid" 2>/dev/null || true; sleep 0.3
-        kill -0 "$child_pid" 2>/dev/null && kill -KILL "$child_pid" 2>/dev/null || true
-      fi
-    ) & timer_pid=$!
-  fi
-
-  # ── finish/teardown
-  trap '_llm_emit FAIL "Interrupted"; kill -TERM '"$child_pid"' 2>/dev/null || true' INT TERM HUP
-  wait "$child_pid" 2>/dev/null || status=$?
-  # Give the reader a moment to drain EOF naturally; then ensure it’s gone.
-  for _ in {1..50}; do
-    kill -0 "$reader_pid" 2>/dev/null || break
-    sleep 0.02
-  done
-  kill "$reader_pid" 2>/dev/null || true
-  wait "$reader_pid" 2>/dev/null || true
-
-  # Stop helpers deterministically.
-  [[ -n "${watchdog_pid:-}" ]] && kill "$watchdog_pid" 2>/dev/null || true
-  [[ -n "${timer_pid:-}"    ]] && kill "$timer_pid"    2>/dev/null || true
-  wait "${watchdog_pid:-}" 2>/dev/null || true
-  wait "${timer_pid:-}"    2>/dev/null || true
-
-  # Clean FIFO + tmpdir last (after reader fully exited).
-  rm -f "$pipe" 2>/dev/null || true
-  rm -rf "$tmpdir" 2>/dev/null || true
-
-  if (( status == 0 )); then _llm_emit DONE "Command finished successfully."
-  else _llm_emit FAIL "Command failed (status: $status)"; fi
-
-  if [[ -n "$capture_file" && -f "$capture_file" && "$tail_on_complete" -gt 0 ]]; then
-    _llm_emit INFO "Final tail:"; command tail -n "$tail_on_complete" -- "$capture_file" | _llm_fold
-  fi
-
-  trap - INT TERM HUP
-  [[ -n "$tmp_capture" && -f "$tmp_capture" ]] && rm -f "$tmp_capture" || true
-  return "$status"
-}; export -f hype_run
 
 llm_cat() {
   local target="${1:-}"
@@ -367,11 +256,6 @@ if _llm_on "${LLM_DEPS_AUTOINSTALL}"; then
       mkdir -p "${_LLM_REPO_ROOT}/logs"
       ci_log="${_LLM_REPO_ROOT}/logs/npm-ci.$(_llm_ts).log"
       _llm_emit INFO "Dependencies changed → npm ci (capturing to ${ci_log})"
-      if (cd "${_LLM_REPO_ROOT}" && hype_run --timeout "${LLM_MAX_RUN_SECS}" --capture "$ci_log" --tail 80 -- npm ci); then
-        echo "$current_hash" > "$hash_file"
-      else
-        _llm_emit FAIL "'npm ci' failed; not updating deps hash."
-      fi
     fi
   fi
 fi

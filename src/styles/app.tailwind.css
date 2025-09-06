@@ -381,5 +381,43 @@
   }
 }
 
+/* Hypebrüt: Tab-like rows & title accent for resume highlights */
+@layer components {
+  .hb-tabrow {
+    @apply relative w-full p-3 sm:p-4 rounded-xl border transition-all duration-200 ease-out;
+    background-color: hsl(var(--b1)/.92);
+    border-color: hsl(var(--bc)/.12);
+    box-shadow: 0 2px 6px rgba(0,0,0,.06);
+  }
+  .hb-tabrow::before {
+    content: "";
+    position: absolute; inset-inline-start: -1px; top: 8px; bottom: 8px; width: 3px;
+    border-radius: 999px;
+    background: linear-gradient(180deg,
+      color-mix(in oklab, var(--neon-a, #00E0FF) 86%, transparent) 0%,
+      color-mix(in oklab, var(--neon-b, #9AFF00) 86%, transparent) 50%,
+      color-mix(in oklab, var(--neon-c, #FF1CF7) 86%, transparent) 100%
+    );
+    opacity: .55; transform: scaleY(.72); transform-origin: center; transition: transform .2s ease, opacity .2s ease;
+  }
+  .hb-tabrow:hover { border-color: hsl(var(--p)/.38); box-shadow: 0 6px 22px rgba(0,0,0,.10); }
+  .hb-tabrow:hover::before { opacity: .85; transform: scaleY(1); }
+  .hb-tabrow[data-active="true"] { border-color: hsl(var(--p)/.5); box-shadow: 0 8px 28px rgba(0,0,0,.12); }
+  .hb-tabrow[data-active="true"]::before { opacity: 1; transform: scaleY(1); }
+
+  .hb-tablabel { @apply text-[11px] uppercase tracking-widest opacity-70; }
+  .hb-tabvalue { @apply text-2xl font-semibold leading-tight; }
+  .hb-tabsub   { @apply text-xs opacity-80; }
+
+  .hb-title { position: relative; display: inline-flex; align-items: center; gap: .5rem; }
+  .hb-title::after{
+    content: ""; height: 1px; width: 48px; opacity: .5;
+    background: linear-gradient(90deg,
+      color-mix(in oklab, var(--neon-a, #00E0FF) 75%, transparent) 0%,
+      color-mix(in oklab, var(--neon-c, #FF1CF7) 75%, transparent) 100%
+    );
+  }
+}
+
 /* Tailwind v4 content discovery */
 @source "../**/*.{njk,md,html,js}";

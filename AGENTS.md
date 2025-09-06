@@ -57,15 +57,6 @@ Environment already active. Sourcing skipped. **Proceed with task.**
 * **Persist & report:** snapshot meaningful work and produce the single final report (see Output Spec).
 
 ## Core Protocols
-
-**Foreground (`hype_run`)** — required for meaningful work
-
-```bash
-hype_run --capture /tmp/build.log -- npm run build
-# trivial checks may omit --capture
-hype_run -- node -v
-```
-
 **Async/daemon (`hype_bg`)** — required for long-running tasks
 
 * **Dev server (only valid form):**

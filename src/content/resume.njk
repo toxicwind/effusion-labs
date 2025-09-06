@@ -62,7 +62,11 @@ eleventyExcludeFromCollections: true
   {% endif %}
 
   <!-- DaisyUI v5 + Tailwind v4 (CDN) -->
-  <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css">
+  <!-- daisyUI components + light/dark base -->
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@5/daisyui.css" rel="stylesheet" type="text/css">
+  <!-- Extra built-in themes (enables `nord` and `sunset`) -->
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@5/themes.css" rel="stylesheet" type="text/css">
+  <!-- Tailwind v4 in-browser compiler for utilities -->
   <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 
   <!-- Fonts -->
@@ -70,7 +74,7 @@ eleventyExcludeFromCollections: true
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Rubik:wght@400..900&family=Space+Grotesk:wght@400..700&display=swap" rel="stylesheet">
 
-  <!-- Tiny CSS: skip-link + print polish only -->
+  <!-- Tiny CSS: skip-link + print polish + hb-tabrow styles -->
   <style>
     .skip-link{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden}
     .skip-link:focus{left:1rem;top:1rem;width:auto;height:auto;padding:.5rem .75rem;z-index:1000}
@@ -82,6 +86,18 @@ eleventyExcludeFromCollections: true
       a{color:#000!important;text-decoration:none!important}
       .card{background:#fff!important;border-color:#ddd!important}
     }
+    /* Hypebrüt: Tab-like row styling for Highlights on this standalone page */
+    .hb-tabrow{position:relative;width:100%;padding:.75rem 1rem;border-radius:12px;border:1px solid hsl(var(--bc)/.12);background-color:hsl(var(--b1)/.92);box-shadow:0 2px 6px rgba(0,0,0,.06);transition:box-shadow .2s ease,border-color .2s ease}
+    .hb-tabrow::before{content:"";position:absolute;inset-inline-start:-1px;top:8px;bottom:8px;width:3px;border-radius:999px;background:linear-gradient(180deg,color-mix(in oklab, var(--neon-a, #00E0FF) 86%, transparent) 0%,color-mix(in oklab, var(--neon-b, #9AFF00) 86%, transparent) 50%,color-mix(in oklab, var(--neon-c, #FF1CF7) 86%, transparent) 100%);opacity:.55;transform:scaleY(.72);transform-origin:center;transition:transform .2s ease,opacity .2s ease}
+    .hb-tabrow:hover{border-color:hsl(var(--p)/.38);box-shadow:0 6px 22px rgba(0,0,0,.10)}
+    .hb-tabrow:hover::before{opacity:.85;transform:scaleY(1)}
+    .hb-tabrow[data-active="true"]{border-color:hsl(var(--p)/.5);box-shadow:0 8px 28px rgba(0,0,0,.12)}
+    .hb-tabrow[data-active="true"]::before{opacity:1;transform:scaleY(1)}
+    .hb-tablabel{font-size:11px;text-transform:uppercase;letter-spacing:.2em;opacity:.7}
+    .hb-tabvalue{font-size:1.375rem;line-height:1.2;font-weight:700}
+    .hb-tabsub{font-size:.75rem;opacity:.8}
+    .hb-title{position:relative;display:inline-flex;align-items:center;gap:.5rem}
+    .hb-title::after{content:"";height:1px;width:48px;opacity:.5;background:linear-gradient(90deg,color-mix(in oklab, var(--neon-a, #00E0FF) 75%, transparent) 0%,color-mix(in oklab, var(--neon-c, #FF1CF7) 75%, transparent) 100%)}
   </style>
 </head>
 
@@ -97,8 +113,8 @@ eleventyExcludeFromCollections: true
     </div>
     <div class="flex-none gap-2">
       <div class="join no-print">
-        <input class="join-item btn btn-sm btn-outline theme-controller" type="radio" name="theme-top" aria-label="Nord" value="nord">
-        <input class="join-item btn btn-sm btn-outline theme-controller" type="radio" name="theme-top" aria-label="Sunset" value="sunset">
+        <input class="join-item btn btn-sm btn-outline theme-controller" type="radio" name="theme" aria-label="Nord" value="nord">
+        <input class="join-item btn btn-sm btn-outline theme-controller" type="radio" name="theme" aria-label="Sunset" value="sunset">
       </div>
       <button class="btn btn-sm btn-outline no-print" onclick="window.print()" title="Print / Save PDF">Print</button>
     </div>
@@ -168,44 +184,52 @@ eleventyExcludeFromCollections: true
           {% if _hc %}
           <section class="card shadow-sm border border-base-300/40 rounded-box">
             <div class="card-body">
-              <h2 class="text-[11px] uppercase tracking-widest opacity-60">Highlights</h2>
+              <h2 class="text-[11px] uppercase tracking-widest opacity-60 hb-title">Highlights</h2>
 
               {# few (≤3): stats row; mid (4–8): compact KPI cards; many (≥9): dense compact cards #}
               {% if _hc <= 3 %}
-                <div class="stats stats-vertical md:stats-horizontal w-full mt-2">
-                  {% for s in resume.highlights %}
-                  <div class="stat px-4">
-                    <div class="stat-title">{{ s.title }}</div>
-                    <div class="stat-value text-3xl">{{ s.value }}</div>
-                    {% if s.sub %}<div class="stat-desc">{{ s.sub }}</div>{% endif %}
-                  </div>
-                  {% endfor %}
+                <div class="mt-3">
+                  <ul class="space-y-2" role="list">
+                    {% for s in resume.highlights %}
+                    <li class="hb-tabrow" role="listitem" {% if loop.index0 == 0 %}data-active="true"{% endif %}>
+                      <div class="flex items-baseline justify-between gap-3">
+                        <div class="hb-tablabel">{{ s.title }}</div>
+                        <div class="hb-tabvalue">{{ s.value }}</div>
+                      </div>
+                      {% if s.sub %}<div class="mt-1 hb-tabsub">{{ s.sub }}</div>{% endif %}
+                    </li>
+                    {% endfor %}
+                  </ul>
                 </div>
 
               {% elif _hc <= 8 %}
-                <div class="mt-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3">
-                  {% for s in resume.highlights %}
-                  <div class="card card-compact border border-base-300/40 rounded-box">
-                    <div class="card-body py-3">
-                      <div class="text-[11px] uppercase tracking-widest opacity-60">{{ s.title }}</div>
-                      <div class="text-2xl font-semibold leading-tight">{{ s.value }}</div>
-                      {% if s.sub %}<div class="text-xs opacity-70 truncate">{{ s.sub }}</div>{% endif %}
-                    </div>
-                  </div>
-                  {% endfor %}
+                <div class="mt-3">
+                  <ul class="space-y-2" role="list">
+                    {% for s in resume.highlights %}
+                    <li class="hb-tabrow" role="listitem" {% if loop.index0 == 0 %}data-active="true"{% endif %}>
+                      <div class="flex items-baseline justify-between gap-3">
+                        <div class="hb-tablabel">{{ s.title }}</div>
+                        <div class="hb-tabvalue">{{ s.value }}</div>
+                      </div>
+                      {% if s.sub %}<div class="mt-1 hb-tabsub">{{ s.sub }}</div>{% endif %}
+                    </li>
+                    {% endfor %}
+                  </ul>
                 </div>
 
               {% else %}
-                <div class="mt-3 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6 gap-2">
-                  {% for s in resume.highlights %}
-                  <div class="card card-compact border border-base-300/40 rounded-box">
-                    <div class="card-body py-2">
-                      <div class="text-[10px] uppercase tracking-widest opacity-60 truncate">{{ s.title }}</div>
-                      <div class="text-lg font-semibold leading-tight">{{ s.value }}</div>
-                      {% if s.sub %}<div class="text-[11px] opacity-70 truncate">{{ s.sub }}</div>{% endif %}
-                    </div>
-                  </div>
-                  {% endfor %}
+                <div class="mt-3">
+                  <ul class="space-y-2" role="list">
+                    {% for s in resume.highlights %}
+                    <li class="hb-tabrow" role="listitem">
+                      <div class="flex items-baseline justify-between gap-3">
+                        <div class="hb-tablabel">{{ s.title }}</div>
+                        <div class="text-xl font-semibold leading-tight">{{ s.value }}</div>
+                      </div>
+                      {% if s.sub %}<div class="mt-1 text-xs opacity-80 truncate">{{ s.sub }}</div>{% endif %}
+                    </li>
+                    {% endfor %}
+                  </ul>
                 </div>
               {% endif %}
             </div>
@@ -388,8 +412,8 @@ eleventyExcludeFromCollections: true
             Last updated: {{ resume.updated | date('yyyy-MM-dd') }}
           </small>
           <div class="join">
-            <input class="join-item btn btn-sm btn-outline theme-controller" type="radio" name="theme-foot" aria-label="Nord" value="nord">
-            <input class="join-item btn btn-sm btn-outline theme-controller" type="radio" name="theme-foot" aria-label="Sunset" value="sunset">
+            <input class="join-item btn btn-sm btn-outline theme-controller" type="radio" name="theme" aria-label="Nord" value="nord">
+            <input class="join-item btn btn-sm btn-outline theme-controller" type="radio" name="theme" aria-label="Sunset" value="sunset">
           </div>
         </footer>
       </section>
@@ -443,7 +467,8 @@ eleventyExcludeFromCollections: true
       function apply(name){
         document.documentElement.setAttribute('data-theme', name);
         localStorage.setItem(key, name);
-        radios.forEach(function(r){ if(r.value===name) r.checked=true; });
+        // keep only the chosen value checked across all controller inputs
+        radios.forEach(function(r){ r.checked = (r.value === name); });
         var meta=document.querySelector('meta[name="color-scheme"]');
         if(meta){ meta.content = (name==='nord') ? 'light dark' : 'dark light'; }
       }
