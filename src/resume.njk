@@ -1,0 +1,20 @@
+---
+title: "Resume"
+layout: layouts/resume.njk
+permalink: /resume/
+eleventyExcludeFromCollections: true
+---
+{% from "components/resume-entry.njk" import resumeEntry %}
+<section class="prose dark:prose-invert max-w-prose mx-auto">
+  <header class="mb-10">
+    <h1 class="font-heading text-4xl">{{ resume.name }}</h1>
+    <p class="opacity-70">{{ resume.title }}</p>
+    <p class="mt-4">{{ resume.summary }}</p>
+  </header>
+  {% if resume.experience %}
+    <h2 class="font-heading text-2xl mt-8 mb-4">Experience</h2>
+    {% for job in resume.experience %}
+      {{ resumeEntry(job) }}
+    {% endfor %}
+  {% endif %}
+</section>
