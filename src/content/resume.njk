@@ -7,7 +7,7 @@ eleventyExcludeFromCollections: true
 
 {# src/resume/index.njk — adaptive layout, subtle accents, canonical+absolute SEO, no rainbow #}
 <!DOCTYPE html>
-<html lang="en" class="scroll-pt-16" data-theme="nord">
+<html lang="en" class="scroll-pt-16 assertive-geometry" data-theme="nord">
 <head>
   <!-- Meta -->
   <meta charset="UTF-8">
@@ -148,12 +148,15 @@ eleventyExcludeFromCollections: true
         {{ resume and resume.name or 'Resume' }}
       </a>
     </div>
-    <div class="flex-none gap-2">
+    <div class="flex-none gap-2 items-center">
+      
       <div class="join no-print" role="group" aria-label="Theme switcher">
-        <input class="join-item btn btn-sm btn-outline theme-controller" type="radio" name="theme" aria-label="Nord" value="nord">
-        <input class="join-item btn btn-sm btn-outline theme-controller" type="radio" name="theme" aria-label="Sunset" value="sunset">
+        <input class="join-item btn btn-sm btn-outline theme-controller hb-anim" type="radio" name="theme" aria-label="Nord" value="nord">
+        <input class="join-item btn btn-sm btn-outline theme-controller hb-anim" type="radio" name="theme" aria-label="Business" value="business">
+        <input class="join-item btn btn-sm btn-outline theme-controller hb-anim" type="radio" name="theme" aria-label="Night" value="night">
+        <input class="join-item btn btn-sm btn-outline theme-controller hb-anim" type="radio" name="theme" aria-label="Abyss" value="abyss">
       </div>
-      <button class="btn btn-sm btn-outline no-print" onclick="window.print()" title="Print / Save PDF">Print</button>
+      <button class="btn btn-sm btn-outline no-print hb-anim" onclick="window.print()" title="Print / Save PDF">Print</button>
     </div>
   </div>
 
@@ -164,7 +167,7 @@ eleventyExcludeFromCollections: true
       <aside class="col-span-12 lg:col-span-4">
         <div class="space-y-6 lg:sticky lg:top-6">
           <!-- Identity -->
-          <section class="card shadow-sm border border-base-300/40 rounded-box hb-accent">
+          <section class="card shadow-sm border border-base-300/40 rounded-box hb-accent hb-neon hb-anim">
             <div class="card-body">
               <h1 class="text-4xl md:text-5xl font-black tracking-tight">
                 {{ resume and resume.name or "Your Name" }}
@@ -205,7 +208,7 @@ eleventyExcludeFromCollections: true
           </section>
 
           {% if resume and resume.summary %}
-          <section class="card shadow-sm border border-base-300/40 rounded-box hb-accent">
+          <section class="card shadow-sm border border-base-300/40 rounded-box hb-accent hb-neon hb-anim">
             <div class="card-body prose prose-sm sm:prose-base dark:prose-invert max-w-none">
               <h2 class="m-0">Summary</h2>
               <p class="mt-2">{{ resume.summary }}</p>
@@ -274,8 +277,8 @@ eleventyExcludeFromCollections: true
           {% endif %}
 
           {% if resume and (resume.skills or resume.tools) %}
-          <section class="card shadow-sm border border-base-300/40 rounded-box hb-accent">
-            <div class="card-body">
+          <section class="card shadow-sm border border-base-300/40 rounded-box hb-accent hb-neon hb-anim">
+            <div class="card-body cq-root cq-chips">
               <h2 class="text-[11px] uppercase tracking-widest opacity-60 hb-title">Skills &amp; Tools</h2>
 
               {% if resume.skills and resume.skills.groups %}
@@ -286,27 +289,23 @@ eleventyExcludeFromCollections: true
                   <div class="mt-2 flex flex-wrap gap-2">
                     {% for item in g.items %}
                       {% if item.hint %}
-                        <span class="badge badge-ghost rounded-full tooltip {{ _badgeSize }}" data-tip="{{ item.hint }}">{{ item.name }}</span>
+                        <span class="badge badge-ghost rounded-full tooltip" data-tip="{{ item.hint }}">{{ item.name }}</span>
                       {% else %}
-                        <span class="badge badge-ghost rounded-full {{ _badgeSize }}">{{ item.name }}</span>
+                        <span class="badge badge-ghost rounded-full">{{ item.name }}</span>
                       {% endif %}
                     {% endfor %}
                   </div>
                 {% endfor %}
               {% elif resume.skills %}
-                {% set _flatCount = resume.skills | length %}
-                {% set _flatSize = 'badge-sm' %}{% if _flatCount > 16 %}{% set _flatSize = 'badge-xs' %}{% endif %}
                 <div class="mt-2 flex flex-wrap gap-2">
-                  {% for s in resume.skills %}<span class="badge badge-ghost rounded-full {{ _flatSize }}">{{ s }}</span>{% endfor %}
+                  {% for s in resume.skills %}<span class="badge badge-ghost rounded-full">{{ s }}</span>{% endfor %}
                 </div>
               {% endif %}
 
               {% if resume.tools %}
-                {% set _toolCount = resume.tools | length %}
-                {% set _toolSize = 'badge-sm' %}{% if _toolCount > 14 %}{% set _toolSize = 'badge-xs' %}{% endif %}
                 <h3 class="mt-4 text-sm font-semibold">Tools</h3>
                 <div class="mt-2 flex flex-wrap gap-2">
-                  {% for t in resume.tools %}<span class="badge badge-ghost rounded-full {{ _toolSize }}">{{ t }}</span>{% endfor %}
+                  {% for t in resume.tools %}<span class="badge badge-ghost rounded-full">{{ t }}</span>{% endfor %}
                 </div>
               {% endif %}
             </div>
@@ -318,18 +317,18 @@ eleventyExcludeFromCollections: true
       <!-- RIGHT COLUMN -->
       <section class="col-span-12 lg:col-span-8 space-y-6">
         {% if resume and resume.experience %}
-        <section class="card shadow-sm border border-base-300/40 rounded-box">
+        <section class="card shadow-sm border border-base-300/40 rounded-box hb-neon">
           <div class="card-body">
             <h2 class="text-[11px] uppercase tracking-widest opacity-60 hb-title">Experience</h2>
             <div class="mt-3 grid gap-4">
               {% for job in resume.experience %}
-              <article class="card bg-base-100 shadow-sm border border-base-300/40 rounded-box hb-accent">
-                <div class="card-body">
-                  <div class="flex flex-wrap items-baseline justify-between gap-2">
-                    <h3 class="text-lg font-semibold tracking-tight">
+              <article class="card bg-base-100 shadow-sm border border-base-300/40 rounded-box hb-accent hb-neon hb-anim">
+                <div class="card-body hb-ex">
+                  <div class="hb-ex-head">
+                    <h3 class="hb-ex-title text-lg font-semibold tracking-tight m-0">
                       {{ job.company }}{% if job.role %} <span class="font-normal">— {{ job.role }}</span>{% endif %}
                     </h3>
-                    <div class="text-xs md:text-sm opacity-70 text-right">
+                    <div class="hb-ex-meta text-xs md:text-sm opacity-70">
                       <span>{{ job.location }}</span>
                       <span class="mx-2 hidden md:inline">•</span>
                       <span class="block md:inline">{{ job.start }}{% if job.end %} — {{ job.end }}{% else %} — Now{% endif %}</span>
@@ -338,7 +337,7 @@ eleventyExcludeFromCollections: true
 
                   {% if job.highlights %}
                   {% set _maxBul = 5 %}
-                  <ul class="mt-2 space-y-1.5 text-[15px] leading-6">
+                  <ul class="hb-ex-bullets mt-2 space-y-1.5 text-[15px] leading-6">
                     {% for h in job.highlights %}
                       {% if loop.index0 < _maxBul %}
                       <li class="hb-minirow">{{ h }}</li>
@@ -346,7 +345,7 @@ eleventyExcludeFromCollections: true
                     {% endfor %}
                   </ul>
                   {% if job.highlights | length > _maxBul %}
-                  <details class="mt-2">
+                  <details class="hb-ex-bullets mt-2">
                     <summary class="link text-sm opacity-80">Show {{ job.highlights | length - _maxBul }} more</summary>
                     <ul class="mt-2 space-y-1.5 text-[15px] leading-6">
                       {% for h in job.highlights %}
@@ -362,8 +361,8 @@ eleventyExcludeFromCollections: true
                   {% if job.tags %}
                   {% set _jt = job.tags | length %}
                   {% set _jtSize = 'badge-sm' %}{% if _jt > 10 %}{% set _jtSize = 'badge-xs' %}{% endif %}
-                  <div class="mt-3 flex flex-wrap gap-2">
-                    {% for tag in job.tags %}<span class="badge badge-ghost rounded-full {{ _jtSize }}">{{ tag }}</span>{% endfor %}
+                  <div class="mt-3 flex flex-wrap gap-2 cq-chips">
+                    {% for tag in job.tags %}<span class="badge badge-ghost rounded-full">{{ tag }}</span>{% endfor %}
                   </div>
                   {% endif %}
                 </div>
@@ -375,21 +374,12 @@ eleventyExcludeFromCollections: true
         {% endif %}
 
         {% if resume and resume.projects %}
-        {% set _pc = resume.projects | length %}
-        {% set _projGrid = 'grid grid-cols-1 sm:grid-cols-2 gap-4' %}
-        {% if _pc <= 1 %}
-          {% set _projGrid = 'grid grid-cols-1 gap-4' %}
-        {% elif _pc <= 6 %}
-          {% set _projGrid = 'grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4' %}
-        {% else %}
-          {% set _projGrid = 'grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4' %}
-        {% endif %}
-        <section class="card shadow-sm border border-base-300/40 rounded-box">
-          <div class="card-body">
+        <section class="card shadow-sm border border-base-300/40 rounded-box hb-neon">
+          <div class="card-body cq-root">
             <h2 class="text-[11px] uppercase tracking-widest opacity-60 hb-title">Selected Projects</h2>
-            <div class="mt-3 {{ _projGrid }}">
+            <div class="mt-3 hb-projects-grid">
               {% for p in resume.projects %}
-              <article class="card card-sm bg-base-100 shadow-sm border border-base-300/40 rounded-box hover:shadow-md transition-shadow hb-accent">
+              <article class="card card-sm bg-base-100 shadow-sm border border-base-300/40 rounded-box hover:shadow-md transition-shadow hb-accent hb-neon hb-anim">
                 <div class="card-body">
                   <div class="flex items-center gap-2">
                     <h3 class="card-title text-sm">
@@ -400,10 +390,8 @@ eleventyExcludeFromCollections: true
                   {% if p.subtitle %}<p class="mt-1 text-xs opacity-70">{{ p.subtitle }}</p>{% endif %}
                   {% if p.blurb %}<p class="mt-2 text-sm leading-6">{{ p.blurb }}</p>{% endif %}
                   {% if p.tags %}
-                  {% set _pt = p.tags | length %}
-                  {% set _ptSize = 'badge-sm' %}{% if _pt > 8 %}{% set _ptSize = 'badge-xs' %}{% endif %}
-                  <div class="mt-3 flex flex-wrap gap-2">
-                    {% for t in p.tags %}<span class="badge badge-ghost rounded-full {{ _ptSize }}">{{ t }}</span>{% endfor %}
+                  <div class="mt-3 flex flex-wrap gap-2 cq-chips">
+                    {% for t in p.tags %}<span class="badge badge-ghost rounded-full">{{ t }}</span>{% endfor %}
                   </div>
                   {% endif %}
                 </div>
@@ -442,9 +430,14 @@ eleventyExcludeFromCollections: true
           <small class="opacity-60">
             {% if resume and resume.updated %}Last updated: {{ resume.updated | date('yyyy-MM-dd') }}{% endif %}
           </small>
-          <div class="join" role="group" aria-label="Theme switcher">
-            <input class="join-item btn btn-sm btn-outline theme-controller" type="radio" name="theme" aria-label="Nord" value="nord">
-            <input class="join-item btn btn-sm btn-outline theme-controller" type="radio" name="theme" aria-label="Sunset" value="sunset">
+          <div class="flex items-center gap-3">
+            
+            <div class="join" role="group" aria-label="Theme switcher">
+              <input class="join-item btn btn-sm btn-outline theme-controller hb-anim" type="radio" name="theme" aria-label="Nord" value="nord">
+              <input class="join-item btn btn-sm btn-outline theme-controller hb-anim" type="radio" name="theme" aria-label="Business" value="business">
+              <input class="join-item btn btn-sm btn-outline theme-controller hb-anim" type="radio" name="theme" aria-label="Night" value="night">
+              <input class="join-item btn btn-sm btn-outline theme-controller hb-anim" type="radio" name="theme" aria-label="Abyss" value="abyss">
+            </div>
           </div>
         </footer>
       </section>
@@ -500,22 +493,40 @@ eleventyExcludeFromCollections: true
     }
     (function(){
       var key='theme';
-      var stored=localStorage.getItem(key);
+      var allowed=['nord','business','night','abyss'];
       var radios=[].slice.call(document.querySelectorAll('.theme-controller'));
-      function apply(name){
+      document.documentElement.classList.add('assertive-geometry');
+
+      function fromQuery(){
+        try{
+          var p=new URLSearchParams(location.search);
+          var t=p.get('theme');
+          if(t && allowed.indexOf(t)>=0){ return t; }
+        }catch(_){}
+        return null;
+      }
+      function fromStorage(){
+        try{ var v=localStorage.getItem(key); if(v && allowed.indexOf(v)>=0) return v; }catch(_){}
+        return null;
+      }
+      function preferred(){
+        var dark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        return dark ? 'business' : 'nord';
+      }
+      function metaScheme(theme){ return (theme==='nord') ? 'light dark' : 'dark light'; }
+      function apply(name, source){
         document.documentElement.setAttribute('data-theme', name);
-        localStorage.setItem(key, name);
-        radios.forEach(function(r){ r.checked = (r.value === name); });
+        document.documentElement.dataset.themeSource = source || 'init';
+        try{ localStorage.setItem(key, name); }catch(_){}
         var meta=document.querySelector('meta[name="color-scheme"]');
-        if(meta){ meta.content = (name==='nord') ? 'light dark' : 'dark light'; }
+        if(meta){ meta.content = metaScheme(name); }
+        radios.forEach(function(r){ r.checked = (r.value === name); });
+        try{ document.dispatchEvent(new CustomEvent('themechange', { detail: { theme: name, source: source||'user' } })); }catch(_){}
       }
-      if(stored){ apply(stored); }
-      else {
-        var prefersDark=window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-        apply(prefersDark ? 'sunset' : 'nord');
-      }
+      var picked = fromQuery() || fromStorage() || preferred();
+      apply(picked, fromQuery() ? 'query' : (fromStorage() ? 'storage' : 'os'));
       document.addEventListener('change', function(e){
-        var t=e.target; if(t && t.classList && t.classList.contains('theme-controller')){ apply(t.value); toast('Theme: '+t.value); }
+        var t=e.target; if(t && t.classList && t.classList.contains('theme-controller')){ apply(t.value, 'radio'); toast('Theme: '+t.value); }
       });
     })();
   </script>

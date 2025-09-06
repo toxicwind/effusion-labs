@@ -1,0 +1,84 @@
+---
+permalink: "/projects/llm-release-watcher/"
+title: "LLM Release Watcher"
+layout: false
+eleventyExcludeFromCollections: false
+---
+
+<!DOCTYPE html>
+<html lang="en" class="assertive-geometry" data-theme="business">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="color-scheme" content="light dark">
+  <title>LLM Release Watcher — Effusion Labs</title>
+  <link rel="stylesheet" href="/assets/css/app.css?v={{ build.hash or build.commit or build.version or buildTime }}">
+</head>
+<body class="bg-base-100 text-base-content font-body antialiased">
+  <div class="navbar bg-base-100/80 backdrop-blur border-b border-base-200 sticky top-0 z-40 no-print">
+    <div class="flex-1">
+      <a href="{{ '/resume/' | url }}" class="btn btn-ghost text-base">← Resume</a>
+    </div>
+    <div class="flex-none join" role="group" aria-label="Theme switcher">
+      <input class="join-item btn btn-sm btn-outline theme-controller" type="radio" name="theme" aria-label="Nord" value="nord">
+      <input class="join-item btn btn-sm btn-outline theme-controller" type="radio" name="theme" aria-label="Business" value="business">
+      <input class="join-item btn btn-sm btn-outline theme-controller" type="radio" name="theme" aria-label="Night" value="night">
+      <input class="join-item btn btn-sm btn-outline theme-controller" type="radio" name="theme" aria-label="Abyss" value="abyss">
+    </div>
+  </div>
+
+  <main class="container mx-auto px-4 sm:px-6 lg:px-8 my-8 space-y-6">
+    <section class="card shadow-sm border border-base-300/40 rounded-box hb-accent">
+      <div class="card-body">
+        <div class="flex items-center gap-3">
+          <h1 class="text-2xl font-bold m-0">LLM Release Watcher</h1>
+          <span class="badge badge-neutral rounded-full">ops</span>
+        </div>
+        <p class="opacity-80 mt-1">A lightweight guardrail for shipping LLM features: shadow runs, timed canaries, accuracy/safety gates, and automatic rollback.</p>
+      </div>
+    </section>
+
+    <section class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <article class="card shadow-sm border border-base-300/40 rounded-box">
+        <div class="card-body">
+          <h2 class="text-sm uppercase tracking-widest opacity-60">Highlights</h2>
+          <ul class="mt-2 space-y-1.5 text-[15px] leading-6">
+            <li>Shadow traffic + metric compare (accuracy, latency, safety).</li>
+            <li>Timed canary with promotion thresholds.</li>
+            <li>Rollback playbooks and post‑release verification.</li>
+          </ul>
+        </div>
+      </article>
+      <article class="card shadow-sm border border-base-300/40 rounded-box">
+        <div class="card-body cq-root cq-chips">
+          <h2 class="text-sm uppercase tracking-widest opacity-60">Stack</h2>
+          <div class="mt-2 flex flex-wrap gap-2">
+            <span class="badge badge-ghost rounded-full">Metrics</span>
+            <span class="badge badge-ghost rounded-full">Dashboards</span>
+            <span class="badge badge-ghost rounded-full">CI/CD gates</span>
+            <span class="badge badge-ghost rounded-full">Playbooks</span>
+          </div>
+        </div>
+      </article>
+      <article class="card shadow-sm border border-base-300/40 rounded-box">
+        <div class="card-body">
+          <h2 class="text-sm uppercase tracking-widest opacity-60">Status</h2>
+          <p class="mt-2">Open to share patterns and code snippets on request.</p>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <script>
+    (function(){
+      var key='theme', allowed=['nord','business','night','abyss'];
+      var radios=[].slice.call(document.querySelectorAll('.theme-controller'));
+      function pick(){ try{var q=new URLSearchParams(location.search);var t=q.get('theme');if(t&&allowed.includes(t))return t;}catch(_){ } try{var s=localStorage.getItem(key);if(s&&allowed.includes(s))return s;}catch(_){ } var dark=matchMedia('(prefers-color-scheme: dark)').matches; return dark?'business':'nord'; }
+      function metaScheme(theme){ return (theme==='nord')?'light dark':'dark light'; }
+      function apply(t){ document.documentElement.classList.add('assertive-geometry'); document.documentElement.setAttribute('data-theme',t); try{localStorage.setItem(key,t);}catch(_){ } var m=document.querySelector('meta[name=\"color-scheme\"]'); if(m){m.content=metaScheme(t);} radios.forEach(function(r){r.checked=(r.value===t);}); }
+      apply(pick());
+      document.addEventListener('change',function(e){ var t=e.target; if(t&&t.classList&&t.classList.contains('theme-controller')){ apply(t.value); }});
+    })();
+  </script>
+</body>
+</html>

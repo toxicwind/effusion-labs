@@ -5,8 +5,8 @@
   "phoneNote": "Shareable on request via email",
   "email": "denverchrisortega@gmail.com",
   "linkedin": "https://linkedin.com/in/denverchrisortega",
-  "website": "https://effusionlabs.xyz",
-  "github": "https://github.com/denverchrisortega",
+  "website": "https://effusionlabs.com",
+  "github": "https://github.com/toxicwind",
   "downloadPdf": "/assets/Christopher_Ortega_Resume_2025.pdf",
   "ogImage": "/assets/og/resume-christopher-ortega.png",
   "updated": "2025-09-06",
@@ -227,7 +227,7 @@
         "Function Calling",
         "Unicode/Confusables"
       ],
-      "url": ""
+      "url": "/projects/hackaprompt-2025/"
     },
     {
       "name": "Patent Intelligence Agent",
@@ -235,7 +235,7 @@
       "subtitle": "Agentic Q&A over patent corpora",
       "blurb": "Hybrid search with CPC/IPC filters and citation trails; maps claims and limitations and returns answers with inline citations and scope notes.",
       "tags": ["RAG", "Guardrails", "RBAC", "Citations"],
-      "url": ""
+      "url": "/projects/patent-intelligence-agent/"
     },
     {
       "name": "LLM Release Watcher",
@@ -243,7 +243,7 @@
       "subtitle": "Safe, measurable LLM releases",
       "blurb": "Monitors accuracy, latency, and safety metrics with shadow runs, timed canaries, and automatic rollback.",
       "tags": ["CI/CD gates", "Metrics", "Playbooks"],
-      "url": ""
+      "url": "/projects/llm-release-watcher/"
     },
     {
       "name": "RAG Quality Kit",
