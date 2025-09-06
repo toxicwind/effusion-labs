@@ -5,7 +5,7 @@ layout: false
 eleventyExcludeFromCollections: true
 ---
 
-{# src/resume/index.njk — rebuilt + ADAPTIVE based on array sizes; no app.css #}
+{# src/resume/index.njk — adaptive layout, subtle accents, canonical+absolute SEO, no rainbow #}
 <!DOCTYPE html>
 <html lang="en" class="scroll-pt-16" data-theme="nord">
 <head>
@@ -19,25 +19,32 @@ eleventyExcludeFromCollections: true
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
-  {% set siteUrl = (site and site.url) or "" %}
   {% from "macros/meta.njk" import buildPageTitle, buildPageDesc %}
   {% set pageTitle = buildPageTitle(resume, title) %}
   {% set pageDesc  = buildPageDesc(resume) %}
-  {% set canonicalPath = "/resume/" | url %}
 
-  {# prefer absolute if site.url exists #}
+  {# Canonicals (prefer absolute when site.url is present) #}
+  {% set canonicalPath = "/resume/" | url %}
   {% if site and site.url %}
     {% set canonicalHref = site.url + canonicalPath %}
   {% else %}
     {% set canonicalHref = canonicalPath %}
   {% endif %}
-
-  {# also precompute Home link for Breadcrumb JSON-LD #}
   {% set homePath = "/" | url %}
   {% if site and site.url %}
     {% set homeHref = site.url + homePath %}
   {% else %}
     {% set homeHref = homePath %}
+  {% endif %}
+
+  {# OG image absolute URL if possible #}
+  {% if resume and resume.ogImage %}
+    {% set ogImageRel = resume.ogImage | url %}
+    {% if site and site.url %}
+      {% set ogImageHref = site.url + ogImageRel %}
+    {% else %}
+      {% set ogImageHref = ogImageRel %}
+    {% endif %}
   {% endif %}
 
   <title>{{ pageTitle }}</title>
@@ -49,17 +56,13 @@ eleventyExcludeFromCollections: true
   <meta property="og:title" content="{{ pageTitle }}">
   <meta property="og:description" content="{{ pageDesc }}">
   <meta property="og:url" content="{{ canonicalHref }}">
-  {% if resume and resume.ogImage %}
-  <meta property="og:image" content="{{ resume.ogImage | url }}">
-  {% endif %}
+  {% if ogImageHref %}<meta property="og:image" content="{{ ogImageHref }}">{% endif %}
 
   <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="{{ pageTitle }}">
   <meta name="twitter:description" content="{{ pageDesc }}">
-  {% if resume and resume.ogImage %}
-  <meta name="twitter:image" content="{{ resume.ogImage | url }}">
-  {% endif %}
+  {% if ogImageHref %}<meta name="twitter:image" content="{{ ogImageHref }}">{% endif %}
 
   <!-- Tailwind v4 + daisyUI v5 (site bundle) -->
   <link rel="stylesheet" href="/assets/css/app.css?v={{ build.hash or build.commit or build.version or buildTime }}">
@@ -69,11 +72,19 @@ eleventyExcludeFromCollections: true
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Rubik:wght@400..900&family=Space+Grotesk:wght@400..700&display=swap" rel="stylesheet">
 
-  <!-- Tiny CSS: skip-link + print polish + hb-tabrow styles -->
+  <!-- Skip-link, print polish, and toned accent system -->
   <style>
-    :root{--hb-accent-start:hsl(var(--p));--hb-accent-end:hsl(var(--s))}
+    :root{
+      /* Subtle accent rail tied to theme tokens (no rainbow) */
+      --hb-accent-start: hsl(var(--p));
+      --hb-accent-end:   hsl(var(--s));
+    }
+
+    /* Accessibility skip link */
     .skip-link{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden}
     .skip-link:focus{left:1rem;top:1rem;width:auto;height:auto;padding:.5rem .75rem;z-index:1000}
+
+    /* Print smoothing */
     @media print{
       @page{margin:.6in}
       .no-print,.navbar{display:none!important}
@@ -82,27 +93,52 @@ eleventyExcludeFromCollections: true
       a{color:#000!important;text-decoration:none!important}
       .card{background:#fff!important;border-color:#ddd!important}
     }
-    /* Subtle accent system */
+
+    /* Accent rail */
     .hb-accent{position:relative}
-    .hb-accent::before{content:"";position:absolute;inset-inline-start:-1px;top:8px;bottom:8px;width:3px;border-radius:999px;background:linear-gradient(180deg,var(--hb-accent-start),var(--hb-accent-end));opacity:.4}
-    /* Hypebrüt: Tab-like row styling for Highlights on this standalone page */
-    .hb-tabrow{position:relative;width:100%;padding:.75rem 1rem;border-radius:12px;border:1px solid hsl(var(--bc)/.12);background-color:hsl(var(--b1)/.92);box-shadow:0 2px 6px rgba(0,0,0,.06);transition:box-shadow .2s ease,border-color .2s ease}
-    .hb-tabrow::before{content:"";position:absolute;inset-inline-start:-1px;top:8px;bottom:8px;width:3px;border-radius:999px;background:linear-gradient(180deg,var(--hb-accent-start) 0%,var(--hb-accent-end) 100%);opacity:.5;transform:scaleY(.72);transform-origin:center;transition:transform .2s ease,opacity .2s ease}
+    .hb-accent::before{
+      content:"";position:absolute;inset-inline-start:-1px;top:8px;bottom:8px;width:3px;border-radius:999px;
+      background:linear-gradient(180deg,var(--hb-accent-start) 0%,var(--hb-accent-end) 100%);
+      opacity:.4;transform:scaleY(.72);transform-origin:center;transition:transform .2s ease,opacity .2s ease
+    }
+
+    /* Tab-like row styling for Highlights */
+    .hb-tabrow{
+      position:relative;width:100%;padding:.75rem 1rem;border-radius:12px;
+      border:1px solid hsl(var(--bc)/.12);background-color:hsl(var(--b1)/.92);
+      box-shadow:0 2px 6px rgba(0,0,0,.06);transition:box-shadow .2s ease,border-color .2s ease
+    }
+    .hb-tabrow::before{
+      content:"";position:absolute;inset-inline-start:-1px;top:8px;bottom:8px;width:3px;border-radius:999px;
+      background:linear-gradient(180deg,var(--hb-accent-start) 0%,var(--hb-accent-end) 100%);
+      opacity:.5;transform:scaleY(.72);transform-origin:center;transition:transform .2s ease,opacity .2s ease
+    }
     .hb-tabrow:hover{border-color:hsl(var(--p)/.38);box-shadow:0 6px 22px rgba(0,0,0,.10)}
     .hb-tabrow:hover::before{opacity:.75;transform:scaleY(1)}
     .hb-tabrow[data-active="true"]{border-color:hsl(var(--p)/.5);box-shadow:0 8px 28px rgba(0,0,0,.12)}
     .hb-tabrow[data-active="true"]::before{opacity:.9;transform:scaleY(1)}
+
     .hb-tablabel{font-size:11px;text-transform:uppercase;letter-spacing:.2em;opacity:.7}
     .hb-tabvalue{font-size:1.375rem;line-height:1.2;font-weight:700}
     .hb-tabsub{font-size:.75rem;opacity:.8}
+
+    /* Title divider (quiet gradient) */
     .hb-title{position:relative;display:inline-flex;align-items:center;gap:.5rem}
-    .hb-title::after{content:"";height:1px;width:48px;opacity:.45;background:linear-gradient(90deg,var(--hb-accent-start) 0%,var(--hb-accent-end) 100%)}
+    .hb-title::after{
+      content:"";height:1px;width:48px;opacity:.45;
+      background:linear-gradient(90deg,var(--hb-accent-start) 0%,var(--hb-accent-end) 100%)
+    }
+
+    /* Accent bullets */
     .hb-minirow{position:relative;padding-left:1rem;line-height:1.45}
-    .hb-minirow::before{content:"";position:absolute;left:0;top:.6em;width:.4rem;height:.4rem;border-radius:50%;background:linear-gradient(180deg,var(--hb-accent-start),var(--hb-accent-end));opacity:.5}
+    .hb-minirow::before{
+      content:"";position:absolute;left:0;top:.6em;width:.4rem;height:.4rem;border-radius:50%;
+      background:linear-gradient(180deg,var(--hb-accent-start),var(--hb-accent-end));opacity:.5
+    }
   </style>
 </head>
 
-  <body class="bg-base-100 text-base-content font-body antialiased selection:bg-primary/20">
+<body class="bg-base-100 text-base-content font-body antialiased selection:bg-primary/20">
   <a href="#main" class="skip-link btn btn-sm">Skip to main content</a>
 
   <!-- Top bar -->
@@ -113,7 +149,7 @@ eleventyExcludeFromCollections: true
       </a>
     </div>
     <div class="flex-none gap-2">
-      <div class="join no-print">
+      <div class="join no-print" role="group" aria-label="Theme switcher">
         <input class="join-item btn btn-sm btn-outline theme-controller" type="radio" name="theme" aria-label="Nord" value="nord">
         <input class="join-item btn btn-sm btn-outline theme-controller" type="radio" name="theme" aria-label="Sunset" value="sunset">
       </div>
@@ -128,8 +164,8 @@ eleventyExcludeFromCollections: true
       <aside class="col-span-12 lg:col-span-4">
         <div class="space-y-6 lg:sticky lg:top-6">
           <!-- Identity -->
-              <section class="card shadow-sm border border-base-300/40 rounded-box hb-accent">
-                <div class="card-body">
+          <section class="card shadow-sm border border-base-300/40 rounded-box hb-accent">
+            <div class="card-body">
               <h1 class="text-4xl md:text-5xl font-black tracking-tight">
                 {{ resume and resume.name or "Your Name" }}
               </h1>
@@ -161,9 +197,9 @@ eleventyExcludeFromCollections: true
               </div>
 
               {% if resume and resume.downloadPdf %}
-              <div class="mt-6">
-                <a href="{{ resume.downloadPdf | url }}" class="btn btn-outline btn-sm rounded-full no-print">Download PDF</a>
-              </div>
+                <div class="mt-6">
+                  <a href="{{ resume.downloadPdf | url }}" class="btn btn-outline btn-sm rounded-full no-print">Download PDF</a>
+                </div>
               {% endif %}
             </div>
           </section>
@@ -404,9 +440,9 @@ eleventyExcludeFromCollections: true
         <!-- Footer -->
         <footer class="flex items-center justify-between pt-2 pb-10 no-print">
           <small class="opacity-60">
-            Last updated: {{ resume.updated | date('yyyy-MM-dd') }}
+            {% if resume and resume.updated %}Last updated: {{ resume.updated | date('yyyy-MM-dd') }}{% endif %}
           </small>
-          <div class="join">
+          <div class="join" role="group" aria-label="Theme switcher">
             <input class="join-item btn btn-sm btn-outline theme-controller" type="radio" name="theme" aria-label="Nord" value="nord">
             <input class="join-item btn btn-sm btn-outline theme-controller" type="radio" name="theme" aria-label="Sunset" value="sunset">
           </div>
@@ -418,7 +454,7 @@ eleventyExcludeFromCollections: true
   <!-- Toaster -->
   <div id="toaster" class="toast toast-end z-[100]"></div>
 
-  <!-- JSON-LD (absolute URLs) -->
+  <!-- JSON-LD (absolute URLs where possible) -->
   {% set sameAsLinks = [resume.website, resume.linkedin, resume.github] | compactUnique %}
   <script type="application/ld+json">
   {
@@ -426,13 +462,13 @@ eleventyExcludeFromCollections: true
     "@type":"Person",
     "name": {{ (resume and resume.name) | dump | safe }},
     "jobTitle": {{ (resume and resume.title) | dump | safe }},
-    {% if resume and resume.ogImage %}"image": {{ resume.ogImage | url | dump | safe }},{% endif %}
+    {% if ogImageHref %}"image": {{ ogImageHref | dump | safe }},{% endif %}
     {% if resume and resume.address %}
-    "address": {{ resume.address | dump | safe }},
+      "address": {{ resume.address | dump | safe }},
     {% elseif resume and resume.location %}
-    "address": { "@type":"PostalAddress", "addressLocality": {{ resume.location | dump | safe }} },
+      "address": { "@type":"PostalAddress", "addressLocality": {{ resume.location | dump | safe }} },
     {% endif %}
-    {% if resume and resume.email %}"email":"mailto:{{ resume.email }}",{% endif %}
+    {% if resume and resume.email %}"email": "mailto:{{ resume.email }}",{% endif %}
     {% if sameAsLinks | length %}"sameAs": {{ sameAsLinks | dump | safe }},{% endif %}
     "url": {{ canonicalHref | dump | safe }}
   }
@@ -442,18 +478,25 @@ eleventyExcludeFromCollections: true
     "@context":"https://schema.org",
     "@type":"BreadcrumbList",
     "itemListElement": [
-      { "@type":"ListItem","position":1,"name":"Home","item": {{ homeHref | dump | safe }} },
-      { "@type":"ListItem","position":2,"name":"Resume","item": {{ canonicalHref | dump | safe }} }
+      { "@type":"ListItem","position": 1,"name":"Home","item": {{ homeHref | dump | safe }} },
+      { "@type":"ListItem","position": 2,"name":"Resume","item": {{ canonicalHref | dump | safe }} }
     ]
   }
   </script>
 
   <!-- Helpers -->
   <script>
-    function toast(msg){var wrap=document.getElementById('toaster');if(!wrap) return;var el=document.createElement('div');el.className='alert alert-info shadow';el.innerHTML='<span>'+msg+'</span>';wrap.appendChild(el);setTimeout(function(){el.style.opacity='0';},2200);setTimeout(function(){el.remove();},2600);}
+    function toast(msg){
+      var wrap=document.getElementById('toaster'); if(!wrap) return;
+      var el=document.createElement('div'); el.className='alert alert-info shadow'; el.innerHTML='<span>'+msg+'</span>';
+      wrap.appendChild(el); setTimeout(function(){el.style.opacity='0';},2200); setTimeout(function(){el.remove();},2600);
+    }
     function copyToClipboard(text){
       try{navigator.clipboard.writeText(text).then(function(){toast('Copied: '+text);});}
-      catch(e){var t=document.createElement('textarea');t.value=text;document.body.appendChild(t);t.select();try{document.execCommand('copy');toast('Copied: '+text);}catch(_){}t.remove();}
+      catch(e){
+        var t=document.createElement('textarea'); t.value=text; document.body.appendChild(t); t.select();
+        try{document.execCommand('copy'); toast('Copied: '+text);}catch(_){} t.remove();
+      }
     }
     (function(){
       var key='theme';
@@ -462,14 +505,14 @@ eleventyExcludeFromCollections: true
       function apply(name){
         document.documentElement.setAttribute('data-theme', name);
         localStorage.setItem(key, name);
-        // keep only the chosen value checked across all controller inputs
         radios.forEach(function(r){ r.checked = (r.value === name); });
         var meta=document.querySelector('meta[name="color-scheme"]');
         if(meta){ meta.content = (name==='nord') ? 'light dark' : 'dark light'; }
       }
-      if(stored){ apply(stored); } else {
-        var prefersDark=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches;
-        apply(prefersDark?'sunset':'nord');
+      if(stored){ apply(stored); }
+      else {
+        var prefersDark=window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        apply(prefersDark ? 'sunset' : 'nord');
       }
       document.addEventListener('change', function(e){
         var t=e.target; if(t && t.classList && t.classList.contains('theme-controller')){ apply(t.value); toast('Theme: '+t.value); }
