@@ -18,7 +18,7 @@
     </div>
   </div>
 
-  <ul id="work-list" class="list-none grid gap-4 md:grid-cols-2 md:gap-6 lg:grid-cols-3 lg:gap-8">
+  <ul id="work-list" class="list-none grid gap-4 md:gap-6 lg:gap-8 auto-rows-[1fr] items-stretch grid-cols-[repeat(auto-fit,minmax(22rem,1fr))]">
     {% for item in work %}
       {{ feedEntry(item) }}
     {% endfor %}

@@ -126,7 +126,7 @@
   {% set metaOff = metaDisable == true or metaDisable == 'true' %}
   {% set hasMeta = (status or certainty or importance or tags or memory_ref or date or page.date) and not metaOff %}
 
-  <main id="main" class="min-h-[60vh] mx-auto max-w-screen-2xl px-6">
+  <main id="main" class="min-h-[60vh] container-fluid px-6">
     <div class="
       {% if hasMeta %} xl:grid xl:grid-cols-[1fr_18rem] xl:gap-10 {% endif %}
       {% if showTitle != false %} mt-8 lg:mt-10 {% endif %}

@@ -1,7 +1,7 @@
 {# Feed entry: convert to a daisyUI-flavored cardish anchor #}
 {% macro feedEntry(item) -%}
 <li data-type="{{ item.type }}">
-  <a href="{{ item.url }}" class="group block surface-solid slab no-elevate with-rail p-5 sm:p-6 transition-colors hover:border-base-300 text-left">
+  <a href="{{ item.url }}" class="group block h-full surface-solid slab no-elevate with-rail p-5 sm:p-6 transition-colors hover:border-base-300 text-left">
     <div>
       {% set t = (item.type or item.data.type) | lower %}
       {% set typeClass = 'pill--meta' %}
