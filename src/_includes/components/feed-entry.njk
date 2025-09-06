@@ -1,8 +1,8 @@
 {# Feed entry: convert to a daisyUI-flavored cardish anchor #}
 {% macro feedEntry(item) -%}
 <li data-type="{{ item.type }}">
-  <a href="{{ item.url }}" class="group card card-border rounded-xl border-primary/60 ring-1 ring-primary/20 bg-base-100/80 backdrop-blur bg-gradient-to-br from-primary/5 to-transparent transition hover:-translate-y-1 hover:shadow-xl focus:outline-none focus-visible:ring focus-visible:ring-primary/40 p-6 text-left">
-    <div class="card-body">
+  <a href="{{ item.url }}" class="group block surface-solid slab no-elevate with-rail p-5 sm:p-6 transition-colors hover:border-base-300 text-left">
+    <div>
       {% set t = (item.type or item.data.type) | lower %}
       {% set typeClass = 'pill--meta' %}
       {% if t == 'project' %}{% set typeClass = 'pill--project' %}
@@ -17,7 +17,7 @@
           </time>
         {% endif %}
       </div>
-      <h3 class="card-title font-heading text-base-content group-hover:text-primary transition-colors">
+      <h3 class="font-heading text-base-content text-lg leading-tight group-hover:text-primary transition-colors">
         {{ item.data.title }}
       </h3>
       {% if item.data.description %}

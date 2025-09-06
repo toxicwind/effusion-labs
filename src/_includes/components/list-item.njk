@@ -2,9 +2,9 @@
 <a
   href="{{ item.url }}"
   aria-label="{{ item.data.title }}"
-  class="group card card-border rounded-xl border-primary/60 ring-1 ring-primary/20 bg-base-100/80 backdrop-blur bg-gradient-to-br from-primary/5 to-transparent transition hover:-translate-y-0.5 hover:shadow-xl focus:outline-none focus-visible:ring focus-visible:ring-primary/40 p-6 text-left"
+  class="group block surface-solid slab no-elevate with-rail p-5 sm:p-6 transition-colors hover:border-base-300 text-left"
 >
-  <div class="card-body">
+  <div>
     {% set t = (item.data.type or item.type) | lower %}
     {% set typeClass = 'pill--meta' %}
     {% if t == 'project' %}{% set typeClass = 'pill--project' %}
@@ -15,7 +15,7 @@
       {% if item.data.type %}<span class="pill {{ typeClass }}">{{ item.data.type | capitalize }}</span>{% endif %}
       {% if item.date %}<time datetime="{{ item.date | htmlDateString }}" class="text-[0.7rem] opacity-90">{{ item.date | readableDate }}</time>{% endif %}
     </div>
-    <h3 class="card-title font-heading text-base-content group-hover:text-primary transition-colors">{{ item.data.title }}</h3>
+    <h3 class="font-heading text-base-content text-lg leading-tight group-hover:text-primary transition-colors">{{ item.data.title }}</h3>
     {% if item.date | isNew %}<span class="sr-only">New</span>{% endif %}
     {% if item.data.description %}
       <p class="text-sm text-base-content/90">{{ item.data.description | truncate(120) }}</p>

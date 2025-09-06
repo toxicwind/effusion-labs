@@ -3,6 +3,10 @@
 export default {
   theme: {
     extend: {
+      screens: {
+        '3xl': '1920px', // 2K / ultrawide start
+        '4xl': '2560px'  // 4K-friendly tweaks
+      },
       fontFamily: {
         heading: ["Space Grotesk", "ui-sans-serif", "system-ui", "sans-serif"],
         body: ["Rubik", "ui-sans-serif", "system-ui", "sans-serif"],

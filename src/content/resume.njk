@@ -7,7 +7,7 @@ eleventyExcludeFromCollections: true
 
 {# src/resume/index.njk — adaptive layout, subtle accents, canonical+absolute SEO, no rainbow #}
 <!DOCTYPE html>
-<html lang="en" class="scroll-pt-16 assertive-geometry" data-theme="nord">
+<html lang="en" class="scroll-pt-16 assertive-geometry" data-theme="dim">
 <head>
   <!-- Meta -->
   <meta charset="UTF-8">
@@ -92,11 +92,11 @@ eleventyExcludeFromCollections: true
   </style>
 </head>
 
-<body class="bg-base-100 text-base-content font-body antialiased selection:bg-primary/20">
+<body class="bg-base-100 text-base-content font-body antialiased selection:bg-primary/20" data-page="resume">
   <a href="#main" class="skip-link btn btn-sm">Skip to main content</a>
 
   <!-- Top bar -->
-  <div class="navbar bg-base-100/80 backdrop-blur border-b border-base-200 sticky top-0 z-40">
+  <div class="navbar bg-base-100 border-b-2 border-base-300 sticky top-0 z-40">
     <div class="flex-1">
       <a href="{{ '/' | url }}" class="btn btn-ghost text-base font-semibold">
         {{ resume and resume.name or 'Resume' }}
@@ -105,16 +105,16 @@ eleventyExcludeFromCollections: true
     <div class="flex-none gap-2 items-center">
       
       <div class="join no-print" role="group" aria-label="Theme switcher">
-        <input class="join-item btn btn-sm btn-outline theme-controller hb-anim" type="radio" name="theme" aria-label="Nord" value="nord">
-        <input class="join-item btn btn-sm btn-outline theme-controller hb-anim" type="radio" name="theme" aria-label="Business" value="business">
+        <input class="join-item btn btn-sm btn-outline theme-controller hb-anim" type="radio" name="theme" aria-label="Corporate" value="corporate">
+        <input class="join-item btn btn-sm btn-outline theme-controller hb-anim" type="radio" name="theme" aria-label="Dim" value="dim">
       </div>
       <button class="btn btn-sm btn-outline no-print hb-anim" onclick="window.print()" title="Print / Save PDF">Print</button>
     </div>
   </div>
 
   <!-- Main grid -->
-  <main id="main" class="container mx-auto px-4 sm:px-6 lg:px-8 my-10 sm:my-12">
-    <div class="grid grid-cols-12 gap-6 sm:gap-8">
+  <main id="main" class="container-fluid px-4 sm:px-6 lg:px-8 2xl:px-12 3xl:px-16 4xl:px-20 my-10 sm:my-12">
+    <div class="hb-sheet grid grid-cols-12 gap-6 sm:gap-8 p-4 sm:p-6">
       <!-- LEFT RAIL (sticky on lg+) -->
       <aside class="col-span-12 lg:col-span-4">
         <div class="space-y-6 lg:sticky lg:top-6">
@@ -160,7 +160,7 @@ eleventyExcludeFromCollections: true
 
           {% if resume and resume.summary %}
           {% from "components/neon-card.njk" import neonCard %}
-          {% call neonCard({ title: "Summary", bodyCls: "prose prose-sm sm:prose-base dark:prose-invert max-w-none" }) %}
+          {% call neonCard({ title: "Summary", bodyCls: "prose prose-sm sm:prose-base dark:prose-invert max-w-none", neon: false, frame: 'none', rail: false }) %}
             <p class="mt-2">{{ resume.summary }}</p>
           {% endcall %}
           {% endif %}
@@ -172,7 +172,7 @@ eleventyExcludeFromCollections: true
           {% if resume and resume.highlights %}{% set _hc = resume.highlights | length %}{% endif %}
           {% if _hc %}
           {% from "components/neon-card.njk" import neonCard %}
-          {% call neonCard({ title: "Highlights" }) %}
+          {% call neonCard({ title: "Highlights", neon: false, frame: 'none', rail: false }) %}
 
               {# few (≤3): stats row; mid (4–8): compact KPI cards; many (≥9): dense compact cards #}
               {% if _hc <= 3 %}
@@ -225,7 +225,7 @@ eleventyExcludeFromCollections: true
 
           {% if resume and (resume.skills or resume.tools) %}
           {% from "components/neon-card.njk" import neonCard %}
-          {% call neonCard({ title: "Skills & Tools", bodyCls: "cq-root cq-chips", intensity: 'lite' }) %}
+          {% call neonCard({ title: "Skills & Tools", bodyCls: "cq-root cq-chips", neon: false, frame: 'none', rail: false }) %}
 
               {% if resume.skills and resume.skills.groups %}
                 {% for g in resume.skills.groups %}
@@ -263,10 +263,10 @@ eleventyExcludeFromCollections: true
       <section class="col-span-12 lg:col-span-8 space-y-6">
         {% if resume and resume.experience %}
         {% from "components/neon-card.njk" import neonCard %}
-        {% call neonCard({ title: "Experience" }) %}
+        {% call neonCard({ title: "Experience", neon: false, frame: 'none', rail: false }) %}
             <div class="mt-3 hb-list">
               {% for job in resume.experience %}
-              <article class="hb-row hb-accent hb-anim">
+              <article class="hb-row hb-anim">
                 <div class="hb-ex">
                   <div class="hb-ex-head">
                     <h3 class="hb-ex-title text-lg font-semibold tracking-tight m-0">
@@ -284,7 +284,7 @@ eleventyExcludeFromCollections: true
                   <ul class="hb-ex-bullets mt-2 space-y-1.5 text-[15px] leading-6">
                     {% for h in job.highlights %}
                       {% if loop.index0 < _maxBul %}
-                      <li class="hb-minirow hb-intensity-lite">{{ h }}</li>
+                      <li class="hb-minirow">{{ h }}</li>
                       {% endif %}
                     {% endfor %}
                   </ul>
@@ -294,7 +294,7 @@ eleventyExcludeFromCollections: true
                     <ul class="mt-2 space-y-1.5 text-[15px] leading-6">
                       {% for h in job.highlights %}
                         {% if loop.index0 >= _maxBul %}
-                        <li class="hb-minirow hb-intensity-lite">{{ h }}</li>
+                        <li class="hb-minirow">{{ h }}</li>
                         {% endif %}
                       {% endfor %}
                     </ul>
@@ -318,13 +318,13 @@ eleventyExcludeFromCollections: true
 
         {% if resume and resume.projects %}
         {% from "components/neon-card.njk" import neonCard %}
-        {% call neonCard({ title: "Selected Projects", bodyCls: "cq-root" }) %}
-            <div class="mt-3 hb-list hb-list--compact">
+        {% call neonCard({ title: "Selected Projects", bodyCls: "cq-root", neon: false, frame: 'none', rail: false }) %}
+            <div class="mt-3 hb-list hb-list--cards">
               {% for p in resume.projects %}
-              <article class="hb-row hb-accent hb-anim hb-proj">
+              <article class="hb-row hb-anim hb-proj">
                 <div class="hb-proj-inner">
                   <div class="flex items-center gap-2">
-                    <h3 class="card-title text-sm m-0">
+                    <h3 class="text-base font-semibold m-0">
                       {% if p.url %}<a href="{{ p.url }}" target="_blank" rel="noopener">{{ p.name }}</a>{% else %}{{ p.name }}{% endif %}
                     </h3>
                     {% if p.badge %}<span class="badge badge-neutral badge-sm rounded-full">{{ p.badge }}</span>{% endif %}
@@ -345,10 +345,10 @@ eleventyExcludeFromCollections: true
 
         {% if resume and resume.education %}
         {% from "components/neon-card.njk" import neonCard %}
-        {% call neonCard({ title: "Education" }) %}
+        {% call neonCard({ title: "Education", neon: false, frame: 'none', rail: false }) %}
             <div class="mt-3 hb-list">
               {% for e in resume.education %}
-              <article class="hb-row hb-accent">
+              <article class="hb-row">
                 <div class="flex items-baseline justify-between gap-3 flex-wrap">
                   <h3 class="text-base font-medium m-0">{{ e.school }}</h3>
                   <div class="text-sm opacity-80">{{ e.start }}{% if e.end %} — {{ e.end }}{% endif %}</div>
@@ -370,8 +370,8 @@ eleventyExcludeFromCollections: true
           <div class="flex items-center gap-3">
             
             <div class="join" role="group" aria-label="Theme switcher">
-              <input class="join-item btn btn-sm btn-outline theme-controller hb-anim" type="radio" name="theme" aria-label="Nord" value="nord">
-              <input class="join-item btn btn-sm btn-outline theme-controller hb-anim" type="radio" name="theme" aria-label="Business" value="business">
+              <input class="join-item btn btn-sm btn-outline theme-controller hb-anim" type="radio" name="theme" aria-label="Corporate" value="corporate">
+              <input class="join-item btn btn-sm btn-outline theme-controller hb-anim" type="radio" name="theme" aria-label="Dim" value="dim">
             </div>
           </div>
         </footer>
@@ -428,7 +428,7 @@ eleventyExcludeFromCollections: true
     }
     (function(){
       var key='theme';
-      var allowed=['nord','business'];
+      var allowed=['corporate','dim'];
       var radios=[].slice.call(document.querySelectorAll('.theme-controller'));
       document.documentElement.classList.add('assertive-geometry');
 
@@ -446,9 +446,9 @@ eleventyExcludeFromCollections: true
       }
       function preferred(){
         var dark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-        return dark ? 'business' : 'nord';
+        return dark ? 'dim' : 'corporate';
       }
-      function metaScheme(theme){ return (theme==='nord') ? 'light dark' : 'dark light'; }
+      function metaScheme(theme){ return (theme==='corporate') ? 'light dark' : 'dark light'; }
       function apply(name, source){
         document.documentElement.setAttribute('data-theme', name);
         document.documentElement.dataset.themeSource = source || 'init';
@@ -458,7 +458,7 @@ eleventyExcludeFromCollections: true
         radios.forEach(function(r){ r.checked = (r.value === name); });
         try{ document.dispatchEvent(new CustomEvent('themechange', { detail: { theme: name, source: source||'user' } })); }catch(_){}
       }
-      var picked = fromQuery() || fromStorage() || preferred();
+      var picked = fromQuery() || fromStorage() || 'dim';
       apply(picked, fromQuery() ? 'query' : (fromStorage() ? 'storage' : 'os'));
       document.addEventListener('change', function(e){
         var t=e.target; if(t && t.classList && t.classList.contains('theme-controller')){ apply(t.value, 'radio'); toast('Theme: '+t.value); }

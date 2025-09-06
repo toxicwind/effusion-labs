@@ -2,8 +2,8 @@
   "use strict";
 
   var STORAGE_KEY = "theme";
-  var LIGHT = "nord";
-  var DARK = "sunset";
+  var LIGHT = "corporate";
+  var DARK = "dim";
 
   var btn = document.getElementById("theme-toggle");
   if (!btn) return;

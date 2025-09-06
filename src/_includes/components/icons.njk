@@ -1,3 +1,11 @@
 {% macro icon(name, attrs = {}) %}
-  {{ name | lucide(attrs) | safe }}
+  {# Progressive icon renderer
+     - If name includes a set prefix (e.g., mdi:home, heroicons-outline:bell), render via Iconify web component.
+     - Otherwise, try lucide server-side SVG (fastest).
+  #}
+  {% if name and (":" in name) %}
+    <iconify-icon icon="{{ name }}" {% for k,v in attrs %} {{ k }}="{{ v }}"{% endfor %}></iconify-icon>
+  {% else %}
+    {{ name | lucide(attrs) | safe }}
+  {% endif %}
 {% endmacro %}

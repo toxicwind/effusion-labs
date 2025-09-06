@@ -24,14 +24,14 @@
     <meta property="og:url" content="{{ canon | absoluteUrl }}">
   {% endif %}
 
-  {# Early theme (daisyUI): align with compiled themes (nord, sunset). #}
+  {# Early theme (daisyUI): align with compiled themes (corporate, dim). #}
   <script>
     (function () {
       try {
         var THEMES = {
-          lightDefault: "nord",
-          darkDefault:  "sunset",
-          allowed: ["nord","sunset"]
+          lightDefault: "corporate",
+          darkDefault:  "dim",
+          allowed: ["corporate","dim"]
         };
         var meta = document.querySelector('meta[name="color-scheme"]') ||
           (function () { var m = document.createElement("meta"); m.name = "color-scheme"; document.head.appendChild(m); return m; })();
@@ -41,9 +41,8 @@
         if (picked && !THEMES.allowed.includes(picked)) picked = null;
 
         if (!picked) {
-          var prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
-          picked = prefersDark ? THEMES.darkDefault : THEMES.lightDefault;
-          document.documentElement.dataset.themeSource = prefersDark ? "os-dark" : "os-light";
+          picked = THEMES.darkDefault; // default to dark (dim)
+          document.documentElement.dataset.themeSource = "default";
         } else {
           document.documentElement.dataset.themeSource = "storage";
         }
@@ -59,7 +58,7 @@
           meta.content = (name === THEMES.lightDefault) ? "light dark" : "dark light";
         };
       } catch (_) {
-        document.documentElement.setAttribute("data-theme", "sunset");
+        document.documentElement.setAttribute("data-theme", "dim");
         document.documentElement.dataset.themeSource = "fallback";
       }
     })();
@@ -95,14 +94,7 @@
       box-shadow: 0 1px 0 rgba(0,0,0,.75), 0 12px 30px rgba(0,0,0,.7);
       border-radius: 16px;
     }
-    .btn-cutout {
-      --c: var(--neon-a);
-      color: var(--neon-edge); background: transparent;
-      border: 2px solid color-mix(in oklab, var(--c) 85%, #fff 15%);
-      box-shadow: inset 0 0 0 2px rgba(0,0,0,.65);
-    }
-    .btn-cutout[data-variant="b"] { --c: var(--neon-b); }
-    .btn-cutout[data-variant="c"] { --c: var(--neon-c); }
+    /* Legacy cutout button styles removed in favor of grounded buttons */
 
     /* Neon Tiles — subtle spectral lift/hover for list cards */
     .hb-tile {
@@ -158,6 +150,8 @@
   {{ footer(buildTime) }}
 
   <!-- Feature scripts -->
+  <!-- Iconify web component (universal icon sets) -->
+  <script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js" defer></script>
   <script src="/assets/js/work-filters.js" defer></script>
   <script src="/assets/js/mschf-overlay.js" defer></script>
   <script src="/assets/js/theme-toggle.js" defer></script>

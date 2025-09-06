@@ -38,9 +38,9 @@
     (function () {
       try {
         var THEMES = {
-          lightDefault: "nord",
-          darkDefault: "sunset",
-          allowed: ["nord","sunset"]
+          lightDefault: "corporate",
+          darkDefault: "dim",
+          allowed: ["corporate","dim"]
         };
         var meta = document.querySelector('meta[name="color-scheme"]') ||
           (function () { var m = document.createElement("meta"); m.name = "color-scheme"; document.head.appendChild(m); return m; })();
@@ -48,9 +48,8 @@
         var picked = (stored && stored.trim()) ? stored.trim() : null;
         if (picked && !THEMES.allowed.includes(picked)) picked = null;
         if (!picked) {
-          var prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
-          picked = prefersDark ? THEMES.darkDefault : THEMES.lightDefault;
-          document.documentElement.dataset.themeSource = prefersDark ? "os-dark" : "os-light";
+          picked = THEMES.darkDefault; // default to dark (dim)
+          document.documentElement.dataset.themeSource = "default";
         } else {
           document.documentElement.dataset.themeSource = "storage";
         }
@@ -64,7 +63,7 @@
           meta.content = (name === THEMES.lightDefault) ? "light dark" : "dark light";
         };
       } catch (_) {
-        document.documentElement.setAttribute("data-theme", "sunset");
+        document.documentElement.setAttribute("data-theme", "dim");
         document.documentElement.dataset.themeSource = "fallback";
       }
     })();

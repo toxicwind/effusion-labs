@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" class="assertive-geometry" data-theme="dim">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="color-scheme" content="light dark">
+
+  {% set slug = projectSlug or page.fileSlug %}
+  {% set proj = resume and resume.projectPages and resume.projectPages[slug] %}
+  <title>{% if proj %}{{ proj.title }} — Effusion Labs{% else %}Project — Effusion Labs{% endif %}</title>
+  <link rel="stylesheet" href="/assets/css/app.css?v={{ build.hash or build.commit or build.version or buildTime }}">
+</head>
+<body class="bg-base-100 text-base-content font-body antialiased">
+  <div class="navbar bg-base-100/80 backdrop-blur border-b border-base-200 sticky top-0 z-40 no-print">
+    <div class="flex-1">
+      <a href="{{ '/resume/' | url }}" class="btn btn-ghost text-base">← Resume</a>
+    </div>
+    <div class="flex-none join" role="group" aria-label="Theme switcher">
+      <input class="join-item btn btn-sm btn-outline theme-controller" type="radio" name="theme" aria-label="Corporate" value="corporate">
+      <input class="join-item btn btn-sm btn-outline theme-controller" type="radio" name="theme" aria-label="Dim" value="dim">
+    </div>
+  </div>
+
+  <main class="container mx-auto px-4 sm:px-6 lg:px-8 my-10 sm:my-12 space-y-6 sm:space-y-8">
+    <section class="card shadow-xs ring-1 ring-base-300/35 border-transparent rounded-box hb-accent hb-neon hb-intensity-lite hb-anim">
+      <div class="card-body">
+        <div class="flex items-center gap-3">
+          <h1 class="text-2xl font-bold m-0">{{ proj and proj.title or 'Project' }}</h1>
+          {% if proj and proj.badge %}<span class="badge badge-neutral rounded-full">{{ proj.badge }}</span>{% endif %}
+        </div>
+        {% if proj and proj.blurb %}<p class="opacity-80 mt-1">{{ proj.blurb }}</p>{% endif %}
+      </div>
+    </section>
+
+    <section class="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
+      <article class="card shadow-xs ring-1 ring-base-300/35 border-transparent rounded-box">
+        <div class="card-body">
+          <h2 class="text-sm uppercase tracking-widest opacity-60">Highlights</h2>
+          {% if proj and proj.highlights %}
+          <ul class="mt-2 space-y-1.5 text-[15px] leading-6">
+            {% for item in proj.highlights %}<li>{{ item }}</li>{% endfor %}
+          </ul>
+          {% endif %}
+        </div>
+      </article>
+      <article class="card shadow-xs ring-1 ring-base-300/35 border-transparent rounded-box">
+        <div class="card-body cq-root cq-chips">
+          <h2 class="text-sm uppercase tracking-widest opacity-60">Stack</h2>
+          <div class="mt-2 flex flex-wrap gap-2">
+            {% for t in (proj and proj.stack) or [] %}<span class="badge badge-ghost rounded-full">{{ t }}</span>{% endfor %}
+          </div>
+        </div>
+      </article>
+      <article class="card shadow-xs ring-1 ring-base-300/35 border-transparent rounded-box">
+        <div class="card-body">
+          <h2 class="text-sm uppercase tracking-widest opacity-60">Status</h2>
+          <p class="mt-2">{{ (proj and proj.status) or '—' }}</p>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <script>
+    (function(){
+      var key='theme', allowed=['corporate','dim'];
+      var radios=[].slice.call(document.querySelectorAll('.theme-controller'));
+      function pick(){ try{var q=new URLSearchParams(location.search);var t=q.get('theme');if(t&&allowed.includes(t))return t;}catch(_){ } try{var s=localStorage.getItem(key);if(s&&allowed.includes(s))return s;}catch(_){ } return 'dim'; }
+      function metaScheme(theme){ return (theme==='corporate')?'light dark':'dark light'; }
+      function apply(t){ document.documentElement.classList.add('assertive-geometry'); document.documentElement.setAttribute('data-theme',t); try{localStorage.setItem(key,t);}catch(_){ } var m=document.querySelector('meta[name="color-scheme"]'); if(m){m.content=metaScheme(t);} radios.forEach(function(r){r.checked=(r.value===t);}); }
+      apply(pick());
+      document.addEventListener('change',function(e){ var t=e.target; if(t&&t.classList&&t.classList.contains('theme-controller')){ apply(t.value); }});
+    })();
+  </script>
+</body>
+</html>

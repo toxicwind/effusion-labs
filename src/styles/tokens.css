@@ -28,3 +28,19 @@ html[data-theme="light"] {
   --color-code-bg: 235 235 235;
   --color-code-text: 30 30 30;
 }
+
+/* Fluid page width and spectrum tokens (site-wide) */
+:root{
+  /* Content width scales but never edge-to-edge */
+  --page-w: min(110rem, 92vw);
+
+  /* Spectrum primitives (rails/hairlines/borders) */
+  --spec-a:#00E0FF; --spec-b:#9AFF00; --spec-c:#FF1CF7; --spec-d:#FFC700;
+  --spectrum: linear-gradient(180deg,var(--spec-a),var(--spec-b) 33%,var(--spec-c) 66%,var(--spec-d));
+  --spectrum-x: linear-gradient(90deg,var(--spec-a),var(--spec-c));
+  --spec-alpha:.35; --spec-rail-w:3px; --spec-underline-w:2px; --spec-chip-bw:2px;
+}
+@media (min-width:1920px){ :root{ --page-w: min(130rem, 88vw); } }
+@media (min-width:2560px){ :root{ --page-w: min(150rem, 84vw); } }
+@media (min-width:3840px){ :root{ --page-w: min(168rem, 78vw); } }
+[data-theme="dim"]{ --spec-alpha:.42; }

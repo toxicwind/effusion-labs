@@ -57,7 +57,7 @@
             {% set isPrimary = (c.kind or 'primary') == 'primary' %}
             <a
               href="{{ c.href }}"
-              class="{% if isPrimary %}btn btn-cutout hb-ring-a{% else %}btn btn-ghost hb-ring-c{% endif %} px-7 py-3 font-heading font-bold"
+              class="{% if isPrimary %}btn btn-primary{% else %}btn btn-outline{% endif %} px-7 py-3 font-heading font-bold"
               {% if not isPrimary %}data-variant="c"{% endif %}
             >
               {{ c.label }}
