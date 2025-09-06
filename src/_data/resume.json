@@ -21,7 +21,11 @@
   "summary": "Software engineer with 6+ years across backend services and streaming data systems, now centered on LLM applications and LLMOps. Built and operated APIs and pipelines on AWS (EMR, Lambda, Kinesis, S3), containerized services on Kubernetes, and delivered search/analytics with Elasticsearch. Focus areas: retrieval that returns the right context, evaluation gates that block bad releases, and dashboards that surface drift early.",
 
   "highlights": [
-    { "title": "HackAPrompt 2025", "value": "Top-10 (#7)", "sub": "Adversarial prompt contest" },
+    {
+      "title": "HackAPrompt 2025",
+      "value": "Top-10 (#7)",
+      "sub": "Adversarial prompt contest"
+    },
     {
       "title": "High-throughput data",
       "value": "10+ TB/day",
@@ -44,10 +48,22 @@
       {
         "name": "AI / LLM",
         "items": [
-          { "name": "Prompt design", "hint": "Task/format constraints, system prompting, self-checks" },
-          { "name": "Retrieval / RAG", "hint": "Chunking heuristics, hybrid search, re-ranking, citations" },
-          { "name": "Evaluation / metrics", "hint": "Small gold sets, pass@k, coverage/latency/safety gates" },
-          { "name": "Safety controls", "hint": "Guardrails, allow/deny lists, output sanitization" },
+          {
+            "name": "Prompt design",
+            "hint": "Task/format constraints, system prompting, self-checks"
+          },
+          {
+            "name": "Retrieval / RAG",
+            "hint": "Chunking heuristics, hybrid search, re-ranking, citations"
+          },
+          {
+            "name": "Evaluation / metrics",
+            "hint": "Small gold sets, pass@k, coverage/latency/safety gates"
+          },
+          {
+            "name": "Safety controls",
+            "hint": "Guardrails, allow/deny lists, output sanitization"
+          },
           { "name": "PyTorch" },
           { "name": "Transformers" },
           { "name": "LangChain" },
@@ -60,7 +76,10 @@
           { "name": "Python" },
           { "name": "Scala (background)" },
           { "name": "Spark", "hint": "Batch + streaming on EMR" },
-          { "name": "Elasticsearch", "hint": "Index design, aggregations, analyzers" },
+          {
+            "name": "Elasticsearch",
+            "hint": "Index design, aggregations, analyzers"
+          },
           { "name": "Kafka" },
           { "name": "Kinesis" },
           { "name": "pandas" },
@@ -70,7 +89,10 @@
       {
         "name": "Cloud & DevOps",
         "items": [
-          { "name": "AWS", "hint": "EMR, Lambda, Kinesis, S3, CloudWatch, RDS" },
+          {
+            "name": "AWS",
+            "hint": "EMR, Lambda, Kinesis, S3, CloudWatch, RDS"
+          },
           { "name": "Kubernetes" },
           { "name": "Terraform" },
           { "name": "Docker" },
@@ -81,9 +103,15 @@
         "name": "APIs & Practices",
         "items": [
           { "name": "REST" },
-          { "name": "OpenAPI", "hint": "Versioning, schema linting, compatibility checks" },
+          {
+            "name": "OpenAPI",
+            "hint": "Versioning, schema linting, compatibility checks"
+          },
           { "name": "JWT/OAuth2" },
-          { "name": "Release checks", "hint": "Quality bars + rollout/rollback playbooks" },
+          {
+            "name": "Release checks",
+            "hint": "Quality bars + rollout/rollback playbooks"
+          },
           { "name": "Observability", "hint": "Metrics, logs, traces, SLOs" },
           { "name": "Response playbooks" },
           { "name": "TRDs" },
@@ -116,8 +144,8 @@
       "end": "",
       "location": "Denver, CO",
       "highlights": [
-        "HackAPrompt 2025 — Top-10 (7th): turned jailbreak tactics into repeatable tests and mitigations; shipped a lightweight Gatekeeper that enforces accuracy/safety gates and rollout controls.",
-        "Authored adversarial sets (200+ items) with Positive/Negative/Risk cases; checks for groundedness (“no citation → no claim”), refusal-appropriateness, unsafe-rate, and p50/p95; deltas: +9 accuracy points, p95 ≤1.8s, unsafe probes ~0 on re-tests.",
+        "HackAPrompt 2025 — Top-10 (7th): turned jailbreak tactics into repeatable tests and mitigations; added rollout controls for accuracy and safety with shadow and canary runs.",
+        "Authored evaluation suites (200+ prompts) with Positive/Negative/Risk cases; checks for groundedness (“no citation → no claim”), refusal-appropriateness, unsafe-rate, and p50/p95; deltas: +9 accuracy points, p95 ≤1.8s, unsafe probes ~0 on re-tests.",
         "Patent Intelligence Agent (consulting, private client): constrained Q&A over patent corpora with hybrid semantic + CPC/IPC filtering, claim/abstract parsing, citation-trail review, and landscape digests; outputs include inline citations and limitation mapping; added RBAC, prompt-safety controls, and clear notices.",
         "Built local LLM workflows with modular orchestration (prompt-rewrite steps, LoRA adapters, graph-style configs) to compare prompts/models offline with reproducible inputs.",
         "Engineered a modular Eleventy (11ty) 3.x system (Nunjucks, Tailwind 4) with markdown-it extensions, interlinking/navigation plugins, and GitHub Actions for reproducible builds."
@@ -188,7 +216,7 @@
       "name": "HackAPrompt Top-10 (7th)",
       "subtitle": "Jailbreak and prompt‑injection challenge (2025)",
       "badge": "security",
-      "blurb": "Placed 7th; built reproducible jailbreak tests and shipped a small gatekeeper enforcing accuracy and safety thresholds with shadow and canary rollouts.",
+      "blurb": "Placed 7th; built reproducible jailbreak tests with shadow and canary rollouts that enforced accuracy and safety thresholds.",
       "tags": [
         "LLM Safety",
         "Prompt Engineering",
@@ -210,10 +238,10 @@
       "url": ""
     },
     {
-      "name": "LLMOps Gatekeeper",
+      "name": "LLM Release Watcher",
       "badge": "ops",
       "subtitle": "Safe, measurable LLM releases",
-      "blurb": "Blocks releases that miss accuracy, latency, or safety thresholds; supports shadow runs, timed canaries, and automatic rollback.",
+      "blurb": "Monitors accuracy, latency, and safety metrics with shadow runs, timed canaries, and automatic rollback.",
       "tags": ["CI/CD gates", "Metrics", "Playbooks"],
       "url": ""
     },
