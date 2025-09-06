@@ -1,7 +1,7 @@
 [
   {
     "name": "tailwindcss",
-    "version": "4.1.11",
+    "version": "4.1.12",
     "license": "MIT",
     "homepage": "https://tailwindcss.com",
     "repo": "https://github.com/tailwindlabs/tailwindcss.git",
@@ -33,7 +33,7 @@
   },
   {
     "name": "daisyui",
-    "version": "5.0.50",
+    "version": "5.1.6",
     "license": "MIT",
     "homepage": "https://daisyui.com",
     "repo": "https://github.com/saadeghi/daisyui.git",

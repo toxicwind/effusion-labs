@@ -1,5 +1,16 @@
 // tailwind.config.mjs
 // Brutalist / KAWS-adjacent type: heavy geometric headings + rounded sans body.
+import typography from '@tailwindcss/typography';
+import daisyui from 'daisyui';
+
+/**
+ * Resolve DaisyUI themes based on environment toggle.
+ * Set `DAISYUI_THEMES=false` to disable theme injection.
+ */
+export function resolveDaisyThemes() {
+  return process.env.DAISYUI_THEMES === 'false' ? [] : ['dim', 'corporate'];
+}
+
 export default {
   theme: {
     extend: {
@@ -100,5 +111,9 @@ export default {
       }),
     },
   },
-  plugins: [],
+  daisyui: {
+    themes: resolveDaisyThemes(),
+    darkTheme: 'dim'
+  },
+  plugins: [typography, daisyui],
 };

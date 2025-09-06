@@ -6,14 +6,8 @@
 /* Bind Tailwind's `dark:` variant to daisyUI dark theme (dim) */
 @custom-variant dark (&:where([data-theme=dim], [data-theme=dim] *));
 
-/* Plugins (Tailwind v4 style) */
-@plugin "@tailwindcss/typography";
-
-/* daisyUI v5 — enable themes with explicit defaults */
-@plugin "daisyui" {
-  /* Light = corporate; Dark = dim (dark by default; prefer light when OS prefers light) */
-  themes: dim --default, corporate --preferslight;
-}
+/* Plugins configured in tailwind.config.mjs.
+   DaisyUI themes honor the `DAISYUI_THEMES` env switch. */
 
 /* Project CSS */
 @import "./home.css";
