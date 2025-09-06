@@ -218,7 +218,7 @@ llm_cat() {
     html|htm)   parser="html" ;;
     css|pcss)   parser="css" ;;
     yml|yaml)   parser="yaml" ;;
-  endesac
+  esac
   if [[ -n "$parser" ]] && _llm_has npx; then
     _llm_emit INFO "Pretty-printing $target (parser: $parser)"
     npx --no-install prettier --parser "$parser" --print-width "${LLM_FOLD_WIDTH}" --no-config -- "$target" 2>/dev/null | _llm_fold
