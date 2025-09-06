@@ -1,0 +1,3 @@
+@layer base {
+  code { @apply font-mono text-sm px-1 rounded bg-base-300; }
+}
