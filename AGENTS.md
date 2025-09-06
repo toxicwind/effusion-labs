@@ -106,7 +106,7 @@ git push origin main
 * **Per-run floors:**
 
   * Do **≥4 passes**.
-  * **Search (per pass):** call `web.run` with **`response_length=long`** and a **`search_query` array of ≥8 smart, diversified queries** (synonyms, domain jargon, Boolean/operators, `site:`/domain and recency filters).
+  * **Search (per pass):** call `to=web.run code=` with **`response_length=long`** and a **`search_query` array of ≥8 smart, diversified queries** (synonyms, domain jargon, Boolean/operators, `site:`/domain and recency filters).
   * **Browse/extract (per pass):** **open ≥4 high-signal results** and pursue **≥4 cross-domain links** using `open` / `click`. Use `find` for exact strings; `screenshot` for PDFs/figures.
 
 * **Mechanistic query design (Goldilocks):**
@@ -124,9 +124,9 @@ git push origin main
 
 * **Tool mapping (sanity):**
 
-  * Searching = `web.run` → `search_query: [ … ]` (with `response_length=long`)
-  * Browsing/extracting = `web.run` → `open` / `click` / `find` / `screenshot`
-  * Images when materially helpful = `web.run` → `image_query`
+  * Searching = `to=web.run code=` → `search_query: [ … ]` (with `response_length=long`)
+  * Browsing/extracting = `to=web.run code=` → `open` / `click` / `find` / `screenshot`
+  * Images when materially helpful = `to=web.run code=` → `image_query`
 
 * **Trace (lightweight):** Emit compact counts (runs/passes/queries/opens/cross-links) and the key pivots chosen.
 
