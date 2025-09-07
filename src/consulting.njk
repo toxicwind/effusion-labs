@@ -147,7 +147,7 @@ permalink: /consulting/
    }
 } %}
 <!DOCTYPE html>
-<html lang="en" data-theme="business>
+<html lang="en" data-theme="business">
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <title>{{ DATA.alt }} | AI Safety Specialist - Eliminate Hallucinations &amp; Data Leaks</title>
@@ -411,7 +411,7 @@ permalink: /consulting/
         {% set isInfo   = ('//' in l) or ('Executing' in l) %}
 
         <pre
-          data-prefix="{% if isBreach or isCrit %}⚠{% elif isInfo %}//{% else %}${% endif %}"
+          data-prefix="{% if isBreach or isCrit %}&#9888;{% elif isInfo %}//{% else %}${% endif %}"
           class="{% if isBreach %}text-error font-bold{% elif isCrit %}text-warning font-bold{% elif isInfo %}text-info{% else %}text-success{% endif %} whitespace-pre"
         ><code>{{ l }}</code></pre>
       {% endfor %}
@@ -458,7 +458,7 @@ permalink: /consulting/
             <div class="space-y-3 mb-8">
               {% for feature in o.features %}
                 <div class="flex items-start gap-3">
-                  <span class="text-primary/70 text-xl">→</span>
+                  <span class="text-primary/70 text-xl">&rarr;</span>
                   <span>{{ feature }}</span>
                 </div>
               {% endfor %}
