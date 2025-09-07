@@ -141,8 +141,8 @@ permalink: /consulting/
       "headline":"ELITE VALIDATION",
       "items":[
          "Top-10 Global Finish: HackAPrompt Adversarial Challenge",
-         "Zero Successful Breaches: 47 Production Deployments",
-         "99.97% Client Retention: 18-Month Average Engagement"
+         "Zero Successful Breaches in Production Deployments",
+         "100% Client Retention: 18-Month Average Engagement"
       ]
    }
 } %}
@@ -219,7 +219,7 @@ permalink: /consulting/
 
     /* --- Hero code-panel right-bleed utilities --- */
     :where(.chunky).hb-overflow-visible { overflow: visible !important; }  /* let child spill past border */
-    .hb-float { position: relative; z-index: 3; }                          /* sit above the card border */
+    .hb-float { position: relative; z-index: 4; }                          /* sit above the card border */
     .hb-bleed-r { margin-right: -4rem; }                                   /* default bleed amount */
     .hb-nudge { transform: translateY(-2px); }                              /* tiny float feel on all sizes */
     .hb-open-r { border-right-color: transparent !important; }             /* visually open right edge */
@@ -228,13 +228,13 @@ permalink: /consulting/
     .hb-console {
       display: inline-block;                                               /* shrink-to-fit */
       width: -moz-fit-content; width: fit-content;                         /* intrinsic width */
-      max-width: min(62ch, 100%);                                          /* readable limit */
+      max-width: min(80ch, 100%);                                          /* readable limit */
       overflow: visible;                                                   /* allow exterior glow/bleed */
     }
-    .hb-console { max-height: clamp(12rem, 36vh, 24rem); }
+    .hb-console { max-height: clamp(14rem, 38vh, 28rem); }
     .hb-console pre { white-space: pre; }
     /* Scoped override so it works even if markup still has w-full */
-    #top .mockup-code { display:inline-block; width:fit-content; max-width:min(62ch,100%); overflow:visible; margin-left:auto; }
+    #top .mockup-code { display:inline-block; width:fit-content; max-width:min(80ch,100%); overflow:visible; margin-left:auto; }
 
     /* --- Hero lean + container sizing --- */
     .hb-card-limit { max-width: clamp(46rem, 68vw, 64rem); }
@@ -252,7 +252,14 @@ permalink: /consulting/
     @media (min-width: 1024px) {                                           /* lg: */
       .lg\:hb-bleed-r { margin-right: -8rem; }                             /* bigger bleed on wide screens */
       .lg\:hb-nudge { transform: translate3d(0.5rem,-2px,0); }             /* add a subtle right nudge at lg */
-      .lg\:hb-console { max-width: min(72ch, 100%); }
+      .lg\:hb-console { max-width: min(96ch, 100%); }
+      /* Center-right float: closer to center, slightly bottom-biased */
+      .lg\:hb-float-cr { position: absolute; top: 58%; right: clamp(1rem, 8vw, 14rem); transform: translate3d(4%, -50%, 0); }
+    }
+
+    @media (min-width: 1536px) {                                           /* 2xl: very wide screens */
+      .lg\:hb-float-cr { top: 56%; right: clamp(3rem, 12vw, 18rem); }
+      #top .mockup-code { max-width: min(104ch, 100%); }
     }
 
     /* safety: make sure columns can actually shrink/wrap */
@@ -388,7 +395,7 @@ permalink: /consulting/
       <!-- moved outside grid for absolute positioning relative to the card wrapper -->
     </div>  <!-- close .hero-content grid -->
 
-    <div class="relative mockup-code bg-base-300 border-2 border-primary/50 w-auto text-xs md:text-sm shadow-2xl overflow-x-auto rounded-lg hb-console lg:hb-console hb-float hb-bleed-r hb-nudge lg:hb-float-br">
+    <div class="relative mockup-code bg-base-300 border-2 border-primary/50 w-auto text-xs md:text-sm shadow-2xl overflow-x-auto rounded-lg hb-console lg:hb-console hb-float hb-bleed-r hb-nudge lg:hb-float-cr">
       {% for l in DATA.hero.code %}
         {% set isBreach = 'BREACH' in l %}
         {% set isCrit   = 'CRITICAL' in l %}
