@@ -380,14 +380,14 @@ permalink: /consulting/
       </div>
     </div>
 <section id="top" class="mb-32">
-  <div class="chunky hb-brut-card hb-intensity-lite hb-accent hb-overflow-visible hb-open-r hb-lean-left hb-card-limit p-8 md:p-12">
+  <div class="chunky hb-brut-card hb-intensity-lite hb-accent hb-overflow-visible hb-open-r hb-lean-left hb-card-limit p-6 md:p-12">
     <!-- grid is predictable; text never gets crushed -->
     <div class="hero-content w-full grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 p-0 items-start">
 
       <!-- TEXT column (left at lg) -->
       <div class="order-1 lg:order-1 col-span-12 lg:col-span-5 min-w-0">
-        <h1 class="text-6xl md:text-8xl hyper-title text-primary mb-2 hb-underline">{{ DATA.hero.headline }}</h1>
-        <p class="py-6 text-3xl font-mono text-primary/90">{{ DATA.hero.kicker }}</p>
+        <h1 class="hb-fluid-h1 hyper-title text-primary mb-2 hb-underline">{{ DATA.hero.headline }}</h1>
+        <p class="py-6 font-mono text-primary/90 hb-fluid-kicker">{{ DATA.hero.kicker }}</p>
         <div class="text-xl leading-relaxed copy max-w-xl md:max-w-2xl"><p>{{ DATA.hero.about }}</p></div>
 
         <div class="mt-10 flex flex-wrap gap-6">
@@ -404,7 +404,7 @@ permalink: /consulting/
       <!-- moved outside grid for absolute positioning relative to the card wrapper -->
     </div>  <!-- close .hero-content grid -->
 
-    <div class="relative mockup-code bg-base-300 border-2 border-primary/50 w-auto text-xs md:text-sm shadow-2xl overflow-x-auto rounded-lg hb-console lg:hb-console hb-float hb-bleed-r hb-nudge lg:hb-float-cr">
+    <div class="relative mockup-code bg-base-300 border-2 border-primary/50 w-auto max-w-full text-xs md:text-sm shadow-2xl overflow-x-auto rounded-lg hb-console lg:hb-console lg:hb-float lg:hb-bleed-r lg:hb-nudge lg:hb-float-cr">
       {% for l in DATA.hero.code %}
         {% set isBreach = 'BREACH' in l %}
         {% set isCrit   = 'CRITICAL' in l %}
@@ -426,7 +426,7 @@ permalink: /consulting/
     <section class="mb-32">
       <div class="hb-neon hb-intensity-lite hb-stripes rounded-xl p-2">
         <div class="hb-inlay text-center mb-10 p-6 md:p-10 rounded-xl mx-auto max-w-5xl">
-          <h2 class="text-4xl md:text-6xl hyper-title text-primary/90 hb-underline">{{ DATA.metrics.headline }}</h2>
+          <h2 class="hb-fluid-h2 hyper-title text-primary/90 hb-underline">{{ DATA.metrics.headline }}</h2>
           <p class="font-mono mt-6 text-xl opacity-90">{{ DATA.metrics.sub }}</p>
         </div>
       </div>
@@ -446,7 +446,7 @@ permalink: /consulting/
 
     <section id="interventions" class="mb-32">
       <div class="text-center mb-20">
-        <h2 class="text-5xl md:text-7xl hyper-title text-primary hb-underline">SURGICAL INTERVENTIONS</h2>
+        <h2 class="hb-fluid-h2 hyper-title text-primary hb-underline">SURGICAL INTERVENTIONS</h2>
         <p class="font-mono mt-6 text-2xl">We deploy solutions. Your competition deploys excuses.</p>
       </div>
       <div class="grid lg:grid-cols-2 gap-10">
@@ -479,7 +479,7 @@ permalink: /consulting/
     <section id="methodology" class="mb-32">
       <div class="chunky hb-brut-card hb-intensity-lite hb-accent p-8 md:p-12">
         <div class="prose prose-invert max-w-none prose-xl copy">
-          <h2 class="font-mono text-4xl md:text-6xl text-primary not-prose mb-2 hb-underline">{{ DATA.methodology.headline }}</h2>
+          <h2 class="font-mono hb-fluid-h2 text-primary not-prose mb-2 hb-underline">{{ DATA.methodology.headline }}</h2>
           {% for p in DATA.methodology.paras %}<p class="text-xl mb-6">{{ p }}</p>{% endfor %}
           <div class="grid lg:grid-cols-3 gap-10 mt-16 not-prose">
             {% for pillar in DATA.methodology.pillars %}
@@ -501,7 +501,7 @@ permalink: /consulting/
 
     <section id="contact" class="mb-16">
       <div class="chunky hb-brut-card hb-neon hb-intensity-lite hb-inlay hb-accent p-8 md:p-12">
-        <h2 class="text-4xl md:text-6xl font-mono font-bold text-primary mb-2 hb-underline">{{ DATA.cta.headline }}</h2>
+        <h2 class="hb-fluid-h2 font-mono font-bold text-primary mb-2 hb-underline">{{ DATA.cta.headline }}</h2>
         <div class="mt-6 max-w-3xl copy"><p class="text-xl">{{ DATA.cta.text }}</p></div>
         <div class="mt-10">
           <form name="consulting-contact" method="POST" data-netlify="true" netlify class="grid grid-cols-1 lg:grid-cols-2 gap-6" action="/success/">
