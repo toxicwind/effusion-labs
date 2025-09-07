@@ -1,4 +1,11 @@
 @layer utilities {
-  .stack { @apply flex flex-col gap-4; }
-  .center { @apply mx-auto max-w-screen-lg; }
+  .stack {
+    @apply flex flex-col gap-4;
+  }
+  .center {
+    @apply mx-auto max-w-screen-lg;
+  }
+  .hb-bleed-reset {
+    @apply mr-0 max-w-full;
+  }
 }
