@@ -214,15 +214,45 @@ permalink: /consulting/
       animation: shimmer 6s linear infinite;
     }
 
+    /* --- Hero layout override: DaisyUI's .hero-content defaults to flex. Force our Grid. --- */
+    .hero-content.grid { display: grid !important; }
+
     /* --- Hero code-panel right-bleed utilities --- */
     :where(.chunky).hb-overflow-visible { overflow: visible !important; }  /* let child spill past border */
-    .hb-float { position: relative; z-index: 2; }                          /* sit above the card border */
+    .hb-float { position: relative; z-index: 3; }                          /* sit above the card border */
     .hb-bleed-r { margin-right: -4rem; }                                   /* default bleed amount */
     .hb-nudge { transform: translateY(-2px); }                              /* tiny float feel on all sizes */
+    .hb-open-r { border-right-color: transparent !important; }             /* visually open right edge */
+
+    /* --- Autosizing console window: shrink-to-fit content with clamps --- */
+    .hb-console {
+      display: inline-block;                                               /* shrink-to-fit */
+      width: -moz-fit-content; width: fit-content;                         /* intrinsic width */
+      max-width: min(62ch, 100%);                                          /* readable limit */
+      overflow: visible;                                                   /* allow exterior glow/bleed */
+    }
+    .hb-console { max-height: clamp(12rem, 36vh, 24rem); }
+    .hb-console pre { white-space: pre; }
+    /* Scoped override so it works even if markup still has w-full */
+    #top .mockup-code { display:inline-block; width:fit-content; max-width:min(62ch,100%); overflow:visible; margin-left:auto; }
+
+    /* --- Hero lean + container sizing --- */
+    .hb-card-limit { max-width: clamp(46rem, 68vw, 64rem); }
+    .hb-lean-left { margin-right: auto; }
+    /* Fallback: force left-lean and max width even if classes missing */
+    #top > .chunky { max-width: clamp(46rem, 68vw, 64rem); margin-right: auto; }
+
+    /* --- Large-screen bottom-right float (console) --- */
+    @media (min-width: 1024px) {
+      .lg\:hb-float-br { position: absolute; right: -8rem; bottom: 1.25rem; transform: translate3d(0.25rem, 0.25rem, 0); }
+      /* Fallback: float the console even if class not present (compiled-flow variant) */
+      #top .hero-content .mockup-code.hb-console { position: absolute; right: -8rem; bottom: 1.25rem; transform: translate3d(0.25rem, 0.25rem, 0); }
+    }
 
     @media (min-width: 1024px) {                                           /* lg: */
-      .lg\:hb-bleed-r { margin-right: -6rem; }                             /* bigger bleed on wide screens */
+      .lg\:hb-bleed-r { margin-right: -8rem; }                             /* bigger bleed on wide screens */
       .lg\:hb-nudge { transform: translate3d(0.5rem,-2px,0); }             /* add a subtle right nudge at lg */
+      .lg\:hb-console { max-width: min(72ch, 100%); }
     }
 
     /* safety: make sure columns can actually shrink/wrap */
@@ -334,7 +364,7 @@ permalink: /consulting/
       </div>
     </div>
 <section id="top" class="mb-32">
-  <div class="chunky hb-brut-card hb-intensity-lite hb-accent hb-overflow-visible p-8 md:p-12">
+  <div class="chunky hb-brut-card hb-intensity-lite hb-accent hb-overflow-visible hb-open-r hb-lean-left hb-card-limit p-8 md:p-12">
     <!-- grid is predictable; text never gets crushed -->
     <div class="hero-content w-full grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 p-0 items-start">
 
@@ -354,21 +384,22 @@ permalink: /consulting/
         </div>
       </div>
 
-      <!-- CODE panel (right at lg), intentionally bleeds past card border -->
-      <div class="order-2 lg:order-2 col-span-12 lg:col-span-7 min-w-0">
-        <div class="relative mockup-code bg-base-300 border-2 border-primary/50 w-full text-xs md:text-sm shadow-2xl overflow-x-auto rounded-lg hb-float hb-bleed-r lg:hb-bleed-r hb-nudge lg:hb-nudge">
-          {% for l in DATA.hero.code %}
-            {% set isBreach = 'BREACH' in l %}
-            {% set isCrit   = 'CRITICAL' in l %}
-            {% set isInfo   = ('//' in l) or ('Executing' in l) %}
+      <!-- CODE panel floats on lg at bottom-right of the card; stays in-flow on small screens -->
+      <!-- moved outside grid for absolute positioning relative to the card wrapper -->
+    </div>  <!-- close .hero-content grid -->
 
-            <pre
-              data-prefix="{% if isBreach or isCrit %}⚠{% elif isInfo %}//{% else %}${% endif %}"
-              class="{% if isBreach %}text-error font-bold{% elif isCrit %}text-warning font-bold{% elif isInfo %}text-info{% else %}text-success{% endif %} whitespace-pre"
-            ><code>{{ l }}</code></pre>
-          {% endfor %}
-        </div>
-      </div>
+    <div class="relative mockup-code bg-base-300 border-2 border-primary/50 w-auto text-xs md:text-sm shadow-2xl overflow-x-auto rounded-lg hb-console lg:hb-console hb-float hb-bleed-r hb-nudge lg:hb-float-br">
+      {% for l in DATA.hero.code %}
+        {% set isBreach = 'BREACH' in l %}
+        {% set isCrit   = 'CRITICAL' in l %}
+        {% set isInfo   = ('//' in l) or ('Executing' in l) %}
+
+        <pre
+          data-prefix="{% if isBreach or isCrit %}⚠{% elif isInfo %}//{% else %}${% endif %}"
+          class="{% if isBreach %}text-error font-bold{% elif isCrit %}text-warning font-bold{% elif isInfo %}text-info{% else %}text-success{% endif %} whitespace-pre"
+        ><code>{{ l }}</code></pre>
+      {% endfor %}
+    </div>
 
     </div>
   </div>
