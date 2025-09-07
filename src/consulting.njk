@@ -147,7 +147,7 @@ permalink: /consulting/
    }
 } %}
 <!DOCTYPE html>
-<html lang="en" data-theme="nord">
+<html lang="en" data-theme="business>
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <title>{{ DATA.alt }} | AI Safety Specialist - Eliminate Hallucinations &amp; Data Leaks</title>
@@ -166,7 +166,7 @@ permalink: /consulting/
 
   <link rel="preload" href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Inter:wght@400;700;900&display=swap" as="style">
   <script src="/assets/js/theme-utils.js"></script>
-  <script>ThemeUtils.configure({ allowed: ['nord','night','business','light','dark'], defaultTheme: 'nord', darkTheme: 'night' }); ThemeUtils.initEarly();</script>
+  <script>ThemeUtils.configure({ allowed: ['nord','night','business','light','dark'], defaultTheme: 'business', darkTheme: 'business' }); ThemeUtils.initEarly();</script>
   <link rel="stylesheet" href="/assets/css/app.css?v={{ build.hash or build.commit or build.version or buildTime }}">
   <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
 
@@ -218,10 +218,11 @@ permalink: /consulting/
     :where(.chunky).hb-overflow-visible { overflow: visible !important; }  /* let child spill past border */
     .hb-float { position: relative; z-index: 2; }                          /* sit above the card border */
     .hb-bleed-r { margin-right: -4rem; }                                   /* default bleed amount */
+    .hb-nudge { transform: translateY(-2px); }                              /* tiny float feel on all sizes */
 
     @media (min-width: 1024px) {                                           /* lg: */
       .lg\:hb-bleed-r { margin-right: -6rem; }                             /* bigger bleed on wide screens */
-      .lg\:hb-nudge-r { transform: translateX(0.5rem); }                   /* tiny nudge so it 'floats' */
+      .lg\:hb-nudge { transform: translate3d(0.5rem,-2px,0); }             /* add a subtle right nudge at lg */
     }
 
     /* safety: make sure columns can actually shrink/wrap */
@@ -355,7 +356,7 @@ permalink: /consulting/
 
       <!-- CODE panel (right at lg), intentionally bleeds past card border -->
       <div class="order-2 lg:order-2 col-span-12 lg:col-span-7 min-w-0">
-        <div class="relative mockup-code bg-base-300 border-2 border-primary/50 w-full text-xs md:text-sm shadow-2xl overflow-x-auto rounded-lg hb-float hb-bleed-r lg:hb-bleed-r lg:hb-nudge-r">
+        <div class="relative mockup-code bg-base-300 border-2 border-primary/50 w-full text-xs md:text-sm shadow-2xl overflow-x-auto rounded-lg hb-float hb-bleed-r lg:hb-bleed-r hb-nudge lg:hb-nudge">
           {% for l in DATA.hero.code %}
             {% set isBreach = 'BREACH' in l %}
             {% set isCrit   = 'CRITICAL' in l %}
