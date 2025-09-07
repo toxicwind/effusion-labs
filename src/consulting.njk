@@ -213,6 +213,21 @@ permalink: /consulting/
       opacity: .25;
       animation: shimmer 6s linear infinite;
     }
+
+    /* --- Hero code-panel right-bleed utilities --- */
+    :where(.chunky).hb-overflow-visible { overflow: visible !important; }  /* let child spill past border */
+    .hb-float { position: relative; z-index: 2; }                          /* sit above the card border */
+    .hb-bleed-r { margin-right: -4rem; }                                   /* default bleed amount */
+
+    @media (min-width: 1024px) {                                           /* lg: */
+      .lg\:hb-bleed-r { margin-right: -6rem; }                             /* bigger bleed on wide screens */
+      .lg\:hb-nudge-r { transform: translateX(0.5rem); }                   /* tiny nudge so it 'floats' */
+    }
+
+    /* safety: make sure columns can actually shrink/wrap */
+    .min-w-0 { min-width: 0; }
+
+
     @keyframes shimmer{0%{left:-60%}100%{left:100%}}
     .chunky:hover{transform:translateY(-2px); box-shadow:0 16px 28px rgba(0,0,0,0.30)}
     .btn{border-radius:.375rem; border-width:2px; font-weight:700; transition:all .3s cubic-bezier(0.4,0,0.2,1); text-transform:none}
@@ -317,55 +332,48 @@ permalink: /consulting/
         {% endfor %}
       </div>
     </div>
+<section id="top" class="mb-32">
+  <div class="chunky hb-brut-card hb-intensity-lite hb-accent hb-overflow-visible p-8 md:p-12">
+    <!-- grid is predictable; text never gets crushed -->
+    <div class="hero-content w-full grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 p-0 items-start">
 
-    <section id="top" class="mb-32">
-      <div class="chunky hb-brut-card hb-intensity-lite hb-accent hb-overflow-visible p-8 md:p-12">
-        <div class="hero-content text-left w-full flex-col lg:flex-row-reverse p-0 gap-8 lg:gap-12">
-          <div class="relative mockup-code bg-base-300 border-2 border-primary/50 w-full lg:w-1/2 ml-0 lg:ml-10 text-xs md:text-sm flex-shrink-0 shadow-2xl overflow-x-auto rounded-lg">
-            {% for l in DATA.hero.code %}
-              {% set isBreach = 'BREACH' in l %}
-              {% set isCrit = 'CRITICAL' in l %}
-              {% set isInfo = ('//' in l) or ('Executing' in l) %}
+      <!-- TEXT column (left at lg) -->
+      <div class="order-1 lg:order-1 col-span-12 lg:col-span-5 min-w-0">
+        <h1 class="text-6xl md:text-8xl hyper-title text-primary mb-2 hb-underline">{{ DATA.hero.headline }}</h1>
+        <p class="py-6 text-3xl font-mono text-primary/90">{{ DATA.hero.kicker }}</p>
+        <div class="text-xl leading-relaxed copy max-w-xl md:max-w-2xl"><p>{{ DATA.hero.about }}</p></div>
 
-              {% if isBreach or isCrit %}
-                {% set prefix = '⚠' %}
-              {% elif isInfo %}
-                {% set prefix = '//' %}
-              {% else %}
-                {% set prefix = '$' %}
-              {% endif %}
-
-              {% if isBreach %}
-                {% set lineClass = 'text-error font-bold' %}
-              {% elif isCrit %}
-                {% set lineClass = 'text-warning font-bold' %}
-              {% elif isInfo %}
-                {% set lineClass = 'text-info' %}
-              {% else %}
-                {% set lineClass = 'text-success' %}
-              {% endif %}
-
-              <pre data-prefix="{{ prefix }}" class="{{ lineClass }} whitespace-pre"><code>{{ l }}</code></pre>
-            {% endfor %}
-          </div>
-          <div class="w-full">
-            <h1 class="text-6xl md:text-8xl hyper-title text-primary mb-2 hb-underline">{{ DATA.hero.headline }}</h1>
-            <p class="py-6 text-3xl font-mono text-primary/90">{{ DATA.hero.kicker }}</p>
-            <div class="text-xl leading-relaxed copy max-w-xl md:max-w-2xl"><p>{{ DATA.hero.about }}</p></div>
-            <div class="mt-10 flex flex-wrap gap-6">
-              {% for a in DATA.hero.actions %}
-              {% if a.primary %}
-                {% set btnClass = 'btn btn-primary btn-lg hb-plasma' %}
-              {% else %}
-                {% set btnClass = 'btn btn-outline btn-lg hb-plasma' %}
-              {% endif %}
-              <a class="{{ btnClass }} border-2 border-base-300 transform hover:scale-105" href="{{ a.href }}">{{ a.label }}</a>
-              {% endfor %}
-            </div>
-          </div>
+        <div class="mt-10 flex flex-wrap gap-6">
+          {% for a in DATA.hero.actions %}
+            <a
+              class="btn {% if a.primary %}btn-primary{% else %}btn-outline{% endif %} btn-lg hb-plasma border-2 border-base-300 transform hover:scale-105"
+              href="{{ a.href }}"
+            >{{ a.label }}</a>
+          {% endfor %}
         </div>
       </div>
-    </section>
+
+      <!-- CODE panel (right at lg), intentionally bleeds past card border -->
+      <div class="order-2 lg:order-2 col-span-12 lg:col-span-7 min-w-0">
+        <div class="relative mockup-code bg-base-300 border-2 border-primary/50 w-full text-xs md:text-sm shadow-2xl overflow-x-auto rounded-lg hb-float hb-bleed-r lg:hb-bleed-r lg:hb-nudge-r">
+          {% for l in DATA.hero.code %}
+            {% set isBreach = 'BREACH' in l %}
+            {% set isCrit   = 'CRITICAL' in l %}
+            {% set isInfo   = ('//' in l) or ('Executing' in l) %}
+
+            <pre
+              data-prefix="{% if isBreach or isCrit %}⚠{% elif isInfo %}//{% else %}${% endif %}"
+              class="{% if isBreach %}text-error font-bold{% elif isCrit %}text-warning font-bold{% elif isInfo %}text-info{% else %}text-success{% endif %} whitespace-pre"
+            ><code>{{ l }}</code></pre>
+          {% endfor %}
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
 
     <section class="mb-32">
       <div class="hb-neon hb-intensity-lite hb-stripes rounded-xl p-2">
