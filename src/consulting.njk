@@ -254,11 +254,20 @@ permalink: /consulting/
       .lg\:hb-nudge { transform: translate3d(0.5rem,-2px,0); }             /* add a subtle right nudge at lg */
       .lg\:hb-console { max-width: min(96ch, 100%); }
       /* Center-right float: closer to center, slightly bottom-biased */
-      .lg\:hb-float-cr { position: absolute; top: 58%; right: clamp(1rem, 8vw, 14rem); transform: translate3d(4%, -50%, 0); }
+        .lg\:hb-float-cr{
+    position: absolute;
+    top: 46%;              /* vertical anchor (mid-upper) */
+    right: -8rem;          /* push it further right; more negative = more bleed */
+    transform: translateY(-50%); /* center around that top% line, no X drift */
+    z-index: 10;
+  }
     }
 
     @media (min-width: 1536px) {                                           /* 2xl: very wide screens */
-      .lg\:hb-float-cr { top: 56%; right: clamp(3rem, 12vw, 18rem); }
+      .lg\:hb-float-cr{
+    top: 44%;              /* tiny nudge up on ultra-wide */
+    right: -12rem;         /* add extra bleed on ultra-wide */
+  }
       #top .mockup-code { max-width: min(104ch, 100%); }
     }
 
