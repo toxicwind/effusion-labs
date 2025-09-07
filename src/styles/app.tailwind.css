@@ -3,7 +3,8 @@
 @import "tailwindcss";
 
 @plugin "daisyui" {
-  themes: light --default, dark --prefersdark;
+  /* DaisyUI v5 themes (ordered): default nord, dark night, plus alternates */
+  themes: nord --default, night --prefersdark, business, abyss, light, dark;
 }
 
 @import "./tokens.css";
@@ -21,5 +22,6 @@
 @import "./utilities/animations.css";
 @import "./utilities/layout.css";
 @import "./utilities/zindex.css";
+@import "./utilities/hyperbrut.css";
 @import "./themes/overrides.light.css";
 @import "./themes/overrides.dark.css";

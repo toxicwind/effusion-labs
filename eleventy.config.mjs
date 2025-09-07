@@ -160,7 +160,15 @@ export default function (eleventyConfig) {
   eleventyConfig.addFilter("seededShuffle", (arr, seed) => seeded.seededShuffle(arr, seed));
   eleventyConfig.addFilter("safe_upper", safeUpper);
   eleventyConfig.addFilter("compactUnique", (arr) => Array.from(new Set((arr || []).filter(Boolean))));
-
+// Safe JSON for <script type="application/ld+json"> blocks
+const toJson = (value, spaces = 0) =>
+  JSON.stringify(value, null, spaces)
+    // keep parsers happy; prevent tag breakouts
+    .replace(/</g, "\\u003C")
+    .replace(/-->/g, "\\u002D\\u002D>");
+eleventyConfig.addFilter("json", toJson);
+// Belt-and-suspenders: explicitly add the Nunjucks variant too
+eleventyConfig.addNunjucksFilter("json", toJson);
   // ---------- unified callout shortcode ----------
   const callout = createCalloutShortcode(eleventyConfig);
   eleventyConfig.addPairedShortcode('callout', callout);
