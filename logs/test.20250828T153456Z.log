@@ -1,6 +1,0 @@
-::notice:: NPM-SHIM: Using PTY wrapper for 'npm test' to ensure output streaming.
-
-> effusion_labs_final@1.0.0 test
-> c8 node tools/runner.mjs
-
-sh: 1: c8: not found
