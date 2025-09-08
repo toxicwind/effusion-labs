@@ -1,3 +1,21 @@
 @layer components {
   .card { @apply shadow-sm; }
+
+  .card-hover {
+    @apply transition-transform;
+    transition-property: transform, box-shadow, border-color;
+    transition-duration: 200ms;
+    transition-timing-function: ease;
+  }
+
+  .card-hover:hover {
+    transform: translateY(-0.25rem);
+    box-shadow: 0 8px 24px hsl(var(--p)/0.2);
+    border-color: hsl(var(--p));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card-hover { transition: none; }
+  .card-hover:hover { transform: none; }
 }

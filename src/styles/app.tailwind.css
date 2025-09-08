@@ -1,4 +1,4 @@
-@source "../**/*.njk" "../scripts/**/*.js";
+@source "../**/*.njk" "../**/*.11ty.js" "../scripts/**/*.js";
 
 @import "tailwindcss";
 

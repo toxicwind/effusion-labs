@@ -40,4 +40,6 @@ tmp/
 
 # Generated CSS
 src/assets/css/*
+!src/assets/css/app.css
+!src/assets/css/mschf-overlay.css
 !src/assets/css/.gitkeep

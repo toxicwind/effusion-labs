@@ -10,7 +10,7 @@ permalink: "/work/{{ pagination.pageNumber + 1 }}/index.html"
 
 <section class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
   {% for item in pagination.items %}
-    <a href="{{ item.url }}" class="card bg-base-100 border border-base-300 shadow hover:shadow-lg transition">
+    <a href="{{ item.url }}" class="card card-hover bg-base-100 border border-base-300">
       <div class="card-body">
         <h2 class="card-title">{{ item.data.title }}</h2>
         {% if item.data.description or item.data.lede %}
