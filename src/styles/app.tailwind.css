@@ -1,4 +1,4 @@
-@source "../**/*.njk" "../scripts/**/*.js";
+@source "../*.njk" "../_includes/**/*.njk" "../archives/**/*.njk" "../content/**/*.njk" "../work/**/*.njk" "../scripts/**/*.js";
 
 @import "tailwindcss";
 
@@ -9,15 +9,16 @@
 @import "./tokens.css";
 @import "./base/reset.css";
 @import "./base/typography.css";
-@import "./components/alert.css";
-@import "./components/badge.css";
-@import "./components/breadcrumb.css";
-@import "./components/button.css";
-@import "./components/card.css";
-@import "./components/form-controls.css";
-@import "./components/modal.css";
-@import "./components/navbar.css";
-@import "./components/pagination.css";
+@import "./components/feedback/alert.css";
+@import "./components/feedback/badge.css";
+@import "./components/navigation/breadcrumb.css";
+@import "./components/navigation/navbar.css";
+@import "./components/navigation/pagination.css";
+@import "./components/forms/button.css";
+@import "./components/forms/form-controls.css";
+@import "./components/forms/theme-toggle.css";
+@import "./components/display/card.css";
+@import "./components/overlay/modal.css";
 @import "./utilities/animations.css";
 @import "./utilities/layout.css";
 @import "./utilities/zindex.css";

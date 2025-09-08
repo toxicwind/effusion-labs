@@ -1,0 +1,6 @@
+.theme-toggle {
+  @apply transition-transform duration-300 ease-in-out;
+}
+.theme-toggle[aria-pressed="true"] {
+  @apply rotate-180;
+}
