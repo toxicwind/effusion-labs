@@ -42,17 +42,17 @@ permalink: /consulting/
          {
             "name":"Hallucination Kill Rate",
             "value":"99.7%",
-            "desc":"Every claim traces to verified source. Zero tolerance policy."
+            "desc":"Every claim traces to verified source. Zero tolerance policy.",
          },
          {
             "name":"Jailbreak Defense",
             "value":"100%",
-            "desc":"Top-10 global adversarial champion. Your system becomes unhackable."
+            "desc":"Top-10 global adversarial champion. Your system becomes unhackable.",
          },
          {
             "name":"Response Speed",
             "value":"<2.4s",
-            "desc":"Faster than human thought. Users never wait."
+            "desc":"Faster than human thought. Users never wait.",
          }
       ]
    },
@@ -150,391 +150,158 @@ permalink: /consulting/
 <html lang="en" data-theme="business">
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <title>{{ DATA.alt }} | AI Safety Specialist - Eliminate Hallucinations &amp; Data Leaks</title>
-  <meta name="description" content="Top-10 global AI safety expert. We eliminate hallucinations, prevent jailbreaks, and install fail-safe systems for enterprise LLM deployments. Your AI becomes bulletproof.">
-  <meta name="keywords" content="AI safety specialist, LLM security, hallucination prevention, prompt injection defense, RAG system security, AI reliability consultant">
-
-  <meta property="og:title" content="AI Safety Specialist - Make Your LLM Bulletproof | {{ DATA.brand }}">
-  <meta property="og:description" content="{{ DATA.desc }}">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="{{ DATA.url }}">
-  <meta property="og:image" content="https://effusionlabs.com/assets/og-ai-safety.jpg">
-
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="AI Safety Specialist - Eliminate Hallucinations | {{ DATA.brand }}">
-  <meta name="twitter:description" content="Top-10 global adversarial expert. We make enterprise AI systems bulletproof against failures, leaks, and attacks.">
-
+  <title>AI Safety Specialist — Bulletproof LLMs | {{ DATA.brand }}</title>
+  <meta name="description" content="{{ DATA.desc }}">
   <link rel="preload" href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Inter:wght@400;700;900&display=swap" as="style">
   <script src="/assets/js/theme-utils.js"></script>
   <script>ThemeUtils.configure({ allowed: ['nord','night','business','light','dark'], defaultTheme: 'business', darkTheme: 'business' }); ThemeUtils.initEarly();</script>
   <link rel="stylesheet" href="/assets/css/app.css?v={{ build.hash or build.commit or build.version or buildTime }}">
   <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
-
-  <style>
-    html{scroll-behavior:smooth}
-    body{
-      font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif;
-      background: linear-gradient(135deg, hsl(var(--b3)) 0%, hsl(var(--b1)) 100%);
-      color: hsl(var(--bc));
-      -webkit-font-smoothing:antialiased;
-      -moz-osx-font-smoothing:grayscale;
-      line-height: 1.6;
-    }
-    .grid-bg {
-      background-image:
-        radial-gradient(circle at 2px 2px, rgba(0,255,65,0.15) 1px, transparent 0),
-        linear-gradient(to right, rgba(255,255,255,.03) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(255,255,255,.03) 1px, transparent 1px);
-      background-size: 40px 40px, 20px 20px, 20px 20px;
-    }
-    .font-mono{font-family:"Roboto Mono",ui-monospace,SFMono-Regular,Menlo,Monaco,monospace}
-    .hyper-title{
-      font-weight:900;
-      letter-spacing:-.02em;
-      line-height:0.9;
-      text-shadow: none;
-    }
-    
-    .chunky{
-      border: 1.5px solid hsl(var(--b3));
-      background: linear-gradient(135deg, hsl(var(--b2)) 0%, hsl(var(--b1)) 100%);
-      box-shadow: 0 12px 24px rgba(0,0,0,0.25), 0 1px 0 rgba(255,255,255,0.04) inset;
-      transition: background .2s ease, box-shadow .2s ease, transform .2s ease;
-      position: relative;
-      overflow: hidden;
-      border-radius: 10px;
-    }
-    
-    
-    .chunky::before{
-      content:'';
-      position:absolute; top:0; left:-60%; width:60%; height:2px;
-      background: linear-gradient(90deg, transparent, color-mix(in oklab, hsl(var(--p)) 35%, transparent), transparent);
-      opacity: .25;
-      animation: shimmer 6s linear infinite;
-    }
-
-    /* --- Hero layout override: DaisyUI's .hero-content defaults to flex. Force our Grid. --- */
-    .hero-content.grid { display: grid !important; }
-
-    /* --- Hero code-panel right-bleed utilities --- */
-    :where(.chunky).hb-overflow-visible { overflow: visible !important; }  /* let child spill past border */
-    .hb-float { position: relative; z-index: 4; }                          /* sit above the card border */
-    .hb-bleed-r { margin-right: -4rem; }                                   /* default bleed amount */
-    .hb-nudge { transform: translateY(-2px); }                              /* tiny float feel on all sizes */
-    .hb-open-r { border-right-color: transparent !important; }             /* visually open right edge */
-
-    /* --- Autosizing console window: shrink-to-fit content with clamps --- */
-    .hb-console {
-      display: inline-block;                                               /* shrink-to-fit */
-      width: -moz-fit-content; width: fit-content;                         /* intrinsic width */
-      max-width: min(80ch, 100%);                                          /* readable limit */
-      overflow: visible;                                                   /* allow exterior glow/bleed */
-    }
-    .hb-console { max-height: clamp(14rem, 38vh, 28rem); }
-    .hb-console pre { white-space: pre; }
-    /* Scoped override so it works even if markup still has w-full */
-    #top .mockup-code { display:inline-block; width:fit-content; max-width:min(80ch,100%); overflow:visible; margin-left:auto; }
-
-    /* --- Hero lean + container sizing --- */
-    .hb-card-limit { max-width: clamp(46rem, 68vw, 64rem); }
-    .hb-lean-left { margin-right: auto; }
-    /* Fallback: force left-lean and max width even if classes missing */
-    #top > .chunky { max-width: clamp(46rem, 68vw, 64rem); margin-right: auto; }
-
-    /* --- Large-screen bottom-right float (console) --- */
-    @media (min-width: 1024px) {
-      .lg\:hb-float-br { position: absolute; right: -8rem; bottom: 1.25rem; transform: translate3d(0.25rem, 0.25rem, 0); }
-      /* Fallback: float the console even if class not present (compiled-flow variant) */
-      #top .hero-content .mockup-code.hb-console { position: absolute; right: -8rem; bottom: 1.25rem; transform: translate3d(0.25rem, 0.25rem, 0); }
-    }
-
-    @media (min-width: 1024px) {                                           /* lg: */
-      .lg\:hb-bleed-r { margin-right: -8rem; }                             /* bigger bleed on wide screens */
-      .lg\:hb-nudge { transform: translate3d(0.5rem,-2px,0); }             /* add a subtle right nudge at lg */
-      .lg\:hb-console { max-width: min(96ch, 100%); }
-      /* Center-right float: closer to center, slightly bottom-biased */
-        .lg\:hb-float-cr{
-    position: absolute;
-    top: 46%;              /* vertical anchor (mid-upper) */
-    right: -8rem;          /* push it further right; more negative = more bleed */
-    transform: translateY(-50%); /* center around that top% line, no X drift */
-    z-index: 10;
-  }
-    }
-
-    @media (min-width: 1536px) {                                           /* 2xl: very wide screens */
-      .lg\:hb-float-cr{
-    top: 44%;              /* tiny nudge up on ultra-wide */
-    right: -12rem;         /* add extra bleed on ultra-wide */
-  }
-      #top .mockup-code { max-width: min(104ch, 100%); }
-    }
-
-    /* safety: make sure columns can actually shrink/wrap */
-    .min-w-0 { min-width: 0; }
-
-
-    @keyframes shimmer{0%{left:-60%}100%{left:100%}}
-    .chunky:hover{transform:translateY(-2px); box-shadow:0 16px 28px rgba(0,0,0,0.30)}
-    .btn{border-radius:.375rem; border-width:2px; font-weight:700; transition:all .3s cubic-bezier(0.4,0,0.2,1); text-transform:none}
-    .btn-primary:hover{box-shadow:0 10px 22px rgba(0,0,0,0.30); transform:translateY(-2px)}
-    .copy p{line-height:1.75; margin-bottom:1.2em}
-    .copy p:last-child{margin-bottom:0}
-    
-    .metric-card{
-      background: color-mix(in oklab, hsl(var(--b2)) 92%, hsl(var(--p)) 8%);
-      border: 1px solid hsl(var(--b3));
-      border-radius: 10px;
-    }
-    
-    
-    .social-proof{
-      background: color-mix(in oklab, hsl(var(--b2)) 92%, hsl(var(--s)) 8%);
-      border-left: 3px solid hsl(var(--s));
-      border-radius: 10px;
-    }
-    
-  </style>
-
-  {# Build JSON-LD offers list safely (no JS comma operator, no concat method requirement) #}
-  {% set itemList = [] %}
-  {% for o in DATA.offers %}
-    {% set item = {
-      "@type": "Offer",
-      "name": o.name,
-      "description": o.desc,
-      "priceSpecification": {
-        "@type": "PriceSpecification",
-        "priceCurrency": "USD"
-      },
-      "itemOffered": {
-        "@type": "Service",
-        "serviceType": o.name
-      }
-    } %}
-    {% set itemList = itemList + [item] %}
-  {% endfor %}
-
   <script type="application/ld+json">
-  {{ {
+  {
     "@context": "https://schema.org",
     "@type": "ProfessionalService",
-    "name": DATA.brand,
-    "alternateName": DATA.alt,
-    "url": DATA.url,
-    "email": DATA.email,
-    "description": DATA.desc,
-    "areaServed": "Global",
-    "serviceType": "AI Safety Consulting",
-    "expertise": ["LLM Security","AI Reliability","Prompt Injection Defense","Hallucination Prevention"],
+    "name": "{{ DATA.brand }}",
+    "url": "{{ DATA.url }}",
+    "description": "{{ DATA.desc }}",
     "hasOfferCatalog": {
       "@type": "OfferCatalog",
-      "name": "AI Safety Interventions",
-      "itemListElement": itemList
+      "name": "Services",
+      "itemListElement": [
+        {% for o in DATA.offers %}
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "{{ o.name }}",
+            "description": "{{ o.desc }}"
+          }
+        }{% if not loop.last %},{% endif %}
+        {% endfor %}
+      ]
     }
-  } | json | safe }}
+  }
   </script>
 </head>
-
-<body class="min-h-screen hb-grid hb-bg-hyper hb-vignette hb-noise">
-  <header class="sticky top-0 z-50 bg-base-200/95 backdrop-blur-md border-b-2 border-primary/30 hb-bevel hb-shadow-brut hb-intensity-lite hb-accent-top">
-    <div class="max-w-7xl mx-auto px-5 md:px-8">
-      <div class="navbar px-0">
-        <div class="navbar-start">
-          <a href="#top" class="flex items-center gap-3 group" aria-label="{{ DATA.brand }} home">
-            <span class="hb-logo" aria-hidden="true"><span class="hb-logo-core">E</span></span>
-            <span class="font-mono text-xl tracking-wide group-hover:text-primary transition-colors">{{ DATA.brand }}</span>
-          </a>
-        </div>
-        <div class="navbar-end">
-          <nav class="hidden md:flex items-center gap-6 font-mono">
-            <a href="#interventions" class="link link-hover hover:text-primary transition-colors">Interventions</a>
-            <a href="#methodology" class="link link-hover hover:text-primary transition-colors">Protocol</a>
-            <a href="#contact" class="btn btn-sm btn-primary border-2 border-black hb-plasma">Emergency Assessment</a>
-          </nav>
-          <div class="dropdown dropdown-end md:hidden">
-            <button tabindex="0" class="btn btn-ghost btn-square" aria-label="Menu">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-5 h-5 stroke-current"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
-            </button>
-            <ul tabindex="0" class="menu dropdown-content mt-3 z-[1] p-2 shadow-lg bg-base-100 rounded-box border-2 border-primary/30 w-52">
-              <li><a href="#interventions">Interventions</a></li>
-              <li><a href="#methodology">Protocol</a></li>
-              <li><a href="#contact">Emergency Assessment</a></li>
-            </ul>
-          </div>
-        </div>
-      </div>
+<body class="bg-base-200 text-base-content">
+  <nav class="navbar border-b border-base-300 px-4 md:px-8">
+    <div class="navbar-start">
+      <a href="/" class="font-mono font-bold text-lg">{{ DATA.brand }}</a>
     </div>
-  </header>
-
-  <main class="max-w-7xl mx-auto px-5 md:px-8 pt-20 pb-24">
-    <div class="social-proof hb-neon hb-intensity-lite hb-inlay p-4 mb-8 rounded-lg">
-      <div class="flex flex-wrap items-center justify-center gap-6 text-sm font-mono">
-        {% for item in DATA.social_proof.items %}
-          <span class="flex items-center gap-2">
-            <span class="w-2 h-2 bg-secondary rounded-full"></span>
-            {{ item }}
-          </span>
-        {% endfor %}
-      </div>
+    <div class="navbar-end">
+      <a href="#contact" class="btn btn-sm btn-primary">Emergency Assessment</a>
     </div>
-<section id="top" class="mb-32">
-  <div class="chunky hb-brut-card hb-intensity-lite hb-accent hb-overflow-visible hb-open-r hb-lean-left hb-card-limit p-8 md:p-12">
-    <!-- grid is predictable; text never gets crushed -->
-    <div class="hero-content w-full grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 p-0 items-start">
-
-      <!-- TEXT column (left at lg) -->
-      <div class="order-1 lg:order-1 col-span-12 lg:col-span-5 min-w-0">
-        <h1 class="text-6xl md:text-8xl hyper-title text-primary mb-2 hb-underline">{{ DATA.hero.headline }}</h1>
-        <p class="py-6 text-3xl font-mono text-primary/90">{{ DATA.hero.kicker }}</p>
-        <div class="text-xl leading-relaxed copy max-w-xl md:max-w-2xl"><p>{{ DATA.hero.about }}</p></div>
-
-        <div class="mt-10 flex flex-wrap gap-6">
+  </nav>
+  <div class="flex flex-wrap justify-center gap-2 px-4 py-3">
+    {% for badge in DATA.social_proof.items %}
+      <span class="badge badge-outline font-mono">{{ badge }}</span>
+    {% endfor %}
+  </div>
+  {% macro renderCode(lines) %}
+  <div class="mockup-code [&_pre]:whitespace-pre w-fit max-w-[96ch] max-h-[28rem] overflow-y-auto lg:absolute lg:right-[-8rem] lg:bottom-4">
+    {% for l in lines %}
+      {% set isBreach = 'BREACH' in l %}
+      {% set isCrit = 'CRITICAL' in l %}
+      {% set isInfo = ('//' in l) or ('Executing' in l) %}
+      <pre data-prefix="{% if isBreach or isCrit %}⚠{% elif isInfo %}//{% else %}${% endif %}" class="{% if isBreach %}text-error font-semibold{% elif isCrit %}text-warning font-semibold{% elif isInfo %}text-info{% else %}text-success{% endif %}"><code>{{ l }}</code></pre>
+    {% endfor %}
+  </div>
+  {% endmacro %}
+  <section class="hero">
+    <div class="hero-content flex-col lg:flex-row gap-12">
+      <div class="min-w-0 max-w-xl">
+        <p class="font-mono text-sm text-primary mb-2">{{ DATA.hero.kicker }}</p>
+        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold mb-4">{{ DATA.hero.headline }}</h1>
+        <p class="mb-6">{{ DATA.hero.about }}</p>
+        <div class="flex flex-col sm:flex-row gap-4">
           {% for a in DATA.hero.actions %}
-            <a
-              class="btn {% if a.primary %}btn-primary{% else %}btn-outline{% endif %} btn-lg hb-plasma border-2 border-base-300 transform hover:scale-105"
-              href="{{ a.href }}"
-            >{{ a.label }}</a>
+            {% if a.primary %}
+              <a href="{{ a.href }}" class="btn btn-primary">{{ a.label }}</a>
+            {% else %}
+              <a href="{{ a.href }}" class="btn btn-outline">{{ a.label }}</a>
+            {% endif %}
           {% endfor %}
         </div>
       </div>
-
-      <!-- CODE panel floats on lg at bottom-right of the card; stays in-flow on small screens -->
-      <!-- moved outside grid for absolute positioning relative to the card wrapper -->
-    </div>  <!-- close .hero-content grid -->
-
-    <div class="relative mockup-code bg-base-300 border-2 border-primary/50 w-full md:w-auto text-xs md:text-sm shadow-2xl overflow-x-auto rounded-lg hb-console lg:hb-console hb-float hb-bleed-reset lg:hb-bleed-r hb-nudge lg:hb-float-cr mx-auto">
-      {% for l in DATA.hero.code %}
-        {% set isBreach = 'BREACH' in l %}
-        {% set isCrit   = 'CRITICAL' in l %}
-        {% set isInfo   = ('//' in l) or ('Executing' in l) %}
-
-        <pre
-          data-prefix="{% if isBreach or isCrit %}&#9888;{% elif isInfo %}//{% else %}${% endif %}"
-          class="{% if isBreach %}text-error font-bold{% elif isCrit %}text-warning font-bold{% elif isInfo %}text-info{% else %}text-success{% endif %} whitespace-pre"
-        ><code>{{ l }}</code></pre>
+      <div class="relative w-full lg:w-auto">
+        {{ renderCode(DATA.hero.code) }}
+      </div>
+    </div>
+  </section>
+  <section class="py-20">
+    <div class="stats shadow max-w-4xl mx-auto">
+      {% for m in DATA.metrics.items %}
+      <div class="stat">
+        <div class="stat-title">{{ m.name }}</div>
+        <div class="stat-value">{{ m.value }}</div>
+        <div class="stat-desc">{{ m.desc }}</div>
+      </div>
       {% endfor %}
     </div>
-
-    </div>
-  </div>
-</section>
-
-
-
-    <section class="mb-32">
-      <div class="hb-neon hb-intensity-lite hb-stripes rounded-xl p-2">
-        <div class="hb-inlay text-center mb-10 p-6 md:p-10 rounded-xl mx-auto max-w-5xl">
-          <h2 class="text-4xl md:text-6xl hyper-title text-primary/90 hb-underline">{{ DATA.metrics.headline }}</h2>
-          <p class="font-mono mt-6 text-xl opacity-90">{{ DATA.metrics.sub }}</p>
-        </div>
-      </div>
-      <div class="grid md:grid-cols-3 gap-8 mt-8">
-        {% set palette = ['text-primary','text-secondary','text-accent'] %}
-        {% for metric in DATA.metrics.items %}
-          {% set color = palette[loop.index0 % palette.length] %}
-          <article class="metric-card hb-brut-card hb-accent hb-accent-top hb-stat-card hb-stripes p-8 rounded-xl group">
-            <div class="hb-scanbar mb-6"></div>
-            <div class="{{ color }} text-6xl md:text-7xl font-mono font-extrabold hb-num-outline mb-3 group-hover:translate-y-[-2px] hb-anim">{{ metric.value }}</div>
-            <div class="text-xl font-bold mb-2">{{ metric.name }}</div>
-            <div class="text-base opacity-85 leading-relaxed">{{ metric.desc }}</div>
-          </article>
-        {% endfor %}
-      </div>
-    </section>
-
-    <section id="interventions" class="mb-32">
-      <div class="text-center mb-20">
-        <h2 class="text-5xl md:text-7xl hyper-title text-primary hb-underline">SURGICAL INTERVENTIONS</h2>
-        <p class="font-mono mt-6 text-2xl">We deploy solutions. Your competition deploys excuses.</p>
-      </div>
-      <div class="grid lg:grid-cols-2 gap-10">
-        {% for o in DATA.offers %}
-          <article class="chunky hb-brut-card hb-accent p-8 flex flex-col min-h-[400px]">
-            <h3 class="text-3xl font-mono font-bold text-primary mb-2">{{ o.name }}</h3>
-            <p class="text-primary/90 font-mono mb-6">{{ o.dur }}</p>
-            <div class="copy flex-grow mb-8"><p>{{ o.desc }}</p></div>
-            <div class="space-y-3 mb-8">
-              {% for feature in o.features %}
-                <div class="flex items-start gap-3">
-                  <span class="text-primary/70 text-xl">&rarr;</span>
-                  <span>{{ feature }}</span>
-                </div>
-              {% endfor %}
-            </div>
-            <div class="mt-auto">
-              {% if o.primary %}
-                {% set ctaClass = 'btn btn-primary btn-lg w-full hb-plasma' %}
-              {% else %}
-                {% set ctaClass = 'btn btn-outline btn-lg w-full hb-plasma' %}
-              {% endif %}
-              <a href="{{ o.href }}" class="{{ ctaClass }} border-2 border-base-300">{{ o.cta }}</a>
-            </div>
-          </article>
-        {% endfor %}
-      </div>
-    </section>
-
-    <section id="methodology" class="mb-32">
-      <div class="chunky hb-brut-card hb-intensity-lite hb-accent p-8 md:p-12">
-        <div class="prose prose-invert max-w-none prose-xl copy">
-          <h2 class="font-mono text-4xl md:text-6xl text-primary not-prose mb-2 hb-underline">{{ DATA.methodology.headline }}</h2>
-          {% for p in DATA.methodology.paras %}<p class="text-xl mb-6">{{ p }}</p>{% endfor %}
-          <div class="grid lg:grid-cols-3 gap-10 mt-16 not-prose">
-            {% for pillar in DATA.methodology.pillars %}
-              <div class="relative">
-                <div class="absolute -left-4 top-0 w-1 h-full bg-gradient-to-b from-primary to-accent"></div>
-                <div class="pl-8">
-                  <h3 class="font-mono text-2xl font-bold text-primary mb-4">{{ pillar.name }}</h3>
-                  <p class="text-lg leading-relaxed">{{ pillar.text }}</p>
-                </div>
-              </div>
+  </section>
+  <section id="interventions" class="py-20">
+    <div class="grid gap-8 lg:grid-cols-2">
+      {% for o in DATA.offers %}
+      <div class="card border rounded-none bg-base-100">
+        <div class="card-body">
+          <h3 class="card-title">{{ o.name }}</h3>
+          <p class="font-mono text-sm opacity-70">{{ o.dur }}</p>
+          <p class="mb-4">{{ o.desc }}</p>
+          <ul class="space-y-2 mb-6">
+            {% for feature in o.features %}
+            <li class="flex gap-2 items-start"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 flex-none"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" /></svg><span>{{ feature }}</span></li>
             {% endfor %}
-          </div>
-          <div class="mt-16 p-8 bg-gradient-to-r from-primary/10 to-accent/10 rounded-lg border-l-4 border-primary not-prose">
-            <p class="text-2xl font-bold text-primary">{{ DATA.methodology.conclusion }}</p>
-          </div>
+          </ul>
+          <a href="{{ o.href }}" class="btn w-full {% if o.primary %}btn-primary{% else %}btn-outline{% endif %}">{{ o.cta }}</a>
         </div>
       </div>
-    </section>
-
-    <section id="contact" class="mb-16">
-      <div class="chunky hb-brut-card hb-neon hb-intensity-lite hb-inlay hb-accent p-8 md:p-12">
-        <h2 class="text-4xl md:text-6xl font-mono font-bold text-primary mb-2 hb-underline">{{ DATA.cta.headline }}</h2>
-        <div class="mt-6 max-w-3xl copy"><p class="text-xl">{{ DATA.cta.text }}</p></div>
-        <div class="mt-10">
-          <form name="consulting-contact" method="POST" data-netlify="true" netlify class="grid grid-cols-1 lg:grid-cols-2 gap-6" action="/success/">
-            <input type="hidden" name="form-name" value="consulting-contact">
-            <fieldset class="fieldset">
-              <label for="name" class="label text-primary font-mono font-bold">Your Name</label>
-              <input id="name" type="text" name="name" class="input input-bordered input-lg w-full border-2 border-primary/30 bg-base-200 focus:border-primary hb-field" required />
-            </fieldset>
-            <fieldset class="fieldset">
-              <label for="email" class="label text-primary font-mono font-bold">Your Email</label>
-              <input id="email" type="email" name="email" class="input input-bordered input-lg w-full border-2 border-primary/30 bg-base-200 focus:border-primary hb-field" required />
-            </fieldset>
-            <fieldset class="fieldset lg:col-span-2">
-              <label for="context" class="label text-primary font-mono font-bold">Describe Current AI Failures</label>
-              <textarea id="context" name="context" class="textarea textarea-bordered textarea-lg h-32 w-full border-2 border-primary/30 bg-base-200 focus:border-primary hb-field" placeholder="Hallucinations, data leaks, prompt injections, latency issues, user complaints..."></textarea>
-            </fieldset>
-            <div class="lg:col-span-2">
-              <button type="submit" class="btn btn-primary btn-lg w-full md:w-auto border-2 border-base-300 text-xl px-12 hb-plasma">{{ DATA.cta.btn }}</button>
-            </div>
-          </form>
-        </div>
+      {% endfor %}
+    </div>
+  </section>
+  <section id="methodology" class="py-20">
+    <h2 class="text-3xl font-bold text-center mb-8">{{ DATA.methodology.headline }}</h2>
+    <div class="max-w-3xl mx-auto mb-12">
+      {% for p in DATA.methodology.paras %}<p class="mb-4">{{ p }}</p>{% endfor %}
+    </div>
+    <ul class="steps steps-vertical lg:steps-horizontal w-full">
+      {% for pillar in DATA.methodology.pillars %}
+      <li class="step step-primary">
+        {{ pillar.name }}
+        <div class="mt-2 text-sm max-w-xs">{{ pillar.text }}</div>
+      </li>
+      {% endfor %}
+    </ul>
+    <div class="mt-12 text-center">
+      <div class="alert alert-info inline-block max-w-xl">{{ DATA.methodology.conclusion }}</div>
+    </div>
+  </section>
+  <section id="contact" class="py-20 px-4">
+    <h2 class="text-3xl font-bold text-center mb-6">{{ DATA.cta.headline }}</h2>
+    <p class="max-w-2xl mx-auto text-center mb-8">{{ DATA.cta.text }}</p>
+    <form name="consulting-contact" method="POST" data-netlify="true" netlify action="/success/" class="max-w-2xl mx-auto space-y-6">
+      <input type="hidden" name="form-name" value="consulting-contact">
+      <div>
+        <label for="name" class="label">Your Name</label>
+        <input id="name" name="name" type="text" required class="input input-bordered w-full"/>
       </div>
-    </section>
-  </main>
-
-  <footer class="border-t-2 border-primary/30 py-12 mt-20 hb-bevel hb-shadow-brut hb-intensity-lite hb-accent-top">
-    <div class="max-w-7xl mx-auto px-5 md:px-8 text-center">
-      <div class="flex items-center justify-center gap-4 mb-4">
-        <span class="w-8 h-8 rounded-full bg-primary inline-flex items-center justify-center font-mono text-black font-bold hb-shadow-brut">E</span>
-        <p class="font-mono text-xl">{{ DATA.brand }}</p>
+      <div>
+        <label for="email" class="label">Your Email</label>
+        <input id="email" name="email" type="email" required class="input input-bordered w-full" aria-describedby="email-hint"/>
+        <p id="email-hint" class="text-xs opacity-70 mt-1">We'll only use this to reply.</p>
       </div>
-      <p class="text-lg font-mono text-primary">{{ DATA.slogan }}</p>
-      <p class="text-sm opacity-70 mt-2">© {{ 'now' | date('yyyy') }} - Elite AI Safety Specialist</p>
+      <div>
+        <label for="context" class="label">Describe Current AI Failures</label>
+        <textarea id="context" name="context" class="textarea textarea-bordered w-full h-32" aria-describedby="context-hint"></textarea>
+        <p id="context-hint" class="text-xs opacity-70 mt-1">Hallucinations, data leaks, prompt injections...</p>
+      </div>
+      <button type="submit" class="btn btn-primary w-full">{{ DATA.cta.btn }}</button>
+    </form>
+  </section>
+  <footer class="footer items-center p-4 border-t border-base-300 text-center">
+    <div class="items-center grid-flow-col mx-auto">
+      <span class="font-mono font-bold text-lg">{{ DATA.brand }}</span>
+      <p class="font-mono">{{ DATA.slogan }}</p>
+      <p class="text-sm">© {{ 'now' | date('yyyy') }}</p>
     </div>
   </footer>
 </body>
