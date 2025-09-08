@@ -8,17 +8,17 @@
 
 ## Component Canon
 
-| Primitive | daisyUI class | Module |
-| --- | --- | --- |
-| Button | `btn` | `src/styles/components/button.css` |
-| Badge | `badge` | `src/styles/components/badge.css` |
-| Alert | `alert` | `src/styles/components/alert.css` |
-| Navbar | `navbar` + `.link-underline` | `src/styles/components/navbar.css` |
-| Card | `card` | `src/styles/components/card.css` |
-| Modal | `modal` | `src/styles/components/modal.css` |
-| Pagination | `.pagination` | `src/styles/components/pagination.css` |
-| Breadcrumb | `breadcrumb` | `src/styles/components/breadcrumb.css` |
-| Form controls | `input`, `select`, `textarea` | `src/styles/components/form-controls.css` |
+| Primitive | daisyUI class | Module | Tokens |
+| --- | --- | --- | --- |
+| Button | `btn` | `src/styles/components/button.css` | `--tw-shadow` reset |
+| Badge | `badge` | `src/styles/components/badge.css` | n/a |
+| Alert | `alert` | `src/styles/components/alert.css` | n/a |
+| Navbar | `navbar` + `.link-underline` | `src/styles/components/navbar.css` | `currentColor` underline |
+| Card | `card` | `src/styles/components/card.css` | `--tw-shadow` reset |
+| Modal | `modal` | `src/styles/components/modal.css` | n/a |
+| Pagination | `.pagination` | `src/styles/components/pagination.css` | n/a |
+| Breadcrumb | `breadcrumb` | `src/styles/components/breadcrumb.css` | n/a |
+| Form controls | `input`, `select`, `textarea` | `src/styles/components/form-controls.css` | `--tw-shadow` reset |
 
 ### Module layout & order
 `src/styles/app.tailwind.css` imports modules in a fixed sequence:

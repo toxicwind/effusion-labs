@@ -1,18 +1,27 @@
 @layer components {
-  .navbar .link-underline { position: relative; }
+  .navbar .link-underline {
+    position: relative;
+  }
   .navbar .link-underline::after {
     content: "";
     position: absolute;
     left: 0;
     bottom: -0.25rem;
     height: 2px;
-    width: 0;
+    width: 100%;
     background-color: currentColor;
-    transition: width 200ms ease;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 200ms ease;
   }
   .navbar .link-underline:hover::after,
-  .navbar .link-underline:focus-visible::after { width: 100%; }
+  .navbar .link-underline:focus-visible::after {
+    transform: scaleX(1);
+  }
 }
 @media (prefers-reduced-motion: reduce) {
-  .navbar .link-underline::after { transition: none; }
+  .navbar .link-underline::after {
+    transform: none;
+    transition: none;
+  }
 }
