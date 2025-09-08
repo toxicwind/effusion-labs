@@ -3,16 +3,16 @@
 {% from "components/footer.njk" import footer %}
 {% from "components/meta-aside.njk" import metaAside %}
 <!DOCTYPE html>
-<html lang="en" class="scroll-pt-16" data-theme="light">
+<html lang="en" class="scroll-pt-16">
 <head>
   <!-- Meta -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="color-scheme" content="light dark">
   {# PWA/UI chrome colors tuned per scheme #}
-  <meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
-  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0b0b0e">
-  <meta name="msapplication-TileColor" content="#0b0b0e">
+  <meta name="theme-color" media="(prefers-color-scheme: light)" content="hsl(0 0% 100%)">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="hsl(210 6% 5%)">
+  <meta name="msapplication-TileColor" content="hsl(210 6% 5%)">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>{{ title }} | Effusion Labs</title>
@@ -35,44 +35,6 @@
   <!-- Tailwind v4 + daisyUI v5 CSS (cache-busted) -->
   <link rel="stylesheet" href="/assets/css/app.css?v={{ build.hash or build.commit or build.version or buildTime }}">
 
-  <!-- Hypebrüt overlay CSS -->
-  <link rel="stylesheet" href="/assets/css/mschf-overlay.css?v={{ build.hash or build.commit or build.version or buildTime }}">
-
-  <!-- Aesthetic utilities (optional, safe globals for inlays/cutouts/focus) -->
-  <style>
-    :root { --mschf-z: 30; }
-    :root { --neon-a:#00E0FF; --neon-b:#9AFF00; --neon-c:#FF1CF7; --neon-edge:#ffffff; --focus-clr: var(--neon-a); }
-    :where(a,button,[role="button"],[tabindex],.focusable):focus-visible {
-      outline: 2px solid transparent;
-      box-shadow:
-        0 0 0 2px color-mix(in oklab, var(--focus-clr) 65%, transparent),
-        0 0 0 6px color-mix(in oklab, var(--focus-clr) 22%, transparent);
-      border-radius: 8px;
-      transition: box-shadow 120ms ease-out;
-    }
-    .hb-inlay {
-      background: color-mix(in oklab, #0b0b0e 86%, #000 14%);
-      color: #F2F2F2;
-      border: 1px solid rgba(255,255,255,.12);
-      box-shadow: 0 1px 0 rgba(0,0,0,.75), 0 12px 30px rgba(0,0,0,.7);
-      border-radius: 16px;
-    }
-    /* Legacy cutout button styles removed in favor of grounded buttons */
-
-    /* Neon Tiles — subtle spectral lift/hover for list cards */
-    .hb-tile {
-      border: 1px solid color-mix(in oklab, hsl(var(--bc)) 14%, transparent);
-      box-shadow: 0 1px 0 rgba(0,0,0,.12), 0 10px 24px rgba(0,0,0,.06);
-      transition: box-shadow .18s ease, border-color .18s ease, transform .18s ease;
-    }
-    .hb-tile:hover {
-      border-color: color-mix(in oklab, hsl(var(--p)) 42%, transparent);
-      box-shadow:
-        0 2px 0 rgba(0,0,0,.20),
-        0 18px 36px color-mix(in oklab, hsl(var(--p)) 18%, transparent),
-        0 0 18px color-mix(in oklab, hsl(var(--p)) 10%, transparent);
-    }
-  </style>
 
   <!-- Icons / PWA -->
   <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96">
@@ -116,7 +78,6 @@
   <!-- Iconify web component (universal icon sets) -->
   <script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js" defer></script>
   <script src="/assets/js/work-filters.js" defer></script>
-  <script src="/assets/js/mschf-overlay.js" defer></script>
   <script src="/assets/js/theme-toggle.js" defer></script>
 </body>
 </html>

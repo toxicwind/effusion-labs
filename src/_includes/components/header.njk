@@ -22,11 +22,11 @@
           </label>
           <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[100] p-2 shadow bg-base-100 rounded-box w-56" role="menu">
             {% if navItems %}
-              {{ navItems(nav, page.url) }}
+              {{ navItems(nav, page.url, 'link-underline hover:text-primary') }}
             {% else %}
               {% for n in nav %}
               <li role="none">
-                <a role="menuitem" href="{{ n.url }}">
+                <a role="menuitem" href="{{ n.url }}" class="link-underline hover:text-primary">
                   {% if n.order %}<span class="opacity-60">{{ n.order }}.</span>{% endif %}
                   <span>{{ n.title | shout }}</span>
                 </a>

@@ -8,17 +8,17 @@
 
 ## Component Canon
 
-| Primitive | daisyUI class | Module |
-| --- | --- | --- |
-| Button | `btn` | `src/styles/components/button.css` |
-| Badge | `badge` | `src/styles/components/badge.css` |
-| Alert | `alert` | `src/styles/components/alert.css` |
-| Navbar | `navbar` + `.link-underline` | `src/styles/components/navbar.css` |
-| Card | `card` | `src/styles/components/card.css` |
-| Modal | `modal` | `src/styles/components/modal.css` |
-| Pagination | `.pagination` | `src/styles/components/pagination.css` |
-| Breadcrumb | `breadcrumb` | `src/styles/components/breadcrumb.css` |
-| Form controls | `input`, `select`, `textarea` | `src/styles/components/form-controls.css` |
+| Primitive | daisyUI class | Module | Notes |
+| --- | --- | --- | --- |
+| Button | `btn` | `src/styles/components/button.css` | `font-semibold`; shadow flattened |
+| Badge | `badge` | `src/styles/components/badge.css` | rounded medium |
+| Alert | `alert` | `src/styles/components/alert.css` | text uses `base-content` token |
+| Navbar | `navbar` + `.link-underline` | `src/styles/components/navbar.css` | underline from `currentColor`; reduced-motion safe |
+| Card | `card` | `src/styles/components/card.css` | shadow flattened |
+| Modal | `modal` | `src/styles/components/modal.css` | backdrop blur only |
+| Pagination | `.pagination` | `src/styles/components/pagination.css` | flex gap-2 |
+| Breadcrumb | `breadcrumb` | `src/styles/components/breadcrumb.css` | small text |
+| Form controls | `input`, `select`, `textarea` | `src/styles/components/form-controls.css` | focus ring `--p`; shadow flattened |
 
 ### Module layout & order
 `src/styles/app.tailwind.css` imports modules in a fixed sequence:

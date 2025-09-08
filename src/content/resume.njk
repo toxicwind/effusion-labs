@@ -7,17 +7,17 @@ eleventyExcludeFromCollections: true
 
 {# src/resume/index.njk — adaptive layout, subtle accents, canonical+absolute SEO, no rainbow #}
 <!DOCTYPE html>
-<html lang="en" class="scroll-pt-16 assertive-geometry" data-theme="light">
+<html lang="en" class="scroll-pt-16 assertive-geometry">
 <head>
   <!-- Meta -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="color-scheme" content="light dark">
-  <meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
-  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0b0b0e">
+  <meta name="theme-color" media="(prefers-color-scheme: light)" content="hsl(0 0% 100%)">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="hsl(210 6% 5%)">
   <script src="/assets/js/theme-utils.js"></script>
   <script>ThemeUtils.initEarly();</script>
-  <meta name="msapplication-TileColor" content="#0b0b0e">
+  <meta name="msapplication-TileColor" content="hsl(210 6% 5%)">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
@@ -84,10 +84,10 @@ eleventyExcludeFromCollections: true
     @media print{
       @page{margin:.6in}
       .no-print,.navbar{display:none!important}
-      .shadow,.shadow-lg,.shadow-xl{box-shadow:none!important}
-      body{background:#fff!important;color:#000!important}
-      a{color:#000!important;text-decoration:none!important}
-      .card{background:#fff!important;border-color:#ddd!important}
+      .shadow,.shadow-lg,.shadow-xl{--tw-shadow:0 0 rgb(0 0 0 / 0)!important}
+      body{background:hsl(0 0% 100%)!important;color:hsl(0 0% 0%)!important}
+      a{color:hsl(0 0% 0%)!important;text-decoration:none!important}
+      .card{background:hsl(0 0% 100%)!important;border-color:hsl(0 0% 87%)!important}
     }
 
     /* Accent utilities moved to global sheet (src/styles/app.tailwind.css). */

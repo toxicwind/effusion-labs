@@ -14,5 +14,8 @@
   .navbar .link-underline:focus-visible::after { width: 100%; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .navbar .link-underline::after { transition: none; }
+  .navbar .link-underline::after {
+    transition: none;
+    transform: none;
+  }
 }

@@ -1,4 +1,6 @@
-@source "../**/*.njk" "../scripts/**/*.js";
+@source "../_includes/**/*.njk" "../content/**/*.njk" "../**/*.js" "../**/*.mjs"
+  !"../**/*.ipynb" !"../../docs/vendor/**" !"../../artifacts/**" !"../../dist/**" !"../../build/**" !"../../coverage/**" !"../../node_modules/**"
+  !"../**/*.{png,jpg,jpeg,svg,webp,mp4,mp3}" !"../../demos/**" !"../../fixtures/**";
 
 @import "tailwindcss";
 
