@@ -1,0 +1,12 @@
+@layer utilities {
+  .hb-tilt {
+    --rx: 0deg;
+    --ry: 0deg;
+    transform: perspective(600px) rotateX(var(--rx)) rotateY(var(--ry));
+    transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
+    will-change: transform;
+  }
+  .hb-tilt:hover {
+    box-shadow: 0 0 12px hsl(var(--p) / 0.3);
+  }
+}

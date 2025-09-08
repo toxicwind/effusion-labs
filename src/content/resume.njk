@@ -118,7 +118,7 @@ eleventyExcludeFromCollections: true
         <div class="space-y-6 lg:sticky lg:top-6">
           <!-- Identity -->
           {% from "components/neon-card.njk" import neonCard %}
-          {% call neonCard({ intensity: 'lite' }) %}
+          {% call neonCard({ intensity: 'lite', tilt: true }) %}
             <h1 class="text-4xl md:text-5xl font-black tracking-tight title-glow">
               {{ resume and resume.name or "Your Name" }}
             </h1>
@@ -422,6 +422,7 @@ eleventyExcludeFromCollections: true
     }
     // Theme handled by shared ThemeUtils + theme-toggle scripts
   </script>
+  <script src="/assets/js/card-tilt.js" defer></script>
   <script src="/assets/js/theme-toggle.js" defer></script>
 </body>
 </html>

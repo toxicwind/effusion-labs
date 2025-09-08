@@ -1,4 +1,4 @@
-@source "../**/*.njk" "../scripts/**/*.js";
+@source "../*.njk" "../_includes/**/*.njk" "../archives/**/*.njk" "../content/**/*.njk" "../work/**/*.njk" "../test/**/*.njk" "../scripts/**/*.js" "../**/*.11ty.js" "../**/*.11tydata.js";
 
 @import "tailwindcss";
 
@@ -19,7 +19,8 @@
 @import "./components/navbar.css";
 @import "./components/pagination.css";
 @import "./utilities/animations.css";
-@import "./utilities/layout.css";
+@import "./utilities/interactive.css";
 @import "./utilities/zindex.css";
+@import "./layouts/helpers.css";
 @import "./themes/overrides.light.css";
 @import "./themes/overrides.dark.css";
