@@ -1,260 +1,482 @@
 #!/usr/bin/env node
+/**
+ * make-plan.mjs
+ * -----------------------------------------------------------------------------
+ * Dry-run planning tool for this Eleventy repo.
+ *
+ * - Uses a REAL Eleventy config run through a "spy" (no stubs, no build).
+ *   • addPlugin(plugin, opts) calls plugin(spy, opts) so registration is real.
+ *   • amendLibrary('md', cb) is honored with a real Markdown-It instance if available.
+ *   • on('eleventy.*', handler) is recorded but NOT executed (no side-effects).
+ * - Scans the repo to produce:
+ *   • var/inspect/tree.before.txt
+ *   • var/inspect/refscan.txt
+ *   • var/inspect/writers.txt
+ *   • var/inspect/unref.txt
+ * - Plans content relocation and rewrites:
+ *   • var/plan/move-map.tsv
+ *   • var/plan/rewrites.sed
+ *   • var/plan/apply-moves.sh
+ *   • var/plan/apply-rewrites.sh
+ *   • var/plan/apply-build.sh
+ *   • var/plan/apply-src.sh      (intentional no-op; we are not normalizing src)
+ * - Reports:
+ *   • var/reports/plan.md
+ *   • var/reports/plan.json
+ *
+ * Notes:
+ * - Requires a clean git working tree (refuses otherwise).
+ * - Does NOT run an Eleventy build; only executes config registration.
+ * - Honors your templateFormats: ["md","njk","html","11ty.js"] — no extra normalization.
+ */
+
 import fs from 'node:fs';
 import fsp from 'node:fs/promises';
 import path from 'node:path';
-import { spawnSync } from 'node:child_process';
+import { execSync, spawnSync } from 'node:child_process';
 import { pathToFileURL } from 'node:url';
 
-/**
- * A mock of the Eleventy configuration object that spies on the methods
- * called by a user's configuration file to capture the settings.
- */
-class EleventyConfigSpy {
-  constructor() {
-    this.passthroughCopies = [];
-    this.globalData = {};
-    this.filters = {};
-    this.nunjucksFilters = {};
-    this.pairedShortcodes = {};
-    this.collections = {};
-    this.libraryAmendments = [];
-    this.eventHandlers = {};
-    this.markdownLibrary = {
-      parse() { },
-      renderer: { render() { return ''; } },
-      options: {}
-    };
-  }
+const repoRoot = process.cwd();
+const varDir = path.join(repoRoot, 'var');
+const inspectDir = path.join(varDir, 'inspect');
+const planDir = path.join(varDir, 'plan');
+const reportDir = path.join(varDir, 'reports');
 
-  addPassthroughCopy(target) {
-    this.passthroughCopies.push(target);
-    return this;
-  }
+/* -------------------------------- Utilities -------------------------------- */
 
-  addGlobalData(key, data) {
-    this.globalData[key] = data;
-    return this;
-  }
-
-  addFilter(name, callback) {
-    this.filters[name] = callback;
-    return this;
-  }
-
-  addNunjucksFilter(name, callback) {
-    this.nunjucksFilters[name] = callback;
-    return this;
-  }
-
-  addPairedShortcode(name, callback) {
-    this.pairedShortcodes[name] = callback;
-    return this;
-  }
-
-  addCollection(name, callback) {
-    this.collections[name] = callback;
-    return this;
-  }
-
-  amendLibrary(name, callback) {
-    this.libraryAmendments.push({ name, callback });
-    return this;
-  }
-
-  on(eventName, callback) {
-    if (!this.eventHandlers[eventName]) {
-      this.eventHandlers[eventName] = [];
-    }
-    this.eventHandlers[eventName].push(callback);
-    return this;
+function shell(cmd, opts = {}) {
+  try {
+    return execSync(cmd, { cwd: repoRoot, encoding: 'utf8', stdio: 'pipe', shell: true, ...opts });
+  } catch (err) {
+    return (err && err.stdout) ? String(err.stdout) : '';
   }
 }
 
-async function main() {
-  // 1. Pre-flight checks
-  const git = spawnSync('git', ['status', '--porcelain'], { encoding: 'utf8' });
-  if (git.stdout.trim()) {
-    console.error('Working tree dirty. Commit or stash changes before running.');
-    process.exit(1);
-  }
+function haveCmd(cmd, args = ['--version']) {
+  const r = spawnSync(cmd, args, { cwd: repoRoot, encoding: 'utf8' });
+  return r.status === 0;
+}
 
-  // 2. Setup directories
-  const repoRoot = process.cwd();
-  const varDir = path.join(repoRoot, 'var');
-  const inspectDir = path.join(varDir, 'inspect');
-  const planDir = path.join(varDir, 'plan');
-  const reportDir = path.join(varDir, 'reports');
+function ensureDirs() {
   fs.mkdirSync(inspectDir, { recursive: true });
   fs.mkdirSync(planDir, { recursive: true });
   fs.mkdirSync(reportDir, { recursive: true });
+}
 
-  // 3. Eleventy discovery using the real config file
-  const eleventyConfigPath = path.join(repoRoot, 'eleventy.config.mjs');
-  let eleventyInfo = { passthroughCopies: [], input: 'src', includes: '_includes', data: '_data', formats: [] };
-
-  if (fs.existsSync(eleventyConfigPath)) {
-    try {
-      const eleventyModule = await import(pathToFileURL(eleventyConfigPath));
-      const eleventyConfig = new EleventyConfigSpy();
-      const result = eleventyModule.default ? eleventyModule.default(eleventyConfig) : eleventyModule;
-
-      eleventyInfo = {
-        input: result?.dir?.input || 'src',
-        includes: result?.dir?.includes || '_includes',
-        data: result?.dir?.data || '_data',
-        formats: result?.templateFormats || [],
-        passthroughCopies: eleventyConfig.passthroughCopies
-      };
-      console.log('Successfully loaded and parsed eleventy.config.mjs.');
-    } catch (e) {
-      console.error('Could not load or parse eleventy.config.mjs:', e);
-    }
-  } else {
-    console.log('eleventy.config.mjs not found, using default settings.');
+function ensureCleanTree() {
+  const status = shell('git status --porcelain').trim();
+  if (status) {
+    console.error('Working tree dirty. Commit or stash changes before running.');
+    process.exit(1);
   }
+}
 
+/* ----------------------------- Eleventy Spy Core ---------------------------- */
 
-  // 4. File enumeration using fd or git ls-files
-  let files = [];
-  const fd = spawnSync('fd', ['--type', 'f', '--hidden', '--strip-cwd-prefix', '.', repoRoot, '--exclude', 'node_modules', '--exclude', '.git', '--exclude', 'bin', '--exclude', 'markdown_gateway', '--exclude', 'mcp-stack'], { encoding: 'utf8' });
-  if (fd.status === 0) {
-    files = fd.stdout.trim().split('\n').filter(Boolean);
-  } else {
-    console.log('`fd` not found, falling back to `git ls-files`.');
-    const ls = spawnSync('git', ['ls-files'], { encoding: 'utf8' });
-    files = ls.stdout.trim().split('\n').filter(Boolean).filter(f => !f.startsWith('node_modules/') && !f.startsWith('.git/') && !f.startsWith('bin/') && !f.startsWith('markdown_gateway/') && !f.startsWith('mcp-stack/'));
-  }
-
-  // 5. Inspection phase
-  console.log('Running inspection tools (tree, rg)...');
-  spawnSync('npx', ['tree', '-a', '-I', 'node_modules|.git', '-o', path.join(inspectDir, 'tree.before.txt')], { encoding: 'utf8', stdio: 'ignore' });
-
-  // refscan.txt: Find all file references
-  const refscanPatterns = ['\\bimport\\s+', '\\bfrom\\s+[\"\']', '\\brequire\\(', '\\{\\%\\s*(include|extends|from|render|macro)\\b', '^\\s*(layout|permalink)\\s*:', 'href=', 'src=', '<link\\s+rel=[\"\']stylesheet[\"\']', '<script[^>]*\\ssrc=', 'url\\(', '/(assets|docs|archives|work)'];
-  const rgArgs = ['--no-ignore', '--hidden', '-n', ...refscanPatterns.flatMap(p => ['-e', p]), '--', '.'];
-  const rg = spawnSync('rg', rgArgs, { encoding: 'utf8' });
-  await fsp.writeFile(path.join(inspectDir, 'refscan.txt'), rg.stdout);
-
-  // writers.txt: Find scripts that write to disk
-  const writerPatterns = ['fs\\.(write|append|createWriteStream|mkdir)', '>>', '\\btee\\b', 'rimraf', 'rm -rf'];
-  const wargs = ['--no-ignore', '--hidden', '-n', ...writerPatterns.flatMap(p => ['-e', p]), '--', '.'];
-  const wscan = spawnSync('rg', wargs, { encoding: 'utf8' });
-  const writerLines = wscan.stdout.split('\n').filter(l => /(lib|artifacts|logs|tmp)\//.test(l));
-  await fsp.writeFile(path.join(inspectDir, 'writers.txt'), writerLines.join('\n'));
-
-  // unref.txt: Find potentially unreferenced files
-  const refFiles = new Set(rg.stdout.split('\n').map(l => l.split(':')[0]).filter(Boolean));
-  const unref = files.filter(f => !refFiles.has(f) && !f.startsWith(`${eleventyInfo.input}/${eleventyInfo.includes}`) && !f.startsWith(`${eleventyInfo.input}/${eleventyInfo.data}`) && !f.endsWith('.11ty.js') && !f.startsWith('markdown_gateway/') && !f.startsWith('mcp-stack/'));
-  await fsp.writeFile(path.join(inspectDir, 'unref.txt'), unref.join('\n'));
-
-  // 6. Planning phase
-  console.log('Generating migration plan...');
-  const moveMap = [];
-  function mapDir(srcDir, destDir) {
-    if (!fs.existsSync(srcDir)) return;
-    const res = spawnSync('fd', ['--type', 'f', '--strip-cwd-prefix', '.', srcDir], { encoding: 'utf8' });
-    if (res.status !== 0) return;
-    for (const line of res.stdout.split('\n').filter(Boolean)) {
-      // The `line` from fd already includes the base directory, so we just use it directly.
-      moveMap.push(`${line}\t${path.join(destDir, path.relative(srcDir, line))}`);
-    }
-  }
-
-  mapDir('docs', 'src/content/docs');
-  mapDir('docs/vendor', 'src/content/docs/vendor-docs');
-  mapDir('docs/vendors', 'src/content/docs/vendor-docs');
-  mapDir('flower_reports_showcase', 'src/content/docs/flower');
-  await fsp.writeFile(path.join(planDir, 'move-map.tsv'), moveMap.join('\n'));
-
-  // src-move-map.tsv (placeholder: detect CSS in assets except app.css)
-  const srcMoves = [];
-  const cssDir = 'src/assets/css';
-  if (fs.existsSync(cssDir)) {
-    const cssFiles = await fsp.readdir(cssDir);
-    for (const f of cssFiles) {
-      if (f !== 'app.css' && f.endsWith('.css')) {
-        srcMoves.push(`src/assets/css/${f}\tsrc/styles/${f}`);
-      }
-    }
-  }
-  await fsp.writeFile(path.join(planDir, 'src-move-map.tsv'), srcMoves.join('\n'));
-
-  // rewrites.sed
-  const rewrites = [
-    's|docs/vendor/|src/content/docs/vendor-docs/|g',
-    's|docs/vendors/|src/content/docs/vendor-docs/|g',
-    's|flower_reports_showcase/|src/content/docs/flower/|g',
-    's|docs/|src/content/docs/|g', // Place this last to avoid over-matching
-  ];
-  await fsp.writeFile(path.join(planDir, 'rewrites.sed'), rewrites.join('\n'));
-
-  // apply scripts
-  const scripts = {
-    'apply-moves.sh': '#!/bin/bash\nset -e\n[ "$I_UNDERSTAND" != "1" ] && echo "Refusing: set I_UNDERSTAND=1" && exit 1\necho "Applying moves..."\nwhile IFS=$"\\t" read -r from to; do\n  [ -z "$from" ] && continue\n  echo "git mv \\"$from\\" \\"$to\\""\n  mkdir -p "$(dirname "$to")"\n  git mv "$from" "$to"\ndone < var/plan/move-map.tsv\n',
-    'apply-rewrites.sh': '#!/bin/bash\nset -e\n[ "$I_UNDERSTAND" != "1" ] && echo "Refusing: set I_UNDERSTAND=1" && exit 1\nfiles_to_rewrite=$(git ls-files)\necho "Running sed -i -f var/plan/rewrites.sed on git-tracked files..."\nsed -i -f var/plan/rewrites.sed $files_to_rewrite\n',
-    'apply-build.sh': '#!/bin/bash\nset -e\n[ "$I_UNDERSTAND" != "1" ] && echo "Refusing: set I_UNDERSTAND=1" && exit 1\necho "MANUAL STEP: Add proposed passthrough copies to eleventy.config.mjs"\n',
-    'apply-src.sh': '#!/bin/bash\nset -e\n[ "$I_UNDERSTAND" != "1" ] && echo "Refusing: set I_UNDERSTAND=1" && exit 1\necho "Applying src normalization..."\nwhile IFS=$"\\t" read -r from to; do\n  [ -z "$from" ] && continue\n  echo "git mv \\"$from\\" \\"$to\\""\n  mkdir -p "$(dirname "$to")"\n  git mv "$from" "$to"\ndone < var/plan/src-move-map.tsv\n'
+async function createEleventySpy() {
+  // Provide a real Markdown-It if available so amendLibrary('md', cb) is meaningful.
+  let MarkdownIt;
+  try { ({ default: MarkdownIt } = await import('markdown-it')); } catch { }
+  const realMd = MarkdownIt ? new MarkdownIt() : {
+    parse() { return []; },
+    renderer: { render() { return ''; } },
+    options: {}
   };
-  for (const [name, content] of Object.entries(scripts)) {
-    const p = path.join(planDir, name);
-    await fsp.writeFile(p, content);
-    await fsp.chmod(p, 0o755);
-  }
 
-  // 7. Reporting
-  console.log('Generating reports...');
-  const proposedPassthroughs = [
-    'src/content/docs/vendor-docs/**',
-    'src/content/docs/flower/normalized/**',
-    'src/content/docs/flower/reports/**',
+  const calls = {
+    passthrough: [],
+    plugins: [],
+    filters: [],
+    nunjucksFilters: [],
+    shortcodes: [],
+    pairedShortcodes: [],
+    collections: [],
+    events: []
+  };
+
+  const spy = {
+    markdownLibrary: realMd,
+    globalData: {},
+
+    // Core API used across your config/plugins
+    addPassthroughCopy(arg) { calls.passthrough.push(arg); },
+    addGlobalData(key, value) { this.globalData[key] = value; },
+
+    addFilter(name, fn) { calls.filters.push(name); },
+    addNunjucksFilter(name, fn) { calls.nunjucksFilters.push(name); },
+    addShortcode(name, fn) { calls.shortcodes.push(name); },
+    addPairedShortcode(name, fn) { calls.pairedShortcodes.push(name); },
+    addCollection(name, cb) { calls.collections.push(name); },
+
+    addPlugin(pluginFn, opts) {
+      calls.plugins.push(pluginFn?.name || 'anonymous');
+      if (typeof pluginFn === 'function') {
+        // Important: run the plugin with THIS spy so it registers normally
+        pluginFn(this, opts);
+      }
+    },
+
+    amendLibrary(type, cb) {
+      if (type === 'md' && typeof cb === 'function') {
+        this.markdownLibrary = cb(this.markdownLibrary);
+        return this.markdownLibrary;
+      }
+    },
+
+    // Less critical APIs: keep no-ops for safety
+    addWatchTarget() { },
+    addTemplateFormats() { },
+    setBrowserSyncConfig() { },
+    setServerOptions() { },
+
+    // ignore support
+    ignores: { add() { } },
+
+    // Record event registration but DO NOT execute handlers
+    on(evt, handler) { calls.events.push(evt); },
+
+    // expose captured calls if you want to report them
+    _calls: calls
+  };
+
+  return spy;
+}
+
+async function discoverEleventy() {
+  const eleventyConfigPath = path.join(repoRoot, 'eleventy.config.mjs');
+  const mod = await import(pathToFileURL(eleventyConfigPath));
+  const spy = await createEleventySpy();
+
+  const returned =
+    typeof mod?.default === 'function' ? await mod.default(spy)
+      : typeof mod === 'function' ? await mod(spy)
+        : (mod || {});
+
+  const dir = returned?.dir || {};
+  const input = dir.input || 'src';
+  const includesName = dir.includes || '_includes';
+  const dataName = dir.data || '_data';
+
+  const eleventyInfo = {
+    input,
+    includes: path.join(input, includesName),
+    data: path.join(input, dataName),
+    formats: Array.isArray(returned?.templateFormats) ? returned.templateFormats : []
+  };
+
+  return { eleventyInfo, spy };
+}
+
+/* ------------------------------ File Enumeration --------------------------- */
+
+function listFiles() {
+  // Prefer fd (fast); fallback to git ls-files
+  const excludes = ['node_modules', '.git', 'bin', 'markdown_gateway', 'mcp-stack'];
+  let files = [];
+  if (haveCmd('fd', ['--version'])) {
+    const args = ['--type', 'f', '--hidden', '--strip-cwd-prefix', '.', repoRoot];
+    excludes.forEach(e => { args.push('--exclude', e); });
+    const r = spawnSync('fd', args, { cwd: repoRoot, encoding: 'utf8' });
+    if (r.status === 0) files = r.stdout.trim().split('\n').filter(Boolean);
+  }
+  if (!files.length) {
+    const out = shell('git ls-files');
+    files = out.split('\n').filter(Boolean)
+      .filter(f => !excludes.some(e => f.startsWith(`${e}/`)));
+  }
+  return files;
+}
+
+/* ---------------------------------- Scans ---------------------------------- */
+
+async function writeTreeBefore(files) {
+  try {
+    // Try a pretty tree; fall back to just listing files
+    const treeCmd = 'npx --yes tree -a -I "node_modules|.git"';
+    const out = shell(treeCmd);
+    if (out && out.trim()) {
+      await fsp.writeFile(path.join(inspectDir, 'tree.before.txt'), out);
+      return;
+    }
+  } catch { }
+  await fsp.writeFile(path.join(inspectDir, 'tree.before.txt'), files.join('\n'));
+}
+
+async function writeRefscan() {
+  const patterns = [
+    '\\bimport\\s+',
+    '\\bfrom\\s+[\'"]',
+    '\\brequire\\(',
+    '\\{%\\s*(include|extends|from|render|macro)\\b',
+    '^\\s*(layout|permalink)\\s*:',
+    'href=',
+    'src=',
+    '<link\\s+rel=[\'"]stylesheet[\'"]',
+    '<script[^>]*\\ssrc=',
+    'url\\(',
+    '/(assets|docs|archives|work)/'
   ];
 
-  const planMarkdown = [
+  let output = '';
+  if (haveCmd('rg', ['--version'])) {
+    const args = ['--no-ignore', '--hidden', '-n'];
+    for (const p of patterns) { args.push('-e', p); }
+    args.push('--', '.');
+    const r = spawnSync('rg', args, { cwd: repoRoot, encoding: 'utf8' });
+    output = r.stdout || '';
+  } else {
+    // Fallback: naive Node scan (slower, but keeps script runnable)
+    const files = listFiles();
+    for (const f of files) {
+      try {
+        const buf = fs.readFileSync(path.join(repoRoot, f), 'utf8');
+        const lines = buf.split('\n');
+        for (let i = 0; i < lines.length; i++) {
+          const line = lines[i];
+          if (patterns.some(p => new RegExp(p).test(line))) {
+            output += `${f}:${i + 1}:${line}\n`;
+          }
+        }
+      } catch { }
+    }
+  }
+  await fsp.writeFile(path.join(inspectDir, 'refscan.txt'), output);
+  return output;
+}
+
+async function writeWriters() {
+  const writerPatterns = [
+    'fs\\.(write|append|createWriteStream|mkdir)',
+    '>>',
+    '\\btee\\b',
+    'rimraf',
+    'rm -rf',
+  ];
+
+  let output = '';
+  if (haveCmd('rg', ['--version'])) {
+    const args = ['--no-ignore', '--hidden', '-n'];
+    for (const p of writerPatterns) args.push('-e', p);
+    args.push('--', '.');
+    const r = spawnSync('rg', args, { cwd: repoRoot, encoding: 'utf8' });
+    output = r.stdout || '';
+  } else {
+    // Fallback: naive Node scan
+    const files = listFiles();
+    for (const f of files) {
+      try {
+        const buf = fs.readFileSync(path.join(repoRoot, f), 'utf8');
+        const lines = buf.split('\n');
+        for (let i = 0; i < lines.length; i++) {
+          const line = lines[i];
+          if (writerPatterns.some(p => new RegExp(p).test(line))) {
+            output += `${f}:${i + 1}:${line}\n`;
+          }
+        }
+      } catch { }
+    }
+  }
+
+  const filtered = output
+    .split('\n')
+    .filter(l => /(lib|artifacts|logs|tmp)\//.test(l))
+    .join('\n');
+
+  await fsp.writeFile(path.join(inspectDir, 'writers.txt'), filtered);
+  return filtered;
+}
+
+async function writeUnreferenced(allFiles, refscanOutput, eleventyInfo) {
+  const refFiles = new Set(
+    (refscanOutput || '')
+      .split('\n')
+      .map(l => l.split(':')[0])
+      .filter(Boolean)
+  );
+
+  const unref = allFiles.filter(f =>
+    !refFiles.has(f) &&
+    !f.startsWith(eleventyInfo.includes) &&
+    !f.startsWith(eleventyInfo.data) &&
+    !f.endsWith('.11ty.js') && // templates: always considered referenced by Eleventy
+    !f.startsWith('markdown_gateway/') &&
+    !f.startsWith('mcp-stack/')
+  );
+
+  await fsp.writeFile(path.join(inspectDir, 'unref.txt'), unref.join('\n'));
+  return unref;
+}
+
+/* ---------------------------- Planning Artifacts ---------------------------- */
+
+async function writeMoveMap() {
+  // Static intents for docs → content/docs and flower reports → content/docs/flower
+  const specs = [
+    { src: 'docs', dest: 'src/content/docs' },
+    { src: 'docs/vendor', dest: 'src/content/docs/vendor-docs' },
+    { src: 'docs/vendors', dest: 'src/content/docs/vendor-docs' },
+    { src: 'flower_reports_showcase', dest: 'src/content/docs/flower' },
+  ];
+  const rows = [];
+
+  for (const intent of specs) {
+    const abs = path.join(repoRoot, intent.src);
+    if (!fs.existsSync(abs)) continue;
+    const r = spawnSync('fd', ['--type', 'f', '--strip-cwd-prefix', '.', intent.src], { cwd: repoRoot, encoding: 'utf8' });
+    if (r.status === 0) {
+      const list = r.stdout.split('\n').filter(Boolean);
+      for (const rel of list) {
+        const from = path.join(intent.src, rel);
+        const to = path.join(intent.dest, rel);
+        rows.push(`${from}\t${to}`);
+      }
+    } else {
+      // fallback: walk directory
+      const walk = (dir, relBase = '') => {
+        const entries = fs.readdirSync(path.join(repoRoot, dir));
+        for (const e of entries) {
+          if (e === '.' || e === '..') continue;
+          const full = path.join(dir, e);
+          const stat = fs.statSync(path.join(repoRoot, full));
+          if (stat.isDirectory()) walk(full, path.join(relBase, e));
+          else if (stat.isFile()) {
+            const from = full;
+            const to = path.join(intent.dest, relBase, e);
+            rows.push(`${from}\t${to}`);
+          }
+        }
+      };
+      walk(intent.src);
+    }
+  }
+
+  await fsp.writeFile(path.join(planDir, 'move-map.tsv'), rows.join('\n'));
+  return rows;
+}
+
+async function writeRewritesSed() {
+  const rewrites = [
+    ['docs/', 'src/content/docs/'],
+    ['docs/vendor/', 'src/content/docs/vendor-docs/'],
+    ['docs/vendors/', 'src/content/docs/vendor-docs/'],
+    ['flower_reports_showcase/', 'src/content/docs/flower/'],
+  ];
+  const sed = rewrites.map(([from, to]) => `s|${from}|${to}|g`).join('\n');
+  await fsp.writeFile(path.join(planDir, 'rewrites.sed'), sed);
+  return rewrites;
+}
+
+async function writeApplyScripts(passthroughs) {
+  const hdr = '#!/bin/bash\nset -e\nif [ "$I_UNDERSTAND" != "1" ]; then echo "Refusing without I_UNDERSTAND=1"; exit 1; fi\n';
+
+  const applyMoves = `${hdr}echo "Previewing git mv operations from var/plan/move-map.tsv"\nwhile IFS=$'\\t' read -r FROM TO; do\n  [ -z "$FROM" ] && continue\n  echo git mv "$FROM" "$TO"\n  git add -N "$FROM" "$TO" >/dev/null 2>&1 || true\ndone < var/plan/move-map.tsv\n`;
+  const applyRewrites = `${hdr}echo "Would run: sed -i -f var/plan/rewrites.sed <files>"\n`;
+  const applyBuild = `${hdr}echo "Proposed Eleventy passthrough copies:"\n${passthroughs.map(p => `echo "  - ${p}"`).join('\n')}\n`;
+  const applySrcNoop = `${hdr}echo "No src normalization planned (templateFormats already support md/njk/html/11ty.js)."\n`;
+
+  await fsp.writeFile(path.join(planDir, 'apply-moves.sh'), applyMoves, { mode: 0o755 });
+  await fsp.writeFile(path.join(planDir, 'apply-rewrites.sh'), applyRewrites, { mode: 0o755 });
+  await fsp.writeFile(path.join(planDir, 'apply-build.sh'), applyBuild, { mode: 0o755 });
+  await fsp.writeFile(path.join(planDir, 'apply-src.sh'), applySrcNoop, { mode: 0o755 });
+}
+
+/* --------------------------------- Reports --------------------------------- */
+
+async function writeReports(eleventyInfo, moves, rewrites, writersTxt, unref, passthroughs, spyCalls) {
+  const formats = (eleventyInfo.formats || []).join(', ');
+
+  const md = [
     '# Plan Report',
     '## Overview',
-    'Dry-run planning of documentation relocation and src normalization.',
+    'Dry-run planning of documentation relocation and URL rewrites. Eleventy config was executed via a live spy (no stubs) to discover directories, template formats, and registration surfaces. No build or event handlers were executed.',
     '## Eleventy Discovery',
-    `**Input Dir**: \`${eleventyInfo.input}\``,
-    `**Includes Dir**: \`${eleventyInfo.includes}\``,
-    `**Data Dir**: \`${eleventyInfo.data}\``,
-    `**Template Formats**: \`${eleventyInfo.formats.join(', ')}\``,
-    '### Discovered Passthrough Copies',
-    eleventyInfo.passthroughCopies.length ? eleventyInfo.passthroughCopies.map(p => `- \`${typeof p === 'object' ? JSON.stringify(p) : p}\``).join('\n') : 'None found.',
+    `- input: \`${eleventyInfo.input}\``,
+    `- includes: \`${eleventyInfo.includes}\``,
+    `- data: \`${eleventyInfo.data}\``,
+    `- templateFormats: \`${formats}\``,
     '## Proposed Moves',
-    moveMap.length ? moveMap.map(m => '- ' + m).join('\n') : 'None',
+    moves.length ? moves.map(m => `- ${m.replace('\t', ' -> ')}`).join('\n') : '- None',
     '## Proposed Rewrites',
-    rewrites.map(r => '- ' + r).join('\n'),
+    rewrites.length ? rewrites.map(([f, t]) => `- \`${f}\` → \`${t}\``).join('\n') : '- None',
     '## Proposed Passthroughs',
-    '- src/content/docs/vendor-docs/**',
-    '- src/content/docs/flower/normalized/**',
-    '- src/content/docs/flower/reports/**',
+    passthroughs.length ? passthroughs.map(p => `- ${p}`).join('\n') : '- None',
     '## Writers of lib|artifacts|logs|tmp',
-    writerLines.map(l => '- ' + l).join('\n'),
+    writersTxt.trim() ? writersTxt.split('\n').map(l => `- ${l}`).join('\n') : '- None observed.',
     '## Unreferenced — Conjecture',
-    unref.map(f => `- ${f} — needs review`).join('\n'),
+    unref.length ? unref.map(f => `- ${f} — needs review`).join('\n') : '- None',
+    '## Eleventy Registration (spy-captured)',
+    `- plugins: ${spyCalls.plugins.length ? '`' + spyCalls.plugins.join('`, `') + '`' : '_none_'}\n` +
+    `- filters: ${spyCalls.filters.length ? '`' + spyCalls.filters.join('`, `') + '`' : '_none_'}\n` +
+    `- nunjucksFilters: ${spyCalls.nunjucksFilters.length ? '`' + spyCalls.nunjucksFilters.join('`, `') + '`' : '_none_'}\n` +
+    `- shortcodes: ${spyCalls.shortcodes.length ? '`' + spyCalls.shortcodes.join('`, `') + '`' : '_none_'}\n` +
+    `- pairedShortcodes: ${spyCalls.pairedShortcodes.length ? '`' + spyCalls.pairedShortcodes.join('`, `') + '`' : '_none_'}\n` +
+    `- collections: ${spyCalls.collections.length ? '`' + spyCalls.collections.join('`, `') + '`' : '_none_'}\n` +
+    `- events registered: ${spyCalls.events.length ? '`' + spyCalls.events.join('`, `') + '`' : '_none_'}\n`,
     '## Edge Cases (as needed, evidence-driven)',
-    'None observed.'
+    '- None observed.'
   ].join('\n');
-  await fsp.writeFile(path.join(reportDir, 'plan.md'), planMarkdown);
 
-  const planJson = {
+  await fsp.writeFile(path.join(reportDir, 'plan.md'), md);
+
+  const json = {
     eleventy: eleventyInfo,
-    moves: moveMap.map(m => {
-      const [from, to] = m.split('\t');
+    moves: moves.map(row => {
+      const [from, to] = row.split('\t');
       return { from, to };
     }),
-    rewrites,
-    writers: writerLines,
+    rewrites: rewrites.map(([from, to]) => ({ from, to })),
+    writers: writersTxt.split('\n').filter(Boolean),
     unreferenced: unref,
     edgeCases: [],
-    passthroughs: [
-      'src/content/docs/vendor-docs/**',
-      'src/content/docs/flower/normalized/**',
-      'src/content/docs/flower/reports/**'
-    ]
+    passthroughs,
+    spy: {
+      plugins: spyCalls.plugins,
+      filters: spyCalls.filters,
+      nunjucksFilters: spyCalls.nunjucksFilters,
+      shortcodes: spyCalls.shortcodes,
+      pairedShortcodes: spyCalls.pairedShortcodes,
+      collections: spyCalls.collections,
+      events: spyCalls.events
+    }
   };
-  await fsp.writeFile(path.join(reportDir, 'plan.json'), JSON.stringify(planJson, null, 2));
 
+  await fsp.writeFile(path.join(reportDir, 'plan.json'), JSON.stringify(json, null, 2));
+}
+
+/* ---------------------------------- Main ----------------------------------- */
+
+async function main() {
+  ensureCleanTree();
+  ensureDirs();
+
+  // 1) Real Eleventy config execution through spy (no build)
+  const { eleventyInfo, spy } = await discoverEleventy();
+
+  // 2) Enumerate files
+  const files = listFiles();
+
+  // 3) Inspect: tree, refscan, writers, unreferenced
+  await writeTreeBefore(files);
+  const refscanOut = await writeRefscan();
+  const writersTxt = await writeWriters();
+  const unref = await writeUnreferenced(files, refscanOut, eleventyInfo);
+
+  // 4) Plan: moves and rewrites (no src normalization; formats already supported)
+  const moves = await writeMoveMap();
+  const rewrites = await writeRewritesSed();
+
+  // 5) Scripts: gated apply scripts
+  const passthroughs = [
+    'src/content/docs/vendor-docs/**',
+    'src/content/docs/flower/normalized/**',
+    'src/content/docs/flower/reports/**'
+  ];
+  await writeApplyScripts(passthroughs);
+
+  // 6) Reports
+  await writeReports(eleventyInfo, moves, rewrites, writersTxt, unref, passthroughs, spy._calls);
+
+  // 7) Done
   console.log('DRY RUN COMPLETE :: artifacts at var/');
 }
 
