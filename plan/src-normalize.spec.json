@@ -1,0 +1,14 @@
+{
+  "allowOverlayAssets": true,
+  "roles": {
+    "routes": ["src/*.njk", "src/*.11ty.js", "src/archives/**", "src/work/**"],
+    "content": ["src/content/**"],
+    "data": ["src/_data/**"],
+    "includes": ["src/_includes/**"],
+    "scripts": ["src/scripts/**"],
+    "styles": ["src/styles/**"],
+    "assets": ["src/assets/**"],
+    "attic": ["src/_attic/**"]
+  },
+  "templatePattern": "**/*.11ty.js"
+}
