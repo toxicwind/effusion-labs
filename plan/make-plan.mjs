@@ -1,33 +1,28 @@
 #!/usr/bin/env node
 /**
- * make-plan.mjs
+ * make-plan.mjs — DRY-RUN PLANNER (Eleventy-aware)
  * -----------------------------------------------------------------------------
- * Dry-run planning tool for this Eleventy repo.
+ * Runs your real Eleventy config through a spy (no build) to discover dirs,
+ * template formats, passthroughs, and plugin/registration surfaces.
  *
- * - Uses a REAL Eleventy config run through a "spy" (no stubs, no build).
- *   • addPlugin(plugin, opts) calls plugin(spy, opts) so registration is real.
- *   • amendLibrary('md', cb) is honored with a real Markdown-It instance if available.
- *   • on('eleventy.*', handler) is recorded but NOT executed (no side-effects).
- * - Scans the repo to produce:
- *   • var/inspect/tree.before.txt
- *   • var/inspect/refscan.txt
- *   • var/inspect/writers.txt
- *   • var/inspect/unref.txt
- * - Plans content relocation and rewrites:
- *   • var/plan/move-map.tsv
- *   • var/plan/rewrites.sed
- *   • var/plan/apply-moves.sh
- *   • var/plan/apply-rewrites.sh
- *   • var/plan/apply-build.sh
- *   • var/plan/apply-src.sh      (intentional no-op; we are not normalizing src)
- * - Reports:
- *   • var/reports/plan.md
- *   • var/reports/plan.json
+ * Fixes:
+ * - Provides eleventyConfig.versionCheck() expected by official plugins
+ *   (e.g. @11ty/eleventy-plugin-rss, @11ty/eleventy-navigation).
+ * - addPlugin executes plugin(spy, opts) so registration is real.
  *
- * Notes:
- * - Requires a clean git working tree (refuses otherwise).
- * - Does NOT run an Eleventy build; only executes config registration.
- * - Honors your templateFormats: ["md","njk","html","11ty.js"] — no extra normalization.
+ * Output artifacts (dry-run only; never mutates repo state):
+ *   var/inspect/tree.before.txt
+ *   var/inspect/refscan.txt
+ *   var/inspect/writers.txt
+ *   var/inspect/unref.txt
+ *   var/plan/move-map.tsv
+ *   var/plan/rewrites.sed
+ *   var/plan/apply-moves.sh
+ *   var/plan/apply-rewrites.sh
+ *   var/plan/apply-build.sh
+ *   var/plan/apply-src.sh  (noop: formats already support md/njk/html/11ty.js)
+ *   var/reports/plan.md
+ *   var/reports/plan.json
  */
 
 import fs from 'node:fs';
@@ -36,14 +31,14 @@ import path from 'node:path';
 import { execSync, spawnSync } from 'node:child_process';
 import { pathToFileURL } from 'node:url';
 
+/* ------------------------------- constants -------------------------------- */
 const repoRoot = process.cwd();
 const varDir = path.join(repoRoot, 'var');
 const inspectDir = path.join(varDir, 'inspect');
 const planDir = path.join(varDir, 'plan');
 const reportDir = path.join(varDir, 'reports');
 
-/* -------------------------------- Utilities -------------------------------- */
-
+/* -------------------------------- helpers --------------------------------- */
 function shell(cmd, opts = {}) {
   try {
     return execSync(cmd, { cwd: repoRoot, encoding: 'utf8', stdio: 'pipe', shell: true, ...opts });
@@ -71,10 +66,9 @@ function ensureCleanTree() {
   }
 }
 
-/* ----------------------------- Eleventy Spy Core ---------------------------- */
-
+/* --------------------------- Eleventy Spy (real) --------------------------- */
 async function createEleventySpy() {
-  // Provide a real Markdown-It if available so amendLibrary('md', cb) is meaningful.
+  // Prefer a real Markdown-It if available
   let MarkdownIt;
   try { ({ default: MarkdownIt } = await import('markdown-it')); } catch { }
   const realMd = MarkdownIt ? new MarkdownIt() : {
@@ -91,31 +85,43 @@ async function createEleventySpy() {
     shortcodes: [],
     pairedShortcodes: [],
     collections: [],
-    events: []
+    events: [],
+    transforms: [],
+  };
+
+  // A minimal Set-like for dataFilterSelectors
+  const dataFilterSelectors = new Set();
+  const htmlTransformer = {
+    add(name, fn) { /* record only */ calls.transforms.push(name || 'htmlTransformer'); },
+    remove(name) { /* noop */ },
   };
 
   const spy = {
+    // public surfaces
     markdownLibrary: realMd,
     globalData: {},
+    dataFilterSelectors,     // .add/.delete supported by Set
+    htmlTransformer,         // used by some plugins
 
-    // Core API used across your config/plugins
+    // Core config APIs used by plugins and your config
     addPassthroughCopy(arg) { calls.passthrough.push(arg); },
     addGlobalData(key, value) { this.globalData[key] = value; },
-
     addFilter(name, fn) { calls.filters.push(name); },
     addNunjucksFilter(name, fn) { calls.nunjucksFilters.push(name); },
     addShortcode(name, fn) { calls.shortcodes.push(name); },
     addPairedShortcode(name, fn) { calls.pairedShortcodes.push(name); },
     addCollection(name, cb) { calls.collections.push(name); },
+    addTransform(name, fn) { calls.transforms.push(name); }, // legacy API safe
 
     addPlugin(pluginFn, opts) {
       calls.plugins.push(pluginFn?.name || 'anonymous');
       if (typeof pluginFn === 'function') {
-        // Important: run the plugin with THIS spy so it registers normally
+        // Execute plugin against the spy (real registration, still no build)
         pluginFn(this, opts);
       }
     },
 
+    // v3 APIs your config uses
     amendLibrary(type, cb) {
       if (type === 'md' && typeof cb === 'function') {
         this.markdownLibrary = cb(this.markdownLibrary);
@@ -123,28 +129,49 @@ async function createEleventySpy() {
       }
     },
 
-    // Less critical APIs: keep no-ops for safety
-    addWatchTarget() { },
-    addTemplateFormats() { },
-    setBrowserSyncConfig() { },
-    setServerOptions() { },
+    // Compatibility check expected by official plugins
+    versionCheck(range) {
+      // We’re not running Eleventy itself here—just configuration.
+      // Accept any range but emit a one-line warning once per unique range.
+      if (!this.__versionChecks) this.__versionChecks = new Set();
+      if (!this.__versionChecks.has(String(range))) {
+        this.__versionChecks.add(String(range));
+        console.warn(`WARN: Eleventy Plugin compatibility check bypassed in spy: versionCheck("${range}")`);
+      }
+      return true;
+    },
 
-    // ignore support
+    // Noisy or server-only surfaces we don’t need; keep as no-ops
+    setQuietMode() { },
+    setInputDirectory() { },
+    setOutputDirectory() { },
+    setIncludesDirectory() { },
+    setLayoutsDirectory() { },
+    setDataDirectory() { },
+    setTemplateFormats() { },
+    addTemplateFormats() { },
+    setServerOptions() { },
+    setBrowserSyncConfig() { },
+    addWatchTarget() { },
     ignores: { add() { } },
 
-    // Record event registration but DO NOT execute handlers
+    // Record event registration but do not execute
     on(evt, handler) { calls.events.push(evt); },
 
-    // expose captured calls if you want to report them
-    _calls: calls
+    // expose captured calls for reports
+    _calls: calls,
   };
+
+  // Match docs API: allow .add and .delete on dataFilterSelectors (already Set)
+  spy.dataFilterSelectors.add = (...args) => Set.prototype.add.apply(dataFilterSelectors, args);
+  spy.dataFilterSelectors.delete = (...args) => Set.prototype.delete.apply(dataFilterSelectors, args);
 
   return spy;
 }
 
 async function discoverEleventy() {
-  const eleventyConfigPath = path.join(repoRoot, 'eleventy.config.mjs');
-  const mod = await import(pathToFileURL(eleventyConfigPath));
+  const p = path.join(repoRoot, 'eleventy.config.mjs');
+  const mod = await import(pathToFileURL(p));
   const spy = await createEleventySpy();
 
   const returned =
@@ -161,21 +188,19 @@ async function discoverEleventy() {
     input,
     includes: path.join(input, includesName),
     data: path.join(input, dataName),
-    formats: Array.isArray(returned?.templateFormats) ? returned.templateFormats : []
+    formats: Array.isArray(returned?.templateFormats) ? returned.templateFormats : [],
   };
 
   return { eleventyInfo, spy };
 }
 
-/* ------------------------------ File Enumeration --------------------------- */
-
+/* ------------------------------- enumeration ------------------------------- */
 function listFiles() {
-  // Prefer fd (fast); fallback to git ls-files
   const excludes = ['node_modules', '.git', 'bin', 'markdown_gateway', 'mcp-stack'];
   let files = [];
   if (haveCmd('fd', ['--version'])) {
     const args = ['--type', 'f', '--hidden', '--strip-cwd-prefix', '.', repoRoot];
-    excludes.forEach(e => { args.push('--exclude', e); });
+    excludes.forEach(e => args.push('--exclude', e));
     const r = spawnSync('fd', args, { cwd: repoRoot, encoding: 'utf8' });
     if (r.status === 0) files = r.stdout.trim().split('\n').filter(Boolean);
   }
@@ -187,13 +212,10 @@ function listFiles() {
   return files;
 }
 
-/* ---------------------------------- Scans ---------------------------------- */
-
+/* ---------------------------------- scans ---------------------------------- */
 async function writeTreeBefore(files) {
   try {
-    // Try a pretty tree; fall back to just listing files
-    const treeCmd = 'npx --yes tree -a -I "node_modules|.git"';
-    const out = shell(treeCmd);
+    const out = shell('npx --yes tree -a -I "node_modules|.git"');
     if (out && out.trim()) {
       await fsp.writeFile(path.join(inspectDir, 'tree.before.txt'), out);
       return;
@@ -214,18 +236,17 @@ async function writeRefscan() {
     '<link\\s+rel=[\'"]stylesheet[\'"]',
     '<script[^>]*\\ssrc=',
     'url\\(',
-    '/(assets|docs|archives|work)/'
+    '/(assets|docs|archives|work)/',
   ];
 
   let output = '';
   if (haveCmd('rg', ['--version'])) {
     const args = ['--no-ignore', '--hidden', '-n'];
-    for (const p of patterns) { args.push('-e', p); }
+    patterns.forEach(p => args.push('-e', p));
     args.push('--', '.');
     const r = spawnSync('rg', args, { cwd: repoRoot, encoding: 'utf8' });
     output = r.stdout || '';
   } else {
-    // Fallback: naive Node scan (slower, but keeps script runnable)
     const files = listFiles();
     for (const f of files) {
       try {
@@ -240,6 +261,7 @@ async function writeRefscan() {
       } catch { }
     }
   }
+
   await fsp.writeFile(path.join(inspectDir, 'refscan.txt'), output);
   return output;
 }
@@ -256,12 +278,11 @@ async function writeWriters() {
   let output = '';
   if (haveCmd('rg', ['--version'])) {
     const args = ['--no-ignore', '--hidden', '-n'];
-    for (const p of writerPatterns) args.push('-e', p);
+    writerPatterns.forEach(p => args.push('-e', p));
     args.push('--', '.');
     const r = spawnSync('rg', args, { cwd: repoRoot, encoding: 'utf8' });
     output = r.stdout || '';
   } else {
-    // Fallback: naive Node scan
     const files = listFiles();
     for (const f of files) {
       try {
@@ -298,7 +319,7 @@ async function writeUnreferenced(allFiles, refscanOutput, eleventyInfo) {
     !refFiles.has(f) &&
     !f.startsWith(eleventyInfo.includes) &&
     !f.startsWith(eleventyInfo.data) &&
-    !f.endsWith('.11ty.js') && // templates: always considered referenced by Eleventy
+    !f.endsWith('.11ty.js') &&
     !f.startsWith('markdown_gateway/') &&
     !f.startsWith('mcp-stack/')
   );
@@ -307,47 +328,47 @@ async function writeUnreferenced(allFiles, refscanOutput, eleventyInfo) {
   return unref;
 }
 
-/* ---------------------------- Planning Artifacts ---------------------------- */
-
+/* ------------------------------ plan artifacts ----------------------------- */
 async function writeMoveMap() {
-  // Static intents for docs → content/docs and flower reports → content/docs/flower
-  const specs = [
+  const intents = [
     { src: 'docs', dest: 'src/content/docs' },
     { src: 'docs/vendor', dest: 'src/content/docs/vendor-docs' },
     { src: 'docs/vendors', dest: 'src/content/docs/vendor-docs' },
     { src: 'flower_reports_showcase', dest: 'src/content/docs/flower' },
   ];
-  const rows = [];
 
-  for (const intent of specs) {
+  const rows = [];
+  for (const intent of intents) {
     const abs = path.join(repoRoot, intent.src);
     if (!fs.existsSync(abs)) continue;
-    const r = spawnSync('fd', ['--type', 'f', '--strip-cwd-prefix', '.', intent.src], { cwd: repoRoot, encoding: 'utf8' });
-    if (r.status === 0) {
-      const list = r.stdout.split('\n').filter(Boolean);
-      for (const rel of list) {
-        const from = path.join(intent.src, rel);
-        const to = path.join(intent.dest, rel);
-        rows.push(`${from}\t${to}`);
-      }
-    } else {
-      // fallback: walk directory
-      const walk = (dir, relBase = '') => {
-        const entries = fs.readdirSync(path.join(repoRoot, dir));
-        for (const e of entries) {
-          if (e === '.' || e === '..') continue;
-          const full = path.join(dir, e);
-          const stat = fs.statSync(path.join(repoRoot, full));
-          if (stat.isDirectory()) walk(full, path.join(relBase, e));
-          else if (stat.isFile()) {
-            const from = full;
-            const to = path.join(intent.dest, relBase, e);
-            rows.push(`${from}\t${to}`);
-          }
+
+    if (haveCmd('fd', ['--version'])) {
+      const r = spawnSync('fd', ['--type', 'f', '--strip-cwd-prefix', '.', intent.src], { cwd: repoRoot, encoding: 'utf8' });
+      if (r.status === 0) {
+        for (const rel of r.stdout.split('\n').filter(Boolean)) {
+          const from = path.join(intent.src, rel);
+          const to = path.join(intent.dest, rel);
+          rows.push(`${from}\t${to}`);
         }
-      };
-      walk(intent.src);
+        continue;
+      }
     }
+    // fallback walk
+    const walk = (dir, relBase = '') => {
+      const entries = fs.readdirSync(path.join(repoRoot, dir));
+      for (const e of entries) {
+        if (e === '.' || e === '..') continue;
+        const full = path.join(dir, e);
+        const stat = fs.statSync(path.join(repoRoot, full));
+        if (stat.isDirectory()) walk(full, path.join(relBase, e));
+        else if (stat.isFile()) {
+          const from = full;
+          const to = path.join(intent.dest, relBase, e);
+          rows.push(`${from}\t${to}`);
+        }
+      }
+    };
+    walk(intent.src);
   }
 
   await fsp.writeFile(path.join(planDir, 'move-map.tsv'), rows.join('\n'));
@@ -355,24 +376,41 @@ async function writeMoveMap() {
 }
 
 async function writeRewritesSed() {
-  const rewrites = [
+  const pairs = [
     ['docs/', 'src/content/docs/'],
     ['docs/vendor/', 'src/content/docs/vendor-docs/'],
     ['docs/vendors/', 'src/content/docs/vendor-docs/'],
     ['flower_reports_showcase/', 'src/content/docs/flower/'],
   ];
-  const sed = rewrites.map(([from, to]) => `s|${from}|${to}|g`).join('\n');
+  const sed = pairs.map(([from, to]) => `s|${from}|${to}|g`).join('\n');
   await fsp.writeFile(path.join(planDir, 'rewrites.sed'), sed);
-  return rewrites;
+  return pairs;
 }
 
 async function writeApplyScripts(passthroughs) {
   const hdr = '#!/bin/bash\nset -e\nif [ "$I_UNDERSTAND" != "1" ]; then echo "Refusing without I_UNDERSTAND=1"; exit 1; fi\n';
 
-  const applyMoves = `${hdr}echo "Previewing git mv operations from var/plan/move-map.tsv"\nwhile IFS=$'\\t' read -r FROM TO; do\n  [ -z "$FROM" ] && continue\n  echo git mv "$FROM" "$TO"\n  git add -N "$FROM" "$TO" >/dev/null 2>&1 || true\ndone < var/plan/move-map.tsv\n`;
-  const applyRewrites = `${hdr}echo "Would run: sed -i -f var/plan/rewrites.sed <files>"\n`;
-  const applyBuild = `${hdr}echo "Proposed Eleventy passthrough copies:"\n${passthroughs.map(p => `echo "  - ${p}"`).join('\n')}\n`;
-  const applySrcNoop = `${hdr}echo "No src normalization planned (templateFormats already support md/njk/html/11ty.js)."\n`;
+  const applyMoves =
+    `${hdr}echo "Previewing git mv operations from var/plan/move-map.tsv"
+while IFS=$'\\t' read -r FROM TO; do
+  [ -z "$FROM" ] && continue
+  echo git mv "$FROM" "$TO"
+  git add -N "$FROM" "$TO" >/dev/null 2>&1 || true
+done < var/plan/move-map.tsv
+`;
+
+  const applyRewrites =
+    `${hdr}echo "Would run: sed -i -f var/plan/rewrites.sed <files>"
+`;
+
+  const applyBuild =
+    `${hdr}echo "Proposed Eleventy passthrough copies:"
+${passthroughs.map(p => `echo "  - ${p}"`).join('\n')}
+`;
+
+  const applySrcNoop =
+    `${hdr}echo "No src normalization planned (templateFormats already support md/njk/html/11ty.js)."
+`;
 
   await fsp.writeFile(path.join(planDir, 'apply-moves.sh'), applyMoves, { mode: 0o755 });
   await fsp.writeFile(path.join(planDir, 'apply-rewrites.sh'), applyRewrites, { mode: 0o755 });
@@ -380,15 +418,13 @@ async function writeApplyScripts(passthroughs) {
   await fsp.writeFile(path.join(planDir, 'apply-src.sh'), applySrcNoop, { mode: 0o755 });
 }
 
-/* --------------------------------- Reports --------------------------------- */
-
+/* --------------------------------- reports --------------------------------- */
 async function writeReports(eleventyInfo, moves, rewrites, writersTxt, unref, passthroughs, spyCalls) {
   const formats = (eleventyInfo.formats || []).join(', ');
-
   const md = [
     '# Plan Report',
     '## Overview',
-    'Dry-run planning of documentation relocation and URL rewrites. Eleventy config was executed via a live spy (no stubs) to discover directories, template formats, and registration surfaces. No build or event handlers were executed.',
+    'Executed Eleventy configuration via a live spy to capture dirs, formats, and plugin/registration surfaces. No build or event handlers were executed.',
     '## Eleventy Discovery',
     `- input: \`${eleventyInfo.input}\``,
     `- includes: \`${eleventyInfo.includes}\``,
@@ -413,7 +449,7 @@ async function writeReports(eleventyInfo, moves, rewrites, writersTxt, unref, pa
     `- collections: ${spyCalls.collections.length ? '`' + spyCalls.collections.join('`, `') + '`' : '_none_'}\n` +
     `- events registered: ${spyCalls.events.length ? '`' + spyCalls.events.join('`, `') + '`' : '_none_'}\n`,
     '## Edge Cases (as needed, evidence-driven)',
-    '- None observed.'
+    '- None observed.',
   ].join('\n');
 
   await fsp.writeFile(path.join(reportDir, 'plan.md'), md);
@@ -436,47 +472,46 @@ async function writeReports(eleventyInfo, moves, rewrites, writersTxt, unref, pa
       shortcodes: spyCalls.shortcodes,
       pairedShortcodes: spyCalls.pairedShortcodes,
       collections: spyCalls.collections,
-      events: spyCalls.events
+      events: spyCalls.events,
+      transforms: spyCalls.transforms,
     }
   };
 
   await fsp.writeFile(path.join(reportDir, 'plan.json'), JSON.stringify(json, null, 2));
 }
 
-/* ---------------------------------- Main ----------------------------------- */
-
+/* ----------------------------------- main ---------------------------------- */
 async function main() {
   ensureCleanTree();
   ensureDirs();
 
-  // 1) Real Eleventy config execution through spy (no build)
+  // 1) Run Eleventy config through spy (no build)
   const { eleventyInfo, spy } = await discoverEleventy();
 
-  // 2) Enumerate files
+  // 2) Enumerate
   const files = listFiles();
 
-  // 3) Inspect: tree, refscan, writers, unreferenced
+  // 3) Inspect
   await writeTreeBefore(files);
   const refscanOut = await writeRefscan();
   const writersTxt = await writeWriters();
   const unref = await writeUnreferenced(files, refscanOut, eleventyInfo);
 
-  // 4) Plan: moves and rewrites (no src normalization; formats already supported)
+  // 4) Plan (no src normalization; formats already include md/njk/html/11ty.js)
   const moves = await writeMoveMap();
   const rewrites = await writeRewritesSed();
 
-  // 5) Scripts: gated apply scripts
+  // 5) Scripts
   const passthroughs = [
     'src/content/docs/vendor-docs/**',
     'src/content/docs/flower/normalized/**',
-    'src/content/docs/flower/reports/**'
+    'src/content/docs/flower/reports/**',
   ];
   await writeApplyScripts(passthroughs);
 
-  // 6) Reports
+  // 6) Report
   await writeReports(eleventyInfo, moves, rewrites, writersTxt, unref, passthroughs, spy._calls);
 
-  // 7) Done
   console.log('DRY RUN COMPLETE :: artifacts at var/');
 }
 
