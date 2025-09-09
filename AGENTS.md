@@ -51,7 +51,7 @@ Environment already active. Sourcing skipped. **Proceed with task.**
 ## Cadence (always)
 
 * **Strategize:** pick an approach from the Strategic Framework.
-* **Orient:** inspect with `tree`, `rg`, `llm_cat`, `hype_status`; scan web for standards/primary sources.
+* **Orient:** inspect with `tree`, `fd`, `rg`, `llm_cat`, `hype_status`; scan web for standards/primary sources.
 * **Implement:** execute only via the Core Protocols.
 * **Verify:** if a check fails, enter the corrective loop (analyze → pivot → re-implement → re-verify).
 * **Persist & report:** snapshot meaningful work and produce the single final report (see Output Spec).
@@ -96,41 +96,6 @@ rg 'addCollection' eleventy.config.mjs | llm_cat
 ```bash
 git push origin main
 ```
-
-#### **⋂ RESEARCH & TOOL PROTOCOL (REQUIRED)**
-
-**Scope:** **Invocation** = any top-level input that requests work (user message, automation, or tool handoff). Applies to **every Invocation**.
-
-* **Chain-first (no outs):** Run **≥2 chained runs**. Each run adapts from the prior (new leads, contradictions, gaps). If a floor isn’t met, **auto-iterate** (add passes/queries/opens); do not stall output.
-
-* **Per-run floors:**
-
-  * Do **≥4 passes**.
-  * **Search (per pass):** call `to=web.run code=` with **`response_length=long`** and a **`search_query` array of ≥8 smart, diversified queries** (synonyms, domain jargon, Boolean/operators, `site:`/domain and recency filters).
-  * **Browse/extract (per pass):** **open ≥4 high-signal results** and pursue **≥4 cross-domain links** using `open` / `click`. Use `find` for exact strings; `screenshot` for PDFs/figures.
-
-* **Mechanistic query design (Goldilocks):**
-
-  * **Think before querying:** derive from entities, claims, unknowns, and likely primary sources—never paste the user text verbatim.
-  * **Calibrate scope:** avoid over-broad floods and over-tight zero-hit strings; tune with quotes, `-term`, `site:`, filetype, and time windows to keep results **rich but focusable**.
-  * **Material diversity:** queries within a pass must be meaningfully distinct (no trivial swaps).
-  * **Primary-source bias:** prefer standards, official docs, filings, first-party repos, peer-review, and reputable outlets; sample dissent to test hypotheses.
-  * **Anti-poisoning:** down-rank brand-bait/SEO sludge; pivot to neighboring primary evidence.
-
-* **Emergent chaining:**
-
-  * **Run 1:** map the space, collect anchors, form candidate explanations.
-  * **Run 2 (+ as needed):** stress the lead hypothesis (falsifiers/edge cases), retire dead axes, add new vectors. Continue until floors are met and key contradictions are addressed.
-
-* **Tool mapping (sanity):**
-
-  * Searching = `to=web.run code=` → `search_query: [ … ]` (with `response_length=long`)
-  * Browsing/extracting = `to=web.run code=` → `open` / `click` / `find` / `screenshot`
-  * Images when materially helpful = `to=web.run code=` → `image_query`
-
-* **Trace (lightweight):** Emit compact counts (runs/passes/queries/opens/cross-links) and the key pivots chosen.
-
------
 
 ### **5. Strategic Framework: Articulating Your Path**
 
