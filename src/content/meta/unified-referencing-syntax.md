@@ -1,6 +1,6 @@
 ---
 title: "The Unified Referencing Syntax"
-layout: "layout.njk"
+layout: "layouts/base.njk"
 date: 2025-07-12
 status: Stable
 certainty: codified
@@ -17,12 +17,12 @@ spark_type: documentation-standard
 target: Cross-Disciplinary Referencing & Audit
 analytic_lens: performative-sourcing, dramaturgical-evidence, adversarial-integrity, multi-type-audit, protocolized-appendix
 memory_ref:
-  - [reproducible-research]
-  - [open-citation]
-  - [dogme-95]
-  - [meta-methodology]
-  - [audit-traceability]
-  - [procedural-rhetoric]
+  - "[reproducible-research]"
+  - "[open-citation]"
+  - "[dogme-95]"
+  - "[meta-methodology]"
+  - "[audit-traceability]"
+  - "[procedural-rhetoric]"
 preamble:
   classification: "[META] Syntax: Formal Reference & Audit"
   version: "1.0-urs"

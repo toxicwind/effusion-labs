@@ -1,0 +1,65 @@
+---
+layout: layouts/base.njk
+eleventyComputed:
+  companySlug: "pop-mart"
+  title: "POP MART"
+---
+{% from "components/back-link.njk" import backLink %}
+{% from "components/archive-nav.njk" import archiveNav %}
+
+<nav class="breadcrumbs text-sm mb-2 overflow-x-auto whitespace-nowrap" aria-label="Breadcrumb">
+  <ul>
+    <li><a href="/archives/">Archives</a></li>
+    <li class="opacity-70">POP MART</li>
+  </ul>
+</nav>
+
+<div class="mb-6">
+  {{ backLink('Back', '/archives/') }}
+</div>
+
+<header class="mb-6">
+  <h1 class="font-heading text-4xl uppercase tracking-[-0.025em] text-primary m-0">POP MART</h1>
+  <p class="mt-2 text-base-content/80">Browse POP MART lines discovered at build time.</p>
+</header>
+
+<section class="mb-10">
+  <div class="card bg-base-100 border shadow-sm">
+    <div class="card-body p-4 sm:p-6">
+      {{ archiveNav(page.url, archivesNav) }}
+    </div>
+  </div>
+</section>
+
+{# Build line list from collections (company-scoped) #}
+{% set prodAll = collections.archiveProducts   | byCompany(companySlug) | byLocale('en') %}
+{% set charAll = collections.archiveCharacters | byCompany(companySlug) | byLocale('en') %}
+{% set seriesAll = collections.archiveSeries   | byCompany(companySlug) | byLocale('en') %}
+{% set slugs = [] %}
+{% for it in prodAll %}{% if slugs.indexOf(it.data.lineSlug) == -1 %}{% set _ = slugs.push(it.data.lineSlug) %}{% endif %}{% endfor %}
+{% for it in charAll %}{% if slugs.indexOf(it.data.lineSlug) == -1 %}{% set _ = slugs.push(it.data.lineSlug) %}{% endif %}{% endfor %}
+{% for it in seriesAll %}{% if slugs.indexOf(it.data.lineSlug) == -1 %}{% set _ = slugs.push(it.data.lineSlug) %}{% endif %}{% endfor %}
+<section class="mb-12">
+  <h2 class="text-xl font-semibold mb-3">Lines</h2>
+  {% if slugs.length %}
+    <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {% for slug in slugs %}
+        {% set prodLine = prodAll   | byLine(slug) | uniqueBy('productSlug') %}
+        {% set charLine = charAll   | byLine(slug) | uniqueBy('charSlug') %}
+        {% set seriesLine = seriesAll | byLine(slug) | uniqueBy('seriesSlug') %}
+        <li class="card bg-base-100 border hover:shadow-xl hover:border-primary/50 transition">
+          <a class="card-body p-4 sm:p-5 block" href="/archives/collectables/designer-toys/{{ companySlug }}/{{ slug }}/">
+            <h3 class="card-title text-base m-0">{{ slug | replace('-', ' ') | title }}</h3>
+            <div class="mt-3 flex flex-wrap gap-2">
+              <span class="badge badge-outline">Products: {{ prodLine | length }}</span>
+              <span class="badge badge-outline">Characters: {{ charLine | length }}</span>
+              <span class="badge badge-outline">Series: {{ seriesLine | length }}</span>
+            </div>
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <div class="alert"><span>No lines found under POP MART yet.</span></div>
+  {% endif %}
+</section>

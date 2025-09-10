@@ -1,6 +1,6 @@
 ---
 title: "The Protocolist Art Framework"
-layout: "layout.njk"
+layout: "layouts/base.njk"
 date: 2025-07-12
 status: Stable
 certainty: codified
@@ -17,12 +17,12 @@ spark_type: artistic-modality-specification
 target: The Practice of Protocolist Art
 analytic_lens: protocol-as-aesthetic, curator-sovereignty, rhizomatic-traceability, reproducible-editions, bias-audit-loop
 memory_ref:
-  - [reproducible-research]
-  - [open-source-hardware]
-  - [dogme-95]
-  - [version-control-git]
-  - [rhizomatic-protocol]
-  - [procedural-rhetoric]
+  - "[reproducible-research]"
+  - "[open-source-hardware]"
+  - "[dogme-95]"
+  - "[version-control-git]"
+  - "[rhizomatic-protocol]"
+  - "[procedural-rhetoric]"
 preamble:
   classification: "[META] Project: Formalization"
   version: "2.0-paf"

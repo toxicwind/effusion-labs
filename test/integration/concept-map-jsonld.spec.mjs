@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert';
-import generateConceptMapJSONLD from '../lib/concept-map.js';
+import generateConceptMapJSONLD from '../../helpers/data/concept-map';
 
 test('concept map JSON-LD export generates @context and @graph', () => {
   const pages = [

@@ -1,2 +1,2 @@
-import generateConceptMapJSONLD from '../../lib/concept-map.js';
+import generateConceptMapJSONLD from '../../helpers/data/concept-map.js';
 export default generateConceptMapJSONLD;

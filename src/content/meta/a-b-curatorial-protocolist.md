@@ -1,6 +1,6 @@
 ---
 title: "Comparative Analysis of Candidate Framework Designations"
-layout: "layout.njk"
+layout: "layouts/base.njk"
 date: 2025-07-12
 status: complete
 certainty: definitive
@@ -17,9 +17,9 @@ spark_type: comparative-analysis
 target: Candidate Framework Designations ("Curatorial Generativism" vs. "Protocolist Art")
 analytic_lens: protocol-centrism, structural-honesty, market-distinctiveness, media-extensibility
 memory_ref:
-  - [protocolist-art-framework]
-  - [curatorial-generativism-obsolete]
-  - [rhizomatic-protocol]
+  - "[protocolist-art-framework]"
+  - "[curatorial-generativism-obsolete]"
+  - "[rhizomatic-protocol]"
 ---
 
 ### 1.0 Objective

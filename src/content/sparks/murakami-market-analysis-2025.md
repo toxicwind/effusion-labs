@@ -1,6 +1,6 @@
 ---
 title: "Takashi Murakami - Lithographs, Signed Works, and Small-format Prints: A 2025 Market Topography"
-layout: "layout.njk"
+layout: "layouts/base.njk"
 date: 2025-07-02
 status: complete-ongoing
 certainty: speculative
@@ -15,11 +15,11 @@ spark_type: market-breakdown
 target: Murakami Print Market
 analytic_lens: lithographs, signed works, small-format prints, valuation, distribution, authentication
 memory_ref:
-  - [style-guide]
-  - [methodology]
-  - [murakami-market-ecosystem]
-  - [print-authentication]
-  - [superflat-concept]
+  - "[style-guide]"
+  - "[methodology]"
+  - "[murakami-market-ecosystem]"
+  - "[print-authentication]"
+  - "[superflat-concept]"
 ---
 
 > “Japanese people accept that art and commerce will be blended; and, in fact, they are surprised by the rigid and pretentious Western hierarchy of ‘high art.’”

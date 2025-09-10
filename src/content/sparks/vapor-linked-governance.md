@@ -1,6 +1,6 @@
 ---
 title: "Vapor-Linked Governance: How Japan Made Tobacco a Civic Utility"
-layout: "layout.njk"
+layout: "layouts/base.njk"
 date: 2025-07-24
 status: Stable
 certainty: adversarial-analytic
@@ -22,11 +22,11 @@ analytic_lens:
   - performative-legitimacy
   - regulatory-technics
 memory_ref:
-  - [public-finance]
-  - [state-owned-enterprise]
-  - [regulatory-capture]
-  - [innovation-theater]
-  - [ritual-economics]
+  - "[public-finance]"
+  - "[state-owned-enterprise]"
+  - "[regulatory-capture]"
+  - "[innovation-theater]"
+  - "[ritual-economics]"
 preamble:
   classification: "[META] Infrastructure audit and meta-ironic institutional critique"
   version: "1.0-vapor-governance"

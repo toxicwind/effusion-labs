@@ -1,6 +1,6 @@
 ---
 title: "On The Sociality Of Stochastic Parrots"
-layout: "layout.njk"
+layout: "layouts/base.njk"
 date: 2025-07-17
 status: complete
 certainty: definitive
@@ -20,13 +20,13 @@ spark_type: conceptual-deconstruction
 target: "Claims of Emergent Social Behavior in Multi-Agent LLMs"
 analytic_lens: stochastic-parrot-thesis, methodological-critique, artifact-analysis
 memory_ref:
-  - [stochastic-parrots]
-  - [llm-emergence-debate]
-  - [schaeffer-emergence-mirage]
-  - [centola-tipping-point]
-  - [agent-homogeneity-problem]
-  - [thunstrom-mimetic-trap]
-  - [weak-vs-strong-emergence]
+  - "[stochastic-parrots]"
+  - "[llm-emergence-debate]"
+  - "[schaeffer-emergence-mirage]"
+  - "[centola-tipping-point]"
+  - "[agent-homogeneity-problem]"
+  - "[thunstrom-mimetic-trap]"
+  - "[weak-vs-strong-emergence]"
 ---
 
 > *An epistemology of consensus, for systems that possess neither knowledge nor the capacity for agreement.*

@@ -2,7 +2,7 @@
 // Master refactor for src/: moves, rewrites, and hygiene with --dry (default) or --do-it.
 //
 // What it does (under src/ only):
-// - Rename _includes/layout.njk -> _includes/layouts/base.njk
+// - Rename _includes/base.njk -> _includes/layouts/base.njk
 // - Move route endpoints into src/pages/** (index, 404, map, feed, consulting,
 //   concept-map.json, resume/{index,card}, work/* incl .11ty.js, plus top-level work.njk)
 // - Move misfiled includes: _includes/layouts/embed.njk -> _includes/components/embed.njk
@@ -11,11 +11,11 @@
 // - Nudge images:           src/assets/og-ai-safety.jpg -> src/assets/images/og/og-ai-safety.jpg
 //                           src/assets/static/logo.png  -> src/assets/images/logo.png
 // - Rewrites inside src/** files only (skip src/archives/**):
-//     * front matter layout: "layout.njk"        -> "layouts/base.njk"
-//     * nunjucks extends:    {% extends "layout.njk" %} -> "layouts/base.njk"
+//     * front matter layout: "base.njk"        -> "layouts/base.njk"
+//     * nunjucks extends:    {% extends "base.njk" %} -> "layouts/base.njk"
 //     * nunjucks includes:   archive-nav.njk     -> components/archive-nav.njk
 //                            layouts/embed.njk   -> components/embed.njk
-//     * JS/11ty data:        layout: 'layout.njk' -> 'layouts/base.njk'
+//     * JS/11ty data:        layout: 'base.njk' -> 'layouts/base.njk'
 //     * src/scripts/ paths   -> src/assets/js/   (does NOT rewrite '/scripts/' web paths)
 //     * specific assets      -> /assets/images/* as listed above
 //
@@ -85,7 +85,7 @@ function noteConflict(what, why) { CONFLICTS.push({ what, why }); }
 function noteSkip(what, why) { SKIPPED.push({ what, why }); }
 
 function replaceFrontMatterLayout(text) {
-    // Only replace "layout.njk" string values; leave false/null untouched.
+    // Only replace "base.njk" string values; leave false/null untouched.
     // Handle YAML front matter at top delimited by --- ... ---.
     if (!text.startsWith('---')) return { text, changed: false };
     const end = text.indexOf('\n---', 3);
@@ -93,7 +93,7 @@ function replaceFrontMatterLayout(text) {
     const fm = text.slice(0, end + 4);
     const body = text.slice(end + 4);
     const before = fm;
-    // Match: layout: 'layout.njk' or "layout.njk"
+    // Match: layout: 'base.njk' or "base.njk"
     const fmNew = fm.replace(
         /(^|\n)\s*layout\s*:\s*(['"])layout\.njk\2\s*($|\n)/,
         (m, a, q, z) => `${a}layout: ${q}layouts/base.njk${q}${z}`
@@ -123,7 +123,7 @@ function shouldRewrite(fileAbs) {
 // compute planned moves
 async function computeMoves() {
     // Base layout normalization
-    const LAYOUT_SRC = path.join(SRC, '_includes', 'layout.njk');
+    const LAYOUT_SRC = path.join(SRC, '_includes', 'base.njk');
     const LAYOUT_DST = path.join(SRC, '_includes', 'layouts', 'base.njk');
     if (await exists(LAYOUT_SRC)) planMove(LAYOUT_SRC, LAYOUT_DST, 'normalize base layout');
 
@@ -241,7 +241,7 @@ async function scanAndRewrite() {
             if (fmRes.changed) {
                 txt = fmRes.text;
                 changed = true;
-                planRewrite(p, 'frontmatter:layout', `"layout.njk" → "layouts/base.njk"`);
+                planRewrite(p, 'frontmatter:layout', `"base.njk" → "layouts/base.njk"`);
             }
         }
 
@@ -266,7 +266,7 @@ async function scanAndRewrite() {
             if (j.changed) {
                 txt = j.out;
                 changed = true;
-                planRewrite(p, 'js:data.layout', `layout: 'layout.njk' → 'layouts/base.njk'`);
+                planRewrite(p, 'js:data.layout', `layout: 'base.njk' → 'layouts/base.njk'`);
             }
         }
 

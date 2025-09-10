@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
-import utils from '../../lib/utils.js';
+import utils from '../../helpers/utils/utils-node.mjs';
 
 // Destructure the functions to be tested
 const { ordinalSuffix, readFileCached } = utils;

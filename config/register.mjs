@@ -388,7 +388,7 @@ export default function register(eleventyConfig) {
     eleventyConfig.on("eleventy.before", async () => {
       console.log("🚀 Eleventy build starting with enhanced footnote system...");
       // Always attempt to snapshot docs (non-fatal on errors)
-      try { await snapshotDocs(); } catch (e) { console.warn("[docs-snapshot] skipped:", e?.message || e); }
+      //try { await snapshotDocs(); } catch (e) { console.warn("[docs-snapshot] skipped:", e?.message || e); }
       if (process.env.CSS_WATCH === "1") return; // external watcher handles CSS
       await runPostcssAll([
         { src: "src/styles/app.tailwind.css", dest: "src/assets/css/app.css" },

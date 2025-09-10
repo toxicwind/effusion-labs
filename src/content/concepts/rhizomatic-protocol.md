@@ -1,6 +1,6 @@
 ---
 title: "The Rhizomatic Protocol: A Corrected Model of the Effusion Labs System"
-layout: "layout.njk"
+layout: "layouts/base.njk"
 date: 2025-07-12
 status: complete
 certainty: corrective
@@ -17,11 +17,11 @@ spark_type: protocol-correction
 target: The Effusion Labs Workflow Model
 analytic_lens: rhizomatic-analysis, error-correction, network-theory, non-linear-systems
 memory_ref:
-  - [deleuze-a-thousand-plateaus]
-  - [atlas-of-a-process-obsolete]
-  - [kuhn-scientific-revolutions]
-  - [curatorial-generativism]
-  - [serendipity-in-science]
+  - "[deleuze-a-thousand-plateaus]"
+  - "[atlas-of-a-process-obsolete]"
+  - "[kuhn-scientific-revolutions]"
+  - "[curatorial-generativism]"
+  - "[serendipity-in-science]"
 ---
 ### 1.0 The Identified Flaw: A Critique of Linear Process Models
 

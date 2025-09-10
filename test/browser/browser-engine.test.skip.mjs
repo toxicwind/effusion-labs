@@ -3,7 +3,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { MockAgent, setGlobalDispatcher } from 'undici';
-import { fetchMarkdown } from '../lib/markdownGateway.js';
+import { fetchMarkdown } from '../../helpers/network/markdownGateway';
 
 test('fetchMarkdown returns markdown and solver payload', async () => {
   const mock = new MockAgent();

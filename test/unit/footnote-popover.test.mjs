@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import MarkdownIt from 'markdown-it';
 import markdownItFootnote from 'markdown-it-footnote';
-import { applyMarkdownExtensions } from '../../lib/markdown/index.js';
+import { applyMarkdownExtensions } from '../../config/markdown/index.js';
 import { JSDOM } from 'jsdom';
 
 test('footnote popover separates source line', () => {

@@ -1,6 +1,6 @@
 ---
 title: "The Aesthetic of the Protocol: An Inquiry into the Effusion Labs Project as a Systems-Based Art Object"
-layout: "layout.njk"
+layout: "layouts/base.njk"
 date: 2025-07-12
 status: complete
 certainty: speculative-analysis
@@ -17,12 +17,12 @@ spark_type: aesthetic-framework
 target: The Effusion Labs Project as an Art Object
 analytic_lens: systems-art, process-art, generative-art, epistemological-sculpture, aesthetic-theory
 memory_ref:
-  - [burnham-systems-esthetics]
-  - [sol-lewitt-wall-drawings]
-  - [kant-critique-of-judgment]
-  - [process-art-movement]
-  - [generative-art-tradition]
-  - [ghost-in-the-engine]
+  - "[burnham-systems-esthetics]"
+  - "[sol-lewitt-wall-drawings]"
+  - "[kant-critique-of-judgment]"
+  - "[process-art-movement]"
+  - "[generative-art-tradition]"
+  - "[ghost-in-the-engine]"
 ---
 
 ### 1.0 A Necessary Interrogation: The Question of Aesthetic Status

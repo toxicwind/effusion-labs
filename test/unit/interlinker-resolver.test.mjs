@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { createArchiveResolvers } from '../../lib/interlinkers/archives-resolvers.mjs';
+import { createArchiveResolvers } from '../../config/interlinkers/archives-resolvers.mjs';
 
 const ctx = {
   data: {

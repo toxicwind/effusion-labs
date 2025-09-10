@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
-import { slugCanonicalProduct } from '../../lib/naming-canon.mjs';
+import { slugCanonicalProduct } from '../../helpers/data/naming-canon.mjs';
 
 await test('slugCanonicalProduct strips volatile suffixes', () => {
   const slug = slugCanonicalProduct({ product_id: 'pop-mart--the-monsters--labubu--best-of-luck--plush--std--20231230--reg-cn' });

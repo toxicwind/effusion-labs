@@ -1,6 +1,6 @@
 ---
 title: "The Ghost in the Byline: On the Structural Honesty of a Co-Authored Text"
-layout: "layout.njk"
+layout: "layouts/base.njk"
 date: 2025-07-12
 status: complete
 certainty: declarative
@@ -17,12 +17,12 @@ spark_type: declaration-of-method
 target: Human-LLM Co-Authorship
 analytic_lens: structural-honesty, distributed-agency, reader-response, feedback-loops, uncanny-valley, provenance
 memory_ref:
-  - [barthes-death-of-the-author]
-  - [foucault-what-is-an-author]
-  - [distributed-cognition]
-  - [mcluhan-medium-is-massage]
-  - [benjamin-work-of-art]
-  - [hofstadter-strange-loops]
+  - "[barthes-death-of-the-author]"
+  - "[foucault-what-is-an-author]"
+  - "[distributed-cognition]"
+  - "[mcluhan-medium-is-massage]"
+  - "[benjamin-work-of-art]"
+  - "[hofstadter-strange-loops]"
 ---
 ## The Ghost in the Byline: On the Structural Honesty of a Co-Authored Text
 

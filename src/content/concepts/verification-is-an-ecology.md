@@ -1,6 +1,6 @@
 ---
 title: 'A Field Guide to the Ecology of Doubt'
-layout: 'layout.njk'
+layout: 'layouts/base.njk'
 date: 2025-08-20
 status: Final
 certainty: conceptual
@@ -25,11 +25,11 @@ analytic_lens:
   - human-algorithm-teaming
   - reputation-mechanisms
 memory_ref:
-  - [verification]
-  - [human-algorithm]
-  - [risk-management]
-  - [reputation-systems]
-  - [decision-theory]
+  - "[verification]"
+  - "[human-algorithm]"
+  - "[risk-management]"
+  - "[reputation-systems]"
+  - "[decision-theory]"
 preamble:
   classification: '[CONCEPT] Verification dynamics in hybrid ecosystems'
   version: '1.0'

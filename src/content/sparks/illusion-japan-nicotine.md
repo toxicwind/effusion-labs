@@ -1,6 +1,6 @@
 ---
 title: "The Illusion of Choice: Engineering Adult Agency in Japan’s Nicotine Market"
-layout: "layout.njk"
+layout: "layouts/base.njk"
 date: 2025-07-24
 status: Stable
 certainty: evidence-analytic
@@ -22,11 +22,11 @@ analytic_lens:
   - consumer-literacy
   - market-theater
 memory_ref:
-  - [japanese-tobacco-market]
-  - [engineering-of-choice]
-  - [regulatory-comparisons]
-  - [consumer-feedback]
-  - [product-lockin]
+  - "[japanese-tobacco-market]"
+  - "[engineering-of-choice]"
+  - "[regulatory-comparisons]"
+  - "[consumer-feedback]"
+  - "[product-lockin]"
 preamble:
   classification: "[META] Meta-ironic technology audit of Japan’s tobacco market as engineered adult agency"
   version: "1.0-agency-illusion"

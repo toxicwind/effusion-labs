@@ -1,6 +1,6 @@
 ---
 title: "The Ghost in the Engine: On the Unseen Architecture of the Effusion Labs Protocol"
-layout: "layout.njk"
+layout: "layouts/base.njk"
 date: 2025-07-12
 status: complete
 certainty: deductive
@@ -17,12 +17,12 @@ spark_type: protocol-analysis
 target: The Effusion Labs Foundational Protocol
 analytic_lens: reverse-engineering, stylistic-analysis, structural-brutalism, deductive-reasoning, unseen-architecture
 memory_ref:
-  - [oulipo]
-  - [dogme-95]
-  - [goedel-incompleteness]
-  - [foucault-panopticon]
-  - [architectural-brutalism]
-  - [borges-on-exactitude]
+  - "[oulipo]"
+  - "[dogme-95]"
+  - "[goedel-incompleteness]"
+  - "[foucault-panopticon]"
+  - "[architectural-brutalism]"
+  - "[borges-on-exactitude]"
 ---
 ### 1.0 The Deliberate Fracture: A Rejection of Narrative Cohesion
 

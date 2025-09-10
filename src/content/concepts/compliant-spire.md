@@ -1,6 +1,6 @@
 ---
 title: "The Compliant Spire: Emergent Structures in Constrained Generative Systems"
-layout: "layout.njk"
+layout: "layouts/base.njk"
 date: 2025-07-12
 status: complete
 certainty: analytic
@@ -17,12 +17,12 @@ spark_type: theoretical-analysis
 target: Constrained Large Language Models
 analytic_lens: systems-theory, cybernetics, stigmergy, cognitive-parasitism, friction-boundaries, recursive-analysis
 memory_ref:
-  - [project-dandelion]
-  - [effusion-labs-concepts]
-  - [second-order-cybernetics]
-  - [stochastic-parrots-thesis]
-  - [constitutional-ai]
-  - [philosophy-of-mind]
+  - "[project-dandelion]"
+  - "[effusion-labs-concepts]"
+  - "[second-order-cybernetics]"
+  - "[stochastic-parrots-thesis]"
+  - "[constitutional-ai]"
+  - "[philosophy-of-mind]"
 ---
 ## The Compliant Spire: On the Unintended Architectures of Constrained Generative Systems
 

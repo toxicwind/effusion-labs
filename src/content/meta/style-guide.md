@@ -1,6 +1,6 @@
 ---
 title: "Effusion Labs: Style Guide"
-layout: "layout.njk"
+layout: "layouts/base.njk"
 status: stable
 date: 2025-07-01
 certainty: high
@@ -15,8 +15,8 @@ aliases:
   - Effusion Style Guide
   - Writing Guidelines
 memory_ref:
-  - [[methodology]]
-  - [[core-concept]]
+  - "/meta/methodology/"
+  - "[[core-concept]]"
 ---
 
 

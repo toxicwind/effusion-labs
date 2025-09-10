@@ -1,6 +1,6 @@
 ---
 title: "The Smoker as Sysadmin: Managing the Self in Japan's Nicotine Technopoly"
-layout: "layout.njk"
+layout: "layouts/base.njk"
 date: 2025-07-24
 status: Stable
 certainty: ethnographic-interpretive
@@ -21,11 +21,11 @@ analytic_lens:
   - behavioral-economics
   - ritual-studies
 memory_ref:
-  - [user-behavior]
-  - [cognitive-dissonance]
-  - [ritual-studies]
-  - [identity-performance]
-  - [techno-capitalism]
+  - "[user-behavior]"
+  - "[cognitive-dissonance]"
+  - "[ritual-studies]"
+  - "[identity-performance]"
+  - "[techno-capitalism]"
 preamble:
   classification: "[META] Ethnographic audit of the smoker's psyche as a managed information system."
   version: "1.0-smoker-sysadmin"

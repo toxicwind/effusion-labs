@@ -1,7 +1,0 @@
-@layer components {
-  .input,
-  .select,
-  .textarea {
-    @apply focus:outline-none focus:ring-2 focus:ring-primary;
-  }
-}

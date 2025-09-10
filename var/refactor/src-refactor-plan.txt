@@ -1,7 +1,7 @@
 DRY: yes
 
 # MOVES (11)
-- src/_includes/layout.njk  ->  src/_includes/layouts/base.njk
+- src/_includes/base.njk  ->  src/_includes/layouts/base.njk
 - src/404.njk  ->  src/pages/404.njk
 - src/index.njk  ->  src/pages/index.njk
 - src/map.njk  ->  src/pages/map.njk
@@ -111,7 +111,7 @@ DRY: yes
 - src/work/index.njk
 
 # REWRITES
-- layout.njk → layouts/base.njk
+- base.njk → layouts/base.njk
 - /scripts/ → /assets/js/
 - src/scripts/ → src/assets/js/
 - /assets/og-ai-safety.jpg → /assets/images/og/og-ai-safety.jpg

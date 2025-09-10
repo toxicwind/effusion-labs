@@ -1,10 +1,10 @@
-// eleventy.config.mjs (root)
-import register from "./lib/eleventy/register.mjs";
+// eleventy.config.mjs (FIXED with all original logic)
+import register from "./config/register.js"; // Corrected path
 import { DateTime } from "luxon";
-import { dirs } from "./lib/config.js";
-import seeded from "./lib/seeded.js";
-import registerArchive from "./lib/eleventy/archives.mjs";
-import { getBuildInfo } from "./lib/build-info.js";
+import { dirs } from "./config/site.js"; // Corrected path
+import seeded from "./helpers/utils/seeded.js"; // Corrected path
+import registerArchive from "./config/archives.mjs"; // Corrected path
+import { getBuildInfo } from "./config/build-info.js"; // Corrected path
 import fs from "node:fs";
 import path from "node:path";
 
@@ -60,8 +60,8 @@ export function createCalloutShortcode(eleventyConfig) {
       icon && /^<svg[\s>]/.test(String(icon))
         ? String(icon)
         : icon
-        ? `<span class="callout-icon" aria-hidden="true">${envEscape(icon)}</span>`
-        : "";
+          ? `<span class="callout-icon" aria-hidden="true">${envEscape(icon)}</span>`
+          : "";
 
     const env = this.ctx ?? {};
     const tokens = md.parse(String(content), env);
@@ -78,8 +78,7 @@ export function createCalloutShortcode(eleventyConfig) {
   <div class="callout-body">
     ${body}
   </div>
-</aside><!-- -->
-`.trim();
+</aside>`.trim();
   };
 }
 
@@ -96,8 +95,6 @@ export default function (eleventyConfig) {
   });
 
   // 🔐 Load JSON archives → stable collections + helpers
-  // Exposes: collections.archiveProducts / archiveCharacters / archiveSeries
-  // and filters: byLine, byCompany, byLocale, uniqueBy (+ global archiveCompanies, archiveLines)
   registerArchive(eleventyConfig);
 
   // ---- Site-specific collections (unchanged semantics) ----
@@ -123,7 +120,6 @@ export default function (eleventyConfig) {
   });
 
   // ---- Filters that play nicely with archive data ----
-  // Date formatter filter (Nunjucks): {{ someDate | date('yyyy-MM-dd') }}
   eleventyConfig.addFilter("date", (value, fmt = "yyyy-LL-dd") => {
     try {
       let dt;
@@ -136,19 +132,17 @@ export default function (eleventyConfig) {
       return "";
     }
   });
-  // Match products by character (accepts name or slug)
+
   eleventyConfig.addFilter("byCharacter", (items, id) => {
     const target = slug(id);
     return (items ?? []).filter((p) => slug(p?.data?.charSlug ?? p?.data?.character) === target);
   });
 
-  // Match products by series (accepts title or slug)
   eleventyConfig.addFilter("bySeries", (items, id) => {
     const target = slug(id);
     return (items ?? []).filter((p) => slug(p?.data?.seriesSlug ?? p?.data?.series) === target);
   });
 
-  // Sort helpers (non-mutating)
   eleventyConfig.addFilter("sortByReleaseDate", (items, dir = "asc") => {
     const arr = [...(items ?? [])];
     arr.sort((a, b) =>
@@ -160,16 +154,14 @@ export default function (eleventyConfig) {
   eleventyConfig.addFilter("seededShuffle", (arr, seed) => seeded.seededShuffle(arr, seed));
   eleventyConfig.addFilter("safe_upper", safeUpper);
   eleventyConfig.addFilter("compactUnique", (arr) => Array.from(new Set((arr || []).filter(Boolean))));
-// Safe JSON for <script type="application/ld+json"> blocks
-const toJson = (value, spaces = 0) =>
-  JSON.stringify(value, null, spaces)
-    // keep parsers happy; prevent tag breakouts
-    .replace(/</g, "\\u003C")
-    .replace(/-->/g, "\\u002D\\u002D>");
-eleventyConfig.addFilter("json", toJson);
-// Belt-and-suspenders: explicitly add the Nunjucks variant too
-eleventyConfig.addNunjucksFilter("json", toJson);
-  // ---------- unified callout shortcode ----------
+
+  const toJson = (value, spaces = 0) =>
+    JSON.stringify(value, null, spaces)
+      .replace(/</g, "\\u003C")
+      .replace(/-->/g, "\\u002D\\u002D>");
+  eleventyConfig.addFilter("json", toJson);
+  eleventyConfig.addNunjucksFilter("json", toJson);
+
   const callout = createCalloutShortcode(eleventyConfig);
   eleventyConfig.addPairedShortcode('callout', callout);
 
@@ -187,8 +179,7 @@ eleventyConfig.addNunjucksFilter("json", toJson);
     return `- ${safeLabel}${content}`.trim();
   });
 
-
-// ---- Global data ----
+  // ---- Global data ----
   eleventyConfig.addGlobalData("buildTime", buildTime);
   eleventyConfig.addGlobalData("dailySeed", seeded.dailySeed);
   eleventyConfig.addGlobalData("homepageCaps", {
@@ -201,7 +192,7 @@ eleventyConfig.addNunjucksFilter("json", toJson);
   });
   const build = getBuildInfo();
   eleventyConfig.addGlobalData("build", build);
-  eleventyConfig.on("eleventy.after", async ({ dir, results }) => {
+  eleventyConfig.on("eleventy.after", async ({ dir }) => {
     const redirectsFile = path.join(dir.output, "_redirects");
     if (fs.existsSync(redirectsFile)) {
       const lines = fs.readFileSync(redirectsFile, "utf8").split(/\n/).filter(Boolean);
@@ -214,18 +205,17 @@ eleventyConfig.addNunjucksFilter("json", toJson);
         fs.writeFileSync(outPath, html);
       }
     }
-    // Snapshot archive product mapping for external tools/tests
+    // Snapshot...
     try {
-      const fs = await import('node:fs');
-      const path = await import('node:path');
       const items = eleventyConfig.globalData?.archiveProductMap || [];
       if (items && items.length) {
         fs.mkdirSync('logs', { recursive: true });
-        fs.writeFileSync(path.join('logs','archiveProductMap.cache.json'), JSON.stringify(items, null, 2));
+        fs.writeFileSync(path.join('logs', 'archiveProductMap.cache.json'), JSON.stringify(items, null, 2));
       }
-    } catch {}
+    } catch { }
   });
   eleventyConfig.addPassthroughCopy('_redirects');
+
   return {
     dir: dirs,
     markdownTemplateEngine: "njk",

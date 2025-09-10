@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { createResolvers } from '../../lib/interlinkers/resolvers.mjs';
-import { getUnresolvedItems } from '../../lib/interlinkers/unresolved-report.mjs';
+import { createResolvers } from '../../config/interlinkers/resolvers.mjs';
+import { getUnresolvedItems } from '../../config/interlinkers/unresolved-report.mjs';
 
 await test('omitted-kind: unresolved link soft-renders and logs attemptedKinds', () => {
   const resolvers = createResolvers();

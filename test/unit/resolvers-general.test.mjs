@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { createResolvers } from '../../lib/interlinkers/resolvers.mjs';
+import { createResolvers } from '../../config/interlinkers/resolvers.mjs';
 
 // Minimal context with archive products
 const ctx = {

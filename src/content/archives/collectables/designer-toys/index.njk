@@ -1,0 +1,18 @@
+---
+layout: layouts/base.njk
+title: "Designer Toys"
+---
+{% from "components/archive-nav.njk" import archiveNav %}
+
+<header class="mb-6">
+  <h1 class="font-heading text-4xl uppercase tracking-[-0.025em] text-base-content m-0">
+    Designer Toys
+  </h1>
+  <p class="mt-2 text-base-content/80">Art toys, platform figures, and collab series.</p>
+</header>
+
+<section class="card bg-base-100 border shadow-sm">
+  <div class="card-body p-4 sm:p-6">
+    {{ archiveNav(page.url, archivesNav) }}
+  </div>
+</section>

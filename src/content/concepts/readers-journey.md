@@ -1,6 +1,6 @@
 ---
 title: "The Reader's Journey and the Divergence from the Singular Author Model"
-layout: "layout.njk"
+layout: "layouts/base.njk"
 date: 2025-07-12
 status: complete
 certainty: analytic
@@ -17,11 +17,11 @@ spark_type: reader-typology
 target: The Effusion Labs Reader
 analytic_lens: comparative-analysis, user-journey-mapping, audience-segmentation, trust-models
 memory_ref:
-  - [gwern-branwen-model]
-  - [effusion-labs-protocol]
-  - [ghost-in-the-byline]
-  - [hci]
-  - [reader-response-theory]
+  - "[gwern-branwen-model]"
+  - "[effusion-labs-protocol]"
+  - "[ghost-in-the-byline]"
+  - "[hci]"
+  - "[reader-response-theory]"
 ---
 
 The initial conceptual model for this project—a "version of `gwern.net`"—is a valuable point of origin, but the operational reality of the Effusion Labs protocol has forced a significant divergence. Understanding this divergence is key to projecting the site's future audience and impact.

@@ -1,6 +1,6 @@
 ---
 title: "Block Ledger"
-layout: "layout.njk"
+layout: "layouts/base.njk"
 date: 2025-08-13
 status: draft
 tags: [concept, block]
@@ -18,5 +18,5 @@ Ledger-style blocks expose structure by refusing polish.
 - size jumps map importance
 
 ## Links
-- [Core Concept](/content/concepts/core-concept/)
-- [Project Dandelion](/content/projects/project-dandelion/)
+- [Core Concept](/concepts/core-concept/)
+- [Project Dandelion](/projects/project-dandelion/)

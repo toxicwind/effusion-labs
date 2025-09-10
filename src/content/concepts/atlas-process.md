@@ -1,6 +1,6 @@
 ---
 title: "The Atlas of a Process: A Synthesis of the Effusion Labs Operating System"
-layout: "layout.njk"
+layout: "layouts/base.njk"
 date: 2025-07-12
 status: complete
 certainty: definitive
@@ -17,12 +17,12 @@ spark_type: system-synthesis
 target: The Effusion Labs Operating System
 analytic_lens: systems-breakdown, methodological-synthesis, apparatus-protocol-lens
 memory_ref:
-  - [effusion-labs-core-concept]
-  - [effusion-labs-methodology]
-  - [project-dandelion]
-  - [latour-laboratory-life]
-  - [popper-scientific-discovery]
-  - [systems-theory]
+  - "[effusion-labs-core-concept]"
+  - "[effusion-labs-methodology]"
+  - "[project-dandelion]"
+  - "[latour-laboratory-life]"
+  - "[popper-scientific-discovery]"
+  - "[systems-theory]"
 ---
 
 ## The Atlas of a Process: A Synthesis of the Effusion Labs Operating System

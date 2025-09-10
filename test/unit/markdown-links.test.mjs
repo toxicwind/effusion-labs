@@ -2,7 +2,7 @@ import MarkdownIt from 'markdown-it';
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 
-import links from '../../lib/markdown/links.js';
+import links from '../../config/markdown/links.js';
 const { externalLinks } = links;
 
 // Acceptance example: any external link gains arrow prefix and class

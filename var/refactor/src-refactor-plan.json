@@ -2,7 +2,7 @@
   "dry": true,
   "moves": [
     [
-      "src/_includes/layout.njk",
+      "src/_includes/base.njk",
       "src/_includes/layouts/base.njk"
     ],
     [
@@ -165,7 +165,7 @@
       "assets/images/logo.png"
     ],
     [
-      "layout: layout.njk",
+      "layout: base.njk",
       "layout: layouts/base.njk"
     ]
   ],

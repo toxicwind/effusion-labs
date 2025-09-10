@@ -1,6 +1,6 @@
 ---
 title: "The Semiotic Collapse of a Toasted Request: On the Emotional Thermodynamics of Eggs-on-Bread"
-layout: "layout.njk"
+layout: "layouts/base.njk"
 date: 2025-07-12
 status: Stable
 certainty: speculative-analytic
@@ -17,12 +17,12 @@ spark_type: analytic-essay
 target: Social Microdynamics in Service Contexts
 analytic_lens: performative-etiquette, emotional-thermodynamics, microaggression-mimesis, irony-as-structure, recursive-discomfort
 memory_ref:
-  - [emotional-labor]
-  - [sociology-of-everyday-life]
-  - [irony-theory]
-  - [foucault-microphysics]
-  - [pareidolia]
-  - [ritual-embarrassment]
+  - "[emotional-labor]"
+  - "[sociology-of-everyday-life]"
+  - "[irony-theory]"
+  - "[foucault-microphysics]"
+  - "[pareidolia]"
+  - "[ritual-embarrassment]"
 preamble:
   classification: "[META] Micro-sociological vignette, analytic parody"
   version: "1.0-toast"

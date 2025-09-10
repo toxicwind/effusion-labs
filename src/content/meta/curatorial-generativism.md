@@ -1,6 +1,6 @@
 ---
 title: "Curatorial Generativism: An Artistic Framework"
-layout: "layout.njk"
+layout: "layouts/base.njk"
 date: 2025-07-12
 status: complete
 certainty: declarative
@@ -17,12 +17,12 @@ spark_type: artistic-framework-definition
 target: The Practice of Curatorial Generativism
 analytic_lens: curator-operator-agency, responsive-medium, networked-artifact, protocol-as-aesthetic
 memory_ref:
-  - [benjamin-author-as-producer]
-  - [burnham-systems-esthetics]
-  - [sol-lewitt-instruction-art]
-  - [duchamp-readymade]
-  - [rhizomatic-protocol]
-  - [institutional-critique]
+  - "[benjamin-author-as-producer]"
+  - "[burnham-systems-esthetics]"
+  - "[sol-lewitt-instruction-art]"
+  - "[duchamp-readymade]"
+  - "[rhizomatic-protocol]"
+  - "[institutional-critique]"
 ---
 ### 1.0 A Formal Declaration of Practice
 

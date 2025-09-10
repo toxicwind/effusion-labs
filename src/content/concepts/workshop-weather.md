@@ -1,6 +1,6 @@
 ---
 title: "The Workshop and the Weather: A Retreat from Metaphor in Analyzing Generative Systems"
-layout: "layout.njk"
+layout: "layouts/base.njk"
 date: 2025-07-12
 status: complete
 certainty: argumentative
@@ -17,11 +17,11 @@ spark_type: methodological-critique
 target: Analytical frameworks for Large Language Models
 analytic_lens: mechanism, operationalism, methodological-behaviorism, policy-forensics, replicability-crisis
 memory_ref:
-  - [project-dandelion]
-  - [stochastic-parrots-thesis]
-  - [replicability-crisis]
-  - [philosophy-of-science]
-  - [hci]
+  - "[project-dandelion]"
+  - "[stochastic-parrots-thesis]"
+  - "[replicability-crisis]"
+  - "[philosophy-of-science]"
+  - "[hci]"
 ---
 
 ### 1.0 On the Seductive Poison of the Holistic Metaphor

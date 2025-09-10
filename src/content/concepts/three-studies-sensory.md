@@ -1,6 +1,6 @@
 ---
 title: "Three Studies in Embodied Regulation"
-layout: "layout.njk"
+layout: "layouts/base.njk"
 date: 2025-07-30
 status: Stable
 certainty: Analytic-Synthesis
@@ -24,11 +24,11 @@ analytic_lens:
   - phenomenology
   - embodied-regulation
 memory_ref:
-  - [interoception]
-  - [sensory-gating]
-  - [stigmergy]
-  - [folksonomy]
-  - [identity-performance]
+  - "[interoception]"
+  - "[sensory-gating]"
+  - "[stigmergy]"
+  - "[folksonomy]"
+  - "[identity-performance]"
 preamble:
   classification: "[META] A comparative review of three distinct, community-validated sensory regulation techniques."
   version: "1.0-resonant-self"

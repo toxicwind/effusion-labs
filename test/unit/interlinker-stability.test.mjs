@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { JSDOM } from 'jsdom';
-import { scanWikilinks } from '../../lib/wikilink/scan.mjs';
+import { scanWikilinks } from '../../helpers/wikilink/scan.mjs';
 
 test('D1: DOM input tolerance — scanning does not throw and finds one link', () => {
   const dom = new JSDOM('<!doctype html><p>[[series:Hello World]]</p>');

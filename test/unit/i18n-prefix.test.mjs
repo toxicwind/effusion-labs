@@ -1,6 +1,6 @@
 import assert from 'node:assert';
-import { createResolvers } from '../../lib/interlinkers/resolvers.mjs';
-import { routeRegistry } from '../../lib/interlinkers/route-registry.mjs';
+import { createResolvers } from '../../config/interlinkers/resolvers.mjs';
+import { routeRegistry } from '../../config/interlinkers/route-registry.mjs';
 
 test('i18n: locale prefix applies when enabled and locale differs', () => {
   const prev = { enabled: routeRegistry.localePrefixEnabled, def: routeRegistry.defaultLocale };

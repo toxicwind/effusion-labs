@@ -1,6 +1,6 @@
 ---
 title: "The Recursive Shadow of Algorithmic Absence: An Archaeological Survey of the Invisible Infrastructure of Contemporary LLM Research"
-layout: "layout.njk"
+layout: "layouts/base.njk"
 date: 2025-07-29
 status: Stable
 certainty: adversarial-analytic
@@ -23,12 +23,12 @@ analytic_lens:
   - infrastructural-inversion
   - measurement-theater
 memory_ref:
-  - [epistemic-failure]
-  - [incentive-capture]
-  - [state-of-the-art-illusion]
-  - [proprietary-knowledge]
-  - [invisible-work]
-  - [structural-holes]
+  - "[epistemic-failure]"
+  - "[incentive-capture]"
+  - "[state-of-the-art-illusion]"
+  - "[proprietary-knowledge]"
+  - "[invisible-work]"
+  - "[structural-holes]"
 preamble:
   classification: "[META] An archaeological critique of knowledge infrastructure in computational linguistics"
   version: "1.0-recursive-shadow"

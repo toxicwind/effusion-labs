@@ -1,6 +1,6 @@
 ---
 title: "How to Manufacture a Legacy: The Pierre Paulin Estate Between Preservation and Product"
-layout: "layout.njk"
+layout: "layouts/base.njk"
 date: 2025-08-02
 status: Stable
 certainty: adversarial-analytic
@@ -23,11 +23,11 @@ analytic_lens:
   - market-as-verdict
   - posthumous-authorship
 memory_ref:
-  - [estate-law]
-  - [brand-management]
-  - [cultural-capital]
-  - [luxury-goods-theory]
-  - [provenance]
+  - "[estate-law]"
+  - "[brand-management]"
+  - "[cultural-capital]"
+  - "[luxury-goods-theory]"
+  - "[provenance]"
 preamble:
   classification: "[META] Brand audit and critique of posthumous legacy management"
   version: "6.0-final-dense"

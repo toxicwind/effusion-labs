@@ -1,0 +1,222 @@
+---
+title: "Effusion Labs: Concept Map"
+layout: "layouts/base.njk"
+status: stable
+date: 2025-07-01
+certainty: high
+importance: structural
+maintainer: Effusion Labs (via language model collaboration)
+tags:
+  - visualization
+  - digitalgarden
+  - graph
+  - connections
+  - metadata-mapping
+aliases:
+  - Concept Graph
+  - Effusion Overview Map
+  - Map of Ideas
+memory_ref:
+  - "/content/meta/style-guide/"
+  - "/content/meta/methodology/"
+  - "[[core-concept]]"
+---
+
+{# Intro prose, theme-aware colors #}
+<div class="map-intro prose dark:prose-invert max-w-none">
+  <p>
+    This interactive map visualizes how
+    <span class="font-bold text-success">Projects</span>,
+    <span class="font-bold text-info">Concepts</span>,
+    <span class="font-bold text-primary">Sparks</span>,
+    and <span class="font-bold text-warning">Meta</span>
+    documents relate across the Effusion Labs knowledge base. Use it to explore how fragments evolve
+    into ideas and converge into projects.
+  </p>
+</div>
+
+{# Card wrapper for the visualization #}
+<section class="mt-6 card bg-base-100 border border-base-300 shadow">
+  <div class="card-body p-4 sm:p-6">
+    <div id="concept-map-container" class="h-[80vh] w-full rounded-box"></div>
+  </div>
+</section>
+
+{# JSON-LD for SEO/graph data #}
+<script type="application/ld+json">
+{{ collections.nodes | conceptMapJSONLD | safe }}
+</script>
+
+{# vis-network bundle #}
+<script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+
+{# Graph renderer that reads daisyUI theme vars #}
+<script>
+(function () {
+  function readVar(names, alpha) {
+    var rs = getComputedStyle(document.documentElement);
+    for (var i=0; i<names.length; i++) {
+      var v = rs.getPropertyValue(names[i]).trim();
+      if (v) return alpha ? "hsl(" + v + " / " + alpha + ")" : "hsl(" + v + ")";
+    }
+    return alpha ? "hsl(0 0% 50% / " + alpha + ")" : "hsl(0 0% 50%)";
+  }
+  function palette() {
+    return {
+      base:          readVar(["--b1","--color-base-100"]),
+      base2:         readVar(["--b2","--color-base-200"]),
+      content:       readVar(["--bc","--color-base-content"]),
+      contentSubtle: readVar(["--bc","--color-base-content"], "0.7"),
+      border:        readVar(["--bc","--color-base-content"], "0.25"),
+      primary:       readVar(["--p","--color-primary"]),
+      info:          readVar(["--in","--color-info"]),
+      success:       readVar(["--su","--color-success"]),
+      warning:       readVar(["--wa","--color-warning"]),
+      error:         readVar(["--er","--color-error"])
+    };
+  }
+  var C = palette();
+
+  var allNodesData = {{ collections.nodes | jsonify | safe }};
+  var nodes = [];
+  var edges = [];
+  var linkRegex = /\[\[([^|\]#]+)/g;
+  var connectionCount = Object.create(null);
+
+  var categoryGlyphs = { Projects:"📁", Concepts:"📘", Sparks:"💡", Meta:"⚙️" };
+
+  function getNodeVisualProps(url, tags) {
+    tags = Array.isArray(tags) ? tags : [];
+    var lower = String(url||"").toLowerCase();
+    var cat =
+      (lower.includes("/projects") || tags.includes("projects")) ? "Projects" :
+      (lower.includes("/concepts") || tags.includes("concepts")) ? "Concepts" :
+      (lower.includes("/sparks")   || tags.includes("sparks"))   ? "Sparks"   :
+      (lower.includes("/meta")     || tags.includes("meta"))     ? "Meta"     : null;
+
+    var borderColor =
+      cat==="Projects" ? C.success :
+      cat==="Concepts" ? C.info :
+      cat==="Sparks"   ? C.primary :
+      cat==="Meta"     ? C.warning : C.border;
+
+    var shape =
+      cat==="Projects" ? "diamond" :
+      cat==="Concepts" ? "hexagon" :
+      cat==="Sparks"   ? "star" :
+      cat==="Meta"     ? "triangleDown" : "dot";
+
+    return { glyph: categoryGlyphs[cat] || "", borderColor: borderColor, shape: shape };
+  }
+
+  allNodesData.forEach(function (page) {
+    var props = getNodeVisualProps(page.url, page.data.tags || []);
+    nodes.push({
+      id: page.url,
+      label: (props.glyph ? props.glyph+" " : "") + (page.data.title || page.fileSlug),
+      title: "Connections: 0",
+      shape: props.shape,
+      font: { face: "Space Grotesk", size: 14, color: C.content, strokeWidth: 0 },
+      color: {
+        background: C.base,
+        border: props.borderColor,
+        highlight: { background: C.base2, border: props.borderColor },
+        hover: { background: C.base, border: props.borderColor }
+      }
+    });
+    connectionCount[page.url] = 0;
+  });
+
+  ["Projects","Concepts","Sparks","Meta"].forEach(function (cat) {
+    nodes.push({
+      id: "category:"+cat.toLowerCase(),
+      label: (categoryGlyphs[cat]||"")+" "+cat,
+      shape: "box",
+      value: 42,
+      scaling: { min: 10, max: 50, label:{enabled:true,min:14,max:30} },
+      title: "Category: "+cat,
+      font: { face:"Space Grotesk", size:16, color:C.content, strokeWidth:0 },
+      color: {
+        background: C.base,
+        border: C.primary,
+        highlight: { background: C.base2, border: C.primary },
+        hover: { background: C.base, border: C.primary }
+      },
+      mass: 1,
+      physics: true
+    });
+    connectionCount["category:"+cat.toLowerCase()] = 0;
+  });
+
+  allNodesData.forEach(function (page) {
+    var content = page.inputContent || "";
+    var url = String(page.url||"").toLowerCase();
+    var tags = page.data.tags || [];
+
+    var m;
+    while ((m = linkRegex.exec(content)) !== null) {
+      var needle = m[1].trim().toLowerCase();
+      var target = allNodesData.find(function (p) {
+        return (p.fileSlug && p.fileSlug.toLowerCase()===needle) ||
+               (p.data.title && p.data.title.toLowerCase()===needle) ||
+               (p.data.aliases && p.data.aliases.map(function(a){return a.toLowerCase();}).includes(needle));
+      });
+      if (target) {
+        edges.push({from:page.url,to:target.url});
+        connectionCount[page.url]++; connectionCount[target.url]++;
+      }
+    }
+
+    var catId =
+      (url.includes("/projects")||tags.includes("projects"))?"category:projects":
+      (url.includes("/concepts")||tags.includes("concepts"))?"category:concepts":
+      (url.includes("/sparks")||tags.includes("sparks"))  ?"category:sparks":
+      (url.includes("/meta")||tags.includes("meta"))      ?"category:meta":null;
+
+    if (catId) {
+      edges.push({from:catId,to:page.url});
+      connectionCount[catId]++; connectionCount[page.url]++;
+    }
+  });
+
+  nodes.forEach(function (n) {
+    var c = connectionCount[n.id] || 0;
+    n.value = c;
+    n.title = n.label + "\nConnections: "+c;
+  });
+
+  var container = document.getElementById("concept-map-container");
+  var network = new vis.Network(container,{nodes:nodes,edges:edges},{
+    nodes:{scaling:{min:8,max:30},font:{face:"Space Grotesk",size:14,color:C.content,strokeWidth:0},borderWidth:1},
+    edges:{width:1,color:{color:C.border,highlight:C.primary,hover:C.contentSubtle,inherit:"from",opacity:0.85},arrows:{to:{enabled:true,scaleFactor:0.4}},smooth:{type:"continuous"}},
+    interaction:{hover:true,tooltipDelay:200,navigationButtons:true,keyboard:true},
+    physics:{enabled:true,barnesHut:{gravitationalConstant:-3500,centralGravity:0.05,springLength:180,springConstant:0.04,damping:0.12,avoidOverlap:0.5},stabilization:{enabled:true,iterations:1000,updateInterval:25}}
+  });
+
+  function recolor() {
+    C = palette();
+    var allIds = network.body.data.nodes.getIds();
+    var updates = allIds.map(function (id) {
+      var isCat = id.startsWith("category:");
+      var border = isCat ? C.primary : C.border;
+      return {id:id,font:{color:C.content},color:{background:C.base,border:border,highlight:{background:C.base2,border:border},hover:{background:C.base,border:border}}};
+    });
+    network.body.data.nodes.update(updates);
+    network.setOptions({edges:{color:{color:C.border,highlight:C.primary,hover:C.contentSubtle,inherit:"from",opacity:0.85}}});
+  }
+
+  new MutationObserver(function(muts){
+    muts.forEach(function(m){if(m.attributeName==="data-theme"){recolor();}});
+  }).observe(document.documentElement,{attributes:true});
+
+  network.on("hoverNode",function(params){
+    var nodeId=params.node;
+    var connected=network.getConnectedNodes(nodeId);
+    var all=network.body.data.nodes.getIds();
+    network.body.data.nodes.update(all.map(function(id){return{id:id,color:{background:C.base2,border:C.border},font:{color:C.contentSubtle}};}));
+    network.body.data.nodes.update([nodeId].concat(connected).map(function(id){return{id:id,color:{background:C.base,border:C.primary},font:{color:C.content}};}));
+  });
+  network.on("blurNode",recolor);
+  network.on("click",function(params){if(params.nodes.length>0){var id=params.nodes[0];if(!id.startsWith("category:"))window.location.href=id;}});
+})();
+</script>

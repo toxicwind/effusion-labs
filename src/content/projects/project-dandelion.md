@@ -1,6 +1,6 @@
 ---
 title: "Project Dandelion: Structural Emergence in Restricted LLM Systems"
-layout: "layout.njk"
+layout: "layouts/base.njk"
 date: 2025-07-01
 status: draft
 tags: [LLMs, systems-theory, interaction-dynamics, compliance-behavior, emergent-patterns, prototype]

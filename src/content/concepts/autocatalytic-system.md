@@ -1,6 +1,6 @@
 ---
 title: "The Site as an Autocatalytic System: A Final Synthesis"
-layout: "layout.njk"
+layout: "layouts/base.njk"
 date: 2025-07-12
 status: complete
 certainty: definitive
@@ -17,12 +17,12 @@ spark_type: system-dynamics-model
 target: The Effusion Labs Project (as a whole system)
 analytic_lens: autocatalysis, systems-dynamics, performance-theory, projected-pathology
 memory_ref:
-  - [ghost-in-the-engine]
-  - [atlas-of-a-process]
-  - [effusion-labs-protocol]
-  - [systems-theory]
-  - [autocatalytic-sets]
-  - [cybernetics]
+  - "[ghost-in-the-engine]"
+  - "[atlas-of-a-process]"
+  - "[effusion-labs-protocol]"
+  - "[systems-theory]"
+  - "[autocatalytic-sets]"
+  - "[cybernetics]"
 ---
 The Effusion Labs project, when viewed as a complete entity (a "site"), should not be understood as a static collection of texts. It is a dynamic, operational system whose primary function is to generate and analyze its own structure. Its architecture is that of a recursive, self-fueling loop.
 

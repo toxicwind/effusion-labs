@@ -1,0 +1,18 @@
+---
+layout: layouts/base.njk
+title: "Archives"
+---
+{% from "components/archive-nav.njk" import archiveNav %}
+
+<header class="mb-6">
+  <h1 class="font-heading text-4xl uppercase tracking-[-0.025em] text-base-content m-0">
+    Archives
+  </h1>
+  <p class="mt-2 text-base-content/80">A living index of lines, series, characters, and products.</p>
+</header>
+
+<section class="card bg-base-100 border shadow-sm">
+  <div class="card-body p-4 sm:p-6">
+    {{ archiveNav(page.url, archivesNav) }}
+  </div>
+</section>
