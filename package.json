@@ -21,17 +21,18 @@
     "validate:docs": "node utils/scripts/validation/validate-docs.js",
     "report:products": "node utils/build/archive-products-report.mjs",
     "check:archives": "node utils/scripts/validation/validate-archive-build.mjs",
+    "verify:patches": "node utils/scripts/validation/verify-patch-applied.mjs",
     "deps:playwright": "playwright install chromium || true",
     "//-- DATA PIPELINE --//": "",
     "data:all": "npm run data:merge-sections && npm run data:synthesize && npm run data:merge-golden",
     "data:merge-sections": "node utils/build/merge-sections.mjs --verbose",
     "data:synthesize": "node utils/build/synthesize.mjs --verbose",
     "data:merge-golden": "node utils/build/merge-golden.mjs --verbose",
-    "postinstall": "patch-package && node utils/scripts/validation/verify-patch-applied.mjs",
+    "postinstall": "if [ \"${PATCH_PACKAGE_RUN:-1}\" != \"0\" ] && [ -x node_modules/.bin/patch-package ]; then patch-package; fi",
     "mcp:dev": "node mcp-stack/gateway/server.mjs",
     "mcp:test": "node mcp-stack/tests/smoke.mjs",
     "mcp:integration": "node mcp-stack/tests/integration.mjs",
-    "style:canon": "node utils/scripts/validation/validate-styles.mjs"
+    "style:canon": "node utils/scripts/style-canon.mjs"
   },
   "engines": {
     "node": ">=24"
