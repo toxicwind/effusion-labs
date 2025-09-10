@@ -142,7 +142,7 @@
     "src/content/sparks/vapor-linked-governance.md",
     "src/index.njk",
     "src/map.njk",
-    "src/scripts/theme-utils.js",
+    "src/assets/js/theme-utils.js",
     "src/styles/app.tailwind.css",
     "src/test/dynamic-archives.md",
     "src/work/index.njk",
@@ -153,7 +153,7 @@
   ],
   "rewrites": [
     [
-      "src/scripts/",
+      "src/assets/js/",
       "src/assets/js/"
     ],
     [

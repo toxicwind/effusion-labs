@@ -17,7 +17,7 @@ function execFileAsync(cmd, args) {
 }
 
 test('engine-detect outputs none when no engine', async () => {
-  const { stdout } = await execFileAsync('sh', [`${root}/scripts/engine-detect.sh`]);
+  const { stdout } = await execFileAsync('sh', [`${root}/mcp-stack/scripts/engine-detect.sh`]);
   assert.equal(stdout.trim(), 'none');
 });
 

@@ -7,7 +7,7 @@
 //   concept-map.json, resume/{index,card}, work/* incl .11ty.js, plus top-level work.njk)
 // - Move misfiled includes: _includes/layouts/embed.njk -> _includes/components/embed.njk
 //                           _includes/archive-nav.njk   -> _includes/components/archive-nav.njk
-// - Consolidate author JS:  src/scripts/* -> src/assets/js/*
+// - Consolidate author JS:  src/assets/js/* -> src/assets/js/*
 // - Nudge images:           src/assets/og-ai-safety.jpg -> src/assets/images/og/og-ai-safety.jpg
 //                           src/assets/static/logo.png  -> src/assets/images/logo.png
 // - Rewrites inside src/** files only (skip src/archives/**):
@@ -16,7 +16,7 @@
 //     * nunjucks includes:   archive-nav.njk     -> components/archive-nav.njk
 //                            layouts/embed.njk   -> components/embed.njk
 //     * JS/11ty data:        layout: 'base.njk' -> 'layouts/base.njk'
-//     * src/scripts/ paths   -> src/assets/js/   (does NOT rewrite '/scripts/' web paths)
+//     * src/assets/js/ paths   -> src/assets/js/   (does NOT rewrite '/scripts/' web paths)
 //     * specific assets      -> /assets/images/* as listed above
 //
 // Excludes: src/archives/** from content rewrites. Never touches repo folders outside src/.
@@ -278,7 +278,7 @@ async function scanAndRewrite() {
         if (jsr.changed) {
             txt = jsr.out;
             changed = true;
-            planRewrite(p, 'paths', 'src/scripts/ → src/assets/js/');
+            planRewrite(p, 'paths', 'src/assets/js/ → src/assets/js/');
         }
 
         // 5) specific asset path nudges (root-absolute & data)

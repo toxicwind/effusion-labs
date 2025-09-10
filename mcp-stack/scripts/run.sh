@@ -4,7 +4,7 @@ _self="$0"
 case "$_self" in /*) _dir=$(dirname "$_self");; *) _dir=$(dirname "$(pwd)/$_self");; esac
 root="$_dir/.."
 root=$(cd "$root" 2>/dev/null && pwd)
-engine="$root/scripts/engine-detect.sh"
+engine="$root/mcp-stack/scripts/engine-detect.sh"
 ENGINE="$($engine)"
 if [ "$ENGINE" = podman ]; then
   podman compose -f "$root/ci/compose.dev.yml" up -d

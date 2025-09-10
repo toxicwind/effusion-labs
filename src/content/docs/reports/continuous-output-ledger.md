@@ -8,7 +8,7 @@ docs/knowledge/no-silent-ops-red.log   | 30 ++++++++++++++++++++++++++++++
 logs/no-silent-ops-green.log           | 16 ++++++++++++++++
 logs/no-silent-ops-red.log             | 30 ++++++++++++++++++++++++++++++
 package.json                           |  2 +-
-scripts/llm-bootstrap.sh               | 26 +++++++++++++-------------
+utils/scripts/setup/env-bootstrap.sh               | 26 +++++++++++++-------------
 test/unit/no-silent-ops.test.mjs       | 19 +++++++++++++++++++
 8 files changed, 127 insertions(+), 16 deletions(-)
 ```

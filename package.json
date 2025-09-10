@@ -31,7 +31,7 @@
     "mcp:dev": "node mcp-stack/gateway/server.mjs",
     "mcp:test": "node mcp-stack/tests/smoke.mjs",
     "mcp:integration": "node mcp-stack/tests/integration.mjs",
-    "style:canon": "node utils/scripts/style-canon.mjs"
+    "style:canon": "node utils/scripts/validation/validate-styles.mjs"
   },
   "engines": {
     "node": ">=24"

@@ -14,7 +14,7 @@ install_cli_tool() {
 
   if [ -n "$npm_pkg" ]; then
     local version
-    version=$(node scripts/npm-utils.js "$npm_pkg" 2>/dev/null || true)
+    version=$(node utils/utils/scripts/npm-utils.js "$npm_pkg" 2>/dev/null || true)
     if [ -n "$version" ]; then
       npm install "$npm_pkg@$version" --save-dev --save-exact || true
     fi
@@ -40,7 +40,7 @@ install_cli_tool "jq" "jq" "jq" "jq"
 install_node_pkg() {
   local pkg="$1"
   local version
-  version=$(node scripts/npm-utils.js "$pkg")
+  version=$(node utils/utils/scripts/npm-utils.js "$pkg")
   npm install "$pkg@$version" --save-dev --save-exact
 }
 

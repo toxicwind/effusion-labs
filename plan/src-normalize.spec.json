@@ -5,7 +5,7 @@
     "content": ["src/content/**"],
     "data": ["src/_data/**"],
     "includes": ["src/_includes/**"],
-    "scripts": ["src/scripts/**"],
+    "scripts": ["src/assets/js/**"],
     "styles": ["src/styles/**"],
     "assets": ["src/assets/**"],
     "attic": ["src/_attic/**"]

@@ -1,102 +1,133 @@
 #!/usr/bin/env node
 /**
- * consolidate-utils.mjs
+ * final-cleanup-v2.mjs
  *
- * Consolidates the `helpers` and `tools` directories into a single `utils` directory.
+ * A comprehensive script to finalize project cleanup. This targets all
+ * remaining legacy paths, including prefixed paths, documentation,
+ * comments, and typos missed by the first pass.
  */
 
-import fs from "fs/promises";
-import path from "path";
+import fse from 'fs-extra';
+import fg from 'fast-glob';
+import ora from 'ora';
 
-const repoRoot = process.cwd();
+// --- The Comprehensive Cleanup Plan ---
 
-// --- Logging ---
-function ok(...args) { console.log("\x1b[32m%s\x1b[0m", args.join(" ")); }
-function warn(...args) { console.warn("\x1b[33m%s\x1b[0m", args.join(" ")); }
-function err(...args) { console.error("\x1b[31m%s\x1b[0m", args.join(" ")); }
+const REWRITE_RULES = [
+    // --------------------------------------------------------------------------
+    // Rule Set 1: High-Confidence Fixes (Typos and very specific paths)
+    // --------------------------------------------------------------------------
 
-// --- The Consolidation Plan ---
-const MOVE_MAP = {
-    // Helpers -> utils/build
-    "helpers/data/archive-nav.js": "utils/build/archive-nav.js",
-    "helpers/data/archive-utils.mjs": "utils/build/archive-utils.mjs",
-    "helpers/data/concept-map.js": "utils/build/concept-map.js",
-    "helpers/data/homepage.js": "utils/build/homepage.js",
-    "helpers/data/naming-canon.mjs": "utils/build/naming-canon.mjs",
-    "helpers/utils/seeded.js": "utils/build/seeded.js",
-    "helpers/utils/utils-node.mjs": "utils/build/utils-node.mjs", // Assuming this is the new name for utils.js
-    "helpers/wikilink/scan.mjs": "utils/build/wikilink-scan.mjs",
-    // Network helpers -> utils/network
-    "tools/net/flareClient.mjs": "utils/network/flareClient.mjs",
-    "tools/net/markdownGateway.mjs": "utils/network/markdownGateway.mjs",
-    "tools/net/outboundProxy.mjs": "utils/network/outboundProxy.mjs",
-    "tools/net/proxyAgent.mjs": "utils/network/proxyAgent.mjs",
-    "tools/net/webpageToMarkdown.mjs": "utils/network/webpageToMarkdown.mjs",
-    // Tools -> utils/scripts
-    "tools/interlinker-operator.sh": "utils/scripts/interlinker-operator.sh",
-    "tools/merge-golden.js": "utils/scripts/merge-golden.js",
-    "tools/run-server.sh": "utils/scripts/run-server.sh",
-    "tools/setup/env-bootstrap.sh": "utils/scripts/setup/env-bootstrap.sh",
-    "tools/setup/install.sh": "utils/scripts/setup/install.sh",
-    "tools/setup/provision-env.sh": "utils/scripts/setup/provision-env.sh",
-    "tools/validation/proxy-health.mjs": "utils/scripts/validation/proxy-health.mjs",
-    "tools/validation/validate-frontmatter.mjs": "utils/scripts/validation/validate-frontmatter.mjs",
-    "tools/validation/validate-styles.mjs": "utils/scripts/validation/validate-styles.mjs",
-    "tools/utils/npm-utils.js": "utils/scripts/npm-utils.js",
-};
+    // Fixes the common `utils/utils/` typo found in package.json
+    {
+        find: /utils\/utils\/scripts/g,
+        replace: 'utils/scripts',
+        reason: 'Correcting a duplicated path segment.'
+    },
+    // Fixes an absolute path to a deleted script found in an old log file.
+    {
+        find: /\/workspace\/effusion-labs\/scripts\/llm-constants\.sh/g,
+        replace: 'utils/scripts/setup/env-bootstrap.sh',
+        reason: 'Replacing a deleted constants script with its successor.'
+    },
+    // Fixes the tailwind.config.js content path glob in README.md
+    {
+        find: /'\.\.\/scripts\/\*\*\/ \*\.js'/g,
+        replace: "'../assets/js/**/*.js'",
+        reason: 'Updating CSS content glob to the new JS asset path.'
+    },
 
-// --- Helper Functions ---
-async function exists(p) {
-    try {
-        await fs.stat(p);
-        return true;
-    } catch {
-        return false;
-    }
-}
+    // --------------------------------------------------------------------------
+    // Rule Set 2: Specific File Renames and Relocations
+    // --------------------------------------------------------------------------
 
-async function moveFile(from, to) {
-    const sourcePath = path.join(repoRoot, from);
-    const destPath = path.join(repoRoot, to);
+    // --- Core Scripts that moved to utils/scripts/ ---
+    { find: /\bscripts\/llm-bootstrap\.sh\b/g, replace: 'utils/scripts/setup/env-bootstrap.sh' },
+    { find: /\bscripts\/warn-gate\.sh\b/g, replace: 'utils/scripts/validation/warn-gate.sh' },
+    { find: /\bscripts\/validate-frontmatter\.mjs\b/g, replace: 'utils/scripts/validation/validate-frontmatter.mjs' },
+    { find: /\bscripts\/npm-utils\.js\b/g, replace: 'utils/scripts/npm-utils.js' },
+    { find: /\bscripts\/style-canon\.mjs\b/g, replace: 'utils/scripts/validation/validate-styles.mjs' },
 
-    if (!(await exists(sourcePath))) {
-        warn(`Skipping: Source file not found at ${from}`);
-        return;
-    }
+    // --- mcp-stack scripts that were namespaced ---
+    // These rules now correctly handle unqualified `scripts/` paths.
+    { find: /(?<!mcp-stack\/)\bscripts\/engine-detect\.sh\b/g, replace: 'mcp-stack/scripts/engine-detect.sh' },
+    { find: /(?<!mcp-stack\/)\bscripts\/run\.sh\b/g, replace: 'mcp-stack/scripts/run.sh' },
+    { find: /(?<!mcp-stack\/)\bscripts\/check-health\.sh\b/g, replace: 'mcp-stack/scripts/check-health.sh' },
 
-    const destDir = path.dirname(destPath);
-    await fs.mkdir(destDir, { recursive: true });
-    await fs.rename(sourcePath, destPath);
-    ok(`Moved: ${from} -> ${to}`);
-}
+    // --- Deprecated scripts (mapping to modern equivalents) ---
+    {
+        find: /\bscripts\/test-with-guardrails\.sh\b/g,
+        replace: 'utils/scripts/validation/warn-gate.sh', // Best guess for the successor
+        reason: 'Mapping a deleted test script to its likely successor.'
+    },
+    {
+        find: /\bscripts\/site-refactor\.mjs\b/g,
+        replace: 'plan/inspect-src-two.mjs', // The script was renamed and moved to plan/
+        reason: 'Updating references in comments to the refactor script\'s new name.'
+    },
 
-async function cleanupOldDir(dir) {
-    const dirPath = path.join(repoRoot, dir);
-    if (!(await exists(dirPath))) return;
-    try {
-        await fs.rm(dirPath, { recursive: true, force: true });
-        ok(`Removed old directory: ${dir}`);
-    } catch (e) {
-        warn(`Could not remove ${dir}. It might have other files. Error: ${e.message}`);
-    }
-}
+    // --------------------------------------------------------------------------
+    // Rule Set 3: Directory-level Rewrites
+    // --------------------------------------------------------------------------
 
+    // Catch-all for any remaining JS client scripts moved from `src/scripts`
+    {
+        find: /src\/scripts\//g,
+        replace: 'src/assets/js/',
+        reason: 'Broadly migrating the old client script directory.'
+    },
+
+    // --------------------------------------------------------------------------
+    // Rule Set 4: Prose and Documentation Cleanup (Use with care)
+    // --------------------------------------------------------------------------
+    // These make docs and descriptions consistent with the new structure.
+    { find: /`scripts\/`/g, replace: '`utils/scripts/`' },
+    { find: /'scripts\/'/g, replace: "'utils/scripts/'" },
+];
 
 // --- Main Execution ---
 async function main() {
-    console.log("Consolidating `helpers` and `tools` into `utils`...");
+    console.log('🧹 Starting comprehensive project cleanup (v2)...');
 
-    for (const [from, to] of Object.entries(MOVE_MAP)) {
-        await moveFile(from, to);
+    const rewriteSpinner = ora('Fixing all remaining legacy references...').start();
+    const files = await fg('**/*', {
+        dot: true,
+        ignore: [
+            'node_modules/**',
+            '.git/**',
+            '.conda/**',
+            '_site/**',
+            '**/__pycache__/**',
+            'plan/**', // IMPORTANT: Exclude planning scripts to avoid self-modification
+            'inspect-src.mjs', // Exclude this script itself
+        ],
+        binary: false,
+    });
+
+    let rewrittenCount = 0;
+    for (const file of files) {
+        try {
+            let content = await fse.readFile(file, 'utf8');
+            const originalContent = content;
+
+            for (const rule of REWRITE_RULES) {
+                content = content.replace(rule.find, rule.replace);
+            }
+
+            if (content !== originalContent) {
+                await fse.writeFile(file, content, 'utf8');
+                rewrittenCount++;
+            }
+        } catch (e) {
+            // Ignore errors for binary files etc.
+        }
     }
+    rewriteSpinner.succeed(`Fixed paths in ${rewrittenCount} files.`);
 
-    await cleanupOldDir("helpers");
-    await cleanupOldDir("tools");
-
-    console.log("\n✅ Consolidation complete!");
+    console.log('\n✅ Comprehensive cleanup complete!');
 }
 
-main().catch(e => {
-    err("An unexpected error occurred:", e.message);
+main().catch(err => {
+    console.error(`\n❌ Error during cleanup: ${err.message}`);
     process.exit(1);
 });

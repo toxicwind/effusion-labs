@@ -104,7 +104,7 @@ DRY: yes
 - src/pages/resume/card.njk
 - src/pages/resume/index.njk
 - src/routes/redirects.11ty.js
-- src/scripts/theme-utils.js
+- src/assets/js/theme-utils.js
 - src/styles/app.tailwind.css
 - src/test/dynamic-archives.md
 - src/work.njk
@@ -113,7 +113,7 @@ DRY: yes
 # REWRITES
 - base.njk → layouts/base.njk
 - /scripts/ → /assets/js/
-- src/scripts/ → src/assets/js/
+- src/assets/js/ → src/assets/js/
 - /assets/og-ai-safety.jpg → /assets/images/og/og-ai-safety.jpg
 - assets/static/logo.png → assets/images/logo.png
 

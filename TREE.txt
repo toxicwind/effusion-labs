@@ -7,7 +7,8 @@
 │   │   └── interlinker-unresolved.json
 │   ├── status.json
 │   └── worklogs
-│       └── 20250908T174424Z.md
+│       ├── 20250908T174424Z.md
+│       └── 20250910T210224Z.md
 ├── bin
 │   ├── bat
 │   ├── fd
@@ -23,13 +24,11 @@
 ├── config
 │   ├── archives.mjs
 │   ├── build-info.js
-│   ├── constants.js
+│   ├── collections.js
 │   ├── css
 │   │   ├── postcss.js
 │   │   └── postcssPlugins.mjs
-│   ├── filters.js
 │   ├── interlinkers
-│   │   ├── archives-resolvers.mjs
 │   │   ├── resolvers.mjs
 │   │   ├── route-registry.mjs
 │   │   └── unresolved-report.mjs
@@ -40,8 +39,8 @@
 │   │   └── links.js
 │   ├── plugins.js
 │   ├── register.mjs
-│   ├── shortcodes.js
-│   └── site.js
+│   ├── site.js
+│   └── templating.js
 ├── .dead-links.json
 ├── docker-compose.yml
 ├── .dockerignore
@@ -163,10 +162,12 @@
 ├── postcss.config.mjs
 ├── .prettierrc
 ├── README.md
+├── report.txt
 ├── research
 │   ├── COMPLETED SEEDS.txt
 │   ├── PRIMARY TARGETS — Completed(1).txt
 │   └── PRIMARY TARGETS — Completed(2).txt
+├── run.sh
 ├── schema
 │   ├── character.schema.json
 │   ├── completed-seeds.schema.json
@@ -851,7 +852,6 @@
 │       ├── .gitkeep
 │       ├── i18n-prefix.test.mjs
 │       ├── index-data.test.mjs
-│       ├── interlinker-resolver.test.mjs
 │       ├── interlinker-stability.test.mjs
 │       ├── interlinker-version.test.mjs
 │       ├── llm-keepalive.test.mjs

@@ -1,6 +1,6 @@
 
 > effusion_labs_final@1.0.0 test:guard
-> bash scripts/test-with-guardrails.sh test/integration/monsters-product-metadata.spec.mjs
+> bash utils/scripts/validation/warn-gate.sh test/integration/monsters-product-metadata.spec.mjs
 
 npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
 

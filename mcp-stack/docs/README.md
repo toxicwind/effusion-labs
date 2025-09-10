@@ -29,8 +29,8 @@ Key endpoints:
 
 Engine-aware start:
 ```bash
-./scripts/engine-detect.sh    # prints podman|docker|none
-./scripts/run.sh              # auto uses containers or local stubs
+./mcp-stack/scripts/engine-detect.sh    # prints podman|docker|none
+./mcp-stack/scripts/run.sh              # auto uses containers or local stubs
 ```
 
 Start FlareSolverr sidecar (Podman):
@@ -112,5 +112,5 @@ The integration test asserts CF auto-correction using WireMock:
 
 ### POSIX scripts
 
-- `mcp-stack/scripts/run.sh` — starts gateway; honors `PORT_SSE=0` for ephemeral ports.
+- `mcp-stack/mcp-stack/scripts/run.sh` — starts gateway; honors `PORT_SSE=0` for ephemeral ports.
 - `mcp-stack/scripts/check-health.sh` — probes `/healthz`, `/readyz`, `/.well-known`, `/admin/queue`, `/admin/rate`, `/admin/retry`, `/admin/sidecars`.

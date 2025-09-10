@@ -6,7 +6,7 @@ set -euo pipefail
 # verifies unresolved report schema, runs tests, and prints audit suggestions.
 
 echo "[op] Activating HYPEBRUT shell toolkit (idempotent)."
-if [ -f scripts/llm-bootstrap.sh ]; then source scripts/llm-bootstrap.sh; fi
+if [ -f utils/scripts/setup/env-bootstrap.sh ]; then source utils/scripts/setup/env-bootstrap.sh; fi
 # Ensure hype_run env defaults under set -u
 : "${LLM_IDLE_SECS:=10}"
 : "${LLM_IDLE_FAIL_AFTER_SECS:=360}"

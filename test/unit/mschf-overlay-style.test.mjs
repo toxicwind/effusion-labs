@@ -19,7 +19,7 @@ test('collage style includes base, ephemera, and lab modules', async () => {
   dom.window.cancelAnimationFrame = dom.window.cancelAnimationFrame || ((id) => {});
   dom.window.IntersectionObserver = dom.window.IntersectionObserver || function(){ return { observe(){}, unobserve(){}, disconnect(){} }; };
 
-  const scriptPath = path.resolve('src/scripts/mschf-overlay.js');
+  const scriptPath = path.resolve('src/assets/js/mschf-overlay.js');
   dom.window.eval(readFileSync(scriptPath, 'utf8'));
   dom.window.document.dispatchEvent(new dom.window.Event('DOMContentLoaded'));
   // Allow boot + first RAF tick
@@ -46,7 +46,7 @@ test('auto style mounts overlay in auto mode', async () => {
   dom.window.requestAnimationFrame = dom.window.requestAnimationFrame || ((cb) => { if (rafCalls2++) return 0; setTimeout(() => cb(Date.now()), 0); return rafCalls2; });
   dom.window.cancelAnimationFrame = dom.window.cancelAnimationFrame || ((id) => {});
   dom.window.IntersectionObserver = dom.window.IntersectionObserver || function(){ return { observe(){}, unobserve(){}, disconnect(){} }; };
-  const scriptPath = path.resolve('src/scripts/mschf-overlay.js');
+  const scriptPath = path.resolve('src/assets/js/mschf-overlay.js');
   dom.window.eval(readFileSync(scriptPath, 'utf8'));
   dom.window.document.dispatchEvent(new dom.window.Event('DOMContentLoaded'));
   await new Promise((r) => setTimeout(r, 50));

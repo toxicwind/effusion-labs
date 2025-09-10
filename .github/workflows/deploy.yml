@@ -86,7 +86,7 @@ jobs:
       - name: 🧪 Validate frontmatter
         run: |
           npm ci --ignore-scripts
-          node scripts/validate-frontmatter.mjs
+          node utils/scripts/validation/validate-frontmatter.mjs
 
       - name: ⚡ Smoke tests for direct pushes
         # Avoids errors on workflow_dispatch where head_commit is absent.

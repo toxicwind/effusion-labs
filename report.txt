@@ -1,11 +1,12 @@
 File Path                                     [Kind]         Size       Details
 -----------------------------------------------------------------------------------------------------------
-./AGENTS.md                                   [md          ]     7962B   Title: do not write this
+./AGENTS.md                                   [md          ]     7986B   Title: do not write this
 ./artifacts/_data_bundle.json                 [json        ]    19566B   Keys: generatedAt, root, files
 ./artifacts/reports/20250908T174424Z.md       [md          ]     3330B   
-./artifacts/reports/interlinker-unresolved.json [json        ]       98B   Keys: schemaVersion, generatedAt, count, items
+./artifacts/reports/interlinker-unresolved.json [json        ]     7773B   Keys: schemaVersion, generatedAt, count, items
 ./artifacts/status.json                       [json        ]       18B   Keys: result
-./artifacts/worklogs/20250908T174424Z.md      [md          ]      325B   Title: Worklog for consulting page rewrite
+./artifacts/worklogs/20250908T174424Z.md      [md          ]      337B   Title: Worklog for consulting page rewrite
+./artifacts/worklogs/20250910T210224Z.md      [md          ]     1386B   Title: Worklog
 ./bin/bat                                     [executable  ]      280B   
 ./bin/fd                                      [executable  ]      275B   
 ./bin/jq                                      [executable  ]      591B   
@@ -17,26 +18,24 @@ File Path                                     [Kind]         Size       Details
 ./bin/rg                                      [executable  ]      328B   
 ./bin/tree                                    [executable  ]      340B   
 ./bin/yq                                      [executable  ]      594B   
-./config/archives.mjs                         [other       ]    10648B   
+./config/archives.mjs                         [other       ]    11052B   
 ./config/build-info.js                        [other       ]      970B   
-./config/constants.js                         [other       ]      509B   
+./config/collections.js                       [other       ]      732B   
 ./config/css/postcss.js                       [other       ]     2413B   
-./config/css/postcssPlugins.mjs               [other       ]      351B   
-./config/filters.js                           [other       ]     8948B   
-./config/interlinkers/archives-resolvers.mjs  [other       ]     6297B   
-./config/interlinkers/resolvers.mjs           [other       ]     5718B   
+./config/css/postcssPlugins.mjs               [other       ]      354B   
+./config/interlinkers/resolvers.mjs           [other       ]     5837B   
 ./config/interlinkers/route-registry.mjs      [other       ]     5617B   
 ./config/interlinkers/unresolved-report.mjs   [other       ]     2727B   
 ./config/markdown/footnotes.js                [other       ]     8453B   
-./config/markdown/index.js                    [other       ]     1312B   
+./config/markdown/index.js                    [other       ]     1397B   
 ./config/markdown/inlineMacros.js             [other       ]     1348B   
 ./config/markdown/links.js                    [other       ]      763B   
 ./config/plugins.js                           [other       ]      813B   
-./config/register.mjs                         [other       ]    16953B   
-./config/shortcodes.js                        [other       ]      739B   
-./config/site.js                              [other       ]      275B   
+./config/register.mjs                         [other       ]     2570B   
+./config/site.js                              [other       ]      647B   
+./config/templating.js                        [other       ]    10208B   
 ./docker-compose.yml                          [other       ]      180B   
-./eleventy.config.mjs                         [other       ]     8375B   
+./eleventy.config.mjs                         [other       ]      826B   
 ./inventory.mjs                               [other       ]     2267B   
 ./lib_content.json                            [json        ]    78299B   Keys: config/site.js, config/build-info.js, config/fi...
 ./LICENSE                                     [other       ]      744B   
@@ -60,7 +59,7 @@ File Path                                     [Kind]         Size       Details
 ./mcp-stack/ci/stubs/searxng.js               [other       ]      281B   
 ./mcp-stack/ci/stubs/searxng/mappings/cf.json [json        ]      273B   Keys: request, response
 ./mcp-stack/ci/stubs/start-stubs.sh           [shell       ]      196B   
-./mcp-stack/docs/README.md                    [md          ]     4849B   
+./mcp-stack/docs/README.md                    [md          ]     4879B   
 ./mcp-stack/docs/RESEARCH-TRACE.md            [md          ]     2532B   
 ./mcp-stack/gateway/config.mjs                [other       ]     1894B   
 ./mcp-stack/gateway/Dockerfile                [other       ]      394B   
@@ -79,11 +78,11 @@ File Path                                     [Kind]         Size       Details
 ./mcp-stack/README.md                         [md          ]     1758B   Title: or
 ./mcp-stack/scripts/check-health.sh           [shell       ]      764B   
 ./mcp-stack/scripts/engine-detect.sh          [shell       ]      192B   
-./mcp-stack/scripts/run.sh                    [shell       ]      712B   
+./mcp-stack/scripts/run.sh                    [shell       ]      722B   
 ./mcp-stack/servers/registry.mjs              [other       ]     2061B   
 ./mcp-stack/servers/templates/stdio-demo.mjs  [other       ]     1188B   
 ./mcp-stack/sidecars/resolver.mjs             [other       ]      771B   
-./mcp-stack/test/engine-aware.test.mjs        [other       ]      940B   
+./mcp-stack/test/engine-aware.test.mjs        [other       ]      950B   
 ./mcp-stack/tests/integration.mjs             [other       ]     6214B   
 ./mcp-stack/tests/smoke.mjs                   [other       ]     2148B   
 ./oneoff/aestheticyearbroken.txt              [other       ]    18320B   
@@ -99,20 +98,20 @@ File Path                                     [Kind]         Size       Details
 ./oneoff/Untitled-2.html                      [other       ]   726148B   
 ./oneoff/Untitled-2.ipynb                     [other       ]    72096B   
 ./oneoff/Untitled-2.pdf                       [other       ]   143131B   
-./package.json                                [json        ]     4145B   Keys: name, version, description, main, scripts, engi...
-./package-lock.json                           [json        ]   449869B   Keys: name, version, lockfileVersion, requires, packages
+./package.json                                [json        ]     4342B   Keys: name, version, description, main, scripts, engi...
+./package-lock.json                           [json        ]   457342B   Keys: name, version, lockfileVersion, requires, packages
 ./patches/@photogabble+eleventy-plugin-interlinker+1.1.0.patch [other       ]     9202B   
 ./patches/tree-cli+0.6.7.patch                [other       ]      814B   
 ./plan/build.spec.json                        [json        ]      301B   Keys: passthrough, cleanup
-./plan/inspect-src.mjs                        [other       ]     3701B   
-./plan/inspect-src-two.mjs                    [other       ]    15364B   
-./plan/make-plan.mjs                          [other       ]    19238B   
+./plan/inspect-src.mjs                        [other       ]     3097B   
+./plan/inspect-src-two.mjs                    [other       ]    15370B   
+./plan/make-plan.mjs                          [other       ]    19240B   
 ./plan/relocate.spec.json                     [json        ]      426B   Keys: dryRun, maxFilesPerBatch, maxBatches, intents
 ./plan/rewrites.spec.json                     [json        ]      427B   Keys: surfaces, excludes, pairs, publicUrlChanges
-./plan/src-normalize.spec.json                [json        ]      403B   Keys: allowOverlayAssets, roles, templatePattern
+./plan/src-normalize.spec.json                [json        ]      405B   Keys: allowOverlayAssets, roles, templatePattern
 ./postcss.config.mjs                          [other       ]      200B   
-./README.md                                   [md          ]    16670B   Title: Effusion Labs — Digital Garden
-./report.txt                                  [other       ]     9281B   
+./README.md                                   [md          ]    16698B   Title: Effusion Labs — Digital Garden
+./report.txt                                  [other       ]     9221B   
 ./research/COMPLETED SEEDS.txt                [other       ]   105256B   
 ./research/PRIMARY TARGETS — Completed(1).txt [other       ]    79527B   
 ./research/PRIMARY TARGETS — Completed(2).txt [other       ]    84859B   
@@ -121,7 +120,9 @@ File Path                                     [Kind]         Size       Details
 ./schema/completed-seeds.schema.json          [json        ]    11428B   Keys: type, properties, required
 ./schema/product.schema.json                  [json        ]     2196B   Keys: $schema, type, required, properties, additional...
 ./schema/series.schema.json                   [json        ]      782B   Keys: $schema, type, required, properties, additional...
+./src/assets/css/app.tailwind.css             [css         ]       23B   
 ./src/assets/css/.gitkeep                     [css         ]        0B   
+./src/assets/css/mschf-overlay.css            [css         ]       23B   
 ./src/assets/icons/apple-touch-icon.png       [other       ]    47159B   
 ./src/assets/icons/favicon-96x96.png          [other       ]    15053B   
 ./src/assets/icons/favicon.ico                [other       ]    15086B   
@@ -295,7 +296,7 @@ File Path                                     [Kind]         Size       Details
 ./src/content/concepts/workshop-weather.md    [md          ]    34122B   Title: The Workshop and the Weather: A Retreat from Metaphor in Analyzing Generative Systems
 ./src/content/docs/adr/20250813-hero-image-perf.md [md          ]      346B   Title: 20250813-hero-image-perf
 ./src/content/docs/adr/20250813-truncate-filter.md [md          ]      311B   Title: 20250813-truncate-filter
-./src/content/docs/adr/20250814-code-copy.md  [md          ]      349B   Title: 20250814-code-copy
+./src/content/docs/adr/20250814-code-copy.md  [md          ]      351B   Title: 20250814-code-copy
 ./src/content/docs/adr/20250814-feed-build-metadata.md [md          ]      397B   Title: 20250814-feed-build-metadata
 ./src/content/docs/adr/20250814-footnote-highlight.md [md          ]      486B   Title: ADR: Move footnote highlight styling to Tailwind
 ./src/content/docs/adr/20250814-monsters-hub.md [md          ]      465B   Title: POP MART The Monsters hub and cross-links
@@ -304,9 +305,9 @@ File Path                                     [Kind]         Size       Details
 ./src/content/docs/adr/20250816-carbon-handshake.md [md          ]      324B   Title: 20250816 - carbon handshake spark
 ./src/content/docs/adr/20250829-unified-collection-layout.md [md          ]      358B   Title: 20250829-unified-collection-layout
 ./src/content/docs/knowledge/deploy-workflow-green.log [other       ]      425B   
-./src/content/docs/knowledge/deploy-workflow-red.log [other       ]     4222B   
+./src/content/docs/knowledge/deploy-workflow-red.log [other       ]     4239B   
 ./src/content/docs/knowledge/gha-actions-upgrade/hashes.txt [other       ]      234B   
-./src/content/docs/knowledge/gha-actions-upgrade/test-fail.log [other       ]     8020B   
+./src/content/docs/knowledge/gha-actions-upgrade/test-fail.log [other       ]     8054B   
 ./src/content/docs/knowledge/gha-actions-upgrade/test-success.log [other       ]      276B   
 ./src/content/docs/knowledge/golden_record_20250819T062726Z.json [json        ]   372453B   (Invalid or non-object JSON)
 ./src/content/docs/knowledge/golden_record_20250819T081736Z.json [json        ]   361047B   (Invalid or non-object JSON)
@@ -364,13 +365,13 @@ File Path                                     [Kind]         Size       Details
 ./src/content/docs/knowledge/wikilink-filter-build-green.log [other       ]    20660B   
 ./src/content/docs/knowledge/wikilink-filter-green.log [other       ]      542B   
 ./src/content/docs/migration/class-map.json   [json        ]        3B   (Invalid or non-object JSON)
-./src/content/docs/migration/path-map.json    [json        ]      302B   Keys: src/assets/css/tailwind.css, src/assets/js/base...
+./src/content/docs/migration/path-map.json    [json        ]      306B   Keys: src/assets/css/tailwind.css, src/assets/js/base...
 ./src/content/docs/reports/2025-08-20-shiki-migration.md [md          ]      416B   Title: Shiki Migration Audit – 2025-08-20
 ./src/content/docs/reports/archive-normalization-audit.md [md          ]      388B   Title: Archive Normalization Audit
 ./src/content/docs/reports/archive-normalization-continue.md [md          ]      413B   Title: Continuation – Archive Normalization
 ./src/content/docs/reports/archive-normalization-ledger.md [md          ]      332B   Title: Archive Normalization Ledger
-./src/content/docs/reports/continuous-output-continue.md [md          ]      689B   Title: Continuous Output Continuation
-./src/content/docs/reports/continuous-output-ledger.md [md          ]     1305B   Title: Continuous Output Ledger
+./src/content/docs/reports/continuous-output-continue.md [md          ]      701B   Title: Continuous Output Continuation
+./src/content/docs/reports/continuous-output-ledger.md [md          ]     1317B   Title: Continuous Output Ledger
 ./src/content/docs/reports/deploy-workflow-continue.md [md          ]      428B   Title: Continuation – Deploy Workflow
 ./src/content/docs/reports/deploy-workflow-ledger.md [md          ]      554B   Title: deploy-workflow Ledger (1/1)
 ./src/content/docs/reports/eleventy-runner-continue.md [md          ]      541B   Title: Continuation Plan
@@ -573,10 +574,10 @@ File Path                                     [Kind]         Size       Details
 ./src/content/sparks/sparks.11tydata.js       [11tydata    ]      348B   
 ./src/content/sparks/vapor-linked-governance.md [md          ]    12468B   Title: Vapor-Linked Governance: How Japan Made Tobacco a Civic Utility
 ./src/content/work/work.11tydata.js           [11tydata    ]       86B   
-./src/_data/archivesNav.js                    [global-data ]      154B   (Invalid or non-object JSON)
+./src/_data/archivesNav.js                    [global-data ]      153B   (Invalid or non-object JSON)
 ./src/_data/branding.js                       [global-data ]      138B   (Invalid or non-object JSON)
 ./src/_data/eleventyComputed.js               [global-data ]      718B   (Invalid or non-object JSON)
-./src/_data/nav.js                            [global-data ]      550B   (Invalid or non-object JSON)
+./src/_data/nav.js                            [global-data ]      545B   (Invalid or non-object JSON)
 ./src/_data/sections.js                       [global-data ]      449B   (Invalid or non-object JSON)
 ./src/_data/site.js                           [global-data ]      119B   (Invalid or non-object JSON)
 ./src/favicon.ico                             [other       ]     9509B   
@@ -618,7 +619,7 @@ File Path                                     [Kind]         Size       Details
 ./src/pages/404.njk                           [njk         ]      916B   Title: Lost in the Lab
 ./src/pages/concept-map.json.njk              [njk         ]      123B   
 ./src/pages/consulting.njk                    [njk         ]    14189B   
-./src/pages/feed.njk                          [njk         ]     1225B   
+./src/pages/feed.njk                          [njk         ]     1229B   
 ./src/pages/index.njk                         [njk         ]      408B   
 ./src/pages/map.njk                           [njk         ]     8677B   Title: Effusion Labs: Concept Map
 ./src/pages/resume/card.njk                   [njk         ]      629B   
@@ -640,7 +641,7 @@ File Path                                     [Kind]         Size       Details
 ./test/helpers/color.mjs                      [other       ]      453B   
 ./test/helpers/eleventy-env.mjs               [other       ]     1042B   
 ./test/integration/build-timestamp.spec.mjs   [other       ]      618B   
-./test/integration/code-copy.spec.mjs         [other       ]      803B   
+./test/integration/code-copy.spec.mjs         [other       ]      805B   
 ./test/integration/collection-layout.spec.mjs [other       ]      664B   
 ./test/integration/concept-map-jsonld.spec.mjs [other       ]      910B   
 ./test/integration/dynamic-archive-defaults.test.mjs [other       ]     1037B   
@@ -682,16 +683,15 @@ File Path                                     [Kind]         Size       Details
 ./test/unit/footnote-popover.test.mjs         [other       ]     1074B   
 ./test/unit/i18n-prefix.test.mjs              [other       ]      801B   
 ./test/unit/index-data.test.mjs               [other       ]      681B   
-./test/unit/interlinker-resolver.test.mjs     [other       ]     1097B   
 ./test/unit/interlinker-stability.test.mjs    [other       ]      804B   
 ./test/unit/interlinker-version.test.mjs      [other       ]      411B   
 ./test/unit/llm-keepalive.test.mjs            [other       ]     1018B   
 ./test/unit/markdown-gateway-config.test.mjs  [other       ]      649B   
 ./test/unit/markdown-links.test.mjs           [other       ]     1215B   
-./test/unit/mschf-overlay-style.test.mjs      [other       ]     3380B   
+./test/unit/mschf-overlay-style.test.mjs      [other       ]     3384B   
 ./test/unit/node-shim.test.mjs                [other       ]      996B   
 ./test/unit/omitted-kind.test.mjs             [other       ]      713B   
-./test/unit/overlay-once.test.mjs             [other       ]     4513B   
+./test/unit/overlay-once.test.mjs             [other       ]     4515B   
 ./test/unit/patch-tree-cli.test.mjs           [other       ]      545B   
 ./test/unit/prettier-package.test.mjs         [other       ]      416B   
 ./test/unit/pty-runner.test.mjs               [other       ]      540B   
@@ -699,8 +699,8 @@ File Path                                     [Kind]         Size       Details
 ./test/unit/taxonomy.test.mjs                 [other       ]     1395B   
 ./test/unit/utils.test.mjs                    [other       ]     1794B   
 ./test/unit/workflow-actions.test.mjs         [other       ]      713B   
-./TREE.txt                                    [other       ]    54965B   
-./utils/build/archive-nav.js                  [other       ]     1515B   
+./TREE.txt                                    [other       ]    54917B   
+./utils/build/archive-nav.js                  [other       ]     1521B   
 ./utils/build/archive-utils.mjs               [other       ]      707B   
 ./utils/build/concept-map.js                  [other       ]     2211B   
 ./utils/build/homepage.js                     [other       ]     3367B   
@@ -713,14 +713,14 @@ File Path                                     [Kind]         Size       Details
 ./utils/network/outboundProxy.mjs             [other       ]      845B   
 ./utils/network/proxyAgent.mjs                [other       ]      812B   
 ./utils/network/webpageToMarkdown.mjs         [other       ]     1239B   
-./utils/scripts/interlinker-operator.sh       [shell       ]     2549B   
-./utils/scripts/npm-utils.js                  [other       ]     1897B   
+./utils/scripts/interlinker-operator.sh       [shell       ]     2573B   
+./utils/utils/scripts/npm-utils.js                  [other       ]     1897B   
 ./utils/scripts/run-server.sh                 [shell       ]      304B   
 ./utils/scripts/setup/env-bootstrap.sh        [shell       ]    12301B   
 ./utils/scripts/setup/install.sh              [shell       ]     2995B   
-./utils/scripts/setup/provision-env.sh        [shell       ]     1306B   
+./utils/scripts/setup/provision-env.sh        [shell       ]     1318B   
 ./utils/scripts/validation/proxy-health.mjs   [other       ]      826B   
 ./utils/scripts/validation/validate-frontmatter.mjs [other       ]     2121B   
 ./utils/scripts/validation/validate-styles.mjs [other       ]      956B   
-./var/refactor/src-refactor-plan.json         [json        ]     5309B   Keys: dry, moves, merges, skipped, touched, rewrites,...
-./var/refactor/src-refactor-plan.txt          [other       ]     4466B   
+./var/refactor/src-refactor-plan.json         [json        ]     5313B   Keys: dry, moves, merges, skipped, touched, rewrites,...
+./var/refactor/src-refactor-plan.txt          [other       ]     4470B   

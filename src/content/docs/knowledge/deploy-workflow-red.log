@@ -35,7 +35,7 @@ not ok 1 - deploy workflow does not trigger on pull_request
           - run: npm ci
           - run: |
               NODE_OPTIONS=--import=./test/setup/http.mjs npm test 2>&1 | tee test.log
-          - run: scripts/warn-gate.sh test.log
+          - run: utils/scripts/validation/warn-gate.sh test.log
           - uses: actions/upload-artifact@v4
             with:
               name: coverage

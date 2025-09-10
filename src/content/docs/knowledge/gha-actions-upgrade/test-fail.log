@@ -32,7 +32,7 @@ not ok 1 - GitHub workflows use latest action versions
       '      - run: npm ci\n' +
       '      - run: |\n' +
       '          NODE_OPTIONS=--import=./test/setup/http.mjs npm test 2>&1 | tee test.log\n' +
-      '      - run: scripts/warn-gate.sh test.log\n' +
+      '      - run: utils/scripts/validation/warn-gate.sh test.log\n' +
       '      - uses: actions/upload-artifact@v3\n' +
       '        with:\n' +
       '          name: coverage\n' +
@@ -129,7 +129,7 @@ not ok 1 - GitHub workflows use latest action versions
           - run: npm ci
           - run: |
               NODE_OPTIONS=--import=./test/setup/http.mjs npm test 2>&1 | tee test.log
-          - run: scripts/warn-gate.sh test.log
+          - run: utils/scripts/validation/warn-gate.sh test.log
           - uses: actions/upload-artifact@v3
             with:
               name: coverage

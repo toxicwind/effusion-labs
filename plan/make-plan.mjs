@@ -511,7 +511,7 @@ async function main() {
     'src/content/docs/flower/reports/**',
     // **src normalization safety**: ensure static copies
     'src/styles/**',
-    'src/scripts/**',
+    'src/assets/js/**',
     'src/assets/**',
   ];
   await writeApplyScripts(passthroughs);

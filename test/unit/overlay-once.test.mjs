@@ -72,7 +72,7 @@ function runOverlayInJsdom(html = '') {
   // Override Math.random within the context (built-in Math is not enumerable on global)
   ctx.__rng = rng;
   vm.runInContext('Math.random = globalThis.__rng;', ctx);
-  const code = fs.readFileSync('src/scripts/mschf-overlay.js', 'utf8');
+  const code = fs.readFileSync('src/assets/js/mschf-overlay.js', 'utf8');
   vm.runInContext(code, ctx, { filename: 'mschf-overlay.js' });
 
   return { window, document, get lastIO() { return lastIO; } };
