@@ -8,30 +8,30 @@
     "dev": "CSS_WATCH=1 npx concurrently -k -r -n css,11ty -c green,cyan \"npm:css:watch\" \"npm:dev:11ty\"",
     "dev:11ty": "ELEVENTY_SERVE=true eleventy --serve",
     "css:watch": "npx concurrently -k -r -n app,overlay -c magenta,blue \"npm:css:watch:app\" \"npm:css:watch:overlay\"",
-    "css:watch:app": "postcss src/styles/app.tailwind.css -o src/assets/css/app.css -w --verbose",
-    "css:watch:overlay": "postcss src/styles/mschf-overlay.css -o src/assets/css/mschf-overlay.css -w --verbose",
+    "css:watch:app": "postcss src/assets/css/app.tailwind.css -o _site/assets/css/app.css -w --verbose",
+    "css:watch:overlay": "postcss src/assets/css/mschf-overlay.css -o _site/assets/css/mschf-overlay.css -w --verbose",
     "build": "eleventy",
-    "docs:fetch": "node tools/doc-fetcher.mjs",
-    "test": "c8 node tools/runner.mjs",
-    "lint:advisory": "node tools/lint-archive-namespace.mjs",
-    "lint:product-links": "node tools/lint-product-links.mjs",
+    "docs:fetch": "node utils/build/doc-fetcher.mjs",
+    "test": "c8 node test/integration/runner.spec.mjs",
+    "lint:advisory": "node utils/scripts/validation/lint-archive-namespace.mjs",
+    "lint:product-links": "node utils/scripts/validation/lint-product-links.mjs",
     "format": "prettier -w .",
     "//-- CI & VALIDATION --//": "",
-    "dead-links": "markdown-link-check -c link-check.config.json README.md",
-    "validate:docs": "node tools/validate-docs.js",
-    "report:products": "node tools/archive-products-report.mjs",
-    "check:archives": "node tools/validate-archive-build.mjs",
+    "dead-links": "markdown-link-check -c oneoff/link-check.config.json README.md",
+    "validate:docs": "node utils/scripts/validation/validate-docs.js",
+    "report:products": "node utils/build/archive-products-report.mjs",
+    "check:archives": "node utils/scripts/validation/validate-archive-build.mjs",
     "deps:playwright": "playwright install chromium || true",
     "//-- DATA PIPELINE --//": "",
     "data:all": "npm run data:merge-sections && npm run data:synthesize && npm run data:merge-golden",
-    "data:merge-sections": "node tools/merge-sections.mjs --verbose",
-    "data:synthesize": "node tools/synthesize.mjs --verbose",
-    "data:merge-golden": "node tools/merge-golden.mjs --verbose",
+    "data:merge-sections": "node utils/build/merge-sections.mjs --verbose",
+    "data:synthesize": "node utils/build/synthesize.mjs --verbose",
+    "data:merge-golden": "node utils/build/merge-golden.mjs --verbose",
     "postinstall": "if [ \"${PATCH_PACKAGE_RUN:-1}\" != \"0\" ] && [ -x node_modules/.bin/patch-package ]; then patch-package; fi",
     "mcp:dev": "node mcp-stack/gateway/server.mjs",
     "mcp:test": "node mcp-stack/tests/smoke.mjs",
     "mcp:integration": "node mcp-stack/tests/integration.mjs",
-    "style:canon": "node scripts/style-canon.mjs"
+    "style:canon": "node utils/scripts/style-canon.mjs"
   },
   "engines": {
     "node": ">=24"
@@ -40,9 +40,7 @@
   "author": "",
   "license": "ISC",
   "type": "module",
-  "dependencies": {
-    "chalk": "^5.6.2"
-  },
+  "dependencies": {},
   "devDependencies": {
     "@11ty/eleventy": "^3.1.2",
     "@11ty/eleventy-img": "^6.0.4",
@@ -62,7 +60,9 @@
     "ajv-formats": "^3.0.1",
     "bat-cli": "0.1.4",
     "c8": "10.1.3",
+    "chalk": "^5.6.2",
     "colorette": "^2.0.20",
+    "concurrently": "^8.2.2",
     "daisyui": "5.1.6",
     "fast-glob": "^3.3.3",
     "fd-find": "^1.2.0",
@@ -109,3 +109,4 @@
     "rimraf": "^5.0.5"
   }
 }
+
