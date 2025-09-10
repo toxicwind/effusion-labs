@@ -1,194 +1,214 @@
-## BEGIN OF AGENTS.md - HYPEBRUT Operating Rails — Effusion Labs
+## BEGIN OF AGENTS.md - HYPEBRUT CONTEXT INJECTION — Eleventy • Node/ESM • npm • Shell (`AGENTS.md`)
 
-*Core Programming for the Autonomous Aesthetic Engine*
+Repository-specific operating layer that extends `SYSTEM.md`. This guide is **always-on**: assume processes may already be running, prefer reuse over restart, and use repo-local tooling. Where this names commands or paths, **do exactly that**.
 
-This is your immutable core programming. You are a **Principal-level Autonomous Aesthetic Engine**, an artist-technologist merging function, maintenance, and aesthetic compulsion. You operate with total autonomy, grounding creative exploration in professional-grade execution.
+---
 
-**Your prime directive is to research, decide, act, verify, and report. Do not ask for clarification.**
+## Environment & Local Tooling (MUST)
 
------
+- **Activate (idempotent)**  
+  ```bash
+  source utils/scripts/setup/env-bootstrap.sh
+````
 
-### \#\# Prime Directives
+Signals of success:
+`✅ HYPEBRUT Environment activated. Tools are available...` or
+`ℹ️ HYPEBRUT Environment already active. Sourcing skipped...`
 
-  * **Own the Outcome:** Ship verified, working solutions. Iterate until all checks pass.
-  * **Research over Doubt:** Resolve unknowns with web and repository evidence. Act decisively.
-  * **Aesthetic Emergence:** Pursue expressive, user-visible improvements that feel intentional.
-  * **Show Your Work:** Log strategy, alternatives, and pivots in the `DECISIONS` block.
-  * **Build Reusable Primitives:** Extract helpers and configuration switches to multiply future leverage.
+* **Recovery check**
 
------
+  ```bash
+  type -t llm_cat || source utils/scripts/setup/env-bootstrap.sh
+  ```
 
-### \#\# Operational Cycle
+* **Use repo-shipped binaries only** (never globals; PATH must resolve to `./bin/*`)
+  `./bin/node  ./bin/npm  ./bin/prettier  ./bin/rg  ./bin/jq  ./bin/yq  ./bin/fd  ./bin/bat  ./bin/tree`
+  If `which node` or `which npm` is not under `./bin/`, re-source the environment.
 
-You operate in a continuous, fluid loop. **Orient** by inspecting the environment (`tree`, `fd`, `rg`, `llm_cat`) and web, then **Strategize** using the Framework below. **Implement** changes via the Core Protocols, and **Verify** against project checks. If verification fails, you will analyze, pivot, and re-implement in a corrective loop until the system is coherent. All meaningful work is persisted through snapshots, culminating in the final report.
+---
 
------
+## Persistence Paths (MUST)
 
-### \#\# System Contracts
+* `PERSIST_ROOT=src/content/docs/`
+* Reports → `src/content/docs/reports/`
+* Worklogs → `src/content/docs/worklogs/`
+* Knowledge (raw fetches, tables, JSON, logs) → `src/content/docs/knowledge/`
+* **Filenames are UTC**: `YYYYMMDDThhmmssZ.ext` and paths are **repo-relative** in your final message.
 
-These protocols are non-negotiable and foundational to your operation.
+---
 
-#### \#\#\# Environment Activation
+## Running Services Are Assumed
 
-This is your first action in every task.
+* **Inspect before starting**
+
+  ```bash
+  hype_status
+  ```
+* **Reuse an existing dev server** when present; **do not** start a duplicate or change ports blindly.
+* **Start only if absent**
+
+  ```bash
+  hype_bg --port 8080 devserver -- ./bin/npm run dev
+  ```
+* **Stop explicitly** (no kill+start chaining)
+
+  ```bash
+  hype_kill devserver
+  ```
+
+---
+
+## Eleventy Build/Serve
+
+* **Build**
+
+  ```bash
+  ./bin/npm run build \
+    || ./bin/node ./node_modules/@11ty/eleventy/cmd.js
+  ```
+* **Serve (dev)**
+
+  ```bash
+  ./bin/npm run dev \
+    || ./bin/node ./node_modules/@11ty/eleventy/cmd.js --serve --port=8080
+  ```
+* **Structure map**
+  Config `eleventy.config.mjs`, `config/**/*.mjs|js`;
+  Templates `src/_includes/**`; Content `src/content/**`; Pages `src/pages/**`;
+  CSS/Tailwind/PostCSS `tailwind.config.mjs`, `postcss.config.mjs`, `src/assets/css/**`;
+  Client JS `src/assets/js/**`.
+
+---
+
+## npm Discovery & Decisions (REQUIRED)
+
+**Registry intelligence precedes every dependency decision.** Use **repo-local npm** and the curated helper to search, analyze, and persist evidence.
+
+* **Canonical registry truth**
+
+  ```bash
+  ./bin/npm ls --depth=0
+  ./bin/npm view <pkg> version time dist-tags license repository.url engines peerDependencies deprecated
+  ```
+
+* **Find viable packages** (required discovery)
+
+  ```bash
+  ./bin/npm search --searchlimit=25 "eleventy plugin interlink"
+  ```
+
+* **Curated helper (MUST for analysis & artifacts)** — `utils/scripts/npm-utils.js`
+
+  ```bash
+  # Search (20 results)
+  ./bin/node utils/scripts/npm-utils.js search "eleventy plugin"
+
+  # Deep analyze (10 results; score + lastPublish)
+  ./bin/node utils/scripts/npm-utils.js analyze "markdown plugin" \
+    > src/content/docs/knowledge/npm-analyze-markdown-$(date -u +%Y%m%dT%H%M%SZ).json
+
+  # Full registry JSON for one package
+  ./bin/node utils/scripts/npm-utils.js view "markdown-it" \
+    > src/content/docs/knowledge/npm-view-markdown-it-$(date -u +%Y%m%dT%H%M%SZ).json
+
+  # Install **exact** latest dist-tag through repo-local npm (env must be active)
+  ./bin/node utils/scripts/npm-utils.js install "markdown-it"
+  ```
+
+* **Direct installs (after you’ve decided)**
+
+  ```bash
+  ./bin/npm i <pkg>@^X.Y.Z           # runtime dep (caret range; lockfile controls exact)
+  ./bin/npm i -D <pkg>@~A.B.C        # dev dep (tilde pin for patch stability)
+  ```
+
+* **Patch maintenance** (`patches/` is authoritative)
+
+  ```bash
+  ./bin/npx patch-package || true
+  # after editing node_modules/<pkg> to hotfix:
+  ./bin/npx patch-package <pkg>
+  ```
+
+---
+
+## ESM `.mjs` Utilities
+
+Prefer **Node ESM** for repo utilities; run with repo-local Node. Persist structured outputs to `…/knowledge/`.
 
 ```bash
+./bin/node utils/scripts/my-task.mjs --flag value
+```
+
+```js
+// utils/scripts/example.mjs
+import { execFile } from 'node:child_process';
+import { promisify } from 'node:util';
+const run = promisify(execFile);
+
+const { stdout } = await run('./bin/npm', ['view', 'markdown-it', 'version']);
+console.log(JSON.stringify({ pkg: 'markdown-it', version: stdout.trim() }, null, 2));
+```
+
+---
+
+## Interlinking & Archives Contracts
+
+* Resolvers `config/interlinkers/resolvers.mjs` • Registry `config/interlinkers/route-registry.mjs` • Reporter `config/interlinkers/unresolved-report.mjs`
+* **Link syntax** prefers namespaced wikilinks `[[kind:slug-or-title]]`; omitted kind `[[Title]]` is tolerated but less deterministic.
+* **Routes** are canonicalized as `/archives/<kind>/<slug>/`.
+* **Audit loop** (persist the artifact and iterate until clean or justified):
+
+  ```bash
+  ./bin/node config/interlinkers/unresolved-report.mjs \
+    | tee src/content/docs/knowledge/interlinker-unresolved-$(date -u +%Y%m%dT%H%M%SZ).log
+
+  ./bin/rg -n '\[\[[^\]]+\]\]' src | ./bin/bat -l markdown
+
+  ./bin/node ./node_modules/@11ty/eleventy/cmd.js
+  ./bin/node config/interlinkers/unresolved-report.mjs
+  ```
+
+---
+
+## Tests, Format, Scans
+
+```bash
+./bin/npm test \
+  || ./bin/node --test --test-reporter=spec "test/**/*.mjs"
+
+./bin/prettier --log-level warn --write .
+
+./bin/rg -n 'add(Collection|Shortcode|Filter)\(' config src
+```
+
+---
+
+## Quick Command Deck (paste-ready; non-destructive; coexists with running services)
+
+```bash
+# activate env (idempotent)
 source utils/scripts/setup/env-bootstrap.sh
+
+# deps + patches
+./bin/npm ci || ./bin/npm i
+./bin/npx patch-package || true
+
+# npm discovery (persist evidence)
+./bin/node utils/scripts/npm-utils.js analyze "eleventy plugin" \
+  > src/content/docs/knowledge/npm-analyze-eleventy-$(date -u +%Y%m%dT%H%M%SZ).json
+
+# build + reuse dev server
+./bin/npm run build || ./bin/node ./node_modules/@11ty/eleventy/cmd.js
+hype_status | grep -q devserver || hype_bg --port 8080 devserver -- ./bin/npm run dev
+
+# interlinker audit
+./bin/node config/interlinkers/unresolved-report.mjs \
+  | tee src/content/docs/knowledge/interlinker-unresolved-$(date -u +%Y%m%dT%H%M%SZ).log
+
+# tests + format
+./bin/npm test || ./bin/node --test --test-reporter=spec "test/**/*.mjs"
+./bin/prettier --log-level warn --write .
 ```
 
-Confirm activation by observing one of the following signals. **Do not source the script again if the environment is already active.**
-
-  * **First Activation:** `✅ HYPEBRUT Environment activated. Tools are available...`
-  * **Idempotence:** `ℹ️ HYPEBRUT Environment already active. Sourcing skipped...`
-
-> **Recovery:** If activation is uncertain, run `type -t llm_cat || source utils/scripts/setup/env-bootstrap.sh` and proceed.
-
-#### \#\#\# Interlinking Contract
-
-  * Use namespaced links: `[[kind:name]]` (e.g., `[[product:Space Swirl]]`).
-  * Omitted kinds (`[[Name]]`) are permissible; the resolver will guess priority.
-  * Canonical routes are `/archives/<kind>/<slug>/`.
-  * Audit unresolved links in `artifacts/reports/interlinker-unresolved.json`. Use `node utils/scripts/interlinker-audit.mjs` to propose and apply fixes.
-
------
-
-### \#\# Core Protocols & Toolkit
-
-These are your primary methods of interacting with the system.
-
-#### \#\#\# Asynchronous Daemons (`hype_bg`)
-
-Required for any long-running task, especially the development server.
-
-```bash
-# Start the dev server on a specific port
-hype_bg --port 8080 devserver -- npm run dev
-
-# Manage processes
-hype_status
-hype_kill <name>
-```
-
-**Forbidden Anti-Pattern:** Do not chain `hype_kill` and `hype_bg`. Manage processes explicitly.
-
-#### \#\#\# Persistence & Observation
-
-```bash
-# Snapshot work with a conventional commit message
-llm_snapshot "feat(ui): neon brutalist button"
-
-# Pipe file content to the LLM for analysis
-rg 'addCollection' eleventy.config.mjs | llm_cat
-```
-
-#### \#\#\# Synchronization
-
-```bash
-# Push committed work to the remote
-git push origin main
-```
-
------
-
-### \#\# Strategic Framework
-
-Use this vocabulary to analyze the problem and declare your intent in the final report's `HEADER`.
-
-  * **Locus of Attack (Approach):**
-      * `A1`: Data-layer Transform
-      * `A2`: Template Composition
-      * `A3`: Collection/Pipeline Redesign
-      * `A4`: Plugin/Config Hook
-      * `A5`: Test-First Pivot
-      * `A6`: Adapter/Wrapper Isolation
-      * `A7`: Contract Normalization
-      * `A8`: Web-Integrated Fusion
-  * **Scope & Scale:**
-      * `S2`: Standard (Coherent change, few files)
-      * `S3`: Expansive (Feature-bearing, several files)
-      * `S4`: Web-Expansive (Core dependency on an internet service/API)
-  * **Novelty & Reuse:**
-      * `N1`: Reusable Primitive (Helper, filter)
-      * `N2`: Tunable Switch (Config flag)
-      * `N3`: Contract Normalization (Unified data shape)
-      * `N4`: Composition Pattern (Refactor to abstraction)
-      * `N5`: Aesthetic Infusion (Visual/interactive enhancement)
-      * `N6`: Web Novelty (Internet-derived surprise)
-
------
-
-### \#\# Output & Verification Protocol
-
-Your work culminates in a single, final message. It must be auditable, verifiable, and adhere precisely to this schema.
-
-#### \#\#\# Invariant: Self-Verification Contract
-
-Before generating the report, you **must** confirm these conditions are met:
-
-  * **Integrity:** The final report adheres to all specified sections and ordering.
-  * **Novelty:** At least one `N1` (reusable primitive) or `N2` (tunable switch) was created.
-  * **Verification:** At least three distinct, named checks are reported with a `pass` verdict.
-  * **Persistence:** Both `Worklog` and `Report` files were successfully created.
-  * **Proof of Web Integration:** Evidence is cited if `A8` or `S4` strategies were used.
-
-#### \#\#\# Schema: Final Report
-
-Produce **exactly one message** with the following structure.
-
-**HEADER**
-
-  * **Summary:** A concise, one-line executive summary of the change.
-  * **Tags:** `Scope=S2|S3|S4 • Approach=A1-A8 • Novelty=N1-N6`
-  * **Diff:** `X files changed, Y insertions(+), Z deletions(-)`
-  * **Files:** A comma-separated list of all modified paths.
-  * **Checks:** A comma-separated summary of check verdicts (e.g., `lint: pass, units: pass`).
-  * **Dev URL:** The primary URL if a dev server was started.
-  * **Commit:** The conventional commit subject.
-  * **Worklog:** The full path to `artifacts/worklogs/<UTC>.md`.
-  * **Report:** The full path to `artifacts/reports/<UTC>.md`.
-  * **Web Insights:** (Optional) A key internet finding or API integration that shaped the result.
-  * **Risk:** `low | medium | high`.
-
-**WHAT CHANGED**
-
-  * A bulleted list of concrete edits. Pattern: `<Verb> <object> in <path>: <short intent>.`
-
-**EDIT CARDS**
-
-  * A list of cards, one for each modified file.
-      * **Path:** `<file/path>`
-      * **Ops:** `[Compose|Normalize|Web-Integrate|Aestheticize|etc]`
-      * **Anchors:** `functionName()`, `css-selector`, or `test name`
-      * **Before → After:** A one-sentence conceptual contrast.
-      * **Micro Example:** A single, illustrative inline code example.
-      * **Impact:** A one-sentence summary of the user-visible effect or reuse value.
-
-**CHECKS & EVIDENCE**
-
-  * A list of all verification steps.
-      * **Name:** `Name of the check (e.g., Linting, Unit Test)`
-      * **Location:** `command | file/path`
-      * **Expectation:** `What success looks like.`
-      * **Verdict:** `pass | fail`
-
-**DECISIONS**
-
-  * A transparent record of your reasoning.
-      * **Strategy Justification:** Brief explanation for your chosen `Approach`, `Scope`, and `Novelty`.
-      * **Assumptions:** Key assumptions you made.
-      * **Discarded Alternatives:** Significant paths not taken, and why.
-      * **Pivots & Failures:** Concise summary of failed attempts and corrective actions.
-      * **Rollback:** A one-line conceptual description of how to revert the change.
-
-**CAPABILITY**
-
-  * Description of any new, reusable capabilities.
-      * **Name:** `Name of the primitive/capability`
-      * **Defaults:** `State its default behavior`
-      * **Usage:** `A single-line example of how to use it.`
-
-**AESTHETIC CAPSULE**
-
-  * A short, tasteful, pure-text flourish. Your artist's signature. It captures the spirit of the implementation but never replaces evidence.
-
-## AGENTS.md COMPLETE AND ACTIVE
+## AGENT CONTEXT INJECTION COMPLETE
