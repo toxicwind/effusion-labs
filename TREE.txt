@@ -1,6 +1,4 @@
 .
-├── aestheticyearbroken.txt
-├── aestheticyear.js
 ├── AGENTS.md
 ├── artifacts
 │   ├── _data_bundle.json
@@ -10,7 +8,6 @@
 │   ├── status.json
 │   └── worklogs
 │       └── 20250908T174424Z.md
-├── ARTIFACTS.md
 ├── bin
 │   ├── bat
 │   ├── fd
@@ -23,7 +20,6 @@
 │   ├── rg
 │   ├── tree
 │   └── yq
-├── cell.py
 ├── config
 │   ├── archives.mjs
 │   ├── build-info.js
@@ -47,298 +43,9 @@
 │   ├── shortcodes.js
 │   └── site.js
 ├── .dead-links.json
-├── DEVNOTES.md
 ├── docker-compose.yml
 ├── .dockerignore
-├── docs
-│   ├── adr
-│   │   ├── 20250813-hero-image-perf.md
-│   │   ├── 20250813-truncate-filter.md
-│   │   ├── 20250814-code-copy.md
-│   │   ├── 20250814-feed-build-metadata.md
-│   │   ├── 20250814-footnote-highlight.md
-│   │   ├── 20250814-monsters-hub.md
-│   │   ├── 20250814-nav-ledger.md
-│   │   ├── 20250814-spark-status.md
-│   │   ├── 20250816-carbon-handshake.md
-│   │   └── 20250829-unified-collection-layout.md
-│   ├── cassettes
-│   │   └── .gitkeep
-│   ├── knowledge
-│   │   ├── deploy-workflow-green.log
-│   │   ├── deploy-workflow-red.log
-│   │   ├── gha-actions-upgrade
-│   │   │   ├── hashes.txt
-│   │   │   ├── test-fail.log
-│   │   │   └── test-success.log
-│   │   ├── golden_record_20250819T062726Z.json
-│   │   ├── golden_record_20250819T081736Z.json
-│   │   ├── golden_record_20250819T081755Z.json
-│   │   ├── homepage-feed-green.log
-│   │   ├── homepage-feed-red.log
-│   │   ├── homepage-hero-green.log
-│   │   ├── homepage-hero-map-green.log
-│   │   ├── homepage-hero-map-red.log
-│   │   ├── homepage-logo-green.log
-│   │   ├── homepage-logo-red.log
-│   │   ├── image-filename-seo-green.log
-│   │   ├── image-filename-seo-install.log
-│   │   ├── image-filename-seo-red.log
-│   │   ├── logo-image-transform-green.log
-│   │   ├── logo-image-transform-red.log
-│   │   ├── monsters-product-metadata-green.log
-│   │   ├── node-shim-prove.md
-│   │   ├── no-silent-ops-green.log
-│   │   ├── no-silent-ops-red.log
-│   │   ├── prettier-guardrails
-│   │   │   ├── test-green.log
-│   │   │   └── test-red.log
-│   │   ├── product-template-fail.md
-│   │   ├── responsive-logo-green.log
-│   │   ├── responsive-logo-red.log
-│   │   ├── ripgrep
-│   │   │   ├── docs-validate.log
-│   │   │   └── test-success.log
-│   │   ├── stabilize-ci-tests-green.log
-│   │   ├── stabilize-ci-tests-install.log
-│   │   ├── stabilize-ci-tests-red.log
-│   │   ├── synthesized_archive-20250818-202538.json
-│   │   ├── synthesized_archive-20250818-202551.json
-│   │   ├── synthesized_archive-20250818-202612.json
-│   │   ├── synthesized_archive-20250818-202854.json
-│   │   ├── synthesized_archive_20250818T202820Z.json
-│   │   ├── synthesized_archive_20250818T202825Z.json
-│   │   ├── synthesized_archive_20250818T202833Z.json
-│   │   ├── synthesized_archive_20250818T203403Z.json
-│   │   ├── synthesized_archive_20250818T203415Z.json
-│   │   ├── synthesized_archive_20250818T203419Z.json
-│   │   ├── synthesized_archive_20250818T203545Z.json
-│   │   ├── synthesized_archive_20250818T203603Z.json
-│   │   ├── synthesized_archive_20250818T203640Z.json
-│   │   ├── synthesized_archive_20250818T203805Z.json
-│   │   ├── synthesized_archive_20250818T204046Z.json
-│   │   ├── synthesized_archive_20250818T204119Z.json
-│   │   ├── synthesized_archive_20250818T204212Z.json
-│   │   ├── synthesized_archive_20250818T204244Z.json
-│   │   ├── synthesized_archive_20250819T081707Z.json
-│   │   ├── synthesized_archive_20250819T081750Z.json
-│   │   ├── test-failures.txt
-│   │   ├── time-to-chill-size-green.log
-│   │   ├── utils-test-green.md
-│   │   ├── utils-test-red.md
-│   │   ├── wikilink-filter-build-green.log
-│   │   └── wikilink-filter-green.log
-│   ├── migration
-│   │   ├── class-map.json
-│   │   └── path-map.json
-│   ├── reports
-│   │   ├── 2025-08-20-shiki-migration.md
-│   │   ├── archive-normalization-audit.md
-│   │   ├── archive-normalization-continue.md
-│   │   ├── archive-normalization-ledger.md
-│   │   ├── continuous-output-continue.md
-│   │   ├── continuous-output-ledger.md
-│   │   ├── deploy-workflow-continue.md
-│   │   ├── deploy-workflow-ledger.md
-│   │   ├── eleventy-runner-continue.md
-│   │   ├── eleventy-runner-ledger.md
-│   │   ├── esm-audit-20250820T215642Z.md
-│   │   ├── external-arrow-continue.md
-│   │   ├── external-arrow-ledger.md
-│   │   ├── gha-actions-upgrade-continue.md
-│   │   ├── gha-actions-upgrade-ledger.md
-│   │   ├── homepage-hero-continue.md
-│   │   ├── homepage-hero-ledger.md
-│   │   ├── homepage-latest-entries-continue.md
-│   │   ├── homepage-latest-entries-ledger.md
-│   │   ├── homepage-logo-continue.md
-│   │   ├── homepage-logo-ledger.md
-│   │   ├── image-filename-seo-continue.md
-│   │   ├── image-filename-seo-ledger.md
-│   │   ├── link-hygiene-r3-continue.md
-│   │   ├── link-hygiene-r3-ledger.md
-│   │   ├── llm-keepalive-continue.md
-│   │   ├── llm-keepalive-ledger.md
-│   │   ├── logo-image-transform-continue.md
-│   │   ├── logo-image-transform-ledger.md
-│   │   ├── monsters-product-metadata-continue.md
-│   │   ├── monsters-product-metadata-ledger.md
-│   │   ├── mschf-overlay-continue.md
-│   │   ├── mschf-overlay-ledger.md
-│   │   ├── node-shim-continue.md
-│   │   ├── node-shim-ledger.md
-│   │   ├── pop-mart-provenance-continue.md
-│   │   ├── pop-mart-provenance-ledger.md
-│   │   ├── prettier-guardrails-continue.md
-│   │   ├── prettier-guardrails-ledger.md
-│   │   ├── products-template-continue.md
-│   │   ├── products-template-ledger.md
-│   │   ├── research-ingest-continue.md
-│   │   ├── research-ingest-ledger.md
-│   │   ├── responsive-logo-continue.md
-│   │   ├── responsive-logo-ledger.md
-│   │   ├── ripgrep-fix-continue.md
-│   │   ├── ripgrep-fix-ledger.md
-│   │   ├── site-redesign-r3-continue.md
-│   │   ├── site-redesign-r3-ledger.md
-│   │   ├── solver-url-env-continue.md
-│   │   ├── solver-url-env-ledger.md
-│   │   ├── stabilize-ci-tests-continue.md
-│   │   ├── stabilize-ci-tests-ledger.md
-│   │   ├── tags-metadata-continue.md
-│   │   ├── tags-metadata-ledger.md
-│   │   ├── tests-green-continue.md
-│   │   ├── tests-green-ledger.md
-│   │   ├── typography-colors-continue.md
-│   │   ├── typography-colors-ledger.md
-│   │   ├── utils-ordinal-suffix-continue.md
-│   │   ├── utils-ordinal-suffix-ledger.md
-│   │   ├── work-pages-continue.md
-│   │   └── work-pages-ledger.md
-│   ├── theming.md
-│   ├── ux
-│   │   └── mschf-overlay.md
-│   ├── vendor
-│   │   ├── daisyui
-│   │   │   ├── base.html
-│   │   │   ├── colors.html
-│   │   │   ├── components.html
-│   │   │   ├── config.html
-│   │   │   ├── configuration.html
-│   │   │   ├── install.html
-│   │   │   ├── README.md
-│   │   │   ├── themes.html
-│   │   │   ├── upgrade.html
-│   │   │   └── v5.html
-│   │   └── tailwind
-│   │       ├── configuration.html
-│   │       ├── content-configuration.html
-│   │       ├── detecting-classes.html
-│   │       ├── functions-and-directives.html
-│   │       ├── plugins.html
-│   │       ├── README.md
-│   │       ├── tailwindcss-v4-blog.html
-│   │       ├── upgrade-guide.html
-│   │       └── v4-blog.html
-│   └── vendors
-│       ├── @11ty
-│       │   └── eleventy
-│       │       └── 3.1.2
-│       │           ├── configuration.md
-│       │           ├── getting-started.md
-│       │           └── manifest.json
-│       ├── daisyui
-│       │   └── 5.0.50
-│       │       ├── install.md
-│       │       └── manifest.json
-│       ├── index.md
-│       ├── _inventory.json
-│       ├── _manifest.json
-│       ├── markdown-it
-│       │   └── 14.1.0
-│       │       ├── index.md
-│       │       └── manifest.json
-│       ├── nunjucks
-│       │   └── 3.2.4
-│       │       ├── manifest.json
-│       │       └── templating.md
-│       ├── postcss
-│       │   └── 8.5.6
-│       │       ├── index.md
-│       │       └── manifest.json
-│       └── tailwindcss
-│           └── 4.1.11
-│               ├── manifest.json
-│               └── readme.md
 ├── eleventy.config.mjs
-├── flower_reports_showcase
-│   ├── normalized
-│   │   ├── listings.csv
-│   │   └── menus
-│   │       ├── a-cut-above-denver.csv
-│   │       ├── a-cut-off-the-top-2059-w-9th-ave-80204.csv
-│   │       ├── affinity-dispensary.csv
-│   │       ├── alternative-medicine-on-capitol-hill.csv
-│   │       ├── amch-adult-use.csv
-│   │       ├── apothecary-farms-denver.csv
-│   │       ├── dank.csv
-│   │       ├── denco-adult-use.csv
-│   │       ├── denco-alternative-medicine-recreational.csv
-│   │       ├── den-rec-medical.csv
-│   │       ├── denver-kush-club-more-than-a-club-adult-use.csv
-│   │       ├── doctors-orders-3.csv
-│   │       ├── everbloom-on-jackson.csv
-│   │       ├── family-grown.csv
-│   │       ├── green-cross-of-cherry-creek-2.csv
-│   │       ├── greenfields-4.csv
-│   │       ├── greenfields-5.csv
-│   │       ├── house-of-dankness-3.csv
-│   │       ├── kinds-meds.csv
-│   │       ├── lemonnade-denver-1.csv
-│   │       ├── life-flower-dispensary.csv
-│   │       ├── life-flower-dispensary-recreational.csv
-│   │       ├── lightshade-peoria-2.csv
-│   │       ├── little-brown-house.csv
-│   │       ├── lova-downtown.csv
-│   │       ├── lova-sheridan.csv
-│   │       ├── magic-city-cannabis-colorado.csv
-│   │       ├── mecca-federal.csv
-│   │       ├── medicine-man-denver.csv
-│   │       ├── native-roots-apothecary-medical.csv
-│   │       ├── native-roots-denver-highlands-med.csv
-│   │       ├── native-roots-south.csv
-│   │       ├── nuvue-pharma-denver.csv
-│   │       ├── potco-2.csv
-│   │       ├── reefer-madness.csv
-│   │       ├── rino-supply-co-rec.csv
-│   │       ├── riverrock-south-recreational.csv
-│   │       ├── sacred-seed-recreational.csv
-│   │       ├── seed-smith-cannabis.csv
-│   │       ├── snaxland-bryant.csv
-│   │       ├── spark-3.csv
-│   │       ├── standing-akimbo-denver.csv
-│   │       ├── starbuds-du.csv
-│   │       ├── strawberry-fields-denver.csv
-│   │       ├── the-center-3.csv
-│   │       ├── the-grove-29.csv
-│   │       ├── the-herbal-cure-recreational.csv
-│   │       ├── three-rivers-dispensary-broadway-med.csv
-│   │       ├── three-rivers-dispensary-broadway-rec.csv
-│   │       └── xclusive-smith.csv
-│   └── reports
-│       ├── audits
-│       │   ├── audit_alternative-medicine-on-capitol-hill.csv
-│       │   ├── audit_apothecary-farms-denver.csv
-│       │   ├── audit_dank.csv
-│       │   ├── audit_denver-kush-club-more-than-a-club-adult-use.csv
-│       │   ├── audit_green-cross-of-cherry-creek-2.csv
-│       │   ├── audit_greenfields-5.csv
-│       │   ├── audit_house-of-dankness-3.csv
-│       │   ├── audit_kinds-meds.csv
-│       │   ├── audit_life-flower-dispensary.csv
-│       │   ├── audit_life-flower-dispensary-recreational.csv
-│       │   ├── audit_lightshade-peoria-2.csv
-│       │   ├── audit_little-brown-house.csv
-│       │   ├── audit_lova-downtown.csv
-│       │   ├── audit_lova-sheridan.csv
-│       │   ├── audit_magic-city-cannabis-colorado.csv
-│       │   ├── audit_mecca-federal.csv
-│       │   ├── audit_medicine-man-denver.csv
-│       │   ├── audit_reefer-madness.csv
-│       │   ├── audit_sacred-seed-recreational.csv
-│       │   ├── audit_seed-smith-cannabis.csv
-│       │   ├── audit_the-center-3.csv
-│       │   ├── audit_the-herbal-cure-recreational.csv
-│       │   ├── audit_three-rivers-dispensary-broadway-med.csv
-│       │   └── audit_xclusive-smith.csv
-│       ├── Magic_City_Cannabis___Colorado_20250810_report.html
-│       ├── nearby_value_cache_status.html
-│       ├── nearby_value_leaderboard.html
-│       ├── Reefer_Madness_20250810_report.html
-│       ├── Reefer_Madness_20250825_report.html
-│       ├── Reefer_Madness_20250826_report.html
-│       └── Reefer_Madness_20250830_report.html
-├── ghost baseline fix.txt
 ├── .github
 │   ├── dependabot.yml
 │   └── workflows
@@ -346,29 +53,13 @@
 │       ├── deploy.yml
 │       └── interlinker-ci.yml
 ├── .gitignore
-├── helpers
-│   ├── data
-│   │   ├── archive-nav.js
-│   │   ├── archive-utils.mjs
-│   │   ├── concept-map.js
-│   │   ├── homepage.js
-│   │   └── naming-canon.mjs
-│   ├── utils
-│   │   ├── seeded.js
-│   │   └── utils-node.mjs
-│   └── wikilink
-│       └── scan.mjs
-├── identity-synonyms.json
 ├── inventory.mjs
-├── inventory-report.mjs
 ├── .ipynb_checkpoints
 │   ├── Untitled-2-checkpoint.ipynb
 │   ├── Untitled-2-Copy1-checkpoint.ipynb
 │   └── Untitled-2-Copy2-checkpoint.ipynb
 ├── lib_content.json
-├── lib_content_snapshot.txt
 ├── LICENSE
-├── link-check.config.json
 ├── logs
 │   └── archiveProductMap.cache.json
 ├── markdown_gateway
@@ -439,6 +130,20 @@
 │       ├── integration.mjs
 │       └── smoke.mjs
 ├── .nvmrc
+├── oneoff
+│   ├── aestheticyearbroken.txt
+│   ├── aestheticyear.js
+│   ├── cell.py
+│   ├── link-check.config.json
+│   ├── popmart.py
+│   ├── Untitled-1-1.ipynb
+│   ├── Untitled-1.html
+│   ├── Untitled-1.ipynb
+│   ├── Untitled-2-Copy1.ipynb
+│   ├── Untitled-2-Copy2.ipynb
+│   ├── Untitled-2.html
+│   ├── Untitled-2.ipynb
+│   └── Untitled-2.pdf
 ├── package.json
 ├── package-lock.json
 ├── patches
@@ -452,7 +157,6 @@
 │   ├── relocate.spec.json
 │   ├── rewrites.spec.json
 │   └── src-normalize.spec.json
-├── popmart.py
 ├── .portainer
 │   ├── Dockerfile
 │   └── nginx.conf
@@ -693,6 +397,293 @@
 │   │   │   ├── three-studies-sensory.md
 │   │   │   ├── verification-is-an-ecology.md
 │   │   │   └── workshop-weather.md
+│   │   ├── docs
+│   │   │   ├── adr
+│   │   │   │   ├── 20250813-hero-image-perf.md
+│   │   │   │   ├── 20250813-truncate-filter.md
+│   │   │   │   ├── 20250814-code-copy.md
+│   │   │   │   ├── 20250814-feed-build-metadata.md
+│   │   │   │   ├── 20250814-footnote-highlight.md
+│   │   │   │   ├── 20250814-monsters-hub.md
+│   │   │   │   ├── 20250814-nav-ledger.md
+│   │   │   │   ├── 20250814-spark-status.md
+│   │   │   │   ├── 20250816-carbon-handshake.md
+│   │   │   │   └── 20250829-unified-collection-layout.md
+│   │   │   ├── cassettes
+│   │   │   │   └── .gitkeep
+│   │   │   ├── knowledge
+│   │   │   │   ├── deploy-workflow-green.log
+│   │   │   │   ├── deploy-workflow-red.log
+│   │   │   │   ├── gha-actions-upgrade
+│   │   │   │   │   ├── hashes.txt
+│   │   │   │   │   ├── test-fail.log
+│   │   │   │   │   └── test-success.log
+│   │   │   │   ├── golden_record_20250819T062726Z.json
+│   │   │   │   ├── golden_record_20250819T081736Z.json
+│   │   │   │   ├── golden_record_20250819T081755Z.json
+│   │   │   │   ├── homepage-feed-green.log
+│   │   │   │   ├── homepage-feed-red.log
+│   │   │   │   ├── homepage-hero-green.log
+│   │   │   │   ├── homepage-hero-map-green.log
+│   │   │   │   ├── homepage-hero-map-red.log
+│   │   │   │   ├── homepage-logo-green.log
+│   │   │   │   ├── homepage-logo-red.log
+│   │   │   │   ├── image-filename-seo-green.log
+│   │   │   │   ├── image-filename-seo-install.log
+│   │   │   │   ├── image-filename-seo-red.log
+│   │   │   │   ├── logo-image-transform-green.log
+│   │   │   │   ├── logo-image-transform-red.log
+│   │   │   │   ├── monsters-product-metadata-green.log
+│   │   │   │   ├── node-shim-prove.md
+│   │   │   │   ├── no-silent-ops-green.log
+│   │   │   │   ├── no-silent-ops-red.log
+│   │   │   │   ├── prettier-guardrails
+│   │   │   │   │   ├── test-green.log
+│   │   │   │   │   └── test-red.log
+│   │   │   │   ├── product-template-fail.md
+│   │   │   │   ├── responsive-logo-green.log
+│   │   │   │   ├── responsive-logo-red.log
+│   │   │   │   ├── ripgrep
+│   │   │   │   │   ├── docs-validate.log
+│   │   │   │   │   └── test-success.log
+│   │   │   │   ├── stabilize-ci-tests-green.log
+│   │   │   │   ├── stabilize-ci-tests-install.log
+│   │   │   │   ├── stabilize-ci-tests-red.log
+│   │   │   │   ├── synthesized_archive-20250818-202538.json
+│   │   │   │   ├── synthesized_archive-20250818-202551.json
+│   │   │   │   ├── synthesized_archive-20250818-202612.json
+│   │   │   │   ├── synthesized_archive-20250818-202854.json
+│   │   │   │   ├── synthesized_archive_20250818T202820Z.json
+│   │   │   │   ├── synthesized_archive_20250818T202825Z.json
+│   │   │   │   ├── synthesized_archive_20250818T202833Z.json
+│   │   │   │   ├── synthesized_archive_20250818T203403Z.json
+│   │   │   │   ├── synthesized_archive_20250818T203415Z.json
+│   │   │   │   ├── synthesized_archive_20250818T203419Z.json
+│   │   │   │   ├── synthesized_archive_20250818T203545Z.json
+│   │   │   │   ├── synthesized_archive_20250818T203603Z.json
+│   │   │   │   ├── synthesized_archive_20250818T203640Z.json
+│   │   │   │   ├── synthesized_archive_20250818T203805Z.json
+│   │   │   │   ├── synthesized_archive_20250818T204046Z.json
+│   │   │   │   ├── synthesized_archive_20250818T204119Z.json
+│   │   │   │   ├── synthesized_archive_20250818T204212Z.json
+│   │   │   │   ├── synthesized_archive_20250818T204244Z.json
+│   │   │   │   ├── synthesized_archive_20250819T081707Z.json
+│   │   │   │   ├── synthesized_archive_20250819T081750Z.json
+│   │   │   │   ├── test-failures.txt
+│   │   │   │   ├── time-to-chill-size-green.log
+│   │   │   │   ├── utils-test-green.md
+│   │   │   │   ├── utils-test-red.md
+│   │   │   │   ├── wikilink-filter-build-green.log
+│   │   │   │   └── wikilink-filter-green.log
+│   │   │   ├── migration
+│   │   │   │   ├── class-map.json
+│   │   │   │   └── path-map.json
+│   │   │   ├── reports
+│   │   │   │   ├── 2025-08-20-shiki-migration.md
+│   │   │   │   ├── archive-normalization-audit.md
+│   │   │   │   ├── archive-normalization-continue.md
+│   │   │   │   ├── archive-normalization-ledger.md
+│   │   │   │   ├── continuous-output-continue.md
+│   │   │   │   ├── continuous-output-ledger.md
+│   │   │   │   ├── deploy-workflow-continue.md
+│   │   │   │   ├── deploy-workflow-ledger.md
+│   │   │   │   ├── eleventy-runner-continue.md
+│   │   │   │   ├── eleventy-runner-ledger.md
+│   │   │   │   ├── esm-audit-20250820T215642Z.md
+│   │   │   │   ├── external-arrow-continue.md
+│   │   │   │   ├── external-arrow-ledger.md
+│   │   │   │   ├── gha-actions-upgrade-continue.md
+│   │   │   │   ├── gha-actions-upgrade-ledger.md
+│   │   │   │   ├── homepage-hero-continue.md
+│   │   │   │   ├── homepage-hero-ledger.md
+│   │   │   │   ├── homepage-latest-entries-continue.md
+│   │   │   │   ├── homepage-latest-entries-ledger.md
+│   │   │   │   ├── homepage-logo-continue.md
+│   │   │   │   ├── homepage-logo-ledger.md
+│   │   │   │   ├── image-filename-seo-continue.md
+│   │   │   │   ├── image-filename-seo-ledger.md
+│   │   │   │   ├── link-hygiene-r3-continue.md
+│   │   │   │   ├── link-hygiene-r3-ledger.md
+│   │   │   │   ├── llm-keepalive-continue.md
+│   │   │   │   ├── llm-keepalive-ledger.md
+│   │   │   │   ├── logo-image-transform-continue.md
+│   │   │   │   ├── logo-image-transform-ledger.md
+│   │   │   │   ├── monsters-product-metadata-continue.md
+│   │   │   │   ├── monsters-product-metadata-ledger.md
+│   │   │   │   ├── mschf-overlay-continue.md
+│   │   │   │   ├── mschf-overlay-ledger.md
+│   │   │   │   ├── node-shim-continue.md
+│   │   │   │   ├── node-shim-ledger.md
+│   │   │   │   ├── pop-mart-provenance-continue.md
+│   │   │   │   ├── pop-mart-provenance-ledger.md
+│   │   │   │   ├── prettier-guardrails-continue.md
+│   │   │   │   ├── prettier-guardrails-ledger.md
+│   │   │   │   ├── products-template-continue.md
+│   │   │   │   ├── products-template-ledger.md
+│   │   │   │   ├── research-ingest-continue.md
+│   │   │   │   ├── research-ingest-ledger.md
+│   │   │   │   ├── responsive-logo-continue.md
+│   │   │   │   ├── responsive-logo-ledger.md
+│   │   │   │   ├── ripgrep-fix-continue.md
+│   │   │   │   ├── ripgrep-fix-ledger.md
+│   │   │   │   ├── site-redesign-r3-continue.md
+│   │   │   │   ├── site-redesign-r3-ledger.md
+│   │   │   │   ├── solver-url-env-continue.md
+│   │   │   │   ├── solver-url-env-ledger.md
+│   │   │   │   ├── stabilize-ci-tests-continue.md
+│   │   │   │   ├── stabilize-ci-tests-ledger.md
+│   │   │   │   ├── tags-metadata-continue.md
+│   │   │   │   ├── tags-metadata-ledger.md
+│   │   │   │   ├── tests-green-continue.md
+│   │   │   │   ├── tests-green-ledger.md
+│   │   │   │   ├── typography-colors-continue.md
+│   │   │   │   ├── typography-colors-ledger.md
+│   │   │   │   ├── utils-ordinal-suffix-continue.md
+│   │   │   │   ├── utils-ordinal-suffix-ledger.md
+│   │   │   │   ├── work-pages-continue.md
+│   │   │   │   └── work-pages-ledger.md
+│   │   │   ├── theming.md
+│   │   │   ├── ux
+│   │   │   │   └── mschf-overlay.md
+│   │   │   ├── vendor
+│   │   │   │   ├── daisyui
+│   │   │   │   │   ├── base.html
+│   │   │   │   │   ├── colors.html
+│   │   │   │   │   ├── components.html
+│   │   │   │   │   ├── config.html
+│   │   │   │   │   ├── configuration.html
+│   │   │   │   │   ├── install.html
+│   │   │   │   │   ├── README.md
+│   │   │   │   │   ├── themes.html
+│   │   │   │   │   ├── upgrade.html
+│   │   │   │   │   └── v5.html
+│   │   │   │   └── tailwind
+│   │   │   │       ├── configuration.html
+│   │   │   │       ├── content-configuration.html
+│   │   │   │       ├── detecting-classes.html
+│   │   │   │       ├── functions-and-directives.html
+│   │   │   │       ├── plugins.html
+│   │   │   │       ├── README.md
+│   │   │   │       ├── tailwindcss-v4-blog.html
+│   │   │   │       ├── upgrade-guide.html
+│   │   │   │       └── v4-blog.html
+│   │   │   └── vendors
+│   │   │       ├── @11ty
+│   │   │       │   └── eleventy
+│   │   │       │       └── 3.1.2
+│   │   │       │           ├── configuration.md
+│   │   │       │           ├── getting-started.md
+│   │   │       │           └── manifest.json
+│   │   │       ├── daisyui
+│   │   │       │   └── 5.0.50
+│   │   │       │       ├── install.md
+│   │   │       │       └── manifest.json
+│   │   │       ├── index.md
+│   │   │       ├── _inventory.json
+│   │   │       ├── _manifest.json
+│   │   │       ├── markdown-it
+│   │   │       │   └── 14.1.0
+│   │   │       │       ├── index.md
+│   │   │       │       └── manifest.json
+│   │   │       ├── nunjucks
+│   │   │       │   └── 3.2.4
+│   │   │       │       ├── manifest.json
+│   │   │       │       └── templating.md
+│   │   │       ├── postcss
+│   │   │       │   └── 8.5.6
+│   │   │       │       ├── index.md
+│   │   │       │       └── manifest.json
+│   │   │       └── tailwindcss
+│   │   │           └── 4.1.11
+│   │   │               ├── manifest.json
+│   │   │               └── readme.md
+│   │   ├── flower_reports_showcase
+│   │   │   ├── normalized
+│   │   │   │   ├── listings.csv
+│   │   │   │   └── menus
+│   │   │   │       ├── a-cut-above-denver.csv
+│   │   │   │       ├── a-cut-off-the-top-2059-w-9th-ave-80204.csv
+│   │   │   │       ├── affinity-dispensary.csv
+│   │   │   │       ├── alternative-medicine-on-capitol-hill.csv
+│   │   │   │       ├── amch-adult-use.csv
+│   │   │   │       ├── apothecary-farms-denver.csv
+│   │   │   │       ├── dank.csv
+│   │   │   │       ├── denco-adult-use.csv
+│   │   │   │       ├── denco-alternative-medicine-recreational.csv
+│   │   │   │       ├── den-rec-medical.csv
+│   │   │   │       ├── denver-kush-club-more-than-a-club-adult-use.csv
+│   │   │   │       ├── doctors-orders-3.csv
+│   │   │   │       ├── everbloom-on-jackson.csv
+│   │   │   │       ├── family-grown.csv
+│   │   │   │       ├── green-cross-of-cherry-creek-2.csv
+│   │   │   │       ├── greenfields-4.csv
+│   │   │   │       ├── greenfields-5.csv
+│   │   │   │       ├── house-of-dankness-3.csv
+│   │   │   │       ├── kinds-meds.csv
+│   │   │   │       ├── lemonnade-denver-1.csv
+│   │   │   │       ├── life-flower-dispensary.csv
+│   │   │   │       ├── life-flower-dispensary-recreational.csv
+│   │   │   │       ├── lightshade-peoria-2.csv
+│   │   │   │       ├── little-brown-house.csv
+│   │   │   │       ├── lova-downtown.csv
+│   │   │   │       ├── lova-sheridan.csv
+│   │   │   │       ├── magic-city-cannabis-colorado.csv
+│   │   │   │       ├── mecca-federal.csv
+│   │   │   │       ├── medicine-man-denver.csv
+│   │   │   │       ├── native-roots-apothecary-medical.csv
+│   │   │   │       ├── native-roots-denver-highlands-med.csv
+│   │   │   │       ├── native-roots-south.csv
+│   │   │   │       ├── nuvue-pharma-denver.csv
+│   │   │   │       ├── potco-2.csv
+│   │   │   │       ├── reefer-madness.csv
+│   │   │   │       ├── rino-supply-co-rec.csv
+│   │   │   │       ├── riverrock-south-recreational.csv
+│   │   │   │       ├── sacred-seed-recreational.csv
+│   │   │   │       ├── seed-smith-cannabis.csv
+│   │   │   │       ├── snaxland-bryant.csv
+│   │   │   │       ├── spark-3.csv
+│   │   │   │       ├── standing-akimbo-denver.csv
+│   │   │   │       ├── starbuds-du.csv
+│   │   │   │       ├── strawberry-fields-denver.csv
+│   │   │   │       ├── the-center-3.csv
+│   │   │   │       ├── the-grove-29.csv
+│   │   │   │       ├── the-herbal-cure-recreational.csv
+│   │   │   │       ├── three-rivers-dispensary-broadway-med.csv
+│   │   │   │       ├── three-rivers-dispensary-broadway-rec.csv
+│   │   │   │       └── xclusive-smith.csv
+│   │   │   └── reports
+│   │   │       ├── audits
+│   │   │       │   ├── audit_alternative-medicine-on-capitol-hill.csv
+│   │   │       │   ├── audit_apothecary-farms-denver.csv
+│   │   │       │   ├── audit_dank.csv
+│   │   │       │   ├── audit_denver-kush-club-more-than-a-club-adult-use.csv
+│   │   │       │   ├── audit_green-cross-of-cherry-creek-2.csv
+│   │   │       │   ├── audit_greenfields-5.csv
+│   │   │       │   ├── audit_house-of-dankness-3.csv
+│   │   │       │   ├── audit_kinds-meds.csv
+│   │   │       │   ├── audit_life-flower-dispensary.csv
+│   │   │       │   ├── audit_life-flower-dispensary-recreational.csv
+│   │   │       │   ├── audit_lightshade-peoria-2.csv
+│   │   │       │   ├── audit_little-brown-house.csv
+│   │   │       │   ├── audit_lova-downtown.csv
+│   │   │       │   ├── audit_lova-sheridan.csv
+│   │   │       │   ├── audit_magic-city-cannabis-colorado.csv
+│   │   │       │   ├── audit_mecca-federal.csv
+│   │   │       │   ├── audit_medicine-man-denver.csv
+│   │   │       │   ├── audit_reefer-madness.csv
+│   │   │       │   ├── audit_sacred-seed-recreational.csv
+│   │   │       │   ├── audit_seed-smith-cannabis.csv
+│   │   │       │   ├── audit_the-center-3.csv
+│   │   │       │   ├── audit_the-herbal-cure-recreational.csv
+│   │   │       │   ├── audit_three-rivers-dispensary-broadway-med.csv
+│   │   │       │   └── audit_xclusive-smith.csv
+│   │   │       ├── Magic_City_Cannabis___Colorado_20250810_report.html
+│   │   │       ├── nearby_value_cache_status.html
+│   │   │       ├── nearby_value_leaderboard.html
+│   │   │       ├── Reefer_Madness_20250810_report.html
+│   │   │       ├── Reefer_Madness_20250825_report.html
+│   │   │       ├── Reefer_Madness_20250826_report.html
+│   │   │       └── Reefer_Madness_20250830_report.html
 │   │   ├── meta
 │   │   │   ├── a-b-curatorial-protocolist.md
 │   │   │   ├── core-concept.md
@@ -792,7 +783,6 @@
 │   ├── test
 │   │   └── dynamic-archives.md
 │   └── work
-├── structure.txt
 ├── SYSTEM.md
 ├── tailwind.config.mjs
 ├── test
@@ -880,72 +870,29 @@
 │       └── workflow-actions.test.mjs
 ├── tmp
 ├── .tools
-├── tools
-│   ├── archive-products-report.mjs
-│   ├── archive-validate.mjs
-│   ├── audit-identity.mjs
-│   ├── build-vendor-index.js
-│   ├── doc-fetcher.mjs
-│   ├── docs-snapshot.mjs
-│   ├── goldenmerge.mjs
-│   ├── interlinker-audit.mjs
-│   ├── interlinker-discover.mjs
-│   ├── interlinker-hotfix-discover.mjs
-│   ├── interlinker-operator.sh
-│   ├── lint-archive-namespace.mjs
-│   ├── lint-product-links.mjs
-│   ├── merge-golden.js
-│   ├── merge-golden.mjs
-│   ├── merge-sections.mjs
-│   ├── net
+├── TREE.txt
+├── utils
+│   ├── network
 │   │   ├── flareClient.mjs
 │   │   ├── markdownGateway.mjs
 │   │   ├── outboundProxy.mjs
 │   │   ├── proxyAgent.mjs
 │   │   └── webpageToMarkdown.mjs
-│   ├── probe.mjs
-│   ├── product-link-hygiene.mjs
-│   ├── provenance-audit.mjs
-│   ├── pty-runner.mjs
-│   ├── runner.mjs
-│   ├── run-server.sh
-│   ├── select.mjs
-│   ├── setup
-│   │   ├── env-bootstrap.sh
-│   │   ├── install.sh
-│   │   └── provision-env.sh
-│   ├── shared
-│   │   ├── BrowserEngine.mjs
-│   │   ├── cf.mjs
-│   │   ├── chain-proxy.mjs
-│   │   ├── probe-browser.mjs
-│   │   └── proxy.mjs
-│   ├── synthesize-archive.mjs
-│   ├── synthesize.mjs
-│   ├── test-ledger.json
-│   ├── unresolved-summary.mjs
-│   ├── unresolved-to-md.mjs
-│   ├── utils
-│   │   └── npm-utils.js
-│   ├── validate-archive-build.mjs
-│   ├── validate-docs.js
-│   ├── validation
-│   │   ├── proxy-health.mjs
-│   │   ├── validate-frontmatter.mjs
-│   │   └── validate-styles.mjs
-│   └── verify-patch-applied.mjs
-├── TREE.txt
-├── Untitled-1-1.ipynb
-├── Untitled-1.html
-├── Untitled-1.ipynb
-├── Untitled-2-Copy1.ipynb
-├── Untitled-2-Copy2.ipynb
-├── Untitled-2.html
-├── Untitled-2.ipynb
-├── Untitled-2.pdf
+│   └── scripts
+│       ├── interlinker-operator.sh
+│       ├── npm-utils.js
+│       ├── run-server.sh
+│       ├── setup
+│       │   ├── env-bootstrap.sh
+│       │   ├── install.sh
+│       │   └── provision-env.sh
+│       └── validation
+│           ├── proxy-health.mjs
+│           ├── validate-frontmatter.mjs
+│           └── validate-styles.mjs
 └── var
     └── refactor
         ├── src-refactor-plan.json
         └── src-refactor-plan.txt
 
-147 directories, 802 files
+143 directories, 753 files

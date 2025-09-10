@@ -6,69 +6,68 @@ on:
     types: [opened, reopened, synchronize, ready_for_review]
 
 permissions:
-  contents: write          # required to enable auto-merge (writes to the PR/merge)
+  contents: write          # required to toggle auto-merge
   pull-requests: write     # required to create a review/approval
   checks: read
   statuses: read
 
 jobs:
   automerge:
-    # Run only on PRs **authored** by dependabot, regardless of the event actor
     if: >
       github.event_name == 'pull_request' &&
       github.event.pull_request.user.login == 'dependabot[bot]'
     runs-on: ubuntu-latest
-    # Avoid dupe runs enabling auto-merge on rapid pushes
+
     concurrency:
       group: dependabot-automerge-${{ github.event.pull_request.number }}
       cancel-in-progress: false
 
     steps:
-      # Optional but useful for update-type gating if you ever need it later
       - name: Fetch Dependabot metadata
         id: meta
         uses: dependabot/fetch-metadata@v2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
-      # Auto-approve to satisfy branch protection that requires at least one approval.
-      # NOTE: This approval is from github-actions[bot]; it won't satisfy CODEOWNERS unless your policy allows it.
       - name: Approve PR (native)
         if: ${{ !github.event.pull_request.draft }}
         uses: actions/github-script@v8
         with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const {owner, repo} = context.repo;
+            const { owner, repo } = context.repo;
             const number = context.payload.pull_request.number;
-            await github.pulls.createReview({
-              owner, repo, pull_number: number,
+            await github.rest.pulls.createReview({
+              owner,
+              repo,
+              pull_number: number,
               event: 'APPROVE',
               body: 'Automated approval for Dependabot PR.'
             });
             core.info(`Approved PR #${number}`);
 
-      # Enable native auto-merge; GitHub will merge once required checks pass.
       - name: Enable auto-merge (squash, native)
         if: ${{ !github.event.pull_request.draft }}
         uses: actions/github-script@v8
         with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const pr = context.payload.pull_request;              // has node_id in payload
-            const pullRequestId = pr.node_id;
+            const pr = context.payload.pull_request; // includes node_id
             const mutation = `
-              mutation($pullRequestId: ID!, $mergeMethod: PullRequestMergeMethod!) {
+              mutation Enable($pullRequestId: ID!, $mergeMethod: PullRequestMergeMethod!) {
                 enablePullRequestAutoMerge(input: { pullRequestId: $pullRequestId, mergeMethod: $mergeMethod }) {
-                  pullRequest { number, state, autoMergeRequest { enabledAt } }
+                  pullRequest { number state autoMergeRequest { enabledAt } }
                 }
-              }`;
+              }
+            `;
             try {
               const res = await github.graphql(mutation, {
-                pullRequestId,
+                pullRequestId: pr.node_id,
                 mergeMethod: "SQUASH"
               });
               core.info(`Auto-merge enabled on PR #${res.enablePullRequestAutoMerge.pullRequest.number}`);
             } catch (e) {
               core.warning(`Could not enable auto-merge: ${e.message}`);
-              core.warning('Ensure "Allow auto-merge" is enabled in repository settings and required checks/approvals are configured.');
-              throw e;  // fail loudly so you notice misconfig
+              core.warning('Verify repository setting "Allow auto-merge" is ON and branch protection allows it.');
+              throw e;
             }
