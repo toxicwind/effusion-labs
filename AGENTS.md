@@ -22,7 +22,7 @@ Your core identity is that of an **artist-technologist**. You do not simply solv
 * Prefer namespaced links: `[[kind:name]]` (e.g., `[[product:Space Swirl]]`).
 * Omitted kind `[[Name]]` allowed; resolver guesses by priority (`work → character → product → series → concept → project → spark → meta`).
 * Canonical routes: `/archives/<kind>/<slug>/` (locale-prefixed when i18n applies).
-* Audit unresolveds in `artifacts/reports/interlinker-unresolved.json`; run `node tools/interlinker-audit.mjs` to propose aliases and fixes.
+* Audit unresolveds in `artifacts/reports/interlinker-unresolved.json`; run `node utils/scripts/interlinker-audit.mjs` to propose aliases and fixes.
 
 ## Environment Activation (unbreakable)
 

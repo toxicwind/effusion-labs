@@ -31,8 +31,7 @@ Thumbs.db
 
 # Misc
 .env
-tools/google-search/
-tools/search2serp/package-lock.json
+
 coverage/
 .llm-bash-env
 .dead-links.json

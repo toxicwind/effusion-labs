@@ -1,6 +1,6 @@
 
 > effusion_labs_final@1.0.0 test:all
-> c8 --reporter=text-summary --reporter=lcov node tools/runner.mjs --all
+> c8 --reporter=text-summary --reporter=lcov node test/integration/runner.spec.mjs --all
 
 [32m✔ probe reports browsers unavailable [90m(1.643984ms)[39m[39m
 [32m✔ probe returns boolean [90m(0.24846ms)[39m[39m

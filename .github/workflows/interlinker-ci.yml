@@ -26,7 +26,7 @@ jobs:
           npm ci
 
       - name: 🧩 Verify interlinker patch applied
-        run: node tools/verify-patch-applied.mjs
+        run: node utils/scripts/validation/verify-patch-applied.mjs
 
       - name: 🏗️ Build site (Eleventy)
         env:
@@ -39,7 +39,7 @@ jobs:
 
       - name: 🧾 Interlinker unresolved summary
         if: always()
-        run: node tools/unresolved-summary.mjs >> "$GITHUB_STEP_SUMMARY"
+        run: node utils/scripts/unresolved-summary.mjs >> "$GITHUB_STEP_SUMMARY"
 
       - name: 🚦 Optional: Fail on unresolved overflow
         if: always()

@@ -92,7 +92,7 @@ jobs:
         # Avoids errors on workflow_dispatch where head_commit is absent.
         run: |
           npm ci
-          node tools/verify-patch-applied.mjs
+          node utils/scripts/validation/verify-patch-applied.mjs
           if npm run -s test >/dev/null 2>&1; then npm test; else echo "✅ No 'test' script found, skipping."; fi
           if npm run -s build >/dev/null 2>&1; then npm run build; else echo "✅ No 'build' script found, skipping."; fi
 

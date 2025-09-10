@@ -3,7 +3,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 
-import { canRunBrowser } from '../tools/shared/probe-browser.mjs';
+import { canRunBrowser } from '../test/tools/shared/probe-browser.mjs';
 
 // Acceptance: probe identifies missing browser support
 // Property: probe result is a boolean

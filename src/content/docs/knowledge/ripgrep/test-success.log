@@ -1,6 +1,6 @@
 
 > effusion_labs_final@1.0.0 test
-> c8 --reporter=text-summary --reporter=lcov node tools/runner.mjs
+> c8 --reporter=text-summary --reporter=lcov node test/integration/runner.spec.mjs
 
 [32m✔ devDependencies omit @vscode/ripgrep [90m(1.018439ms)[39m[39m
 [32m✔ prepare-docs avoids ripgrep install [90m(0.148982ms)[39m[39m

@@ -37,7 +37,7 @@ COPY . .
 
 # Verify patches and then Eleventy build; cache Eleventy/Tailwind intermediates if any
 RUN --mount=type=cache,target=/app/.cache \
-    node tools/verify-patch-applied.mjs && \
+    node utils/scripts/validation/verify-patch-applied.mjs && \
     echo "⚙️ Building site with Eleventy..." && \
     npx @11ty/eleventy
 

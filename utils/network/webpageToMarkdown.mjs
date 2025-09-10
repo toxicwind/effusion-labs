@@ -24,7 +24,7 @@ import { request } from './flareClient.js';
  */
 export async function webpageToMarkdown(url) {
   if (!url) throw new Error('URL is required');
-  const { realisticHeaders } = await import('../tools/shared/cf.mjs');
+  const { realisticHeaders } = await import('../utils/build/cf.mjs');
   const res = await request.get(url, { headers: realisticHeaders() });
   return htmlToMarkdown(res.body, res.url);
 }

@@ -5,7 +5,7 @@
 npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
 
 > effusion_labs_final@1.0.0 test
-> c8 --reporter=text-summary --reporter=lcov node tools/runner.mjs
+> c8 --reporter=text-summary --reporter=lcov node test/integration/runner.spec.mjs
 
 [11ty] Problem writing Eleventy templates:
 [11ty] 1. Having trouble rendering njk template ./src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk (via TemplateContentRenderError)

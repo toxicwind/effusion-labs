@@ -1,4 +1,4 @@
-import { request, __setUndici } from '../tools/net/flareClient.mjs';
+import { request, __setUndici } from '../utils/network/flareClient.mjs';
 import { MockAgent, fetch } from 'undici';
 
 if(process.env.MOCK_PROXY_HEALTH){

@@ -155,13 +155,13 @@ All wikilinks resolve against a dynamic registry spanning work, concepts, projec
 
 ## Wikilink Debugging
 
-Builds write unresolved links to `artifacts/reports/interlinker-unresolved.json` with guessed kinds and attempted resolutions. Use `node tools/interlinker-audit.mjs` to inspect and patch aliases.
+Builds write unresolved links to `artifacts/reports/interlinker-unresolved.json` with guessed kinds and attempted resolutions. Use `node utils/scripts/interlinker-audit.mjs` to inspect and patch aliases.
 
 ### CI Thresholds & Summary
 
 - Gate unresolved count with env vars: `INTERLINKER_MAX_UNRESOLVED` (default 200 on CI, Infinity locally) and `INTERLINKER_FAIL_ON_UNRESOLVED=true` to hard‑fail.
 - After builds, a compact line prints: `Interlinker: unresolved=<n> threshold=<t> action=<warn|fail>`.
-- For PRs, render a quick table: `node tools/unresolved-to-md.mjs`.
+- For PRs, render a quick table: `node utils/scripts/unresolved-to-md.mjs`.
 
 ### CLI Audit
 
@@ -169,10 +169,10 @@ Suggest or apply aliases from the unresolved report:
 
 ```bash
 # Suggest top matches (all kinds)
-node tools/interlinker-audit.mjs
+node utils/scripts/interlinker-audit.mjs
 
 # Limit to products, apply best matches with a minimum score
-node tools/interlinker-audit.mjs --kind product --apply --min 0.9
+node utils/scripts/interlinker-audit.mjs --kind product --apply --min 0.9
 ```
 
 When applying, a brief worklog entry is written under `artifacts/worklogs/`.
@@ -186,7 +186,7 @@ When applying, a brief worklog entry is written under `artifacts/worklogs/`.
 What this means in practice:
 
 - Sentinel comment `Patched-By: ARACA-INTERLINKER-HOTFIX-V3` is inserted into patched plugin files.
-- Run `node tools/verify-patch-applied.mjs` after `npm ci` to verify locally or in CI.
+- Run `node utils/scripts/validation/verify-patch-applied.mjs` after `npm ci` to verify locally or in CI.
 - Dockerfile change (Option A): `.portainer/Dockerfile` now copies `patches/` into the deps stage prior to `npm ci`, ensuring postinstall applies patches.
 
 Research trace and findings live in `artifacts/reports/interlinker-hotfix-discovery.json`.
@@ -210,7 +210,7 @@ All product entities resolve to `/archives/product/<slugCanonical>/` using a sta
 ## 2) Automation, Tooling & Guardrails
 
 - `utils/scripts/` — Operational scripts (includes `llm-bootstrap.sh` guardrail env).
-- `bin/` / `tools/` — CLI utilities, one-offs, maintenance tools.
+- `bin/` / `utils/scripts/` — CLI utilities, one-offs, maintenance tools.
 
 ## 3) Services & Infrastructure
 
@@ -296,7 +296,7 @@ Requires **Node ≥ 24** (see `package.json` / `.nvmrc`). Run from the repo root
 
 - `npm run dev` — Start Eleventy dev server with live reload (`eleventy --serve`).
 - `npm run build` — Build the static site to `_site/` (`eleventy`).
-- `npm test` — Run the test runner under coverage (`c8 node tools/runner.mjs`).
+- `npm test` — Run the test runner under coverage (`c8 node test/integration/runner.spec.mjs`).
 - `npm run format` — Format the repo with Prettier (`prettier -w .`).
 
 ---
@@ -351,10 +351,10 @@ Environment-driven thresholds (CI friendly):
 
 After each `eleventy` run, you’ll see: `Interlinker: unresolved=<N> threshold=<T> action=<warn|fail>`.
 
-CLI audit tool: `tools/interlinker-audit.mjs`
+CLI audit tool: `utils/scripts/interlinker-audit.mjs`
 
-- `node tools/interlinker-audit.mjs` — print ranked suggestions for unresolved links.
-- `node tools/interlinker-audit.mjs --apply --kind product --min 0.86` — add `slugAliases` to best archive JSON match.
+- `node utils/scripts/interlinker-audit.mjs` — print ranked suggestions for unresolved links.
+- `node utils/scripts/interlinker-audit.mjs --apply --kind product --min 0.86` — add `slugAliases` to best archive JSON match.
 
 #### CI: Post Unresolved Table in PRs
 
@@ -366,7 +366,7 @@ Add a summary table to your PR using GitHub Actions:
 
   - name: Interlinker summary
     if: always()
-    run: node tools/unresolved-summary.mjs >> "$GITHUB_STEP_SUMMARY"
+    run: node utils/scripts/unresolved-summary.mjs >> "$GITHUB_STEP_SUMMARY"
 
   - name: Gate unresolved (optional)
     if: always()
@@ -375,7 +375,7 @@ Add a summary table to your PR using GitHub Actions:
       INTERLINKER_FAIL_ON_UNRESOLVED: true
     run: |
       # Re-run summary for logs and enforce threshold
-      node tools/unresolved-summary.mjs
+      node utils/scripts/unresolved-summary.mjs
       # summarizeAndGate() already ran in eleventy.after; rely on exitCode.
       test "$?" -eq 0
 ```

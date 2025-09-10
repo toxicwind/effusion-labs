@@ -98,19 +98,19 @@ File Path                                     [Kind]         Size       Details
 ./oneoff/Untitled-2.html                      [other       ]   726148B   
 ./oneoff/Untitled-2.ipynb                     [other       ]    72096B   
 ./oneoff/Untitled-2.pdf                       [other       ]   143131B   
-./package.json                                [json        ]     4342B   Keys: name, version, description, main, scripts, engi...
+./package.json                                [json        ]     4298B   Keys: name, version, description, main, scripts, engi...
 ./package-lock.json                           [json        ]   457342B   Keys: name, version, lockfileVersion, requires, packages
 ./patches/@photogabble+eleventy-plugin-interlinker+1.1.0.patch [other       ]     9202B   
 ./patches/tree-cli+0.6.7.patch                [other       ]      814B   
 ./plan/build.spec.json                        [json        ]      301B   Keys: passthrough, cleanup
-./plan/inspect-src.mjs                        [other       ]     3097B   
+./plan/inspect-src.mjs                        [other       ]     5410B   
 ./plan/inspect-src-two.mjs                    [other       ]    15370B   
 ./plan/make-plan.mjs                          [other       ]    19240B   
 ./plan/relocate.spec.json                     [json        ]      426B   Keys: dryRun, maxFilesPerBatch, maxBatches, intents
 ./plan/rewrites.spec.json                     [json        ]      427B   Keys: surfaces, excludes, pairs, publicUrlChanges
 ./plan/src-normalize.spec.json                [json        ]      405B   Keys: allowOverlayAssets, roles, templatePattern
 ./postcss.config.mjs                          [other       ]      200B   
-./README.md                                   [md          ]    16698B   Title: Effusion Labs — Digital Garden
+./README.md                                   [md          ]    16704B   Title: Effusion Labs — Digital Garden
 ./report.txt                                  [other       ]     9221B   
 ./research/COMPLETED SEEDS.txt                [other       ]   105256B   
 ./research/PRIMARY TARGETS — Completed(1).txt [other       ]    79527B   
@@ -324,8 +324,8 @@ File Path                                     [Kind]         Size       Details
 ./src/content/docs/knowledge/image-filename-seo-red.log [other       ]     1766B   
 ./src/content/docs/knowledge/logo-image-transform-green.log [other       ]     2132B   
 ./src/content/docs/knowledge/logo-image-transform-red.log [other       ]     2905B   
-./src/content/docs/knowledge/monsters-product-metadata-green.log [other       ]    20989B   
-./src/content/docs/knowledge/node-shim-prove.md [md          ]      177B   Title: Node shim failure
+./src/content/docs/knowledge/monsters-product-metadata-green.log [other       ]    20995B   
+./src/content/docs/knowledge/node-shim-prove.md [md          ]      164B   Title: Node shim failure
 ./src/content/docs/knowledge/no-silent-ops-green.log [other       ]      300B   
 ./src/content/docs/knowledge/no-silent-ops-red.log [other       ]      930B   
 ./src/content/docs/knowledge/prettier-guardrails/test-green.log [other       ]      106B   
@@ -674,7 +674,7 @@ File Path                                     [Kind]         Size       Details
 ./test/setup/llm-keepalive.mjs                [other       ]      979B   
 ./test/setup/msw.mjs                          [other       ]      219B   
 ./test/src/_data/nav.js                       [other       ]       53B   
-./test/tools/shared/probe-browser.mjs         [other       ]       58B   
+./test/test/tools/shared/probe-browser.mjs         [other       ]       58B   
 ./test/unit/advisory-lint.test.mjs            [other       ]      668B   
 ./test/unit/archive-canon.test.mjs            [other       ]     1476B   
 ./test/unit/callout-shortcode.test.mjs        [other       ]     1109B   
@@ -718,9 +718,10 @@ File Path                                     [Kind]         Size       Details
 ./utils/scripts/run-server.sh                 [shell       ]      304B   
 ./utils/scripts/setup/env-bootstrap.sh        [shell       ]    12301B   
 ./utils/scripts/setup/install.sh              [shell       ]     2995B   
-./utils/scripts/setup/provision-env.sh        [shell       ]     1318B   
+./utils/scripts/setup/provision-env.sh        [shell       ]     1330B   
 ./utils/scripts/validation/proxy-health.mjs   [other       ]      826B   
 ./utils/scripts/validation/validate-frontmatter.mjs [other       ]     2121B   
 ./utils/scripts/validation/validate-styles.mjs [other       ]      956B   
+./utils/scripts/validation/verify-patch-applied.mjs [other       ]     4057B   
 ./var/refactor/src-refactor-plan.json         [json        ]     5313B   Keys: dry, moves, merges, skipped, touched, rewrites,...
 ./var/refactor/src-refactor-plan.txt          [other       ]     4470B   

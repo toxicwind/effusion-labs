@@ -24,11 +24,11 @@ if [ -x node_modules/.bin/patch-package ]; then
 fi
 
 echo "[op] Discovery artifacts"
-hype_run --capture logs/discovery.$(date -u +%Y%m%dT%H%M%SZ).log -- node tools/interlinker-discover.mjs
-hype_run --capture logs/hotfix-discovery.$(date -u +%Y%m%dT%H%M%SZ).log -- node tools/interlinker-hotfix-discover.mjs
+hype_run --capture logs/discovery.$(date -u +%Y%m%dT%H%M%SZ).log -- node utils/scripts/interlinker-discover.mjs
+hype_run --capture logs/hotfix-discovery.$(date -u +%Y%m%dT%H%M%SZ).log -- node utils/scripts/interlinker-hotfix-discover.mjs
 
 echo "[op] Verify plugin patches are applied"
-hype_run -- node tools/verify-patch-applied.mjs
+hype_run -- node utils/scripts/validation/verify-patch-applied.mjs
 
 echo "[op] Build with thresholds"
 export INTERLINKER_MAX_UNRESOLVED="${INTERLINKER_MAX_UNRESOLVED:-200}"
@@ -54,6 +54,6 @@ echo "[op] Run tests"
 hype_run --capture logs/tests.$(date -u +%Y%m%dT%H%M%SZ).log -- npm test
 
 echo "[op] Dry-run alias proposals"
-node tools/interlinker-audit.mjs || true
+node utils/scripts/interlinker-audit.mjs || true
 
 echo "[op] Done."

@@ -3,8 +3,8 @@
  * final-cleanup-v2.mjs
  *
  * A comprehensive script to finalize project cleanup. This targets all
- * remaining legacy paths, including prefixed paths, documentation,
- * comments, and typos missed by the first pass.
+ * remaining legacy paths from both 'scripts/' and 'tools/' directories,
+ * including prefixed paths, documentation, comments, and typos.
  */
 
 import fse from 'fs-extra';
@@ -38,7 +38,7 @@ const REWRITE_RULES = [
     },
 
     // --------------------------------------------------------------------------
-    // Rule Set 2: Specific File Renames and Relocations
+    // Rule Set 2: Specific File Renames and Relocations ('scripts/')
     // --------------------------------------------------------------------------
 
     // --- Core Scripts that moved to utils/scripts/ ---
@@ -49,7 +49,6 @@ const REWRITE_RULES = [
     { find: /\bscripts\/style-canon\.mjs\b/g, replace: 'utils/scripts/validation/validate-styles.mjs' },
 
     // --- mcp-stack scripts that were namespaced ---
-    // These rules now correctly handle unqualified `scripts/` paths.
     { find: /(?<!mcp-stack\/)\bscripts\/engine-detect\.sh\b/g, replace: 'mcp-stack/scripts/engine-detect.sh' },
     { find: /(?<!mcp-stack\/)\bscripts\/run\.sh\b/g, replace: 'mcp-stack/scripts/run.sh' },
     { find: /(?<!mcp-stack\/)\bscripts\/check-health\.sh\b/g, replace: 'mcp-stack/scripts/check-health.sh' },
@@ -67,10 +66,9 @@ const REWRITE_RULES = [
     },
 
     // --------------------------------------------------------------------------
-    // Rule Set 3: Directory-level Rewrites
+    // Rule Set 3: Directory-level Rewrites ('src/scripts/')
     // --------------------------------------------------------------------------
 
-    // Catch-all for any remaining JS client scripts moved from `src/scripts`
     {
         find: /src\/scripts\//g,
         replace: 'src/assets/js/',
@@ -78,11 +76,37 @@ const REWRITE_RULES = [
     },
 
     // --------------------------------------------------------------------------
-    // Rule Set 4: Prose and Documentation Cleanup (Use with care)
+    // Rule Set 4: Prose and Documentation Cleanup ('scripts/')
     // --------------------------------------------------------------------------
-    // These make docs and descriptions consistent with the new structure.
     { find: /`scripts\/`/g, replace: '`utils/scripts/`' },
     { find: /'scripts\/'/g, replace: "'utils/scripts/'" },
+
+    // --------------------------------------------------------------------------
+    // Rule Set 5: [VALIDATED] Comprehensive Migration for 'tools/' directory
+    // --------------------------------------------------------------------------
+
+    // --- Specific file paths confirmed against the new file list ---
+    { find: /\btools\/net\/flareClient\.mjs\b/g, replace: 'utils/network/flareClient.mjs' },
+    { find: /\btools\/shared\/probe-browser\.mjs\b/g, replace: 'test/tools/shared/probe-browser.mjs' },
+    { find: /\btools\/shared\/cf\.mjs\b/g, replace: 'utils/build/cf.mjs' }, // Assuming shared build tools moved here
+    { find: /\btools\/pty-runner\.mjs\b/g, replace: 'test/unit/pty-runner.test.mjs' },
+    { find: /\btools\/runner\.mjs\b/g, replace: 'test/integration/runner.spec.mjs' },
+    { find: /\btools\/test-ledger\.json\b/g, replace: 'artifacts/test-ledger.json' }, // Assuming test artifacts are centralized
+
+    // --- Interlinker tools, now core operational scripts ---
+    { find: /\btools\/interlinker-discover\.mjs\b/g, replace: 'utils/scripts/interlinker-discover.mjs' },
+    { find: /\btools\/interlinker-hotfix-discover\.mjs\b/g, replace: 'utils/scripts/interlinker-hotfix-discover.mjs' },
+    { find: /\btools\/interlinker-audit\.mjs\b/g, replace: 'utils/scripts/interlinker-audit.mjs' },
+
+    // --- CI/utility scripts with confirmed new locations ---
+    { find: /\btools\/verify-patch-applied\.mjs\b/g, replace: 'utils/scripts/validation/verify-patch-applied.mjs' },
+    { find: /\btools\/unresolved-to-md\.mjs\b/g, replace: 'utils/scripts/unresolved-to-md.mjs' },
+    { find: /\btools\/unresolved-summary\.mjs\b/g, replace: 'utils/scripts/unresolved-summary.mjs' },
+    { find: /\btools\/validate-docs\.js\b/g, replace: 'utils/scripts/validation/validate-docs.js' },
+    { find: /\btools\/test-changed\.mjs\b/g, replace: 'utils/scripts/test-changed.mjs' },
+
+    // --- General Prose and Documentation Cleanup ---
+    { find: /`bin\/` \/ `tools\/`/g, replace: '`bin/` / `utils/scripts/`' },
 ];
 
 // --- Main Execution ---
@@ -95,11 +119,11 @@ async function main() {
         ignore: [
             'node_modules/**',
             '.git/**',
-            '.conda/**',
-            '_site/**',
             '**/__pycache__/**',
+            'src/content/archives/**',
+            'flower_reports_showcase/**',
             'plan/**', // IMPORTANT: Exclude planning scripts to avoid self-modification
-            'inspect-src.mjs', // Exclude this script itself
+            'final-cleanup-v2.mjs', // Exclude this script itself
         ],
         binary: false,
     });
@@ -124,7 +148,7 @@ async function main() {
     }
     rewriteSpinner.succeed(`Fixed paths in ${rewrittenCount} files.`);
 
-    console.log('\n✅ Comprehensive cleanup complete!');
+    console.log('\n✅ Comprehensive cleanup complete! All script and tool paths have been updated.');
 }
 
 main().catch(err => {

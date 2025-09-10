@@ -1,5 +1,5 @@
 
 > effusion_labs_final@1.0.0 docs:validate
-> node tools/validate-docs.js
+> node utils/scripts/validation/validate-docs.js
 
 docs validated

@@ -9,7 +9,7 @@ Interlinker fortification:
 - Before: wiki-link resolution could throw `document.match is not a function` on non-string inputs.
 - After: inputs sanitized via `toHtmlString`, canonical-first resolution, and unresolved links recorded for audit.
  - v2: Patched both CJS and ESM plugin surfaces (`@photogabble/eleventy-plugin-interlinker@1.1.0`) via patch-package; added i18n-aware href prefixing and generalized multi-scaffold resolvers.
- - v3: Coerced all parser inputs to strings (CJS + ESM), added sentinel comments, introduced `safeMatch(...)`, fixed Docker layering so `patch-package` sees `patches/` in deps stage, and added CI guard (`tools/verify-patch-applied.mjs`).
+ - v3: Coerced all parser inputs to strings (CJS + ESM), added sentinel comments, introduced `safeMatch(...)`, fixed Docker layering so `patch-package` sees `patches/` in deps stage, and added CI guard (`utils/scripts/validation/verify-patch-applied.mjs`).
 
 Primary patterns referenced:
 - Node HTTP SSE basics and headers
