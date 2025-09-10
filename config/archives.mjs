@@ -1,7 +1,7 @@
 // ESM only; no external deps
 import fs from "node:fs";
 import path from "node:path";
-import { slugCanonicalProduct } from "../naming-canon.mjs";
+import { slugCanonicalProduct } from "../utils/build/naming-canon.mjs";
 
 const TYPES = ["products", "characters", "series"];
 

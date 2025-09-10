@@ -1,7 +1,7 @@
 import { dailySeed, seededShuffle } from './seeded.js';
 import fs from 'node:fs';
 import path from 'node:path';
-import { baseContentPath } from './constants.js';
+import { baseContentPath } from '../../config/site.js';
 
 const MS_PER_DAY = 1000 * 60 * 60 * 24;
 

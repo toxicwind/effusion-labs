@@ -38,6 +38,3 @@ coverage/
 .dead-links.json
 tmp/
 
-# Generated CSS
-src/assets/css/*
-!src/assets/css/.gitkeep
