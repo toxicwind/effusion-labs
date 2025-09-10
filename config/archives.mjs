@@ -1,7 +1,7 @@
 // ESM only; no external deps
 import fs from "node:fs";
 import path from "node:path";
-import { slugCanonicalProduct } from "../naming-canon.mjs";
+import { slugCanonicalProduct } from "../utils/build/naming-canon.mjs";
 
 const TYPES = ["products", "characters", "series"];
 
@@ -225,6 +225,14 @@ export default function registerArchive(eleventyConfig) {
     const seen = new Set(); const out = [];
     for (const x of arr ?? []) { const v = x?.data?.[key]; if (!seen.has(v)) { seen.add(v); out.push(x); } }
     return out;
+  });
+  eleventyConfig.addFilter("byCharacter", (items, id) => {
+    const target = slugify(id);
+    return (items ?? []).filter((p) => slugify(p?.data?.charSlug ?? p?.data?.character) === target);
+  });
+  eleventyConfig.addFilter("bySeries", (items, id) => {
+    const target = slugify(id);
+    return (items ?? []).filter((p) => slugify(p?.data?.seriesSlug ?? p?.data?.series) === target);
   });
 
   const companies = aggregateCompanies(normalized);

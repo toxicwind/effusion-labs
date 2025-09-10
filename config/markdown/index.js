@@ -1,4 +1,5 @@
 // lib/markdown/index.js
+import markdownItFootnote from "markdown-it-footnote";
 import {
   hybridFootnoteDefinitions,
   footnotePopover,
@@ -26,6 +27,7 @@ const mdItExtensions = [
 ];
 
 export function applyMarkdownExtensions(md) {
+  md.use(markdownItFootnote);
   mdItExtensions.forEach((fn) => {
     try { fn(md); } catch (err) {
       console.error(`[md-it] Failed extension: ${err?.message || err}`);

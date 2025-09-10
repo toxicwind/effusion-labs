@@ -1,4 +1,4 @@
-import { CONTENT_AREAS } from '../../config/constants.js';
+import { CONTENT_AREAS } from '../../config/site.js';
 
 const areaLinks = CONTENT_AREAS.map((a) => ({
   title: a.charAt(0).toUpperCase() + a.slice(1),
