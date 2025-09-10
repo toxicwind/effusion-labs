@@ -201,7 +201,9 @@ export function addFilters(eleventyConfig) {
   eleventyConfig.addFilter("safe_upper", safeUpper);
   eleventyConfig.addFilter("compactUnique", (arr) => Array.from(new Set((arr || []).filter(Boolean))));
 
-  const toJson = (value, spaces = 0) => JSON.stringify(value, null, spaces).replace(/</g, "\\u003C").replace(/-->/g, "\\u002D\\u002D>");
+  const toJson = (value, spaces = 0) => JSON.stringify(value, null, spaces)
+    .replace(/</g, "\\u003C")
+    .replace(/--(?:!?)>/g, "\\u002D\\u002D>");
   eleventyConfig.addFilter("json", toJson);
   eleventyConfig.addNunjucksFilter("json", toJson);
   
