@@ -1,6 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { baseContentPath } from './constants.js';
+import { baseContentPath } from '../../config/site.js';
 
 /**
  * Convert a directory name to a human-friendly title.
