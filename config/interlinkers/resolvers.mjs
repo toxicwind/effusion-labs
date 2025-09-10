@@ -120,6 +120,8 @@ export function createResolvers() {
   for (const kind of Object.keys(routeRegistry.kinds)) {
     map.set(kind, resolverFor(kind));
   }
+  // generic docs resolver falls back to default link behaviour
+  map.set('docs', (link) => map.get('default')(link));
   // Back-compat synonyms: archive:product etc.
   map.set('archive', (link, currentPage) => {
     const raw = toStr(link?.name);

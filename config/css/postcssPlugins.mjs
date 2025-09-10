@@ -1,4 +1,4 @@
-import postcssConfig from '../postcss.config.mjs';
+import postcssConfig from '../../postcss.config.mjs';
 
 export default async function loadPostcssPlugins() {
   const plugins = postcssConfig.plugins || [];
