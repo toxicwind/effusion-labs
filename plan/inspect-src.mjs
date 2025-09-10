@@ -1,253 +1,245 @@
 #!/usr/bin/env node
-/**
- * Refactor src/ into a future-proof 11ty layout.
- * - Writes a plan even on --dry
- * - Auto-merges directory conflicts when --apply
- * - Rewrites layout refs and asset/script paths
- * - Forces layout:false on resume/* and consulting
- */
+// plan/inspect-src.mjs
+// Master refactor planner for src/ (with --dry / --do-it)
 
 import fs from 'node:fs';
 import fsp from 'node:fs/promises';
 import path from 'node:path';
-import crypto from 'node:crypto';
-import { fileURLToPath } from 'node:url';
+import fg from 'fast-glob';
+import chalk from 'chalk';
 
-const CWD = process.cwd();
-const SRC = path.join(CWD, 'src');
-const OUTDIR = path.join(CWD, 'var/refactor');
+const cwd = process.cwd();
 const args = new Set(process.argv.slice(2));
-const APPLY = args.has('--apply') || args.has('-y');
-const DRY = !APPLY;
+const DRY = args.has('--dry') || !args.has('--do-it');
+const DO_IT = args.has('--do-it');
 
-// ---------- helpers ----------
-const exists = p => fs.existsSync(p);
-const isDir = p => exists(p) && fs.statSync(p).isDirectory();
-const isFile = p => exists(p) && fs.statSync(p).isFile();
-const ensureDir = p => fs.mkdirSync(p, { recursive: true });
-const rel = p => path.relative(CWD, p) || '.';
-const sha1 = buf => crypto.createHash('sha1').update(buf).digest('hex');
-const readText = p => fs.readFileSync(p, 'utf8');
-const writeText = (p, s) => { ensureDir(path.dirname(p)); fs.writeFileSync(p, s); };
+const rel = p => p.replace(cwd + path.sep, '');
+async function exists(p) { try { await fsp.access(p); return true; } catch { return false; } }
+async function ensureDir(p) { await fsp.mkdir(p, { recursive: true }); }
+function ppMove(m) { return `- ${m.from}  ->  ${m.to}${m.note ? `  (${m.note})` : ''}`; }
 
-// recursive walk
-function* walk(dir) {
-    for (const dirent of fs.readdirSync(dir, { withFileTypes: true })) {
-        const full = path.join(dir, dirent.name);
-        if (dirent.isDirectory()) yield* walk(full);
-        else yield full;
-    }
-}
+const MOVES = [];
+const CONFLICTS = [];
+const TOUCHED = new Set();
+const COUNTS = {
+    rewrites_frontmatter_layout: 0,
+    rewrites_includes_extends: 0,
+    rewrites_assets: 0,
+    rewrites_srcscripts: 0,
+};
 
-// naive text-file check by ext
-const TEXT_EXT = new Set(['.njk', '.md', '.11ty.js', '.js', '.json', '.css', '.svg', '.html']);
-const isTextish = p => TEXT_EXT.has(path.extname(p));
-
-// copy file if changed
-async function copyFileSmart(src, dest, plan) {
-    const srcBuf = await fsp.readFile(src);
-    const srcHash = sha1(srcBuf);
-    let doWrite = true;
-    if (isFile(dest)) {
-        const dstBuf = await fsp.readFile(dest);
-        if (sha1(dstBuf) === srcHash) doWrite = false;
-    }
-    if (!DRY && doWrite) {
-        ensureDir(path.dirname(dest));
-        await fsp.writeFile(dest, srcBuf);
-    }
-    plan.touched.add(dest);
-}
-
-// move file (copy+remove src)
-async function moveFileSmart(src, dest, plan) {
-    await copyFileSmart(src, dest, plan);
-    if (!DRY) await fsp.rm(src);
-    plan.moves.push([rel(src), rel(dest)]);
-}
-
-// merge directories (source → dest, prefer source on conflicts)
-async function mergeDirSmart(srcDir, destDir, plan) {
-    for (const file of walk(srcDir)) {
-        const relPath = path.relative(srcDir, file);
-        const dest = path.join(destDir, relPath);
-        await copyFileSmart(file, dest, plan);
-    }
-    if (!DRY) await fsp.rm(srcDir, { recursive: true, force: true });
-    plan.merges.push([rel(srcDir), rel(destDir)]);
-}
-
-// front matter updater (very light: only layout)
-function ensureLayoutFalse(filePath, plan) {
-    if (!isFile(filePath)) return;
-    let txt = readText(filePath);
-    // add or update YAML front matter layout:false
-    if (/^---\s*[\s\S]*?---/.test(txt)) {
-        // has FM: replace layout: ... with false or insert it
-        if (/^---[\s\S]*?\blayout\s*:\s*.*$/m.test(txt)) {
-            txt = txt.replace(/^---([\s\S]*?)\blayout\s*:\s*.*$/m, (_m, head) => `---${head}layout: false`);
-        } else {
-            txt = txt.replace(/^---\s*\n/, `---\nlayout: false\n`);
-        }
-    } else {
-        txt = `---\nlayout: false\n---\n` + txt;
-    }
-    if (!DRY) writeText(filePath, txt);
-    plan.touched.add(filePath);
-}
-
-// bulk rewrite (paths + layout)
-function rewriteInFile(filePath, plan) {
-    if (!isFile(filePath) || !isTextish(filePath)) return;
-    let before = readText(filePath);
-    let after = before;
-
-    // layout rename
-    after = after.replace(/\blayout:\s*["']?layout\.njk["']?/g, 'layout: layouts/base.njk');
-
-    // script path rewrites
-    after = after.replace(/\/scripts\//g, '/assets/js/');
-    after = after.replace(/src\/scripts\//g, 'src/assets/js/');
-
-    // image path rewrites
-    after = after.replace(/\/assets\/og-ai-safety\.jpg/g, '/assets/images/og/og-ai-safety.jpg');
-    after = after.replace(/assets\/static\/logo\.png/g, 'assets/images/logo.png');
-
-    if (after !== before) {
-        if (!DRY) writeText(filePath, after);
-        plan.touched.add(filePath);
-    }
-}
-
-// ---------- plan definition ----------
-const moves = [
+// Planned relocations (only applied if source exists)
+const candidates = [
     ['src/_includes/layout.njk', 'src/_includes/layouts/base.njk', 'normalize base layout'],
-    ['src/404.njk', 'src/pages/404.njk', 'consolidate route pages'],
-    ['src/index.njk', 'src/pages/index.njk', 'consolidate route pages'],
-    ['src/map.njk', 'src/pages/map.njk', 'consolidate route pages'],
-    ['src/feed.njk', 'src/pages/feed.njk', 'consolidate route pages'],
-    ['src/consulting.njk', 'src/pages/consulting.njk', 'consolidate route pages'],
-    ['src/content/resume.njk', 'src/pages/resume/index.njk', 'resume → pages/resume (layout:false)'],
-    ['src/content/resume-card.njk', 'src/pages/resume/card.njk', 'resume card → pages/resume (layout:false)'],
-    ['src/redirects.11ty.js', 'src/routes/redirects.11ty.js', 'route script → src/routes/'],
+    ['src/404.njk', 'src/pages/404.njk', 'endpoint → pages/'],
+    ['src/index.njk', 'src/pages/index.njk', 'endpoint → pages/'],
+    ['src/map.njk', 'src/pages/map.njk', 'endpoint → pages/'],
+    ['src/feed.njk', 'src/pages/feed.njk', 'endpoint → pages/'],
+    ['src/consulting.njk', 'src/pages/consulting.njk', 'endpoint → pages/'],
+    ['src/concept-map.json.njk', 'src/pages/concept-map.json.njk', 'endpoint → pages/'],
+    ['src/content/resume.njk', 'src/pages/resume/index.njk', 'resume endpoint'],
+    ['src/content/resume-card.njk', 'src/pages/resume/card.njk', 'resume card endpoint'],
+    ['src/work/drop.11ty.js', 'src/pages/work/drop.11ty.js', 'work endpoint'],
+    ['src/work/latest.11ty.js', 'src/pages/work/latest.11ty.js', 'work endpoint'],
+    ['src/work/index.njk', 'src/pages/work/index.njk', 'work endpoint (folder index)'],
+    ['src/work.njk', 'src/pages/work/index.njk', 'work listing'],
+    ['src/_includes/layouts/embed.njk', 'src/_includes/components/embed.njk', 'component, not layout'],
+    ['src/_includes/archive-nav.njk', 'src/_includes/components/archive-nav.njk', 'component placement'],
+    ['src/scripts/base.js', 'src/assets/js/base.js', 'js authoring → assets/js'],
+    ['src/scripts/code-copy.js', 'src/assets/js/code-copy.js', 'js authoring → assets/js'],
+    ['src/scripts/footnote-nav.js', 'src/assets/js/footnote-nav.js', 'js authoring → assets/js'],
+    ['src/scripts/mschf-overlay.js', 'src/assets/js/mschf-overlay.js', 'js authoring → assets/js'],
+    ['src/scripts/theme-toggle.js', 'src/assets/js/theme-toggle.js', 'js authoring → assets/js'],
+    ['src/scripts/theme-utils.js', 'src/assets/js/theme-utils.js', 'js authoring → assets/js'],
+    ['src/scripts/work-filters.js', 'src/assets/js/work-filters.js', 'js authoring → assets/js'],
     ['src/assets/og-ai-safety.jpg', 'src/assets/images/og/og-ai-safety.jpg', 'group OG images'],
     ['src/assets/static/logo.png', 'src/assets/images/logo.png', 'collapse static/ into images/'],
 ];
 
-// dir merges (dest already exists)
-const merges = [
-    ['src/archives', 'src/content/archives'],
-    ['src/work', 'src/content/work'],
-    ['src/scripts', 'src/assets/js'],
-];
+async function buildMoves() {
+    for (const [from, to, note] of candidates) {
+        const absFrom = path.join(cwd, from);
+        if (await exists(absFrom)) MOVES.push({ from, to, note });
+    }
 
-// files to force layout:false after refactor
-const enforceNoLayoutTargets = [
-    // before move (if they haven’t been moved yet)
-    'src/content/resume.njk',
-    'src/content/resume-card.njk',
-    'src/consulting.njk',
-    // after move
-    'src/pages/resume/index.njk',
-    'src/pages/resume/card.njk',
-    'src/pages/consulting.njk',
-];
+    // Resolve index/list duplication under pages/work/
+    const workTarget = 'src/pages/work/index.njk';
+    const folderIdx = MOVES.find(m => m.from === 'src/work/index.njk' && m.to === workTarget);
+    const topLevel = MOVES.find(m => m.from === 'src/work.njk' && m.to === workTarget);
+    if (folderIdx && topLevel) {
+        folderIdx.to = 'src/pages/work/list.njk';
+        folderIdx.note = 'work paginated list';
+    }
 
-// ---------- execution ----------
+    // In-plan duplicate destinations
+    const mapTo = new Map();
+    for (const m of MOVES) {
+        const arr = mapTo.get(m.to) || [];
+        arr.push(m);
+        mapTo.set(m.to, arr);
+    }
+    for (const [to, arr] of mapTo.entries()) {
+        if (arr.length > 1) CONFLICTS.push({ what: to, why: `multiple sources → ${arr.map(x => x.from).join(', ')}` });
+    }
+
+    // On-disk destination collisions
+    for (const m of MOVES) {
+        const absTo = path.join(cwd, m.to);
+        if (await exists(absTo)) CONFLICTS.push({ what: m.to, why: 'destination exists on disk' });
+    }
+}
+
+async function applyMoves() {
+    const conflictedTargets = new Set(CONFLICTS.map(c => c.what));
+    for (const m of MOVES) {
+        if (conflictedTargets.has(m.to)) continue;
+        const absFrom = path.join(cwd, m.from);
+        const absTo = path.join(cwd, m.to);
+        if (!(await exists(absFrom))) continue;
+        if (DRY) continue;
+        await ensureDir(path.dirname(absTo));
+        await fsp.rename(absFrom, absTo);
+    }
+}
+
+const TEXT_EXTS = new Set(['.njk', '.md', '.11ty.js', '.js', '.json', '.css', '.yml', '.yaml']);
+
+function replaceCount(str, re, replacement, counterKey) {
+    let count = 0;
+    const out = str.replace(re, (...args) => {
+        count++;
+        return (typeof replacement === 'function') ? replacement(...args) : replacement;
+    });
+    COUNTS[counterKey] += count;
+    return [out, count];
+}
+
+async function scanAndRewrite() {
+    // Use fast-glob to get all candidate text files (excluding archives/**)
+    const files = await fg('src/**/*', {
+        cwd,
+        dot: true,
+        onlyFiles: true,
+        followSymbolicLinks: true,
+        ignore: ['src/archives/**']
+    });
+
+    for (const pRel of files) {
+        const p = path.join(cwd, pRel);
+        const ext = path.extname(p);
+        if (!TEXT_EXTS.has(ext)) continue;
+
+        let txt = await fsp.readFile(p, 'utf8');
+        let changed = false, out, n;
+
+        // Front matter layout: accept both quoted/unquoted & CRLF
+        [out, n] = replaceCount(
+            txt,
+            /(^|\r?\n)\s*layout\s*:\s*(['"])layout\.njk\2(\s*($|\r?\n))/g,
+            (m, a, q, z) => `${a}layout: ${q}layouts/base.njk${q}${z}`,
+            'rewrites_frontmatter_layout'
+        ); if (n) { txt = out; changed = true; }
+
+        [out, n] = replaceCount(
+            txt,
+            /(^|\r?\n)\s*layout\s*:\s*layout\.njk(\s*($|\r?\n))/g,
+            (m, a, z) => `${a}layout: layouts/base.njk${z}`,
+            'rewrites_frontmatter_layout'
+        ); if (n) { txt = out; changed = true; }
+
+        // Nunjucks extends/include path tweaks (outside archives)
+        [out, n] = replaceCount(
+            txt,
+            /(\{%\s*(?:include|from)\s+["'])archive-nav\.njk(["'])/g,
+            `$1components/archive-nav.njk$2`,
+            'rewrites_includes_extends'
+        ); if (n) { txt = out; changed = true; }
+
+        [out, n] = replaceCount(
+            txt,
+            /(\{%\s*(?:include|from)\s+["'])layouts\/embed\.njk(["'])/g,
+            `$1components/embed.njk$2`,
+            'rewrites_includes_extends'
+        ); if (n) { txt = out; changed = true; }
+
+        [out, n] = replaceCount(
+            txt,
+            /(\{%\s*extends\s+["'])layout\.njk(["'])/g,
+            `$1layouts/base.njk$2`,
+            'rewrites_includes_extends'
+        ); if (n) { txt = out; changed = true; }
+
+        // Asset path nudges
+        // og-ai-safety.jpg → assets/images/og/og-ai-safety.jpg (handles optional leading slash)
+        [out, n] = replaceCount(
+            txt,
+            /(^|[^A-Za-z0-9_\/])\/?assets\/og-ai-safety\.jpg/g,
+            (m, pre) => `${pre}/assets/images/og/og-ai-safety.jpg`,
+            'rewrites_assets'
+        ); if (n) { txt = out; changed = true; }
+
+        // logo.png under assets/static → assets/images/logo.png (catch leading “/” too)
+        [out, n] = replaceCount(
+            txt,
+            /(^|[^A-Za-z0-9_\/])\/?assets\/static\/logo\.png/g,
+            (m, pre) => `${pre}/assets/images/logo.png`,
+            'rewrites_assets'
+        ); if (n) { txt = out; changed = true; }
+
+        // Only internal-src references: src/scripts/ → src/assets/js/
+        [out, n] = replaceCount(
+            txt,
+            /src\/scripts\//g,
+            'src/assets/js/',
+            'rewrites_srcscripts'
+        ); if (n) { txt = out; changed = true; }
+
+        if (changed) {
+            TOUCHED.add(pRel);
+            if (DO_IT) await fsp.writeFile(p, txt, 'utf8');
+        }
+    }
+}
+
+function h(title, n) {
+    return `${chalk.bold(`# ${title}`)} ${chalk.dim(`(${n})`)}`;
+}
+
+function printReport() {
+    console.log(`${chalk.bold('DRY:')} ${DRY ? chalk.yellow('yes') : chalk.green('no')}\n`);
+
+    console.log(h('MOVES', MOVES.length));
+    for (const m of MOVES) console.log(ppMove(m));
+    console.log('');
+
+    console.log(h('CONFLICTS', CONFLICTS.length));
+    if (CONFLICTS.length === 0) console.log('(none)');
+    else for (const c of CONFLICTS) console.log(`- ${c.what}  (${c.why})`);
+    console.log('');
+
+    const totalRewrites =
+        COUNTS.rewrites_frontmatter_layout +
+        COUNTS.rewrites_includes_extends +
+        COUNTS.rewrites_assets +
+        COUNTS.rewrites_srcscripts;
+
+    console.log(`${chalk.bold(`# REWRITES`)} ${chalk.dim(`(${totalRewrites})`)}`);
+    console.log(`- frontmatter:layout: ${COUNTS.rewrites_frontmatter_layout} change(s)`);
+    console.log(`- includes/extends: ${COUNTS.rewrites_includes_extends} change(s)`);
+    console.log(`- assets: ${COUNTS.rewrites_assets} change(s)`);
+    console.log(`- src-scripts: ${COUNTS.rewrites_srcscripts} change(s)`);
+    console.log('');
+
+    console.log(h('TOUCHED', TOUCHED.size));
+    for (const f of Array.from(TOUCHED).sort()) console.log(`- ${f}`);
+    console.log('');
+
+    if (DRY) console.log(chalk.dim('NOTE: This was a dry run. Use --do-it to apply changes.'));
+}
+
 (async () => {
-    const plan = {
-        dry: DRY,
-        moves: [],
-        merges: [],
-        rewrites: [],
-        touched: new Set(),
-        skipped: [],
-        notes: [],
-    };
-
-    // sanity
-    if (!isDir(SRC)) {
-        console.error(`src/ not found at: ${rel(SRC)}`);
-        process.exit(2);
-    }
-
-    // 1) perform file moves (non-merge)
-    for (const [fromRel, toRel] of moves) {
-        const from = path.join(CWD, fromRel);
-        const to = path.join(CWD, toRel);
-        if (!exists(from)) { plan.skipped.push([fromRel, 'missing']); continue; }
-        ensureDir(path.dirname(to));
-        await moveFileSmart(from, to, plan);
-    }
-
-    // 2) auto-merge the conflicting directories
-    for (const [fromRel, toRel] of merges) {
-        const from = path.join(CWD, fromRel);
-        const to = path.join(CWD, toRel);
-        if (!exists(from)) { plan.skipped.push([fromRel, 'missing']); continue; }
-        ensureDir(to);
-        await mergeDirSmart(from, to, plan);
-    }
-
-    // 3) global rewrites (layouts + paths)
-    for (const file of walk(SRC)) {
-        rewriteInFile(file, plan);
-    }
-
-    // 4) enforce layout:false where required
-    for (const p of enforceNoLayoutTargets) {
-        const abs = path.join(CWD, p);
-        if (exists(abs)) ensureLayoutFalse(abs, plan);
-    }
-
-    // 5) compile report (always write, even in dry)
-    ensureDir(OUTDIR);
-
-    const txt = [
-        `DRY: ${DRY ? 'yes' : 'no'}`,
-        ``,
-        `# MOVES (${plan.moves.length})`,
-        ...plan.moves.map(([a, b]) => `- ${a}  ->  ${b}`),
-        ``,
-        `# MERGES (${plan.merges.length})`,
-        ...plan.merges.map(([a, b]) => `- ${a}  ⇒  ${b}  (merged dir)`),
-        ``,
-        `# SKIPPED (${plan.skipped.length})`,
-        ...plan.skipped.map(([a, why]) => `- ${a}  (${why})`),
-        ``,
-        `# TOUCHED (${plan.touched.size})`,
-        ...Array.from(plan.touched).sort().map(p => `- ${rel(p)}`),
-        ``,
-        `# REWRITES`,
-        `- layout.njk → layouts/base.njk`,
-        `- /scripts/ → /assets/js/`,
-        `- src/scripts/ → src/assets/js/`,
-        `- /assets/og-ai-safety.jpg → /assets/images/og/og-ai-safety.jpg`,
-        `- assets/static/logo.png → assets/images/logo.png`,
-        ``,
-        `# NOTES`,
-        `- consulting and resume/* forced to layout:false`,
-    ].join('\n');
-
-    const json = {
-        dry: DRY,
-        moves: plan.moves,
-        merges: plan.merges,
-        skipped: plan.skipped,
-        touched: Array.from(plan.touched).map(p => rel(p)),
-        rewrites: [
-            ['/scripts/', '/assets/js/'],
-            ['src/scripts/', 'src/assets/js/'],
-            ['/assets/og-ai-safety.jpg', '/assets/images/og/og-ai-safety.jpg'],
-            ['assets/static/logo.png', 'assets/images/logo.png'],
-            ['layout: layout.njk', 'layout: layouts/base.njk'],
-        ],
-        notes: ['consulting and resume/* forced to layout:false'],
-    };
-
-    writeText(path.join(OUTDIR, 'src-refactor-plan.txt'), txt);
-    writeText(path.join(OUTDIR, 'src-refactor-plan.json'), JSON.stringify(json, null, 2));
-
-    // 6) console summary
-    console.log(txt);
+    await buildMoves();
+    await scanAndRewrite();
+    await applyMoves();
+    printReport();
 })();
