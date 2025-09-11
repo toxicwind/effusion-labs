@@ -1,4 +1,3 @@
-// lib/interlinkers/unresolved-report.mjs
 // Stable unresolved link reporting with dedupe, schema, and CI gating.
 
 import fs from 'node:fs';
