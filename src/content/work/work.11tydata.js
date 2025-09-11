@@ -1,5 +1,11 @@
+import { contentArea } from '../../../config/content-area.js';
+
+const base = contentArea('work');
+
 export default {
+  ...base,
   eleventyComputed: {
-    work: data => data.collections.work
-  }
+    ...base.eleventyComputed,
+    work: (data) => data.collections.work,
+  },
 };
