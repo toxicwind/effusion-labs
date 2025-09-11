@@ -1,17 +1,25 @@
 {# components/embed.njk #}
 {% macro embed(url, title, description, opts = {}) %}
 {# opts: { badges?: [{label, tone}], meta?: [{label, value}], tags?: [tag] } #}
-{% set _isInternal = url and url[0] == '/' %}
+
+{# normalize + classify link #}
+{% set _url = url or '#' %}
+{% set _href = _url %}
+{% if _href and _href[0] == '/' %}
+  {% set _href = _href | url %}
+{% endif %}
+{% set _isExternal = _url and _url[0] != '/' %}
+
 <a
-  href="{{ _isInternal ? (url | url) : url }}"
+  href="{{ _href }}"
   class="group block rounded-lg border border-base-content/15 bg-base-100/80 backdrop-blur p-4 transition
          hover:-translate-y-0.5 hover:shadow-xl hover:border-primary/50
          focus:outline-none focus-visible:ring focus-visible:ring-primary/40 no-underline"
-  {% if not _isInternal %}target="_blank" rel="noopener noreferrer"{% endif %}
+  {% if _isExternal %}target="_blank" rel="noopener noreferrer"{% endif %}
 >
   <div class="mb-1 flex items-center gap-2">
     <strong class="text-lg text-base-content">{{ title or 'Untitled' }}</strong>
-    {% if not _isInternal and url %}
+    {% if _isExternal and url %}
       <span class="badge badge-ghost badge-xs">{{ url | hostname }}</span>
     {% endif %}
   </div>
@@ -20,7 +28,7 @@
     <p class="text-base-content/70 text-sm mb-3">{{ description }}</p>
   {% endif %}
 
-  {% if opts.badges and opts.badges.length %}
+  {% if opts.badges and (opts.badges | length) %}
     <div class="mb-2 flex flex-wrap gap-1">
       {% for b in opts.badges %}
         <span class="badge badge-outline badge-xs">{{ b.label }}</span>
@@ -29,7 +37,7 @@
   {% endif %}
 
   <div class="text-xs text-base-content/70 space-y-1">
-    {% if opts.meta and opts.meta.length %}
+    {% if opts.meta and (opts.meta | length) %}
       <div class="flex flex-wrap gap-x-3 gap-y-1">
         {% for m in opts.meta %}
           <span><span class="opacity-60">{{ m.label }}:</span> {{ m.value }}</span>
@@ -37,7 +45,7 @@
       </div>
     {% endif %}
 
-    {% if opts.tags and opts.tags.length %}
+    {% if opts.tags and (opts.tags | length) %}
       <div class="mt-1">
         <strong class="text-base-content/60">Tags:</strong>
         <span class="inline-flex flex-wrap gap-1 pl-1">

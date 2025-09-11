@@ -5,27 +5,61 @@ import { dirs } from "./config/site.js";
 import htmlToMarkdownUnified from "./config/html-to-markdown-unified.mjs";
 
 export default function (eleventyConfig) {
-  // Your existing config
+  // saner error locations while debugging
+  eleventyConfig.setNunjucksEnvironmentOptions({
+    trimBlocks: false,
+    lstripBlocks: false,
+    noCache: true,
+    throwOnUndefined: false,
+  });
+
+  // ⬅️ Add the ternary filter so rewrites work
+  eleventyConfig.addNunjucksFilter("ternary", function (val, a, b) {
+    return val ? a : b;
+  });
+
+  // your existing config
   register(eleventyConfig);
   registerArchive(eleventyConfig);
 
   eleventyConfig.addGlobalData("build", getBuildInfo());
   eleventyConfig.addGlobalData("buildTime", new Date().toISOString());
 
-  // Convert any .html under src/content → Markdown (unified), then let Eleventy treat it like normal .md
+  // Auto-fix {{ X ? A : B }} before each build (can opt-out with FIX_NJK_TERNARY=0)
+  eleventyConfig.on("eleventy.before", async () => {
+    if (process.env.FIX_NJK_TERNARY === "0") return;
+    try {
+      // ⬅️ corrected path
+      const { fixRepoTernaries } = await import("./utils/scripts/fix-njk-ternaries.mjs");
+      const report = await fixRepoTernaries({
+        roots: ["src"],
+        exts: [".njk", ".md", ".html"],
+        dryRun: !!process.env.DRY_RUN,
+        logFile: ".njk-fix-report.json",
+        quiet: !!process.env.FIX_NJK_QUIET,
+      });
+      if (!report.quiet && report.modified > 0) {
+        console.log(`[njk-fix] patched ${report.modified} file(s); summary → ${report.logFile}`);
+      }
+    } catch (err) {
+      console.error("[njk-fix] failed:", err?.message || err);
+    }
+  });
+
+  // HTML→Markdown pipeline (unchanged)
   htmlToMarkdownUnified(eleventyConfig, {
-    rootDir: "src/content",          // scope: all content HTML
-    dumpMarkdownTo: "_cache/md-dumps", // set to null to disable debug dumps
+    rootDir: "src/content",
+    dumpMarkdownTo: "_cache/md-dumps",
     pageTitlePrefix: "",
-    defaultLayout: "layouts/converted-html.njk",               // let directory data decide layout/collections
-    frontMatterExtra: { convertedFromHtml: true }
+    defaultLayout: "layouts/converted-html.njk",
+    frontMatterExtra: { convertedFromHtml: true },
   });
 
   return {
     dir: dirs,
     markdownTemplateEngine: "njk",
-    htmlTemplateEngine: false,         // do not template .html (Eleventy defaults HTML→Liquid; disable it)
+    htmlTemplateEngine: false,
     templateFormats: ["md", "njk", "html", "11ty.js"],
-    pathPrefix: "/"
+    pathPrefix: "/",
   };
 }

@@ -21,7 +21,7 @@
       </h3>
       {% if item.data.description %}
         <p class="text-sm text-base-content/90 line-clamp-2">
-          {{ item.data.description | truncate(140, true, '…') }}
+          {{ item.data.description | truncate(140) }}
         </p>
       {% endif %}
     </div>

@@ -43,6 +43,14 @@
   {% set msrpConverted = msrpAmt * msrpRate %}
 {% endif %}
 
+{# availability badge text/class #}
+{% set availBadge = 'badge-success' %}
+{% set availText  = 'Standard' %}
+{% if availabilityIsLimited %}
+  {% set availBadge = 'badge-error' %}
+  {% set availText  = 'Limited' %}
+{% endif %}
+
 <section class="relative card bg-base-100 border border-base-300/60 shadow-xl rounded-2xl overflow-hidden
                 before:content-[''] before:pointer-events-none before:block before:absolute before:inset-0
                 before:bg-[radial-gradient(1200px_600px_at_0%_-10%,hsl(var(--er)/.10),transparent_40%)]
@@ -66,9 +74,7 @@
         </div>
       </div>
       <div class="tooltip tooltip-left" data-tip="Availability">
-        <span class="badge {{ availabilityIsLimited ? 'badge-error' : 'badge-success' }} badge-lg">
-          {{ availabilityIsLimited and 'Limited' or 'Standard' }}
-        </span>
+        <span class="badge {{ availBadge }} badge-lg">{{ availText }}</span>
       </div>
     </div>
 

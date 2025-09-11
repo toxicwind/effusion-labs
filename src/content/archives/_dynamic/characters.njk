@@ -6,31 +6,55 @@ pagination:
   alias: character
 eleventyComputed:
   permalink: "/archives/character/{{ character.data.charSlug }}/"
-  title: "{{ character.data.name or character.data.charSlug }}"
+  title: "{{ (character.data.name or character.data.charSlug) }}"
   showTitle: false
 ---
 
 {% from "components/back-link.njk" import backLink %}
 {% from "components/tile.njk" import tile %}
 
+{# Breadcrumbs #}
 <nav class="breadcrumbs text-sm mb-3 overflow-x-auto whitespace-nowrap" aria-label="Breadcrumb">
   <ul>
     <li><a href="{{ '/archives/' | url }}">Archives</a></li>
-    <li><a href="{{ '/archives/collectables/designer-toys/' | url }}{{ character.data.companySlug }}/">{{ character.data.companyTitle }}</a></li>
-    <li><a href="{{ '/archives/collectables/designer-toys/' | url }}{{ character.data.companySlug }}/{{ character.data.lineSlug }}/">{{ character.data.lineTitle }}</a></li>
+    <li>
+      {% if character.data.companySlug %}
+        <a href="{{ '/archives/collectables/designer-toys/' | url ~ character.data.companySlug ~ '/' }}">
+          {{ (character.data.companyTitle or character.data.companySlug) | title }}
+        </a>
+      {% else %}Company{% endif %}
+    </li>
+    <li>
+      {% if character.data.companySlug and character.data.lineSlug %}
+        <a href="{{ '/archives/collectables/designer-toys/' | url ~ character.data.companySlug ~ '/' ~ character.data.lineSlug ~ '/' }}">
+          {{ (character.data.lineTitle or character.data.lineSlug) | title }}
+        </a>
+      {% else %}Line{% endif %}
+    </li>
     <li class="opacity-70">{{ character.data.name or character.data.charSlug }}</li>
   </ul>
 </nav>
 
 <div class="mb-6">
-  {{ backLink('Back', '/archives/collectables/designer-toys/' + character.data.companySlug + '/' + character.data.lineSlug + '/') }}
+  {% if character.data.companySlug and character.data.lineSlug %}
+    {{ backLink('Back', '/archives/collectables/designer-toys/' ~ character.data.companySlug ~ '/' ~ character.data.lineSlug ~ '/') }}
+  {% else %}
+    {{ backLink('Back', '/archives/') }}
+  {% endif %}
 </div>
 
+{# Header #}
 <section class="rounded-box border-2 border-black bg-base-200 p-5 sm:p-7 shadow-[6px_6px_0_rgba(0,0,0,0.85)]">
   <h1 class="m-0 font-extrabold tracking-tight fluid-title">{{ character.data.name or character.data.charSlug }}</h1>
-  <p class="opacity-85 mt-2">{{ character.data.companyTitle }} · {{ character.data.lineTitle }}</p>
+  <p class="opacity-85 mt-2">
+    {{ (character.data.companyTitle or character.data.companySlug) | title }}
+    {% if character.data.companyTitle or character.data.companySlug %} · {% endif %}
+    {{ (character.data.lineTitle or character.data.lineSlug) | title }}
+  </p>
+  {% if character.data.bio %}<p class="mt-2 opacity-80">{{ character.data.bio }}</p>{% endif %}
 </section>
 
+{# All products in the same company+line featuring this character #}
 {% set allInLine = collections.archiveProducts
   | byCompany(character.data.companySlug)
   | byLine(character.data.lineSlug) %}
@@ -38,19 +62,23 @@ eleventyComputed:
 {% set products = [] %}
 {% for p in allInLine %}
   {% if p.data.charSlug and p.data.charSlug == character.data.charSlug %}
-    {% set products = products.concat([p]) %}
+    {% set products = products | push(p) %}
   {% endif %}
 {% endfor %}
 
-{% if products.length %}
-  <h2 class="text-lg font-semibold mt-6 mb-3">Products featuring this character</h2>
+{% if products and (products | length) %}
+  <h2 class="text-lg font-semibold mt-8 mb-3">Products featuring this character</h2>
   <ul class="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
     {% for p in products %}
-      <li>
-        {{ tile(p) }}
-      </li>
+      <li>{{ tile(p) }}</li>
     {% endfor %}
   </ul>
+
+  <div class="mt-6">
+    <a class="btn btn-outline btn-sm" href="{{ '/archives/character/' | url ~ character.data.charSlug ~ '/snapshot/' }}">
+      View market snapshot →
+    </a>
+  </div>
 {% else %}
   <p class="opacity-75 mt-6">No products indexed yet for this character.</p>
 {% endif %}

@@ -6,12 +6,19 @@
   {% set _neon = (opts.neon is not defined) or (opts.neon != false) %}
   {% set _frame = opts.frame or 'ring' %}
   {% set _rail = (opts.rail is not defined) or (opts.rail != false) %}
-  {% set _sectionCls = (opts.sectionCls or '') + ' ' + ('hb-intensity-' ~ _intensity) %}
-  {% set _cls = ['card','rounded-box','hb-anim',_sectionCls] %}
-  {% if _neon %}{% set _cls = _cls.concat(['hb-neon']) %}{% endif %}
-  {% if _rail %}{% set _cls = _cls.concat(['hb-accent']) %}{% endif %}
-  {% if _frame == 'ring' %}{% set _cls = _cls.concat(['shadow-xs','ring-1','ring-base-300/35','border-transparent']) %}{% else %}{% set _cls = _cls.concat(['shadow-none','border-transparent']) %}{% endif %}
-  <section class="{{ _cls | join(' ') }}">
+  {% set _sectionCls = (opts.sectionCls or '') ~ ' ' ~ ('hb-intensity-' ~ _intensity) %}
+
+  {# build class string without array.concat #}
+  {% set _cls = 'card rounded-box hb-anim ' ~ _sectionCls %}
+  {% if _neon %}{% set _cls = _cls ~ ' hb-neon' %}{% endif %}
+  {% if _rail %}{% set _cls = _cls ~ ' hb-accent' %}{% endif %}
+  {% if _frame == 'ring' %}
+    {% set _cls = _cls ~ ' shadow-xs ring-1 ring-base-300/35 border-transparent' %}
+  {% else %}
+    {% set _cls = _cls ~ ' shadow-none border-transparent' %}
+  {% endif %}
+
+  <section class="{{ _cls }}">
     <div class="card-body {{ _bodyCls }}">
       {% if _title %}
         <h2 class="text-[11px] uppercase tracking-widest opacity-60 hb-title">{{ _title }}</h2>

@@ -1,7 +1,7 @@
 {# components/archive-nav.njk #}
 {% macro archiveNav(path, nav) %}
   {% set items = nav[path] or [] %}
-  {% if items.length %}
+  {% if items and (items | length) %}
   <ul class="menu menu-sm p-0">
     {% for item in items %}
       <li>

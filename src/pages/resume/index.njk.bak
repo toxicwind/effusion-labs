@@ -244,11 +244,11 @@ eleventyExcludeFromCollections: true
 
 {# JSON-LD (absolute URLs where possible) #}
 {% set canonicalPath = "/resume/" | url %}
-{% set canonicalHref = (site and site.url) | ternary((site.url + canonicalPath), canonicalPath) %}
-{% set homeHref = (site and site.url) | ternary((site.url + ('/' | url)), ('/' | url)) %}
+{% set canonicalHref = (site and site.url) ? (site.url + canonicalPath) : canonicalPath %}
+{% set homeHref = (site and site.url) ? (site.url + ('/' | url)) : ('/' | url) %}
 {% if resume and resume.ogImage %}
   {% set ogImageRel = resume.ogImage | url %}
-  {% set ogImageHref = (site and site.url) | ternary((site.url + ogImageRel), ogImageRel) %}
+  {% set ogImageHref = (site and site.url) ? (site.url + ogImageRel) : ogImageRel %}
 {% endif %}
 {% set sameAsLinks = [resume and resume.website, resume and resume.linkedin, resume and resume.github] | compactUnique %}
 

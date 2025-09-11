@@ -1,14 +1,23 @@
 {# components/hero.njk #}
 {% from "components/hero-tile.njk" import heroTile %}
 
+{# Precompute booleans to keep the markup clean #}
+{% set hasBrand = branding and (branding.logoSrc or branding.logoAlt or branding.logoSizes) %}
+{% set hasCtas  = ctas and (ctas | length) %}
+{% set hasTiles = tiles and (tiles | length) %}
+{% set hasBuild = build and (build.branch or build.hash or build.builtAtIso) %}
+
 <header class="hero relative mx-auto w-full hb-neon hb-intensity-bold">
   <div class="container-fluid px-4 sm:px-6 lg:px-8 py-[clamp(3rem,8vh,9rem)]">
     <div class="hb-inlay mx-auto max-w-[min(100rem,92vw)] px-8 sm:px-12 py-10 text-center">
-      {% if branding and branding.logoSrc %}
+
+      {% if hasBrand %}
+        {% set _logoSrc = (branding.logoSrc or '') | url %}
+        {% set _logoAlt = branding.logoAlt or 'Logo' %}
+        {% set _logoSizes = branding.logoSizes or '' %}
         <img class="hero-logo mx-auto mb-6 w-28 md:w-40"
-             src="{{ branding.logoSrc | url }}"
-             alt="{{ branding.logoAlt or 'Logo' }}"
-             {% if branding.logoSizes %}sizes="{{ branding.logoSizes }}"{% endif %}
+             src="{{ _logoSrc }}"
+             alt="{{ _logoAlt }}"{% if _logoSizes %} sizes="{{ _logoSizes }}"{% endif %}
              loading="eager" fetchpriority="high"
              style="filter: drop-shadow(0 0 12px color-mix(in oklab, var(--neon-a) 30%, transparent));" />
       {% endif %}
@@ -18,33 +27,26 @@
       {% endif %}
 
       <h1 class="font-heading font-black uppercase tracking-[-0.025em] leading-[0.95] text-[clamp(2.75rem,6vw,6.5rem)] hb-ink">
-        {{ title }}
+        {{ title or '' }}
       </h1>
 
       {% if lede %}<p class="mx-auto mt-4 max-w-3xl font-body text-base md:text-lg hb-ink-soft">{{ lede }}</p>{% endif %}
       {% if sublede %}<p class="mx-auto mt-2 max-w-3xl font-body text-base md:text-lg hb-ink-soft">{{ sublede }}</p>{% endif %}
 
-      {% if ctas and ctas.length %}
+      {% if hasCtas %}
         <div class="mt-6 flex flex-col items-center justify-center gap-4 sm:flex-row">
           {% for c in ctas %}
-            {% set isPrimary = (c.kind or 'primary') == 'primary' %}
-            {% set href = c.href or '#' %}
-            {% if href and href[0] == '/' %}
-              {% set href = href | url %}
-            {% endif %}
-            {% set isExternal = href and not (href[0] == '/') %}
-
-            <a href="{{ href }}"
-               class="{% if isPrimary %}btn btn-primary{% else %}btn btn-outline{% endif %} px-7 py-3 font-heading font-bold"
-               {% if isExternal %}target="_blank" rel="noopener"{% endif %}>
-              {{ c.label }}
-            </a>
+            {% set _label = c.label or 'Learn more' %}
+            {% set _href  = (c.href or '#') | url %}
+            {% set _kind  = c.kind or 'primary' %}
+            {% set _btn   = (_kind == 'primary') and 'btn btn-primary' or 'btn btn-outline' %}
+            <a href="{{ _href }}" class="{{ _btn }} px-7 py-3 font-heading font-bold">{{ _label }}</a>
           {% endfor %}
         </div>
       {% endif %}
     </div>
 
-    {% if tiles and tiles.length %}
+    {% if hasTiles %}
       <div class="mt-10 grid gap-4 sm:grid-cols-3">
         {% for t in tiles %}
           {{ heroTile(t.k, t.h, t.s, t.url, t.featured or false) }}
@@ -52,9 +54,13 @@
       </div>
     {% endif %}
 
-    {% if build %}
+    {% if hasBuild %}
       <div class="mt-8 text-center font-mono text-[11px] hb-ink-soft">
-        {{ build.branch }} · {{ build.hash }} · {{ build.builtAtIso }}
+        {% set _parts = [] %}
+        {% if build.branch %}{% set _parts = _parts | push(build.branch) %}{% endif %}
+        {% if build.hash %}{% set _parts = _parts | push(build.hash) %}{% endif %}
+        {% if build.builtAtIso %}{% set _parts = _parts | push(build.builtAtIso) %}{% endif %}
+        {{ _parts | join(' · ') }}
       </div>
     {% endif %}
   </div>

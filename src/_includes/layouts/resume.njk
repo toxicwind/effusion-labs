@@ -1,28 +1,5 @@
-{#_includes/layouts/resume.njk
-  Resume Layout (standalone page shell)
-
-  What this file does
-  • Provides the <html> + <head> frame for the resume page.
-  • Builds SEO tags (title/description), canonical URL, and absolute OG/Twitter
-    images when `site.url` is available.
-  • Loads global CSS (Tailwind v4 + daisyUI v5) and shared theme utils.
-
-  Expected inputs
-  • Data: `resume` (see src/pages/resume/resume.json).
-  • Globals (optional): `site.url` for absolute canonicals, `build.hash | commit | version | buildTime` for cache-busting.
-  • Macros: macros/meta.njk → buildPageTitle/buildPageDesc.
-  • Filters: standard Eleventy filters + our safe `json`/`dump`.
-
-  Usage
-  --- front matter ---
-  layout: "layouts/resume.njk"
-  --------------------
-  Then put ONLY the body/content in the page template (no <html> or <head>).
-
-  Notes
-  • JSON-LD is emitted from the page template (keeps the layout generic).
-  • Theme is initialized early via /assets/js/theme-utils.js.
-  • Designed to render safely even when optional resume fields are missing.
+{# _includes/layouts/resume.njk
+   Resume Layout (standalone page shell) — Nunjucks-safe
 #}
 <!DOCTYPE html>
 <html lang="en" class="scroll-pt-16" data-mschf="off" data-theme="light">
@@ -40,26 +17,34 @@
   {% set pageTitle = buildPageTitle(resume, title) %}
   {% set pageDesc  = buildPageDesc(resume) %}
 
-  {# Absolute canonical if site.url is set #}
+  {# Canonical (absolute if site.url is set) #}
   {% set canonicalPath = "/resume/" | url %}
-  {% set canonicalHref = (site and site.url) ? (site.url + canonicalPath) : canonicalPath %}
+  {% set canonicalHref = canonicalPath %}
+  {% if site and site.url %}
+    {% set canonicalHref = site.url + canonicalPath %}
+  {% endif %}
 
-  {# Absolute OG image if possible #}
+  {# Absolute OG image if provided #}
   {% if resume and resume.ogImage %}
     {% set ogRel = resume.ogImage | url %}
-    {% set ogHref = (site and site.url) ? (site.url + ogRel) : ogRel %}
+    {% set ogHref = ogRel %}
+    {% if site and site.url %}
+      {% set ogHref = site.url + ogRel %}
+    {% endif %}
   {% endif %}
 
   <title>{{ pageTitle }}</title>
   <link rel="canonical" href="{{ canonicalHref }}">
   <meta name="description" content="{{ pageDesc }}">
 
+  <!-- Open Graph -->
   <meta property="og:type" content="profile">
   <meta property="og:title" content="{{ pageTitle }}">
   <meta property="og:description" content="{{ pageDesc }}">
   <meta property="og:url" content="{{ canonicalHref }}">
   {% if ogHref %}<meta property="og:image" content="{{ ogHref }}">{% endif %}
 
+  <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="{{ pageTitle }}">
   <meta name="twitter:description" content="{{ pageDesc }}">
