@@ -1,9 +1,13 @@
-{# Badge: switch to daisyUI badge, theme-aware borders & hover #}
-{% macro badge(text, href) -%}
-<a
-  href="{{ href }}"
-  class="badge badge-outline badge-sm no-underline transition-colors hover:border-primary hover:text-primary focus:outline-none focus-visible:ring focus-visible:ring-primary/40"
->
-  {{ text }}
-</a>
+{# Badge component (linkable) #}
+{% macro badge(text, href, tone='outline') -%}
+{% set isLink = href and href != '' %}
+{% if isLink %}
+  <a href="{{ href[0] == '/' ? (href | url) : href }}"
+     class="badge badge-{{ tone }} badge-sm no-underline transition-colors hover:border-primary hover:text-primary
+            focus:outline-none focus-visible:ring focus-visible:ring-primary/40">
+    {{ text }}
+  </a>
+{% else %}
+  <span class="badge badge-{{ tone }} badge-sm">{{ text }}</span>
+{% endif %}
 {%- endmacro %}

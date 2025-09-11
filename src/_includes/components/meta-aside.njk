@@ -6,15 +6,17 @@
       <ul class="space-y-1">
         {% if status %}<li><strong>Status:</strong> {{ status }}</li>{% endif %}
         {% if date %}
-          <li><strong>Date:</strong>
-            <time datetime="{{ date | htmlDateString }}">{{ date | readableDate }}</time>
-          </li>
+          <li><strong>Date:</strong> <time datetime="{{ date | htmlDateString }}">{{ date | readableDate }}</time></li>
         {% endif %}
         {% if certainty %}<li><strong>Certainty:</strong> {{ certainty }}</li>{% endif %}
         {% if importance %}<li><strong>Importance:</strong> {{ importance }}</li>{% endif %}
         {% if tags %}
           <li><strong>Tags:</strong>
-            <ul class="pl-4 list-disc">{% for tag in tags %}<li>{{ tag }}</li>{% endfor %}</ul>
+            <div class="mt-1 flex flex-wrap gap-1">
+              {% for tag in tags %}
+                <a class="badge badge-outline badge-xs no-underline" href="{{ '/tags/' | url }}{{ tag | slug }}/">#{{ tag }}</a>
+              {% endfor %}
+            </div>
           </li>
         {% endif %}
         {% if memory_ref %}
@@ -26,4 +28,3 @@
     </div>
   </aside>
 {% endmacro %}
-

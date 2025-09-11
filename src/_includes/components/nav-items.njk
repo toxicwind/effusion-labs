@@ -1,17 +1,28 @@
 {# src/_includes/components/nav-items.njk #}
+{# Expected nav shape:
+   [{ title, url, order?, external?, children?: [...] }]
+#}
 {% macro navItems(nav, pageUrl, linkClass='') -%}
+  {% set current = (pageUrl or '/') | url %}
   {% for n in nav %}
-    {% set isActive = (n.url == pageUrl) %}
+    {% set href = n.url | url %}
+    {% set isActive = href == current %}
+    {% set isExternal = n.external or (n.url and n.url[0] != '/') %}
     <li>
       <a
-        href="{{ n.url }}"
-        class="transition-colors rounded-sm px-1 py-0.5 {% if isActive %}text-primary{% endif %}{% if linkClass %} {{ linkClass }}{% endif %} focus:outline-none focus-visible:ring focus-visible:ring-primary/40"
-        {% if n.external %}target="_blank" rel="noopener noreferrer"{% endif %}
+        href="{{ isExternal ? n.url : href }}"
+        class="transition-colors rounded-sm px-1 py-0.5 {{ linkClass }} {% if isActive %}text-primary{% endif %}"
+        {% if isExternal %}target="_blank" rel="noopener noreferrer"{% endif %}
         {% if isActive %}aria-current="page" data-active="true"{% endif %}
       >
         {% if n.order %}<span class="opacity-60">{{ n.order }}.</span>{% endif %}
         <span>{{ n.title | shout }}</span>
       </a>
+      {% if n.children and n.children.length %}
+        <ul class="menu menu-sm pl-3 mt-1">
+          {{ navItems(n.children, pageUrl, linkClass) }}
+        </ul>
+      {% endif %}
     </li>
   {% endfor %}
 {%- endmacro %}

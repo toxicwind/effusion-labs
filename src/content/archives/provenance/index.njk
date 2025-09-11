@@ -1,16 +1,17 @@
 ---
 layout: layouts/base.njk
 title: "Provenance Explorer"
+showTitle: false
 ---
 
-<header class="mb-6">
-  <h1 class="font-heading text-4xl uppercase tracking-[-0.025em] text-primary m-0">Provenance Explorer</h1>
-  <p class="mt-2 text-base-content/80">Browse all JSONL sources across hosts, markets, currencies, and products.</p>
-</header>
+<section class="rounded-box border-2 border-black bg-base-200 p-5 sm:p-7 shadow-[6px_6px_0_rgba(0,0,0,0.85)]">
+  <h1 class="m-0 font-extrabold tracking-tight fluid-title text-primary">Provenance Explorer</h1>
+  <p class="mt-2 opacity-85">Browse all JSONL sources across hosts, markets, currencies, and products.</p>
+</section>
 
 {% set provenance = provenance or global.provenance or {} %}
 
-<section class="grid gap-4 md:grid-cols-3">
+<section class="grid gap-4 md:grid-cols-3 mt-6">
   <div class="stat bg-base-100 border rounded-xl">
     <div class="stat-title">Products</div>
     <div class="stat-value">{{ provenance.stats and provenance.stats.products or 0 }}</div>
@@ -40,7 +41,8 @@ title: "Provenance Explorer"
     </div>
     <ul id="hostList" class="mt-4 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
       {% for h in (provenance.hosts or []) | slice(0,60) %}
-      <li class="card bg-base-100 border">
+      {% set sample = (provenance.byProduct[h.products[0]] or {}) %}
+      <li class="card bg-base-100 border hover:shadow-xl hover:border-primary/50 transition">
         <div class="card-body p-4">
           <div class="flex items-center justify-between">
             <h3 class="card-title text-base m-0">{{ h.host }}</h3>
@@ -49,7 +51,7 @@ title: "Provenance Explorer"
           <div class="mt-2 flex flex-wrap gap-2">
             {% for slug in h.products | slice(0,6) %}
               {% set p = provenance.byProduct[slug] %}
-              {% if p %}<a class="badge badge-ghost hover:badge-info" href="{{ p.url }}">{{ p.slug }}</a>{% endif %}
+              {% if p %}<a class="badge badge-ghost hover:badge-info" href="{{ p.url | url }}">{{ p.slug }}</a>{% endif %}
             {% endfor %}
           </div>
         </div>
@@ -62,7 +64,7 @@ title: "Provenance Explorer"
     <h2 class="text-xl font-semibold mb-3">Currencies</h2>
     <ul class="flex flex-wrap gap-2">
       {% for c in (provenance.currencies or []) %}
-        <li><span class="badge badge-outline">{{ c.code }} · {{ c.entries }} {% if c.min != null and c.max != null %} ({{ c.min }}–{{ c.max }}){% endif %}</span></li>
+        <li><span class="badge badge-outline">{{ c.code }} · {{ c.entries }}{% if c.min != null and c.max != null %} ({{ c.min }}–{{ c.max }}){% endif %}</span></li>
       {% endfor %}
     </ul>
   </div>
@@ -81,7 +83,7 @@ title: "Provenance Explorer"
     <ul class="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
       {% for p in (provenance.products or []) | slice(0,24) %}
       <li class="card bg-base-100 border hover:shadow-xl hover:border-primary/50 transition">
-        <a class="card-body p-4 block" href="{{ p.url }}">
+        <a class="card-body p-4 block no-underline" href="{{ p.url | url }}">
           <h3 class="card-title text-base m-0">{{ p.title }}</h3>
           <div class="mt-2 flex flex-wrap gap-2">
             {% for h in p.hosts | slice(0,6) %}<span class="badge badge-ghost">{{ h }}</span>{% endfor %}

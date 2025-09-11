@@ -1,15 +1,16 @@
 {# components/tile.njk #}
 {% macro tile(item) %}
 <a
-  href="{{ item.url }}"
+  href="{{ item.url | url }}"
   aria-label="{{ item.data.title }}"
   class="group block rounded-lg border border-base-content/15 bg-base-100/80 backdrop-blur p-4 transition
          hover:-translate-y-0.5 hover:shadow-xl hover:border-primary/50
-         focus:outline-none focus-visible:ring focus-visible:ring-primary/40"
+         focus:outline-none focus-visible:ring focus-visible:ring-primary/40 no-underline"
+  data-title="{{ item.data.title }}" data-date="{{ item.date | date('yyyy-MM-dd') }}"
 >
   {% if item.data.image %}
     <div class="mb-2 aspect-[4/3] overflow-hidden rounded bg-base-200/60">
-      <img src="{{ item.data.image }}" alt="" class="h-full w-full object-cover" />
+      <img src="{{ item.data.image }}" alt="" class="h-full w-full object-cover" loading="lazy" />
     </div>
   {% else %}
     <div class="mb-2 aspect-[4/3] rounded bg-base-200/60"></div>

@@ -8,70 +8,42 @@
     <div class="navbar container-fluid px-6">
       <!-- Brand -->
       <div class="flex-1">
-        <a href="/" class="flex items-center gap-2 font-heading text-3xl text-primary">
+        <a href="{{ '/' | url }}" class="flex items-center gap-2 font-heading text-3xl text-primary no-underline">
           {{ icon('flask-conical', { class: 'w-6 h-6', 'aria-hidden': 'true' }) }}
           <span>{{ 'Effusion Labs' | shout }}</span>
         </a>
       </div>
 
-      <!-- Mobile nav (hidden on lg+) -->
+      <!-- Mobile nav -->
       <div class="flex-none lg:hidden">
         <nav class="dropdown dropdown-end" aria-label="{{ navLabel }}">
           <label tabindex="0" class="btn btn-ghost btn-square" aria-label="Open menu">
             {{ icon('menu', { class: 'w-6 h-6', 'aria-hidden': 'true' }) }}
           </label>
           <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[100] p-2 shadow bg-base-100 rounded-box w-56" role="menu">
-            {% if navItems %}
-              {{ navItems(nav, page.url) }}
-            {% else %}
-              {% for n in nav %}
-              <li role="none">
-                <a role="menuitem" href="{{ n.url }}">
-                  {% if n.order %}<span class="opacity-60">{{ n.order }}.</span>{% endif %}
-                  <span>{{ n.title | shout }}</span>
-                </a>
-              </li>
-              {% endfor %}
-            {% endif %}
+            {{ navItems(nav, page.url) }}
           </ul>
         </nav>
       </div>
 
-      <!-- Right cluster: desktop nav + theme toggle -->
+      <!-- Desktop nav + theme toggle -->
       <div class="flex-none flex items-center gap-2">
-        <!-- Desktop nav (shown on lg+) -->
         <nav class="hidden lg:flex" aria-label="{{ navLabel }}">
           <ul class="menu menu-horizontal px-1">
-            {% if navItems %}
-              {{ navItems(nav, page.url, 'link-underline hover:text-primary') }}
-            {% else %}
-              {% for n in nav %}
-              <li>
-                <a href="{{ n.url }}" class="link-underline hover:text-primary">
-                  {% if n.order %}<span class="opacity-60">{{ n.order }}.</span>{% endif %}
-                  <span>{{ n.title | shout }}</span>
-                </a>
-              </li>
-              {% endfor %}
-            {% endif %}
+            {{ navItems(nav, page.url, 'link-underline hover:text-primary') }}
           </ul>
         </nav>
 
-        <!-- Theme toggle (works with theme-init.js + theme-toggle.js) -->
         <button
           id="theme-toggle"
           class="btn btn-ghost btn-square"
           type="button"
           aria-pressed="false"
-          aria-label="Switch to dark theme"
+          aria-label="Switch theme"
           title="Toggle theme"
         >
-          <span class="lucide-sun">
-            {{ icon('sun', { class: 'w-6 h-6', 'aria-hidden': 'true' }) }}
-          </span>
-          <span class="lucide-moon hidden">
-            {{ icon('moon', { class: 'w-6 h-6', 'aria-hidden': 'true' }) }}
-          </span>
+          <span class="lucide-sun">{{ icon('sun', { class: 'w-6 h-6', 'aria-hidden': 'true' }) }}</span>
+          <span class="lucide-moon hidden">{{ icon('moon', { class: 'w-6 h-6', 'aria-hidden': 'true' }) }}</span>
         </button>
       </div>
     </div>

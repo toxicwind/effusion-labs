@@ -3,27 +3,34 @@ layout: layouts/base.njk
 eleventyComputed:
   companySlug: "pop-mart"
   title: "POP MART"
+showTitle: false
 ---
 {% from "components/back-link.njk" import backLink %}
 {% from "components/archive-nav.njk" import archiveNav %}
 
+{% set companySlug = companySlug %}
+{% set prodAll = collections.archiveProducts   | byCompany(companySlug) | byLocale('en') %}
+{% set charAll = collections.archiveCharacters | byCompany(companySlug) | byLocale('en') %}
+{% set seriesAll = collections.archiveSeries   | byCompany(companySlug) | byLocale('en') %}
+
 <nav class="breadcrumbs text-sm mb-2 overflow-x-auto whitespace-nowrap" aria-label="Breadcrumb">
   <ul>
-    <li><a href="/archives/">Archives</a></li>
+    <li><a href="{{ '/archives/' | url }}">Archives</a></li>
+    <li><a href="{{ '/archives/collectables/designer-toys/' | url }}">Designer Toys</a></li>
     <li class="opacity-70">POP MART</li>
   </ul>
 </nav>
 
 <div class="mb-6">
-  {{ backLink('Back', '/archives/') }}
+  {{ backLink('Back', '/archives/collectables/designer-toys/') }}
 </div>
 
-<header class="mb-6">
-  <h1 class="font-heading text-4xl uppercase tracking-[-0.025em] text-primary m-0">POP MART</h1>
-  <p class="mt-2 text-base-content/80">Browse POP MART lines discovered at build time.</p>
-</header>
+<section class="rounded-box border-2 border-black bg-base-200 p-5 sm:p-7 shadow-[6px_6px_0_rgba(0,0,0,0.85)]">
+  <h1 class="m-0 font-extrabold tracking-tight fluid-title text-primary">POP MART</h1>
+  <p class="mt-2 opacity-85">Browse POP MART lines discovered at build time.</p>
+</section>
 
-<section class="mb-10">
+<section class="mt-6">
   <div class="card bg-base-100 border shadow-sm">
     <div class="card-body p-4 sm:p-6">
       {{ archiveNav(page.url, archivesNav) }}
@@ -31,24 +38,30 @@ eleventyComputed:
   </div>
 </section>
 
-{# Build line list from collections (company-scoped) #}
-{% set prodAll = collections.archiveProducts   | byCompany(companySlug) | byLocale('en') %}
-{% set charAll = collections.archiveCharacters | byCompany(companySlug) | byLocale('en') %}
-{% set seriesAll = collections.archiveSeries   | byCompany(companySlug) | byLocale('en') %}
-{% set slugs = [] %}
-{% for it in prodAll %}{% if slugs.indexOf(it.data.lineSlug) == -1 %}{% set _ = slugs.push(it.data.lineSlug) %}{% endif %}{% endfor %}
-{% for it in charAll %}{% if slugs.indexOf(it.data.lineSlug) == -1 %}{% set _ = slugs.push(it.data.lineSlug) %}{% endif %}{% endfor %}
-{% for it in seriesAll %}{% if slugs.indexOf(it.data.lineSlug) == -1 %}{% set _ = slugs.push(it.data.lineSlug) %}{% endif %}{% endfor %}
-<section class="mb-12">
-  <h2 class="text-xl font-semibold mb-3">Lines</h2>
-  {% if slugs.length %}
-    <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      {% for slug in slugs %}
-        {% set prodLine = prodAll   | byLine(slug) | uniqueBy('productSlug') %}
-        {% set charLine = charAll   | byLine(slug) | uniqueBy('charSlug') %}
-        {% set seriesLine = seriesAll | byLine(slug) | uniqueBy('seriesSlug') %}
+{# Collect unique line slugs across product/character/series docs #}
+{% set lineSlugs = [] %}
+{% for it in prodAll %}{% if it.data.lineSlug and lineSlugs.indexOf(it.data.lineSlug) == -1 %}{% set _ = lineSlugs.push(it.data.lineSlug) %}{% endif %}{% endfor %}
+{% for it in charAll %}{% if it.data.lineSlug and lineSlugs.indexOf(it.data.lineSlug) == -1 %}{% set _ = lineSlugs.push(it.data.lineSlug) %}{% endif %}{% endfor %}
+{% for it in seriesAll %}{% if it.data.lineSlug and lineSlugs.indexOf(it.data.lineSlug) == -1 %}{% set _ = lineSlugs.push(it.data.lineSlug) %}{% endif %}{% endfor %}
+
+<section class="mt-10">
+  <div class="flex items-end justify-between gap-3">
+    <h2 class="text-xl font-semibold m-0">Lines</h2>
+    <div class="form-control max-w-xs">
+      <label class="label"><span class="label-text">Filter lines</span></label>
+      <input id="lineFilter" class="input input-bordered input-sm" placeholder="type to filter…" />
+    </div>
+  </div>
+
+  {% if lineSlugs.length %}
+    <ul id="lineList" class="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {% for slug in lineSlugs %}
+        {% set prodLine = prodAll   | byLine(slug) %}
+        {% set charLine = charAll   | byLine(slug) %}
+        {% set seriesLine = seriesAll | byLine(slug) %}
+        {% set lineHref = ('/archives/collectables/designer-toys/' + companySlug + '/' + slug + '/') | url %}
         <li class="card bg-base-100 border hover:shadow-xl hover:border-primary/50 transition">
-          <a class="card-body p-4 sm:p-5 block" href="/archives/collectables/designer-toys/{{ companySlug }}/{{ slug }}/">
+          <a class="card-body p-4 sm:p-5 block no-underline" href="{{ lineHref }}">
             <h3 class="card-title text-base m-0">{{ slug | replace('-', ' ') | title }}</h3>
             <div class="mt-3 flex flex-wrap gap-2">
               <span class="badge badge-outline">Products: {{ prodLine | length }}</span>
@@ -60,6 +73,20 @@ eleventyComputed:
       {% endfor %}
     </ul>
   {% else %}
-    <div class="alert"><span>No lines found under POP MART yet.</span></div>
+    <div class="alert mt-4"><span>No lines found under POP MART yet.</span></div>
   {% endif %}
 </section>
+
+<script type="module">
+  const input = document.getElementById('lineFilter');
+  const list = document.getElementById('lineList');
+  if (input && list) {
+    input.addEventListener('input', () => {
+      const q = input.value.trim().toLowerCase();
+      for (const li of list.children) {
+        const name = li.querySelector('.card-title')?.textContent?.toLowerCase() || '';
+        li.style.display = (!q || name.includes(q)) ? '' : 'none';
+      }
+    });
+  }
+</script>

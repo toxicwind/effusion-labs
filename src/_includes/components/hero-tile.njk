@@ -1,14 +1,10 @@
 {# Hero tile: daisyUI-leaning tile/card with primary variant #}
 {% macro heroTile(type, title, description, href, primary=false) -%}
 <a
-  href="{{ href }}"
-  class="group block surface-ground hb-tile transition
-         {% if primary %}
-           border-primary/60 ring-1 ring-primary/20 bg-gradient-to-br from-primary/5 to-transparent
-         {% else %}
-           border-base-content/15
-         {% endif %}
-         hover:-translate-y-0.5 focus:outline-none focus-visible:ring focus-visible:ring-primary/40 p-6 text-left"
+  href="{{ href[0] == '/' ? (href | url) : href }}"
+  class="group block hb-tile transition
+         {% if primary %} border-primary/60 ring-1 ring-primary/20 bg-gradient-to-br from-primary/5 to-transparent {% else %} border-base-content/15 {% endif %}
+         hover:-translate-y-0.5 focus:outline-none focus-visible:ring focus-visible:ring-primary/40 p-6 text-left no-underline"
 >
   <span class="badge badge-ghost badge-xs uppercase tracking-wider">{{ type | safe }}</span>
   <h3 class="mt-2 font-heading text-lg text-base-content group-hover:text-primary transition-colors">{{ title | safe }}</h3>

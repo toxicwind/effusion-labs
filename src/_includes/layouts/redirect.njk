@@ -1,17 +1,16 @@
-<!DOCTYPE html>
-<html lang="en" data-theme="light">
-<head>
-  <meta charset="UTF-8">
-  <meta name="color-scheme" content="light dark">
-  <meta http-equiv="refresh" content="0; url={{ redirect }}">
-  <link rel="canonical" href="{{ redirect }}">
-  <title>Redirecting…</title>
-</head>
-<body class="bg-base-100 text-base-content">
-  <p>Redirecting to <a class="link link-hover" href="{{ redirect }}">{{ redirect }}</a>…</p>
-  <script>
-    // JS fallback for environments that ignore meta refresh or strip querystrings
-    try { location.replace({{ redirect | dump }}); } catch (_) {}
-  </script>
-</body>
-</html>
+---
+layout: layouts/base.njk
+showTitle: false
+metaDisable: true
+eleventyComputed:
+  headExtra: |
+    <meta http-equiv="refresh" content="0; url={{ redirect }}">
+    <link rel="canonical" href="{{ redirect }}">
+    <meta name="robots" content="noindex">
+title: "Redirecting…"
+---
+
+<p>Redirecting to <a class="link link-hover" href="{{ redirect }}">{{ redirect }}</a>…</p>
+<script>
+  try { location.replace({{ redirect | dump }}); } catch(_) {}
+</script>

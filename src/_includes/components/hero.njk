@@ -1,65 +1,35 @@
-
-
-
-{# ─────────────────────────────────────────────────────────────
-  FILE: components/hero.njk
-  Changes:
-  • Hero becomes a neon field with a readable inlay “card”
-  • Logo + headings sit on neutral inlay; CTAs gain cutout option
-  • Optional MSCHF decals preserved; add subtle halo for vibe
-─────────────────────────────────────────────────────────────── #}
+{# components/hero.njk #}
 {% from "components/hero-tile.njk" import heroTile %}
 
 <header class="hero relative mx-auto w-full hb-neon hb-intensity-bold">
   <div class="container-fluid px-4 sm:px-6 lg:px-8 py-[clamp(3rem,8vh,9rem)]">
-
     <div class="hb-inlay mx-auto max-w-[min(100rem,92vw)] px-8 sm:px-12 py-10 text-center">
-      {# logo — brand sentinel #}
-      <img
-        class="hero-logo mx-auto mb-6 w-28 md:w-40"
-        src="{{ branding.logoSrc }}"
-        alt="{{ branding.logoAlt }}"
-        sizes="{{ branding.logoSizes }}"
-        loading="eager"
-        fetchpriority="high"
-        style="filter: drop-shadow(0 0 12px color-mix(in oklab, var(--neon-a) 30%, transparent));"
-      />
-
-      {# eyebrow #}
-      {% if eyebrow %}
-        <p class="eyebrow font-mono text-xs uppercase tracking-[0.18em] hb-ink-soft">
-          {{ eyebrow }}
-        </p>
+      {% if branding and branding.logoSrc %}
+        <img class="hero-logo mx-auto mb-6 w-28 md:w-40"
+             src="{{ branding.logoSrc | url }}"
+             alt="{{ branding.logoAlt or 'Logo' }}"
+             sizes="{{ branding.logoSizes }}"
+             loading="eager" fetchpriority="high"
+             style="filter: drop-shadow(0 0 12px color-mix(in oklab, var(--neon-a) 30%, transparent));" />
       {% endif %}
 
-      {# single, authoritative H1 with fluid size #}
-      <h1 class="font-heading font-black uppercase tracking-[-0.025em] leading-[0.95]
-                 text-[clamp(2.75rem,6vw,6.5rem)] hb-ink">
+      {% if eyebrow %}
+        <p class="font-mono text-xs uppercase tracking-[0.18em] hb-ink-soft">{{ eyebrow }}</p>
+      {% endif %}
+
+      <h1 class="font-heading font-black uppercase tracking-[-0.025em] leading-[0.95] text-[clamp(2.75rem,6vw,6.5rem)] hb-ink">
         {{ title }}
       </h1>
 
-      {# lede + optional sublede #}
-      {% if lede %}
-        <p class="lede mx-auto mt-4 max-w-3xl font-body text-base md:text-lg hb-ink-soft">
-          {{ lede }}
-        </p>
-      {% endif %}
-      {% if sublede %}
-        <p class="mx-auto mt-2 max-w-3xl font-body text-base md:text-lg hb-ink-soft">
-          {{ sublede }}
-        </p>
-      {% endif %}
+      {% if lede %}<p class="mx-auto mt-4 max-w-3xl font-body text-base md:text-lg hb-ink-soft">{{ lede }}</p>{% endif %}
+      {% if sublede %}<p class="mx-auto mt-2 max-w-3xl font-body text-base md:text-lg hb-ink-soft">{{ sublede }}</p>{% endif %}
 
-      {# CTAs — primary cutout, secondary ghost #}
       {% if ctas and ctas.length %}
-        <div class="cta-row mt-6 flex flex-col items-center justify-center gap-4 sm:flex-row">
+        <div class="mt-6 flex flex-col items-center justify-center gap-4 sm:flex-row">
           {% for c in ctas %}
             {% set isPrimary = (c.kind or 'primary') == 'primary' %}
-            <a
-              href="{{ c.href }}"
-              class="{% if isPrimary %}btn btn-primary{% else %}btn btn-outline{% endif %} px-7 py-3 font-heading font-bold"
-              {% if not isPrimary %}data-variant="c"{% endif %}
-            >
+            <a href="{{ c.href[0] == '/' ? (c.href | url) : c.href }}"
+               class="{% if isPrimary %}btn btn-primary{% else %}btn btn-outline{% endif %} px-7 py-3 font-heading font-bold">
               {{ c.label }}
             </a>
           {% endfor %}
@@ -67,18 +37,18 @@
       {% endif %}
     </div>
 
-    {# feature tiles (bento) #}
     {% if tiles and tiles.length %}
-      <div class="bento mt-10 grid gap-4 sm:grid-cols-3">
+      <div class="mt-10 grid gap-4 sm:grid-cols-3">
         {% for t in tiles %}
           {{ heroTile(t.k, t.h, t.s, t.url, t.featured or false) }}
         {% endfor %}
       </div>
     {% endif %}
 
-    {# build meta #}
-    <div class="mt-8 text-center font-mono text-[11px] hb-ink-soft">
-      {{ build.branch }} · {{ build.hash }} · {{ build.builtAtIso }}
-    </div>
+    {% if build %}
+      <div class="mt-8 text-center font-mono text-[11px] hb-ink-soft">
+        {{ build.branch }} · {{ build.hash }} · {{ build.builtAtIso }}
+      </div>
+    {% endif %}
   </div>
 </header>

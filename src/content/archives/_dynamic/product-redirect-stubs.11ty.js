@@ -1,12 +1,15 @@
 /**
- * Emits HTML stub pages (one per legacy/alias path) with meta refresh to the
- * canonical URL. These are excluded from sitemap.
+ * Emits HTML stub pages (one per legacy/alias path) that use your base layout
+ * and inject a meta refresh + canonical to the product’s canonical URL.
+ * Excluded from sitemap and collections.
  */
 export default class {
   data() {
     const on = (process.env.ARCHIVE_CANON_ROUTES ?? 'true') !== 'false';
     if (!on) return { pagination: { size: 0 } };
+
     return {
+      layout: 'layouts/base.njk',
       pagination: {
         data: 'archiveProductMap',
         size: 1,
@@ -15,7 +18,6 @@ export default class {
           const seen = new Map();
           for (const it of items || []) {
             const target = it.canonicalUrl;
-            // Stubs only for deep legacy paths to avoid collisions with canonical or other alias slugs
             const set = new Set([...(it.legacyPaths || []).filter(p => p.includes('/collectables/'))]);
             for (const from of set) {
               if (!from || from === target) continue;
@@ -28,23 +30,28 @@ export default class {
       permalink: (data) => data.entry.from,
       sitemap: { ignore: true },
       eleventyExcludeFromCollections: true,
-      layout: false,
+      eleventyComputed: {
+        title: () => 'Redirecting…',
+        // Inject into <head> via base.njk’s {{ headExtra | safe }}
+        headExtra: (data) =>
+          data.entry?.target
+            ? `<meta http-equiv="refresh" content="0; url=${data.entry.target}">
+               <link rel="canonical" href="${data.entry.target}">
+               <meta name="robots" content="noindex,follow">`
+            : '',
+        showTitle: () => false,
+        metaDisable: () => true,
+      },
     };
   }
 
   render(data) {
-    const target = data.entry.target;
-    return `<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta http-equiv="refresh" content="0; url=${target}">
-  <link rel="canonical" href="${target}">
-  <title>Redirecting…</title>
-</head>
-<body>
-  <p>Redirecting to canonical page: <a href="${target}">${target}</a></p>
-</body>
-</html>`;
+    const target = data.entry?.target || '/archives/';
+    return `
+<p>Redirecting to canonical page:
+  <a class="link link-hover" href="${target}">${target}</a>
+</p>
+<script>try{location.replace(${JSON.stringify(target)});}catch(_){};</script>
+`.trim();
   }
 }

@@ -1,17 +1,17 @@
 {% macro resumeEntry(job) %}
-  <article class="hb-row hb-anim mb-3">
-    <h3 class="text-lg font-semibold tracking-tight m-0">{{ job.company }}{% if job.role %} <span class="font-normal">— {{ job.role }}</span>{% endif %}</h3>
-    <div class="text-xs md:text-sm opacity-70">
-      <span>{{ job.location }}</span>
-      <span class="mx-2 hidden md:inline">•</span>
-      <span class="block md:inline">{{ job.start }}{% if job.end %} — {{ job.end }}{% else %} — Now{% endif %}</span>
-    </div>
-    {% if job.highlights %}
-      <ul class="mt-2 space-y-1.5 text-[15px] leading-6">
-        {% for h in job.highlights %}
-          <li class="hb-minirow">{{ h }}</li>
-        {% endfor %}
-      </ul>
-    {% endif %}
-  </article>
+<article class="hb-row hb-anim mb-3">
+  <h3 class="text-lg font-semibold tracking-tight m-0">
+    {{ job.company }}{% if job.role %} <span class="font-normal">— {{ job.role }}</span>{% endif %}
+  </h3>
+  <div class="text-xs md:text-sm opacity-70">
+    <span>{{ job.location }}</span>
+    <span class="mx-2 hidden md:inline">•</span>
+    <span class="block md:inline">{{ job.start }}{% if job.end %} — {{ job.end }}{% else %} — Now{% endif %}</span>
+  </div>
+  {% if job.highlights %}
+    <ul class="mt-2 space-y-1.5 text-[15px] leading-6">
+      {% for h in job.highlights %}<li class="hb-minirow">{{ h }}</li>{% endfor %}
+    </ul>
+  {% endif %}
+</article>
 {% endmacro %}

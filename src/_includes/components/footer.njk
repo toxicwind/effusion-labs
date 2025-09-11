@@ -1,11 +1,11 @@
 {# src/_includes/components/footer.njk #}
 {% from "components/ext-link.njk" import extLink %}
 {% macro footer(buildTime) %}
-  <footer class="mt-16 p-8 text-center text-sm text-text/60 border-t border-border bg-base-100/80 backdrop-blur">
+  <footer class="mt-16 p-8 text-center text-sm text-text/60 border-top border-base-200 bg-base-100/80 backdrop-blur">
     <span class="block font-mono text-xs tracking-widest mb-2" data-build="{{ buildTime }}">
       <time datetime="{{ buildTime }}">{{ buildTime }}</time>
     </span>
-    &copy; 2025 Effusion Labs. A space for creative synthesis.
+    &copy; {{ (buildTime or '2025-01-01') | date('yyyy') }} Effusion Labs. A space for creative synthesis.
     <div class="mt-2">{{ extLink('https://github.com/toxicwind/effusion-labs', 'GitHub') }}</div>
   </footer>
 {% endmacro %}

@@ -5,11 +5,8 @@
   <ul class="menu menu-sm p-0">
     {% for item in items %}
       <li>
-        <a
-          href="{{ item.url }}"
-          class="flex items-center justify-between rounded-sm
-                 focus:outline-none focus-visible:ring focus-visible:ring-primary/40"
-        >
+        <a href="{{ item.url | url }}" class="flex items-center justify-between rounded-sm
+                   focus:outline-none focus-visible:ring focus-visible:ring-primary/40">
           <span>{{ item.title }}</span>
           <span class="badge badge-ghost badge-xs">{{ item.count }}</span>
         </a>

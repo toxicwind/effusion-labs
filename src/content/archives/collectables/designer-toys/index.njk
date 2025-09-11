@@ -1,18 +1,77 @@
 ---
 layout: layouts/base.njk
 title: "Designer Toys"
+showTitle: false
 ---
 {% from "components/archive-nav.njk" import archiveNav %}
 
-<header class="mb-6">
-  <h1 class="font-heading text-4xl uppercase tracking-[-0.025em] text-base-content m-0">
-    Designer Toys
-  </h1>
-  <p class="mt-2 text-base-content/80">Art toys, platform figures, and collab series.</p>
-</header>
+{# Aggregate companies for this category (designer-toys lives in the pathing). #}
+{% set prodAll = collections.archiveProducts or [] %}
+{% set agg = {} %}
+{% for p in prodAll %}
+  {% if p.data and p.data.companySlug %}
+    {% set slug = p.data.companySlug %}
+    {% if not agg[slug] %}
+      {% set _ = agg | setAttribute(slug, { slug: slug, title: p.data.companyTitle or slug, count: 0, lines: new Set() }) %}
+    {% endif %}
+    {% set _ = agg[slug] | setAttribute('count', (agg[slug].count + 1)) %}
+    {% if p.data.lineSlug %}{% set _ = agg[slug].lines.add(p.data.lineSlug) %}{% endif %}
+  {% endif %}
+{% endfor %}
+{% set companies = [] %}
+{% for k,v in agg %}
+  {% set companies = companies.concat([{ slug: v.slug, title: v.title, count: v.count, lineCount: v.lines.size }]) %}
+{% endfor %}
+{% set companies = companies | sort(false, true, 'count') %}
 
-<section class="card bg-base-100 border shadow-sm">
+<section class="rounded-box border-2 border-black bg-base-200 p-5 sm:p-7 shadow-[6px_6px_0_rgba(0,0,0,0.85)]">
+  <h1 class="m-0 font-extrabold tracking-tight fluid-title">Designer Toys</h1>
+  <p class="mt-2 opacity-85">Art toys, platform figures, and collab series.</p>
+</section>
+
+<section class="card bg-base-100 border shadow-sm mt-6">
   <div class="card-body p-4 sm:p-6">
     {{ archiveNav(page.url, archivesNav) }}
   </div>
 </section>
+
+{% if companies.length %}
+<section class="mt-8">
+  <div class="flex items-end justify-between gap-3">
+    <h2 class="text-xl font-semibold m-0">Companies</h2>
+    <div class="form-control max-w-xs">
+      <label class="label"><span class="label-text">Filter companies</span></label>
+      <input id="companyFilterDT" class="input input-bordered input-sm" placeholder="type to filter…" />
+    </div>
+  </div>
+
+  <ul id="companyListDT" class="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    {% for c in companies %}
+      <li class="card bg-base-100 border hover:shadow-xl hover:border-primary/50 transition">
+        <a class="card-body p-4 block no-underline"
+           href="{{ ('/archives/collectables/designer-toys/' + c.slug + '/') | url }}">
+          <h3 class="card-title text-base m-0">{{ c.title | replace('-', ' ') | title }}</h3>
+          <div class="mt-2 flex flex-wrap gap-2">
+            <span class="badge badge-outline">Products: {{ c.count }}</span>
+            <span class="badge badge-outline">Lines: {{ c.lineCount }}</span>
+          </div>
+        </a>
+      </li>
+    {% endfor %}
+  </ul>
+</section>
+
+<script type="module">
+  const input = document.getElementById('companyFilterDT');
+  const list = document.getElementById('companyListDT');
+  if (input && list) {
+    input.addEventListener('input', () => {
+      const q = input.value.trim().toLowerCase();
+      for (const li of list.children) {
+        const name = li.querySelector('.card-title')?.textContent?.toLowerCase() || '';
+        li.style.display = (!q || name.includes(q)) ? '' : 'none';
+      }
+    });
+  }
+</script>
+{% endif %}

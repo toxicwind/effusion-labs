@@ -1,85 +1,86 @@
 {# components/products/SpecSheet.njk #}
-{# ---------------------------------------------------------------------------
- # Pretty spec sheet (Tailwind + daisyUI), MSCHF-ish accents
- # - No JS-style ternaries (Nunjucks-safe)
- # - Uses |length, explicit {% if %} blocks, and filter parentheses
- # - Works with your filters: titleizeSlug, humanDate, yesNo
- # --------------------------------------------------------------------------- #}
-{% macro specSheet(product) %}
-{% set p = product.data %}
-{% set releaseDate = p.release_date or (p.release_info and p.release_info.release_date) %}
-{% set editionKind = (p.edition and p.edition.kind) %}
-{% set editionSize = (p.release_info and p.release_info.edition_size) or (p.availability and p.availability.unit_count) %}
-{% set msrpMap  = (p.pricing and p.pricing.original_msrp) %}
-{% set secRange = (p.pricing and p.pricing.secondary_market_range) %}
-{% set availabilityIsLimited = (p.availability and p.availability.limited) %}
+{% from "components/products/MarketTable.njk"    import marketTable %}
+{% from "components/products/ProvenanceList.njk" import provenanceList %}
+{% from "components/products/MetaNotes.njk"      import metaNotes %}
 
-{# primaryMarket without ternary #}
-{% if p.market_listings and (p.market_listings | length) %}
-  {% set primaryMarket = p.market_listings[0] %}
-{% else %}
-  {% set primaryMarket = null %}
+{% macro specSheet(product) %}
+{% set p = product and product.data or {} %}
+
+{# release + edition #}
+{% set releaseDate  = p.release_date or (p.release_info and p.release_info.release_date) %}
+{% set editionKind  = p.edition and p.edition.kind %}
+{% set editionSize  = (p.release_info and p.release_info.edition_size) or (p.availability and p.availability.unit_count) %}
+{% set msrpMap      = p.pricing and p.pricing.original_msrp %}
+{% set secRange     = p.pricing and p.pricing.secondary_market_range %}
+{% set availabilityIsLimited = p.availability and p.availability.limited %}
+{% set listings = p.market_listings or [] %}
+{% set primaryMarket = (listings | length) and listings[0] or null %}
+
+{# FX context #}
+{% set baseCcy = (build and build.base_currency) or 'USD' %}
+{% set fx      = (build and build.fx) or {} %}
+{% set fxAsOf  = (build and build.fx_asof) %}
+
+{# MSRP choice #}
+{% set msrpCur = null %}
+{% set msrpAmt = null %}
+{% if primaryMarket and primaryMarket.price %}
+  {% set msrpCur = (primaryMarket.currency or baseCcy) | upper %}
+  {% set msrpAmt = primaryMarket.price * 1 %}
+{% elseif msrpMap %}
+  {% for ccy, amt in msrpMap %}
+    {% if loop.first %}{% set msrpCur = ccy | upper %}{% set msrpAmt = amt * 1 %}{% endif %}
+  {% endfor %}
+{% endif %}
+{% set msrpRate = null %}
+{% if msrpCur and (msrpCur == (baseCcy | upper)) %}
+  {% set msrpRate = 1 %}
+{% elseif msrpCur and fx and fx[msrpCur] %}
+  {% set msrpRate = fx[msrpCur] * 1 %}
+{% endif %}
+{% set msrpConverted = null %}
+{% if msrpAmt != null and msrpRate != null %}
+  {% set msrpConverted = msrpAmt * msrpRate %}
 {% endif %}
 
-<section
-  class="relative card bg-base-100 border border-base-300/60 shadow-xl rounded-2xl overflow-hidden
-         before:content-[''] before:pointer-events-none before:block before:absolute before:inset-0
-         before:bg-[radial-gradient(1200px_600px_at_0%_-10%,hsl(var(--er)/.10),transparent_40%)]
-         after:content-[''] after:pointer-events-none after:block after:absolute after:inset-0
-         after:bg-[radial-gradient(900px_500px_at_110%_120%,hsl(var(--p)/.10),transparent_40%)]">
-
+<section class="relative card bg-base-100 border border-base-300/60 shadow-xl rounded-2xl overflow-hidden
+                before:content-[''] before:pointer-events-none before:block before:absolute before:inset-0
+                before:bg-[radial-gradient(1200px_600px_at_0%_-10%,hsl(var(--er)/.10),transparent_40%)]
+                after:content-[''] after:pointer-events-none after:block after:absolute after:inset-0
+                after:bg-[radial-gradient(900px_500px_at_110%_120%,hsl(var(--p)/.10),transparent_40%)]">
   <div class="card-body gap-4">
-    {# ---------- Header ---------- #}
     <div class="flex items-start justify-between gap-3">
       <div>
         <h2 class="card-title text-2xl sm:text-3xl tracking-tight">
-          {{ p.product_title
-             or (p.series and (p.series ~ ' • ' ~ (p.variant or '')))
-             or p.title
-             or 'Untitled Product' }}
+          {{ p.product_title or (p.series and (p.series ~ ' • ' ~ (p.variant or ''))) or p.title or 'Untitled Product' }}
         </h2>
-
         <div class="mt-2 flex flex-wrap items-center gap-2">
           {% if p.brand %}<span class="badge badge-outline">{{ p.brand | titleizeSlug }}</span>{% endif %}
           {% if p.line %}<span class="badge badge-outline">{{ p.line | titleizeSlug }}</span>{% endif %}
           {% if p.character %}
             <a class="badge badge-ghost hover:badge-outline transition"
-               href="/archives/character/{{ (p.character) | slug }}/">
-              {{ p.character | titleizeSlug }}
-            </a>
+               href="{{ '/archives/character/' | url }}{{ (p.character | slug) }}/">{{ p.character | titleizeSlug }}</a>
           {% endif %}
           {% if p.series %}<span class="badge badge-ghost">{{ p.series | titleizeSlug }}</span>{% endif %}
           {% if p.form %}<span class="badge badge-ghost">{{ p.form | titleizeSlug }}</span>{% endif %}
         </div>
       </div>
-
-      {# Availability chip (no ternary) #}
-      {% set availBadge = 'badge-success' %}
-      {% if availabilityIsLimited %}{% set availBadge = 'badge-error' %}{% endif %}
       <div class="tooltip tooltip-left" data-tip="Availability">
-        <span class="badge {{ availBadge }} badge-lg">
+        <span class="badge {{ availabilityIsLimited ? 'badge-error' : 'badge-success' }} badge-lg">
           {{ availabilityIsLimited and 'Limited' or 'Standard' }}
         </span>
       </div>
     </div>
 
-    {# ---------- Quick stats row ---------- #}
     <div class="stats stats-vertical sm:stats-horizontal w-full bg-base-200/40 rounded-xl border border-base-300/50">
       <div class="stat">
         <div class="stat-title opacity-70">Release</div>
         <div class="stat-value text-xl">
-          {% if releaseDate %}
-            {{ releaseDate | humanDate | safe }}
-          {% else %}
-            TBD
-          {% endif %}
+          {% if releaseDate %}{{ releaseDate | humanDate | safe }}{% else %}TBD{% endif %}
         </div>
         {% if p.size and (p.size.h or p.size.w or p.size.d) %}
           <div class="stat-desc">
-            {{ p.size.h }}
-            {% if p.size.w %}×{{ p.size.w }}{% endif %}
-            {% if p.size.d %}×{{ p.size.d }}{% endif %}
-            {{ p.size.unit or 'cm' }}
+            {{ p.size.h }}{% if p.size.w %}×{{ p.size.w }}{% endif %}{% if p.size.d %}×{{ p.size.d }}{% endif %} {{ p.size.unit or 'cm' }}
           </div>
         {% endif %}
       </div>
@@ -87,24 +88,15 @@
       <div class="stat">
         <div class="stat-title opacity-70">MSRP</div>
         <div class="stat-value text-xl">
-          {% if primaryMarket and primaryMarket.price %}
-            {{ primaryMarket.currency }} {{ primaryMarket.price }}
-          {% elseif msrpMap %}
-            {% for ccy, amt in msrpMap %}
-              {% if loop.first %}
-                {{ ccy }} {{ amt }}
-              {% endif %}
-            {% endfor %}
-          {% else %}—{% endif %}
+          {% if msrpAmt != null and msrpCur %}{{ msrpAmt | money(msrpCur) }}{% else %}—{% endif %}
         </div>
+        {% if msrpConverted != null and (msrpCur|upper) != (baseCcy|upper) %}
+          <div class="stat-desc">≈ {{ msrpConverted | money(baseCcy) }}{% if fxAsOf %} <span class="opacity-70">(as of {{ fxAsOf }})</span>{% endif %}</div>
+        {% endif %}
         {% if secRange %}
-          <div class="stat-desc">
-            {% for ccy, rng in secRange %}
-              {% if loop.first %}
-                Secondary: {{ ccy }} {{ rng }}
-              {% endif %}
-            {% endfor %}
-          </div>
+          {% for ccy, rng in secRange %}
+            {% if loop.first %}<div class="stat-desc">Secondary: {{ ccy }} {{ rng }}</div>{% endif %}
+          {% endfor %}
         {% endif %}
       </div>
 
@@ -113,31 +105,13 @@
         <div class="stat-value text-xl">{{ (p.distribution and p.distribution.region_lock) | yesNo }}</div>
         {% if p.distribution and p.distribution.markets and (p.distribution.markets | length) %}
           <div class="stat-desc flex flex-wrap gap-1">
-            {% for m in p.distribution.markets %}
-              <span class="badge badge-sm">{{ m }}</span>
-            {% endfor %}
+            {% for m in p.distribution.markets %}<span class="badge badge-sm">{{ m }}</span>{% endfor %}
           </div>
         {% endif %}
       </div>
     </div>
 
-    {# ---------- Spec sheet grid ---------- #}
-    <dl data-testid="spec-sheet"
-        class="grid grid-cols-1 sm:grid-cols-12 gap-x-6 gap-y-3 mt-4 text-sm leading-relaxed">
-
-      {% if p.product_id %}
-        <dt class="sm:col-span-3 text-base-content/70">Product ID</dt>
-        <dd class="sm:col-span-9">
-          <code class="kbd kbd-sm align-middle">{{ p.product_id }}</code>
-          <button type="button"
-                  class="btn btn-ghost btn-xs ml-2"
-                  data-copy="{{ p.product_id }}"
-                  aria-label="Copy product ID">
-            Copy
-          </button>
-        </dd>
-      {% endif %}
-
+    <dl data-testid="spec-sheet" class="grid grid-cols-1 sm:grid-cols-12 gap-x-6 gap-y-3 mt-4 text-sm leading-relaxed">
       {% if p.variant %}
         <dt class="sm:col-span-3 text-base-content/70">Variant</dt>
         <dd class="sm:col-span-9">{{ p.variant | titleizeSlug }}</dd>
@@ -180,18 +154,10 @@
         </dd>
       {% endif %}
 
-      {% if p.market_listings and (p.market_listings | length) %}
-        <dt class="sm:col-span-3 text-base-content/70">Market Listings</dt>
+      {% if listings and (listings | length) %}
+        <dt class="sm:col-span-3 text-base-content/70">Market</dt>
         <dd class="sm:col-span-9">
-          <ul class="flex flex-wrap gap-2">
-            {% for l in p.market_listings %}
-              <li class="tooltip" data-tip="{{ l.currency }} {{ l.price }}">
-                <span class="badge badge-info badge-outline">
-                  {{ l.market }}{% if l.currency or l.price %} · {{ l.currency }} {{ l.price }}{% endif %}
-                </span>
-              </li>
-            {% endfor %}
-          </ul>
+          {{ marketTable(listings, { fx: fx, base: baseCcy, asOf: fxAsOf }) }}
         </dd>
       {% endif %}
 
@@ -209,31 +175,16 @@
         </dd>
       {% endif %}
 
-      <dt class="sm:col-span-3 text-base-content/70">Region Lock</dt>
-      <dd class="sm:col-span-9">{{ (p.distribution and p.distribution.region_lock) | yesNo }}</dd>
-
       {% if p.provenance_ref %}
+        {% set prov = (p.provenance_ref | provenanceSources) %}
         <dt class="sm:col-span-3 text-base-content/70">Provenance</dt>
         <dd class="sm:col-span-9">
-          {% set prov = (p.provenance_ref | provenanceSources) %}
-          {% if prov and prov.length %}
-            <ul class="space-y-1">
-              {% for s in prov | slice(0,8) %}
-                <li>
-                  {% if s.url %}
-                    <a class="external-link" href="{{ s.url }}" target="_blank" rel="noopener noreferrer">{{ hostname(s.url) or s.url }}</a>
-                  {% endif %}
-                  {% if s.title %}<span class="opacity-80"> — {{ s.title | safe }}</span>{% endif %}
-                  {% if s.currency and s.price %}<span class="opacity-70"> — {{ s.currency }} {{ s.price }}</span>{% endif %}
-                  {% if s.market %}<span class="opacity-70"> — {{ s.market }}</span>{% endif %}
-                  {% if s.retrieved_at %}<span class="opacity-60"> ({{ s.retrieved_at }})</span>{% endif %}
-                </li>
-              {% endfor %}
-            </ul>
-            <div class="mt-1 text-xs opacity-90 space-x-3">
+          {% if prov and (prov | length) %}
+            {{ provenanceList(prov, { limit: 10, fx: fx, base: baseCcy }) }}
+            <div class="mt-2 text-xs opacity-90 space-x-3">
               <a class="link link-hover" href="{{ p.provenance_ref | provenanceViewerUrl }}">View .jsonl</a>
               <a class="link" href="{{ p.provenance_ref | provenanceDownloadUrl }}" download>Download</a>
-              {% if prov.length > 8 %}<span class="opacity-60"> · showing 8 of {{ prov.length }}</span>{% endif %}
+              {% if (prov | length) > 10 %}<span class="opacity-60"> · showing 10 of {{ prov | length }}</span>{% endif %}
             </div>
           {% else %}
             <a class="link link-primary" href="{{ p.provenance_ref | provenanceViewerUrl }}">View .jsonl</a>
@@ -251,14 +202,8 @@
           <span class="opacity-70">{{ confPct }}%</span>
         </dd>
       {% endif %}
-
-      {% if p.notes %}
-        <dt class="sm:col-span-3 text-base-content/70">Notes</dt>
-        <dd class="sm:col-span-9">{{ p.notes | safe }}</dd>
-      {% endif %}
     </dl>
 
-    {# ---------- Changes / Deltas ---------- #}
     {% if p.Deltas and (p.Deltas | length) %}
       <div class="mt-4">
         <div class="collapse collapse-arrow border border-base-300/60 bg-base-200/50 rounded-xl">
@@ -271,13 +216,11 @@
               {% for d in p.Deltas %}
                 <li>
                   <div class="timeline-start">{{ d.field }}</div>
-                  <div class="timeline-middle">
-                    <span class="badge badge-error badge-sm"></span>
-                  </div>
+                  <div class="timeline-middle"><span class="badge badge-error badge-sm"></span></div>
                   <div class="timeline-end timeline-box prose prose-sm max-w-none">
                     <p class="m-0"><strong>{{ d.reason }}</strong></p>
                     {% if d.from or d.to %}
-                      <pre class="m-0 mt-2 rounded-lg bg-base-300/60 p-3 overflow-x-auto"><code>from: {{ d.from | safe }}
+<pre class="m-0 mt-2 rounded-lg bg-base-300/60 p-3 overflow-x-auto"><code>from: {{ d.from | safe }}
 to:   {{ d.to   | safe }}</code></pre>
                     {% endif %}
                   </div>
@@ -288,6 +231,8 @@ to:   {{ d.to   | safe }}</code></pre>
         </div>
       </div>
     {% endif %}
+
+    {{ metaNotes(p) }}
   </div>
 </section>
 {% endmacro %}

@@ -1,19 +1,18 @@
-{# Feed entry: convert to a daisyUI-flavored cardish anchor #}
+{# Feed entry: daisyUI-flavored card link #}
 {% macro feedEntry(item) -%}
-<li data-type="{{ item.type }}">
-  <a href="{{ item.url }}" class="group block h-full surface-ground hb-tile with-rail p-5 sm:p-6 transition-colors text-left">
+{% set t = (item.type or item.data.type) | lower %}
+<li data-type="{{ t }}">
+  <a href="{{ item.url | url }}" class="group block h-full hb-tile with-rail p-5 sm:p-6 transition-colors text-left no-underline"
+     data-title="{{ item.data.title }}" data-date="{{ item.date | date('yyyy-MM-dd') }}">
     <div>
-      {% set t = (item.type or item.data.type) | lower %}
       {% set typeClass = 'pill--meta' %}
-      {% if t == 'project' %}{% set typeClass = 'pill--project' %}
-      {% elif t == 'concept' %}{% set typeClass = 'pill--concept' %}
-      {% elif t == 'spark' %}{% set typeClass = 'pill--spark' %}
-      {% elif t == 'meta' %}{% set typeClass = 'pill--meta' %}{% endif %}
+      {% if t == 'project' %}{% set typeClass = 'pill--project' %}{% elif t == 'concept' %}{% set typeClass = 'pill--concept' %}
+      {% elif t == 'spark' %}{% set typeClass = 'pill--spark' %}{% elif t == 'meta' %}{% set typeClass = 'pill--meta' %}{% endif %}
       <div class="flex items-start justify-between">
-        <span class="pill {{ typeClass }}">{{ item.type | capitalize }}</span>
+        <span class="pill {{ typeClass }}">{{ (item.type or item.data.type) | capitalize }}</span>
         {% if item.date %}
-          <time datetime="{{ item.date.toISOString() }}" class="text-[0.7rem] opacity-90">
-            {{ item.date.toISOString().slice(0, 10) }}
+          <time datetime="{{ item.date | htmlDateString }}" class="text-[0.7rem] opacity-90">
+            {{ item.date | readableDate }}
           </time>
         {% endif %}
       </div>

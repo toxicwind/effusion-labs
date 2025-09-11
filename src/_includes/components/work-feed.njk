@@ -1,9 +1,4 @@
-{# ─────────────────────────────────────────────────────────────
-  FILE: components/work.njk
-  Changes:
-  • Neon-led header; filters on a neutral inlay for legibility
-  • Primary filter uses cutout style; strong focus ring
-─────────────────────────────────────────────────────────────── #}
+{# components/work-feed.njk #}
 {% from "components/feed-entry.njk" import feedEntry %}
 <section aria-labelledby="work-heading" class="space-y-4">
   <h2 id="work-heading" class="text-2xl font-heading hb-ink">Work</h2>
@@ -25,6 +20,6 @@
   </ul>
 
   <div class="more">
-    <a class="btn btn-primary" href="/work">Browse all work</a>
+    <a class="btn btn-primary" href="{{ '/work' | url }}">Browse all work</a>
   </div>
 </section>

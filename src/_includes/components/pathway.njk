@@ -1,16 +1,13 @@
 {# src/_includes/components/pathway.njk #}
 {% macro pathway(path) %}
-<div class="flex items-center gap-2 text-sm">
+<nav class="flex items-center gap-2 text-sm" aria-label="Breadcrumb">
   {% for node in path %}
-    {% if not loop.first %}
-      <span aria-hidden="true" class="opacity-60">→</span>
-    {% endif %}
-    <a
-      href="{{ node.url }}"
-      class="link link-hover underline-offset-2 decoration-dotted rounded-sm px-0.5 focus:outline-none focus-visible:ring focus-visible:ring-primary/40"
-    >
+    {% if not loop.first %}<span aria-hidden="true" class="opacity-60">→</span>{% endif %}
+    <a href="{{ node.url[0] == '/' ? (node.url | url) : node.url }}"
+       class="link link-hover underline-offset-2 decoration-dotted rounded-sm px-0.5
+              focus:outline-none focus-visible:ring focus-visible:ring-primary/40">
       {{ node.title }}
     </a>
   {% endfor %}
-</div>
+</nav>
 {% endmacro %}

@@ -1,9 +1,8 @@
-{# DaisyUI-styled pagination component #}
-<nav class="flex items-center justify-between gap-4 mt-12 text-sm font-mono">
+{# DaisyUI-styled pagination #}
+{% macro pager(pagination) %}
+<nav class="flex items-center justify-between gap-4 mt-12 text-sm font-mono" aria-label="Pagination">
   {% if pagination.href.previous %}
-    <a href="{{ pagination.href.previous }}" class="btn btn-sm btn-ghost gap-2">
-      ← Newer
-    </a>
+    <a href="{{ pagination.href.previous | url }}" class="btn btn-sm btn-ghost gap-2">← Newer</a>
   {% else %}
     <span class="opacity-30">← Newer</span>
   {% endif %}
@@ -13,10 +12,9 @@
   </span>
 
   {% if pagination.href.next %}
-    <a href="{{ pagination.href.next }}" class="btn btn-sm btn-ghost gap-2">
-      Older →
-    </a>
+    <a href="{{ pagination.href.next | url }}" class="btn btn-sm btn-ghost gap-2">Older →</a>
   {% else %}
     <span class="opacity-30">Older →</span>
   {% endif %}
 </nav>
+{% endmacro %}

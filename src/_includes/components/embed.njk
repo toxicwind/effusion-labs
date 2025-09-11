@@ -1,47 +1,52 @@
 {# components/embed.njk #}
+{% macro embed(url, title, description, opts = {}) %}
+{# opts: { badges?: [{label, tone}], meta?: [{label, value}], tags?: [tag] } #}
+{% set _isInternal = url and url[0] == '/' %}
 <a
-  href="{{ url }}"
-  class="embed block rounded-md border border-base-content/15 bg-base-100/80 backdrop-blur p-4 transition
-         hover:bg-base-200/60 hover:border-primary/50
-         focus:outline-none focus-visible:ring focus-visible:ring-primary/40"
+  href="{{ _isInternal ? (url | url) : url }}"
+  class="group block rounded-lg border border-base-content/15 bg-base-100/80 backdrop-blur p-4 transition
+         hover:-translate-y-0.5 hover:shadow-xl hover:border-primary/50
+         focus:outline-none focus-visible:ring focus-visible:ring-primary/40 no-underline"
+  {% if not _isInternal %}target="_blank" rel="noopener noreferrer"{% endif %}
 >
-  <div class="mb-1">
-    <strong class="text-lg text-base-content">{{ title or fileSlug or "Untitled" }}</strong>
+  <div class="mb-1 flex items-center gap-2">
+    <strong class="text-lg text-base-content">{{ title or 'Untitled' }}</strong>
+    {% if not _isInternal and url %}
+      <span class="badge badge-ghost badge-xs">{{ url | hostname }}</span>
+    {% endif %}
   </div>
 
   {% if description %}
-    <p class="text-base-content/70 text-sm mb-2">{{ description }}</p>
+    <p class="text-base-content/70 text-sm mb-3">{{ description }}</p>
+  {% endif %}
+
+  {% if opts.badges and opts.badges.length %}
+    <div class="mb-2 flex flex-wrap gap-1">
+      {% for b in opts.badges %}
+        <span class="badge badge-outline badge-xs">{{ b.label }}</span>
+      {% endfor %}
+    </div>
   {% endif %}
 
   <div class="text-xs text-base-content/70 space-y-1">
-    {% if status or certainty or importance %}
-    <div class="flex gap-2 flex-wrap">
-      {% if status %}<span class="badge badge-ghost badge-xs">{{ status }}</span>{% endif %}
-      {% if certainty %}<span class="badge badge-ghost badge-xs">certainty: {{ certainty }}</span>{% endif %}
-      {% if importance %}<span class="badge badge-ghost badge-xs">importance: {{ importance }}</span>{% endif %}
-    </div>
+    {% if opts.meta and opts.meta.length %}
+      <div class="flex flex-wrap gap-x-3 gap-y-1">
+        {% for m in opts.meta %}
+          <span><span class="opacity-60">{{ m.label }}:</span> {{ m.value }}</span>
+        {% endfor %}
+      </div>
     {% endif %}
 
-    {% if tags %}
-    <div class="mt-1">
-      <strong class="text-base-content/60">Tags:</strong>
-      <span class="inline-flex flex-wrap gap-1 pl-1">
-        {% for tag in tags %}
-          <span class="badge badge-outline badge-xs">{{ tag }}</span>
-        {% endfor %}
-      </span>
-    </div>
-    {% endif %}
-
-    {% if memory_ref %}
-    <div class="mt-1">
-      <strong class="text-base-content/60">Memory:</strong>
-      <ul class="list-disc pl-4">
-        {% for ref in memory_ref %}
-          <li><a href="{{ ref }}" class="link link-hover">{{ ref }}</a></li>
-        {% endfor %}
-      </ul>
-    </div>
+    {% if opts.tags and opts.tags.length %}
+      <div class="mt-1">
+        <strong class="text-base-content/60">Tags:</strong>
+        <span class="inline-flex flex-wrap gap-1 pl-1">
+          {% for tag in opts.tags %}
+            <span class="badge badge-outline badge-xs">#{{ tag }}</span>
+          {% endfor %}
+        </span>
+      </div>
     {% endif %}
   </div>
 </a>
+{% endmacro %}
