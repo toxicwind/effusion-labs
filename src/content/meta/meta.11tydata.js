@@ -1,12 +1,3 @@
-export default {
-  eleventyComputed: {
-    permalink: (data) => {
-      if (data.permalink) return data.permalink;
-      if (data.page.fileSlug === 'index' || data.page.fileSlug === '_index') {
-        return '/meta/';
-      }
-      return `/meta/${data.page.fileSlug}/`;
-    },
-    layout: (data) => data.layout ?? 'layouts/base.njk',
-  },
-};
+import { contentArea } from '../../../config/content-area.js';
+
+export default contentArea('meta');
