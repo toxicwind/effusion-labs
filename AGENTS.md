@@ -1,4 +1,4 @@
-## BEGIN OF AGENTS.md - HYPEBRUT CONTEXT INJECTION — Eleventy • Node/ESM • npm • Shell (`AGENTS.md`)
+# BEGIN OF AGENTS.md - HYPEBRUT CONTEXT INJECTION — Eleventy • Node/ESM • npm • Shell (`AGENTS.md`)
 
 Repository-specific operating layer that extends `SYSTEM.md`. This guide is **always-on**: assume processes may already be running, prefer reuse over restart, and use repo-local tooling. Where this names commands or paths, **do exactly that**.
 
@@ -6,22 +6,23 @@ Repository-specific operating layer that extends `SYSTEM.md`. This guide is **al
 
 ## Environment & Local Tooling (MUST)
 
-- **Activate (idempotent)**  
-  ```bash
+- **Activate (idempotent)**
+
+```bash
   source utils/scripts/setup/env-bootstrap.sh
-````
+```
 
 Signals of success:
 `✅ HYPEBRUT Environment activated. Tools are available...` or
 `ℹ️ HYPEBRUT Environment already active. Sourcing skipped...`
 
-* **Recovery check**
+- **Recovery check**
 
-  ```bash
+```bash
   type -t llm_cat || source utils/scripts/setup/env-bootstrap.sh
-  ```
+```
 
-* **Use repo-shipped binaries only** (never globals; PATH must resolve to `./bin/*`)
+- **Use repo-shipped binaries only** (never globals; PATH must resolve to `./bin/*`)
   `./bin/node  ./bin/npm  ./bin/prettier  ./bin/rg  ./bin/jq  ./bin/yq  ./bin/fd  ./bin/bat  ./bin/tree`
   If `which node` or `which npm` is not under `./bin/`, re-source the environment.
 
@@ -29,50 +30,54 @@ Signals of success:
 
 ## Persistence Paths (MUST)
 
-* `PERSIST_ROOT=src/content/docs/`
-* Reports → `src/content/docs/reports/`
-* Worklogs → `src/content/docs/worklogs/`
-* Knowledge (raw fetches, tables, JSON, logs) → `src/content/docs/knowledge/`
-* **Filenames are UTC**: `YYYYMMDDThhmmssZ.ext` and paths are **repo-relative** in your final message.
+- `PERSIST_ROOT=src/content/docs/`
+- Reports → `src/content/docs/reports/`
+- Worklogs → `src/content/docs/worklogs/`
+- Knowledge (raw fetches, tables, JSON, logs) → `src/content/docs/knowledge/`
+- **Filenames are UTC**: `YYYYMMDDThhmmssZ.ext` and paths are **repo-relative** in your final message.
 
 ---
 
 ## Running Services Are Assumed
 
-* **Inspect before starting**
+- **Inspect before starting**
 
-  ```bash
+```bash
   hype_status
-  ```
-* **Reuse an existing dev server** when present; **do not** start a duplicate or change ports blindly.
-* **Start only if absent**
+```
 
-  ```bash
+- **Reuse an existing dev server** when present; **do not** start a duplicate or change ports blindly.
+- **Start only if absent**
+
+```bash
   hype_bg --port 8080 devserver -- ./bin/npm run dev
-  ```
-* **Stop explicitly** (no kill+start chaining)
+```
 
-  ```bash
+- **Stop explicitly** (no kill+start chaining)
+
+```bash
   hype_kill devserver
-  ```
+```
 
 ---
 
 ## Eleventy Build/Serve
 
-* **Build**
+- **Build**
 
-  ```bash
+```bash
   ./bin/npm run build \
     || ./bin/node ./node_modules/@11ty/eleventy/cmd.js
-  ```
-* **Serve (dev)**
+```
 
-  ```bash
+- **Serve (dev)**
+
+```bash
   ./bin/npm run dev \
     || ./bin/node ./node_modules/@11ty/eleventy/cmd.js --serve --port=8080
-  ```
-* **Structure map**
+```
+
+- **Structure map**
   Config `eleventy.config.mjs`, `config/**/*.mjs|js`;
   Templates `src/_includes/**`; Content `src/content/**`; Pages `src/pages/**`;
   CSS/Tailwind/PostCSS `tailwind.config.mjs`, `postcss.config.mjs`, `src/assets/css/**`;
@@ -84,22 +89,22 @@ Signals of success:
 
 **Registry intelligence precedes every dependency decision.** Use **repo-local npm** and the curated helper to search, analyze, and persist evidence.
 
-* **Canonical registry truth**
+- **Canonical registry truth**
 
-  ```bash
+```bash
   ./bin/npm ls --depth=0
   ./bin/npm view <pkg> version time dist-tags license repository.url engines peerDependencies deprecated
-  ```
+```
 
-* **Find viable packages** (required discovery)
+- **Find viable packages** (required discovery)
 
-  ```bash
+```bash
   ./bin/npm search --searchlimit=25 "eleventy plugin interlink"
-  ```
+```
 
-* **Curated helper (MUST for analysis & artifacts)** — `utils/scripts/npm-utils.js`
+- **Curated helper (MUST for analysis & artifacts)** — `utils/scripts/npm-utils.js`
 
-  ```bash
+```bash
   # Search (20 results)
   ./bin/node utils/scripts/npm-utils.js search "eleventy plugin"
 
@@ -113,22 +118,22 @@ Signals of success:
 
   # Install **exact** latest dist-tag through repo-local npm (env must be active)
   ./bin/node utils/scripts/npm-utils.js install "markdown-it"
-  ```
+```
 
-* **Direct installs (after you’ve decided)**
+- **Direct installs (after you’ve decided)**
 
-  ```bash
+```bash
   ./bin/npm i <pkg>@^X.Y.Z           # runtime dep (caret range; lockfile controls exact)
   ./bin/npm i -D <pkg>@~A.B.C        # dev dep (tilde pin for patch stability)
-  ```
+```
 
-* **Patch maintenance** (`patches/` is authoritative)
+- **Patch maintenance** (`patches/` is authoritative)
 
-  ```bash
+```bash
   ./bin/npx patch-package || true
   # after editing node_modules/<pkg> to hotfix:
   ./bin/npx patch-package <pkg>
-  ```
+```
 
 ---
 
@@ -147,19 +152,21 @@ import { promisify } from 'node:util';
 const run = promisify(execFile);
 
 const { stdout } = await run('./bin/npm', ['view', 'markdown-it', 'version']);
-console.log(JSON.stringify({ pkg: 'markdown-it', version: stdout.trim() }, null, 2));
+console.log(
+  JSON.stringify({ pkg: 'markdown-it', version: stdout.trim() }, null, 2),
+);
 ```
 
 ---
 
 ## Interlinking & Archives Contracts
 
-* Resolvers `config/interlinkers/resolvers.mjs` • Registry `config/interlinkers/route-registry.mjs` • Reporter `config/interlinkers/unresolved-report.mjs`
-* **Link syntax** prefers namespaced wikilinks `[[kind:slug-or-title]]`; omitted kind `[[Title]]` is tolerated but less deterministic.
-* **Routes** are canonicalized as `/archives/<kind>/<slug>/`.
-* **Audit loop** (persist the artifact and iterate until clean or justified):
+- Resolvers `config/interlinkers/resolvers.mjs` • Registry `config/interlinkers/route-registry.mjs` • Reporter `config/interlinkers/unresolved-report.mjs`
+- **Link syntax** prefers namespaced wikilinks `[[kind:slug-or-title]]`; omitted kind `[[Title]]` is tolerated but less deterministic.
+- **Routes** are canonicalized as `/archives/<kind>/<slug>/`.
+- **Audit loop** (persist the artifact and iterate until clean or justified):
 
-  ```bash
+```bash
   ./bin/node config/interlinkers/unresolved-report.mjs \
     | tee src/content/docs/knowledge/interlinker-unresolved-$(date -u +%Y%m%dT%H%M%SZ).log
 
@@ -167,7 +174,7 @@ console.log(JSON.stringify({ pkg: 'markdown-it', version: stdout.trim() }, null,
 
   ./bin/node ./node_modules/@11ty/eleventy/cmd.js
   ./bin/node config/interlinkers/unresolved-report.mjs
-  ```
+```
 
 ---
 
@@ -189,6 +196,9 @@ console.log(JSON.stringify({ pkg: 'markdown-it', version: stdout.trim() }, null,
 ```bash
 # activate env (idempotent)
 source utils/scripts/setup/env-bootstrap.sh
+
+# ensure topic branch (never main/master): work/<UTC>-<short-task-slug>
+git branch --show-current | grep -q '^work/' || git switch -c "work/$(date -u +%Y%m%dT%H%M%SZ)-task"
 
 # deps + patches
 ./bin/npm ci || ./bin/npm i
