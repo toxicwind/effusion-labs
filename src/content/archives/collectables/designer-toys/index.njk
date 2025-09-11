@@ -5,22 +5,41 @@ showTitle: false
 ---
 {% from "components/archive-nav.njk" import archiveNav %}
 
-{# Aggregate companies for this category (designer-toys lives in the pathing). #}
+{# Aggregate companies for this category #}
 {% set prodAll = collections.archiveProducts or [] %}
 {% set agg = {} %}
+
 {% for p in prodAll %}
   {% if p.data and p.data.companySlug %}
     {% set slug = p.data.companySlug %}
+
+    {# Ensure bucket exists (use array; dedupe later) #}
     {% if not agg[slug] %}
-      {% set _ = agg | setAttribute(slug, { slug: slug, title: p.data.companyTitle or slug, count: 0, lines: new Set() }) %}
+      {% set _ = agg | setAttribute(slug, {
+        slug: slug,
+        title: p.data.companyTitle or slug,
+        count: 0,
+        lines: []
+      }) %}
     {% endif %}
+
+    {# bump count #}
     {% set _ = agg[slug] | setAttribute('count', (agg[slug].count + 1)) %}
-    {% if p.data.lineSlug %}{% set _ = agg[slug].lines.add(p.data.lineSlug) %}{% endif %}
+
+    {# collect line slugs (push -> then assign) #}
+    {% if p.data.lineSlug %}
+      {% set newLines = (agg[slug].lines or []) | push(p.data.lineSlug) %}
+      {% set _ = agg[slug] | setAttribute('lines', newLines) %}
+    {% endif %}
   {% endif %}
 {% endfor %}
+
+{# flatten to array with unique line counts #}
 {% set companies = [] %}
-{% for k,v in agg %}
-  {% set companies = companies.concat([{ slug: v.slug, title: v.title, count: v.count, lineCount: v.lines.size }]) %}
+{% for k, v in agg %}
+  {% set uniqLines = (v.lines or []) | compactUnique %}
+  {% set lc = uniqLines | length %}
+  {% set companies = companies | push({ slug: v.slug, title: v.title, count: v.count, lineCount: lc }) %}
 {% endfor %}
 {% set companies = companies | sort(false, true, 'count') %}
 
@@ -35,7 +54,7 @@ showTitle: false
   </div>
 </section>
 
-{% if companies.length %}
+{% if companies and (companies | length) %}
 <section class="mt-8">
   <div class="flex items-end justify-between gap-3">
     <h2 class="text-xl font-semibold m-0">Companies</h2>
@@ -48,9 +67,8 @@ showTitle: false
   <ul id="companyListDT" class="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
     {% for c in companies %}
       <li class="card bg-base-100 border hover:shadow-xl hover:border-primary/50 transition">
-        <a class="card-body p-4 block no-underline"
-           href="{{ ('/archives/collectables/designer-toys/' + c.slug + '/') | url }}">
-          <h3 class="card-title text-base m-0">{{ c.title | replace('-', ' ') | title }}</h3>
+        <a class="card-body p-4 block no-underline" href="{{ ('/archives/collectables/designer-toys/' + c.slug + '/') | url }}">
+          <h3 class="card-title text-base m-0">{{ c.title | replace('-', ' ') | titleizeSlug }}</h3>
           <div class="mt-2 flex flex-wrap gap-2">
             <span class="badge badge-outline">Products: {{ c.count }}</span>
             <span class="badge badge-outline">Lines: {{ c.lineCount }}</span>
@@ -63,7 +81,7 @@ showTitle: false
 
 <script type="module">
   const input = document.getElementById('companyFilterDT');
-  const list = document.getElementById('companyListDT');
+  const list  = document.getElementById('companyListDT');
   if (input && list) {
     input.addEventListener('input', () => {
       const q = input.value.trim().toLowerCase();

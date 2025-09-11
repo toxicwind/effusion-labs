@@ -1,0 +1,30 @@
+{# components/resume/Expander.njk #}
+{% macro expander(title, opts = {}) %}
+{% set o = opts or {} %}
+{% set subtitle = o.subtitle %}
+{% set badge = o.badge %}
+{% set href = o.href %}
+<details class="group rounded-xl border border-base-300/70 bg-base-100/80 p-3 sm:p-4 hover:border-primary/50 transition">
+  <summary class="flex items-center justify-between gap-3 cursor-pointer list-none">
+    <div class="min-w-0">
+      <div class="flex items-center gap-2">
+        <span class="font-semibold tracking-tight">{{ title }}</span>
+        {% if badge %}<span class="badge badge-neutral badge-xs rounded-full chip-elevated">{{ badge }}</span>{% endif %}
+      </div>
+      {% if subtitle %}
+        <p class="mt-0.5 text-xs opacity-80 truncate ink-soft">{{ subtitle }}</p>
+      {% endif %}
+      {% if href %}
+        <p class="mt-1 text-xs"><a class="link link-hover" href="{{ href }}" target="_blank" rel="noopener">View project</a></p>
+      {% endif %}
+    </div>
+    <span class="shrink-0 inline-flex items-center justify-center w-7 h-7 rounded-md border border-base-300/60">
+      {{ "chevron-down" | lucide({ width: 16, height: 16, class: "transition-transform group-open:rotate-180" }) | safe }}
+    </span>
+  </summary>
+
+  <div class="mt-3">
+    {{ caller() }}
+  </div>
+</details>
+{% endmacro %}

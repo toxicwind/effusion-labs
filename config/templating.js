@@ -5,7 +5,7 @@ import { DateTime } from 'luxon';
 import { icons } from 'lucide';
 import defaultAttributes from 'lucide/dist/esm/defaultAttributes.js';
 import generateConceptMapJSONLD from '../utils/build/concept-map.js';
-import seeded from '../utils/build/seeded.js';
+import seeded from '../utils/build/seeded.js'; // (kept; even if unused elsewhere)
 
 // --- Inlined Utilities (for stability) ---
 const fileCache = new Map();
@@ -36,8 +36,17 @@ function _isPresent(v) {
 
 // --- Core Helpers ---
 const toStr = (v) => String(v ?? '');
-const slug = (s) => String(s ?? "").normalize("NFKD").toLowerCase().replace(/[^\w\s-]/g, "").trim().replace(/\s+/g, "-").replace(/-+/g, "-");
-const escapeHtml = (str) => String(str ?? "").replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&#39;");
+const slug = (s) => String(s ?? "")
+  .normalize("NFKD").toLowerCase()
+  .replace(/[^\w\s-]/g, "")
+  .trim().replace(/\s+/g, "-")
+  .replace(/-+/g, "-");
+const escapeHtml = (str) => String(str ?? "")
+  .replaceAll("&", "&amp;")
+  .replaceAll("<", "&lt;")
+  .replaceAll(">", "&gt;")
+  .replaceAll('"', "&quot;")
+  .replaceAll("'", "&#39;");
 
 // --- Filters ---
 const defaultFilters = {
@@ -68,8 +77,9 @@ const defaultFilters = {
   money: (value = 0, code = '') => {
     const num = Number(value);
     const cur = toStr(code).toUpperCase();
-    if (!cur || Number.isNaN(num)) return '';
-    return `${cur} ${num.toFixed(2)}`;
+    if (Number.isNaN(num)) return '';
+    // Keep the simple "CODE 0.00" format sitewide for consistency
+    return cur ? `${cur} ${num.toFixed(2)}` : `${num.toFixed(2)}`;
   },
   yesNo: (v) => v ? 'Yes' : 'No',
   humanDate: (iso = '') => {
@@ -77,7 +87,7 @@ const defaultFilters = {
     const d = DateTime.fromISO(iso, { zone: 'utc' });
     if (!d.isValid) return '';
     const fmt = d.toFormat('yyyy-LL-dd');
-    return `<time datetime="${iso}">${fmt}</time>`;
+    return `<time datetime="${escapeHtml(iso)}">${fmt}</time>`;
   },
   titleizeSlug: (str = '') => toStr(str).split('-').filter(Boolean).map(s => s.charAt(0).toUpperCase() + s.slice(1)).join(' '),
   hostname: (url = '') => {
@@ -101,6 +111,7 @@ const defaultFilters = {
     }
   },
   provenanceSources: (ref = '') => {
+    // Defensive: return [] on any weird input
     if (typeof ref !== 'string' || ref.trim() === '') return [];
     const rel = ref.startsWith('/') ? ref.slice(1) : ref;
     const full = path.join(process.cwd(), 'src', rel);
@@ -115,8 +126,8 @@ const defaultFilters = {
     const clean = ref.replace(/^\/*content\//, '');
     const parts = clean.split('/');
     const idx = parts.lastIndexOf('provenance');
-    if (idx < 0 || !parts[idx+1]) return ref;
-    const file = parts[idx+1].replace(/\.jsonl$/, '');
+    if (idx < 0 || !parts[idx + 1]) return ref;
+    const file = parts[idx + 1].replace(/\.jsonl$/, '');
     const slug = file.replace(/--+/g, '-');
     const prefix = parts.slice(1, idx).join('/');
     return `/archives/${prefix}/provenance/${slug}/`;
@@ -126,8 +137,8 @@ const defaultFilters = {
     const clean = ref.replace(/^\/*content\//, '');
     const parts = clean.split('/');
     const idx = parts.lastIndexOf('provenance');
-    if (idx < 0 || !parts[idx+1]) return ref;
-    const file = parts[idx+1].replace(/\.jsonl$/, '');
+    if (idx < 0 || !parts[idx + 1]) return ref;
+    const file = parts[idx + 1].replace(/\.jsonl$/, '');
     const slug = file.replace(/--+/g, '-');
     const prefix = parts.slice(1, idx).join('/');
     return `/archives/${prefix}/provenance/${slug}.jsonl`;
@@ -138,10 +149,10 @@ function fieldCounts(obj = {}, excludeKeys = []) {
   try {
     const o = (obj && typeof obj === 'object') ? obj : {};
     const sys = new Set([
-      'industry','industrySlug','category','categorySlug','company','companySlug','line','lineSlug','section','locale',
-      '__source','__rel','url','title','lineTitle','companyTitle','categoryTitle','industryTitle',
-      'productSlug','product_id','charSlug','name','seriesSlug',
-      'page','collections'
+      'industry', 'industrySlug', 'category', 'categorySlug', 'company', 'companySlug', 'line', 'lineSlug', 'section', 'locale',
+      '__source', '__rel', 'url', 'title', 'lineTitle', 'companyTitle', 'categoryTitle', 'industryTitle',
+      'productSlug', 'product_id', 'charSlug', 'name', 'seriesSlug',
+      'page', 'collections'
     ].concat(Array.isArray(excludeKeys) ? excludeKeys : []));
     const keys = Object.keys(o).filter((k) => !sys.has(k));
     const total = keys.length;
@@ -164,6 +175,25 @@ defaultFilters.fieldCounts = fieldCounts;
 defaultFilters.fieldRatio = fieldRatio;
 defaultFilters.len = len;
 
+// --- Mutation helpers for Nunjucks use (safe, defensive) ---
+function setAttribute(obj, key, value) {
+  try {
+    if (!obj || typeof obj !== 'object') return obj;
+    obj[key] = value;
+    return obj;
+  } catch {
+    return obj;
+  }
+}
+function push(arr, value) {
+  try {
+    if (Array.isArray(arr)) { arr.push(value); return arr; }
+    return arr;
+  } catch {
+    return arr;
+  }
+}
+
 // --- Shortcodes ---
 function specnote(variant, content, tooltip) {
   const cls = {
@@ -185,42 +215,67 @@ function createCalloutShortcode(eleventyConfig) {
     const safeTitle = escapeHtml(title);
     const id = `callout-${title ? slug(title) : Date.now()}`;
     const body = md.render(String(content), this.ctx ?? {});
-    return `<aside class="callout callout--${variant}" role="note" aria-labelledby="${id}"><div class="callout-head"><h${headingLevel} id="${id}" class="callout-title">${icon ? `<span class="callout-icon">${icon}</span>` : ''}${safeTitle}</h${headingLevel}>${kicker ? `<p class="callout-kicker">${escapeHtml(kicker)}</p>` : ''}</div><div class="callout-body">${body}</div></aside>`;
+    return `<aside class="callout callout--${variant}" role="note" aria-labelledby="${id}">
+      <div class="callout-head">
+        <h${headingLevel} id="${id}" class="callout-title">
+          ${icon ? `<span class="callout-icon">${icon}</span>` : ''}${safeTitle}
+        </h${headingLevel}>
+        ${kicker ? `<p class="callout-kicker">${escapeHtml(kicker)}</p>` : ''}
+      </div>
+      <div class="callout-body">${body}</div>
+    </aside>`;
   };
 }
 
 // --- Registration Functions ---
 export function addFilters(eleventyConfig) {
+  // Base filters
   Object.entries(defaultFilters).forEach(([name, fn]) => eleventyConfig.addFilter(name, fn));
-  
+
+  // Safe helpers used across templates
   const safeUpper = (value, fallback = "", coerce = false) => {
-      if (typeof value === "string") return value.toUpperCase();
-      if (value == null) return fallback;
-      return coerce ? String(value).toUpperCase() : fallback;
+    if (typeof value === "string") return value.toUpperCase();
+    if (value == null) return fallback;
+    return coerce ? String(value).toUpperCase() : fallback;
   };
   eleventyConfig.addFilter("safe_upper", safeUpper);
   eleventyConfig.addFilter("compactUnique", (arr) => Array.from(new Set((arr || []).filter(Boolean))));
 
-  const toJson = (value, spaces = 0) => JSON.stringify(value, null, spaces)
-    .replace(/</g, "\\u003C")
-    .replace(/--(?:!?)>/g, "\\u002D\\u002D>");
+  // SAFER JSON: never return undefined; always a string
+  const toJson = (value, spaces = 0) => {
+    // stringify null if value is undefined so `.replace` always works
+    const json = JSON.stringify(value ?? null, null, spaces);
+    return String(json)
+      .replace(/</g, "\\u003C")
+      .replace(/--(?:!?)>/g, "\\u002D\\u002D>");
+  };
+  
   eleventyConfig.addFilter("json", toJson);
   eleventyConfig.addNunjucksFilter("json", toJson);
-  
+  eleventyConfig.addFilter("dump", toJson);
+  eleventyConfig.addNunjucksFilter("dump", toJson);
+
+  // New: mutation filters used in your Nunjucks templates
+  eleventyConfig.addFilter("setAttribute", setAttribute);
+  eleventyConfig.addNunjucksFilter("setAttribute", setAttribute);
+  eleventyConfig.addFilter("push", push);
+  eleventyConfig.addNunjucksFilter("push", push);
+
+  // Lucide (kept)
   eleventyConfig.addFilter("lucide", (name, attrs = {}) => {
-      try {
-          if (!name || typeof name !== "string") return "";
-          const toPascal = (s) => s.split(/[:._\-\s]+/).filter(Boolean).map((p) => p.charAt(0).toUpperCase() + p.slice(1)).join("");
-          const key = toPascal(name);
-          const node = icons[key] || icons[name];
-          if (!node) return "";
-          const attrsMerged = { ...defaultAttributes, ...attrs };
-          const toAttrString = (obj) => Object.entries(obj).map(([k, v]) => `${k}="${escapeHtml(v)}"`).join(" ");
-          const children = Array.isArray(node[2]) ? node[2].map(([tag, attr]) => `<${tag} ${toAttrString(attr)} />`).join("") : "";
-          return `<svg ${toAttrString(attrsMerged)}>${children}</svg>`;
-      } catch {
-          return "";
-      }
+    try {
+      if (!name || typeof name !== "string") return "";
+      const toPascal = (s) => s.split(/[:._\-\s]+/).filter(Boolean).map((p) => p.charAt(0).toUpperCase() + p.slice(1)).join("");
+      const key = toPascal(name);
+      const node = icons[key] || icons[name];
+      if (!node) return "";
+      const attrsMerged = { ...defaultAttributes, ...attrs };
+      const toAttrString = (obj) => Object.entries(obj).map(([k, v]) => `${k}="${escapeHtml(v)}"`).join(" ");
+      const children = Array.isArray(node[2]) ? node[2].map(([tag, attr]) => `<${tag} ${toAttrString(attr)} />`).join("") : "";
+      return `<svg ${toAttrString(attrsMerged)}>${children}</svg>`;
+    } catch {
+      return "";
+    }
   });
 }
 
@@ -229,7 +284,9 @@ export function addShortcodes(eleventyConfig) {
   const callout = createCalloutShortcode(eleventyConfig);
   eleventyConfig.addPairedShortcode('callout', callout);
   eleventyConfig.addPairedShortcode('failbox', function (content, titleOrOpts, kicker) {
-      const opts = (titleOrOpts && typeof titleOrOpts === 'object') ? { ...titleOrOpts, variant: 'error' } : { title: titleOrOpts, kicker, variant: 'error' };
-      return callout.call(this, content, opts);
+    const opts = (titleOrOpts && typeof titleOrOpts === 'object')
+      ? { ...titleOrOpts, variant: 'error' }
+      : { title: titleOrOpts, kicker, variant: 'error' };
+    return callout.call(this, content, opts);
   });
 }

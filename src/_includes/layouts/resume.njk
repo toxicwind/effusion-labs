@@ -1,4 +1,29 @@
-{# Standalone resume layout #}
+{#_includes/layouts/resume.njk
+  Resume Layout (standalone page shell)
+
+  What this file does
+  • Provides the <html> + <head> frame for the resume page.
+  • Builds SEO tags (title/description), canonical URL, and absolute OG/Twitter
+    images when `site.url` is available.
+  • Loads global CSS (Tailwind v4 + daisyUI v5) and shared theme utils.
+
+  Expected inputs
+  • Data: `resume` (see src/pages/resume/resume.json).
+  • Globals (optional): `site.url` for absolute canonicals, `build.hash | commit | version | buildTime` for cache-busting.
+  • Macros: macros/meta.njk → buildPageTitle/buildPageDesc.
+  • Filters: standard Eleventy filters + our safe `json`/`dump`.
+
+  Usage
+  --- front matter ---
+  layout: "layouts/resume.njk"
+  --------------------
+  Then put ONLY the body/content in the page template (no <html> or <head>).
+
+  Notes
+  • JSON-LD is emitted from the page template (keeps the layout generic).
+  • Theme is initialized early via /assets/js/theme-utils.js.
+  • Designed to render safely even when optional resume fields are missing.
+#}
 <!DOCTYPE html>
 <html lang="en" class="scroll-pt-16" data-mschf="off" data-theme="light">
 <head>
@@ -14,7 +39,17 @@
   {% from "macros/meta.njk" import buildPageTitle, buildPageDesc %}
   {% set pageTitle = buildPageTitle(resume, title) %}
   {% set pageDesc  = buildPageDesc(resume) %}
-  {% set canonicalHref = "/resume/" | url %}
+
+  {# Absolute canonical if site.url is set #}
+  {% set canonicalPath = "/resume/" | url %}
+  {% set canonicalHref = (site and site.url) ? (site.url + canonicalPath) : canonicalPath %}
+
+  {# Absolute OG image if possible #}
+  {% if resume and resume.ogImage %}
+    {% set ogRel = resume.ogImage | url %}
+    {% set ogHref = (site and site.url) ? (site.url + ogRel) : ogRel %}
+  {% endif %}
+
   <title>{{ pageTitle }}</title>
   <link rel="canonical" href="{{ canonicalHref }}">
   <meta name="description" content="{{ pageDesc }}">
@@ -23,16 +58,12 @@
   <meta property="og:title" content="{{ pageTitle }}">
   <meta property="og:description" content="{{ pageDesc }}">
   <meta property="og:url" content="{{ canonicalHref }}">
-  {% if resume and resume.ogImage %}
-  <meta property="og:image" content="{{ resume.ogImage | url }}">
-  {% endif %}
+  {% if ogHref %}<meta property="og:image" content="{{ ogHref }}">{% endif %}
 
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="{{ pageTitle }}">
   <meta name="twitter:description" content="{{ pageDesc }}">
-  {% if resume and resume.ogImage %}
-  <meta name="twitter:image" content="{{ resume.ogImage | url }}">
-  {% endif %}
+  {% if ogHref %}<meta name="twitter:image" content="{{ ogHref }}">{% endif %}
 
   <script src="/assets/js/theme-utils.js"></script>
   <script>ThemeUtils.initEarly();</script>
@@ -43,8 +74,8 @@
 
   <link rel="stylesheet" href="/assets/css/app.css?v={{ build.hash or build.commit or build.version or buildTime }}">
 </head>
-<body>
-  <main id="main" class="min-h-[60vh] mx-auto max-w-screen-lg px-6 py-10">
+<body class="bg-base-100 text-base-content font-body antialiased selection:bg-primary/20">
+  <main id="main" class="min-h-[60vh] mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8 2xl:px-12 py-10">
     {{ content | safe }}
   </main>
 </body>

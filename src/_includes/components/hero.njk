@@ -8,7 +8,7 @@
         <img class="hero-logo mx-auto mb-6 w-28 md:w-40"
              src="{{ branding.logoSrc | url }}"
              alt="{{ branding.logoAlt or 'Logo' }}"
-             sizes="{{ branding.logoSizes }}"
+             {% if branding.logoSizes %}sizes="{{ branding.logoSizes }}"{% endif %}
              loading="eager" fetchpriority="high"
              style="filter: drop-shadow(0 0 12px color-mix(in oklab, var(--neon-a) 30%, transparent));" />
       {% endif %}
@@ -28,8 +28,15 @@
         <div class="mt-6 flex flex-col items-center justify-center gap-4 sm:flex-row">
           {% for c in ctas %}
             {% set isPrimary = (c.kind or 'primary') == 'primary' %}
-            <a href="{{ c.href[0] == '/' ? (c.href | url) : c.href }}"
-               class="{% if isPrimary %}btn btn-primary{% else %}btn btn-outline{% endif %} px-7 py-3 font-heading font-bold">
+            {% set href = c.href or '#' %}
+            {% if href and href[0] == '/' %}
+              {% set href = href | url %}
+            {% endif %}
+            {% set isExternal = href and not (href[0] == '/') %}
+
+            <a href="{{ href }}"
+               class="{% if isPrimary %}btn btn-primary{% else %}btn btn-outline{% endif %} px-7 py-3 font-heading font-bold"
+               {% if isExternal %}target="_blank" rel="noopener"{% endif %}>
               {{ c.label }}
             </a>
           {% endfor %}
