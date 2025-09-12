@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-09-12T19:53:45.183Z",
+  "timestamp": "2025-09-12T19:57:35.486Z",
   "roots": [
     "src"
   ],
@@ -433,6 +433,11 @@
       "rewrites": 0
     },
     {
+      "file": "src/content/archives/collectables/index.njk",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
       "file": "src/content/archives/_dynamic/characters.njk",
       "changed": false,
       "rewrites": 0
@@ -444,11 +449,6 @@
     },
     {
       "file": "src/content/archives/_dynamic/series.njk",
-      "changed": false,
-      "rewrites": 0
-    },
-    {
-      "file": "src/content/archives/collectables/index.njk",
       "changed": false,
       "rewrites": 0
     },
@@ -508,6 +508,11 @@
       "rewrites": 0
     },
     {
+      "file": "src/content/docs/ux/mschf-overlay.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
       "file": "src/content/docs/knowledge/eleventy-collections-20250911T175345Z.html",
       "changed": false,
       "rewrites": 0
@@ -544,11 +549,6 @@
     },
     {
       "file": "src/content/docs/knowledge/utils-test-red.md",
-      "changed": false,
-      "rewrites": 0
-    },
-    {
-      "file": "src/content/docs/ux/mschf-overlay.md",
       "changed": false,
       "rewrites": 0
     },
