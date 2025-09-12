@@ -7,11 +7,11 @@
   "author": "",
   "type": "module",
   "main": "index.js",
-  "scripts": {
+    "scripts": {
     "start": "npm run dev",
-    "build": "npm run css:build && node utils/dev/eleventy-with-codeframes.mjs",
+    "build": "node utils/dev/eleventy-with-codeframes.mjs",
     "preview": "ELEVENTY_SERVE=true node utils/dev/eleventy-with-codeframes.mjs --serve",
-    "dev": "CSS_WATCH=1 npx concurrently -k -r -n css,11ty -c green,cyan \"npm:css:watch\" \"npm:dev:11ty\"",
+    "dev": "ELEVENTY_SERVE=true node utils/dev/eleventy-with-codeframes.mjs --serve",
     "dev:11ty": "ELEVENTY_SERVE=true node utils/dev/eleventy-with-codeframes.mjs --serve",
     "eleventy": "npx @11ty/eleventy",
     "eleventy:raw": "npx @11ty/eleventy",
