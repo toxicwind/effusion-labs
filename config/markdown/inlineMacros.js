@@ -1,33 +1,84 @@
-/**
- * Helper to define simple inline macros.
- * @param {string} name - macro name
- * @param {string} after - rule to insert after
- * @param {(value:string)=>string} toHtml - HTML generator
- */
-const toStringSafe = (v) => (v == null ? '' : (typeof v === 'string' ? v : String(v)));
+// config/markdown/inlineMacros.js
+// Small, robust inline macros with quoted argument support.
+// Usage: @audio("https://…"), @qr("some text")
 
-export const inlineMacro = (name, after, toHtml) => (md) => {
-  const regex = new RegExp(`^@${name}\\(([^)]+)\\)`);
-  md.inline.ruler.after(after, name, (state, silent) => {
-    if (!state || typeof state.src !== 'string' || typeof state.pos !== 'number') return false;
-    const src = state.src;
-    const start = Math.max(0, state.pos | 0);
-    const slice = src.slice(start);
-    const m = slice.match(regex);
-    if (!m) return false;
-    if (!silent) state.push({ type: 'html_inline', content: toHtml(toStringSafe(m[1])) });
-    state.pos += m[0].length;
-    return true;
-  });
-};
+const toStr = (v) => (v == null ? "" : String(v));
 
-/** Inline audio embedding macro */
-export const audioEmbed = inlineMacro('audio', 'emphasis', src => `<audio controls class="audio-embed" src="${src}"></audio>`);
+/** Parse balanced (...) with optional quoted commas */
+function parseArgs(src) {
+  // Strip wrapping whitespace and quotes
+  let s = src.trim();
+  const out = [];
+  let cur = "";
+  let inStr = false;
+  let chStr = "";
+  let depth = 0;
 
-/** Inline QR-code embedding macro */
-export const qrEmbed = inlineMacro('qr', 'audio', s => {
-  const src = encodeURIComponent(s);
-  return `<img class="qr-code" src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${src}" alt="QR code">`;
+  for (let i = 0; i < s.length; i++) {
+    const ch = s[i];
+    if (inStr) {
+      if (ch === chStr && s[i - 1] !== "\\") {
+        inStr = false;
+      }
+      cur += ch;
+      continue;
+    }
+    if (ch === '"' || ch === "'") {
+      inStr = true;
+      chStr = ch;
+      cur += ch;
+      continue;
+    }
+    if (ch === "(") { depth++; cur += ch; continue; }
+    if (ch === ")") { depth = Math.max(0, depth - 1); cur += ch; continue; }
+    if (ch === "," && depth === 0) {
+      out.push(cur.trim().replace(/^['"]|['"]$/g, ""));
+      cur = "";
+      continue;
+    }
+    cur += ch;
+  }
+  if (cur) out.push(cur.trim().replace(/^['"]|['"]$/g, ""));
+  return out;
+}
+
+function inlineMacro(name, after, render) {
+  const re = new RegExp(`^@${name}\\(([^)]*)\\)`);
+  return (md) => {
+    md.inline.ruler.after(after, name, (state, silent) => {
+      if (!state) return false;
+      const src = state.src.slice(state.pos);
+      const m = src.match(re);
+      if (!m) return false;
+      if (!silent) {
+        const args = parseArgs(m[1]);
+        const html = render(...args.map(toStr));
+        state.push({ type: "html_inline", content: html });
+      }
+      state.pos += m[0].length;
+      return true;
+    });
+  };
+}
+
+// @audio(url)
+// Optional: @audio(url, "label")
+export const audioEmbed = inlineMacro("audio", "emphasis", (url, label) => {
+  const u = toStr(url);
+  const lab = toStr(label || "");
+  const cap = lab ? `<figcaption class="text-xs opacity-70 mt-1">${lab}</figcaption>` : "";
+  return (
+    `<figure class="audio-embed not-prose">` +
+    `<audio controls class="w-full" src="${u}"></audio>` +
+    cap +
+    `</figure>`
+  );
 });
 
-export default { inlineMacro, audioEmbed, qrEmbed };
+// @qr(text)
+export const qrEmbed = inlineMacro("qr", "audio", (text) => {
+  const v = encodeURIComponent(toStr(text));
+  return `<img class="qr-code border-2 shadow-[4px_4px_0_rgba(0,0,0,.85)]" src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${v}" alt="QR code">`;
+});
+
+export default { audioEmbed, qrEmbed };

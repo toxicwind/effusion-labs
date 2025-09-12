@@ -1,4 +1,3 @@
-// lib/interlinkers/resolvers.mjs
 // Generalized resolvers powered by the Route Registry; crash-safe and dynamic-by-default.
 
 import { routeRegistry, getByPath } from './route-registry.mjs';

@@ -1,4 +1,3 @@
-// lib/interlinkers/route-registry.mjs
 // Central registry of linkable kinds and how to index/resolve them.
 
 function _defaultRegistry() {

@@ -1,3 +1,46 @@
-@import 'tailwindcss';
-@plugin "@tailwindcss/typography";
+/* src/assets/css/app.tailwind.css
+   Tailwind v4 + daisyUI v5 in CSS-first mode */
+
+@import "tailwindcss";
 @plugin "daisyui";
+
+/* Base tweaks */
+:root {
+  --radius: .5rem;
+}
+
+html { scroll-behavior: smooth; }
+
+/* Hyperbrut vibe (visible affordances + chunky borders) */
+.btn,
+.badge,
+.card,
+.alert,
+.menu,
+.kbd,
+.tab,
+.input,
+.select,
+.textarea {
+  border-radius: var(--radius);
+  border-width: 2px;
+}
+
+/* Optional: neon headline glow for titles used on resume/projects */
+.title-glow {
+  text-shadow: 0 0 .025em #fff, 0 0 .2em var(--fallback-p);
+}
+
+/* “chip” look */
+.chip-elevated {
+  border-width: 2px;
+  box-shadow: 4px 4px 0 rgba(0,0,0,.9);
+}
+
+/* Footnote popover */
+.fn-pop {
+  position: relative;
+  cursor: help;
+}
+.fn-pop:focus-within > .fn-balloon,
+.fn-pop:hover > .fn-balloon { display: block; }

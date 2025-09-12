@@ -1,4 +1,3 @@
-// lib/build-info.js
 // A simple, synchronous utility to get build information without relying on Git.
 
 export function getBuildInfo() {

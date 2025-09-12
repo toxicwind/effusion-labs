@@ -1,62 +1,32 @@
-// lib/markdown/index.js
+// config/markdown/index.js
 import markdownItFootnote from "markdown-it-footnote";
 import {
-  hybridFootnoteDefinitions,
-  footnotePopover,
-  collectFootnoteTokens,
-  connectFootnoteBlockquotes,
-  disableFootnoteTail,
+  hybridFootnotes,
+  footnotePopoverRefs,
 } from "./footnotes.js";
 import { audioEmbed, qrEmbed } from "./inlineMacros.js";
 import { externalLinks } from "./links.js";
 
 /**
- * Array of markdown-it extension functions to apply.
- * NOTE: anchors are configured in eleventy.config.mjs, so not added here.
+ * Apply markdown-it extensions.
+ * Keep this compact and resilient; failures should not tank the build.
  */
-const mdItExtensions = [
-  // anchors, // <-- remove this reference
-  hybridFootnoteDefinitions,
-  footnotePopover,
-  collectFootnoteTokens,
-  connectFootnoteBlockquotes,
-  disableFootnoteTail,
-  audioEmbed,
-  qrEmbed,
-  externalLinks,
-];
-
 export function applyMarkdownExtensions(md) {
+  // Core footnotes
   md.use(markdownItFootnote);
-  mdItExtensions.forEach((fn) => {
-    try { fn(md); } catch (err) {
-      console.error(`[md-it] Failed extension: ${err?.message || err}`);
-    }
-  });
+
+  // Aesthetic & UX layers
+  try { hybridFootnotes(md); } catch (e) { console.error("[md-it] hybridFootnotes:", e?.message || e); }
+  try { footnotePopoverRefs(md); } catch (e) { console.error("[md-it] footnotePopoverRefs:", e?.message || e); }
+
+  // Inline macros
+  try { audioEmbed(md); } catch (e) { console.error("[md-it] audioEmbed:", e?.message || e); }
+  try { qrEmbed(md); } catch (e) { console.error("[md-it] qrEmbed:", e?.message || e); }
+
+  // External links
+  try { externalLinks(md); } catch (e) { console.error("[md-it] externalLinks:", e?.message || e); }
+
   return md;
 }
 
-export {
-  hybridFootnoteDefinitions,
-  footnotePopover,
-  collectFootnoteTokens,
-  connectFootnoteBlockquotes,
-  disableFootnoteTail,
-  audioEmbed,
-  qrEmbed,
-  externalLinks,
-  mdItExtensions,
-};
-
-export default {
-  hybridFootnoteDefinitions,
-  footnotePopover,
-  collectFootnoteTokens,
-  connectFootnoteBlockquotes,
-  disableFootnoteTail,
-  audioEmbed,
-  qrEmbed,
-  externalLinks,
-  mdItExtensions,
-  applyMarkdownExtensions,
-};
+export default { applyMarkdownExtensions };

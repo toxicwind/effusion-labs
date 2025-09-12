@@ -1,3 +1,8 @@
+// eleventy.config.mjs
+import fs from "node:fs";
+import fsp from "node:fs/promises";
+import path from "node:path";
+
 import register from "./config/register.mjs";
 import registerArchive from "./config/archives.mjs";
 import { getBuildInfo } from "./config/build-info.js";
@@ -5,7 +10,7 @@ import { dirs } from "./config/site.js";
 import htmlToMarkdownUnified from "./config/html-to-markdown-unified.mjs";
 
 export default function (eleventyConfig) {
-  // saner error locations while debugging
+  // saner nunjucks errors while debugging
   eleventyConfig.setNunjucksEnvironmentOptions({
     trimBlocks: false,
     lstripBlocks: false,
@@ -13,40 +18,43 @@ export default function (eleventyConfig) {
     throwOnUndefined: false,
   });
 
-  // ⬅️ Add the ternary filter so rewrites work
-  eleventyConfig.addNunjucksFilter("ternary", function (val, a, b) {
-    return val ? a : b;
+  // ternary filter (pairs with the rewrite step below)
+  eleventyConfig.addNunjucksFilter("ternary", (val, a, b) => (val ? a : b));
+
+  // pre-clean vite temp dir to prevent EISDIR on stale folders
+  eleventyConfig.on("eleventy.before", async () => {
+    const viteTemp = path.join(process.cwd(), ".11ty-vite");
+    try {
+      if (fs.existsSync(viteTemp)) {
+        await fsp.rm(viteTemp, { recursive: true, force: true });
+      }
+    } catch { }
   });
 
-  // your existing config
+  // auto-fix simple nunjucks ternaries `? :` → `| ternary(a,b)`
+  eleventyConfig.on("eleventy.before", async () => {
+    try {
+      const { fixRepoTernaries } = await import("./utils/scripts/fix-njk-ternaries.mjs");
+      await fixRepoTernaries({
+        roots: ["src"],
+        exts: [".njk", ".md", ".html"],
+        dryRun: false,
+        logFile: ".njk-fix-report.json",
+        quiet: true,
+      });
+    } catch (err) {
+      console.error("[njk-fix] failed:", err?.message || err);
+    }
+  });
+
+  // your existing setup (this also installs plugins via config/plugins.js)
   register(eleventyConfig);
   registerArchive(eleventyConfig);
 
   eleventyConfig.addGlobalData("build", getBuildInfo());
   eleventyConfig.addGlobalData("buildTime", new Date().toISOString());
 
-  // Auto-fix {{ X ? A : B }} before each build (can opt-out with FIX_NJK_TERNARY=0)
-  eleventyConfig.on("eleventy.before", async () => {
-    if (process.env.FIX_NJK_TERNARY === "0") return;
-    try {
-      // ⬅️ corrected path
-      const { fixRepoTernaries } = await import("./utils/scripts/fix-njk-ternaries.mjs");
-      const report = await fixRepoTernaries({
-        roots: ["src"],
-        exts: [".njk", ".md", ".html"],
-        dryRun: !!process.env.DRY_RUN,
-        logFile: ".njk-fix-report.json",
-        quiet: !!process.env.FIX_NJK_QUIET,
-      });
-      if (!report.quiet && report.modified > 0) {
-        console.log(`[njk-fix] patched ${report.modified} file(s); summary → ${report.logFile}`);
-      }
-    } catch (err) {
-      console.error("[njk-fix] failed:", err?.message || err);
-    }
-  });
-
-  // HTML→Markdown pipeline (unchanged)
+  // HTML → Markdown pipeline
   htmlToMarkdownUnified(eleventyConfig, {
     rootDir: "src/content",
     dumpMarkdownTo: "_cache/md-dumps",
@@ -58,7 +66,7 @@ export default function (eleventyConfig) {
   return {
     dir: dirs,
     markdownTemplateEngine: "njk",
-    htmlTemplateEngine: false,
+    htmlTemplateEngine: false, // don’t parse raw .html through Liquid
     templateFormats: ["md", "njk", "html", "11ty.js"],
     pathPrefix: "/",
   };

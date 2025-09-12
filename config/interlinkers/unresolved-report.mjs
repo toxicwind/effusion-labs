@@ -1,24 +1,26 @@
-// Stable unresolved link reporting with dedupe, schema, and CI gating.
+// Stable unresolved link reporting with dedupe, schema, and *no CI gating* by default.
 
-import fs from 'node:fs';
-import path from 'node:path';
+import fs from "node:fs";
+import path from "node:path";
 
-const OUT_PATH = path.join('artifacts', 'reports', 'interlinker-unresolved.json');
-const keyFor = (kind, key, sourcePage) => `${kind}::${key || ''}::${sourcePage || ''}`;
+const OUT_PATH = path.join("artifacts", "reports", "interlinker-unresolved.json");
+const keyFor = (kind, key, sourcePage) => `${kind}::${key || ""}::${sourcePage || ""}`;
 
 const state = {
   map: new Map(), // key -> item
   count: 0,
 };
 
-function toISO(d = new Date()) { return new Date(d).toISOString(); }
+function toISO(d = new Date()) {
+  return new Date(d).toISOString();
+}
 
 export function recordUnresolved({ kind, key, sourcePage, guessedKind, attemptedKinds }) {
   const k = keyFor(kind, key, sourcePage);
   if (!state.map.has(k)) {
     state.map.set(k, {
       kind,
-      key: String(key ?? ''),
+      key: String(key ?? ""),
       sourcePage: sourcePage || null,
       guessedKind: guessedKind || null,
       attemptedKinds: Array.isArray(attemptedKinds) ? attemptedKinds : [],
@@ -45,17 +47,26 @@ export function flushUnresolved() {
   return payload;
 }
 
+// Simple logger-only summary. No thresholds, no throwing.
+export function summarize({ log = true } = {}) {
+  const payload = flushUnresolved();
+  if (log) {
+    // eslint-disable-next-line no-console
+    console.log(`Interlinker: unresolved=${payload.count} → ${OUT_PATH}`);
+  }
+  return payload;
+}
+
+// --- Optional legacy helper kept for flexibility; not used in config ---
 function parseBool(v, fallback = false) {
   if (v == null) return fallback;
   const s = String(v).toLowerCase();
-  return s === '1' || s === 'true' || s === 'yes' || s === 'on';
+  return s === "1" || s === "true" || s === "yes" || s === "on";
 }
-
 function parseNum(v, fallback) {
   const n = Number(v);
   return Number.isFinite(n) ? n : fallback;
 }
-
 export function summarizeAndGate() {
   const isCI = parseBool(process.env.CI, false);
   const defaultThreshold = isCI ? 200 : Infinity;
@@ -64,16 +75,36 @@ export function summarizeAndGate() {
 
   const payload = flushUnresolved();
   const count = payload.count;
-  const action = shouldFail && count > maxUnresolved ? 'fail' : 'warn';
+  const action = shouldFail && count > maxUnresolved ? "fail" : "warn";
   // eslint-disable-next-line no-console
   console.log(`Interlinker: unresolved=${count} threshold=${maxUnresolved} action=${action}`);
-  if (action === 'fail') {
-    throw new Error(`Interlinker unresolved links (${count}) exceeded threshold (${maxUnresolved}).`);
+  if (action === "fail") {
+    throw new Error(
+      `Interlinker unresolved links (${count}) exceeded threshold (${maxUnresolved}).`
+    );
   }
 }
 
-// Auto-flush on exit to keep behavior consistent with prior array report
-process.on('exit', () => { try { flushUnresolved(); } catch {} });
-process.on('beforeExit', () => { try { flushUnresolved(); } catch {} });
-process.on('SIGINT', () => { try { flushUnresolved(); } catch {}; process.exit(130); });
-process.on('SIGTERM', () => { try { flushUnresolved(); } catch {}; process.exit(143); });
+// Auto-flush on exit so the report is always up-to-date
+process.on("exit", () => {
+  try {
+    flushUnresolved();
+  } catch { }
+});
+process.on("beforeExit", () => {
+  try {
+    flushUnresolved();
+  } catch { }
+});
+process.on("SIGINT", () => {
+  try {
+    flushUnresolved();
+  } catch { }
+  process.exit(130);
+});
+process.on("SIGTERM", () => {
+  try {
+    flushUnresolved();
+  } catch { }
+  process.exit(143);
+});

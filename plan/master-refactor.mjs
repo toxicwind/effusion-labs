@@ -1,4 +1,3 @@
-// scripts/site-refactor.mjs
 // Master refactor for src/: moves, rewrites, and hygiene with --dry (default) or --do-it.
 //
 // What it does (under src/ only):

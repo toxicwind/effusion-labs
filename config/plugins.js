@@ -1,3 +1,4 @@
+// config/plugins.js
 import interlinker from "@photogabble/eleventy-plugin-interlinker";
 import navigation from "@11ty/eleventy-navigation";
 import rss from "@11ty/eleventy-plugin-rss";
@@ -6,28 +7,39 @@ import schema from "@quasibit/eleventy-plugin-schema";
 import vitePlugin from "@11ty/eleventy-plugin-vite";
 import { createResolvers } from "./interlinkers/resolvers.mjs";
 
-// Minimal Vite options that play nice with Eleventy’s _site output
-const viteOpts = {
-  appType: "mpa",
-  server: { middlewareMode: true },
-  build: { outDir: "_site", emptyOutDir: false },
-  publicDir: "src/assets", // static passthrough
-};
-
 export default function getPlugins() {
-  return [
+  const plugins = [
     [
       interlinker,
       {
-        defaultLayout: "layouts/embed.njk",
+        // Use your normal site shell
+        defaultLayout: "layouts/base.njk",
         resolvingFns: createResolvers(),
-        deadLinkReport: "json",
+        deadLinkReport: "json", // artifact only (no CI gating)
       },
     ],
     [navigation],
     [rss],
     [sitemap, { sitemap: { hostname: "https://effusionlabs.com" } }],
     [schema],
-    [vitePlugin, viteOpts], // ← added
+    // Vite on by default – stable minimal config for Eleventy integration
+    [
+      vitePlugin,
+      {
+        tempFolderName: ".11ty-vite",
+        viteOptions: {
+          clearScreen: false,
+          appType: "custom",
+          server: { middlewareMode: true },
+          build: {
+            emptyOutDir: true, // wipe .11ty-vite on build (we also clean in eleventy.before)
+          },
+          // Allow Vite to also look for assets in /_site during dev transforms
+          publicDir: false,
+        },
+      },
+    ],
   ];
+
+  return plugins;
 }
