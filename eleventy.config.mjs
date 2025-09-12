@@ -9,6 +9,9 @@ import { getBuildInfo } from "./config/build-info.js";
 import { dirs } from "./config/site.js";
 import htmlToMarkdownUnified from "./config/html-to-markdown-unified.mjs";
 
+// (optional) Vite integration here too, safe to no-op if you already add it elsewhere
+import EleventyVitePlugin from "@11ty/eleventy-plugin-vite";
+
 export default function (eleventyConfig) {
   // saner nunjucks errors while debugging
   eleventyConfig.setNunjucksEnvironmentOptions({
@@ -47,6 +50,11 @@ export default function (eleventyConfig) {
     }
   });
 
+  // ⬇️ CRITICAL: copy all assets (css, js, images) so Vite can import "../css/app.css" from the built JS
+  eleventyConfig.addPassthroughCopy({ "src/assets": "assets" });
+  eleventyConfig.addWatchTarget("src/assets");
+
+
   // your existing setup (this also installs plugins via config/plugins.js)
   register(eleventyConfig);
   registerArchive(eleventyConfig);
@@ -62,6 +70,16 @@ export default function (eleventyConfig) {
     defaultLayout: "layouts/converted-html.njk",
     frontMatterExtra: { convertedFromHtml: true },
   });
+
+  // Optional: if your dev runner doesn’t already add the Vite plugin, this will.
+  try {
+    eleventyConfig.addPlugin(EleventyVitePlugin, {
+      tempFolderName: ".11ty-vite",
+      viteOptions: { clearScreen: false, appType: "mpa" },
+    });
+  } catch {
+    // ignore if already added elsewhere
+  }
 
   return {
     dir: dirs,

@@ -1,273 +1,204 @@
 #!/usr/bin/env bash
 # ────────────────────────────────────────────────────────────────────────────────
-#  HYPEBRUT Operating System — Effusion Labs
-#  llm-bootstrap.sh
+# HYPEBRUT / env-bootstrap.sh — minimal, no-env, explicit line-splitting
+# Location: utils/scripts/setup/env-bootstrap.sh
+# Purpose: Protect noninteractive sessions from >4096-byte *lines* by:
+#   • Global stdout/stderr guard (per-process) with explicit split markers
+#   • Binary-aware path: base64-encode non-text lines with visible header
+#   • Sidecar log capturing raw, unwrapped output per process (file only)
+#   • Login + noninteractive hook install, with NO exports
+# Notes:
+#   • No environment variables are created or read. All settings are static.
+#   • For noninteractive children spawned as *login* shells (bash -lc), the hook
+#     auto-engages. For bare `bash -c` (not login), consider the shim below.
 # ────────────────────────────────────────────────────────────────────────────────
 
-# ╭───────────────── ensure we are SOURCED, not executed ─────────────────╮
+# Must be sourced, not executed.
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
   printf '❌ HYPEBRUT :: This script must be *sourced*, not executed.\n' >&2
-  exit 1
+  return 1 2>/dev/null || exit 1
 fi
 
-# ╭───────────────── guard original shell opts; scope the trap ──────────╮
-_LLM_BOOT_OLD_SET_OPTS="$(set +o)"
-# NOTE: We *also* restore + clear at EOF to avoid leaving a global RETURN trap.
-trap 'eval "$_LLM_BOOT_OLD_SET_OPTS"' RETURN
-
-# Strict, but contained to this script’s body.
+# Save/restore shell opts; scope our changes.
+_HB_OLD_SET_OPTS="$(set +o)"
+trap 'eval "$_HB_OLD_SET_OPTS"' RETURN
 set -Euo pipefail
 
-# ╭───────────────── tiny helpers ─────────────────╮
-_llm_has() { command -v "$1" >/dev/null 2>&1; }
-_llm_on()  { [[ "${1:-}" == "1" || "${1:-}" == "true" ]]; }
-_llm_ts()  { date -u +"%Y-%m-%dT%H:%M:%SZ"; }
-_llm_path_prepend_unique() {
-  local dir="$1"; [[ -d "$dir" ]] || return 0
-  case ":$PATH:" in *":$dir:"*) ;; *) PATH="$dir:$PATH" ;; esac
+# ── static defaults (no env knobs) ─────────────────────────────────────────────
+_HB_SPLIT_WIDTH=3800           # bytes per emitted chunk on stdout/stderr (<4096)
+_HB_MARK_PREFIX='[HBWRAP'      # visible marker for wrapped text lines
+_HB_MARK_SUFFIX=']'
+_HB_B64_HEADER='[HBB64'        # visible header for binary lines (then base64 body)
+_HB_B64_TAIL=']'
+_HB_LOG_DIR="/tmp/hype_logs"   # sidecar logs (raw, unmodified lines)
+_HB_CFG_DIR="${HOME}/.config/hypebrut"
+_HB_LOGIN_HOOK="${_HB_CFG_DIR}/login-hook.sh"
+_HB_NONINT_HOOK="${_HB_CFG_DIR}/noninteractive-hook.sh"
+_HB_BOOTSTRAP_ABS="$(readlink -f "${BASH_SOURCE[0]}")"
+
+# ── helpers (shell-local) ──────────────────────────────────────────────────────
+_hb_has() { command -v "$1" >/dev/null 2>&1; }
+_hb_now() { date -u +"%Y-%m-%dT%H:%M:%SZ"; }
+
+# ── explicit, byte-aware splitter with visible markers + raw sidecar log ──────
+# Reads stdin; writes:
+#   • to $_HB_LOG_FILE: original, unwrapped bytes (for auditing)
+#   • to stdout: safe lines
+#     - ASCII/printable: split into ≤_HB_SPLIT_WIDTH chunks with [HBWRAP i/n a..b]
+#     - Non-text (has non-printables in C locale): print one [HBB64 LEN=…] header
+#       then base64 of the original line (naturally wrapped at ~76 chars)
+_hb_filter() {
+  local width="${_HB_SPLIT_WIDTH}" mark_pfx="${_HB_MARK_PREFIX}" mark_sfx="${_HB_MARK_SUFFIX}"
+  local b64_head="${_HB_B64_HEADER}" b64_tail="${_HB_B64_TAIL}" logf="${_HB_LOG_FILE:-}" tmpdir="/tmp"
+  # We keep a unique counter for temporary blobs used during base64 hashing.
+  local -i seq=0
+
+  # Use awk (C locale) to detect non-printables and split printable lines;
+  # For binary lines we drop to a tiny shell to base64 the temp file, so we can
+  # keep per-line isolation and avoid corrupting terminals.
+  LC_ALL=C awk -v W="$width" -v LOGF="$logf" -v PFX="$mark_pfx" -v SFX="$mark_sfx" \
+               -v B64H="$b64_head" -v B64T="$b64_tail" -v TMPDIR="$tmpdir" -v SEQPTR="/dev/fd/3" '
+    # Utility: emit a wrapped chunk with header
+    function emit_chunk(i,n,start,end,text) {
+      if (n > 1) {
+        printf("%s %d/%d %d..%d%s %s\n", PFX, i, n, start, end, SFX, text);
+      } else {
+        print text;
+      }
+    }
+    # Utility: detect non-printables in C locale (NUL cannot appear in AWK records)
+    function is_binary(s,  i,c) {
+      for (i=1; i<=length(s); i++) {
+        c = substr(s,i,1);
+        if (c !~ /[[:print:]\t\r]/) return 1;
+      }
+      return 0;
+    }
+    {
+      # Sidecar: raw line first (no wrapping)
+      if (LOGF != "") { print $0 >> LOGF; fflush(LOGF); }
+
+      # Printable path → wrap safely
+      if (!is_binary($0)) {
+        L = length($0);
+        if (L <= W) { emit_chunk(1,1,1,L,$0); next }
+        N = int((L + W - 1) / W);
+        start = 1;
+        for (i = 1; i <= N; i++) {
+          end = (i*W < L) ? i*W : L;
+          emit_chunk(i, N, start, end, substr($0, start, end - start + 1));
+          start = end + 1;
+        }
+        next
+      }
+
+      # Binary path → write bytes to temp, then base64 them line-wrapped
+      # Acquire a unique id from parent shell via fd 3 (increments an integer)
+      if (getline seq < SEQPTR <= 0) { seq = 0 }  # paranoid default
+      seq++
+      blob = TMPDIR "/hb.bin." PROCINFO["pid"] "." seq
+      # Write payload (plus \n since AWK records are newline-stripped)
+      print $0 > blob; close(blob)
+
+      # Compute length and hash if tools exist (best effort, not required)
+      len = length($0)
+      sha = "NA"
+      if (system("command -v sha256sum >/dev/null 2>&1") == 0) {
+        cmd = "sha256sum " blob " | awk \047{print $1}\047"; cmd | getline sha; close(cmd)
+      } else if (system("command -v shasum >/dev/null 2>&1") == 0) {
+        cmd = "shasum -a 256 " blob " | awk \047{print $1}\047"; cmd | getline sha; close(cmd)
+      }
+
+      # Header then base64 body (default base64 wrap ~76 chars on both GNU/BSD)
+      printf("%s LEN=%d SHA256=%s%s\n", B64H, len, sha, B64T);
+      cmd = "base64 " blob
+      while ((cmd | getline line) > 0) { print line }
+      close(cmd)
+      # Clean temp
+      system("rm -f " blob)
+    }
+  ' 3< <(
+      # fd 3 streams an ever-increasing integer to awk so it can generate per-line temp names.
+      # This protects against racing when multiple filter instances exist.
+      i=0; while :; do printf '%s\n' "$i"; i=$((i+1)); done
+  )
 }
-_llm_emit() {
-  [[ "${LLM_VERBOSE:-0}" != "1" ]] && return 0
-  local tag="${1:-INFO}"; shift || true
-  local color="\033[0;34m" icon="ℹ️"
-  case "$tag" in
-    START) color="\033[1;33m"; icon="⚡" ;;
-    DONE)  color="\033[1;32m"; icon="✅" ;;
-    FAIL)  color="\033[1;31m"; icon="❌" ;;
-    IDLE)  color="\033[0;36m"; icon="⌛" ;;
-    SNAP)  color="\033[0;35m"; icon="📸" ;;
-    BG)    color="\033[0;90m"; icon="⚙️" ;;
-    INFO)  color="\033[0;34m"; icon="ℹ️" ;;
-  esac
-  printf "${color}%s HYPEBRUT %s\033[0m\n" "$icon" "$*" >&2
+
+# ── global FD hijack (per-process; no env) ─────────────────────────────────────
+_hb_enable_guard() {
+  [[ "${_HB_FD_HIJACKED:-0}" == "1" && "${_HB_HIJACK_PID:-}" == "$$" ]] && return 0
+  mkdir -p "$_HB_LOG_DIR"
+  _HB_LOG_FILE="${_HB_LOG_DIR}/hb.$(basename "${SHELL:-bash}" 2>/dev/null).$$_$(_hb_now).log"
+  # Save original FDs and redirect through the guard
+  exec {_HB_STDOUT_ORIG}>&1
+  exec {_HB_STDERR_ORIG}>&2
+  exec 1> >(_hb_filter)
+  exec 2> >(_hb_filter)
+  _HB_FD_HIJACKED=1
+  _HB_HIJACK_PID="$$"
+}
+_hb_disable_guard() {
+  [[ "${_HB_FD_HIJACKED:-0}" != "1" || "${_HB_HIJACK_PID:-}" != "$$" ]] && return 0
+  exec 1>&${_HB_STDOUT_ORIG} 2>&${_HB_STDERR_ORIG}
+  exec {_HB_STDOUT_ORIG}>&- {_HB_STDERR_ORIG}>&-
+  unset _HB_FD_HIJACKED _HB_HIJACK_PID _HB_STDOUT_ORIG _HB_STDERR_ORIG _HB_LOG_FILE
 }
 
-# ╭───────────────── repo + paths ─────────────────╮
-_LLM_THIS_SCRIPT="$(readlink -f "${BASH_SOURCE[0]}")"
-_LLM_REPO_ROOT="$(cd "$(dirname "$_LLM_THIS_SCRIPT")/.." && pwd -P)"
-_LLM_CFG_DIR="${HOME}/.config/hypebrut"
-_LLM_LOGIN_HOOK="${_LLM_CFG_DIR}/login-hook.sh"
-_LLM_NONINT_HOOK="${_LLM_CFG_DIR}/noninteractive-hook.sh"
-_LLM_PID_DIR="/tmp/hype_pids"
-_LLM_LOG_DIR="/tmp/hype_logs"
+# Engage the guard automatically in *noninteractive* shells.
+if [[ $- != *i* ]]; then
+  _hb_enable_guard
+fi
 
-# ╭───────────────── arg parsing (internal hook flag) ─────────────────╮
-_LLM_AS_HOOK=0
-for _arg in "${@:-}"; do
-  [[ "${_arg}" == "--as-hook" ]] && _LLM_AS_HOOK=1
-done
-
-# ╭───────────────── idempotence gate ─────────────────╮
-if [[ "${HYPEBRUT_ENV_READY:-}" == "1" && "${HYPEBRUT_ENV_ROOT:-}" == "${_LLM_REPO_ROOT}" && "${LLM_BOOTSTRAP_FORCE:-0}" != "1" ]]; then
-  _llm_emit INFO "Environment already active. Sourcing skipped. **Proceed with task.** (root: ${_LLM_REPO_ROOT})"
-  # Explicitly restore & clear RETURN trap here too (no lingering).
-  eval "$_LLM_BOOT_OLD_SET_OPTS"; trap - RETURN
+# ── idempotence (process-local; no env) ───────────────────────────────────────
+if [[ "${_HB_READY:-}" == "1" && "${_HB_READY_PID:-}" == "$$" ]]; then
+  printf "[HB] Ready in this process. Proceed.\n" >&2
   return 0
 fi
 
-# ╭───────────────── defaults & tuning ─────────────────╮
-export LLM_VERBOSE="${LLM_VERBOSE:-0}"
-export LLM_FOLD_WIDTH="${LLM_FOLD_WIDTH:-3996}"
-export LLM_IDLE_SECS="${LLM_IDLE_SECS:-10}"
-export LLM_IDLE_FAIL_AFTER_SECS="${LLM_IDLE_FAIL_AFTER_SECS:-300}"
-export LLM_MAX_RUN_SECS="${LLM_MAX_RUN_SECS:-600}"
-export LLM_TEST_PRESETS="${LLM_TEST_PRESETS:-1}"
-export LLM_SUPPRESS_PATTERNS="${LLM_SUPPRESS_PATTERNS:-^npm ERR! cb}"
-export LLM_DEPS_AUTOINSTALL="${LLM_DEPS_AUTOINSTALL:-1}"
-export LLM_GIT_HOOKS="${LLM_GIT_HOOKS:-1}"
-export TZ="${TZ:-UTC}"
+# ── hooks (no exports) ─────────────────────────────────────────────────────────
+mkdir -p "$_HB_CFG_DIR"
 
-# ╭───────────────── banner ─────────────────╮
-_llm_emit INFO "Effusion Labs HYPEBRUT OS activated."
-_llm_emit INFO "Repo Root: ${_LLM_REPO_ROOT}"
-
-# ╭───────────────── PATH + dirs ─────────────────╮
-mkdir -p "$_LLM_CFG_DIR" "$_LLM_PID_DIR" "$_LLM_LOG_DIR"
-_llm_path_prepend_unique "${_LLM_REPO_ROOT}/bin"
-_llm_emit INFO "Ensured '${_LLM_REPO_ROOT}/bin' is on PATH."
-
-# ╭───────────────── stream formatting helpers ─────────────────╮
-_llm_fold() { if _llm_has fold; then fold -w "${LLM_FOLD_WIDTH}" -s; else cat; fi; }
-_llm_stream_filter() {
-  if [[ -z "${LLM_SUPPRESS_PATTERNS}" ]]; then cat
-  else awk -v pat="$LLM_SUPPRESS_PATTERNS" '{ if ($0 ~ pat) next; print }'
-  fi
-}
-
-llm_cat() {
-  local target="${1:-}"
-  if [[ -z "$target" ]]; then command cat | _llm_fold; return; fi
-  if [[ ! -f "$target" ]]; then _llm_emit FAIL "File not found: $target"; return 1; fi
-  local ext="${target##*.}" parser=""
-  case "$ext" in
-    js|mjs|cjs) parser="babel" ;;
-    ts|tsx)     parser="babel-ts" ;;
-    json|jsonl) parser="json" ;;
-    md|markdown)parser="markdown" ;;
-    html|htm)   parser="html" ;;
-    css|pcss)   parser="css" ;;
-    yml|yaml)   parser="yaml" ;;
-  esac
-  if [[ -n "$parser" ]] && _llm_has npx; then
-    _llm_emit INFO "Pretty-printing $target (parser: $parser)"
-    npx --no-install prettier --parser "$parser" --print-width "${LLM_FOLD_WIDTH}" --no-config -- "$target" 2>/dev/null | _llm_fold
-  else
-    _llm_emit INFO "Displaying raw content of $target"
-    command cat -- "$target" | _llm_fold
-  fi
-}; export -f llm_cat
-
-llm_snapshot() {
-  local msg="${1:-chore: WIP checkpoint}"
-  _llm_emit SNAP "Snapshot: '$msg'"
-  if ! _llm_has git || ! git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
-    _llm_emit FAIL "Not in a git repository."
-    return 1
-  fi
-  git add -A
-  if git commit --allow-empty -m "$msg"; then _llm_emit DONE "Snapshot committed."
-  else _llm_emit INFO "No changes to commit."; fi
-}; export -f llm_snapshot
-
-hype_bg() {
-  local check_port=""
-  while [[ $# -gt 0 ]]; do
-    case "$1" in
-      --port) check_port="$2"; shift 2;;
-      --) shift; break;;
-      *) break;;
-    esac
-  done
-  [[ $# -ge 2 ]] || { _llm_emit FAIL "hype_bg requires a name and a command"; return 2; }
-  local name=$1; shift
-
-  if [[ "$name" == "devserver" && -z "$check_port" ]]; then
-    _llm_emit FAIL "POLICY: 'devserver' requires --port <n>"; return 1
-  fi
-
-  if [[ -n "$check_port" ]] && _llm_has lsof; then
-    local pid; pid="$(lsof -t -i :"$check_port" 2>/dev/null || true)"
-    if [[ -n "$pid" ]]; then
-      if [[ -d "$_LLM_PID_DIR" ]] && grep -qsx "$pid" "$_LLM_PID_DIR"/*.pid 2>/dev/null; then
-        _llm_emit INFO "Managed process already on port $check_port (PID: $pid)"; return 0
-      else
-        _llm_emit FAIL "Port $check_port blocked by unmanaged PID $pid"; return 1
-      fi
-    fi
-  fi
-
-  local pid_file="${_LLM_PID_DIR}/${name}.pid" log_file="${_LLM_LOG_DIR}/${name}.log"
-  if [[ -f "$pid_file" ]]; then _llm_emit FAIL "Process '$name' already managed (stale pidfile?)"; return 1; fi
-
-  _llm_emit BG "Start '$name': $(printf '%q ' "$@")"
-  _llm_emit BG "Log → $log_file"
-  ( "$@" >"$log_file" 2>&1 ) & echo $! > "$pid_file"
-  sleep 0.5
-  if ! kill -0 "$(cat "$pid_file")" 2>/dev/null; then
-    _llm_emit FAIL "'$name' failed to start; see $log_file"; rm -f "$pid_file"; return 1
-  fi
-  _llm_emit BG "'$name' running (PID $(cat "$pid_file"))."
-}; export -f hype_bg
-
-hype_kill() {
-  [[ $# -ge 1 ]] || { _llm_emit FAIL "hype_kill requires a process name"; return 2; }
-  local name=$1 pid_file="${_LLM_PID_DIR}/${name}.pid"
-  if [[ ! -f "$pid_file" ]]; then _llm_emit FAIL "'$name' is not running"; return 1; fi
-  local pid; pid="$(cat "$pid_file")"
-  _llm_emit BG "Stopping '$name' (PID: $pid)…"
-  if kill -TERM "$pid" 2>/dev/null; then _llm_emit BG "'$name' terminated."
-  else _llm_emit BG "'$name' not found or already stopped."; fi
-  rm -f "$pid_file"
-}; export -f hype_kill
-
-hype_status() {
-  _llm_emit BG "Managed processes:"
-  if [[ ! -d "$_LLM_PID_DIR" ]] || [[ -z "$(ls -A "$_LLM_PID_DIR" 2>/dev/null || true)" ]]; then
-    _llm_emit BG "None."; return 0
-  fi
-  local pid_file name pid
-  for pid_file in "${_LLM_PID_DIR}"/*.pid; do
-    [[ -f "$pid_file" ]] || continue
-    name="$(basename "$pid_file" .pid)"; pid="$(cat "$pid_file")"
-    if kill -0 "$pid" 2>/dev/null; then _llm_emit BG "- $name: RUNNING (PID $pid)"
-    else _llm_emit BG "- $name: STALE (cleaning)"; rm -f "$pid_file"; fi
-  done
-}; export -f hype_status
-
-# ╭───────────────── auto-install shell hijack (once) ─────────────────╮
-_llm_install_hooks() {
-  mkdir -p "$_LLM_CFG_DIR"
-
-  # 1) Non-interactive hook (BASH_ENV target)
-  cat > "$_LLM_NONINT_HOOK" <<EOF
-# >>> HYPEBRUT noninteractive hook (auto-generated) >>>
-# shellcheck source=/dev/null
-HYPEBRUT_ENV_ROOT="${_LLM_REPO_ROOT}"
-if [[ "\${HYPEBRUT_ENV_READY:-}" != "1" || "\${HYPEBRUT_ENV_ROOT:-}" != "\${HYPEBRUT_ENV_ROOT}" ]]; then
-  source "${_LLM_THIS_SCRIPT}" --as-hook
+# Noninteractive hook (absolute path to this bootstrap; no guessing)
+cat > "$_HB_NONINT_HOOK" <<EOF
+# >>> HYPEBRUT noninteractive hook (no-env) >>>
+# shellcheck shell=bash source=/dev/null
+# Always source the bootstrap in noninteractive *login* shells so the guard engages.
+if [[ \$- != *i* ]]; then
+  source "${_HB_BOOTSTRAP_ABS}" --as-hook
 fi
 # <<< HYPEBRUT noninteractive hook <<<
 EOF
-  chmod 0644 "$_LLM_NONINT_HOOK"
+chmod 0644 "$_HB_NONINT_HOOK"
 
-  # 2) Login hook — sourced by login shells (`bash -l`).
-  cat > "$_LLM_LOGIN_HOOK" <<EOF
-# >>> HYPEBRUT login hook (auto-generated) >>>
-export BASH_ENV="${_LLM_NONINT_HOOK}"
-# shellcheck source=/dev/null
-HYPEBRUT_ENV_ROOT="${_LLM_REPO_ROOT}"
-if [[ "\${HYPEBRUT_ENV_READY:-}" != "1" || "\${HYPEBRUT_ENV_ROOT:-}" != "\${HYPEBRUT_ENV_ROOT}" ]]; then
-  source "${_LLM_THIS_SCRIPT}" --as-hook
-fi
+# Login hook: ensure login shells source the noninteractive hook
+cat > "$_HB_LOGIN_HOOK" <<EOF
+# >>> HYPEBRUT login hook (no-env) >>>
+# shellcheck shell=bash source=/dev/null
+[ -f "${_HB_NONINT_HOOK}" ] && source "${_HB_NONINT_HOOK}"
 # <<< HYPEBRUT login hook <<<
 EOF
-  chmod 0644 "$_LLM_LOGIN_HOOK"
+chmod 0644 "$_HB_LOGIN_HOOK"
 
-  # 3) Ensure login shells source our hook (idempotent).
-  _llm_patch_file() {
-    local file="$1" marker="# >>> HYPEBRUT login sourcing >>>"
-    if [[ -f "$file" ]] && grep -Fq "$marker" "$file"; then return 0; fi
-    mkdir -p "$(dirname "$file")"
-    {
-      echo ""; echo "$marker"
-      echo "[ -f \"${_LLM_LOGIN_HOOK}\" ] && source \"${_LLM_LOGIN_HOOK}\""
-      echo "# <<< HYPEBRUT login sourcing <<<"
-    } >> "$file"
-  }
-  if [[ -f "${HOME}/.bash_profile" || ! -f "${HOME}/.profile" ]]; then
-    _llm_patch_file "${HOME}/.bash_profile"
-  fi
-  _llm_patch_file "${HOME}/.profile"
-
-  _llm_emit DONE "Shell hijack installed → login + noninteractive hooks ready."
+# Idempotently append login sourcing to common startup files.
+_hb_patch_file() {
+  local f="$1" marker="# >>> HYPEBRUT login sourcing >>>"
+  if [[ -f "$f" ]] && grep -Fq "$marker" "$f"; then return 0; fi
+  mkdir -p "$(dirname "$f")"
+  {
+    echo ""; echo "$marker"
+    echo "[ -f \"${_HB_LOGIN_HOOK}\" ] && source \"${_HB_LOGIN_HOOK}\""
+    echo "# <<< HYPEBRUT login sourcing <<<"
+  } >> "$f"
 }
-
-# Install once unless invoked as a hook (hooks stay lightweight).
-if (( _LLM_AS_HOOK == 0 )); then _llm_install_hooks; fi
-
-# ╭───────────────── optional: npm ci auto-install (hashed) ────────────╮
-if _llm_on "${LLM_DEPS_AUTOINSTALL}"; then
-  mkdir -p "${_LLM_REPO_ROOT}/tmp"; hash_file="${_LLM_REPO_ROOT}/tmp/.deps_hash"
-  lock_file="${_LLM_REPO_ROOT}/package-lock.json"
-  if [[ -f "$lock_file" ]]; then
-    current_hash="$(sha256sum "$lock_file" | awk '{print $1}')"
-    stored_hash="$(cat "$hash_file" 2>/dev/null || echo "")"
-    if [[ "$current_hash" != "$stored_hash" ]]; then
-      mkdir -p "${_LLM_REPO_ROOT}/logs"
-      ci_log="${_LLM_REPO_ROOT}/logs/npm-ci.$(_llm_ts).log"
-      _llm_emit INFO "Dependencies changed → npm ci (capturing to ${ci_log})"
-    fi
-  fi
+if [[ -f "${HOME}/.bash_profile" || ! -f "${HOME}/.profile" ]]; then
+  _hb_patch_file "${HOME}/.bash_profile"
 fi
+_hb_patch_file "${HOME}/.profile"
 
-# ╭───────────────── export environment flags ─────────────────╮
-export HYPEBRUT_ENV_READY=1
-export HYPEBRUT_ENV_ROOT="${_LLM_REPO_ROOT}"
-_llm_emit DONE "Environment activated. Tools are available for this shell session. **Do not source again.**"
+# Mark process-local readiness.
+_HB_READY=1
+_HB_READY_PID="$$"
+printf "[HB] Bootstrap active. Guard armed (width=%d bytes). Log: %s\n" \
+       "$_HB_SPLIT_WIDTH" "${_HB_LOG_FILE:-<none>}" >&2
 
-# ╭───────────────── FINAL: restore shell opts & clear RETURN trap ─────╮
-eval "$_LLM_BOOT_OLD_SET_OPTS"
-trap - RETURN
-# ────────────────────────────────────────────────────────────────────────────────
-# End of file
-# ────────────────────────────────────────────────────────────────────────────────
+# Done. RETURN trap restores shell options (not the guard; it persists).

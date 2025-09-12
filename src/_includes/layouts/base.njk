@@ -31,14 +31,16 @@
 
     {{ headExtra | safe }}
 
-    <script src="{{ '/assets/js/theme-utils.js' | url }}"></script>
+    {# Theme boot (runs pre-render to avoid FART) #}
+    <link rel="stylesheet" href="{{ '/assets/css/app.css' | url }}">
     <script>window.ThemeUtils?.initEarly?.();</script>
 
+    {# Fonts #}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Rubik:wght@400..900&family=Space+Grotesk:wght@400..700&display=swap" rel="stylesheet">
 
-    {# Vite entry (imports /assets/css/app.css inside) #}
+    {# Vite entry: this file imports ../css/app.css — Tailwind+daisyUI come through Vite #}
     <script type="module" src="{{ '/assets/js/app.js' | url }}"></script>
 
     <style>
@@ -99,9 +101,5 @@
 
     {{ footer(buildTime) }}
 
-    <script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js" defer></script>
-    <script src="{{ '/assets/js/work-filters.js' | url }}" defer></script>
-    <script src="{{ '/assets/js/mschf-overlay.js' | url }}" defer></script>
-    <script src="{{ '/assets/js/theme-toggle.js' | url }}" defer></script>
   </body>
 </html>
