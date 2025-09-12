@@ -8,20 +8,27 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "build": "node utils/dev/eleventy-with-codeframes.mjs",
-    "check:archives": "node utils/scripts/validation/validate-archive-build.mjs",
-    "data:all": "npm run data:merge-sections && npm run data:synthesize && npm run data:merge-golden",
-    "data:merge-golden": "node utils/build/merge-golden.mjs --verbose",
-    "data:merge-sections": "node utils/build/merge-sections.mjs --verbose",
-    "data:synthesize": "node utils/build/synthesize.mjs --verbose",
-    "dead-links": "markdown-link-check -c oneoff/link-check.config.json README.md",
-    "deps:playwright": "playwright install chromium || true",
+    "start": "npm run dev",
+    "build": "npm run css:build && node utils/dev/eleventy-with-codeframes.mjs",
+    "preview": "ELEVENTY_SERVE=true node utils/dev/eleventy-with-codeframes.mjs --serve",
     "dev": "CSS_WATCH=1 npx concurrently -k -r -n css,11ty -c green,cyan \"npm:css:watch\" \"npm:dev:11ty\"",
     "dev:11ty": "ELEVENTY_SERVE=true node utils/dev/eleventy-with-codeframes.mjs --serve",
-    "docs:fetch": "node utils/build/doc-fetcher.mjs",
+    "eleventy": "npx @11ty/eleventy",
     "eleventy:raw": "npx @11ty/eleventy",
     "format": "prettier -w .",
-    "postinstall": "if [ \"${PATCH_PACKAGE_RUN:-1}\" != \"0\" ] && [ -x node_modules/.bin/patch-package ]; then patch-package; fi",
+    "format:check": "prettier -c .",
+    "test": "c8 node test/integration/runner.spec.mjs",
+    "test:watch": "node --watch test/integration/runner.spec.mjs",
+    "check": "npm run format:check && npm run lint && npm run test",
+    "lint": "npm run lint:advisory && npm run lint:product-links && npm run lint:links",
+    "lint:links": "markdown-link-check -c oneoff/link-check.config.json README.md",
+    "dead-links": "npm run lint:links",
+    "deps:playwright": "playwright install chromium || true",
+    "docs:fetch": "node utils/build/doc-fetcher.mjs",
+    "data:all": "npm run data:merge-sections && npm run data:synthesize && npm run data:merge-golden",
+    "data:merge-sections": "node utils/build/merge-sections.mjs --verbose",
+    "data:synthesize": "node utils/build/synthesize.mjs --verbose",
+    "data:merge-golden": "node utils/build/merge-golden.mjs --verbose",
     "lint:advisory": "node utils/scripts/validation/lint-archive-namespace.mjs",
     "lint:product-links": "node utils/scripts/validation/lint-product-links.mjs",
     "mcp:dev": "node mcp-stack/gateway/server.mjs",
@@ -31,11 +38,12 @@
     "report:products": "node utils/build/archive-products-report.mjs",
     "scan:ternary": "node utils/scripts/scan-njk-ternaries.mjs",
     "style:canon": "node utils/scripts/style-canon.mjs",
-    "test": "c8 node test/integration/runner.spec.mjs",
     "validate:docs": "node utils/scripts/validation/validate-docs.js",
-    "verify:patches": "node utils/scripts/validation/verify-patch-applied.mjs"
+    "verify:patches": "node utils/scripts/validation/verify-patch-applied.mjs",
+    "postinstall": "if [ \"${PATCH_PACKAGE_RUN:-1}\" != \"0\" ] && [ -x node_modules/.bin/patch-package ]; then patch-package; fi"
   },
-  "dependencies": {
+  "dependencies": {},
+  "devDependencies": {
     "@11ty/eleventy": "3.1.2",
     "@11ty/eleventy-img": "6.0.4",
     "@11ty/eleventy-navigation": "1.0.4",
@@ -49,7 +57,6 @@
     "@quasibit/eleventy-plugin-sitemap": "2.2.0",
     "@shikijs/markdown-it": "3.12.2",
     "@shikijs/transformers": "3.12.2",
-    "@tailwindcss/oxide-linux-x64-gnu": "4.1.13",
     "@tailwindcss/typography": "0.5.16",
     "@tailwindcss/vite": "4.1.13",
     "acorn": "8.15.0",
@@ -59,7 +66,7 @@
     "bat-cli": "0.1.4",
     "c8": "10.1.3",
     "chalk": "5.6.2",
-    "colorette": "2.0.20",
+    "colorette": "2.0.16",
     "concurrently": "9.2.1",
     "daisyui": "5.1.10",
     "date-fns": "4.1.0",
@@ -112,10 +119,9 @@
     "unified": "11.0.5",
     "vite": "7.1.5",
     "yaml": "2.8.1",
-    "yargs": "18.0.0",
-    "yq": "0.0.1"
+    "yargs": "18.0.0"
   },
   "engines": {
-    "node": ">=24"
+    "node": ">=24.0.0"
   }
 }
