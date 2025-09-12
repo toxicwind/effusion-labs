@@ -77,12 +77,6 @@ Signals of success:
     || ./bin/node ./node_modules/@11ty/eleventy/cmd.js --serve --port=8080
 ```
 
-- **Structure map**
-  Config `eleventy.config.mjs`, `config/**/*.mjs|js`;
-  Templates `src/_includes/**`; Content `src/content/**`; Pages `src/pages/**`;
-  CSS/Tailwind/PostCSS `tailwind.config.mjs`, `postcss.config.mjs`, `src/assets/css/**`;
-  Client JS `src/assets/js/**`.
-
 ---
 
 ## npm Discovery & Decisions (REQUIRED)

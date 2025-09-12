@@ -33,7 +33,6 @@ A fast, opinionated Eleventy + Nunjucks + Tailwind static site—curated as a �
   - [6) Build Products \& Dependencies (generated/managed)](#6-build-products--dependencies-generatedmanaged)
   - [7) Repo Control \& Configuration](#7-repo-control--configuration)
     - [Quick orientation (on demand)](#quick-orientation-on-demand)
-  - [Configuration](#configuration)
   - [Services](#services)
   - [Scripts](#scripts)
     - [Core](#core)
@@ -80,7 +79,7 @@ Run the gated doc fetcher locally (never required in CI):
 DOC_FETCH=1 npm run docs:fetch
 ```
 
-**Runtime target:** Node.js **24+** (honor `.nvmrc` if present). The repository is ESM-first (`package.json` sets `"type": "module"`); use `import`/`export` syntax. Configuration files like `eleventy.config.mjs`, `tailwind.config.mjs`, and `postcss.config.mjs` are ESM as well.
+**Runtime target:** Node.js **24+** (honor `.nvmrc` if present). The repository is ESM-first (`package.json` sets `"type": "module"`); use `import`/`export` syntax. Configuration files like `eleventy.config.mjs`, `tailwind.config.mjs`, and `vite.config.mjs` are ESM as well.
 
 ---
 
@@ -218,7 +217,6 @@ All product entities resolve to `/archives/product/<slugCanonical>/` using a sta
 - `lib/` — Reusable app/library code (helpers, transforms, utilities).
 * `.eleventy.js` — Eleventy config (collections, filters/shortcodes, passthrough).
 * `src/styles/app.tailwind.css` — Tailwind v4 entry with `@plugin` and `@source` directives.
-* `tailwind.config.mjs` / `postcss.config.mjs` — Theme tokens and PostCSS pipeline.
 
 ## 2) Automation, Tooling & Guardrails
 
@@ -267,17 +265,6 @@ All product entities resolve to `/archives/product/<slugCanonical>/` using a sta
 - Agents/CI: `source utils/scripts/setup/env-bootstrap.sh` then `llm_run --out /tmp/build.log -- npm run build`.
 - Want a current snapshot? `tree -L 2 -I "node_modules|_site|.git|tmp"` (don’t commit the output).
 
----
-
-## Configuration
-
-- **Eleventy**:
-
-  - Collections via `addCollection` in `eleventy.config.mjs`
-  - Static assets via `addPassthroughCopy`
-
-* **Tailwind/DaisyUI**: plugins/themes in `src/styles/app.tailwind.css`, tokens in `tailwind.config.mjs`
-* **PostCSS**: plugin pipeline in `postcss.config.mjs`
 * **Node version**: respect `.nvmrc`
 
 ---
