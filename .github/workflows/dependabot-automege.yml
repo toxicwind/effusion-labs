@@ -1,21 +1,20 @@
-# .github/workflows/dependabot-auto-merge.yml
-name: Dependabot Auto-Merge (Native)
+name: Dependabot Auto-Merge (Native, Gated)
 
 on:
   pull_request:
     types: [opened, reopened, synchronize, ready_for_review]
 
 permissions:
-  contents: write          # required to toggle auto-merge
-  pull-requests: write     # required to create a review/approval
+  contents: write          # needed for auto-merge toggle via GraphQL
+  pull-requests: write     # needed to approve
   checks: read
   statuses: read
 
 jobs:
   automerge:
     if: >
-      github.event_name == 'pull_request' &&
-      github.event.pull_request.user.login == 'dependabot[bot]'
+      github.event.pull_request.user.login == 'dependabot[bot]' &&
+      !github.event.pull_request.draft
     runs-on: ubuntu-latest
 
     concurrency:
@@ -29,8 +28,12 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Approve PR (native)
-        if: ${{ !github.event.pull_request.draft }}
+      # Gate: only minor/patch or security updates
+      - name: Approve PR
+        if: >
+          contains(steps.meta.outputs.update-type, 'semver-patch') ||
+          contains(steps.meta.outputs.update-type, 'semver-minor') ||
+          startsWith(steps.meta.outputs.update-type, 'security')
         uses: actions/github-script@v8
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -38,36 +41,86 @@ jobs:
             const { owner, repo } = context.repo;
             const number = context.payload.pull_request.number;
             await github.rest.pulls.createReview({
-              owner,
-              repo,
-              pull_number: number,
+              owner, repo, pull_number: number,
               event: 'APPROVE',
-              body: 'Automated approval for Dependabot PR.'
+              body: 'Auto-approval for Dependabot (minor/patch or security).'
             });
             core.info(`Approved PR #${number}`);
 
-      - name: Enable auto-merge (squash, native)
-        if: ${{ !github.event.pull_request.draft }}
+      # Robust, native enablement: wait for mergeability to stabilize, then enable auto-merge (squash)
+      - name: Enable auto-merge (native, gated)
+        if: >
+          contains(steps.meta.outputs.update-type, 'semver-patch') ||
+          contains(steps.meta.outputs.update-type, 'semver-minor') ||
+          startsWith(steps.meta.outputs.update-type, 'security')
         uses: actions/github-script@v8
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const pr = context.payload.pull_request; // includes node_id
-            const mutation = `
-              mutation Enable($pullRequestId: ID!, $mergeMethod: PullRequestMergeMethod!) {
+            const {owner, repo} = context.repo;
+            const number = context.payload.pull_request.number;
+
+            const Q = `
+              query($owner:String!, $repo:String!, $number:Int!) {
+                repository(owner:$owner, name:$repo) {
+                  autoMergeAllowed
+                  pullRequest(number:$number) {
+                    id
+                    isDraft
+                    state
+                    mergeStateStatus
+                    reviewDecision
+                    commits(last:1) {
+                      nodes {
+                        commit { oid statusCheckRollup { state } } # SUCCESS | FAILURE | PENDING | null
+                      }
+                    }
+                  }
+                }
+              }`;
+
+            const enable = async (id) => {
+              const M = `mutation Enable($pullRequestId: ID!, $mergeMethod: PullRequestMergeMethod!) {
                 enablePullRequestAutoMerge(input: { pullRequestId: $pullRequestId, mergeMethod: $mergeMethod }) {
                   pullRequest { number state autoMergeRequest { enabledAt } }
                 }
+              }`;
+              return await github.graphql(M, { pullRequestId: id, mergeMethod: "SQUASH" });
+            };
+
+            const prInfo = async () => await github.graphql(Q, {owner, repo, number});
+            const sleep = (ms) => new Promise(r => setTimeout(r, ms));
+
+            // Up to ~3 minutes of gentle polling
+            for (let i=0; i<18; i++) {
+              const r = await prInfo();
+              if (!r.repository.autoMergeAllowed) {
+                core.setFailed("Repo setting 'Allow auto-merge' is OFF.");
               }
-            `;
-            try {
-              const res = await github.graphql(mutation, {
-                pullRequestId: pr.node_id,
-                mergeMethod: "SQUASH"
-              });
-              core.info(`Auto-merge enabled on PR #${res.enablePullRequestAutoMerge.pullRequest.number}`);
-            } catch (e) {
-              core.warning(`Could not enable auto-merge: ${e.message}`);
-              core.warning('Verify repository setting "Allow auto-merge" is ON and branch protection allows it.');
-              throw e;
+              const pr = r.repository.pullRequest;
+              const roll = pr.commits.nodes[0]?.commit?.statusCheckRollup?.state || "UNKNOWN";
+              core.info(`mergeStateStatus=${pr.mergeStateStatus} statusCheckRollup=${roll}`);
+
+              // If checks are failing, don't attempt to enable; try again on next run
+              if (pr.mergeStateStatus === "UNSTABLE" && roll === "FAILURE") {
+                core.info("Checks failing → skip enablement (will re-run on new commits).");
+                return;
+              }
+
+              // If not pending and mergeability isn't UNKNOWN, try to enable
+              if (roll !== "PENDING" && pr.mergeStateStatus !== "UNKNOWN") {
+                try {
+                  const res = await enable(pr.id);
+                  core.info(`Auto-merge enabled on PR #${res.enablePullRequestAutoMerge.pullRequest.number}`);
+                  return;
+                } catch (e) {
+                  if (/unstable status|UNKNOWN|mergeability/i.test(e.message)) {
+                    core.warning(`Transient: ${e.message}; retrying...`);
+                  } else {
+                    throw e; // real failure
+                  }
+                }
+              }
+              await sleep(10000);
             }
+            core.setFailed("Gave up enabling auto-merge (mergeability never stabilized).");

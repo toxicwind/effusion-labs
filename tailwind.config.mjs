@@ -1,30 +1,23 @@
 // tailwind.config.mjs
-// Brutalist / KAWS-adjacent type: heavy geometric headings + rounded sans body.
+// Minimal config; everything else is done in CSS (v4 “CSS-first”).
 export default {
   theme: {
     extend: {
       screens: {
-        '3xl': '1920px', // 2K / ultrawide start
-        '4xl': '2560px'  // 4K-friendly tweaks
+        "3xl": "1920px",
+        "4xl": "2560px",
       },
       fontFamily: {
         heading: ["Space Grotesk", "ui-sans-serif", "system-ui", "sans-serif"],
         body: ["Rubik", "ui-sans-serif", "system-ui", "sans-serif"],
         mono: ["IBM Plex Mono", "ui-monospace", "SFMono-Regular", "Menlo", "monospace"],
       },
-
       letterSpacing: {
         brutal: "-0.025em",
         tightish: "-0.01em",
         mega: "0.08em",
       },
-
       colors: {
-        primary: "hsl(var(--p) / <alpha-value>)",
-        info: "hsl(var(--in) / <alpha-value>)",
-        success: "hsl(var(--su) / <alpha-value>)",
-        warning: "hsl(var(--wa) / <alpha-value>)",
-        error: "hsl(var(--er) / <alpha-value>)",
         background: "rgb(var(--color-bg) / <alpha-value>)",
         surface: "rgb(var(--color-surface) / <alpha-value>)",
         text: "rgb(var(--color-text) / <alpha-value>)",
@@ -33,7 +26,6 @@ export default {
         codetext: "rgb(var(--color-code-text) / <alpha-value>)",
         electric: "rgb(0 191 255 / <alpha-value>)",
       },
-
       typography: ({ theme }) => ({
         DEFAULT: {
           css: {
@@ -100,5 +92,5 @@ export default {
       }),
     },
   },
-  plugins: [],
+  plugins: [], // Tailwind v4 plugins are activated in CSS via @plugin
 };

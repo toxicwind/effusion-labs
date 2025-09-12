@@ -1,3 +1,4 @@
+{# src/pages/resume/index.njk #}
 ---
 permalink: "/resume/"
 title: "Resume"
@@ -75,10 +76,7 @@ eleventyExcludeFromCollections: true
       {% endif %}
 
       {# Highlights #}
-      {% set _hc = 0 %}
-      {% if resume and resume.highlights %}
-        {% set _hc = resume.highlights | length %}
-      {% endif %}
+      {% set _hc = resume and resume.highlights and (resume.highlights | length) or 0 %}
       {% if _hc %}
         {% call neonCard({ title: "Highlights", neon: false, frame: 'none', rail: false }) %}
           <div class="mt-3">
@@ -162,7 +160,7 @@ eleventyExcludeFromCollections: true
                     <ul class="mt-2 space-y-1.5 text-[15px] leading-6">
                       {% for h in job.highlights %}
                         {% if loop.index0 >= _maxBul %}
-                          <li class="hb-minirow hl-line ink-soft">{{ h }}</li>
+                          <li class="hl-line ink-soft">{{ h }}</li>
                         {% endif %}
                       {% endfor %}
                     </ul>
@@ -252,7 +250,6 @@ eleventyExcludeFromCollections: true
 {% endif %}
 {% set sameAsLinks = [resume and resume.website, resume and resume.linkedin, resume and resume.github] | compactUnique %}
 
-{# Build Person JSON-LD without undefined values #}
 {% set person = {
   "@context": "https://schema.org",
   "@type": "Person",
@@ -284,7 +281,7 @@ eleventyExcludeFromCollections: true
 } | json | safe }}
 </script>
 
-<!-- Helpers -->
+<!-- Page-local helpers -->
 <script>
   function toast(msg){
     var wrap=document.getElementById('toaster'); if(!wrap) return;
@@ -299,4 +296,3 @@ eleventyExcludeFromCollections: true
     }
   }
 </script>
-<script src="/assets/js/theme-toggle.js" defer></script>

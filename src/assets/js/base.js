@@ -1,1 +1,0 @@
-// This file is used to hold JavaScript code that is shared across multiple components

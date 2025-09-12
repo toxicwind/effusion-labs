@@ -5,7 +5,7 @@ import rss from "@11ty/eleventy-plugin-rss";
 import sitemap from "@quasibit/eleventy-plugin-sitemap";
 import schema from "@quasibit/eleventy-plugin-schema";
 import vitePlugin from "@11ty/eleventy-plugin-vite";
-import { createResolvers } from "./interlinkers/resolvers.mjs";
+import { createResolvers } from "../config/interlinkers/resolvers.mjs";
 
 export default function getPlugins() {
   const plugins = [
@@ -15,31 +15,36 @@ export default function getPlugins() {
         // Use your normal site shell
         defaultLayout: "layouts/base.njk",
         resolvingFns: createResolvers(),
-        deadLinkReport: "json", // artifact only (no CI gating)
+        deadLinkReport: "json", // write unresolved report artifact only (no gating)
       },
     ],
     [navigation],
     [rss],
     [sitemap, { sitemap: { hostname: "https://effusionlabs.com" } }],
     [schema],
-    // Vite on by default – stable minimal config for Eleventy integration
-    [
-      vitePlugin,
-      {
-        tempFolderName: ".11ty-vite",
-        viteOptions: {
-          clearScreen: false,
-          appType: "custom",
-          server: { middlewareMode: true },
-          build: {
-            emptyOutDir: true, // wipe .11ty-vite on build (we also clean in eleventy.before)
+  ];
+
+  // Vite: always on (you said you want it extensively)
+  plugins.push([
+    vitePlugin,
+    {
+      // keep the temp dir stable
+      tempFolderName: ".11ty-vite",
+      viteOptions: {
+        clearScreen: false,
+        appType: "custom",
+        server: { middlewareMode: true },
+        css: { devSourcemap: true },
+        build: {
+          manifest: true,
+          rollupOptions: {
+            // Ensure our JS entry (which imports CSS) is known to Vite
+            input: ["/assets/js/app.js"],
           },
-          // Allow Vite to also look for assets in /_site during dev transforms
-          publicDir: false,
         },
       },
-    ],
-  ];
+    },
+  ]);
 
   return plugins;
 }
