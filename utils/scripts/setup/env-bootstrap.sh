@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# HYPEBRUT / env-bootstrap.sh — LLM-safe stream guard (separate stdout/stderr filters via FIFOs)
+# HYPEBRUT / env-bootstrap.sh \u2014 LLM-safe stream guard (separate stdout/stderr filters via FIFOs)
 # Path: utils/scripts/setup/env-bootstrap.sh
 
 # Sourcing is mandatory (we must hijack *current* FDs).
@@ -13,7 +13,7 @@ __HB_OLD_SET_OPTS="$(set +o)"
 trap 'eval "$__HB_OLD_SET_OPTS"' RETURN
 set -Euo pipefail
 
-# ── defaults tuned for LLM sessions ────────────────────────────────────────────
+# \u2500\u2500 defaults tuned for LLM sessions \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
 # LLM mode: no automatic login/BASH_ENV hooks, no noisy banners, per-process only.
 : "${HB_LLM_MODE:=1}"
 : "${HB_FORCE_GUARD:=0}"         # arm in interactive shells when set to 1
@@ -41,7 +41,7 @@ _hb_now() { date -u +"%Y-%m-%dT%H:%M:%SZ"; }
 
 mkdir -p "$_HB_CFG_DIR" "$_HB_LOG_DIR"
 
-# ── streaming filter (Perl primary) — ANSI/UTF-8 safe, chunk long lines, suppress hazardous C0/DEL only ──
+# \u2500\u2500 streaming filter (Perl primary) \u2014 ANSI/UTF-8 safe, chunk long lines, suppress hazardous C0/DEL only \u2500\u2500
 cat >"$_HB_FILTER_PERL" <<'PERL'
 #!/usr/bin/env perl
 use strict; use warnings;
@@ -120,7 +120,7 @@ if (length($buf)) {
 PERL
 chmod 0755 "$_HB_FILTER_PERL"
 
-# ── streaming filter (Python fallback) ─────────────────────────────────────────
+# \u2500\u2500 streaming filter (Python fallback) \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
 cat >"$_HB_FILTER_PY" <<'PY'
 #!/usr/bin/env python3
 import os, sys
@@ -189,7 +189,7 @@ elif command -v python3 >/dev/null 2>&1; then _HB_FILTER_BIN="$_HB_FILTER_PY"
 else _HB_FILTER_BIN=""
 fi
 
-# ── core: arm/disarm using FIFOs; no process substitution; one filter per stream ──────────────────────────
+# \u2500\u2500 core: arm/disarm using FIFOs; no process substitution; one filter per stream \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
 _hb_enable_guard() {
   [[ "${HB_NO_GUARD}" == "1" ]] && return 0
   [[ -z "${_HB_FILTER_BIN}" ]] && return 0
@@ -222,7 +222,7 @@ _hb_enable_guard() {
   HB_FILTER_LOGF="$_HB_LOG_ERR" "$_HB_FILTER_BIN" < "$_HB_FIFO_ERR" >&${_HB_STDERR_ORIG} &
   _HB_FILTER_ERR_PID=$!
 
-  # Route this shell’s stdout/stderr into FIFOs.
+  # Route this shell\u2019s stdout/stderr into FIFOs.
   exec 1>"$_HB_FIFO_OUT"
   exec 2>"$_HB_FIFO_ERR"
 
@@ -230,7 +230,7 @@ _hb_enable_guard() {
   _HB_HIJACK_PID="$$"
 
   # Comment-safe banner on stderr only, and only once armed.
-  printf '# HB guard: armed • width=%s • sidecar(out)=%s • sidecar(err)=%s\n' \
+  printf '# HB guard: armed \u2022 width=%s \u2022 sidecar(out)=%s \u2022 sidecar(err)=%s\n' \
          "$HB_FILTER_W" "$_HB_LOG_OUT" "$_HB_LOG_ERR" >&2
 
   # Auto-clean on shell exit.
@@ -263,7 +263,7 @@ hb_disarm() { _hb_disarm_on_exit; }
 # Status (comment-safe).
 hb_status() {
   if [[ "${_HB_FD_HIJACKED:-0}" == "1" && "${_HB_HIJACK_PID:-}" == "$$" ]]; then
-    printf '# HB guard: active • out=%s • err=%s • width=%s\n' "${_HB_LOG_OUT:-?}" "${_HB_LOG_ERR:-?}" "${HB_FILTER_W}"
+    printf '# HB guard: active \u2022 out=%s \u2022 err=%s \u2022 width=%s\n' "${_HB_LOG_OUT:-?}" "${_HB_LOG_ERR:-?}" "${HB_FILTER_W}"
   else
     printf '# HB guard: inactive\n'
   fi
@@ -286,7 +286,7 @@ hb_run() {
   fi
 }
 
-# ── hooks (disabled by default in LLM mode) ────────────────────────────────────
+# \u2500\u2500 hooks (disabled by default in LLM mode) \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
 # Explicit helpers if you want persistent hooks *outside* LLM sessions.
 hb_install_hooks() {
   [[ "${HB_LLM_MODE}" == "1" ]] && { printf '# HB hooks: skipped (HB_LLM_MODE=1)\n' >&2; return 0; }
@@ -327,7 +327,7 @@ hb_uninstall_hooks() {
   printf '# HB hooks: removed\n' >&2
 }
 
-# ── arming policy ─────────────────────────────────────────────────────────────
+# \u2500\u2500 arming policy \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
 # Non-interactive shells auto-arm; interactive require HB_FORCE_GUARD=1.
 if [[ "${HB_NO_GUARD}" != "1" ]]; then
   if [[ $- != *i* || "${HB_FORCE_GUARD}" == "1" ]]; then
