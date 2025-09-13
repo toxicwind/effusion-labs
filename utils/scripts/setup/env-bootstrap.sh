@@ -1,37 +1,39 @@
 #!/usr/bin/env bash
-# HYPEBRUT / env-bootstrap.sh \u2014 deterministic console stream shaping + raw sidecar
+# HYPEBRUT / env-bootstrap.sh — LLM-safe stream guard (separate stdout/stderr filters via FIFOs)
 # Path: utils/scripts/setup/env-bootstrap.sh
-#
-# Guarantees:
-#   \u2022 Byte-true preservation of all input in a sidecar log.
-#   \u2022 Console stream that remains readable and safe under extreme long-line and CR-overstrike patterns.
-#   \u2022 Minified one-liners are soft-wrapped at a stable width with explicit markers, without altering payload bytes.
-#   \u2022 Only hazardous control bytes are suppressed from console; everything else textual is allowed through.
-#   \u2022 Stdout and stderr are merged through a single filter to preserve sequencing.
-#   \u2022 Hooks activate this in noninteractive shells by default; simple env toggles give you control.
 
-# Must be sourced to hijack current FDs.
+# Sourcing is mandatory (we must hijack *current* FDs).
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
-  printf '\u274c HYPEBRUT :: source this file (do not execute)\n' >&2
+  printf '# HB guard: source this file (do not execute)\n' >&2
   return 1 2>/dev/null || exit 1
 fi
 
-# Preserve caller shell opts; enforce strict mode in our scope.
+# Preserve caller shell flags; strict within our scope.
 __HB_OLD_SET_OPTS="$(set +o)"
 trap 'eval "$__HB_OLD_SET_OPTS"' RETURN
 set -Euo pipefail
 
-# \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 configuration (stable defaults) \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
-_HB_SPLIT_WIDTH=3800                   # byte width for soft wrapping
-_HB_MARK_PREFIX='[HBWRAP'              # visible split marker prefix
-_HB_MARK_SUFFIX=']'
-_HB_BIN_MARK_PREFIX='[HBBIN'           # visible suppression marker
-_HB_LOG_DIR="/tmp/hype_logs"           # raw sidecar directory
-_HB_CFG_DIR="${HOME}/.config/hypebrut" # user-scoped config
+# ── defaults tuned for LLM sessions ────────────────────────────────────────────
+# LLM mode: no automatic login/BASH_ENV hooks, no noisy banners, per-process only.
+: "${HB_LLM_MODE:=1}"
+: "${HB_FORCE_GUARD:=0}"         # arm in interactive shells when set to 1
+: "${HB_NO_GUARD:=0}"            # hard opt-out
+
+# Soft-wrap width and soft-flush threshold for delimiterless runs.
+: "${HB_FILTER_W:=3800}"
+: "${HB_FILTER_FLUSH:=$((4*HB_FILTER_W))}"
+
+# Visual markers (ASCII only).
+: "${HB_FILTER_PFX:="[HBWRAP"}"
+: "${HB_FILTER_SFX:="]"}"
+: "${HB_FILTER_BIN:="[HBBIN"}"
+
+# Paths.
+_HB_CFG_DIR="${HOME}/.config/hypebrut"
+_HB_LOG_DIR="${HB_LOG_DIR:-/tmp/hype_logs}"
 _HB_BOOTSTRAP_ABS="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/$(basename "${BASH_SOURCE[0]}")"
-_HB_LOGIN_HOOK="${_HB_CFG_DIR}/login-hook.sh"
-_HB_NONINT_HOOK="${_HB_CFG_DIR}/noninteractive-hook.sh"
-_HB_BASHENV_HOOK="${_HB_CFG_DIR}/bashenv.sh"
+
+# Artifacts installed under config dir.
 _HB_FILTER_PERL="${_HB_CFG_DIR}/guard-filter.pl"
 _HB_FILTER_PY="${_HB_CFG_DIR}/guard-filter.py"
 
@@ -39,55 +41,28 @@ _hb_now() { date -u +"%Y-%m-%dT%H:%M:%SZ"; }
 
 mkdir -p "$_HB_CFG_DIR" "$_HB_LOG_DIR"
 
-# \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 streaming filter (Perl primary) \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
-# Notes:
-#  \u2022 Treat \n and \r as delimiters; normalize to newline for readability.
-#  \u2022 When no delimiter is present and the buffer exceeds a threshold, emit soft wraps.
-#  \u2022 Allow ESC (0x1b) sequences and all bytes \u22650x80; suppress only hazardous control bytes.
-#  \u2022 Every raw byte, including delimiters, is written to the sidecar before console shaping.
+# ── streaming filter (Perl primary) — ANSI/UTF-8 safe, chunk long lines, suppress hazardous C0/DEL only ──
 cat >"$_HB_FILTER_PERL" <<'PERL'
 #!/usr/bin/env perl
 use strict; use warnings;
 binmode STDIN; binmode STDOUT;
 
-# config via env
-my $W     = $ENV{HB_FILTER_W}     || 3800;  # chunk width
-my $LOGF  = $ENV{HB_FILTER_LOGF}  || "";    # sidecar path
+my $W     = $ENV{HB_FILTER_W}     || 3800;
+my $LOGF  = $ENV{HB_FILTER_LOGF}  || "";
 my $PFX   = $ENV{HB_FILTER_PFX}   || "[HBWRAP";
 my $SFX   = $ENV{HB_FILTER_SFX}   || "]";
 my $BIN   = $ENV{HB_FILTER_BIN}   || "[HBBIN";
-my $PREV  = $ENV{HB_BIN_PREVIEW}  || 0;     # tiny hex nibble for suppressed lines (0 = none)
-my $FLUSH = $ENV{HB_FILTER_FLUSH} || (4 * $W); # soft-wrap threshold when no delimiters arrive
+my $FLUSH = $ENV{HB_FILTER_FLUSH} || (4 * $W);
 
 my $logfh;
-if ($LOGF ne "") {
-  open($logfh, ">>", $LOGF) or die "open log failed: $!";
-  binmode $logfh;
-}
+if ($LOGF ne "") { open($logfh, ">>", $LOGF) or die "open log failed: $!"; binmode $logfh; }
 
-# allow \t (\x09), \n (\x0A), \r (\x0D), and ESC (\x1B); disallow only truly hazardous C0 + DEL
-sub is_hazardous_ctrl {
-  my ($s) = @_;
-  return ($s =~ /[\x00-\x08\x0B\x0C\x0E-\x1A\x1C-\x1F\x7F]/) ? 1 : 0;
-}
+sub bad_ctrl { my($s)=@_; return ($s =~ /[\x00-\x08\x0B\x0C\x0E-\x1A\x1C-\x1F\x7F]/) ? 1 : 0; }
 
-sub hex_preview {
-  my ($s, $n) = @_;
-  $n = 0 + $n;
-  return "" if $n <= 0;
-  my $take = substr($s, 0, $n);
-  my @h = map { sprintf("%02x", ord($_)) } split(//, $take);
-  return " preview=" . join(" ", @h);
-}
-
-# emit a textual line, chunking into [HBWRAP \u2026] windows as needed
-sub emit_text_chunks {
+sub emit_chunks {
   my ($line, $nl) = @_;
   my $L = length($line);
-  if ($L <= $W) {
-    print STDOUT $line, $nl;
-    return;
-  }
+  if ($L <= $W) { print STDOUT $line, $nl; return; }
   my $n = int(($L + $W - 1)/$W);
   my $start = 0;
   for (my $i=1; $i<=$n; $i++) {
@@ -100,13 +75,11 @@ sub emit_text_chunks {
   print STDOUT $nl if $nl ne "";
 }
 
-# when there is no delimiter for a long time, periodically soft-wrap to avoid starving the consumer
-sub emit_softwrap_windows {
+sub softflush {
   my ($bufref) = @_;
   my $buf = $$bufref;
   while (length($buf) > $FLUSH) {
     my $win = substr($buf, 0, $W, "");
-    # sidecar sees exact bytes with a synthetic newline to mark the window boundary in the log
     print STDOUT "$PFX 1/1 1..".length($win)."$SFX $win\n";
   }
   $$bufref = $buf;
@@ -118,101 +91,69 @@ while (1) {
   last if !defined($r) || $r == 0;
   $buf .= $chunk;
 
-  # soft-wrap on long delimiterless stretches
-  emit_softwrap_windows(\$buf);
+  softflush(\$buf);
 
-  # process full records terminated by \n or \r
   while ($buf =~ /[\r\n]/) {
-    my $pos_n = index($buf, "\n");
-    my $pos_r = index($buf, "\r");
-    $pos_n = 1<<30 if $pos_n < 0;
-    $pos_r = 1<<30 if $pos_r < 0;
-    my $pos = ($pos_n < $pos_r) ? $pos_n : $pos_r;
+    my $pn = index($buf, "\n"); $pn = 1<<30 if $pn < 0;
+    my $pr = index($buf, "\r"); $pr = 1<<30 if $pr < 0;
+    my $pos = ($pn < $pr) ? $pn : $pr;
     my $delim = substr($buf, $pos, 1);
     my $line = substr($buf, 0, $pos);
 
-    # consume delimiter (+ optional LF if CRLF)
-    my $consume = 1;
-    if ($delim eq "\r" && substr($buf, $pos+1, 1) eq "\n") { $consume = 2; }
-    my $raw = substr($buf, 0, $pos + $consume);
-    $buf = substr($buf, $pos + $consume);
+    my $take = 1;
+    if ($delim eq "\r" && substr($buf, $pos+1, 1) eq "\n") { $take = 2; }
+    my $raw = substr($buf, 0, $pos + $take);
+    $buf = substr($buf, $pos + $take);
 
-    print $logfh $raw if $logfh;  # raw to sidecar
+    print $logfh $raw if $logfh;
     my $nl = "\n";
-
-    if (is_hazardous_ctrl($line)) {
-      my $len = length($line);
-      my $pv = hex_preview($line, $PREV);
-      print STDOUT "$BIN suppressed $len bytes$pv$nl";
-    } else {
-      emit_text_chunks($line, $nl);
-    }
+    if (bad_ctrl($line)) { print STDOUT "$BIN suppressed ".length($line)." bytes$nl"; }
+    else { emit_chunks($line, $nl); }
   }
 }
 
-# tail remainder
 if (length($buf)) {
   print $logfh $buf if $logfh;
-  if (is_hazardous_ctrl($buf)) {
-    my $len = length($buf);
-    my $pv = hex_preview($buf, $PREV);
-    print STDOUT "$BIN suppressed $len bytes$pv";
-  } else {
-    emit_text_chunks($buf, "");
-  }
+  if (bad_ctrl($buf)) { print STDOUT "$BIN suppressed ".length($buf)." bytes"; }
+  else { emit_chunks($buf, ""); }
 }
 PERL
 chmod 0755 "$_HB_FILTER_PERL"
 
-# \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 streaming filter (Python fallback) \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
+# ── streaming filter (Python fallback) ─────────────────────────────────────────
 cat >"$_HB_FILTER_PY" <<'PY'
 #!/usr/bin/env python3
 import os, sys
 W     = int(os.environ.get("HB_FILTER_W", "3800"))
-LOGF  = os.environ.get("HB_FILTER_LOGF", ""))
+LOGF  = os.environ.get("HB_FILTER_LOGF", "")
 PFX   = os.environ.get("HB_FILTER_PFX", "[HBWRAP")
 SFX   = os.environ.get("HB_FILTER_SFX", "]")
 BIN   = os.environ.get("HB_FILTER_BIN", "[HBBIN")
-PREV  = int(os.environ.get("HB_BIN_PREVIEW", "0"))
 FLUSH = int(os.environ.get("HB_FILTER_FLUSH", str(4*W)))
-
 logfh = open(LOGF, "ab", buffering=0) if LOGF else None
 
-ALLOWED = {9,10,13,27}  # \t, \n, \r, ESC
-
-def hazardous_ctrl(b: bytes) -> bool:
+ALLOWED = {9,10,13,27}
+def bad_ctrl(b: bytes) -> bool:
     for x in b:
-        if x in ALLOWED:
-            continue
-        if x < 32 or x == 127:
-            return True
+        if x in ALLOWED: continue
+        if x < 32 or x == 127: return True
     return False
 
-def hex_preview(b: bytes, n: int) -> str:
-    if n <= 0: return ""
-    take = b[:n]
-    return " preview=" + " ".join(f"{x:02x}" for x in take)
-
-def emit_text_chunks(b: bytes, nl: bytes):
+def emit_chunks(b: bytes, nl: bytes):
     L = len(b)
     if L <= W:
-        sys.stdout.buffer.write(b + nl)
-        return
-    n = (L + W - 1)//W
-    start = 0
+        sys.stdout.buffer.write(b + nl); return
+    n = (L + W - 1)//W; start = 0
     for i in range(1, n+1):
         end = min(start + W, L)
-        chunk = b[start:end]
-        a, c = start+1, end
+        chunk = b[start:end]; a, c = start+1, end
         sys.stdout.buffer.write((f"{PFX} {i}/{n} {a}..{c}{SFX} ").encode("utf-8") + chunk + b"\n")
         start = end
-    if nl:
-        sys.stdout.buffer.write(nl)
+    if nl: sys.stdout.buffer.write(nl)
 
-def emit_softwrap_windows(buf: bytearray):
+def softflush(buf: bytearray):
     while len(buf) > FLUSH:
-        win = bytes(buf[:W])
-        del buf[:W]
+        win = bytes(buf[:W]); del buf[:W]
         sys.stdout.buffer.write((f"{PFX} 1/1 1..{len(win)}{SFX} ").encode("utf-8") + win + b"\n")
 
 buf = bytearray()
@@ -220,131 +161,139 @@ while True:
     chunk = sys.stdin.buffer.read(8192)
     if not chunk: break
     buf.extend(chunk)
-    emit_softwrap_windows(buf)
-
-    # process delimiters
+    softflush(buf)
     while True:
-        pos_n = buf.find(b"\n")
-        pos_r = buf.find(b"\r")
-        if pos_n < 0 and pos_r < 0:
-            break
-        if pos_n < 0: pos_n = 1<<30
-        if pos_r < 0: pos_r = 1<<30
-        pos = pos_n if pos_n < pos_r else pos_r
+        pn = buf.find(b"\n"); pr = buf.find(b"\r")
+        if pn < 0 and pr < 0: break
+        if pn < 0: pn = 1<<30
+        if pr < 0: pr = 1<<30
+        pos = pn if pn < pr else pr
         delim = buf[pos:pos+1]
         line = bytes(buf[:pos])
-
-        consume = 1
-        if delim == b"\r" and buf[pos:pos+2] == b"\r\n":
-            consume = 2
-        raw = bytes(buf[:pos+consume])
-        del buf[:pos+consume]
-
-        if logfh:
-            logfh.write(raw)
-
-        nl = b"\n"
-        if hazardous_ctrl(line):
-            msg = f"{BIN} suppressed {len(line)} bytes"
-            if PREV > 0: msg += hex_preview(line, PREV)
-            sys.stdout.buffer.write(msg.encode("utf-8") + nl)
-        else:
-            emit_text_chunks(line, nl)
-
-# tail
+        take = 1
+        if delim == b"\r" and buf[pos:pos+2] == b"\r\n": take = 2
+        raw = bytes(buf[:pos+take]); del buf[:pos+take]
+        if logfh: logfh.write(raw)
+        if bad_ctrl(line): sys.stdout.buffer.write((f"{BIN} suppressed {len(line)} bytes\n").encode("utf-8"))
+        else: emit_chunks(line, b"\n")
 if buf:
-    if logfh:
-        logfh.write(bytes(buf))
-    if hazardous_ctrl(bytes(buf)):
-        msg = f"{BIN} suppressed {len(buf)} bytes"
-        if PREV > 0: msg += hex_preview(bytes(buf), PREV)
-        sys.stdout.buffer.write(msg.encode("utf-8"))
-    else:
-        emit_text_chunks(bytes(buf), b"")
+    if logfh: logfh.write(bytes(buf))
+    if bad_ctrl(bytes(buf)): sys.stdout.buffer.write((f"{BIN} suppressed {len(buf)} bytes").encode("utf-8"))
+    else: emit_chunks(bytes(buf), b"")
 PY
 chmod 0755 "$_HB_FILTER_PY"
 
-# pick a filter
-if command -v perl >/dev/null 2>&1; then
-  _HB_FILTER_BIN="$_HB_FILTER_PERL"
-elif command -v python3 >/dev/null 2>&1; then
-  _HB_FILTER_BIN="$_HB_FILTER_PY"
-else
-  _HB_FILTER_BIN=""
+# Select filter runtime.
+if command -v perl >/dev/null 2>&1; then _HB_FILTER_BIN="$_HB_FILTER_PERL"
+elif command -v python3 >/dev/null 2>&1; then _HB_FILTER_BIN="$_HB_FILTER_PY"
+else _HB_FILTER_BIN=""
 fi
 
-# \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 FD hijack (single filter, ordered) \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
+# ── core: arm/disarm using FIFOs; no process substitution; one filter per stream ──────────────────────────
 _hb_enable_guard() {
-  if [[ "${HB_NO_GUARD:-0}" == "1" ]]; then
-    printf "[HB] guard disabled (HB_NO_GUARD=1)\n" >&2
-    return 0
-  fi
-  if [[ -z "${_HB_FILTER_BIN}" ]]; then
-    printf "[HB] guard unavailable (perl/python3 not found); pass-through\n" >&2
-    return 0
-  fi
+  [[ "${HB_NO_GUARD}" == "1" ]] && return 0
+  [[ -z "${_HB_FILTER_BIN}" ]] && return 0
+
+  # Only if this PID hasn't already armed.
   if [[ "${_HB_FD_HIJACKED:-0}" == "1" && "${_HB_HIJACK_PID:-}" == "$$" ]]; then
     return 0
   fi
 
-  _HB_LOG_FILE="${_HB_LOG_DIR}/hb.$(basename "${SHELL:-bash}" 2>/dev/null).$$_$(_hb_now).log"
+  # Create per-PID workspace and FIFOs.
+  _HB_TMP_DIR="$(mktemp -d "/tmp/hb.$$.$(date +%s).XXXX")"
+  _HB_FIFO_OUT="${_HB_TMP_DIR}/out.fifo"
+  _HB_FIFO_ERR="${_HB_TMP_DIR}/err.fifo"
+  mkfifo -m 600 "$_HB_FIFO_OUT" "$_HB_FIFO_ERR"
 
-  export HB_FILTER_W="$_HB_SPLIT_WIDTH"
-  export HB_FILTER_LOGF="$_HB_LOG_FILE"
-  export HB_FILTER_PFX="$_HB_MARK_PREFIX"
-  export HB_FILTER_SFX="$_HB_MARK_SUFFIX"
-  export HB_FILTER_BIN="$_HB_BIN_MARK_PREFIX"
-  : "${HB_BIN_PREVIEW:=0}"; export HB_BIN_PREVIEW
-  : "${HB_FILTER_FLUSH:=$((4*_HB_SPLIT_WIDTH))}"; export HB_FILTER_FLUSH
-
-  # Save originals, wire stdout to filter, then route stderr into stdout.
+  # Save real FDs.
   exec {_HB_STDOUT_ORIG}>&1
   exec {_HB_STDERR_ORIG}>&2
-  exec 1> >("$_HB_FILTER_BIN")
-  exec 2>&1
+
+  # Logs per stream.
+  _HB_LOG_OUT="${_HB_LOG_DIR}/hb.out.$$_$(_hb_now).log"
+  _HB_LOG_ERR="${_HB_LOG_DIR}/hb.err.$$_$(_hb_now).log"
+
+  # Export filter config for children.
+  export HB_FILTER_W HB_FILTER_FLUSH HB_FILTER_PFX HB_FILTER_SFX HB_FILTER_BIN
+
+  # Start filters wired to original FDs, not the hijacked ones.
+  HB_FILTER_LOGF="$_HB_LOG_OUT" "$_HB_FILTER_BIN" < "$_HB_FIFO_OUT" >&${_HB_STDOUT_ORIG} &
+  _HB_FILTER_OUT_PID=$!
+  HB_FILTER_LOGF="$_HB_LOG_ERR" "$_HB_FILTER_BIN" < "$_HB_FIFO_ERR" >&${_HB_STDERR_ORIG} &
+  _HB_FILTER_ERR_PID=$!
+
+  # Route this shell’s stdout/stderr into FIFOs.
+  exec 1>"$_HB_FIFO_OUT"
+  exec 2>"$_HB_FIFO_ERR"
 
   _HB_FD_HIJACKED=1
   _HB_HIJACK_PID="$$"
+
+  # Comment-safe banner on stderr only, and only once armed.
+  printf '# HB guard: armed • width=%s • sidecar(out)=%s • sidecar(err)=%s\n' \
+         "$HB_FILTER_W" "$_HB_LOG_OUT" "$_HB_LOG_ERR" >&2
+
+  # Auto-clean on shell exit.
+  trap _hb_disarm_on_exit EXIT
 }
 
-_hb_disable_guard() {
+_hb_disarm_on_exit() {
+  # If already disarmed, nothing to do.
   [[ "${_HB_FD_HIJACKED:-0}" != "1" || "${_HB_HIJACK_PID:-}" != "$$" ]] && return 0
+
+  # Restore FDs.
   exec 1>&${_HB_STDOUT_ORIG} 2>&${_HB_STDERR_ORIG}
   exec {_HB_STDOUT_ORIG}>&- {_HB_STDERR_ORIG}>&-
-  unset _HB_FD_HIJACKED _HB_HIJACK_PID _HB_STDOUT_ORIG _HB_STDERR_ORIG _HB_LOG_FILE
+
+  # Stop filters and remove FIFOs/dir.
+  [[ -n "${_HB_FILTER_OUT_PID:-}" ]] && kill -TERM "${_HB_FILTER_OUT_PID}" 2>/dev/null || true
+  [[ -n "${_HB_FILTER_ERR_PID:-}" ]] && kill -TERM "${_HB_FILTER_ERR_PID}" 2>/dev/null || true
+  [[ -n "${_HB_FIFO_OUT:-}" && -p "${_HB_FIFO_OUT}" ]] && rm -f "${_HB_FIFO_OUT}"
+  [[ -n "${_HB_FIFO_ERR:-}" && -p "${_HB_FIFO_ERR}" ]] && rm -f "${_HB_FIFO_ERR}"
+  [[ -n "${_HB_TMP_DIR:-}" && -d "${_HB_TMP_DIR}" ]] && rmdir "${_HB_TMP_DIR}" 2>/dev/null || true
+
+  unset _HB_FD_HIJACKED _HB_HIJACK_PID _HB_FILTER_OUT_PID _HB_FILTER_ERR_PID
+  unset _HB_STDOUT_ORIG _HB_STDERR_ORIG _HB_FIFO_OUT _HB_FIFO_ERR _HB_TMP_DIR
+  printf '# HB guard: disarmed\n' >&2
 }
 
-# auto-arm in noninteractive or when forced
-if [[ $- != *i* || "${HB_FORCE_GUARD:-0}" == "1" ]]; then
-  _hb_enable_guard
-fi
+# Public disarm helper (manual).
+hb_disarm() { _hb_disarm_on_exit; }
 
-# idempotence banner
-if [[ "${_HB_READY:-}" == "1" && "${_HB_READY_PID:-}" == "$$" ]]; then
-  printf "[HB] already active (pid=%s) sidecar=%s\n" "$$" "${_HB_LOG_FILE:-<none>}" >&2
-  return 0
-fi
+# Status (comment-safe).
+hb_status() {
+  if [[ "${_HB_FD_HIJACKED:-0}" == "1" && "${_HB_HIJACK_PID:-}" == "$$" ]]; then
+    printf '# HB guard: active • out=%s • err=%s • width=%s\n' "${_HB_LOG_OUT:-?}" "${_HB_LOG_ERR:-?}" "${HB_FILTER_W}"
+  else
+    printf '# HB guard: inactive\n'
+  fi
+}
 
-# \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 durable hooks for persistence \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
-cat > "$_HB_NONINT_HOOK" <<EOF
-# >>> HYPEBRUT noninteractive hook >>>
-# shellcheck shell=bash source=/dev/null
-if [[ "\$-" != *i* ]]; then
-  source "${_HB_BOOTSTRAP_ABS}" --as-hook
-fi
-# <<< HYPEBRUT noninteractive hook <<<
-EOF
-chmod 0644 "$_HB_NONINT_HOOK"
+# Burst-friendly runner that inherits the guard.
+hb_run() {
+  # usage: hb_run <cmd> [args...]
+  local -a cmd=( "$@" )
+  if command -v script >/dev/null 2>&1; then
+    script -q -e -c "$(printf '%q ' "${cmd[@]}")" /dev/null
+  elif command -v unbuffer >/dev/null 2>&1; then
+    unbuffer "${cmd[@]}"
+  elif command -v expect >/dev/null 2>&1; then
+    expect -c "spawn -noecho $(printf '%q ' "${cmd[@]}"); interact"
+  elif command -v stdbuf >/dev/null 2>&1; then
+    stdbuf -oL -eL "${cmd[@]}"
+  else
+    "${cmd[@]}"
+  fi
+}
 
-cat > "$_HB_LOGIN_HOOK" <<EOF
-# >>> HYPEBRUT login hook >>>
-# shellcheck shell=bash source=/dev/null
-[ -f "${_HB_NONINT_HOOK}" ] && source "${_HB_NONINT_HOOK}"
-# <<< HYPEBRUT login hook <<<
-EOF
-chmod 0644 "$_HB_LOGIN_HOOK"
-
-cat > "$_HB_BASHENV_HOOK" <<'EOF'
+# ── hooks (disabled by default in LLM mode) ────────────────────────────────────
+# Explicit helpers if you want persistent hooks *outside* LLM sessions.
+hb_install_hooks() {
+  [[ "${HB_LLM_MODE}" == "1" ]] && { printf '# HB hooks: skipped (HB_LLM_MODE=1)\n' >&2; return 0; }
+  local login="${HOME}/.bash_profile" profile="${HOME}/.profile"
+  local marker="# >>> HYPEBRUT login sourcing >>>"
+  local bashenv="${_HB_CFG_DIR}/bashenv.sh"
+  cat > "$bashenv" <<'EOF'
 # >>> HYPEBRUT BASH_ENV >>>
 # shellcheck shell=bash source=/dev/null
 if [ -n "${BASH_VERSION:-}" ] && [[ "$-" != *i* ]]; then
@@ -353,37 +302,35 @@ if [ -n "${BASH_VERSION:-}" ] && [[ "$-" != *i* ]]; then
 fi
 # <<< HYPEBRUT BASH_ENV <<<
 EOF
-chmod 0644 "$_HB_BASHENV_HOOK"
-export BASH_ENV="$_HB_BASHENV_HOOK"
-
-_hb_patch_file() {
-  local f="$1" marker="# >>> HYPEBRUT login sourcing >>>"
-  [[ -f "$f" ]] && grep -Fq "$marker" "$f" && return 0
-  mkdir -p "$(dirname "$f")"
-  {
-    echo ""
-    echo "$marker"
-    echo "[ -f \"${_HB_LOGIN_HOOK}\" ] && source \"${_HB_LOGIN_HOOK}\""
-    echo "export BASH_ENV=\"${_HB_BASHENV_HOOK}\""
-    echo "# <<< HYPEBRUT login sourcing <<<"
-  } >> "$f"
+  chmod 0644 "$bashenv"
+  echo -e "\n$marker\n[ -f \"${_HB_CFG_DIR}/login-hook.sh\" ] && source \"${_HB_CFG_DIR}/login-hook.sh\"\nexport BASH_ENV=\"${bashenv}\"\n# <<< HYPEBRUT login sourcing <<<" >> "$profile"
+  [[ -f "$login" || ! -f "$profile" ]] && echo -e "\n$marker\n[ -f \"${_HB_CFG_DIR}/login-hook.sh\" ] && source \"${_HB_CFG_DIR}/login-hook.sh\"\nexport BASH_ENV=\"${bashenv}\"\n# <<< HYPEBRUT login sourcing <<<" >> "$login"
+  cat > "${_HB_CFG_DIR}/noninteractive-hook.sh" <<EOF
+# >>> HYPEBRUT noninteractive hook >>>
+# shellcheck shell=bash source=/dev/null
+if [[ "\$-" != *i* ]]; then source "${_HB_BOOTSTRAP_ABS}" --as-hook; fi
+# <<< HYPEBRUT noninteractive hook <<<
+EOF
+  chmod 0644 "${_HB_CFG_DIR}/noninteractive-hook.sh"
+  cat > "${_HB_CFG_DIR}/login-hook.sh" <<EOF
+# >>> HYPEBRUT login hook >>>
+# shellcheck shell=bash source=/dev/null
+[ -f "${_HB_CFG_DIR}/noninteractive-hook.sh" ] && source "${_HB_CFG_DIR}/noninteractive-hook.sh"
+# <<< HYPEBRUT login hook <<<
+EOF
+  chmod 0644 "${_HB_CFG_DIR}/login-hook.sh"
+  printf '# HB hooks: installed\n' >&2
 }
-if [[ -f "${HOME}/.bash_profile" || ! -f "${HOME}/.profile" ]]; then
-  _hb_patch_file "${HOME}/.bash_profile"
+
+hb_uninstall_hooks() {
+  rm -f "${_HB_CFG_DIR}/bashenv.sh" "${_HB_CFG_DIR}/login-hook.sh" "${_HB_CFG_DIR}/noninteractive-hook.sh" 2>/dev/null || true
+  printf '# HB hooks: removed\n' >&2
+}
+
+# ── arming policy ─────────────────────────────────────────────────────────────
+# Non-interactive shells auto-arm; interactive require HB_FORCE_GUARD=1.
+if [[ "${HB_NO_GUARD}" != "1" ]]; then
+  if [[ $- != *i* || "${HB_FORCE_GUARD}" == "1" ]]; then
+    _hb_enable_guard
+  fi
 fi
-_hb_patch_file "${HOME}/.profile"
-
-_HB_READY=1
-_HB_READY_PID="$$"
-printf "[HB] stream guard armed \u2022 width=%d \u2022 sidecar=%s\n" "$_HB_SPLIT_WIDTH" "${_HB_LOG_FILE:-<none>}" >&2
-
-# \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 operational notes (for humans skimming) \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
-# \u2022 Minified files or single-line payloads: emitted in windows with [HBWRAP \u2026] markers at the configured width.
-# \u2022 CR-based progress: each update appears as its own line so you can see incremental movement in non-PTY contexts.
-# \u2022 Hazardous control bytes: summarized inline as \u201c[HBBIN suppressed N bytes]\u201d; raw bytes are always in the sidecar.
-# \u2022 Tuning knobs:
-#     HB_NO_GUARD=1       # temporarily bypass for this shell (source again to re-arm later)
-#     HB_FORCE_GUARD=1    # arm even in interactive shells
-#     HB_BIN_PREVIEW=64   # include a tiny hex nibble with suppression lines when actively debugging
-#     HB_FILTER_W=4096    # override split width if a tool prefers a different ceiling
-#     HB_FILTER_FLUSH=\u2026   # adjust soft-wrap threshold for delimiterless streams
