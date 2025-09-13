@@ -1,44 +1,36 @@
 #!/usr/bin/env bash
-# A smart shim for npm that handles output buffering for test commands.
+# HYPEBRUT npm shim: hijack-aware, guard-enforced test wrapping
+
 set -euo pipefail
 
-# Compute real npm binary, skipping this shim
+# Fully qualified env bootstrap
+_HB_BOOTSTRAP="utils/scripts/setup/env-bootstrap.sh"
+
+# If not hijacked, re-exec via login Bash sourcing our guard
+if [[ "${_HB_FD_HIJACKED:-0}" != "1" || "${_HB_HIJACK_PID:-}" != "$$" ]]; then
+  exec bash -l -c "source \"${_HB_BOOTSTRAP}\" && exec \"\$0\" \"\$@\"" "$0" "$@"
+fi
+
+# Locate true npm, ignoring this shim
 DIR="$(cd "$(dirname "$0")" && pwd)"
 PATH_WITHOUT_DIR=$(printf "%s" "$PATH" | sed "s|$DIR:||;s|:$DIR||;s|$DIR||")
 NPM_BIN="$(PATH="$PATH_WITHOUT_DIR" command -v npm)"
-if [ -z "$NPM_BIN" ]; then
-  echo "npm binary not found" >&2
+if [[ -z "$NPM_BIN" ]]; then
+  echo "❌ HYPEBRUT: Cannot locate real npm binary." >&2
   exit 127
 fi
 
-# Helper to run npm with a PTY so output streams in real time
-run_with_pty() {
-  if command -v script >/dev/null 2>&1; then
-    cmd="$NPM_BIN $(printf '%q ' "$@")"
-    script -q -e -c "$cmd" /dev/null
-    return $?
-  elif command -v unbuffer >/dev/null 2>&1; then
-    unbuffer "$NPM_BIN" "$@"
-    return $?
-  elif command -v expect >/dev/null 2>&1; then
-    expect -c "spawn -noecho $NPM_BIN $(printf '%q ' "$@"); interact"
-    return $?
-  elif command -v stdbuf >/dev/null 2>&1; then
-    stdbuf -oL -eL "$NPM_BIN" "$@"
-    return $?
-  else
-    "$NPM_BIN" "$@"
-    return $?
-  fi
-}
+# If command is 'test', wrap in pty-trampoline to preserve streaming (but hijacked!)
+if [[ "$1" == "test" ]]; then
+  echo "[HB] NPM-SHIM: PTY wrapper for 'npm test' to ensure streamed output." >&2
 
-# Check if the command is 'test'. This is often the command that suffers
-# from I/O buffering when run in non-interactive shells.
-if [ "$1" = "test" ]; then
-  # For 'npm test', use PTY/line buffering strategies to ensure streaming.
-  echo "::notice:: NPM-SHIM: Using PTY wrapper for 'npm test' to ensure output streaming." >&2
-  run_with_pty "$@"
+  if command -v script >/dev/null 2>&1; then
+    script -q -e -c "$NPM_BIN $(printf '%q ' "${@:1}")" /dev/null
+  elif command -v stdbuf >/dev/null 2>&1; then
+    stdbuf -oL -eL "$NPM_BIN" "${@:1}"
+  else
+    "$NPM_BIN" "${@:1}"
+  fi
 else
-  # For all other commands (install, run build, etc.), execute directly.
   exec "$NPM_BIN" "$@"
 fi

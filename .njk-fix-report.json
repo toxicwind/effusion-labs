@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-09-13T17:46:25.278Z",
+  "timestamp": "2025-09-13T18:14:45.318Z",
   "roots": [
     "src"
   ],
@@ -44,46 +44,6 @@
     },
     {
       "file": "src/test/dynamic-archives.md",
-      "changed": false,
-      "rewrites": 0
-    },
-    {
-      "file": "src/_includes/layouts/base.njk",
-      "changed": false,
-      "rewrites": 0
-    },
-    {
-      "file": "src/_includes/layouts/collection.njk",
-      "changed": false,
-      "rewrites": 0
-    },
-    {
-      "file": "src/_includes/layouts/converted-html.njk",
-      "changed": false,
-      "rewrites": 0
-    },
-    {
-      "file": "src/_includes/layouts/embed.njk",
-      "changed": false,
-      "rewrites": 0
-    },
-    {
-      "file": "src/_includes/layouts/project.njk",
-      "changed": false,
-      "rewrites": 0
-    },
-    {
-      "file": "src/_includes/layouts/redirect.njk",
-      "changed": false,
-      "rewrites": 0
-    },
-    {
-      "file": "src/_includes/layouts/resume.njk",
-      "changed": false,
-      "rewrites": 0
-    },
-    {
-      "file": "src/_includes/macros/meta.njk",
       "changed": false,
       "rewrites": 0
     },
@@ -208,12 +168,47 @@
       "rewrites": 0
     },
     {
-      "file": "src/content/archives/index.njk",
+      "file": "src/_includes/layouts/base.njk",
       "changed": false,
       "rewrites": 0
     },
     {
-      "file": "src/content/docs/theming.md",
+      "file": "src/_includes/layouts/collection.njk",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/_includes/layouts/converted-html.njk",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/_includes/layouts/embed.njk",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/_includes/layouts/project.njk",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/_includes/layouts/redirect.njk",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/_includes/layouts/resume.njk",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/_includes/macros/meta.njk",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/archives/index.njk",
       "changed": false,
       "rewrites": 0
     },
@@ -288,6 +283,11 @@
       "rewrites": 0
     },
     {
+      "file": "src/content/docs/theming.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
       "file": "src/content/meta/a-b-curatorial-protocolist.md",
       "changed": false,
       "rewrites": 0
@@ -324,26 +324,6 @@
     },
     {
       "file": "src/content/meta/unified-referencing-syntax.md",
-      "changed": false,
-      "rewrites": 0
-    },
-    {
-      "file": "src/content/projects/index.njk",
-      "changed": false,
-      "rewrites": 0
-    },
-    {
-      "file": "src/content/projects/llm-release-watcher.njk",
-      "changed": false,
-      "rewrites": 0
-    },
-    {
-      "file": "src/content/projects/patent-intelligence-agent.njk",
-      "changed": false,
-      "rewrites": 0
-    },
-    {
-      "file": "src/content/projects/project-dandelion.md",
       "changed": false,
       "rewrites": 0
     },
@@ -393,6 +373,26 @@
       "rewrites": 0
     },
     {
+      "file": "src/content/projects/index.njk",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/projects/llm-release-watcher.njk",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/projects/patent-intelligence-agent.njk",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/projects/project-dandelion.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
       "file": "src/pages/resume/index.njk",
       "changed": false,
       "rewrites": 0
@@ -404,11 +404,6 @@
     },
     {
       "file": "src/pages/work/work-list.njk",
-      "changed": false,
-      "rewrites": 0
-    },
-    {
-      "file": "src/_includes/components/resume/expander.njk",
       "changed": false,
       "rewrites": 0
     },
@@ -433,7 +428,7 @@
       "rewrites": 0
     },
     {
-      "file": "src/content/archives/collectables/index.njk",
+      "file": "src/_includes/components/resume/expander.njk",
       "changed": false,
       "rewrites": 0
     },
@@ -449,6 +444,11 @@
     },
     {
       "file": "src/content/archives/_dynamic/series.njk",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/archives/collectables/index.njk",
       "changed": false,
       "rewrites": 0
     },
@@ -564,6 +564,11 @@
     },
     {
       "file": "src/content/docs/reports/20250911T175533Z.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/reports/20250913T180936Z.md",
       "changed": false,
       "rewrites": 0
     },
@@ -889,6 +894,11 @@
     },
     {
       "file": "src/content/docs/worklogs/20250911T175533Z.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/worklogs/20250913T180936Z.md",
       "changed": false,
       "rewrites": 0
     },
