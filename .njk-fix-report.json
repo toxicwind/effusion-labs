@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-09-13T17:11:18.107Z",
+  "timestamp": "2025-09-13T17:46:25.278Z",
   "roots": [
     "src"
   ],
@@ -44,6 +44,46 @@
     },
     {
       "file": "src/test/dynamic-archives.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/_includes/layouts/base.njk",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/_includes/layouts/collection.njk",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/_includes/layouts/converted-html.njk",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/_includes/layouts/embed.njk",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/_includes/layouts/project.njk",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/_includes/layouts/redirect.njk",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/_includes/layouts/resume.njk",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/_includes/macros/meta.njk",
       "changed": false,
       "rewrites": 0
     },
@@ -168,47 +208,12 @@
       "rewrites": 0
     },
     {
-      "file": "src/_includes/layouts/base.njk",
-      "changed": false,
-      "rewrites": 0
-    },
-    {
-      "file": "src/_includes/layouts/collection.njk",
-      "changed": false,
-      "rewrites": 0
-    },
-    {
-      "file": "src/_includes/layouts/converted-html.njk",
-      "changed": false,
-      "rewrites": 0
-    },
-    {
-      "file": "src/_includes/layouts/embed.njk",
-      "changed": false,
-      "rewrites": 0
-    },
-    {
-      "file": "src/_includes/layouts/project.njk",
-      "changed": false,
-      "rewrites": 0
-    },
-    {
-      "file": "src/_includes/layouts/redirect.njk",
-      "changed": false,
-      "rewrites": 0
-    },
-    {
-      "file": "src/_includes/layouts/resume.njk",
-      "changed": false,
-      "rewrites": 0
-    },
-    {
-      "file": "src/_includes/macros/meta.njk",
-      "changed": false,
-      "rewrites": 0
-    },
-    {
       "file": "src/content/archives/index.njk",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/theming.md",
       "changed": false,
       "rewrites": 0
     },
@@ -279,11 +284,6 @@
     },
     {
       "file": "src/content/concepts/workshop-weather.md",
-      "changed": false,
-      "rewrites": 0
-    },
-    {
-      "file": "src/content/docs/theming.md",
       "changed": false,
       "rewrites": 0
     },
@@ -408,6 +408,11 @@
       "rewrites": 0
     },
     {
+      "file": "src/_includes/components/resume/expander.njk",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
       "file": "src/_includes/components/products/MarketTable.njk",
       "changed": false,
       "rewrites": 0
@@ -428,7 +433,7 @@
       "rewrites": 0
     },
     {
-      "file": "src/_includes/components/resume/expander.njk",
+      "file": "src/content/archives/collectables/index.njk",
       "changed": false,
       "rewrites": 0
     },
@@ -444,11 +449,6 @@
     },
     {
       "file": "src/content/archives/_dynamic/series.njk",
-      "changed": false,
-      "rewrites": 0
-    },
-    {
-      "file": "src/content/archives/collectables/index.njk",
       "changed": false,
       "rewrites": 0
     },
@@ -508,11 +508,6 @@
       "rewrites": 0
     },
     {
-      "file": "src/content/docs/ux/mschf-overlay.md",
-      "changed": false,
-      "rewrites": 0
-    },
-    {
       "file": "src/content/docs/knowledge/eleventy-collections-20250911T175345Z.html",
       "changed": false,
       "rewrites": 0
@@ -553,7 +548,7 @@
       "rewrites": 0
     },
     {
-      "file": "src/content/docs/vendors/index.md",
+      "file": "src/content/docs/ux/mschf-overlay.md",
       "changed": false,
       "rewrites": 0
     },
@@ -883,6 +878,11 @@
       "rewrites": 0
     },
     {
+      "file": "src/content/docs/vendors/index.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
       "file": "src/content/docs/worklogs/20250911T175310Z.md",
       "changed": false,
       "rewrites": 0
@@ -1043,12 +1043,12 @@
       "rewrites": 0
     },
     {
-      "file": "src/content/docs/vendors/postcss/8.5.6/index.md",
+      "file": "src/content/docs/vendors/nunjucks/3.2.4/templating.md",
       "changed": false,
       "rewrites": 0
     },
     {
-      "file": "src/content/docs/vendors/nunjucks/3.2.4/templating.md",
+      "file": "src/content/docs/vendors/postcss/8.5.6/index.md",
       "changed": false,
       "rewrites": 0
     },
