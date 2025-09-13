@@ -1,11 +1,12 @@
 // config/plugins.js
-import interlinker from "@photogabble/eleventy-plugin-interlinker";
-import navigation from "@11ty/eleventy-navigation";
-import rss from "@11ty/eleventy-plugin-rss";
-import sitemap from "@quasibit/eleventy-plugin-sitemap";
-import schema from "@quasibit/eleventy-plugin-schema";
-import vitePlugin from "@11ty/eleventy-plugin-vite";
-import { createResolvers } from "../config/interlinkers/resolvers.mjs";
+import { fileURLToPath, URL } from 'node:url';
+import interlinker from '@photogabble/eleventy-plugin-interlinker';
+import navigation from '@11ty/eleventy-navigation';
+import rss from '@11ty/eleventy-plugin-rss';
+import sitemap from '@quasibit/eleventy-plugin-sitemap';
+import schema from '@quasibit/eleventy-plugin-schema';
+import vitePlugin from '@11ty/eleventy-plugin-vite';
+import { createResolvers } from '../config/interlinkers/resolvers.mjs';
 
 export default function getPlugins() {
   const plugins = [
@@ -13,14 +14,14 @@ export default function getPlugins() {
       interlinker,
       {
         // Use your normal site shell
-        defaultLayout: "layouts/base.njk",
+        defaultLayout: 'layouts/base.njk',
         resolvingFns: createResolvers(),
-        deadLinkReport: "json", // write unresolved report artifact only (no gating)
+        deadLinkReport: 'json', // write unresolved report artifact only (no gating)
       },
     ],
     [navigation],
     [rss],
-    [sitemap, { sitemap: { hostname: "https://effusionlabs.com" } }],
+    [sitemap, { sitemap: { hostname: 'https://effusionlabs.com' } }],
     [schema],
   ];
 
@@ -29,17 +30,22 @@ export default function getPlugins() {
     vitePlugin,
     {
       // keep the temp dir stable
-      tempFolderName: ".11ty-vite",
+      tempFolderName: '.11ty-vite',
       viteOptions: {
         clearScreen: false,
-        appType: "custom",
+        appType: 'custom',
+        resolve: {
+          alias: {
+            '@': fileURLToPath(new URL('../src', import.meta.url)),
+          },
+        },
         server: { middlewareMode: true },
         css: { devSourcemap: true },
         build: {
           manifest: true,
           rollupOptions: {
             // Ensure our JS entry (which imports CSS) is known to Vite
-            input: ["/assets/js/app.js"],
+            input: ['/assets/js/app.js'],
           },
         },
       },
