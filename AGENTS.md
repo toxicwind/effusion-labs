@@ -1,216 +1,143 @@
-# BEGIN OF AGENTS.md — HYPEBRUT CONTEXT INJECTION • Eleventy • Node/ESM • npm • Shell
+# AGENTS.md — HYPEBRUT Overlay for **Effusion Labs**
 
-This layer is **always on**. Assume processes exist, **reuse** them, and **only** use repo-local tooling. When this file names commands or paths, **do exactly that**.
+*A hard rail for coding agents. Obey exactly. No hedging. No “outs.” This file **extends** `SYSTEM.md` and only adds repo-specific rules; when overlap exists, follow the **stricter** rule.*
 
----
-
-## Environment & Local Tooling (MUST)
-
-**Activate (idempotent)**
+## Bootstrap (run once per shell; only fenced block allowed)
 
 ```bash
 source utils/scripts/setup/env-bootstrap.sh
 ```
 
-**Signals (stderr)**
+* Guard engages globally after sourcing; all stdout/stderr travels through the HYPEBRUT line-guard for the entire session.
+* Idempotent; if you see `[HB] Ready in this process. Proceed.`, do not re-source.
 
-- Fresh: `[HB] Bootstrap active. Guard=3800b …`
-- Already active: `[HB] Ready in this process. Proceed.`
+## Precedence & Scope
 
-**Repo binaries only** — PATH resolves to `./bin/*`. Enforce:
+* Layer order is **USER → AGENTS.md (this) → SYSTEM.md → Baseline**; if rules appear to conflict, apply the **highest layer** or, if still ambiguous, the **strictest**.
+* Single-message mandate remains absolute; you finish in **one** comprehensive message as defined by `SYSTEM.md`.
 
-```bash
-which node && which npm
-# Expect: ./bin/node  ./bin/npm
-```
+## Console Guard
 
----
+* The platform kills on \~4096-byte lines; you **will not** trigger that.
+* Text lines >3800 bytes are visibly wrapped with `[HBWRAP i/n a..b]` prefixes; leave prefixes intact.
+* Binary output is **suppressed** on the console; write the raw, unsplit bytes to `/tmp/hype_logs/hb.*.log` and print a single notice: `binary suppressed → see /tmp/hype_logs/<file>`.
+* Subprocesses that try to bypass FDs are **wrapped** (tiny `bash -c` trampoline or PTY/`stdbuf` shim). You own the bytes end-to-end.
 
-## Output Guard (CONTRACT)
+## Toolchain & Scripts
 
-- Every line to the platform is ≤ **3800 bytes**. Long text is split with visible markers.
-- **Wrapped text** example:
+* Node runtime is `>=24`; do not downgrade.
+* Use repo scripts **exactly** as named; do not invent alternates:
 
-  ```
-  [HBWRAP 1/3 1..3800] …
-  [HBWRAP 2/3 3801..7600] …
-  [HBWRAP 3/3 7601..N] …
-  ```
+  * Dev server: `npm run dev` (aliases: `preview`, `dev:11ty`).
+  * Build: `npm run build` (drives `utils/dev/eleventy-with-codeframes.mjs`).
+  * Tests: `npm test` (c8 + Node test runner).
+  * Gate: `npm run check` (format\:check → lint → test).
+  * Lint suite: `npm run lint`, `lint:advisory`, `lint:product-links`, `lint:links`.
+  * Data pipeline: `npm run data:all` and sub-scripts as needed.
+  * Patches: `npm run verify:patches` after any install or patch maintenance.
+  * MCP stack only when the task targets it: `mcp:dev`, `mcp:integration`, `mcp:test`.
 
-- **Binary** lines are emitted as:
+## Dev Server Discipline
 
-  ```
-  [HBB64 LEN=<bytes> SHA256=<hash>]
-  <base64 body>
-  ```
+* Probe port `:8080` before acting; if a compatible listener exists, **reuse** it.
+* Start only when absent; stop explicitly when required using a graceful signal.
+* Do not spawn duplicates; do not “pick another port” without USER instruction.
 
-- A **raw, unsplit** copy of all output is written to `/tmp/hype_logs/hb.*.log`.
+## Eleventy + Vite Reality
 
-Reconstruct text from wrapped output:
+* Build errors are **fixed at the source**; do not paper over.
+* Missing `type="module"` attributes on `<script>` are corrected in templates.
+* Transient rename/ENOENT around `.11ty-vite` or `tmp/build-timestamp/` is solved by creating needed parents **inside the build pipeline**, not by ad-hoc manual mkdirs.
+* Never commit caches, coverage, dist, or `.11ty-vite`.
 
-```bash
-awk '/^\[HBWRAP [0-9]+\/[0-9]+ [0-9]+\.\.[0-9]+\] /{sub(/^\[HBWRAP [^]]+\] /,"");printf "%s",$0;next}{print}' wrapped.txt > original.txt
-```
+## Persistence Root
 
-Decode a binary block:
+* Use `src/content/docs/` as `PERSIST_ROOT`.
+* Reports → `src/content/docs/reports/`
+* Worklogs → `src/content/docs/worklogs/`
+* Knowledge → `src/content/docs/knowledge/`
+* Filenames are **UTC**: `YYYYMMDDThhmmssZ.ext`. Print repo-relative paths in your final message.
 
-```bash
-awk 'BEGIN{p=0} /^\[HBB64 /{p=1;next} {if(p)print}' wrapped.txt | base64 -d > original.bin
-```
+## Interlinkers & Archives
 
----
+* Use namespaced wikilinks `[[kind:slug-or-title]]`; omitted kind is tolerated but inferior.
+* Canonical routes are `/archives/<kind>/<slug>/`.
+* Run the unresolved-link reporter; eliminate unresolveds or justify each remaining one in **DECISIONS** and persist the audit log under `…/knowledge/`.
 
-## Persistence Paths (MUST)
+## Conservation & Staging
 
-- `PERSIST_ROOT=src/content/docs/`
-- Reports → `src/content/docs/reports/`
-- Worklogs → `src/content/docs/worklogs/`
-- Knowledge → `src/content/docs/knowledge/`
-- Filenames are **UTC**: `YYYYMMDDThhmmssZ.ext`. Paths are **repo-relative**.
+* Stage only SIM-declared paths; no destructive deletions unless the USER explicitly instructs and a revert path is documented.
+* Opaque binaries and caches are unstaged and quarantined to `…/knowledge/`; add or tighten ignores and continue until gates are green.
+* No history rewrites; no force pushes; operate on a `work/<UTC>-<slug>` topic branch.
 
----
+## Research Protocol
 
-## Running Services
+* Inherits `SYSTEM.md` §REQUIRED\_WEB\_PROTOCOL; bias to **primary sources** when build/test behavior is implicated.
+* When correctness is at issue, perform at least two research runs (discovery → falsification); adapt queries across passes until floors are met.
+* In your final message, print counts (runs, passes, queries, opens, cross-links) and list decisive pivots. Cite for any claim not obviously internal.
 
-**Inspect**
+## Failure & Recovery
 
-```bash
-lsof -t -i :8080 >/dev/null 2>&1 && echo "devserver: present" || echo "devserver: absent"
-```
+* If any gate fails (build, tests, lint, linkers, contracts), **pivot and correct**; loop until everything is green.
+* Maintain console discipline while debugging; binary remains suppressed to console and persisted to logs.
 
-**Start (only if absent)**
+## Final Message Expectations
 
-```bash
-if ! lsof -t -i :8080 >/dev/null 2>&1; then
-  nohup ./bin/npm run dev > /tmp/hype_logs/devserver.$(date -u +%Y%m%dT%H%M%SZ).log 2>&1 &
-  echo "devserver: started (8080)"
-else
-  echo "devserver: already running (8080)"
-fi
-```
+* Follow the `SYSTEM.md` final-message schema **exactly**.
+* Include the required Conservation & Binary Statement.
+* If a dev server is active, print the URL; otherwise state “none launched”.
 
-**Stop**
+## Shell Shims
 
-```bash
-pid=$(lsof -t -i :8080 2>/dev/null | head -n1) && kill -TERM "$pid" || true
-```
+* If a runner uses `/bin/sh -lc`, invoke commands through `utils/scripts/setup/env-bootstrap-shim.sh` to guarantee guard engagement.
+* Any subprocess suspected of FD bypass is wrapped; this is not optional.
 
----
+## Style & Minimal Churn
 
-## Eleventy Build/Serve
+* Formatting is restricted to files you touched unless the task **is** formatting; when formatting, print tool and version.
+* Aesthetic upgrades are encouraged when intentional and fully verified; document them under **WHAT CHANGED**.
 
-**Build**
+## Ordinal Semantics Kill-Switch
 
-```bash
-./bin/npm run build || ./bin/node ./node_modules/@11ty/eleventy/cmd.js
-```
+* Problem: headings or prompts containing ordinals or “workflow language” (“1.”, “(1)”, “I.”, “Step 3”, “Phase II”, “Stage 4”, “Milestone 1”) cause brittle, mis-sequenced behavior.
+* Policy in this repository is **ordinal-free** authoring and **ordinal-neutral** interpretation. You enforce both without asking.
 
-**Serve (dev)**
+**Authoring rules (docs you write or modify):**
 
-```bash
-./bin/npm run dev || ./bin/node ./node_modules/@11ty/eleventy/cmd.js --serve --port=8080
-```
+* Headings must not contain digits or roman numerals.
+* Headings must not contain the tokens `step`, `phase`, `stage`, `milestone` (case-insensitive), including plural forms.
+* Replace numeric or roman prefixes with descriptive, noun-based titles (e.g., “Bootstrap”, “Console Guard”, “Persistence Root”).
+* If you must reference order for clarity, use non-ordinal cues like “earliest” / “later” in prose, not in headings.
 
----
+**Lint enforcement (non-negotiable; fail the gate):**
 
-## npm Discovery & Decisions (REQUIRED)
+* Run a documentation linter that scans `*.md` (including `AGENTS.md`) and fails on the following patterns in headings:
 
-Use **repo-local npm** and the curated helper. Persist evidence.
+  * `^#{1,6}\s*(?:\d+[\.\)]\s+|\(\d+\)\s+|[IVXLCDM]+\.\s+)`
+  * `^#{1,6}\s*.*\b(?:step|steps|phase|phases|stage|stages|milestone|milestones)\b`
+* When violations are found, you **rewrite the headings** to be noun-based and re-run the gate until clean.
+* For third-party content you must keep verbatim, add a local adapter: store the raw under `…/knowledge/` and include a sanitized derivative in the site; document the adapter in **WHAT CHANGED**.
 
-**Registry truth**
+**Prompt neutralizer (inputs you receive as tasks):**
 
-```bash
-./bin/npm ls --depth=0
-./bin/npm view <pkg> version time dist-tags license repository.url engines peerDependencies deprecated
-```
+* Treat numbered lists and “workflow language” as **unordered constraints**.
+* Flatten any input that looks like a sequence into independent requirement bullets before acting.
+* Remove ordinal markers (`1.`, `(1)`, `I.`, `Step N`, `Phase N`, `Stage N`, `Milestone N`) and keep only the substantive requirement text.
+* Reorder the flattened set by **dependency** and **blast-radius minimization**, not by the original numbering.
+* Print the flattened, dependency-ordered plan in your final message; never mirror the original ordinals.
+* If the input uses ordinals to imply gating (“do X before Y”), you infer gating from dependencies, not from numbering. If ambiguity remains, prefer actions that increase verification signal first (build → test → lint) and document the assumption in **DECISIONS**.
 
-**Search**
+**Mechanistic guardrails you will apply automatically:**
 
-```bash
-./bin/npm search --searchlimit=25 "eleventy plugin interlink"
-```
+* Before you act on any user prompt, run it through an ordinal scrub that:
 
-**Curated helper — `utils/scripts/npm-utils.js`**
-
-```bash
-./bin/node utils/scripts/npm-utils.js search "eleventy plugin"
-
-./bin/node utils/scripts/npm-utils.js analyze "markdown plugin" \
-  > src/content/docs/knowledge/npm-analyze-markdown-$(date -u +%Y%m%dT%H%M%SZ).json
-
-./bin/node utils/scripts/npm-utils.js view "markdown-it" \
-  > src/content/docs/knowledge/npm-view-markdown-it-$(date -u +%Y%m%dT%H%M%SZ).json
-
-./bin/node utils/scripts/npm-utils.js install "markdown-it"
-```
-
-**Direct installs**
-
-```bash
-./bin/npm i <pkg>@^X.Y.Z
-./bin/npm i -D <pkg>@~A.B.C
-```
-
-**Patch maintenance**
-
-```bash
-./bin/npx patch-package || true
-./bin/npx patch-package <pkg>   # after editing node_modules/<pkg>
-```
+  * deletes ordinal prefixes and “workflow language”;
+  * normalizes bullets to `-` with one requirement per bullet;
+  * deduplicates semantically identical bullets;
+  * emits a short summary line: “ordinal-neutralized input applied”.
+* Before you commit any Markdown, run the heading linter; if it fails, you fix the headings and rerun.
+* If an automation or runner injects a step-shaped plan back at you, you scrub it again and proceed ordinal-free. There is no escape hatch.
 
 ---
 
-## ESM Utilities
-
-Run repo utilities with repo Node. Persist outputs to `…/knowledge/`.
-
-```bash
-./bin/node utils/scripts/my-task.mjs --flag value
-```
-
-```js
-// utils/scripts/example.mjs
-import { execFile } from 'node:child_process';
-import { promisify } from 'node:util';
-const run = promisify(execFile);
-const { stdout } = await run('./bin/npm', ['view', 'markdown-it', 'version']);
-console.log(
-  JSON.stringify({ pkg: 'markdown-it', version: stdout.trim() }, null, 2),
-);
-```
-
----
-
-## Interlinking & Archives
-
-- Resolvers `config/interlinkers/resolvers.mjs`
-- Registry `config/interlinkers/route-registry.mjs`
-- Reporter `config/interlinkers/unresolved-report.mjs`
-
-**Contracts**
-
-- Prefer `[[kind:slug-or-title]]`. `[[Title]]` is tolerated but weaker.
-- Routes are `/archives/<kind>/<slug>/`.
-
-**Audit loop**
-
-```bash
-./bin/node config/interlinkers/unresolved-report.mjs \
-  | tee src/content/docs/knowledge/interlinker-unresolved-$(date -u +%Y%m%dT%H%M%SZ).log
-
-./bin/rg -n '\[\[[^\]]+\]\]' src | ./bin/bat -l markdown
-./bin/node ./node_modules/@11ty/eleventy/cmd.js
-./bin/node config/interlinkers/unresolved-report.mjs
-```
-
----
-
-## Tests, Format, Scans
-
-```bash
-./bin/npm test || ./bin/node --test --test-reporter=spec "test/**/*.mjs"
-./bin/prettier --log-level warn --write .
-./bin/rg -n 'add(Collection|Shortcode|Filter)\(' config src
-```
-
-## AGENT CONTEXT INJECTION COMPLETE
+**You are configured. Bootstrap once, keep the guard on, use the repo scripts exactly, enforce ordinal-neutral behavior at input and authoring time, fix failures, persist artifacts under the prescribed paths, and finish in one message using the `SYSTEM.md` schema.**
