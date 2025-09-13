@@ -1,18 +1,18 @@
 #!/usr/bin/env bash
-# HYPEBRUT / env-bootstrap.sh — deterministic console stream shaping + raw sidecar
+# HYPEBRUT / env-bootstrap.sh \u2014 deterministic console stream shaping + raw sidecar
 # Path: utils/scripts/setup/env-bootstrap.sh
 #
 # Guarantees:
-#   • Byte-true preservation of all input in a sidecar log.
-#   • Console stream that remains readable and safe under extreme long-line and CR-overstrike patterns.
-#   • Minified one-liners are soft-wrapped at a stable width with explicit markers, without altering payload bytes.
-#   • Only hazardous control bytes are suppressed from console; everything else textual is allowed through.
-#   • Stdout and stderr are merged through a single filter to preserve sequencing.
-#   • Hooks activate this in noninteractive shells by default; simple env toggles give you control.
+#   \u2022 Byte-true preservation of all input in a sidecar log.
+#   \u2022 Console stream that remains readable and safe under extreme long-line and CR-overstrike patterns.
+#   \u2022 Minified one-liners are soft-wrapped at a stable width with explicit markers, without altering payload bytes.
+#   \u2022 Only hazardous control bytes are suppressed from console; everything else textual is allowed through.
+#   \u2022 Stdout and stderr are merged through a single filter to preserve sequencing.
+#   \u2022 Hooks activate this in noninteractive shells by default; simple env toggles give you control.
 
 # Must be sourced to hijack current FDs.
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
-  printf '❌ HYPEBRUT :: source this file (do not execute)\n' >&2
+  printf '\u274c HYPEBRUT :: source this file (do not execute)\n' >&2
   return 1 2>/dev/null || exit 1
 fi
 
@@ -21,7 +21,7 @@ __HB_OLD_SET_OPTS="$(set +o)"
 trap 'eval "$__HB_OLD_SET_OPTS"' RETURN
 set -Euo pipefail
 
-# ─────────────────────────── configuration (stable defaults) ───────────────────────────
+# \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 configuration (stable defaults) \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
 _HB_SPLIT_WIDTH=3800                   # byte width for soft wrapping
 _HB_MARK_PREFIX='[HBWRAP'              # visible split marker prefix
 _HB_MARK_SUFFIX=']'
@@ -39,12 +39,12 @@ _hb_now() { date -u +"%Y-%m-%dT%H:%M:%SZ"; }
 
 mkdir -p "$_HB_CFG_DIR" "$_HB_LOG_DIR"
 
-# ─────────────────────────── streaming filter (Perl primary) ───────────────────────────
+# \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 streaming filter (Perl primary) \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
 # Notes:
-#  • Treat \n and \r as delimiters; normalize to newline for readability.
-#  • When no delimiter is present and the buffer exceeds a threshold, emit soft wraps.
-#  • Allow ESC (0x1b) sequences and all bytes ≥0x80; suppress only hazardous control bytes.
-#  • Every raw byte, including delimiters, is written to the sidecar before console shaping.
+#  \u2022 Treat \n and \r as delimiters; normalize to newline for readability.
+#  \u2022 When no delimiter is present and the buffer exceeds a threshold, emit soft wraps.
+#  \u2022 Allow ESC (0x1b) sequences and all bytes \u22650x80; suppress only hazardous control bytes.
+#  \u2022 Every raw byte, including delimiters, is written to the sidecar before console shaping.
 cat >"$_HB_FILTER_PERL" <<'PERL'
 #!/usr/bin/env perl
 use strict; use warnings;
@@ -80,7 +80,7 @@ sub hex_preview {
   return " preview=" . join(" ", @h);
 }
 
-# emit a textual line, chunking into [HBWRAP …] windows as needed
+# emit a textual line, chunking into [HBWRAP \u2026] windows as needed
 sub emit_text_chunks {
   my ($line, $nl) = @_;
   my $L = length($line);
@@ -164,7 +164,7 @@ if (length($buf)) {
 PERL
 chmod 0755 "$_HB_FILTER_PERL"
 
-# ─────────────────────────── streaming filter (Python fallback) ───────────────────────────
+# \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 streaming filter (Python fallback) \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
 cat >"$_HB_FILTER_PY" <<'PY'
 #!/usr/bin/env python3
 import os, sys
@@ -273,7 +273,7 @@ else
   _HB_FILTER_BIN=""
 fi
 
-# ─────────────────────────── FD hijack (single filter, ordered) ───────────────────────────
+# \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 FD hijack (single filter, ordered) \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
 _hb_enable_guard() {
   if [[ "${HB_NO_GUARD:-0}" == "1" ]]; then
     printf "[HB] guard disabled (HB_NO_GUARD=1)\n" >&2
@@ -325,7 +325,7 @@ if [[ "${_HB_READY:-}" == "1" && "${_HB_READY_PID:-}" == "$$" ]]; then
   return 0
 fi
 
-# ─────────────────────────── durable hooks for persistence ───────────────────────────
+# \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 durable hooks for persistence \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
 cat > "$_HB_NONINT_HOOK" <<EOF
 # >>> HYPEBRUT noninteractive hook >>>
 # shellcheck shell=bash source=/dev/null
@@ -375,15 +375,15 @@ _hb_patch_file "${HOME}/.profile"
 
 _HB_READY=1
 _HB_READY_PID="$$"
-printf "[HB] stream guard armed • width=%d • sidecar=%s\n" "$_HB_SPLIT_WIDTH" "${_HB_LOG_FILE:-<none>}" >&2
+printf "[HB] stream guard armed \u2022 width=%d \u2022 sidecar=%s\n" "$_HB_SPLIT_WIDTH" "${_HB_LOG_FILE:-<none>}" >&2
 
-# ─────────────────────────── operational notes (for humans skimming) ───────────────────────────
-# • Minified files or single-line payloads: emitted in windows with [HBWRAP …] markers at the configured width.
-# • CR-based progress: each update appears as its own line so you can see incremental movement in non-PTY contexts.
-# • Hazardous control bytes: summarized inline as “[HBBIN suppressed N bytes]”; raw bytes are always in the sidecar.
-# • Tuning knobs:
+# \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 operational notes (for humans skimming) \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
+# \u2022 Minified files or single-line payloads: emitted in windows with [HBWRAP \u2026] markers at the configured width.
+# \u2022 CR-based progress: each update appears as its own line so you can see incremental movement in non-PTY contexts.
+# \u2022 Hazardous control bytes: summarized inline as \u201c[HBBIN suppressed N bytes]\u201d; raw bytes are always in the sidecar.
+# \u2022 Tuning knobs:
 #     HB_NO_GUARD=1       # temporarily bypass for this shell (source again to re-arm later)
 #     HB_FORCE_GUARD=1    # arm even in interactive shells
 #     HB_BIN_PREVIEW=64   # include a tiny hex nibble with suppression lines when actively debugging
 #     HB_FILTER_W=4096    # override split width if a tool prefers a different ceiling
-#     HB_FILTER_FLUSH=…   # adjust soft-wrap threshold for delimiterless streams
+#     HB_FILTER_FLUSH=\u2026   # adjust soft-wrap threshold for delimiterless streams
