@@ -1,0 +1,8 @@
+@import "tailwindcss";
+@plugin "daisyui";
+
+@layer components {
+  .hb-brut-border {
+    @apply border-4 border-electric;
+  }
+}

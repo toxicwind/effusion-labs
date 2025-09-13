@@ -42,3 +42,4 @@ src/assets/css/*
 !src/assets/css/.gitkeep
 !src/assets/css/*.tailwind.css
 !src/assets/css/mschf-overlay.css
+!src/assets/css/app.css
