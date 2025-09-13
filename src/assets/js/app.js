@@ -3,7 +3,7 @@
 // Consolidates: footnote nav, theme toggle, code copy, work filters.
 // Lazily loads the heavy overlay only when conditions are good.
 
-import "@/assets/css/app.css";
+import "../css/app.css";
 
 /* -------------------------------
    tiny utils

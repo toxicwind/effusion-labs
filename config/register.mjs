@@ -42,11 +42,12 @@ export default function register(eleventyConfig) {
   });
 
   // --- Asset Passthroughs & Watch Targets ---
-  eleventyConfig.addPassthroughCopy({ "src/assets/js": "assets/js" });
-  eleventyConfig.addPassthroughCopy({ "src/favicon.ico": "favicon.ico" });
-  eleventyConfig.addPassthroughCopy({ "src/assets/static": "assets" });
-  eleventyConfig.addPassthroughCopy({ "src/assets/icons": "assets/icons" });
-  eleventyConfig.addWatchTarget("src/assets/css/");
+    eleventyConfig.addPassthroughCopy({ "src/assets/js": "assets/js" });
+    eleventyConfig.addPassthroughCopy({ "src/assets/css": "assets/css" });
+    eleventyConfig.addPassthroughCopy({ "src/favicon.ico": "favicon.ico" });
+    eleventyConfig.addPassthroughCopy({ "src/assets/static": "assets" });
+    eleventyConfig.addPassthroughCopy({ "src/assets/icons": "assets/icons" });
+    eleventyConfig.addWatchTarget("src/assets/css/");
 
   // After build: write unresolved report (log-only, no CI fail)
   eleventyConfig.on("eleventy.after", () => {
