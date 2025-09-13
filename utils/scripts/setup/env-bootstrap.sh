@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# HYPEBRUT / env-bootstrap.sh — forced FD guard (text-only splitting, no base64)
+# HYPEBRUT / env-bootstrap.sh — Forced global FD hijack w/ auto line split & binary safety
 # Location: utils/scripts/setup/env-bootstrap.sh
 
 # Must be sourced, not executed.
@@ -8,46 +8,52 @@ if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
   return 1 2>/dev/null || exit 1
 fi
 
-# Save/restore shell opts for our scope.
-_HB_OLD_SET_OPTS="$(set +o)"
-trap 'eval "$_HB_OLD_SET_OPTS"' RETURN
-set -Euo pipefail
-
-# ── static defaults (no env knobs) ─────────────────────────────────────────────
-_HB_SPLIT_WIDTH=3800           # bytes per emitted console line (<4096)
-_HB_MARK_PREFIX='[HBWRAP'      # visible marker for split chunks
+_HB_SPLIT_WIDTH=3800
+_HB_MARK_PREFIX='[HBWRAP'
 _HB_MARK_SUFFIX=']'
-_HB_LOG_DIR="/tmp/hype_logs"   # sidecar raw log path (authoritative)
+_HB_BIN_MARK_PREFIX='[HBBIN'
+_HB_LOG_DIR="/tmp/hype_logs"
 _HB_CFG_DIR="${HOME}/.config/hypebrut"
 _HB_LOGIN_HOOK="${_HB_CFG_DIR}/login-hook.sh"
 _HB_NONINT_HOOK="${_HB_CFG_DIR}/noninteractive-hook.sh"
-_HB_BOOTSTRAP_ABS="$(command -v readlink >/dev/null 2>&1 && readlink -f "${BASH_SOURCE[0]}")"
-_HB_BOOTSTRAP_ABS="${_HB_BOOTSTRAP_ABS:-${BASH_SOURCE[0]}}"
+_HB_BOOTSTRAP_ABS="$(readlink -f "${BASH_SOURCE[0]}" 2>/dev/null || realpath "${BASH_SOURCE[0]}")"
+_HB_READY=0
 
-# ── helpers ───────────────────────────────────────────────────────────────────
+# ── Timestamp
 _hb_now() { date -u +"%Y-%m-%dT%H:%M:%SZ"; }
 
-# Byte-safe, text-only splitter with visible markers + raw sidecar log.
-# - Every input line goes to the sidecar log unmodified.
-# - Console output: if a line length > WIDTH, it is chunked with [HBWRAP i/n a..b].
-# - No base64, no binary path. ANSI escapes are passed through as-is.
-_hb_filter() {
-  local width="${_HB_SPLIT_WIDTH}" mark_pfx="${_HB_MARK_PREFIX}" mark_sfx="${_HB_MARK_SUFFIX}"
-  local logf="${_HB_LOG_FILE:-}"
+# ── Binary detector (C locale, octets)
+_hb_is_binary() {
+  LC_ALL=C grep -qU '[\x00-\x08\x0B\x0C\x0E-\x1F\x7F-\xFF]' <<<"$1"
+}
 
-  # Use C locale to count bytes, not characters.
-  LC_ALL=C awk -v W="$width" -v LOGF="$logf" -v PFX="$mark_pfx" -v SFX="$mark_sfx" '
+# ── Byte-safe splitter with visible markers + sidecar log
+_hb_filter() {
+  local width="${_HB_SPLIT_WIDTH}" logf="${_HB_LOG_FILE:-}" mark_pfx="${_HB_MARK_PREFIX}" mark_sfx="${_HB_MARK_SUFFIX}"
+  local bin_pfx="${_HB_BIN_MARK_PREFIX}"
+
+  LC_ALL=C awk -v W="$width" -v LOGF="$logf" -v PFX="$mark_pfx" -v SFX="$mark_sfx" -v BIN="$bin_pfx" '
     function emit_chunk(i,n,start,end,text) {
       if (n > 1) {
-        # marker + a space, then the chunk
         printf("%s %d/%d %d..%d%s %s\n", PFX, i, n, start, end, SFX, text);
       } else {
         print text;
       }
     }
     {
-      # Sidecar raw line first (authoritative)
+      # Sidecar first
       if (LOGF != "") { print $0 >> LOGF; fflush(LOGF); }
+
+      # Binary detection
+      for (i = 1; i <= length($0); i++) {
+        c = substr($0, i, 1);
+        if (c ~ /[\x00-\x08\x0B\x0C\x0E-\x1F\x7F-\xFF]/) {
+          cmd = "echo \""$0"\" | base64";
+          cmd | getline b64; close(cmd);
+          printf("%s BASE64 LINE %d\n%s\n", BIN, NR, b64);
+          next;
+        }
+      }
 
       L = length($0);
       if (L <= W) { emit_chunk(1,1,1,L,$0); next }
@@ -63,19 +69,21 @@ _hb_filter() {
   '
 }
 
-# ── global FD hijack (per-process; forced) ─────────────────────────────────────
+# ── Forced hijack of all FDs in this process
 _hb_enable_guard() {
   [[ "${_HB_FD_HIJACKED:-0}" == "1" && "${_HB_HIJACK_PID:-}" == "$$" ]] && return 0
   mkdir -p "$_HB_LOG_DIR"
   _HB_LOG_FILE="${_HB_LOG_DIR}/hb.$(basename "${SHELL:-bash}" 2>/dev/null).$$_$(_hb_now).log"
-  # Save real FDs, then redirect stdout/stderr through the splitter.
+
   exec {_HB_STDOUT_ORIG}>&1
   exec {_HB_STDERR_ORIG}>&2
   exec 1> >(_hb_filter)
   exec 2> >(_hb_filter)
+
   _HB_FD_HIJACKED=1
   _HB_HIJACK_PID="$$"
 }
+
 _hb_disable_guard() {
   [[ "${_HB_FD_HIJACKED:-0}" != "1" || "${_HB_HIJACK_PID:-}" != "$$" ]] && return 0
   exec 1>&${_HB_STDOUT_ORIG} 2>&${_HB_STDERR_ORIG}
@@ -83,18 +91,18 @@ _hb_disable_guard() {
   unset _HB_FD_HIJACKED _HB_HIJACK_PID _HB_STDOUT_ORIG _HB_STDERR_ORIG _HB_LOG_FILE
 }
 
-# Engage the guard automatically in *noninteractive* shells.
+# ── Noninteractive hijack: any shell not interactive gets FD-guarded
 if [[ $- != *i* ]]; then
   _hb_enable_guard
 fi
 
-# Idempotence (process-local).
+# ── Idempotence
 if [[ "${_HB_READY:-}" == "1" && "${_HB_READY_PID:-}" == "$$" ]]; then
-  printf "[HB] Ready in this process. Proceed.\n" >&2
+  printf "[HB] Already hijacked (PID=$$). Proceed.\n" >&2
   return 0
 fi
 
-# ── hooks to ensure noninteractive *login* shells source this (forced) ─────────
+# ── Hooks into login/profile + ~/.config/hypebrut
 mkdir -p "$_HB_CFG_DIR"
 
 cat > "$_HB_NONINT_HOOK" <<EOF
@@ -105,7 +113,6 @@ if [[ \$- != *i* ]]; then
 fi
 # <<< HYPEBRUT noninteractive hook <<<
 EOF
-chmod 0644 "$_HB_NONINT_HOOK"
 
 cat > "$_HB_LOGIN_HOOK" <<EOF
 # >>> HYPEBRUT login hook >>>
@@ -113,8 +120,10 @@ cat > "$_HB_LOGIN_HOOK" <<EOF
 [ -f "${_HB_NONINT_HOOK}" ] && source "${_HB_NONINT_HOOK}"
 # <<< HYPEBRUT login hook <<<
 EOF
-chmod 0644 "$_HB_LOGIN_HOOK"
 
+chmod 0644 "$_HB_LOGIN_HOOK" "$_HB_NONINT_HOOK"
+
+# ── Force insert into ~/.profile and ~/.bash_profile
 _hb_patch_file() {
   local f="$1" marker="# >>> HYPEBRUT login sourcing >>>"
   if [[ -f "$f" ]] && grep -Fq "$marker" "$f"; then return 0; fi
@@ -130,8 +139,7 @@ if [[ -f "${HOME}/.bash_profile" || ! -f "${HOME}/.profile" ]]; then
 fi
 _hb_patch_file "${HOME}/.profile"
 
-# Process-local readiness banner (stderr).
+# ── Mark ready
 _HB_READY=1
 _HB_READY_PID="$$"
-printf "[HB] Bootstrap active. Guard armed (width=%d bytes). Log: %s\n" \
-       "$_HB_SPLIT_WIDTH" "${_HB_LOG_FILE:-<none>}" >&2
+printf "[HB] Bootstrap armed. Output is hijacked. Log: %s\n" "${_HB_LOG_FILE:-<none>}" >&2
