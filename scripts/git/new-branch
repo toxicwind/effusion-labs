@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+ns="${1:-work}"; shift || true
+slug="${*:-exec-surface}"
+ts="$(date -u +%Y-%m-%dT%H-%M-%SZ)"
+name="${ns%/}/$ts-${slug// /-}"
+echo "$name"
+git switch -c "$name"
+
