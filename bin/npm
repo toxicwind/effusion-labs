@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
+# Repo-local npm shim: inject keepalive for npm test invocations.
 set -euo pipefail
-DIR="$(cd "$(dirname "$0")" && pwd)"
-PATH_TRIMMED="$(printf "%s" "$PATH" | sed -e "s|${DIR}:||g" -e "s|:${DIR}||g")"
-NPM_BIN="$(PATH="$PATH_TRIMMED" command -v npm || true)"
-if [[ -z "${NPM_BIN}" ]]; then echo "# npm shim: real npm not found" >&2; exit 127; fi
-hb_run "${NPM_BIN}" "$@"
+orig_args=("$@")
+if [[ "${1:-}" == "test" ]] || { [[ "${1:-}" == "run" ]] && [[ "${2:-}" == "test" ]]; }; then
+  export NODE_OPTIONS="${NODE_OPTIONS:-} --import=./test/setup/llm-keepalive.mjs"
+fi
+REAL_NPM="$(command -v -a npm | awk 'NR==2{print;exit}')"
+exec "${REAL_NPM:-/usr/bin/npm}" "${orig_args[@]}"
