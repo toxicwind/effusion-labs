@@ -6,7 +6,7 @@ if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
 fi
 __HB_OLD_SET_OPTS="$(set +o)"; trap 'eval "$__HB_OLD_SET_OPTS"' RETURN; set -Euo pipefail
 : "${HB_LLM_MODE:=1}"; : "${HB_FORCE_GUARD:=0}"; : "${HB_NO_GUARD:=0}"
-: "${HB_FILTER_W:=3800}"; : "${HB_FILTER_FLUSH:=$((4*HB_FILTER_W))}"
+: "${HB_FILTER_W:=3500}"; : "${HB_FILTER_FLUSH:=$((4*HB_FILTER_W))}"
 : "${HB_FILTER_PFX:="[HBWRAP"}"; : "${HB_FILTER_SFX:="]"}"; : "${HB_FILTER_BIN:="[HBBIN"}"
 _HB_CFG_DIR="${HOME}/.config/hypebrut"; _HB_LOG_DIR="${HB_LOG_DIR:-/tmp/hype_logs}"
 mkdir -p "$_HB_CFG_DIR" "$_HB_LOG_DIR"
@@ -17,7 +17,7 @@ _hb_now(){ date -u +"%Y-%m-%dT%H:%M:%SZ"; }
 cat >"$_HB_FILTER_PERL" <<'PERL'
 #!/usr/bin/env perl
 use strict; use warnings; binmode STDIN; binmode STDOUT;
-my $W=$ENV{HB_FILTER_W}||3800; my $LOGF=$ENV{HB_FILTER_LOGF}||"";
+my $W=$ENV{HB_FILTER_W}||3500; my $LOGF=$ENV{HB_FILTER_LOGF}||"";
 my $PFX=$ENV{HB_FILTER_PFX}||"[HBWRAP"; my $SFX=$ENV{HB_FILTER_SFX}||"]";
 my $BIN=$ENV{HB_FILTER_BIN}||"[HBBIN"; my $FLUSH=$ENV{HB_FILTER_FLUSH}||(4*$W);
 my $logfh; if ($LOGF ne ""){ open($logfh,">>",$LOGF) or die $!; binmode $logfh; }
@@ -42,7 +42,7 @@ chmod 0755 "$_HB_FILTER_PERL"
 cat >"$_HB_FILTER_PY" <<'PY'
 #!/usr/bin/env python3
 import os,sys
-W=int(os.environ.get("HB_FILTER_W","3800")); LOGF=os.environ.get("HB_FILTER_LOGF","")
+W=int(os.environ.get("HB_FILTER_W","3500")); LOGF=os.environ.get("HB_FILTER_LOGF","")
 PFX=os.environ.get("HB_FILTER_PFX","[HBWRAP"); SFX=os.environ.get("HB_FILTER_SFX","]")
 BIN=os.environ.get("HB_FILTER_BIN","[HBBIN"); FLUSH=int(os.environ.get("HB_FILTER_FLUSH",str(4*W)))
 logfh=open(LOGF,"ab",buffering=0) if LOGF else None
