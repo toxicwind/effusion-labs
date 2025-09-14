@@ -1,0 +1,2 @@
+hello
+armed pid=51720 pipes=/tmp/hbguard.51720 sidecars=.hb-logs/51720.stdout.log,.hb-logs/51720.stderr.log width=3500

@@ -1,0 +1,2 @@
+[HB] Bootstrap armed. Output is hijacked. Log: .hb-logs
+T=test/hb_guard/01-arm-quiet.t: line 1: T: unbound variable
