@@ -1,0 +1,253 @@
+
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>stdbuf(1) - Linux manual page</title>
+    <link rel="stylesheet" type="text/css" href="../../../style.css" title="style" />
+    <link rel="stylesheet" type="text/css" href="../style.css" title="style" />
+</head>
+
+<body>
+
+<div class="page-top"><a id="top_of_page"></a></div>
+<!--%%%TOP_BAR%%%-->
+    <div class="nav-bar">
+        <table class="nav-table">
+            <tr>
+                <td class="nav-cell">
+                    <p class="nav-text">
+                        <a href="../../../index.html">man7.org</a> &gt; Linux &gt; <a href="../index.html">man-pages</a>
+                    </p>
+                </td>
+                <td class="training-cell">
+                    <p class="training-text"><a class="training-link" href="http://man7.org/training/">Linux/UNIX system programming training</a></p>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+<hr class="nav-end" />
+
+<!--%%%PAGE_START%%%-->
+<h1>stdbuf(1) &mdash; Linux manual page</h1>
+
+
+<table class="sec-table">
+<tr>
+    <td>
+        <p class="section-dir">
+<a href="#NAME">NAME</a> | <a href="#SYNOPSIS">SYNOPSIS</a> | <a href="#DESCRIPTION">DESCRIPTION</a> | <a href="#EXAMPLES">EXAMPLES</a> | <a href="#BUGS">BUGS</a> | <a href="#AUTHOR">AUTHOR</a> | <a href="#REPORTING_BUGS">REPORTING&nbsp;BUGS</a> | <a href="#COPYRIGHT">COPYRIGHT</a> | <a href="#SEE_ALSO">SEE&nbsp;ALSO</a> | <a href="#COLOPHON">COLOPHON</a>
+        </p>
+    </td>
+</tr>
+<tr>
+    <td class="search-box">
+        <div class="man-search-box">
+
+            <form method="get" action="https://www.google.com/search">
+                <fieldset class="man-search">
+                    <input type="text" name="q" size="10" maxlength="255" value="" />
+                    <input type="hidden" name="sitesearch" value="man7.org/linux/man-pages" />
+                    <input type="submit" name="sa" value="Search online pages" />
+                </fieldset>
+            </form>
+
+        </div>
+    </td>
+    <td> </td>
+</tr>
+</table>
+
+<!--%%%TEXT_START%%%-->
+<pre>
+<span class="headline"><i>STDBUF</i>(1)                     User Commands                     <i>STDBUF</i>(1)</span>
+</pre>
+<h2><a id="NAME" href="#NAME"></a>NAME  &nbsp; &nbsp; &nbsp; &nbsp; <a href="#top_of_page"><span class="top-link">top</span></a></h2><pre>
+       stdbuf - Run COMMAND, with modified buffering operations for its
+       standard streams.
+</pre>
+<h2><a id="SYNOPSIS" href="#SYNOPSIS"></a>SYNOPSIS  &nbsp; &nbsp; &nbsp; &nbsp; <a href="#top_of_page"><span class="top-link">top</span></a></h2><pre>
+       <b>stdbuf </b><i>OPTION</i>... <i>COMMAND</i>
+</pre>
+<h2><a id="DESCRIPTION" href="#DESCRIPTION"></a>DESCRIPTION  &nbsp; &nbsp; &nbsp; &nbsp; <a href="#top_of_page"><span class="top-link">top</span></a></h2><pre>
+       Run COMMAND, with modified buffering operations for its standard
+       streams.
+
+       Mandatory arguments to long options are mandatory for short
+       options too.
+
+       <b>-i</b>, <b>--input</b>=<i>MODE</i>
+              adjust standard input stream buffering
+
+       <b>-o</b>, <b>--output</b>=<i>MODE</i>
+              adjust standard output stream buffering
+
+       <b>-e</b>, <b>--error</b>=<i>MODE</i>
+              adjust standard error stream buffering
+
+       <b>--help </b>display this help and exit
+
+       <b>--version</b>
+              output version information and exit
+
+       If MODE is 'L' the corresponding stream will be line buffered.
+       This option is invalid with standard input.
+
+       If MODE is '0' the corresponding stream will be unbuffered.
+
+       Otherwise MODE is a number which may be followed by one of the
+       following: KB 1000, K 1024, MB 1000*1000, M 1024*1024, and so on
+       for G,T,P,E,Z,Y,R,Q.  Binary prefixes can be used, too: KiB=K,
+       MiB=M, and so on.  In this case the corresponding stream will be
+       fully buffered with the buffer size set to MODE bytes.
+
+       NOTE: If COMMAND adjusts the buffering of its standard streams
+       ('tee' does for example) then that will override corresponding
+       changes by 'stdbuf'.  Also some filters (like 'dd' and 'cat' etc.)
+       don't use streams for I/O, and are thus unaffected by 'stdbuf'
+       settings.
+
+   <b>Exit status:</b>
+       125    if the stdbuf command itself fails
+
+       126    if COMMAND is found but cannot be invoked
+
+       127    if COMMAND cannot be found
+
+       -      the exit status of COMMAND otherwise
+</pre>
+<h2><a id="EXAMPLES" href="#EXAMPLES"></a>EXAMPLES  &nbsp; &nbsp; &nbsp; &nbsp; <a href="#top_of_page"><span class="top-link">top</span></a></h2><pre>
+       <b>tail -f access.log | stdbuf -oL cut -d ' ' -f1 | uniq</b>
+       This will immediately display unique entries from access.log
+</pre>
+<h2><a id="BUGS" href="#BUGS"></a>BUGS  &nbsp; &nbsp; &nbsp; &nbsp; <a href="#top_of_page"><span class="top-link">top</span></a></h2><pre>
+       On GLIBC platforms, specifying a buffer size, i.e., using fully
+       buffered mode will result in undefined operation.
+</pre>
+<h2><a id="AUTHOR" href="#AUTHOR"></a>AUTHOR  &nbsp; &nbsp; &nbsp; &nbsp; <a href="#top_of_page"><span class="top-link">top</span></a></h2><pre>
+       Written by Padraig Brady.
+</pre>
+<h2><a id="REPORTING_BUGS" href="#REPORTING_BUGS"></a>REPORTING BUGS  &nbsp; &nbsp; &nbsp; &nbsp; <a href="#top_of_page"><span class="top-link">top</span></a></h2><pre>
+       GNU coreutils online help:
+       &lt;<a href="https://www.gnu.org/software/coreutils/">https://www.gnu.org/software/coreutils/</a>&gt;
+       Report any translation bugs to
+       &lt;<a href="https://translationproject.org/team/">https://translationproject.org/team/</a>&gt;
+</pre>
+<h2><a id="COPYRIGHT" href="#COPYRIGHT"></a>COPYRIGHT  &nbsp; &nbsp; &nbsp; &nbsp; <a href="#top_of_page"><span class="top-link">top</span></a></h2><pre>
+       Copyright © 2025 Free Software Foundation, Inc.  License GPLv3+:
+       GNU GPL version 3 or later &lt;<a href="https://gnu.org/licenses/gpl.html">https://gnu.org/licenses/gpl.html</a>&gt;.
+       This is free software: you are free to change and redistribute it.
+       There is NO WARRANTY, to the extent permitted by law.
+</pre>
+<h2><a id="SEE_ALSO" href="#SEE_ALSO"></a>SEE ALSO  &nbsp; &nbsp; &nbsp; &nbsp; <a href="#top_of_page"><span class="top-link">top</span></a></h2><pre>
+       Full documentation &lt;<a href="https://www.gnu.org/software/coreutils/stdbuf">https://www.gnu.org/software/coreutils/stdbuf</a>&gt;
+       or available locally via: info '(coreutils) stdbuf invocation'
+</pre>
+<h2><a id="COLOPHON" href="#COLOPHON"></a>COLOPHON  &nbsp; &nbsp; &nbsp; &nbsp; <a href="#top_of_page"><span class="top-link">top</span></a></h2><pre>
+       This page is part of the <i>coreutils</i> (basic file, shell and text
+       manipulation utilities) project.  Information about the project
+       can be found at ⟨<a href="http://www.gnu.org/software/coreutils/">http://www.gnu.org/software/coreutils/</a>⟩.  If you
+       have a bug report for this manual page, see
+       ⟨<a href="http://www.gnu.org/software/coreutils/">http://www.gnu.org/software/coreutils/</a>⟩.  This page was obtained
+       from the tarball coreutils-9.7.tar.xz fetched from
+       ⟨<a href="http://ftp.gnu.org/gnu/coreutils/">http://ftp.gnu.org/gnu/coreutils/</a>⟩ on 2025-08-11.  If you
+       discover any rendering problems in this HTML version of the page,
+       or you believe there is a better or more up-to-date source for the
+       page, or you have corrections or improvements to the information
+       in this COLOPHON (which is <i>not</i> part of the original manual page),
+       send a mail to man-pages@man7.org
+
+<span class="footline">GNU coreutils 9.7               April 2025                      <i>STDBUF</i>(1)</span>
+</pre>
+
+<hr class="end-man-text" />
+<p>Pages that refer to this page:
+    <a href="../man3/setbuf.3.html">setbuf(3)</a>
+</p>
+<hr/>
+
+ 
+<hr class="start-footer" />
+
+<div class="footer">
+
+<table class="colophon-table">
+    <tr>
+    <td class="pub-info">
+        <p>
+            HTML rendering created 2025-09-06
+            by <a href="https://man7.org/mtk/index.html">Michael Kerrisk</a>,
+            author of
+            <a href="https://man7.org/tlpi/"><em>The Linux Programming Interface</em></a>.
+        </p>
+        <p>
+            For details of in-depth
+            <strong>Linux/UNIX system programming training courses</strong>
+            that I teach, look <a href="https://man7.org/training/">here</a>.
+        </p>
+        <p>
+            Hosting by <a href="https://www.jambit.com/index_en.html">jambit GmbH</a>.
+        </p>
+    </td>
+    <td class="colophon-divider">
+    </td>
+    <td class="tlpi-cover">
+        <a href="https://man7.org/tlpi/"><img src="https://man7.org/tlpi/cover/TLPI-front-cover-vsmall.png" alt="Cover of TLPI" /></a>
+    </td>
+    </tr>
+</table>
+
+</div>
+
+<hr class="end-footer" />
+
+
+
+<!--BEGIN-SITETRACKING-->
+<!-- SITETRACKING.man7.org_linux_man-pages -->
+
+<!-- Default Statcounter code for man7.org/linux/man-pages
+http://www.man7.org/linux/man-pages -->
+<script type="text/javascript">
+var sc_project=7422636;
+var sc_invisible=1;
+var sc_security="9b6714ff";
+</script>
+<script type="text/javascript"
+src="https://www.statcounter.com/counter/counter.js"
+async></script>
+<noscript><div class="statcounter"><a title="Web Analytics
+Made Easy - StatCounter" href="https://statcounter.com/"
+target="_blank"><img class="statcounter"
+src="https://c.statcounter.com/7422636/0/9b6714ff/1/"
+alt="Web Analytics Made Easy -
+StatCounter"></a></div></noscript>
+<!-- End of Statcounter Code -->
+
+
+
+<!-- Start of Google Analytics Code -->
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-9830363-8']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+<!-- End of Google Analytics Code -->
+
+<!--END-SITETRACKING-->
+
+</body>
+</html>
