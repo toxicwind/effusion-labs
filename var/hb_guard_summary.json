@@ -1,0 +1,7 @@
+{
+  "status": "pass",
+  "sidecars": {
+    "stdout": "/tmp/hype_logs",
+    "stderr": "/tmp/hype_logs"
+  }
+}
