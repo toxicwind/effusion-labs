@@ -1,36 +1,7 @@
 #!/usr/bin/env bash
-# HYPEBRUT npm shim: hijack-aware, guard-enforced test wrapping
-
 set -euo pipefail
-
-# Fully qualified env bootstrap
-_HB_BOOTSTRAP="utils/scripts/setup/env-bootstrap.sh"
-
-# If not hijacked, re-exec via login Bash sourcing our guard
-if [[ "${_HB_FD_HIJACKED:-0}" != "1" || "${_HB_HIJACK_PID:-}" != "$$" ]]; then
-  exec bash -l -c "source \"${_HB_BOOTSTRAP}\" && exec \"\$0\" \"\$@\"" "$0" "$@"
-fi
-
-# Locate true npm, ignoring this shim
 DIR="$(cd "$(dirname "$0")" && pwd)"
-PATH_WITHOUT_DIR=$(printf "%s" "$PATH" | sed "s|$DIR:||;s|:$DIR||;s|$DIR||")
-NPM_BIN="$(PATH="$PATH_WITHOUT_DIR" command -v npm)"
-if [[ -z "$NPM_BIN" ]]; then
-  echo "❌ HYPEBRUT: Cannot locate real npm binary." >&2
-  exit 127
-fi
-
-# If command is 'test', wrap in pty-trampoline to preserve streaming (but hijacked!)
-if [[ "$1" == "test" ]]; then
-  echo "[HB] NPM-SHIM: PTY wrapper for 'npm test' to ensure streamed output." >&2
-
-  if command -v script >/dev/null 2>&1; then
-    script -q -e -c "$NPM_BIN $(printf '%q ' "${@:1}")" /dev/null
-  elif command -v stdbuf >/dev/null 2>&1; then
-    stdbuf -oL -eL "$NPM_BIN" "${@:1}"
-  else
-    "$NPM_BIN" "${@:1}"
-  fi
-else
-  exec "$NPM_BIN" "$@"
-fi
+PATH_TRIMMED="$(printf "%s" "$PATH" | sed -e "s|${DIR}:||g" -e "s|:${DIR}||g")"
+NPM_BIN="$(PATH="$PATH_TRIMMED" command -v npm || true)"
+if [[ -z "${NPM_BIN}" ]]; then echo "# npm shim: real npm not found" >&2; exit 127; fi
+hb_run "${NPM_BIN}" "$@"
