@@ -6,7 +6,7 @@ if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
 fi
 __HB_OLD_SET_OPTS="$(set +o)"; trap 'eval "$__HB_OLD_SET_OPTS"' RETURN; set -Euo pipefail
 : "${HB_LLM_MODE:=1}"; : "${HB_FORCE_GUARD:=0}"; : "${HB_NO_GUARD:=0}"
-: "${HB_FILTER_W:=3800}"; : "${HB_FILTER_FLUSH:=$((4*HB_FILTER_W))}"
+: "${HB_FILTER_W:=3500}"; : "${HB_FILTER_FLUSH:=$((4*HB_FILTER_W))}"
 : "${HB_FILTER_PFX:="[HBWRAP"}"; : "${HB_FILTER_SFX:="]"}"; : "${HB_FILTER_BIN:="[HBBIN"}"
 _HB_CFG_DIR="${HOME}/.config/hypebrut"; _HB_LOG_DIR="${HB_LOG_DIR:-/tmp/hype_logs}"
 mkdir -p "$_HB_CFG_DIR" "$_HB_LOG_DIR"
@@ -17,7 +17,7 @@ _hb_now(){ date -u +"%Y-%m-%dT%H:%M:%SZ"; }
 cat >"$_HB_FILTER_PERL" <<'PERL'
 #!/usr/bin/env perl
 use strict; use warnings; binmode STDIN; binmode STDOUT;
-my $W=$ENV{HB_FILTER_W}||3800; my $LOGF=$ENV{HB_FILTER_LOGF}||"";
+my $W=$ENV{HB_FILTER_W}||3500; my $LOGF=$ENV{HB_FILTER_LOGF}||"";
 my $PFX=$ENV{HB_FILTER_PFX}||"[HBWRAP"; my $SFX=$ENV{HB_FILTER_SFX}||"]";
 my $BIN=$ENV{HB_FILTER_BIN}||"[HBBIN"; my $FLUSH=$ENV{HB_FILTER_FLUSH}||(4*$W);
 my $logfh; if ($LOGF ne ""){ open($logfh,">>",$LOGF) or die $!; binmode $logfh; }
@@ -42,7 +42,7 @@ chmod 0755 "$_HB_FILTER_PERL"
 cat >"$_HB_FILTER_PY" <<'PY'
 #!/usr/bin/env python3
 import os,sys
-W=int(os.environ.get("HB_FILTER_W","3800")); LOGF=os.environ.get("HB_FILTER_LOGF","")
+W=int(os.environ.get("HB_FILTER_W","3500")); LOGF=os.environ.get("HB_FILTER_LOGF","")
 PFX=os.environ.get("HB_FILTER_PFX","[HBWRAP"); SFX=os.environ.get("HB_FILTER_SFX","]")
 BIN=os.environ.get("HB_FILTER_BIN","[HBBIN"); FLUSH=int(os.environ.get("HB_FILTER_FLUSH",str(4*W)))
 logfh=open(LOGF,"ab",buffering=0) if LOGF else None
@@ -100,6 +100,10 @@ _hb_enable_guard() {
   exec {_HB_STDOUT_ORIG}>&1; exec {_HB_STDERR_ORIG}>&2
   _HB_LOG_OUT="${_HB_LOG_DIR}/hb.out.$$_$(_hb_now).log"
   _HB_LOG_ERR="${_HB_LOG_DIR}/hb.err.$$_$(_hb_now).log"
+  mkdir -p var
+  _HB_ENV_JSON="var/hb_guard_env.json"
+  printf '{"pid":%d,"shell":"%s","width":%s,"log_out":"%s","log_err":"%s"}\n' \
+    "$$" "${SHELL:-unknown}" "$HB_FILTER_W" "$_HB_LOG_OUT" "$_HB_LOG_ERR" >"$_HB_ENV_JSON"
   export HB_FILTER_W HB_FILTER_FLUSH HB_FILTER_PFX HB_FILTER_SFX HB_FILTER_BIN
   HB_FILTER_LOGF="$_HB_LOG_OUT" "$_HB_FILTER_BIN" < "$_HB_FIFO_OUT" >&${_HB_STDOUT_ORIG} &
   _HB_FILTER_OUT_PID=$!
@@ -120,6 +124,8 @@ _hb_disarm_on_exit() {
   [[ -n "${_HB_FIFO_OUT:-}" && -p "${_HB_FIFO_OUT}" ]] && rm -f "${_HB_FIFO_OUT}"
   [[ -n "${_HB_FIFO_ERR:-}" && -p "${_HB_FIFO_ERR}" ]] && rm -f "${_HB_FIFO_ERR}"
   [[ -n "${_HB_TMP_DIR:-}" && -d "${_HB_TMP_DIR}" ]] && rmdir "${_HB_TMP_DIR}" 2>/dev/null || true
+  mkdir -p var
+  printf '{"disarmed":true,"log_out":"%s","log_err":"%s"}\n' "${_HB_LOG_OUT:-}" "${_HB_LOG_ERR:-}" >var/hb_guard_summary.json
   unset _HB_FD_HIJACKED _HB_HIJACK_PID _HB_FILTER_OUT_PID _HB_FILTER_ERR_PID _HB_STDOUT_ORIG _HB_STDERR_ORIG _HB_FIFO_OUT _HB_FIFO_ERR _HB_TMP_DIR
   printf '# HB guard: disarmed\n' >&2
 }
