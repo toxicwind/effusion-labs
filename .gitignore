@@ -41,3 +41,6 @@ tmp/
 src/assets/css/*
 !src/assets/css/.gitkeep
 !src/assets/css/app.css
+
+# HYPEBRUT sidecars
+.hb-logs/
