@@ -1,5 +1,5 @@
-// ✨ FIX: Import the main stylesheet for Vite to process.
-import "../css/app.css";
+// ✨ FIX: Import the main stylesheet through the Vite alias.
+import "@/assets/css/app.css";
 
 // src/assets/js/app.js
 // Vite entry: imports CSS and initializes all page-level JS.

@@ -31,8 +31,7 @@
 
     {{ headExtra | safe }}
 
-    {# Theme boot (runs pre-render to avoid FART) #}
-    <link rel="stylesheet" href="{{ '/assets/css/app.css' | url }}">
+    {# Theme boot — CSS injected by Vite, run early util #}
     <script>window.ThemeUtils?.initEarly?.();</script>
 
     {# Fonts #}

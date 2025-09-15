@@ -6,6 +6,9 @@
 @plugin "@tailwindcss/typography";
 @plugin "daisyui";
 
+/* Map Tailwind's `dark:` variant to daisyUI's data-theme switch */
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
+
 /* -------------------- */
 /* Site tokens in CSS   */
 /* -------------------- */
@@ -39,6 +42,9 @@ html[data-theme="dark"] {
   --spectrum-x: linear-gradient(90deg, var(--spec-a), var(--spec-c));
   --spec-alpha: .35; --spec-rail-w: 3px; --spec-underline-w: 2px; --spec-chip-bw: 2px;
 
+  /* Overlay z-index (below header/nav = 40) */
+  --mschf-z: 30;
+
   /* Small global niceties */
   --radius: .5rem;
 }
@@ -58,6 +64,8 @@ html { scroll-behavior: smooth; }
   body { margin:0; line-height:1.5; -webkit-font-smoothing: antialiased; }
 
   code { @apply font-mono text-sm px-1 rounded bg-base-300; }
+  /* Ensure typography inverts when data-theme=dark is active */
+  html[data-theme="dark"] .prose { @apply prose-invert; }
 }
 
 /* -------------------- */
@@ -225,7 +233,8 @@ html { scroll-behavior: smooth; }
     border-width: 2px;
   }
 
-  .title-glow { text-shadow: 0 0 .025em #fff, 0 0 .2em var(--fallback-p, theme(colors.primary)); }
+  /* Use daisyUI primary token; avoid Tailwind theme() here */
+  .title-glow { text-shadow: 0 0 .025em #fff, 0 0 .2em hsl(var(--p)); }
   .chip-elevated { border-width: 2px; box-shadow: 4px 4px 0 rgba(0,0,0,.9); }
 
   .input, .select, .textarea { @apply focus:outline-none focus:ring-2 focus:ring-primary; }
@@ -247,4 +256,76 @@ html { scroll-behavior: smooth; }
 }
 @media (prefers-reduced-motion: reduce) {
   .navbar .link-underline::after { transition: none; }
+}
+
+/* -------------------- */
+/* Overlay (MSCHF) — DOM fallback styles
+   Keep subtle; GPU path handles heavy visuals.
+   All overlay nodes are pointer-events:none and aria-hidden in JS. */
+@layer components {
+  #mschf-overlay-root { pointer-events:none; user-select:none; }
+  #mschf-overlay-root * { pointer-events:none !important; user-select:none !important; }
+
+  .mschf-layer { position:absolute; inset:0; }
+  .mschf-highlight { outline:2px dashed hsl(var(--p)); outline-offset:2px; }
+
+  /* Faint dot/line grid */
+  .mschf-grid { position:absolute; inset:0; opacity:.08; mix-blend-mode:screen; }
+  .mschf-grid[data-variant="dots"] {
+    background-image:
+      radial-gradient(circle at 1px 1px, rgba(255,255,255,.35) 1px, transparent 1.8px),
+      radial-gradient(circle at 1px 1px, rgba(0,0,0,.25) 1px, transparent 1.8px);
+    background-size: 18px 18px, 36px 36px;
+    background-position: 0 0, 0 0;
+  }
+  .mschf-grid[data-variant="lines"] {
+    background-image:
+      linear-gradient(to right, rgba(255,255,255,.18) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255,255,255,.10) 1px, transparent 1px);
+    background-size: 24px 24px, 24px 24px;
+  }
+
+  /* Rings */
+  .mschf-rings { position:absolute; border-radius:9999px; box-shadow: 0 0 0 1px rgba(255,255,255,.25) inset, 0 0 24px rgba(255,255,255,.12); opacity:.25; }
+  .mschf-rings.static { opacity:.18; }
+
+  /* Topographic wiggles */
+  .mschf-topo { position:absolute; inset:auto; width:60vmax; height:30vmax; opacity:.08; mix-blend-mode:screen;
+    background: repeating-linear-gradient(var(--rot,8deg), rgba(255,255,255,.25), rgba(255,255,255,.25) 1px, transparent 1px, transparent 12px);
+    filter: blur(0.3px);
+  }
+
+  /* Corner ticks */
+  .mschf-corner { position:absolute; width:18px; height:18px; opacity:.5; }
+  .mschf-corner-tl { left:8px; top:8px; border-left:2px solid rgba(255,255,255,.45); border-top:2px solid rgba(255,255,255,.45); }
+  .mschf-corner-tr { right:8px; top:8px; border-right:2px solid rgba(255,255,255,.45); border-top:2px solid rgba(255,255,255,.45); }
+  .mschf-corner-bl { left:8px; bottom:8px; border-left:2px solid rgba(255,255,255,.45); border-bottom:2px solid rgba(255,255,255,.45); }
+  .mschf-corner-br { right:8px; bottom:8px; border-right:2px solid rgba(255,255,255,.45); border-bottom:2px solid rgba(255,255,255,.45); }
+
+  /* Rulers */
+  .mschf-ruler { position:absolute; opacity:.35; }
+  .mschf-ruler-top { inset:10px 10px auto 10px; height:1px; background: linear-gradient(90deg, rgba(255,255,255,.25) 50%, transparent 0) 0 0/8px 1px repeat-x; }
+  .mschf-ruler-left { inset:10px auto 10px 10px; width:1px; background: linear-gradient(180deg, rgba(255,255,255,.25) 50%, transparent 0) 0 0/1px 8px repeat-y; }
+
+  /* Scanline */
+  .mschf-scanline { position:absolute; left:0; right:0; height:6px; background: linear-gradient(180deg, rgba(255,255,255,.25), transparent); opacity:.35; }
+  .mschf-scanline.static { background: rgba(255,255,255,.10); }
+
+  /* Labels and stamps */
+  .mschf-stamp { position:absolute; padding:.25rem .5rem; font:700 10px/1 ui-monospace,Menlo,monospace; letter-spacing:.08em; text-transform:uppercase; color:rgba(255,255,255,.8); background:rgba(0,0,0,.55); border:1px solid rgba(255,255,255,.35); border-radius:4px; box-shadow: 2px 2px 0 rgba(0,0,0,.5); }
+  .mschf-badge { display:inline-block; margin:.125rem; padding:.25rem .5rem; font:700 10px/1 ui-monospace,Menlo,monospace; letter-spacing:.06em; color:#000; background:hsl(var(--p)); border:1px solid rgba(0,0,0,.8); border-radius:6px; box-shadow: 2px 2px 0 rgba(0,0,0,.6); }
+
+  /* Framing brackets */
+  .mschf-brackets { position:absolute; inset:auto; width:240px; height:120px; opacity:.22; border-radius:12px; box-shadow: 0 0 0 2px rgba(255,255,255,.25) inset; }
+
+  /* Perf edges */
+  .mschf-perf { position:absolute; inset:auto; opacity:.2; background: repeating-linear-gradient(90deg, rgba(255,255,255,.4) 0 2px, transparent 2px 12px); height:10px; width:100%; }
+
+  /* Dimensions HUD */
+  .mschf-dims { position:absolute; border:1px dashed rgba(255,255,255,.35); border-radius:6px; padding:2px; opacity:.55; }
+  .mschf-dims-label { position:absolute; transform:translateY(-100%); left:0; top:0; padding:.1rem .35rem; font:700 10px/1 ui-monospace,Menlo,monospace; letter-spacing:.06em; color:#000; background:rgba(255,255,255,.85); border:1px solid rgba(0,0,0,.75); border-radius:3px; box-shadow: 2px 2px 0 rgba(0,0,0,.4); }
+
+  /* Holographic blob */
+  .mschf-holo { position:absolute; width:220px; height:140px; border-radius:9999px; filter: blur(18px) saturate(140%); opacity:.16; background: conic-gradient(from 180deg, hsl(var(--p)/.8), hsl(var(--a)/.6), hsl(var(--s)/.4), hsl(var(--p)/.8)); }
+  .mschf-holo.static { filter: blur(16px) saturate(120%); opacity:.12; }
 }
