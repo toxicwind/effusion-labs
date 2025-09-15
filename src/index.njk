@@ -25,7 +25,7 @@ prose: false
 
 <div id="page-shell" data-mschf="auto" data-mschf-intensity="calm" data-mschf-style="structural">
   <!-- HERO -->
-  <section class="hero min-h-[55vh] bg-base-200/50">
+  <section class="hero min-h-[55vh] bg-base-200/40">
     <div class="hero-content text-center">
       <div class="max-w-3xl">
         {% if branding and branding.logoSrc %}
@@ -59,7 +59,7 @@ prose: false
 
   <!-- STATS STRIP -->
   <section aria-labelledby="stats-heading" class="container-fluid px-4 sm:px-6 lg:px-8 -mt-10">
-    <div class="stats shadow bg-base-100 w-full">
+    <div class="stats glass-card w-full">
       <div class="stat">
         <div class="stat-title">Total entries</div>
         <div class="stat-value text-primary">{{ allWork | length }}</div>
@@ -86,7 +86,7 @@ prose: false
   <!-- FEATURES -->
   <section class="container-fluid px-4 sm:px-6 lg:px-8 mt-12">
     <div class="grid gap-4 md:grid-cols-3">
-      <div class="card bg-base-100 border border-base-300/60">
+      <div class="card glass-card">
         <div class="card-body">
           <div class="flex items-center gap-2">
             {{ icon('sparkles', { class: 'size-6 text-primary', 'aria-hidden':'true' }) }}
@@ -95,7 +95,7 @@ prose: false
           <p>Strong foundations for UI: tokens, components, and motion that scale.</p>
         </div>
       </div>
-      <div class="card bg-base-100 border border-base-300/60">
+      <div class="card glass-card">
         <div class="card-body">
           <div class="flex items-center gap-2">
             {{ icon('cpu', { class: 'size-6 text-primary', 'aria-hidden':'true' }) }}
@@ -104,7 +104,7 @@ prose: false
           <p>Fast builds, clean authoring, and modern tooling with Tailwind v4 + daisyUI.</p>
         </div>
       </div>
-      <div class="card bg-base-100 border border-base-300/60">
+      <div class="card glass-card">
         <div class="card-body">
           <div class="flex items-center gap-2">
             {{ icon('bot', { class: 'size-6 text-primary', 'aria-hidden':'true' }) }}
@@ -129,7 +129,7 @@ prose: false
         {title:'Sparks',   items:sList, tone:'accent'},
         {title:'Meta',     items:mList, tone:'info'}
       ] %}
-      <div class="card bg-base-100 border border-base-300/60">
+      <div class="card glass-card">
         <div class="card-body p-4">
           <h3 class="card-title text-base">
             <span class="badge badge-{{ col.tone }} badge-sm">{{ col.title }}</span>
@@ -161,7 +161,7 @@ prose: false
     </div>
     <div class="grid gap-4 md:grid-cols-3">
       {% for p in projects %}
-      <article class="card bg-base-100 border border-base-300/60">
+      <article class="card glass-card">
         <div class="card-body">
           <div class="flex items-start justify-between">
             <span class="badge badge-outline">Project</span>
@@ -193,7 +193,7 @@ prose: false
     <ul class="grid gap-4 md:gap-6 grid-cols-[repeat(auto-fit,minmax(18rem,1fr))] list-none p-0 m-0">
       {% for item in latest %}
       <li>
-        <article class="card bg-base-100 border border-base-300/60 h-full">
+        <article class="card glass-card h-full">
           <div class="card-body">
             <div class="flex items-start justify-between">
               <span class="badge badge-ghost">{{ (item.type or item.data.type) | capitalize }}</span>
@@ -220,7 +220,7 @@ prose: false
 
   <!-- CONCEPT MAP CTA -->
   <section class="container-fluid px-4 sm:px-6 lg:px-8 mt-16">
-    <div class="hero rounded-box bg-base-200/60">
+    <div class="hero rounded-box glass-card">
       <div class="hero-content text-center">
         <div class="max-w-2xl">
           <h2 class="text-2xl md:text-3xl font-heading">Explore the Interactive Concept Map</h2>
@@ -234,17 +234,17 @@ prose: false
   <!-- FAQ (optional quick clarity) -->
   <section class="container-fluid px-4 sm:px-6 lg:px-8 mt-12 mb-16">
     <div class="grid gap-3 md:grid-cols-3">
-      <div class="collapse collapse-arrow bg-base-200/40 border border-base-300/60">
+      <div class="collapse collapse-arrow glass-card">
         <input type="checkbox" />
         <div class="collapse-title text-md font-medium">What is Effusion Labs?</div>
         <div class="collapse-content"><p>An exploration space for systems thinking, design, and code—shipping artifacts you can use.</p></div>
       </div>
-      <div class="collapse collapse-arrow bg-base-200/40 border border-base-300/60">
+      <div class="collapse collapse-arrow glass-card">
         <input type="checkbox" />
         <div class="collapse-title text-md font-medium">How often is this updated?</div>
         <div class="collapse-content"><p>Work is added continuously; the lists above always reflect the latest entries.</p></div>
       </div>
-      <div class="collapse collapse-arrow bg-base-200/40 border border-base-300/60">
+      <div class="collapse collapse-arrow glass-card">
         <input type="checkbox" />
         <div class="collapse-title text-md font-medium">Can I contribute?</div>
         <div class="collapse-content"><p>Yes—join the group discussions on GitHub or open issues with ideas and fixes.</p></div>
