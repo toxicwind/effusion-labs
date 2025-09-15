@@ -58,7 +58,7 @@ prose: false
   </section>
 
   <!-- STATS STRIP -->
-  <section aria-labelledby="stats-heading" class="container-fluid px-4 sm:px-6 lg:px-8 -mt-10">
+  <section aria-labelledby="stats-heading" class="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 -mt-10">
     <div class="stats glass-card w-full">
       <div class="stat">
         <div class="stat-title">Total entries</div>
@@ -84,7 +84,7 @@ prose: false
   </section>
 
   <!-- FEATURES -->
-  <section class="container-fluid px-4 sm:px-6 lg:px-8 mt-12">
+  <section class="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 mt-12">
     <div class="grid gap-4 md:grid-cols-3">
       <div class="card glass-card">
         <div class="card-body">
@@ -121,7 +121,7 @@ prose: false
   {% set cList = (collections.concepts or []) | slice(0,5) %}
   {% set sList = (collections.sparks or []) | slice(0,5) %}
   {% set mList = (allWork | selectattr('data.type','equalto','meta') | list) | slice(0,5) %}
-  <section class="container-fluid px-4 sm:px-6 lg:px-8 mt-14">
+  <section class="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 mt-14">
     <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
       {% for col in [
         {title:'Projects', items:pList, tone:'primary'},
@@ -154,7 +154,7 @@ prose: false
 
   <!-- FEATURED PROJECTS -->
   {% if projects and (projects | length) %}
-  <section class="container-fluid px-4 sm:px-6 lg:px-8 mt-14 space-y-4">
+  <section class="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 mt-14 space-y-4">
     <div class="flex items-center justify-between">
       <h2 class="text-2xl font-heading">Featured projects</h2>
       <a href="{{ '/work/' | url }}" class="link link-primary">Browse all</a>
@@ -188,7 +188,7 @@ prose: false
   <!-- LATEST ACROSS THE LAB -->
   {% set latest = work or allWork | slice(0,9) %}
   {% if latest and (latest | length) %}
-  <section class="container-fluid px-4 sm:px-6 lg:px-8 mt-14 space-y-4">
+  <section class="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 mt-14 space-y-4">
     <h2 class="text-2xl font-heading">Latest across the lab</h2>
     <ul class="grid gap-4 md:gap-6 grid-cols-[repeat(auto-fit,minmax(18rem,1fr))] list-none p-0 m-0">
       {% for item in latest %}
@@ -219,7 +219,7 @@ prose: false
   {% endif %}
 
   <!-- CONCEPT MAP CTA -->
-  <section class="container-fluid px-4 sm:px-6 lg:px-8 mt-16">
+  <section class="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 mt-16">
     <div class="hero rounded-box glass-card">
       <div class="hero-content text-center">
         <div class="max-w-2xl">
@@ -232,7 +232,7 @@ prose: false
   </section>
 
   <!-- FAQ (optional quick clarity) -->
-  <section class="container-fluid px-4 sm:px-6 lg:px-8 mt-12 mb-16">
+  <section class="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 mb-16">
     <div class="grid gap-3 md:grid-cols-3">
       <div class="collapse collapse-arrow glass-card">
         <input type="checkbox" />

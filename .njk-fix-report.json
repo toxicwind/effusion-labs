@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-09-15T02:00:53.164Z",
+  "timestamp": "2025-09-15T17:11:31.153Z",
   "roots": [
     "src"
   ],
@@ -168,6 +168,11 @@
       "rewrites": 0
     },
     {
+      "file": "src/_includes/macros/meta.njk",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
       "file": "src/_includes/layouts/base.njk",
       "changed": false,
       "rewrites": 0
@@ -199,11 +204,6 @@
     },
     {
       "file": "src/_includes/layouts/resume.njk",
-      "changed": false,
-      "rewrites": 0
-    },
-    {
-      "file": "src/_includes/macros/meta.njk",
       "changed": false,
       "rewrites": 0
     },
@@ -283,16 +283,6 @@
       "rewrites": 0
     },
     {
-      "file": "src/content/docs/stream-guard-3500.md",
-      "changed": false,
-      "rewrites": 0
-    },
-    {
-      "file": "src/content/docs/theming.md",
-      "changed": false,
-      "rewrites": 0
-    },
-    {
       "file": "src/content/meta/a-b-curatorial-protocolist.md",
       "changed": false,
       "rewrites": 0
@@ -329,6 +319,16 @@
     },
     {
       "file": "src/content/meta/unified-referencing-syntax.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/stream-guard-3500.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/theming.md",
       "changed": false,
       "rewrites": 0
     },
@@ -544,51 +544,6 @@
     },
     {
       "file": "src/content/docs/adr/20250829-unified-collection-layout.md",
-      "changed": false,
-      "rewrites": 0
-    },
-    {
-      "file": "src/content/docs/knowledge/branch-policy.md",
-      "changed": false,
-      "rewrites": 0
-    },
-    {
-      "file": "src/content/docs/knowledge/eleventy-collections-20250911T175345Z.html",
-      "changed": false,
-      "rewrites": 0
-    },
-    {
-      "file": "src/content/docs/knowledge/eleventy-data-cascade-20250911T175348Z.html",
-      "changed": false,
-      "rewrites": 0
-    },
-    {
-      "file": "src/content/docs/knowledge/eleventy-data-computed-20250911T175414Z.html",
-      "changed": false,
-      "rewrites": 0
-    },
-    {
-      "file": "src/content/docs/knowledge/eleventy-data-template-dir-20250911T175432Z.html",
-      "changed": false,
-      "rewrites": 0
-    },
-    {
-      "file": "src/content/docs/knowledge/node-shim-prove.md",
-      "changed": false,
-      "rewrites": 0
-    },
-    {
-      "file": "src/content/docs/knowledge/product-template-fail.md",
-      "changed": false,
-      "rewrites": 0
-    },
-    {
-      "file": "src/content/docs/knowledge/utils-test-green.md",
-      "changed": false,
-      "rewrites": 0
-    },
-    {
-      "file": "src/content/docs/knowledge/utils-test-red.md",
       "changed": false,
       "rewrites": 0
     },
@@ -933,6 +888,51 @@
       "rewrites": 0
     },
     {
+      "file": "src/content/docs/knowledge/branch-policy.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/knowledge/eleventy-collections-20250911T175345Z.html",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/knowledge/eleventy-data-cascade-20250911T175348Z.html",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/knowledge/eleventy-data-computed-20250911T175414Z.html",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/knowledge/eleventy-data-template-dir-20250911T175432Z.html",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/knowledge/node-shim-prove.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/knowledge/product-template-fail.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/knowledge/utils-test-green.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/knowledge/utils-test-red.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
       "file": "src/content/docs/vendors/index.md",
       "changed": false,
       "rewrites": 0
@@ -1073,12 +1073,12 @@
       "rewrites": 0
     },
     {
-      "file": "src/content/docs/vendors/nunjucks/3.2.4/templating.md",
+      "file": "src/content/docs/vendors/postcss/8.5.6/index.md",
       "changed": false,
       "rewrites": 0
     },
     {
-      "file": "src/content/docs/vendors/postcss/8.5.6/index.md",
+      "file": "src/content/docs/vendors/nunjucks/3.2.4/templating.md",
       "changed": false,
       "rewrites": 0
     },
