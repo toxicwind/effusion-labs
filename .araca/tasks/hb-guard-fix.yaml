@@ -28,13 +28,13 @@ plan:
   - step: report
     run: scripts/araca/hb-guard-fix.sh report
 success_criteria:
-  - "All tests under test/hb_guard/*.t exit 0"
-  - "Sourcing env-bootstrap.sh in a fresh non-interactive shell prints nothing on stdout and only comment-prefixed lines on stderr"
-  - "Minified/one-line payloads are soft-wrapped with [HBWRAP …] markers at configured width"
-  - "Hazardous control bytes are suppressed with a single [HBBIN suppressed …] line; raw bytes land in sidecar logs"
-  - "hb_disarm fully restores FDs; no stuck filters; FIFOs are removed"
+  - 'All tests under test/hb_guard/*.t exit 0'
+  - 'Sourcing env-bootstrap.sh in a fresh non-interactive shell prints nothing on stdout and only comment-prefixed lines on stderr'
+  - 'Minified/one-line payloads are soft-wrapped with [HBWRAP …] markers at configured width'
+  - 'Hazardous control bytes are suppressed with a single [HBBIN suppressed …] line; raw bytes land in sidecar logs'
+  - 'hb_disarm fully restores FDs; no stuck filters; FIFOs are removed'
 outputs:
-  - logs: "/tmp/hype_logs/hb.*.log"
-  - summary: "var/hb_guard_summary.json"
+  - logs: '/tmp/hype_logs/hb.*.log'
+  - summary: 'var/hb_guard_summary.json'
 rollback:
   run: scripts/araca/hb-guard-fix.sh rollback

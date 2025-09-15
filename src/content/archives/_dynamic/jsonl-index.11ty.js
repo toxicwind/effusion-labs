@@ -3,17 +3,18 @@ export const data = () => ({
   pagination: { data: 'collections.jsonlDirs', size: 1, alias: 'dir' },
   eleventyComputed: {
     title: ({ dir }) => `Provenance — ${dir?.rel ?? ''}`,
-    permalink: ({ dir }) => (dir ? `/archives/${dir.rel}/provenance/index.html` : false),
+    permalink: ({ dir }) =>
+      dir ? `/archives/${dir.rel}/provenance/index.html` : false,
     showTitle: false,
   },
-});
+})
 
 export const render = ({ dir }) => {
-  if (!dir) return '';
-  const items = dir.items || [];
+  if (!dir) return ''
+  const items = dir.items || []
   const list = items
     .map(
-      (it) => `
+      it => `
       <li class="flex items-center justify-between gap-4">
         <div class="truncate font-mono text-sm">${it.base}.jsonl</div>
         <div class="shrink-0 space-x-3 text-sm">
@@ -23,7 +24,7 @@ export const render = ({ dir }) => {
         </div>
       </li>`
     )
-    .join('\n');
+    .join('\n')
 
   return `
 <nav class="breadcrumbs text-sm mb-2 overflow-x-auto whitespace-nowrap" aria-label="Breadcrumb">
@@ -43,5 +44,5 @@ export const render = ({ dir }) => {
     <ul class="divide-y">${list}</ul>
   </div>
 </section>
-`.trim();
-};
+`.trim()
+}

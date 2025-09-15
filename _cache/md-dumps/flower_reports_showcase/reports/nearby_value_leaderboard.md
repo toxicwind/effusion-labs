@@ -3,7 +3,7 @@ layout: "layouts/converted-html.njk"
 title: "Nearby Value Leaderboard"
 excerpt: "Reefer Madness"
 sourcePath: "./src/content/flower_reports_showcase/reports/nearby_value_leaderboard.html"
-readabilityLength: 11739
+readabilityLength: 12699
 convertedFromHtml: true
 ---
 Reefer Madness

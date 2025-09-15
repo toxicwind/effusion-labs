@@ -41,18 +41,8 @@
     }
   },
   "availability": {
-    "regions": [
-      "Global",
-      "US",
-      "CN",
-      "SG",
-      "UK",
-      "AU"
-    ],
-    "channels": [
-      "POP MART official online store",
-      "in-store EQL drops"
-    ],
+    "regions": ["Global", "US", "CN", "SG", "UK", "AU"],
+    "channels": ["POP MART official online store", "in-store EQL drops"],
     "stock_status": "Sold out"
   },
   "designer": "Kasing Lung (龙家升)",

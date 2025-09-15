@@ -1,4 +1,5 @@
 # Continuation: prettier-guardrails
+
 - Recap: Added Prettier format script and config, pinned version; removed legacy guardrail test artifacts; updated docs.
 - Next Steps:
   1. Extend Prettier configuration to cover markdown sources.

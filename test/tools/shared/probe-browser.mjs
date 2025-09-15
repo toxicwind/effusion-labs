@@ -1,3 +1,3 @@
 export async function canRunBrowser() {
-  return false;
+  return false
 }

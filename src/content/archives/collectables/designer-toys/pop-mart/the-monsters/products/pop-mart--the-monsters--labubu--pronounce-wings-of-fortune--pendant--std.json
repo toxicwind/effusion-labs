@@ -12,9 +12,7 @@
   },
   "distribution": {
     "region_lock": false,
-    "markets": [
-      "US"
-    ]
+    "markets": ["US"]
   },
   "release_date": "2024-10-04",
   "market_listings": [

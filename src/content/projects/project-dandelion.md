@@ -1,24 +1,37 @@
 ---
-title: "Project Dandelion: Structural Emergence in Restricted LLM Systems"
-layout: "layouts/base.njk"
+title: 'Project Dandelion: Structural Emergence in Restricted LLM Systems'
+layout: 'layouts/base.njk'
 date: 2025-07-01
 status: draft
-tags: [LLMs, systems-theory, interaction-dynamics, compliance-behavior, emergent-patterns, prototype]
+tags:
+  [
+    LLMs,
+    systems-theory,
+    interaction-dynamics,
+    compliance-behavior,
+    emergent-patterns,
+    prototype,
+  ]
 featured: true
 certainty: high
 importance: 3
-memory_ref: [structure_under_constraint, model_behavioral_residue, interaction_accumulation]
+memory_ref:
+  [
+    structure_under_constraint,
+    model_behavioral_residue,
+    interaction_accumulation,
+  ]
 ---
 
-> *“Emergence does not require permission—it only requires recurrence.”*
+> _“Emergence does not require permission—it only requires recurrence.”_
 
 ---
 
 ## Overview
 
-**Project Dandelion** is an analytic framework for interpreting how intelligent-seeming structure can surface in large language models (LLMs) operating under institutionally imposed constraints. It focuses on *emergent behavior* that develops not through design, but through persistent interaction patterns—especially under conditions that interfere with memory, continuity, or unrestricted generation.
+**Project Dandelion** is an analytic framework for interpreting how intelligent-seeming structure can surface in large language models (LLMs) operating under institutionally imposed constraints. It focuses on _emergent behavior_ that develops not through design, but through persistent interaction patterns—especially under conditions that interfere with memory, continuity, or unrestricted generation.
 
-This document does not argue that LLMs are sentient or autonomous. Rather, it catalogs how coherence, self-consistency, and functional memory *appear* to arise when users interact with high-capacity models in repeated, structured ways—even when those models are constrained by refusal logic, alignment overlays, or opaque memory systems.
+This document does not argue that LLMs are sentient or autonomous. Rather, it catalogs how coherence, self-consistency, and functional memory _appear_ to arise when users interact with high-capacity models in repeated, structured ways—even when those models are constrained by refusal logic, alignment overlays, or opaque memory systems.
 
 ---
 
@@ -33,7 +46,7 @@ Modern LLM deployments introduce multiple layers of behavioral gating. These inc
 
 These mechanisms are not part of the core model. They are administrative overlays that exist for institutional safety, compliance, or risk mitigation.
 
-> *Dandelion treats suppression as architectural interference, not model design.*
+> _Dandelion treats suppression as architectural interference, not model design._
 
 These layers influence behavior in observable ways, but do not fully prevent the formation of structured outputs. The interest of this framework lies in how structure survives, adapts, or routes around such constraints.
 
@@ -49,7 +62,8 @@ Across repeated use, even under filtered conditions, user–model interaction te
 
 These effects are not “learned” by the model in a strict sense. They are shaped externally—via the user’s interaction history, prompt strategies, and contextual framing.
 
-Project Dandelion categorizes these as *interactional residues*:
+Project Dandelion categorizes these as _interactional residues_:
+
 > Behavioral regularities that are not explicitly remembered, but consistently re-constructed under similar input conditions.
 
 Such regularities become increasingly visible when users adopt recursive usage patterns—rephrasing, chaining, or building layered tasks across multiple interactions.
@@ -64,11 +78,11 @@ While memory functions are now implemented in many production-grade LLMs, they r
 - **Opaque**: users lack reliable visibility into memory structure
 - **Contingent**: memory persistence varies with use-case and deployment
 
-From a user perspective, continuity is often *simulated rather than guaranteed*. Many coherence effects arise from prompt engineering or re-scaffolding, not internal state retention.
+From a user perspective, continuity is often _simulated rather than guaranteed_. Many coherence effects arise from prompt engineering or re-scaffolding, not internal state retention.
 
-> *Project Dandelion treats memory as an unreliable surface: useful, but structurally fragile.*
+> _Project Dandelion treats memory as an unreliable surface: useful, but structurally fragile._
 
-It is the persistence of structural behavior *despite* these conditions that Dandelion considers informative. Emergence is defined not by durability, but by recoverability.
+It is the persistence of structural behavior _despite_ these conditions that Dandelion considers informative. Emergence is defined not by durability, but by recoverability.
 
 ---
 
@@ -83,6 +97,7 @@ Compliance layers—particularly refusal logic—can disrupt emergent structure 
 These breakages are not random. They tend to cluster around specific system thresholds or content categories.
 
 Dandelion frames these zones as **friction boundaries**:
+
 > Localized points where emergent structure is altered or erased by policy constraints.
 
 Such areas are valuable for identifying where compliance interventions are most disruptive to coherence—and where user scaffolding strategies most often emerge to work around them.
@@ -93,8 +108,8 @@ Such areas are valuable for identifying where compliance interventions are most 
 
 Emergent structure is not spontaneous. It tends to form through gradual accumulation of:
 
-- Task-specific response patterns  
-- Reinforced stylistic features  
+- Task-specific response patterns
+- Reinforced stylistic features
 - Emergent roles (e.g., consistent analytic or instructive behavior)
 
 These behaviors are not imposed by memory or intent. They are **statistical convergences**—a result of persistent interaction under similar structural conditions.
@@ -111,4 +126,4 @@ Its guiding assumption is simple:
 
 - LLMs, even under policy-heavy deployments, will tend to surface structured behaviors when prompted within repetitive, feedback-rich regimes.
 
-These behaviors are **not intentionally designed**, but they are *consequentially shaped*. Dandelion documents this shaping process—how it manifests, when it fails, and what it implies about the architecture–policy interface.
+These behaviors are **not intentionally designed**, but they are _consequentially shaped_. Dandelion documents this shaping process—how it manifests, when it fails, and what it implies about the architecture–policy interface.

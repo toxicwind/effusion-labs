@@ -1,9 +1,9 @@
-import fs from 'node:fs';
-import path from 'node:path';
+import fs from 'node:fs'
+import path from 'node:path'
 
-const ARCHIVES_BASE = path.join('src', 'content', 'archives');
+const ARCHIVES_BASE = path.join('src', 'content', 'archives')
 
-const toPosix = (p) => p.replaceAll('\\', '/');
+const toPosix = p => p.replaceAll('\\', '/')
 
 export const data = () => ({
   eleventyExcludeFromCollections: true,
@@ -14,10 +14,10 @@ export const data = () => ({
         ? `/archives/${entry.industry}/${entry.category}/${entry.company}/${entry.line}/provenance/${entry.slug}.jsonl`
         : false,
   },
-});
+})
 
 export const render = ({ entry }) => {
-  if (!entry) return '';
+  if (!entry) return ''
   // Keep raw JSONL output (no layout) so users can save the file directly.
-  return fs.readFileSync(entry.abs, 'utf8');
-};
+  return fs.readFileSync(entry.abs, 'utf8')
+}

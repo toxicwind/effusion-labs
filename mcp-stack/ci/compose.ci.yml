@@ -1,4 +1,4 @@
-version: "3.8"
+version: '3.8'
 services:
   mcp-gateway:
     build: ./mcp-stack/gateway
@@ -9,17 +9,17 @@ services:
       - HOST_ALLOWLIST=flaresolverr,searxng,screenshot,curl,localhost,127.0.0.1
       - FLARESOLVERR_URL=http://flaresolverr:8191
     ports:
-      - "3000:3000"
+      - '3000:3000'
     depends_on:
       - flaresolverr
       - searxng
   flaresolverr:
     image: wiremock/wiremock:2.35.0
-    command: ["--verbose", "--port", "8191", "--root-dir", "/home/wiremock"]
+    command: ['--verbose', '--port', '8191', '--root-dir', '/home/wiremock']
     volumes:
       - ./mcp-stack/ci/stubs/flaresolverr:/home/wiremock
   searxng:
     image: wiremock/wiremock:2.35.0
-    command: ["--verbose", "--port", "8080", "--root-dir", "/home/wiremock"]
+    command: ['--verbose', '--port', '8080', '--root-dir', '/home/wiremock']
     volumes:
       - ./mcp-stack/ci/stubs/searxng:/home/wiremock

@@ -1,6 +1,6 @@
 ---
-title: "Effusion Labs: Core Concept"
-layout: "layouts/base.njk"
+title: 'Effusion Labs: Core Concept'
+layout: 'layouts/base.njk'
 date: 2025-07-01
 status: stable
 tags: [core-concept, methodology, digital-garden]
@@ -9,7 +9,7 @@ importance: 3
 memory_ref: [effusion_style_guide]
 ---
 
-> *Effusion Labs is a structured environment for capturing ideas, tracing their lineage, and observing how coherence forms under constraint.*
+> _Effusion Labs is a structured environment for capturing ideas, tracing their lineage, and observing how coherence forms under constraint._
 
 ---
 

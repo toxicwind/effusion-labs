@@ -1,6 +1,6 @@
-import fs from 'node:fs';
-import path from 'node:path';
-import { baseContentPath } from '../../config/site.js';
+import fs from 'node:fs'
+import path from 'node:path'
+import { baseContentPath } from '../../config/site.js'
 
 /**
  * Convert a directory name to a human-friendly title.
@@ -10,12 +10,12 @@ import { baseContentPath } from '../../config/site.js';
 function titleize(name) {
   return name
     .split('-')
-    .map((s) => s.charAt(0).toUpperCase() + s.slice(1))
-    .join(' ');
+    .map(s => s.charAt(0).toUpperCase() + s.slice(1))
+    .join(' ')
 }
 
 function subdirs(p) {
-  return fs.readdirSync(p, { withFileTypes: true }).filter((e) => e.isDirectory());
+  return fs.readdirSync(p, { withFileTypes: true }).filter(e => e.isDirectory())
 }
 
 /**
@@ -26,22 +26,22 @@ function subdirs(p) {
  * @returns {Object} map of url -> nav items
  */
 function buildMap(dir, url, acc = {}) {
-  const entries = subdirs(dir);
+  const entries = subdirs(dir)
 
-  acc[url] = entries.map((e) => {
-    const nextDir = path.join(dir, e.name);
-    const childUrl = path.posix.join(url, e.name) + '/';
-    const count = subdirs(nextDir).length;
-    return { title: titleize(e.name), url: childUrl, count };
-  });
+  acc[url] = entries.map(e => {
+    const nextDir = path.join(dir, e.name)
+    const childUrl = path.posix.join(url, e.name) + '/'
+    const count = subdirs(nextDir).length
+    return { title: titleize(e.name), url: childUrl, count }
+  })
 
-  entries.forEach((e) => {
-    const nextDir = path.join(dir, e.name);
-    const nextUrl = path.posix.join(url, e.name) + '/';
-    buildMap(nextDir, nextUrl, acc);
-  });
+  entries.forEach(e => {
+    const nextDir = path.join(dir, e.name)
+    const nextUrl = path.posix.join(url, e.name) + '/'
+    buildMap(nextDir, nextUrl, acc)
+  })
 
-  return acc;
+  return acc
 }
 
 /**
@@ -49,8 +49,8 @@ function buildMap(dir, url, acc = {}) {
  * @returns {Object}
  */
 export function buildArchiveNav() {
-  const root = path.join(process.cwd(), baseContentPath, 'archives');
-  return buildMap(root, '/archives/');
+  const root = path.join(process.cwd(), baseContentPath, 'archives')
+  return buildMap(root, '/archives/')
 }
 
-export default { buildArchiveNav };
+export default { buildArchiveNav }

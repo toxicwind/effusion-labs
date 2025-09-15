@@ -96,9 +96,7 @@
         "query_ledger": "“Pop Mart Exciting Macaron set 131.94,” “Pop Mart Exciting Macaron odds,” “Pop Mart Exciting Macaron checklist.”"
       },
       "i_n_nomenclature": {
-        "_items": [
-          "Localized:"
-        ],
+        "_items": ["Localized:"],
         "transliteration": "Macaron 马卡龙.",
         "per_locale_notes": "Flavors localized."
       },

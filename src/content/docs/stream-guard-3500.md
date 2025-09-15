@@ -17,4 +17,3 @@ Helpers exported when armed:
 - `hb_status`: prints guard status to stderr.
 - `hb_disarm`: restores FDs and cleans up.
 - `hb_run <cmd>`: runs a command under PTY or line-buffered where available to preserve streaming.
-

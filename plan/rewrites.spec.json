@@ -1,6 +1,12 @@
 {
   "surfaces": ["**/*.{mjs,js,11ty.js,md,njk,html,css,json,jsonl,yml,yaml}"],
-  "excludes": ["markdown_gateway/**", "mcp-stack/**", "node_modules/**", ".git/**", "bin/**"],
+  "excludes": [
+    "markdown_gateway/**",
+    "mcp-stack/**",
+    "node_modules/**",
+    ".git/**",
+    "bin/**"
+  ],
   "pairs": [
     ["docs/", "src/content/docs/"],
     ["docs/vendor/", "src/content/docs/vendor-docs/"],

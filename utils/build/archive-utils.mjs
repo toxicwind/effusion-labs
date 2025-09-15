@@ -11,11 +11,11 @@
  * @param {string} [locale="en"] - Locale to match (defaults to 'en').
  * @returns {Array} Filtered products belonging to the company/line/locale.
  */
-export function lineProducts(products, companySlug, lineSlug, locale = "en") {
+export function lineProducts(products, companySlug, lineSlug, locale = 'en') {
   return (products ?? []).filter(
-    (p) =>
+    p =>
       p?.data?.companySlug === companySlug &&
       p?.data?.lineSlug === lineSlug &&
       p?.data?.locale === locale
-  );
+  )
 }

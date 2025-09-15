@@ -4,8 +4,6 @@
   "line": "the-monsters",
   "slug": "walk-by-fortune",
   "title": "Walk by Fortune",
-  "character_slugs": [
-    "labubu"
-  ],
+  "character_slugs": ["labubu"],
   "notes": "Seeded from initial article; needs confirmation."
 }

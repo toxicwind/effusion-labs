@@ -40,13 +40,8 @@
       }
     },
     "availability": {
-      "regions": [
-        "Global"
-      ],
-      "channels": [
-        "POP MART official stores",
-        "Online platforms"
-      ],
+      "regions": ["Global"],
+      "channels": ["POP MART official stores", "Online platforms"],
       "stock_status": "Sold out"
     },
     "designer": "Kasing Lung (龙家升)",
@@ -101,14 +96,8 @@
       }
     },
     "availability": {
-      "regions": [
-        "China",
-        "Global"
-      ],
-      "channels": [
-        "POP MART official stores",
-        "online platforms"
-      ],
+      "regions": ["China", "Global"],
+      "channels": ["POP MART official stores", "online platforms"],
       "stock_status": "Sold out"
     },
     "designer": "Kasing Lung (龙家升)",
@@ -163,19 +152,12 @@
       }
     },
     "availability": {
-      "regions": [
-        "Global"
-      ],
-      "channels": [
-        "POP MART official stores"
-      ],
+      "regions": ["Global"],
+      "channels": ["POP MART official stores"],
       "stock_status": "Sold out"
     },
     "designer": "Kasing Lung (龙家升)",
-    "accessories": [
-      "Removable bucket hat",
-      "Scarf"
-    ],
+    "accessories": ["Removable bucket hat", "Scarf"],
     "articulation": null,
     "colorway": "Latte-toned outfit with fluffy accents"
   },
@@ -220,18 +202,12 @@
       }
     },
     "availability": {
-      "regions": [
-        "China"
-      ],
-      "channels": [
-        "POP MART official stores"
-      ],
+      "regions": ["China"],
+      "channels": ["POP MART official stores"],
       "stock_status": "Sold out"
     },
     "designer": "Kasing Lung (龙家升)",
-    "accessories": [
-      "Fortune-themed outfit and accessories"
-    ],
+    "accessories": ["Fortune-themed outfit and accessories"],
     "articulation": null,
     "colorway": "Traditional red Chinese New Year theme"
   },
@@ -276,12 +252,8 @@
       }
     },
     "availability": {
-      "regions": [
-        "Overseas markets (non-CN)"
-      ],
-      "channels": [
-        "POP MART overseas stores"
-      ],
+      "regions": ["Overseas markets (non-CN)"],
+      "channels": ["POP MART overseas stores"],
       "stock_status": "Sold out"
     },
     "designer": "Kasing Lung (龙家升)",
@@ -337,16 +309,8 @@
       }
     },
     "availability": {
-      "regions": [
-        "CN",
-        "US",
-        "EU",
-        "APAC"
-      ],
-      "channels": [
-        "POP MART official",
-        "Pronounce flagship stores"
-      ],
+      "regions": ["CN", "US", "EU", "APAC"],
+      "channels": ["POP MART official", "Pronounce flagship stores"],
       "stock_status": "Sold out"
     },
     "designer": "Kasing Lung (龙家升)",
@@ -403,15 +367,8 @@
       }
     },
     "availability": {
-      "regions": [
-        "US",
-        "CN",
-        "AU",
-        "Global"
-      ],
-      "channels": [
-        "POP MART official stores"
-      ],
+      "regions": ["US", "CN", "AU", "Global"],
+      "channels": ["POP MART official stores"],
       "stock_status": "Frequently sold out"
     },
     "designer": "Kasing Lung (龙家升)",
@@ -468,21 +425,12 @@
       }
     },
     "availability": {
-      "regions": [
-        "US",
-        "CA",
-        "CN",
-        "Global"
-      ],
-      "channels": [
-        "POP MART official stores"
-      ],
+      "regions": ["US", "CA", "CN", "Global"],
+      "channels": ["POP MART official stores"],
       "stock_status": "Frequently sold out"
     },
     "designer": "Kasing Lung (龙家升)",
-    "accessories": [
-      "Removable glasses"
-    ],
+    "accessories": ["Removable glasses"],
     "articulation": "Movable eyes with flip feature (spiral eyes), posable hands and head",
     "colorway": "Cream-colored fur with blue striped shirt and denim pants"
   },
@@ -525,14 +473,8 @@
       "secondary_market_range": null
     },
     "availability": {
-      "regions": [
-        "US",
-        "Singapore",
-        "Global"
-      ],
-      "channels": [
-        "POP MART official stores"
-      ],
+      "regions": ["US", "Singapore", "Global"],
+      "channels": ["POP MART official stores"],
       "stock_status": "Out of stock"
     },
     "designer": "Kasing Lung (龙家升)",
@@ -582,14 +524,8 @@
       "secondary_market_range": null
     },
     "availability": {
-      "regions": [
-        "US",
-        "Singapore",
-        "Global"
-      ],
-      "channels": [
-        "POP MART official stores"
-      ],
+      "regions": ["US", "Singapore", "Global"],
+      "channels": ["POP MART official stores"],
       "stock_status": "Out of stock"
     },
     "designer": "Kasing Lung (龙家升)",
@@ -642,19 +578,12 @@
       }
     },
     "availability": {
-      "regions": [
-        "Global"
-      ],
-      "channels": [
-        "POP MART US",
-        "Global"
-      ],
+      "regions": ["Global"],
+      "channels": ["POP MART US", "Global"],
       "stock_status": "Out of stock"
     },
     "designer": "Kasing Lung (龙家升)",
-    "accessories": [
-      "Hanging loop hardware"
-    ],
+    "accessories": ["Hanging loop hardware"],
     "articulation": "Fixed",
     "colorway": "Pastel yellow with silver accents"
   },
@@ -699,25 +628,12 @@
       }
     },
     "availability": {
-      "regions": [
-        "US",
-        "CA",
-        "CN",
-        "EU",
-        "APAC"
-      ],
-      "channels": [
-        "POP MART US",
-        "POP MART CA",
-        "POP MART CN"
-      ],
+      "regions": ["US", "CA", "CN", "EU", "APAC"],
+      "channels": ["POP MART US", "POP MART CA", "POP MART CN"],
       "stock_status": "Out of stock"
     },
     "designer": "Kasing Lung (龙家升)",
-    "accessories": [
-      "Translucent butterfly wings",
-      "Golden crown"
-    ],
+    "accessories": ["Translucent butterfly wings", "Golden crown"],
     "articulation": "Fixed figure",
     "colorway": "Pastel lavender with glitter accents"
   },
@@ -762,22 +678,12 @@
       }
     },
     "availability": {
-      "regions": [
-        "AU",
-        "US",
-        "CN",
-        "Global"
-      ],
-      "channels": [
-        "POP MART official sites",
-        "selected stores"
-      ],
+      "regions": ["AU", "US", "CN", "Global"],
+      "channels": ["POP MART official sites", "selected stores"],
       "stock_status": "Sold out"
     },
     "designer": "Kasing Lung (龙家升)",
-    "accessories": [
-      "Keychain loop"
-    ],
+    "accessories": ["Keychain loop"],
     "articulation": "Fixed sitting pose",
     "colorway": "Bright orange and green"
   },
@@ -824,18 +730,8 @@
       }
     },
     "availability": {
-      "regions": [
-        "Global",
-        "US",
-        "CN",
-        "SG",
-        "UK",
-        "AU"
-      ],
-      "channels": [
-        "POP MART official online store",
-        "in-store EQL drops"
-      ],
+      "regions": ["Global", "US", "CN", "SG", "UK", "AU"],
+      "channels": ["POP MART official online store", "in-store EQL drops"],
       "stock_status": "Sold out"
     },
     "designer": "Kasing Lung (龙家升)",
@@ -889,19 +785,12 @@
       }
     },
     "availability": {
-      "regions": [
-        "Global"
-      ],
-      "channels": [
-        "POP MART official online",
-        "physical stores"
-      ],
+      "regions": ["Global"],
+      "channels": ["POP MART official online", "physical stores"],
       "stock_status": "Sold out"
     },
     "designer": "Kasing Lung (龙家升)",
-    "accessories": [
-      "Keychain clip"
-    ],
+    "accessories": ["Keychain clip"],
     "articulation": "None",
     "colorway": "Pastel macaron tones matching flavor names"
   },
@@ -947,12 +836,8 @@
       }
     },
     "availability": {
-      "regions": [
-        "Global"
-      ],
-      "channels": [
-        "POP MART official channels and authorized resellers"
-      ],
+      "regions": ["Global"],
+      "channels": ["POP MART official channels and authorized resellers"],
       "stock_status": "Out of stock"
     },
     "designer": "Kasing Lung",
@@ -1006,12 +891,8 @@
       }
     },
     "availability": {
-      "regions": [
-        "Global"
-      ],
-      "channels": [
-        "POP MART official channels and authorized resellers"
-      ],
+      "regions": ["Global"],
+      "channels": ["POP MART official channels and authorized resellers"],
       "stock_status": "Out of stock"
     },
     "designer": "Kasing Lung",
@@ -1066,12 +947,8 @@
       }
     },
     "availability": {
-      "regions": [
-        "Global"
-      ],
-      "channels": [
-        "POP MART official stores and online platforms"
-      ],
+      "regions": ["Global"],
+      "channels": ["POP MART official stores and online platforms"],
       "stock_status": "High initial demand"
     },
     "designer": "Kasing Lung",
@@ -1124,19 +1001,12 @@
       }
     },
     "availability": {
-      "regions": [
-        "Global"
-      ],
-      "channels": [
-        "POP MART official channels internationally"
-      ],
+      "regions": ["Global"],
+      "channels": ["POP MART official channels internationally"],
       "stock_status": "Good stock levels"
     },
     "designer": "Kasing Lung",
-    "accessories": [
-      "Floral accessories",
-      "keychain for pendant version"
-    ],
+    "accessories": ["Floral accessories", "keychain for pendant version"],
     "articulation": null,
     "colorway": "Spring floral colorway"
   },
@@ -1180,19 +1050,12 @@
       "pendant_msrp": null
     },
     "availability": {
-      "regions": [
-        "Global"
-      ],
-      "channels": [
-        "POP MART online and retail"
-      ],
+      "regions": ["Global"],
+      "channels": ["POP MART online and retail"],
       "stock_status": "Widely available"
     },
     "designer": "Kasing Lung",
-    "accessories": [
-      "Keychain hardware",
-      "diamond accents"
-    ],
+    "accessories": ["Keychain hardware", "diamond accents"],
     "articulation": null,
     "colorway": "Blue diamond colorway"
   },
@@ -1236,19 +1099,12 @@
       "pendant_msrp": null
     },
     "availability": {
-      "regions": [
-        "Global"
-      ],
-      "channels": [
-        "POP MART channels"
-      ],
+      "regions": ["Global"],
+      "channels": ["POP MART channels"],
       "stock_status": "Available"
     },
     "designer": "Kasing Lung",
-    "accessories": [
-      "Keychain",
-      "pumpkin elements"
-    ],
+    "accessories": ["Keychain", "pumpkin elements"],
     "articulation": null,
     "colorway": "Pumpkin orange"
   },
@@ -1292,18 +1148,12 @@
       "pendant_msrp": null
     },
     "availability": {
-      "regions": [
-        "Global"
-      ],
-      "channels": [
-        "POP MART official"
-      ],
+      "regions": ["Global"],
+      "channels": ["POP MART official"],
       "stock_status": "Available"
     },
     "designer": "Kasing Lung",
-    "accessories": [
-      "Card holder feature"
-    ],
+    "accessories": ["Card holder feature"],
     "articulation": null,
     "colorway": "Twinkly fairy colorway"
   },
@@ -1347,12 +1197,8 @@
       "pendant_msrp": null
     },
     "availability": {
-      "regions": [
-        "Singapore"
-      ],
-      "channels": [
-        "POP MART Singapore EQL platform"
-      ],
+      "regions": ["Singapore"],
+      "channels": ["POP MART Singapore EQL platform"],
       "stock_status": "Sold out"
     },
     "designer": "Kasing Lung",
@@ -1404,12 +1250,8 @@
       "pendant_msrp": null
     },
     "availability": {
-      "regions": [
-        "Thailand"
-      ],
-      "channels": [
-        "POP MART Thailand online and app"
-      ],
+      "regions": ["Thailand"],
+      "channels": ["POP MART Thailand online and app"],
       "stock_status": "Sold out"
     },
     "designer": "Kasing Lung",
@@ -1463,18 +1305,12 @@
       "pendant_msrp": null
     },
     "availability": {
-      "regions": [
-        "Mainland-China"
-      ],
-      "channels": [
-        "POP MART China Points Mall"
-      ],
+      "regions": ["Mainland-China"],
+      "channels": ["POP MART China Points Mall"],
       "stock_status": "Out of stock"
     },
     "designer": "Kasing Lung",
-    "accessories": [
-      "Key-clip hardware and credit-card backing"
-    ],
+    "accessories": ["Key-clip hardware and credit-card backing"],
     "articulation": null,
     "colorway": "White plush “duck” suit with orange beak visor"
   },
@@ -1518,12 +1354,8 @@
       "pendant_msrp": null
     },
     "availability": {
-      "regions": [
-        "China"
-      ],
-      "channels": [
-        "Wacky Mart pop-up locations"
-      ],
+      "regions": ["China"],
+      "channels": ["Wacky Mart pop-up locations"],
       "stock_status": "Available at pop-up locations"
     },
     "designer": "Kasing Lung",

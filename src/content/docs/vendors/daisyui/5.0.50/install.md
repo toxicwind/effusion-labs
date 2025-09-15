@@ -2,16 +2,16 @@
 
 5.0.50
 
-*   [daisyUI 5](https://daisyui.com/docs/v5/)
+- [daisyUI 5](https://daisyui.com/docs/v5/)
 
-*   [Changelog](https://daisyui.com/docs/changelog/)
+- [Changelog](https://daisyui.com/docs/changelog/)
 
-*   [Version 4.x](https://v4.daisyui.com/)
-*   [Version 3.x](https://v3.daisyui.com/)
-*   [Version 2.x](https://v2.daisyui.com/)
-*   [Version 1.x](https://v1.daisyui.com/)
+- [Version 4.x](https://v4.daisyui.com/)
+- [Version 3.x](https://v3.daisyui.com/)
+- [Version 2.x](https://v2.daisyui.com/)
+- [Version 1.x](https://v1.daisyui.com/)
 
-*   [Roadmap](https://daisyui.com/docs/roadmap/)
+- [Roadmap](https://daisyui.com/docs/roadmap/)
 
 How to install daisyUI as a Tailwind CSS plugin?
 
@@ -44,8 +44,7 @@ Deno
     @import "tailwindcss";
     @plugin "daisyui";
 
-[](#framework-install-tutorials)Framework install tutorials
------------------------------------------------------------
+## [](#framework-install-tutorials)Framework install tutorials
 
 See example setup of daisyUI and Tailwind CSS on different frameworks and build tools.
 
@@ -53,9 +52,9 @@ See example setup of daisyUI and Tailwind CSS on different frameworks and build 
 
 NEXUS  
 Official daisyUI Dashboard Template
--------------------------------------------
 
-Available on daisyUI store
---------------------------
+---
+
+## Available on daisyUI store
 
 [More details](https://daisyui.com/store)

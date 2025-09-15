@@ -1,64 +1,22 @@
 {
   "dry": true,
   "moves": [
-    [
-      "src/_includes/base.njk",
-      "src/_includes/layouts/base.njk"
-    ],
-    [
-      "src/404.njk",
-      "src/pages/404.njk"
-    ],
-    [
-      "src/index.njk",
-      "src/pages/index.njk"
-    ],
-    [
-      "src/map.njk",
-      "src/pages/map.njk"
-    ],
-    [
-      "src/feed.njk",
-      "src/pages/feed.njk"
-    ],
-    [
-      "src/consulting.njk",
-      "src/pages/consulting.njk"
-    ],
-    [
-      "src/content/resume.njk",
-      "src/pages/resume/index.njk"
-    ],
-    [
-      "src/content/resume-card.njk",
-      "src/pages/resume/card.njk"
-    ],
-    [
-      "src/redirects.11ty.js",
-      "src/routes/redirects.11ty.js"
-    ],
-    [
-      "src/assets/og-ai-safety.jpg",
-      "src/assets/images/og/og-ai-safety.jpg"
-    ],
-    [
-      "src/assets/static/logo.png",
-      "src/assets/images/logo.png"
-    ]
+    ["src/_includes/base.njk", "src/_includes/layouts/base.njk"],
+    ["src/404.njk", "src/pages/404.njk"],
+    ["src/index.njk", "src/pages/index.njk"],
+    ["src/map.njk", "src/pages/map.njk"],
+    ["src/feed.njk", "src/pages/feed.njk"],
+    ["src/consulting.njk", "src/pages/consulting.njk"],
+    ["src/content/resume.njk", "src/pages/resume/index.njk"],
+    ["src/content/resume-card.njk", "src/pages/resume/card.njk"],
+    ["src/redirects.11ty.js", "src/routes/redirects.11ty.js"],
+    ["src/assets/og-ai-safety.jpg", "src/assets/images/og/og-ai-safety.jpg"],
+    ["src/assets/static/logo.png", "src/assets/images/logo.png"]
   ],
   "merges": [
-    [
-      "src/archives",
-      "src/content/archives"
-    ],
-    [
-      "src/work",
-      "src/content/work"
-    ],
-    [
-      "src/scripts",
-      "src/assets/js"
-    ]
+    ["src/archives", "src/content/archives"],
+    ["src/work", "src/content/work"],
+    ["src/scripts", "src/assets/js"]
   ],
   "skipped": [],
   "touched": [
@@ -152,24 +110,10 @@
     "src/consulting.njk"
   ],
   "rewrites": [
-    [
-      "src/assets/js/",
-      "src/assets/js/"
-    ],
-    [
-      "/assets/og-ai-safety.jpg",
-      "/assets/images/og/og-ai-safety.jpg"
-    ],
-    [
-      "assets/static/logo.png",
-      "assets/images/logo.png"
-    ],
-    [
-      "layout: base.njk",
-      "layout: layouts/base.njk"
-    ]
+    ["src/assets/js/", "src/assets/js/"],
+    ["/assets/og-ai-safety.jpg", "/assets/images/og/og-ai-safety.jpg"],
+    ["assets/static/logo.png", "assets/images/logo.png"],
+    ["layout: base.njk", "layout: layouts/base.njk"]
   ],
-  "notes": [
-    "consulting and resume/* forced to layout:false"
-  ]
+  "notes": ["consulting and resume/* forced to layout:false"]
 }

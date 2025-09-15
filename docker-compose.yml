@@ -1,4 +1,4 @@
-version: "3.8"
+version: '3.8'
 
 services:
   effusion-labs:
@@ -6,4 +6,4 @@ services:
     container_name: effusion
     restart: unless-stopped
     ports:
-      - "18400:80"
+      - '18400:80'

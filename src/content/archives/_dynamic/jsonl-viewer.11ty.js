@@ -1,31 +1,31 @@
-import fs from 'node:fs';
-import path from 'node:path';
+import fs from 'node:fs'
+import path from 'node:path'
 
-const ARCHIVES_BASE = path.join('src', 'content', 'archives');
+const ARCHIVES_BASE = path.join('src', 'content', 'archives')
 
-const toPosix = (p) => p.replaceAll('\\', '/');
-const exists = (p) => {
+const toPosix = p => p.replaceAll('\\', '/')
+const exists = p => {
   try {
-    return fs.existsSync(p);
+    return fs.existsSync(p)
   } catch {
-    return false;
+    return false
   }
-};
+}
 
 function walkJsonl(dirAbs) {
-  const out = [];
-  if (!exists(dirAbs)) return out;
+  const out = []
+  if (!exists(dirAbs)) return out
   for (const ent of fs.readdirSync(dirAbs, { withFileTypes: true })) {
-    const p = path.join(dirAbs, ent.name);
-    if (ent.isDirectory()) out.push(...walkJsonl(p));
-    else if (ent.isFile() && p.endsWith('.jsonl')) out.push(p);
+    const p = path.join(dirAbs, ent.name)
+    if (ent.isDirectory()) out.push(...walkJsonl(p))
+    else if (ent.isFile() && p.endsWith('.jsonl')) out.push(p)
   }
-  return out;
+  return out
 }
 
 function parseParts(absPath) {
-  const rel = toPosix(path.relative(ARCHIVES_BASE, absPath));
-  const parts = rel.split('/');
+  const rel = toPosix(path.relative(ARCHIVES_BASE, absPath))
+  const parts = rel.split('/')
   return {
     rel,
     industry: parts.at(0),
@@ -35,17 +35,21 @@ function parseParts(absPath) {
     section: parts.at(4), // 'provenance'
     file: parts.at(-1),
     base: path.basename(absPath, '.jsonl'),
-  };
+  }
 }
 
 function normalizeSlug(base) {
-  return String(base).replace(/--+/g, '-');
+  return String(base).replace(/--+/g, '-')
 }
 
 export const data = () => {
   return {
     layout: 'layouts/base.njk',
-    pagination: { data: 'collections.jsonlProvenance', size: 1, alias: 'entry' },
+    pagination: {
+      data: 'collections.jsonlProvenance',
+      size: 1,
+      alias: 'entry',
+    },
     eleventyComputed: {
       title: ({ entry }) => `Provenance — ${entry?.base ?? ''}`,
       permalink: ({ entry }) =>
@@ -58,19 +62,19 @@ export const data = () => {
           : '#',
       showTitle: false,
     },
-  };
-};
+  }
+}
 
-export const render = async (data) => {
-  if (!data.entry) return '';
-  const { codeToHtml } = await import('shiki');
-  const code = fs.readFileSync(data.entry.abs, 'utf8');
+export const render = async data => {
+  if (!data.entry) return ''
+  const { codeToHtml } = await import('shiki')
+  const code = fs.readFileSync(data.entry.abs, 'utf8')
   const highlighted = await codeToHtml(code, {
     lang: 'jsonl',
     themes: { light: 'github-light', dark: 'github-dark' },
-  });
-  const downloadHref = data.downloadUrl;
-  const filename = `${data.entry.base}.jsonl`;
+  })
+  const downloadHref = data.downloadUrl
+  const filename = `${data.entry.base}.jsonl`
 
   return `
 <nav class="breadcrumbs text-sm mb-2 overflow-x-auto whitespace-nowrap" aria-label="Breadcrumb">
@@ -98,5 +102,5 @@ export const render = async (data) => {
     </div>
   </div>
 </section>
-`.trim();
-};
+`.trim()
+}

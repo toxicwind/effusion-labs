@@ -12,9 +12,7 @@
   },
   "distribution": {
     "region_lock": false,
-    "markets": [
-      "CN"
-    ]
+    "markets": ["CN"]
   },
   "size": {
     "unit": "cm",

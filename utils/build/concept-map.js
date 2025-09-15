@@ -1,14 +1,13 @@
-const linkRegex = /\[\[([^|\]#]+)/g;
+const linkRegex = /\[\[([^|\]#]+)/g
 const context = {
-  "@vocab": "https://schema.org/",
-  source: { "@id": "source", "@type": "@id" },
-  target: { "@id": "target", "@type": "@id" }
-};
-
+  '@vocab': 'https://schema.org/',
+  source: { '@id': 'source', '@type': '@id' },
+  target: { '@id': 'target', '@type': '@id' },
+}
 
 /** Normalize a title or slug for comparison */
 function normalizeIdentifier(str = '') {
-  return str.toLowerCase().replace(/\s+/g, '-');
+  return str.toLowerCase().replace(/\s+/g, '-')
 }
 
 /**
@@ -19,13 +18,13 @@ function normalizeIdentifier(str = '') {
  * @returns {Object|undefined}
  */
 function resolveLink(pages, identifier) {
-  const norm = normalizeIdentifier(identifier);
+  const norm = normalizeIdentifier(identifier)
   return pages.find(p => {
-    const slug = normalizeIdentifier(p.url.replace(/\/?$/, '').split('/').pop());
-    const title = p.data.title ? normalizeIdentifier(p.data.title) : '';
-    const aliases = (p.data.aliases || []).map(normalizeIdentifier);
-    return slug === norm || title === norm || aliases.includes(norm);
-  });
+    const slug = normalizeIdentifier(p.url.replace(/\/?$/, '').split('/').pop())
+    const title = p.data.title ? normalizeIdentifier(p.data.title) : ''
+    const aliases = (p.data.aliases || []).map(normalizeIdentifier)
+    return slug === norm || title === norm || aliases.includes(norm)
+  })
 }
 
 /**
@@ -38,8 +37,8 @@ function buildNodes(pages) {
     '@id': page.url,
     '@type': 'Node',
     name: page.data.title || page.url,
-    category: page.data.tags && page.data.tags[0] ? page.data.tags[0] : ''
-  }));
+    category: page.data.tags && page.data.tags[0] ? page.data.tags[0] : '',
+  }))
 }
 
 /**
@@ -48,23 +47,23 @@ function buildNodes(pages) {
  * @returns {Array<Object>}
  */
 function buildEdges(pages) {
-  const edges = [];
+  const edges = []
   pages.forEach(page => {
-    const content = page.data.content || '';
-    let match;
+    const content = page.data.content || ''
+    let match
     while ((match = linkRegex.exec(content))) {
-      const target = resolveLink(pages, match[1].trim());
+      const target = resolveLink(pages, match[1].trim())
       if (target) {
         edges.push({
           '@id': `edge:${page.url}->${target.url}`,
           '@type': 'Edge',
           source: page.url,
-          target: target.url
-        });
+          target: target.url,
+        })
       }
     }
-  });
-  return edges;
+  })
+  return edges
 }
 
 /**
@@ -73,10 +72,10 @@ function buildEdges(pages) {
  * @returns {Object}
  */
 export default function generateConceptMapJSONLD(pages) {
-  const nodes = buildNodes(pages);
-  const edges = buildEdges(pages);
+  const nodes = buildNodes(pages)
+  const edges = buildEdges(pages)
   return {
-    "@context": context,
-    '@graph': [...nodes, ...edges]
-  };
+    '@context': context,
+    '@graph': [...nodes, ...edges],
+  }
 }

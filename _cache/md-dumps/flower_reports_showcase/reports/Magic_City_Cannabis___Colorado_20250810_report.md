@@ -3,7 +3,7 @@ layout: "layouts/converted-html.njk"
 title: "Medical Flower Price Report - Magic City Cannabis"
 excerpt: "Medical flower price analysis report for Magic City Cannabis - Colorado"
 sourcePath: "./src/content/flower_reports_showcase/reports/Magic_City_Cannabis___Colorado_20250810_report.html"
-readabilityLength: 22742
+readabilityLength: 34486
 convertedFromHtml: true
 ---
 <!-- Dispensary Header -->

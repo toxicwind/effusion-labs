@@ -278,8 +278,7 @@
       "start": "2010",
       "end": "2012"
     }
-  ]
-  ,
+  ],
   "projectPages": {
     "llm-release-watcher": {
       "title": "LLM Release Watcher",
@@ -303,7 +302,14 @@
         "Claim/limitation mapping with uncertainty notes.",
         "RBAC + audit logging; guarded outputs."
       ],
-      "stack": ["RAG", "Guardrails", "RBAC", "Elasticsearch", "LangChain", "PyTorch"],
+      "stack": [
+        "RAG",
+        "Guardrails",
+        "RBAC",
+        "Elasticsearch",
+        "LangChain",
+        "PyTorch"
+      ],
       "status": "Private client work; demo available upon request."
     }
   }

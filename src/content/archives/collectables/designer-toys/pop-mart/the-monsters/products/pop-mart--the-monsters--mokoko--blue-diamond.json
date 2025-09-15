@@ -12,9 +12,7 @@
   },
   "distribution": {
     "region_lock": false,
-    "markets": [
-      "CN"
-    ]
+    "markets": ["CN"]
   },
   "size": {
     "unit": "cm",
@@ -60,10 +58,7 @@
     "pendant_msrp": null
   },
   "designer": "Kasing Lung",
-  "accessories": [
-    "Keychain hardware",
-    "diamond accents"
-  ],
+  "accessories": ["Keychain hardware", "diamond accents"],
   "colorway": "Blue diamond colorway",
   "Deltas": [
     {

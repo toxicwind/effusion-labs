@@ -1,4 +1,4 @@
-  [![Tailwind CSS](https://raw.githubusercontent.com/tailwindlabs/tailwindcss/HEAD/.github/logo-light.svg)](https://tailwindcss.com/)
+[![Tailwind CSS](https://raw.githubusercontent.com/tailwindlabs/tailwindcss/HEAD/.github/logo-light.svg)](https://tailwindcss.com/)
 
 A utility-first CSS framework for rapidly building custom user interfaces.
 

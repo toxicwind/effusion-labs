@@ -4,8 +4,6 @@
   "line": "the-monsters",
   "slug": "best-of-luck",
   "title": "Best of Luck",
-  "character_slugs": [
-    "labubu"
-  ],
+  "character_slugs": ["labubu"],
   "notes": "Seeded from initial article; needs confirmation."
 }

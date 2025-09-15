@@ -4,8 +4,6 @@
   "line": "the-monsters",
   "slug": "flip-with-me",
   "title": "Flip with Me",
-  "character_slugs": [
-    "labubu"
-  ],
+  "character_slugs": ["labubu"],
   "notes": "Seeded from initial article; needs confirmation."
 }

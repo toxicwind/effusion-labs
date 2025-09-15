@@ -1,6 +1,6 @@
 ---
-title: "Methodology"
-layout: "layouts/base.njk"
+title: 'Methodology'
+layout: 'layouts/base.njk'
 status: stable
 date: 2025-07-01
 certainty: high
@@ -13,7 +13,7 @@ eleventyNavigation:
   order: 1
 ---
 
-> *A structured protocol for developing ideas through iterative, layered synthesis.*
+> _A structured protocol for developing ideas through iterative, layered synthesis._
 
 ---
 
@@ -27,13 +27,13 @@ This process is not designed for resolution, but for **traceability**. It preser
 
 Effusion Labs organizes conceptual progression through a three-phase pipeline. Each phase retains its own affordances and traceable triggers:
 
-* **[Sparks](/sparks/)**:
+- **[Sparks](/sparks/)**:
   The initial record of a question, observation, or aesthetic impulse. Sparks are typically fragmentary and lack mechanistic structure, but encode directional curiosity.
 
-* **[Concepts](/concepts/)**:
+- **[Concepts](/concepts/)**:
   A matured Spark with structure. Concepts isolate internal mechanisms, model constraints, or introduce comparative frames. They are the primary unit of system modeling.
 
-* **[Projects](/projects/)**:
+- **[Projects](/projects/)**:
   A synthesis node that tests or applies an accumulated Concept. Projects manifest through formalization, tool design, or aesthetic implementation.
 
 The pipeline is **nonlinear**. A Project may yield new Sparks. A Concept may bifurcate when divergent modeling directions appear. Iteration is expected, and reverse transitions are valid. The pipeline is an interaction map—not a linear funnel.

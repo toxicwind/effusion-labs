@@ -4,7 +4,9 @@
   "type": "module",
   "private": true,
   "main": "server.mjs",
-  "engines": { "node": ">=20" },
+  "engines": {
+    "node": ">=20"
+  },
   "dependencies": {
     "undici": "^7.15.0",
     "jsdom": "^26.1.0",
@@ -12,4 +14,3 @@
     "@mozilla/readability": "^0.6.6"
   }
 }
-

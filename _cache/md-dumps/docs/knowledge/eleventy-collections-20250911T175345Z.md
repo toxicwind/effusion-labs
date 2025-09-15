@@ -3,7 +3,7 @@ layout: "layouts/converted-html.njk"
 title: "Collections"
 excerpt: "A docs page for Eleventy, a simpler static site generator."
 sourcePath: "./src/content/docs/knowledge/eleventy-collections-20250911T175345Z.html"
-readabilityLength: 12769
+readabilityLength: 19969
 convertedFromHtml: true
 ---
 Breadcrumbs:

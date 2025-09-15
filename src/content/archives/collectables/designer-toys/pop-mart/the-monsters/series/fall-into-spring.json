@@ -4,8 +4,6 @@
   "line": "the-monsters",
   "slug": "fall-into-spring",
   "title": "Fall into Spring",
-  "character_slugs": [
-    "mokoko"
-  ],
+  "character_slugs": ["mokoko"],
   "notes": "Seeded from initial article; needs confirmation."
 }

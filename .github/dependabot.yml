@@ -9,60 +9,60 @@ version: 2
 updates:
   # 1) NPM (root)
   - package-ecosystem: npm
-    directory: "/"
+    directory: '/'
     schedule:
       interval: daily
-      time: "09:00"
-      timezone: "America/Denver"
+      time: '09:00'
+      timezone: 'America/Denver'
     open-pull-requests-limit: 50
     rebase-strategy: auto
-    labels: ["deps", "automerge"]
+    labels: ['deps', 'automerge']
     groups:
       security:
         applies-to: security-updates
-        patterns: ["*"]
+        patterns: ['*']
 
   # 2) GitHub Actions
   - package-ecosystem: github-actions
-    directory: "/"
+    directory: '/'
     schedule:
       interval: daily
-      time: "09:05"
-      timezone: "America/Denver"
+      time: '09:05'
+      timezone: 'America/Denver'
     open-pull-requests-limit: 50
     rebase-strategy: auto
-    labels: ["deps", "automerge"]
+    labels: ['deps', 'automerge']
     groups:
       security:
         applies-to: security-updates
-        patterns: ["*"]
+        patterns: ['*']
 
   # 3) Docker — .portainer/Dockerfile
   - package-ecosystem: docker
-    directory: "/.portainer"
+    directory: '/.portainer'
     schedule:
       interval: daily
-      time: "09:10"
-      timezone: "America/Denver"
+      time: '09:10'
+      timezone: 'America/Denver'
     open-pull-requests-limit: 50
     rebase-strategy: auto
-    labels: ["deps", "automerge"]
+    labels: ['deps', 'automerge']
     groups:
       security:
         applies-to: security-updates
-        patterns: ["*"]
+        patterns: ['*']
 
   # 4) Docker — markdown_gateway/Dockerfile
   - package-ecosystem: docker
-    directory: "/markdown_gateway"
+    directory: '/markdown_gateway'
     schedule:
       interval: daily
-      time: "09:12"
-      timezone: "America/Denver"
+      time: '09:12'
+      timezone: 'America/Denver'
     open-pull-requests-limit: 50
     rebase-strategy: auto
-    labels: ["deps", "automerge"]
+    labels: ['deps', 'automerge']
     groups:
       security:
         applies-to: security-updates
-        patterns: ["*"]
+        patterns: ['*']

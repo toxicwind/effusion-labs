@@ -4,8 +4,6 @@
   "line": "the-monsters",
   "slug": "time-to-chill",
   "title": "Time to Chill",
-  "character_slugs": [
-    "labubu"
-  ],
+  "character_slugs": ["labubu"],
   "notes": "Seeded from initial article; needs confirmation."
 }

@@ -3,7 +3,7 @@ layout: "layouts/converted-html.njk"
 title: "Template and Directory Data Files"
 excerpt: "A docs page for Eleventy, a simpler static site generator."
 sourcePath: "./src/content/docs/knowledge/eleventy-data-template-dir-20250911T175432Z.html"
-readabilityLength: 2736
+readabilityLength: 5303
 convertedFromHtml: true
 ---
 Breadcrumbs:

@@ -41,16 +41,8 @@
     }
   },
   "availability": {
-    "regions": [
-      "CN",
-      "US",
-      "EU",
-      "APAC"
-    ],
-    "channels": [
-      "POP MART official",
-      "Pronounce flagship stores"
-    ],
+    "regions": ["CN", "US", "EU", "APAC"],
+    "channels": ["POP MART official", "Pronounce flagship stores"],
     "stock_status": "Sold out"
   },
   "designer": "Kasing Lung (龙家升)",

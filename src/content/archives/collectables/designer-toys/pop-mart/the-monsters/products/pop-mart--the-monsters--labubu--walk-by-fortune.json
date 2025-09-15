@@ -12,9 +12,7 @@
   },
   "distribution": {
     "region_lock": false,
-    "markets": [
-      "CN"
-    ]
+    "markets": ["CN"]
   },
   "release_date": "2023-12-29",
   "market_listings": [
@@ -65,9 +63,7 @@
     }
   },
   "designer": "Kasing Lung (龙家升)",
-  "accessories": [
-    "Fortune-themed outfit and accessories"
-  ],
+  "accessories": ["Fortune-themed outfit and accessories"],
   "colorway": "Traditional red Chinese New Year theme",
   "Deltas": [
     {

@@ -12,9 +12,7 @@
   },
   "distribution": {
     "region_lock": false,
-    "markets": [
-      "CN"
-    ]
+    "markets": ["CN"]
   },
   "release_date": "2023-10-26",
   "market_listings": [
@@ -65,10 +63,7 @@
     }
   },
   "designer": "Kasing Lung (龙家升)",
-  "accessories": [
-    "Removable bucket hat",
-    "Scarf"
-  ],
+  "accessories": ["Removable bucket hat", "Scarf"],
   "colorway": "Latte-toned outfit with fluffy accents",
   "Deltas": [
     {

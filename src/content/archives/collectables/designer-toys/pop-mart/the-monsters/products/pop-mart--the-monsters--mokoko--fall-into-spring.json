@@ -12,9 +12,7 @@
   },
   "distribution": {
     "region_lock": false,
-    "markets": [
-      "CN"
-    ]
+    "markets": ["CN"]
   },
   "release_date": "2024-03-08",
   "market_listings": [
@@ -65,10 +63,7 @@
     }
   },
   "designer": "Kasing Lung",
-  "accessories": [
-    "Floral accessories",
-    "keychain for pendant version"
-  ],
+  "accessories": ["Floral accessories", "keychain for pendant version"],
   "colorway": "Spring floral colorway",
   "Deltas": [
     {

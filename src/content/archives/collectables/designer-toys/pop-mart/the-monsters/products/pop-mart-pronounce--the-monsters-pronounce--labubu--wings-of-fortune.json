@@ -38,19 +38,12 @@
     }
   },
   "availability": {
-    "regions": [
-      "Global"
-    ],
-    "channels": [
-      "POP MART US",
-      "Global"
-    ],
+    "regions": ["Global"],
+    "channels": ["POP MART US", "Global"],
     "stock_status": "Out of stock"
   },
   "designer": "Kasing Lung (龙家升)",
-  "accessories": [
-    "Hanging loop hardware"
-  ],
+  "accessories": ["Hanging loop hardware"],
   "articulation": "Fixed",
   "colorway": "Pastel yellow with silver accents"
 }

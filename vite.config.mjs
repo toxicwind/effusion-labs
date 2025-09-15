@@ -1,9 +1,9 @@
 // vite.config.mjs
-import { fileURLToPath, URL } from 'node:url';
-import tailwind from '@tailwindcss/vite';
+import { fileURLToPath, URL } from 'node:url'
+import tailwind from '@tailwindcss/vite'
 
 // Define project paths for clarity and reuse
-const srcRoot = fileURLToPath(new URL('./src', import.meta.url));
+const srcRoot = fileURLToPath(new URL('./src', import.meta.url))
 
 export default {
   // Path alias configuration (for builds and editor support)
@@ -14,12 +14,10 @@ export default {
   },
 
   // Vite plugins
-  plugins: [
-    tailwind(),
-  ],
+  plugins: [tailwind()],
 
   // CSS-specific options
   css: {
     devSourcemap: true,
   },
-};
+}

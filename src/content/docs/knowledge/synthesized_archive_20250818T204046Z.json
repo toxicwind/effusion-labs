@@ -11,18 +11,14 @@
     "release_date": "2023-12-15",
     "msrp": "— 30×25×58 cm — USD 179.99",
     "source": "PRIMARY TARGETS Completed(2)",
-    "deltas": [
-      "msrp: — USD 179.99 -> — 30×25×58 cm — USD 179.99"
-    ]
+    "deltas": ["msrp: — USD 179.99 -> — 30×25×58 cm — USD 179.99"]
   },
   {
     "name": "ANGEL IN CLOUDS (v2) —",
     "release_date": "2024-10-25",
     "msrp": "— 33×25×58 cm — USD 289.99",
     "source": "PRIMARY TARGETS Completed(2)",
-    "deltas": [
-      "msrp: — USD 289.99 -> — 33×25×58 cm — USD 289.99"
-    ]
+    "deltas": ["msrp: — USD 289.99 -> — 33×25×58 cm — USD 289.99"]
   },
   {
     "name": "Jump for Joy —",

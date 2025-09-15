@@ -1,3 +1,3 @@
-import { contentArea } from '../../../config/content-area.js';
+import { contentArea } from '../../../config/content-area.js'
 
-export default contentArea('sparks');
+export default contentArea('sparks')

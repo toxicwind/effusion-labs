@@ -1,68 +1,58 @@
-Templating
-----------
+## Templating
 
 This is an overview of the templating features available in Nunjucks.
 
 > Nunjucks is essentially a port of [jinja2](http://jinja.pocoo.org/docs/), so you can read their [docs](http://jinja.pocoo.org/docs/templates/) if you find anything lacking here. Read about the differences [here](http://mozilla.github.io/nunjucks/faq.html#can-i-use-the-same-templates-between-nunjucks-and-jinja2-what-are-the-differences).
 
-User-Defined Templates Warning
-------------------------------
+## User-Defined Templates Warning
 
 nunjucks does not sandbox execution so **it is not safe to run user-defined templates or inject user-defined content into template definitions**. On the server, you can expose attack vectors for accessing sensitive data and remote code execution. On the client, you can expose cross-site scripting vulnerabilities even for precompiled templates (which can be mitigated with a strong [CSP](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy)). See [this issue](https://github.com/mozilla/nunjucks-docs/issues/17) for more information.
 
-File Extensions
----------------
+## File Extensions
 
 Although you are free to use any file extension you wish for your Nunjucks template files, the Nunjucks community has adopted `.njk`.
 
 If you are developing tools or editor syntax helpers for Nunjucks, please include recognition of the `.njk` extension.
 
-Syntax Highlighting
--------------------
+## Syntax Highlighting
 
 Plugins are available in various editors to support the `jinja` syntax highlighting of Nunjucks.
 
-*   atom [https://github.com/alohaas/language-nunjucks](https://github.com/alohaas/language-nunjucks)
-*   vim [https://github.com/niftylettuce/vim-jinja](https://github.com/niftylettuce/vim-jinja)
-*   brackets [https://github.com/axelboc/nunjucks-brackets](https://github.com/axelboc/nunjucks-brackets)
-*   sublime [https://github.com/mogga/sublime-nunjucks/blob/master/Nunjucks.tmLanguage](https://github.com/mogga/sublime-nunjucks/blob/master/Nunjucks.tmLanguage)
-*   emacs [http://web-mode.org](http://web-mode.org/)
-*   vscode [https://github.com/ronnidc/vscode-nunjucks](https://github.com/ronnidc/vscode-nunjucks)
+- atom [https://github.com/alohaas/language-nunjucks](https://github.com/alohaas/language-nunjucks)
+- vim [https://github.com/niftylettuce/vim-jinja](https://github.com/niftylettuce/vim-jinja)
+- brackets [https://github.com/axelboc/nunjucks-brackets](https://github.com/axelboc/nunjucks-brackets)
+- sublime [https://github.com/mogga/sublime-nunjucks/blob/master/Nunjucks.tmLanguage](https://github.com/mogga/sublime-nunjucks/blob/master/Nunjucks.tmLanguage)
+- emacs [http://web-mode.org](http://web-mode.org/)
+- vscode [https://github.com/ronnidc/vscode-nunjucks](https://github.com/ronnidc/vscode-nunjucks)
 
-Variables
----------
+## Variables
 
 A variable looks up a value from the template context. If you wanted to simply display a variable, you would do:
 
     {{ username }}
-    
 
 This looks up `username` from the context and displays it. Variable names can have dots in them which lookup properties, just like javascript. You can also use the square bracket syntax.
 
     {{ foo.bar }}
     {{ foo["bar"] }}
-    
 
 These two forms to the exact same thing, just like javascript.
 
 If a value is `undefined` or `null`, nothing is displayed. The same behavior occurs when referencing undefined or null objects. The following all output nothing if `foo` is undefined: `{{ foo }}`, `{{ foo.bar }}`, `{{ foo.bar.baz }}`.
 
-Filters
--------
+## Filters
 
 Filters are essentially functions that can be applied to variables. They are called with a pipe operator (`|`) and can take arguments.
 
     {{ foo | title }}
     {{ foo | join(",") }}
     {{ foo | replace("foo", "bar") | capitalize }}
-    
 
 The third example shows how you can chain filters. It would display "Bar", by first replacing "foo" with "bar" and then capitalizing it.
 
 Nunjucks comes with several [builtin filters](#builtin-filters), and you can [add your own](https://mozilla.github.io/nunjucks/api#custom-filters) as well.
 
-Template Inheritance
---------------------
+## Template Inheritance
 
 Template inheritance is a way to make it easy to reuse templates. When writing a template, you can define "blocks" that child templates can override. The inheritance chain can be as long as you like.
 
@@ -71,48 +61,44 @@ If we have a template `parent.html` that looks like this:
     {% block header %}
     This is the default content
     {% endblock %}
-    
+
     <section class="left">
       {% block left %}{% endblock %}
     </section>
-    
+
     <section class="right">
       {% block right %}
       This is more content
       {% endblock %}
     </section>
-    
 
 And we render this template:
 
     {% extends "parent.html" %}
-    
+
     {% block left %}
     This is the left side!
     {% endblock %}
-    
+
     {% block right %}
     This is the right side!
     {% endblock %}
-    
 
 The output would be:
 
     This is the default content
-    
+
     <section class="left">
       This is the left side!
     </section>
-    
+
     <section class="right">
       This is the right side!
     </section>
-    
 
 You can store the template to inherit in a variable and use it by omitting quotes. This variable can contain a string that points to a template file, or it can contain a compiled Template object that has been added to the context. That way you can dynamically change which template is inherited when rendering by setting it in the context.
 
     {% extends parentTemplate %}
-    
 
 You leverage inheritance with the [`extends`](#extends) and [`block`](#block) tags. A more detailed explanation of inheritance can be found in the [jinja2 docs](http://jinja.pocoo.org/docs/templates/#template-inheritance).
 
@@ -124,13 +110,11 @@ You can render the contents of the parent block inside a child block by calling 
     {{ super() }}
     Right side!
     {% endblock %}
-    
 
 The output of the block would be:
 
     This is more content
     Right side!
-    
 
 Tags are special blocks that perform operations on sections of the template. Nunjucks comes with several builtin, but [you can add your own](https://mozilla.github.io/nunjucks/api.html#custom-tags).
 
@@ -141,7 +125,6 @@ Tags are special blocks that perform operations on sections of the template. Nun
     {% if variable %}
       It is true
     {% endif %}
-    
 
 If variable is defined and evaluates to true, "It is true" will be displayed. Otherwise, nothing will be.
 
@@ -154,18 +137,16 @@ You can specify alternate conditions with `elif` (or `elseif`, which is simply a
     {% else %}
       I am good!
     {% endif %}
-    
 
 You can specify multiple conditions with `and` and `or`:
 
     {% if happy and hungry %}
       I am happy *and* hungry; both are true.
     {% endif %}
-    
+
     {% if happy or hungry %}
       I am either happy *or* hungry; one or the other is true.
     {% endif %}
-    
 
 You can also use if as an [inline expression](#if-expression).
 
@@ -176,7 +157,7 @@ You can also use if as an [inline expression](#if-expression).
 > If you are using a custom template loader that is asynchronous, see [`asyncEach`](#asynceach))
 
     var items = [{ title: "foo", id: 1 }, { title: "bar", id: 2}];
-    
+
 
     <h1>Posts</h1>
     <ul>
@@ -186,7 +167,6 @@ You can also use if as an [inline expression](#if-expression).
       <li>This would display if the 'item' collection were empty</li>
     {% endfor %}
     </ul>
-    
 
 The above example lists all the posts using the `title` attribute of each item in the `items` array as the display value. If the `items` array were empty, the contents of the optional `else` clause would instead be rendered.
 
@@ -197,12 +177,11 @@ You can also iterate over objects/hashes:
       'mustard': '1 tbsp',
       'pickle': '0 tbsp'
     };
-    
+
 
     {% for ingredient, amount in food %}
       Use {{ amount }} of {{ ingredient }}
     {% endfor %}
-    
 
 The [`dictsort`](http://jinja.pocoo.org/docs/templates/#dictsort) filter is available for sorting objects when iterating over them.
 
@@ -213,32 +192,30 @@ ES iterators are supported, like the new builtin Map and Set. But also anything 
       ["apple", "red"],
       ["peach", "pink"]
     ])
-    
+
 
     {% for fruit, color in fruits %}
       Did you know that {{ fruit }} is {{ color }}?
     {% endfor %}
-    
 
 Additionally, Nunjucks will unpack arrays into variables:
 
     var points = [[0, 1, 2], [5, 6, 7], [12, 13, 14]];
-    
+
 
     {% for x, y, z in points %}
       Point: {{ x }}, {{ y }}, {{ z }}
     {% endfor %}
-    
 
 Inside loops, you have access to a few special variables:
 
-*   `loop.index`: the current iteration of the loop (1 indexed)
-*   `loop.index0`: the current iteration of the loop (0 indexed)
-*   `loop.revindex`: number of iterations until the end (1 indexed)
-*   `loop.revindex0`: number of iterations until the end (0 based)
-*   `loop.first`: boolean indicating the first iteration
-*   `loop.last`: boolean indicating the last iteration
-*   `loop.length`: total number of items
+- `loop.index`: the current iteration of the loop (1 indexed)
+- `loop.index0`: the current iteration of the loop (0 indexed)
+- `loop.revindex`: number of iterations until the end (1 indexed)
+- `loop.revindex0`: number of iterations until the end (0 based)
+- `loop.first`: boolean indicating the first iteration
+- `loop.last`: boolean indicating the last iteration
+- `loop.length`: total number of items
 
 ### asyncEach
 
@@ -252,7 +229,7 @@ At compile-time, Nunjucks is not aware how templates are loaded so it's unable t
 
     // If you are using a custom loader that is async, you need asyncEach
     var env = new nunjucks.Environment(AsyncLoaderFromDatabase, opts);
-    
+
 
     <h1>Posts</h1>
     <ul>
@@ -260,7 +237,6 @@ At compile-time, Nunjucks is not aware how templates are loaded so it's unable t
       {% include "item-template.html" %}
     {% endeach %}
     </ul>
-    
 
 ### asyncAll
 
@@ -276,7 +252,6 @@ Let's say you created a filter named `lookup` that fetches some text from a data
       <li>{{ item.id | lookup }}</li>
     {% endall %}
     </ul>
-    
 
 If `lookup` is an asynchronous filter, it's probably doing something slow like fetching something from disk. `asyncAll` allows you reduce the time it would take to execute the loop sequentially by doing all the async work in parallel, and the template rendering resumes once all the items are done.
 
@@ -290,13 +265,11 @@ If `lookup` is an asynchronous filter, it's probably doing something slow like f
              value="{{ value | escape }}" />
     </div>
     {% endmacro %}
-    
 
 Now `field` is available to be called like a normal function:
 
     {{ field('user') }}
     {{ field('pass', type='password') }}
-    
 
 Keyword/default arguments are available. See [keyword arguments](#keyword-arguments) for a more detailed explanation.
 
@@ -311,14 +284,12 @@ You can [import](#import) macros from other templates, allowing you to reuse the
     {{ username }}
     {% set username = "joe" %}
     {{ username }}
-    
 
 If `username` was initially "james', this would print "james joe".
 
 You can introduce new variables, and also set multiple at once:
 
     {% set x, y, z = 5 %}
-    
 
 If `set` is used at the top-level, it changes the value of the global template context. If used inside scoped blocks like an include or a macro, it only modifies the current scope.
 
@@ -329,26 +300,22 @@ This can be useful in some situations as an alternative for macros:
     {% set standardModal %}
         {% include 'standardModalData.html' %}
     {% endset %}
-    
+
     <div class="js-modal" data-modal="{{standardModal | e}}">
-    
 
 ### extends
 
 `extends` is used to specify template inheritance. The specified template is used as a base template. See [Template Inheritance](#template-inheritance).
 
     {% extends "base.html" %}
-    
 
 You can store the template to inherit in a variable and use it by omitting quotes. This variable can contain a string that points to a template file, or it can contain a compiled Template object that has been added to the context. That way you can dynamically change which template is inherited when rendering by setting it in the context.
 
     {% extends parentTemplate %}
-    
 
 In fact, `extends` accepts any arbitrary expression, so you can pass anything into it, as long as that expression evaluates to a string or a compiled Template object:
 
     {% extends name + ".html" %}`.
-    
 
 ### block
 
@@ -357,23 +324,20 @@ In fact, `extends` accepts any arbitrary expression, so you can pass anything in
     {% block css %}
     <link rel="stylesheet" href="app.css" />
     {% endblock %}
-    
 
 You can even define blocks within looping:
 
     {% for item in items %}
     {% block item %}{{ item }}{% endblock %}
     {% endfor %}
-    
 
 Child templates can override the `item` block and change how it is displayed:
 
     {% extends "item.html" %}
-    
+
     {% block item %}
     The name of the item is: {{ item.name }}
     {% endblock %}
-    
 
 A special function `super` is available within blocks which will render the parent block's content. See [super](#super).
 
@@ -382,14 +346,12 @@ A special function `super` is available within blocks which will render the pare
 `include` pulls in other templates in place. It's useful when you need to share smaller chunks across several templates that already inherit other templates.
 
     {% include "item.html" %}
-    
 
 You can even include templates in the middle of loops:
 
     {% for item in items %}
     {% include "item.html" %}
     {% endfor %}
-    
 
 This is especially useful for cutting up templates into pieces so that the browser-side environment can render the small chunks when it needs to change the page.
 
@@ -398,7 +360,6 @@ This is especially useful for cutting up templates into pieces so that the brows
 It might be useful to not throw an error if a template does not exist. Use the `ignore missing` option to suppress such errors.
 
     {% include "missing.html" ignore missing %}
-    
 
 Included templates can themselves `extend` another template (so you could have a set of related includes that all inherit a common structure). An included template does not participate in the block structure of its including template; it has a totally separate inheritance tree and block namespace. In other words, an `include` is _not_ a pre-processor that pulls the included template code into the including template before rendering; instead, it fires off a separate render of the included template, and the results of that render are included.
 
@@ -416,38 +377,34 @@ Let's start with a template called `forms.html` that has the following in it:
              value="{{ value | escape }}" />
     </div>
     {% endmacro %}
-    
+
     {% macro label(text) %}
     <div>
       <label>{{ text }}</label>
     </div>
     {% endmacro %}
-    
 
 We can import this template and bind all of its exported values to a variable so that we can use it:
 
     {% import "forms.html" as forms %}
-    
+
     {{ forms.label('Username') }}
     {{ forms.field('user') }}
     {{ forms.label('Password') }}
     {{ forms.field('pass', type='password') }}
-    
 
 You can also import specific values from a template into the current namespace with `from import`:
 
     {% from "forms.html" import field, label as description %}
-    
+
     {{ description('Username') }}
     {{ field('user') }}
     {{ description('Password') }}
     {{ field('pass', type='password') }}
-    
 
 By adding `with context` to the end of an `import` directive, the imported template is processed with the current context.
 
     {% from "forms.html" import field with context %}
-    
 
 `import` actually accepts any arbitrary expression, so you can pass anything into it, as long as the expression evaluates to a string or a compiled Template object: `{% import name + ".html" as obj %}`.
 
@@ -466,11 +423,10 @@ A `filter` block allows you to call a filter with the contents of the block. Ins
     {% filter title %}
     may the force be with you
     {% endfilter %}
-    
+
     {% filter replace("force", "forth") %}
     may the force be with you
     {% endfilter %}
-    
 
 NOTE: You cannot do anything asynchronous inside these blocks.
 
@@ -481,28 +437,24 @@ A `call` block enables you to call a macro with all the text inside the tag. Thi
     {% macro add(x, y) %}
     {{ caller() }}: {{ x + y }}
     {% endmacro%}
-    
+
     {% call add(1, 2) -%}
     The result is
     {%- endcall %}
-    
 
 The above example would output "The result is: 3".
 
-Keyword Arguments
------------------
+## Keyword Arguments
 
 jinja2 uses Python's keyword arguments support to allow keyword arguments in functions, filters, and macros. Nunjucks supports keyword arguments as well by introducing a new calling convention.
 
 Keyword arguments look like this:
 
     {{ foo(1, 2, bar=3, baz=4) }}
-    
 
 `bar` and `baz` are keyword arguments. Nunjucks converts them into a hash and passes it as the last argument. It's equivalent to this call in javascript:
 
     foo(1, 2, { bar: 3, baz: 4})
-    
 
 Since this is a standard calling convention, it works for all functions and filters if they are written to expect them. [Read more](https://mozilla.github.io/nunjucks/api#Keyword-Arguments) about this in the API section.
 
@@ -511,34 +463,28 @@ Macros allow you to also use keyword arguments in the definition, which allows y
     {% macro foo(x, y, z=5, w=6) %}
     {{ x }}, {{ y }}, {{ z }}, {{ w}}
     {% endmacro %}
-    
+
     {{ foo(1, 2) }}        -> 1, 2, 5, 6
     {{ foo(1, 2, w=10) }}  -> 1, 2, 5, 10
-    
 
 You can mix positional and keyword arguments with macros. For example, you can specify a positional argument as a keyword argument:
 
     {{ foo(20, y=21) }}     -> 20, 21, 5, 6
-    
 
 You can also simply pass a positional argument in place of a keyword argument:
 
     {{ foo(5, 6, 7, 8) }}   -> 5, 6, 7, 8
-    
 
 In this way, you can "skip" positional arguments:
 
     {{ foo(8, z=7) }}      -> 8, , 7, 6
-    
 
 You can write comments using `{#` and `#}`. Comments are completely stripped out when rendering.
 
     {# Loop through all the users #}
     {% for user in users %}...{% endfor %}
-    
 
-Whitespace Control
-------------------
+## Whitespace Control
 
 Normally the template engine outputs everything outside of variable and tag blocks verbatim, with all the whitespace as it is in the file. Occasionally you don't want the extra whitespace, but you still want to format the template cleanly, which requires whitespace.
 
@@ -547,96 +493,87 @@ You can tell the engine to strip all leading or trailing whitespace by adding a 
     {% for i in [1,2,3,4,5] -%}
       {{ i }}
     {%- endfor %}
-    
 
 The exact output of the above would be "12345". The `{%-` strips the whitespace right before the tag, and `-%}` the strips the whitespace right after the tag.
 
 And the same is for variables: `{{-` will strip the whitespace before the variable, and `-}}` will strip the whitespace after the variable.
 
-Expressions
------------
+## Expressions
 
 You can use many types of literal expressions that you are used to in javascript.
 
-*   Strings: `"How are you?"`, `'How are you?'`
-*   Numbers: `40`, `30.123`
-*   Arrays: `[1, 2, "array"]`
-*   Dicts: `{ one: 1, two: 2 }`
-*   Boolean: `true`, `false`
+- Strings: `"How are you?"`, `'How are you?'`
+- Numbers: `40`, `30.123`
+- Arrays: `[1, 2, "array"]`
+- Dicts: `{ one: 1, two: 2 }`
+- Boolean: `true`, `false`
 
 ### Math
 
 Nunjucks allows you to operate on values (though it should be used sparingly, as most of your logic should be in code). The following operators are available:
 
-*   Addition: `+`
-*   Subtraction: `-`
-*   Division: `/`
-*   Division and integer truncation: `//`
-*   Division remainder: `%`
-*   Multiplication: `*`
-*   Power: `**`
+- Addition: `+`
+- Subtraction: `-`
+- Division: `/`
+- Division and integer truncation: `//`
+- Division remainder: `%`
+- Multiplication: `*`
+- Power: `**`
 
 You can use them like this:
 
     {{ 2 + 3 }}       (outputs 5)
     {{ 10/5 }}        (outputs 2)
     {{ numItems*2 }}
-    
 
 ### Comparisons
 
-*   `==`
-*   `===`
-*   `!=`
-*   `!==`
-*   `>`
-*   `>=`
-*   `<`
-*   `<=`
+- `==`
+- `===`
+- `!=`
+- `!==`
+- `>`
+- `>=`
+- `<`
+- `<=`
 
 Examples:
 
     {% if numUsers < 5 %}...{% endif %}
     {% if i == 0 %}...{% endif %}
-    
 
 ### Logic
 
-*   `and`
-*   `or`
-*   `not`
-*   Use parentheses to group expressions
+- `and`
+- `or`
+- `not`
+- Use parentheses to group expressions
 
 Examples:
 
     {% if users and showUsers %}...{% endif %}
     {% if i == 0 and not hideFirst %}...{% endif %}
     {% if (x < 5 or y < 5) and foo %}...{% endif %}
-    
 
 ### If Expression
 
 Similar to javascript's ternary operator, you can use `if` as if it were an inline expression:
 
     {{ "true" if foo else "false" }}
-    
 
 The above outputs the string "true" if foo is truthy, otherwise "false". This is especially useful for default values like so:
 
     {{ baz(foo if foo else "default") }}
-    
 
 Unlike javascript's ternary operator, the `else` is optional:
 
     {{ "true" if foo }}
-    
 
 ### Function Calls
 
 If you have passed a javascript method to your template, you can call it like normal.
 
     {{ foo(1, 2, 3) }}
-    
 
 ### Regular Expressions
 
@@ -646,32 +583,27 @@ A regular expression can be created just like JavaScript, but needs to be prefix
     {% if regExp.test('foo') %}
       Foo in the house!
     {% endif %}
-    
 
 The supported flags are the following. See [Regex on MDN](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/RegExp) for more information.
 
-*   `g`: apply globally
-*   `i`: case insensitive
-*   `m`: multiline
-*   `y`: sticky
+- `g`: apply globally
+- `i`: case insensitive
+- `m`: multiline
+- `y`: sticky
 
-Autoescaping
-------------
+## Autoescaping
 
 If autoescaping is turned on in the environment, all output will automatically be escaped for safe output. To manually mark output as safe, use the `safe` filter. Nunjucks will not escape this output.
 
     {{ foo }}           // &lt;span%gt;
     {{ foo | safe }}    // <span>
-    
 
 If autoescaping is turned off, all output will be rendered as it is. You can manually escape variables with the `escape` filter.
 
     {{ foo }}           // <span>
     {{ foo | escape }}  // &lt;span&gt;
-    
 
-Global Functions
-----------------
+## Global Functions
 
 There are a few builtin global functions that cover some common cases.
 
@@ -682,7 +614,6 @@ If you need to iterate over a fixed set of numbers, `range` generates the set fo
     {% for i in range(0, 5) -%}
       {{ i }},
     {%- endfor %}
-    
 
 The above outputs `0,1,2,3,4`.
 
@@ -694,7 +625,6 @@ An easy way to rotate through several values is to use `cycler`, which takes any
     {% for row in rows %}
       <div class="{{ cls.next() }}">{{ row.name }}</div>
     {% endfor %}
-    
 
 In the above example, odd rows have the class "odd" and even rows have the class "even". You can access the current item on the `current` property (in the above example, `cls.current`).
 
@@ -706,12 +636,10 @@ When combining multiple items, it's common to want to delimit them with somethin
     {% for tag in tags -%}
       {{ comma() }} {{ tag }}
     {%- endfor %}
-    
 
 If `tags` was `["food", "beer", "dessert"]`, the above example would output `food, beer, dessert`.
 
-Builtin Filters
----------------
+## Builtin Filters
 
 Nunjucks has ported most of [jinja's filters](http://jinja.pocoo.org/docs/dev/templates/#builtin-filters), and has a few of its own:
 
@@ -722,12 +650,10 @@ Return the absolute value of the argument:
 **Input**
 
     {{ -3|abs }}
-    
 
 **Output**
 
     3
-    
 
 ### batch
 
@@ -742,12 +668,10 @@ Return a list of lists with the given number of items:
            {{ items }}
         {% endfor %}
     {% endfor %}
-    
 
 **Output**
 
     12-34-56
-    
 
 ### capitalize
 
@@ -756,12 +680,10 @@ Make the first letter uppercase, the rest lower case:
 **Input**
 
     {{ "This Is A Test" | capitalize }}
-    
 
 **Output**
 
     This is a test
-    
 
 ### center
 
@@ -770,12 +692,10 @@ Center the value in a field of a given width:
 **Input**
 
     {{ "fooo" | center }}
-    
 
 **Output**
 
     fooo
-    
 
 ### default(value, default, \[boolean\])
 
@@ -800,12 +720,10 @@ Sort a dict and yield (key, value) pairs:
     {% for item in items | dictsort %}
         {{ item[0] }}
     {% endfor %}
-    
 
 **Output**
 
     a b c d e f
-    
 
 ### dump
 
@@ -815,12 +733,10 @@ Call [`JSON.stringify`](https://developer.mozilla.org/en/docs/Web/JavaScript/Ref
 
     {% set items = ["a", 1, { b : true}] %}
     {{ items | dump }}
-    
 
 **Output**
 
     ["a",1,{"b":true}]
-    
 
 Dump provides the spaces parameter to add spaces or tabs to the resulting values. This makes the results more readable.
 
@@ -828,7 +744,6 @@ Dump provides the spaces parameter to add spaces or tabs to the resulting values
 
     {% set items = ["a", 1, { b : true}] %}
     {{ items | dump(2) }}
-    
 
 **Output**
 
@@ -839,13 +754,11 @@ Dump provides the spaces parameter to add spaces or tabs to the resulting values
         "b": true
       }
     ]
-    
 
 **Input**
 
     {% set items = ["a", 1, { b : true}] %}
     {{ items | dump('\t') }}
-    
 
 **Output**
 
@@ -856,7 +769,6 @@ Dump provides the spaces parameter to add spaces or tabs to the resulting values
             "b": true
         }
     ]
-    
 
 ### escape (aliased as e)
 
@@ -865,12 +777,10 @@ Convert the characters &, <, >, ‘, and ” in strings to HTML-safe sequences. 
 **Input**
 
     {{ "<html>" | escape }}
-    
 
 **Output**
 
     &lt;html&gt;
-    
 
 ### first
 
@@ -880,17 +790,15 @@ Get the first item in an array or the first letter if it's a string:
 
     {% set items = [1,2,3] %}
     {{ items | first }}
-    
+
     {% set word = 'abc' %}
     {{ word | first }}
-    
 
 **Output**
 
     1
-    
+
     a
-    
 
 ### float
 
@@ -899,12 +807,10 @@ Convert a value into a floating point number. If the conversion fails 0.0 is ret
 **Input**
 
     {{ "3.5" | float }}
-    
 
 **Output**
 
     3.5
-    
 
 ### forceescape
 
@@ -923,20 +829,18 @@ Group a sequence of objects by a common attribute:
             { name: 'jessie', type: 'green' }
         ]
     %}
-    
+
     {% for type, items in items | groupby("type") %}
         <b>{{ type }}</b> :
         {% for item in items %}
             {{ item.name }}
         {% endfor %}<br>
     {% endfor %}
-    
 
 **Output**
 
     green : james jessie
     blue : john jim
-    
 
 Attribute can use dot notation to use nested attribute, like `date.year`.
 
@@ -963,14 +867,13 @@ Attribute can use dot notation to use nested attribute, like `date.year`.
           }
         ]
     %}
-    
+
     {% for year, posts in posts | groupby("date.year") %}
         :{{ year }}:
         {% for post in posts %}
             {{ post.title }}
         {% endfor %}
     {% endfor %}
-    
 
 **Output** :2018: Post 2 :2019: Post 1 Post 3
 
@@ -981,42 +884,36 @@ Indent a string using spaces. Default behaviour is _not_ to indent the first lin
 **Input**
 
     {{ "one\ntwo\nthree" | indent }}
-    
 
 **Output**
 
     one
         two
         three
-    
 
 Change default indentation to 6 spaces:
 
 **Input**
 
     {{ "one\ntwo\nthree" | indent(6) }}
-    
 
 **Output**
 
     one
           two
           three
-    
 
 Change default indentation to 6 spaces and indent the first line:
 
 **Input**
 
     {{ "one\ntwo\nthree" | indent(6, true) }}
-    
 
 **Output**
 
           one
           two
           three
-    
 
 ### int
 
@@ -1025,12 +922,10 @@ Convert the value into an integer. If the conversion fails 0 is returned.
 **Input**
 
     {{ "3.5" | int }}
-    
 
 **Output**
 
     3
-    
 
 ### join
 
@@ -1040,12 +935,10 @@ Return a string which is the concatenation of the strings in a sequence:
 
     {% set items =  [1, 2, 3] %}
     {{ items | join }}
-    
 
 **Output**
 
     123
-    
 
 The separator between elements is an empty string by default which can be defined with an optional parameter:
 
@@ -1053,12 +946,10 @@ The separator between elements is an empty string by default which can be define
 
     {% set items = ['foo', 'bar', 'bear'] %}
     {{ items | join(",") }}
-    
 
 **Output**
 
     foo,bar,bear
-    
 
 This behaviour is applicable to arrays:
 
@@ -1069,14 +960,12 @@ This behaviour is applicable to arrays:
         { name: 'bar' },
         { name: 'bear' }]
     %}
-    
+
     {{ items | join(",", "name") }}
-    
 
 **Output**
 
     foo,bar,bear
-    
 
 ### last
 
@@ -1086,17 +975,15 @@ Get the last item in an array or the last letter if it's a string:
 
     {% set items = [1,2,3] %}
     {{ items | last }}
-    
+
     {% set word = 'abc' %}
     {{ word | last }}
-    
 
 **Output**
 
     3
-    
+
     c
-    
 
 ### length
 
@@ -1107,14 +994,12 @@ Return the length of an array or string, or the number of keys in an object:
     {{ [1,2,3] | length }}
     {{ "test" | length }}
     {{ {key: value} | length }}
-    
 
 **Output**
 
     3
     4
     1
-    
 
 ### list
 
@@ -1123,12 +1008,10 @@ Convert the value into a list. If it was a string the returned list will be a li
 **Input**
 
     {% for i in "foobar" | list %}{{ i }},{% endfor %}
-    
 
 **Output**
 
     f,o,o,b,a,r,
-    
 
 ### lower
 
@@ -1137,12 +1020,10 @@ Convert string to all lower case:
 **Input**
 
     {{ "fOObAr" | lower }}
-    
 
 **Output**
 
     foobar
-    
 
 ### nl2br
 
@@ -1151,12 +1032,10 @@ Replace new lines with `<br />` HTML elements:
 **Input**
 
     {{ "foo\nbar" | striptags(true) | escape | nl2br }}
-    
 
 **Output**
 
     foo<br />\nbar
-    
 
 ### random
 
@@ -1165,7 +1044,6 @@ Select a random value from an array. (This will change everytime the page is ref
 **Input**
 
     {{ [1,2,3,4,5,6,7,8,9] | random }}
-    
 
 **Output**
 
@@ -1180,12 +1058,11 @@ If no test is specified, each object will be evaluated as a boolean.
 **Input**
 
     {% set numbers=[0, 1, 2, 3, 4, 5] %}
-    
+
     {{ numbers | reject("odd") | join }}
     {{ numbers | reject("even") | join }}
     {{ numbers | reject("divisibleby", 3) | join }}
     {{ numbers | reject() | join }}
-    
 
 **Output**
 
@@ -1193,7 +1070,6 @@ If no test is specified, each object will be evaluated as a boolean.
     135
     1245
     0
-    
 
 ### rejectattr (only the single-argument form)
 
@@ -1207,12 +1083,10 @@ If no test is specified, the attribute’s value will be evaluated as a boolean.
 
     {% set foods = [{tasty: true}, {tasty: false}, {tasty: true}]%}
     {{ foods | rejectattr("tasty") | length }}
-    
 
 **Output**
 
     1
-    
 
 ### replace
 
@@ -1222,12 +1096,10 @@ Replace one item with another. The first item is the item to be replaced, the se
 
     {% set numbers = 123456 %}
     {{ numbers | replace("4", ".") }}
-    
 
 **Output**
 
     123.56
-    
 
 Insert a replaced item before and after a value, by adding quote marks and replacing them surrounding an item:
 
@@ -1235,12 +1107,10 @@ Insert a replaced item before and after a value, by adding quote marks and repla
 
     {% set letters = aaabbbccc%}
     {{ letters | replace("", ".") }}
-    
 
 **Output**
 
     .a.a.a.b.b.b.c.c.c.
-    
 
 Every instance of an item up to a given number (item to be replaced, item replacement, number to be replaced):
 
@@ -1248,14 +1118,12 @@ Every instance of an item up to a given number (item to be replaced, item replac
 
     {% set letters = "aaabbbccc" %}
     {{ letters | replace("a", "x", 2) }}
-    
 
 Note in this instance the required quote marks surrounding the list.
 
 **Output**
 
     xxabbbccc
-    
 
 It is possible to search for patterns in a list to replace:
 
@@ -1263,12 +1131,10 @@ It is possible to search for patterns in a list to replace:
 
     {% set letters = "aaabbbccc" %}
     {{ letters | replace("ab", "x", 2) }}
-    
 
 **Output**
 
     aaxbbccc
-    
 
 ### reverse
 
@@ -1277,12 +1143,10 @@ Reverse a string:
 **Input**
 
     {{ "abcdef" | reverse }}
-    
 
 **Output**
 
     fedcba
-    
 
 Reverse an array:
 
@@ -1291,12 +1155,10 @@ Reverse an array:
     {% for i in [1, 2, 3, 4] | reverse %}
         {{ i }}
     {% endfor %}
-    
 
 **Output**
 
     4 3 2 1
-    
 
 ### round
 
@@ -1305,36 +1167,30 @@ Round a number:
 **Input**
 
     {{ 4.5 | round }}
-    
 
 **Output**
 
     5
-    
 
 Round to the nearest whole number (which rounds down):
 
 **Input**
 
     {{ 4 | round(0, "floor") }}
-    
 
 **Output**
 
     4
-    
 
 Specify the number of digits to round:
 
 **Input**
 
     {{ 4.12346 | round(4) }}
-    
 
 **Output**
 
     4.1235
-    
 
 ### safe
 
@@ -1343,12 +1199,10 @@ Mark the value as safe which means that in an environment with automatic escapin
 **Input**
 
     {{ "foo http://www.example.com/ bar" | urlize | safe }}
-    
 
 **Output**
 
     foo <a href="http://www.example.com/">http://www.example.com/</a> bar
-    
 
 ### select
 
@@ -1359,12 +1213,11 @@ If no test is specified, each object will be evaluated as a boolean.
 **Input**
 
     {% set numbers=[0, 1, 2, 3, 4, 5] %}
-    
+
     {{ numbers | select("odd") | join }}
     {{ numbers | select("even") | join }}
     {{ numbers | select("divisibleby", 3) | join }}
     {{ numbers | select() | join }}
-    
 
 **Output**
 
@@ -1372,7 +1225,6 @@ If no test is specified, each object will be evaluated as a boolean.
     024
     03
     12345
-    
 
 ### selectattr (only the single-argument form)
 
@@ -1386,12 +1238,10 @@ If no test is specified, the attribute’s value will be evaluated as a boolean.
 
     {% set foods = [{tasty: true}, {tasty: false}, {tasty: true}]%}
     {{ foods | selectattr("tasty") | length }}
-    
 
 **Output**
 
     2
-    
 
 ### slice
 
@@ -1400,7 +1250,7 @@ Slice an iterator and return a list of lists containing those items:
 **Input**
 
     {% set arr = [1,2,3,4,5,6,7,8,9] %}
-    
+
     <div class="columwrapper">
       {%- for items in arr | slice(3) %}
         <ul class="column-{{ loop.index }}">
@@ -1410,7 +1260,6 @@ Slice an iterator and return a list of lists containing those items:
         </ul>
       {%- endfor %}
     </div>
-    
 
 **Output**
 
@@ -1431,7 +1280,6 @@ Slice an iterator and return a list of lists containing those items:
           <li>9</li>
         </ul>
     </div>
-    
 
 ### sort(arr, reverse, caseSens, attr)
 
@@ -1447,14 +1295,12 @@ Convert an object to a string:
     {% for i in item | string | list %}
         {{ i }},
     {% endfor %}
-    
 
 **Output**
 
     1,2,3,4,
-    
 
-### striptags (value, \[preserve\_linebreaks\])
+### striptags (value, \[preserve_linebreaks\])
 
 Analog of jinja's [striptags](http://jinja.pocoo.org/docs/templates/#striptags). If `preserve_linebreaks` is false (default), strips SGML/XML tags and replaces adjacent whitespace with one space. If `preserve_linebreaks` is true, normalizes whitespace, trying to preserve original linebreaks. Use second behavior if you want to pipe `{{ text | striptags(true) | escape | nl2br }}`. Use default one otherwise.
 
@@ -1466,12 +1312,10 @@ Output the sum of items in the array:
 
     {% set items = [1,2,3] %}
     {{ items | sum }}
-    
 
 **Output**
 
     6
-    
 
 ### title
 
@@ -1480,12 +1324,10 @@ Make the first letter of the string uppercase:
 **Input**
 
     {{ "foo bar baz" | title }}
-    
 
 **Output**
 
     Foo Bar Baz
-    
 
 ### trim
 
@@ -1494,12 +1336,10 @@ Strip leading and trailing whitespace:
 **Input**
 
     {{ "  foo " | trim }}
-    
 
 **Output**
 
     foo
-    
 
 ### truncate
 
@@ -1510,24 +1350,20 @@ Truncate to 3 characters:
 **Input**
 
     {{ "foo bar" | truncate(3) }}
-    
 
 **Output**
 
     foo(...)
-    
 
 Truncate to 6 characters and replace "..." with a "?":
 
 **Input**
 
     {{ "foo bar baz" | truncate(6, true, "?") }}
-    
 
 **Output**
 
     foo ba ?
-    
 
 ### upper
 
@@ -1536,12 +1372,10 @@ Convert the string to upper case:
 **Input**
 
     {{ "foo" | upper }}
-    
 
 **Output**
 
     FOO
-    
 
 ### urlencode
 
@@ -1550,12 +1384,10 @@ Escape strings for use in URLs, using UTF-8 encoding. Accepts both dictionaries 
 **Input**
 
     {{ "&" | urlencode }}
-    
 
 **Output**
 
     %26
-    
 
 ### urlize
 
@@ -1564,24 +1396,20 @@ Convert URLs in plain text into clickable links:
 **Input**
 
     {{ "foo http://www.example.com/ bar" | urlize | safe }}
-    
 
 **Output**
 
     foo <a href="http://www.example.com/">http://www.example.com/</a> bar
-    
 
 Truncate URL text by a given number:
 
 **Input**
 
     {{ "http://mozilla.github.io/" | urlize(10, true) | safe }}
-    
 
 **Output**
 
     <a href="http://mozilla.github.io/">http://moz</a>
-    
 
 ### wordcount
 
@@ -1591,11 +1419,9 @@ Count and output the number of words in a string:
 
     {% set foo = "Hello World"%}
     {{ foo | wordcount }}
-    
 
 **Output**
 
     2
-    
 
 Alternatively, it's easy to [read the JavaScript code](https://github.com/mozilla/nunjucks/blob/master/nunjucks/src/filters.js) that implements these filters.

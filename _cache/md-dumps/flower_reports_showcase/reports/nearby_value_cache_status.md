@@ -3,7 +3,7 @@ layout: "layouts/converted-html.njk"
 title: "nearby_value_cache_status"
 excerpt: "LATLNG"
 sourcePath: "./src/content/flower_reports_showcase/reports/nearby_value_cache_status.html"
-readabilityLength: 8408
+readabilityLength: 10107
 convertedFromHtml: true
 ---
 LATLNG

@@ -5,6 +5,7 @@
 Status: 1/1 items captured.
 
 Delta Queue:
+
 1. Add global loaders and schemas.
 2. Create pagination templates with stable permalinks.
 

@@ -4,8 +4,6 @@
   "line": "the-monsters",
   "slug": "dress-be-latte",
   "title": "Dress be Latte",
-  "character_slugs": [
-    "labubu"
-  ],
+  "character_slugs": ["labubu"],
   "notes": "Seeded from initial article; needs confirmation."
 }

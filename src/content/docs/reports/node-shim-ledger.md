@@ -1,4 +1,5 @@
 # node-shim Ledger
+
 - Time: 2025-08-18T04:17:19Z
 - Diffstat: see `git diff --stat HEAD~5..HEAD`
 - Files changed: README.md, bin/node, bin/npm, docs/knowledge/node-shim-prove.md, logs/node-shim-prove.log, logs/node-shim-unit-prove.log, test/unit/node-shim.test.mjs, logs/docs-links.log

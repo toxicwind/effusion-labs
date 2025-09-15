@@ -38,12 +38,8 @@
     "pendant_msrp": null
   },
   "availability": {
-    "regions": [
-      "China"
-    ],
-    "channels": [
-      "Wacky Mart pop-up locations"
-    ],
+    "regions": ["China"],
+    "channels": ["Wacky Mart pop-up locations"],
     "stock_status": "Available at pop-up locations"
   },
   "designer": "Kasing Lung",

@@ -4,8 +4,6 @@
   "line": "the-monsters",
   "slug": "magic-of-pumpkin",
   "title": "Magic of Pumpkin",
-  "character_slugs": [
-    "mokoko"
-  ],
+  "character_slugs": ["mokoko"],
   "notes": "Seeded from initial article; needs confirmation."
 }

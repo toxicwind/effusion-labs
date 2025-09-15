@@ -41,18 +41,12 @@
     "pendant_msrp": null
   },
   "availability": {
-    "regions": [
-      "Mainland-China"
-    ],
-    "channels": [
-      "POP MART China Points Mall"
-    ],
+    "regions": ["Mainland-China"],
+    "channels": ["POP MART China Points Mall"],
     "stock_status": "Out of stock"
   },
   "designer": "Kasing Lung",
-  "accessories": [
-    "Key-clip hardware and credit-card backing"
-  ],
+  "accessories": ["Key-clip hardware and credit-card backing"],
   "articulation": null,
   "colorway": "White plush “duck” suit with orange beak visor"
 }

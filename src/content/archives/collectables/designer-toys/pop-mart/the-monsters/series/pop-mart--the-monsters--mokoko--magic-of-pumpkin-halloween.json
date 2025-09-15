@@ -38,19 +38,12 @@
     "pendant_msrp": null
   },
   "availability": {
-    "regions": [
-      "Global"
-    ],
-    "channels": [
-      "POP MART channels"
-    ],
+    "regions": ["Global"],
+    "channels": ["POP MART channels"],
     "stock_status": "Available"
   },
   "designer": "Kasing Lung",
-  "accessories": [
-    "Keychain",
-    "pumpkin elements"
-  ],
+  "accessories": ["Keychain", "pumpkin elements"],
   "articulation": null,
   "colorway": "Pumpkin orange"
 }

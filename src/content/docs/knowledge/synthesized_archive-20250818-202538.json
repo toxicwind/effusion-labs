@@ -18,9 +18,7 @@
     "relations_graph_edges": "Relations \\& graph edges:\n\n- Predecessor/successor: Seasonal Halloween series.\n- Lateral variants: Magic of Pumpkin pendant.\n- Graph hub: POP MART seasonal.",
     "market_intelligence": "Market intelligence (optional):\n\n- Price history: AU\\$ 50 launch, no official adjustments.\n- Secondary range: AU\\$ 75–AU\\$ 90.\n- Scarcity: High collector demand, sold out first day.\n\nProvenance URLs:\n\n- https://m.popmart.com/us/products/1505/happy-halloween-party-series-sitting-pumpkin-vinyl-plush-pendant\n- https://www.instagram.com/p/C4P8fNkqjZC/?hl=en\n- https://www.instagram.com/p/C4dCMPovGfa/",
     "deltas": [],
-    "sources": [
-      "research/COMPLETED SEEDS.txt"
-    ]
+    "sources": ["research/COMPLETED SEEDS.txt"]
   },
   {
     "product": "PRONOUNCE — Be Fancy Now",
@@ -41,9 +39,7 @@
     "relations_graph_edges": "Relations \\& graph:\n\n- Predecessor: Wings of Fantasy collab.\n- Successor: Wings of Fortune.\n- Hub: Collaboration series.",
     "market_intelligence": "Market intelligence:\n\n- Price history: Launch CNY 599, resale CNY 2,200+.\n- Secondary snapshot: CNY 1,800–CNY 2,500.\n- Scarcity: 6,458 units, sold out same day.\n\nProvenance URLs:\n\n- https://m.popmart.com/us/products/1012/labubu-×-pronounce-be-fancy-now-vinyl-plush-doll\n- https://www.instagram.com/p/C4dCMPovGfa/\n- https://www.instagram.com/reel/C4d_9NBi0Kh/?hl=en\n- https://whoopea.com/products/labubu-x-pronounce-be-fancy-now-vinyl-plush-doll-global-limited\n- https://www.getnowprinting.com/shopdetail/10987066.html",
     "deltas": [],
-    "sources": [
-      "research/COMPLETED SEEDS.txt"
-    ]
+    "sources": ["research/COMPLETED SEEDS.txt"]
   },
   {
     "product": "^6_1",
@@ -64,9 +60,7 @@
     "relations_graph_edges": "Relations \\& graph edges:\n\n- Predecessor: Be Fancy Now.\n- Successor: Wings of Fortune.\n- Hub: Pronounce collaboration series.",
     "market_intelligence": "Market intelligence (optional):\n\n- Price history: Launch USD119.99; resell USD200–USD250.\n- Secondary market: USD180–USD240.\n- Scarcity: Sold out quickly, limited per-order.",
     "deltas": [],
-    "sources": [
-      "research/COMPLETED SEEDS.txt"
-    ]
+    "sources": ["research/COMPLETED SEEDS.txt"]
   },
   {
     "product": "PRONOUNCE — Wings of Fortune (hanging card)",
@@ -87,9 +81,7 @@
     "relations_graph_edges": "Relations \\& graph edges:\n\n- Companion: Wings of Fantasy plush.\n- Hub: Pronounce collaboration.",
     "market_intelligence": "Market intelligence (optional):\n\n- Price history: Launch USD43.99; resell USD75–USD90.\n- Secondary market: USD65–USD85.\n- Scarcity: Limited sale, immediate sellout.\n\nProvenance URLs:\n\n- https://m.popmart.com/us/products/1580/labubu-×-pronounce-wings-of-fantasy-vinyl-plush-doll\n- https://www.popculturedepot.com/products/labubu-pronounce-wings-of-fortune-vinyl-plush-hanging-card-1\n- https://littlethingsme.com/products/labubu-pronounce-wings-of-fortune-vinyl-plush-hanging-card\n- https://www.instagram.com/reel/DAd3tCeJZLQ/?hl=en\n- https://www.popmart.com/en-HK/products/1153/labubu-×-pronounce-wings-of-fortune-vinyl-plush-hanging-card",
     "deltas": [],
-    "sources": [
-      "research/COMPLETED SEEDS.txt"
-    ]
+    "sources": ["research/COMPLETED SEEDS.txt"]
   },
   {
     "product": "^7_1",
@@ -110,9 +102,7 @@
     "relations_graph_edges": "Relations \\& graph edges:\n\n- Predecessor: None (first Coca-Cola collab).\n- Lateral variants: Figures vs plush blind-box (V3).\n- Shared collab capsule: Seasonal winter collab.\n- Series hub link: POP MART collab series.",
     "market_intelligence": "Market intelligence (optional):\n\n- Official price history: USD 39.99 launch; set of 6 for USD 239.94.\n- Secondary market range: USD 60–USD 100; secret edition trades USD 3,000–USD 5,000.\n- Scarcity signals: Secret odds 1:72, sold out global blind-box launch.",
     "deltas": [],
-    "sources": [
-      "research/COMPLETED SEEDS.txt"
-    ]
+    "sources": ["research/COMPLETED SEEDS.txt"]
   },
   {
     "product": "Exciting Macaron (v1)",
@@ -133,9 +123,7 @@
     "relations_graph_edges": "Relations \\& graph edges:\n\n- Predecessor: None.\n- Successor: Have a Seat (V2).\n- Hub: The Monsters blind-box series.",
     "market_intelligence": "Market intelligence (optional):\n\n- Price history: Launch USD 21.99; set USD 131.94.\n- Secondary market: USD 35–USD 50 per box.\n- Scarcity signals: Secret odds 1:72, intermittent restocks.",
     "deltas": [],
-    "sources": [
-      "research/COMPLETED SEEDS.txt"
-    ]
+    "sources": ["research/COMPLETED SEEDS.txt"]
   },
   {
     "product": "^8_1",
@@ -156,9 +144,7 @@
     "relations_graph_edges": null,
     "market_intelligence": null,
     "deltas": [],
-    "sources": [
-      "research/COMPLETED SEEDS.txt"
-    ]
+    "sources": ["research/COMPLETED SEEDS.txt"]
   },
   {
     "product": "Time to Chill — 2022-10-31 — USD 69.99",
@@ -222,9 +208,7 @@
     "relations_graph_edges": "Deltas:\nRelease date correction: Seed listed May 25, 2023, but official sources confirm May 26, 2023 as the actual release date[^1_14][^1_17].",
     "market_intelligence": "Media assets:\nOfficial social media promotional content available including Instagram reels and X/Twitter posts showing product details and marketing materials[^1_14][^1_15][^1_17].",
     "deltas": [],
-    "sources": [
-      "research/PRIMARY TARGETS — Completed(1).txt"
-    ]
+    "sources": ["research/PRIMARY TARGETS — Completed(1).txt"]
   },
   {
     "product": "Dress be Latte — 2023-10-26; CNY 499 (plush)",
@@ -245,9 +229,7 @@
     "relations_graph_edges": "Deltas:\nRelease date correction: Seed data shows October 26, 2023, but official sources confirm October 27, 2023[^1_23][^1_26].",
     "market_intelligence": "Media assets:\nOfficial promotional materials including Instagram posts and social media campaigns showcasing the autumn/winter theme and cozy aesthetic[^1_23][^1_31][^1_29].",
     "deltas": [],
-    "sources": [
-      "research/PRIMARY TARGETS — Completed(1).txt"
-    ]
+    "sources": ["research/PRIMARY TARGETS — Completed(1).txt"]
   },
   {
     "product": "Flip with Me — 2024-07-12; plush 40×20×15 cm; CN/US pricing exists",
@@ -268,9 +250,7 @@
     "relations_graph_edges": "Deltas:\nNo contradictions found with seed data. Dimensions and release date confirmed accurate across all sources.",
     "market_intelligence": "Media assets:\nOfficial promotional photography, social media content, and YouTube unboxing videos showcasing the dynamic flip pose and gradient coloring[^1_37][^1_35][^1_38].",
     "deltas": [],
-    "sources": [
-      "research/PRIMARY TARGETS — Completed(1).txt"
-    ]
+    "sources": ["research/PRIMARY TARGETS — Completed(1).txt"]
   },
   {
     "product": "Fall in Wild — 2024-07-12; plush 40×20×15 and keychain pendant 17 cm",
@@ -291,9 +271,7 @@
     "relations_graph_edges": "Deltas:\nNo contradictions found with seed data. Dimensions and release date confirmed accurate across sources.",
     "market_intelligence": "Media assets:\nOfficial promotional materials showcasing both plush doll and pendant formats, plus camping theme aesthetic[^1_47][^1_45].",
     "deltas": [],
-    "sources": [
-      "research/PRIMARY TARGETS — Completed(1).txt"
-    ]
+    "sources": ["research/PRIMARY TARGETS — Completed(1).txt"]
   },
   {
     "product": "Let's Checkmate (Doll) — 2025-02-07; 37 cm; USD 114.99",
@@ -314,9 +292,7 @@
     "relations_graph_edges": "Deltas:\nNo contradictions found with seed data. Price and dimensions confirmed accurate across all sources.",
     "market_intelligence": "Media assets:\nOfficial promotional materials, unboxing videos, and product photography showcasing chess theme and functional jewelry box feature[^1_50][^1_54][^1_56].",
     "deltas": [],
-    "sources": [
-      "research/PRIMARY TARGETS — Completed(1).txt"
-    ]
+    "sources": ["research/PRIMARY TARGETS — Completed(1).txt"]
   },
   {
     "product": "Let's Checkmate (Hanging Card) — 2025-02-07; 17 cm; USD 39.99",
@@ -337,9 +313,7 @@
     "relations_graph_edges": "Deltas:\nNo contradictions found with seed data. Pricing and dimensions confirmed accurate across sources.",
     "market_intelligence": "Media assets:\nProduct photography and promotional materials showing chess theme design and pendant functionality[^1_50][^1_56][^1_57].",
     "deltas": [],
-    "sources": [
-      "research/PRIMARY TARGETS — Completed(1).txt"
-    ]
+    "sources": ["research/PRIMARY TARGETS — Completed(1).txt"]
   },
   {
     "product": "Time to Chill:",
@@ -360,9 +334,7 @@
     "relations_graph_edges": "Deltas:\nAll pricing and release date information consistent across sources. No contradictions found with seed data.",
     "market_intelligence": "Media assets:\nMilan Fashion Week photography, official product photography, and promotional materials showcasing fashion collaboration concept and purple world aesthetic[^2_5][^2_12][^2_13].",
     "deltas": [],
-    "sources": [
-      "research/PRIMARY TARGETS — Completed(1).txt"
-    ]
+    "sources": ["research/PRIMARY TARGETS — Completed(1).txt"]
   },
   {
     "product": "Coca-Cola — 2025-01-24; 15.5×17 cm; set USD 239.94 / box USD 39.99 (blind box)",
@@ -383,9 +355,7 @@
     "relations_graph_edges": "Deltas:\nAll pricing and release date information consistent across sources. No contradictions found with seed data.",
     "market_intelligence": "Media assets:\nOfficial promotional materials featuring winter/holiday themes, unboxing videos showing all variants, and Coca-Cola collaboration marketing content[^2_15][^2_17][^2_26][^2_27].",
     "deltas": [],
-    "sources": [
-      "research/PRIMARY TARGETS — Completed(1).txt"
-    ]
+    "sources": ["research/PRIMARY TARGETS — Completed(1).txt"]
   },
   {
     "product": "Have a Seat — 2024-07-12; 8×7×15 cm; set USD 131.94 / box USD 21.99",
@@ -406,9 +376,7 @@
     "relations_graph_edges": "Deltas:\nAll pricing, dimensions, and release date information consistent across sources. No contradictions found with seed data.",
     "market_intelligence": "Media assets:\nOfficial promotional materials showcasing sitting poses and comfort themes, plus extensive social media content featuring all character variants[^2_35][^2_36].",
     "deltas": [],
-    "sources": [
-      "research/PRIMARY TARGETS — Completed(1).txt"
-    ]
+    "sources": ["research/PRIMARY TARGETS — Completed(1).txt"]
   },
   {
     "product": "Big Into Energy (v3) — 2025-04-25; 17 cm; set USD 167.94 / box USD 27.99",
@@ -429,9 +397,7 @@
     "relations_graph_edges": "Deltas:\nAll pricing, dimensions, and release date information consistent across sources. No contradictions found with seed data.",
     "market_intelligence": "Media assets:\nOfficial promotional materials featuring cosmic energy themes, unboxing videos showcasing unique tie-dye variations, and extensive social media campaign content[^2_46][^2_47][^2_49].",
     "deltas": [],
-    "sources": [
-      "research/PRIMARY TARGETS — Completed(1).txt"
-    ]
+    "sources": ["research/PRIMARY TARGETS — Completed(1).txt"]
   },
   {
     "product": "PRONOUNCE Wings of Fantasy/Fortune:",
@@ -452,9 +418,7 @@
     "relations_graph_edges": "Deltas:\nSeed release date and price match sourced data; limited-edition quantity (1,999) added. No contradictions to seed data.",
     "market_intelligence": "Media assets:\nYouTube unboxing video demonstrating size and accessories[^3_3]; TikTok promotional clips highlighting design features[^3_6].",
     "deltas": [],
-    "sources": [
-      "research/PRIMARY TARGETS — Completed(1).txt"
-    ]
+    "sources": ["research/PRIMARY TARGETS — Completed(1).txt"]
   },
   {
     "product": "I FOUND YOU (v1):",
@@ -475,9 +439,7 @@
     "relations_graph_edges": "Deltas:\nNo discrepancies with seed data. Packaging details and materials breakdown added.",
     "market_intelligence": "Media assets:\nYouTube unboxing video demonstrating wings detail[^4_7]; Instagram product reveal showcasing halo and cloud packaging[^4_6].",
     "deltas": [],
-    "sources": [
-      "research/PRIMARY TARGETS — Completed(1).txt"
-    ]
+    "sources": ["research/PRIMARY TARGETS — Completed(1).txt"]
   },
   {
     "product": "Jump for Joy — 2023-05-25 — CNY 499 (plush)",
@@ -498,9 +460,7 @@
     "relations_graph_edges": "**Deltas:**\nNone identified versus seed data.",
     "market_intelligence": "**Media assets:**\nSocial media content, product photography, collector documentation available[^1_16][^1_13][^1_20].",
     "deltas": [],
-    "sources": [
-      "research/PRIMARY TARGETS — Completed(2).txt"
-    ]
+    "sources": ["research/PRIMARY TARGETS — Completed(2).txt"]
   },
   {
     "product": "Dress be Latte — 2023-10-26 — CNY 499 (plush)",
@@ -521,9 +481,7 @@
     "relations_graph_edges": "**Deltas:**\nNone identified versus seed data.",
     "market_intelligence": "**Media assets:**\nTikTok unboxing content, Instagram promotional materials, product photography available[^1_28][^1_30][^1_31][^1_32].",
     "deltas": [],
-    "sources": [
-      "research/PRIMARY TARGETS — Completed(2).txt"
-    ]
+    "sources": ["research/PRIMARY TARGETS — Completed(2).txt"]
   },
   {
     "product": "Flip with Me — 2024-07-12 — plush 40×20×15 cm — CN/US pricing exists",
@@ -544,9 +502,7 @@
     "relations_graph_edges": "**Deltas:**\nNone identified versus seed data.",
     "market_intelligence": "**Media assets:**\nInstagram promotional content, product demonstration videos, collector documentation[^1_36][^1_38].",
     "deltas": [],
-    "sources": [
-      "research/PRIMARY TARGETS — Completed(2).txt"
-    ]
+    "sources": ["research/PRIMARY TARGETS — Completed(2).txt"]
   },
   {
     "product": "Fall in Wild — 2024-07-12 — plush 40×20×15 and keychain pendant 17 cm",
@@ -567,9 +523,7 @@
     "relations_graph_edges": "**Deltas:**\nNone identified versus seed data.",
     "market_intelligence": "**Media assets:**\nCNY promotional content, product photography, seasonal marketing materials[^2_7][^2_5].",
     "deltas": [],
-    "sources": [
-      "research/PRIMARY TARGETS — Completed(2).txt"
-    ]
+    "sources": ["research/PRIMARY TARGETS — Completed(2).txt"]
   },
   {
     "product": "Best of Luck（海外限定） — 2023-12-30 — CNY 499 — limited 3,000 — likely regional exclusive",
@@ -590,9 +544,7 @@
     "relations_graph_edges": "**Deltas:**\nConfirmed as overseas exclusive (海外限定) supporting seed designation.",
     "market_intelligence": "**Media assets:**\nLimited documentation due to regional exclusive nature[^2_9].",
     "deltas": [],
-    "sources": [
-      "research/PRIMARY TARGETS — Completed(2).txt"
-    ]
+    "sources": ["research/PRIMARY TARGETS — Completed(2).txt"]
   },
   {
     "product": "Happy Halloween Party — 2024-10-25 — AU\\$ 50 (keychain pendant)",
@@ -613,9 +565,7 @@
     "relations_graph_edges": "**Deltas:**\nNone identified versus seed data.",
     "market_intelligence": "**Media assets:**\nHalloween promotional materials, Australian market content[^2_10].",
     "deltas": [],
-    "sources": [
-      "research/PRIMARY TARGETS — Completed(2).txt"
-    ]
+    "sources": ["research/PRIMARY TARGETS — Completed(2).txt"]
   },
   {
     "product": "PRONOUNCE — Wings of Fantasy (plush) / Wings of Fortune (hanging card) — 2024-10-04 — USD 119.99 / USD 43.99",
@@ -636,9 +586,7 @@
     "relations_graph_edges": "**Deltas:**\nNone identified versus seed data.",
     "market_intelligence": "**Media assets:**\nFashion collaboration photography, social media campaigns, unboxing content[^3_5].",
     "deltas": [],
-    "sources": [
-      "research/PRIMARY TARGETS — Completed(2).txt"
-    ]
+    "sources": ["research/PRIMARY TARGETS — Completed(2).txt"]
   },
   {
     "product": "I FOUND YOU (v1) — 2023-12-15 — 30×25×58 cm — USD 179.99",
@@ -659,9 +607,7 @@
     "relations_graph_edges": "**Deltas:**\nNone identified versus seed data.",
     "market_intelligence": "**Media assets:**\nCharacter introduction videos, unboxing content, collector documentation[^3_11][^3_10][^3_14].",
     "deltas": [],
-    "sources": [
-      "research/PRIMARY TARGETS — Completed(2).txt"
-    ]
+    "sources": ["research/PRIMARY TARGETS — Completed(2).txt"]
   },
   {
     "product": "ANGEL IN CLOUDS (v2) — 2024-10-25 — 33×25×58 cm — USD 289.99",
@@ -682,9 +628,7 @@
     "relations_graph_edges": "**Deltas:**\nRelease date refined to September 2023 without specific day; seed \"xx\" consistent with available data.",
     "market_intelligence": "**Media assets:**\nProduct photography, unboxing videos, collector scent demonstrations.",
     "deltas": [],
-    "sources": [
-      "research/PRIMARY TARGETS — Completed(2).txt"
-    ]
+    "sources": ["research/PRIMARY TARGETS — Completed(2).txt"]
   },
   {
     "product": "Fall into Spring — 2024-03-08 — CNY 599 (plush) / CNY 159 (pendant)",
@@ -705,9 +649,7 @@
     "relations_graph_edges": "**Deltas:**\nNone identified versus seed data.",
     "market_intelligence": "**Media assets:**\nSeasonal promotional images, collector reviews.",
     "deltas": [],
-    "sources": [
-      "research/PRIMARY TARGETS — Completed(2).txt"
-    ]
+    "sources": ["research/PRIMARY TARGETS — Completed(2).txt"]
   },
   {
     "product": "Blue Diamond — 2024-06-18 — CNY 159 (pendant)",
@@ -728,9 +670,7 @@
     "relations_graph_edges": "**Deltas:**\nNone identified versus seed data.",
     "market_intelligence": "**Media assets:**\nProduct images, pendant demonstrations.",
     "deltas": [],
-    "sources": [
-      "research/PRIMARY TARGETS — Completed(2).txt"
-    ]
+    "sources": ["research/PRIMARY TARGETS — Completed(2).txt"]
   },
   {
     "product": "Magic of Pumpkin (Halloween) — 2024-10-27 — CNY 159 (pendant)",
@@ -751,9 +691,7 @@
     "relations_graph_edges": "**Deltas:**\nNone identified versus seed data.",
     "market_intelligence": "**Media assets:**\nHalloween promotional content.",
     "deltas": [],
-    "sources": [
-      "research/PRIMARY TARGETS — Completed(2).txt"
-    ]
+    "sources": ["research/PRIMARY TARGETS — Completed(2).txt"]
   },
   {
     "product": "Twinkly Fairy Tale — 2024-11-28 — CNY 159 (pendant)",
@@ -774,9 +712,7 @@
     "relations_graph_edges": "**Deltas:**\nSeed release date unspecified; launch window refined to June 2025.",
     "market_intelligence": "**Media assets:**\nReal vs fake comparison video, store EQL launch imagery, collector unboxing footage[^5_1][^5_4].",
     "deltas": [],
-    "sources": [
-      "research/PRIMARY TARGETS — Completed(2).txt"
-    ]
+    "sources": ["research/PRIMARY TARGETS — Completed(2).txt"]
   },
   {
     "product": "GOOD LUCKY TO YOU (Thailand) — 2024-12-20 — THB 1,050 — regional exclusive",
@@ -797,9 +733,7 @@
     "relations_graph_edges": "**Deltas:**\nSeed date and price confirmed; seed “USD” currency replaced by THB local pricing.",
     "market_intelligence": "**Media assets:**\nThailand launch event photos, social media unboxing videos, collector testimonials.",
     "deltas": [],
-    "sources": [
-      "research/PRIMARY TARGETS — Completed(2).txt"
-    ]
+    "sources": ["research/PRIMARY TARGETS — Completed(2).txt"]
   },
   {
     "product": "^5_1",
@@ -820,9 +754,7 @@
     "relations_graph_edges": "**Deltas:**\nSeed “member points” confirmed as 5,000 points; dimensions and materials matched standard card specs.",
     "market_intelligence": "**Media assets:**\nInstagram leak posts, SNKRDUNK article images, collector “pop bean” unboxing videos[^6_2][^6_4][^6_5].",
     "deltas": [],
-    "sources": [
-      "research/PRIMARY TARGETS — Completed(2).txt"
-    ]
+    "sources": ["research/PRIMARY TARGETS — Completed(2).txt"]
   },
   {
     "product": "Wacky Mart (China) — 2025-06-12 — CNY 199 — pop-up store exclusive",
@@ -843,8 +775,6 @@
     "relations_graph_edges": "**Deltas:**\nCNY 199 price and event duration confirmed; seed “reg-cn expected” validated by official pop-up schedule.",
     "market_intelligence": "**Media assets:**\nEvent posters, influencer walkthrough videos, snapshop user content from pop-up stores[^6_7][^6_8].",
     "deltas": [],
-    "sources": [
-      "research/PRIMARY TARGETS — Completed(2).txt"
-    ]
+    "sources": ["research/PRIMARY TARGETS — Completed(2).txt"]
   }
 ]

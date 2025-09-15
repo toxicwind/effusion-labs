@@ -5,8 +5,8 @@ on:
     types: [opened, reopened, synchronize, ready_for_review]
 
 permissions:
-  contents: write          # needed to toggle auto-merge via GraphQL
-  pull-requests: write     # not approving, but safe to keep
+  contents: write # needed to toggle auto-merge via GraphQL
+  pull-requests: write # not approving, but safe to keep
   checks: read
   statuses: read
 
@@ -16,7 +16,6 @@ jobs:
       github.event.pull_request.user.login == 'dependabot[bot]' &&
       !github.event.pull_request.draft
     runs-on: ubuntu-latest
-
     concurrency:
       group: dependabot-automerge-${{ github.event.pull_request.number }}
       cancel-in-progress: false

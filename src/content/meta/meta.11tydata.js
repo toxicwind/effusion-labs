@@ -1,3 +1,3 @@
-import { contentArea } from '../../../config/content-area.js';
+import { contentArea } from '../../../config/content-area.js'
 
-export default contentArea('meta');
+export default contentArea('meta')

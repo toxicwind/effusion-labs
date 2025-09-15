@@ -1,4 +1,4 @@
-version: "3.8"
+version: '3.8'
 services:
   mcp-gateway:
     build: ./mcp-stack/gateway
@@ -8,14 +8,13 @@ services:
       - HOST_ALLOWLIST=localhost,127.0.0.1
       - FLARESOLVERR_URL=http://flaresolverr:8191
     expose:
-      - "3000"
+      - '3000'
     depends_on:
       - flaresolverr
   flaresolverr:
     image: ghcr.io/flaresolverr/flaresolverr:latest
     expose:
-      - "8191"
+      - '8191'
 networks:
   default:
     internal: true
-

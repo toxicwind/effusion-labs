@@ -10,12 +10,12 @@ Effusion Labs ships with a default dark theme and an optional light mode. Theme 
   --step-1: clamp(1.13rem, calc(1.06rem + 0.27vw), 1.44rem);
   /* ... */
 }
-html[data-theme="dark"] {
+html[data-theme='dark'] {
   --color-bg: 18 18 18;
   --color-surface: 35 35 35;
   --color-text: 235 235 235;
 }
-html[data-theme="light"] {
+html[data-theme='light'] {
   --color-bg: 245 245 245;
   --color-surface: 230 230 230;
   --color-text: 30 30 30;

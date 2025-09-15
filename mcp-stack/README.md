@@ -3,6 +3,7 @@
 This subproject provides a canonical Server-Sent Events (SSE) gateway that multiplexes multiple stdio-based MCP servers behind a single HTTP surface, with discovery, profiles, sidecar resolution, and basic observability.
 
 ### Transport Surface
+
 - `GET /servers` — JSON by default; simple HTML when `Accept: text/html`.
 - `GET /servers/:name/info` — per-server info/state.
 - `GET /servers/:name/sse` — SSE stream; lazy-spawns the stdio server on first connect.
@@ -11,9 +12,11 @@ This subproject provides a canonical Server-Sent Events (SSE) gateway that multi
 - `GET /healthz`, `GET /readyz` — observability endpoints.
 
 ### Included Servers (registry entries)
+
 filesystem, readweb, screenshot, playwright, curl (with FlareSolverr), searxng. These entries are present in the registry; most are disabled by default unless configured. A demo server (`demo`) is provided for smoke testing.
 
 ### Configuration
+
 - `PROFILE`: `dev` (default) or `prod`
 - `PORT_HTTP`: fixed port for HTTP/SSE
 - `PORT_RANGE_START` / `PORT_RANGE_END`: probe for free port in range
@@ -35,7 +38,7 @@ curl -N http://localhost:<port>/servers/demo/sse
 ```
 
 ### Tests
+
 ```bash
 node mcp-stack/tests/smoke.mjs
 ```
-

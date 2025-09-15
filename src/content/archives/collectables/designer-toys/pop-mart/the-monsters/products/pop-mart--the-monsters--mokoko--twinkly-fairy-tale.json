@@ -12,9 +12,7 @@
   },
   "distribution": {
     "region_lock": false,
-    "markets": [
-      "CN"
-    ]
+    "markets": ["CN"]
   },
   "size": {
     "unit": "cm",
@@ -60,9 +58,7 @@
     "pendant_msrp": null
   },
   "designer": "Kasing Lung",
-  "accessories": [
-    "Card holder feature"
-  ],
+  "accessories": ["Card holder feature"],
   "colorway": "Twinkly fairy colorway",
   "Deltas": [
     {

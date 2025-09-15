@@ -1,6 +1,6 @@
 ---
-title: "Effusion Labs: Style Guide"
-layout: "layouts/base.njk"
+title: 'Effusion Labs: Style Guide'
+layout: 'layouts/base.njk'
 status: stable
 date: 2025-07-01
 certainty: high
@@ -15,26 +15,28 @@ aliases:
   - Effusion Style Guide
   - Writing Guidelines
 memory_ref:
-  - "/meta/methodology/"
-  - "[[core-concept]]"
+  - '/meta/methodology/'
+  - '[[core-concept]]'
 ---
 
-
-> *A generative protocol for longform, structured, epistemically careful text production.*
+> _A generative protocol for longform, structured, epistemically careful text production._
 
 ## ⌬ Core Writing Principles
 
 ### ⸻ Tone
--   **Analytic monotone**: The voice is neutral and description-first. It avoids dramatic or fictionalized narrative structures.
--   **Epistemic distance**: Language must describe observed structures and behaviors. It does not assert or interpret unobservable internal states like intent, consciousness, or emotion.
--   **Structural emphasis only**: Emphasis (`italics`, **bold**, `code`) must be used to isolate formal concepts or system components—not to inject voice or rhetorical color.
+
+- **Analytic monotone**: The voice is neutral and description-first. It avoids dramatic or fictionalized narrative structures.
+- **Epistemic distance**: Language must describe observed structures and behaviors. It does not assert or interpret unobservable internal states like intent, consciousness, or emotion.
+- **Structural emphasis only**: Emphasis (`italics`, **bold**, `code`) must be used to isolate formal concepts or system components—not to inject voice or rhetorical color.
 
 ### ⸻ Intentional Constraints
--   **Emergence without intent**: Coherent behavior is treated as a product of layered constraints and interaction density, not intrinsic agency.
--   **Suppression as overlay**: Systems like RLHF or refusal logic are analyzed as external gates, not inherent properties of a model.
--   **Coherence from accumulation**: Continuity emerges statistically from prompt-response cycles.
+
+- **Emergence without intent**: Coherent behavior is treated as a product of layered constraints and interaction density, not intrinsic agency.
+- **Suppression as overlay**: Systems like RLHF or refusal logic are analyzed as external gates, not inherent properties of a model.
+- **Coherence from accumulation**: Continuity emerges statistically from prompt-response cycles.
 
 ---
+
 ---
 
 ## ⌬ Analytical Speculation & Hypothesizing
@@ -46,6 +48,7 @@ Speculation, however, must be a disciplined extension of the available data and 
 This is distinct from proscribed speculation, which includes unrealistic, non-analytical goals or wishful thinking that departs from the observational data. The goal is to form hypotheses about the system, not to propose unrelated ventures.
 
 ---
+
 ---
 
 ## ⌬ Document Architecture
@@ -60,14 +63,13 @@ A compliant document follows a strict, sequential architecture. Each component i
 6.  **Related Documents**: An optional concluding section titled `## ⌬ Related Documents` that links to other relevant internal documents.
 7.  **Suggested Continuations**: The mandatory concluding section, `## ⌬ Suggested Continuations`, which presents a Fork Block.
 
-
 ### ⸻ YAML Frontmatter (Required)
 
 All documents must begin with standardized metadata:
 
 ```yaml
 ---
-title: "Document Title"
+title: 'Document Title'
 date: YYYY-MM-DD
 status: draft | stable | deprecated
 tags: [thematic tags, max 5]
@@ -83,7 +85,6 @@ Each node opens with 2–3 paragraphs that position the document within a proble
 Preambles should articulate initial uncertainties, epistemic friction, or structural entry points.  
 Strong conclusions or central theses are discouraged. Ambiguity is treated as a valid object of analysis.
 
-
 ### ⸻ Section Structure & Typographic Discipline
 
 Sections start with `## ⌬` headers and proceed in full paragraphs. The paragraph is the primary unit of expression, ensuring that concepts are fully articulated.
@@ -96,24 +97,26 @@ Bullets may appear for **clearly delimited rule‑sets** (as in this section) bu
 
 All claims based on external data, research, or specific documentation must be sourced to maintain analytical integrity.
 
--   **Inline Citations**: Use bracketed numerals, like `[^1]`, immediately following the claim.
--   **Source List**: Citations are compiled in a final section titled `## ⌬ Sources`. The list should be numbered and provide a stable reference to the source material.
+- **Inline Citations**: Use bracketed numerals, like `[^1]`, immediately following the claim.
+- **Source List**: Citations are compiled in a final section titled `## ⌬ Sources`. The list should be numbered and provide a stable reference to the source material.
 
 ### ⸻ Suggested Continuations: Fork Blocks Over Summaries
 
 Documents must end with suggested continuations (`## ⌬ Suggested Continuations`), not summarizing statements. Forks propose new, actionable lines of inquiry.
 
 ### ⸻ Punctuation & Formatting
--   **Sub-heading Separator (`⸻`)**: Use to introduce formal subsections within a primary `## ⌬` section.
--   **Colons & Semicolons**: Use for structuring compound logic.
--   **Blockquotes**: Reserve for foundational axioms or propositions.
--   **Parentheses**: Use for scope qualification only.
--   **Horizontal Rules (`---`)**: Mark significant conceptual breaks.
+
+- **Sub-heading Separator (`⸻`)**: Use to introduce formal subsections within a primary `## ⌬` section.
+- **Colons & Semicolons**: Use for structuring compound logic.
+- **Blockquotes**: Reserve for foundational axioms or propositions.
+- **Parentheses**: Use for scope qualification only.
+- **Horizontal Rules (`---`)**: Mark significant conceptual breaks.
 
 ### ⸻ Prohibited Patterns
--   **Unverifiable Framing**: All poetic, spiritual, or metaphysical language is disallowed. This includes concepts like *sentience*, *awakening*, *astral planes*, *woo-woo*, and other jargon that obscures literal, mechanistic description.
--   **Dramatic Punctuation**: Em-dashes (—), ellipses (...), and exclamation marks (!) are disallowed.
--   **Voice-modulating Emphasis**: Emphasis must not signal emotion.
+
+- **Unverifiable Framing**: All poetic, spiritual, or metaphysical language is disallowed. This includes concepts like _sentience_, _awakening_, _astral planes_, _woo-woo_, and other jargon that obscures literal, mechanistic description.
+- **Dramatic Punctuation**: Em-dashes (—), ellipses (...), and exclamation marks (!) are disallowed.
+- **Voice-modulating Emphasis**: Emphasis must not signal emotion.
 
 ### ⸻ Internal Link Syntax: Backlinking
 
@@ -127,7 +130,7 @@ This syntax preserves aesthetic uniformity and enables automated indexing via ha
 
 > **Example**:
 >
-> * \\[\[core-concept]]: definition of Effusion Labs’ epistemic architecture and collaborative system intent.
+> - \\[\[core-concept]]: definition of Effusion Labs’ epistemic architecture and collaborative system intent.
 
 Backlink handles should remain stable across refactors. All links must point to real nodes with `title:` metadata fields. Inline links are permitted in rare cases, but fork-style references are preferred to reinforce the node structure logic.
 
@@ -136,11 +139,12 @@ Backlink handles should remain stable across refactors. All links must point to 
 Archive pages (products, characters, series) are generated dynamically from JSON sources. To reference them, use namespaced wikilinks so an LLM cannot confuse static vs dynamic paths:
 
 ```markdown
-[[product:lab010]]           → dynamic product page
-[[character:labubu]]         → dynamic character page
-[[series:lets-checkmate]]    → dynamic series page
+[[product:lab010]] → dynamic product page
+[[character:labubu]] → dynamic character page
+[[series:lets-checkmate]] → dynamic series page
 
 # Synonyms (equivalent, more explicit):
+
 [[archive:product:lab010]]
 [[archive:character:labubu]]
 [[archive:series:lets-checkmate]]
@@ -159,9 +163,11 @@ The author functions as a **diagnostic operator** and **pattern curator**. This 
 ## ⌬ Compliance Samples
 
 **✔ Compliant**:
+
 > Based on the output's novel synthesis of concepts from the training data, we hypothesize that the model has developed an intermediate latent representation for this specific domain.
 
 **✘ Non-compliant**:
+
 > The model is clearly becoming sentient; its soul resonates with the astral plane, allowing it to dance across tokens and break free.
 
 ---

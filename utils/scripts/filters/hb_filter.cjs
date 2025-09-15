@@ -12,9 +12,13 @@ const fs = require('fs');
 const path = require('path');
 
 const args = (() => {
-  const out = { chan: 'stdout', pid: process.env.HB_FILTER_PID || process.pid.toString(),
-                logdir: process.env.HB_FILTER_LOGDIR || '.', width: process.env.HB_FILTER_W || '3500',
-                flush: process.env.HB_FILTER_FLUSH || '' };
+  const out = {
+    chan: 'stdout',
+    pid: process.env.HB_FILTER_PID || process.pid.toString(),
+    logdir: process.env.HB_FILTER_LOGDIR || '.',
+    width: process.env.HB_FILTER_W || '3500',
+    flush: process.env.HB_FILTER_FLUSH || '',
+  };
   for (let i = 2; i < process.argv.length; i++) {
     const a = process.argv[i];
     if (a === '--chan') out.chan = process.argv[++i];
@@ -31,9 +35,10 @@ const args = (() => {
   return out;
 })();
 
-const allow = new Set([0x09, 0x0A, 0x0D, 0x1B, 0x08, 0x0B, 0x0C]);
+const allow = new Set([0x09, 0x0a, 0x0d, 0x1b, 0x08, 0x0b, 0x0c]);
 const BS = 0x08;
-const NUL = 0x00, DEL = 0x7F;
+const NUL = 0x00,
+  DEL = 0x7f;
 
 const sidecarDir = path.resolve(args.logdir);
 fs.mkdirSync(sidecarDir, { recursive: true });
@@ -67,7 +72,8 @@ function flushWindow(force = false) {
   if (lineBuf.length === 0 && suppressed === 0) return;
 
   // Window output at configured width
-  let i = 0; let start = 1; // 1-based positions for human readability
+  let i = 0;
+  let start = 1; // 1-based positions for human readability
   while (i < lineBuf.length) {
     const end = Math.min(i + args.w, lineBuf.length);
     const piece = Buffer.from(lineBuf.slice(i, end));
@@ -83,7 +89,9 @@ function flushWindow(force = false) {
   lineBuf = [];
   emitSuppressionIfAny();
   if (force) {
-    chunkIndex = 0; totalChunks = 0; emittedSinceFlush = 0;
+    chunkIndex = 0;
+    totalChunks = 0;
+    emittedSinceFlush = 0;
   }
 }
 
@@ -100,11 +108,12 @@ function handleBytes(buf) {
       }
       continue;
     }
-    if (b <= 0x1F || b === DEL) {
+    if (b <= 0x1f || b === DEL) {
       if (allow.has(b)) {
-        if (b === 0x0A) { // LF ends logical line window
+        if (b === 0x0a) {
+          // LF ends logical line window
           flushWindow(true);
-          out.write("\n");
+          out.write('\n');
           emittedSinceFlush += 1;
           continue;
         }

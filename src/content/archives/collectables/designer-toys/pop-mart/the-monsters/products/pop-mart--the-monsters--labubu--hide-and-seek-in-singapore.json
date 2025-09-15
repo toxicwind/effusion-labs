@@ -12,9 +12,7 @@
   },
   "distribution": {
     "region_lock": true,
-    "markets": [
-      "SG"
-    ]
+    "markets": ["SG"]
   },
   "size": {
     "unit": "cm",

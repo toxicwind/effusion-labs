@@ -1,1 +1,1 @@
-export { default } from '../../../src/_data/nav.js';
+export { default } from '../../../src/_data/nav.js'

@@ -1,13 +1,13 @@
-import { fetch } from 'undici';
+import { fetch } from 'undici'
 
 export async function fetchMarkdown(targetUrl) {
-  const gateway = process.env.OUTBOUND_MARKDOWN_URL || 'http://gateway';
+  const gateway = process.env.OUTBOUND_MARKDOWN_URL || 'http://gateway'
   const res = await fetch(`${gateway}/convert`, {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
     body: JSON.stringify({ url: targetUrl }),
-  });
-  return res.json();
+  })
+  return res.json()
 }
 
-export default { fetchMarkdown };
+export default { fetchMarkdown }

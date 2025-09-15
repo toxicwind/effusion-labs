@@ -3,7 +3,7 @@ layout: "layouts/converted-html.njk"
 title: "Data Cascade"
 excerpt: "A docs page for Eleventy, a simpler static site generator."
 sourcePath: "./src/content/docs/knowledge/eleventy-data-cascade-20250911T175348Z.html"
-readabilityLength: 1955
+readabilityLength: 3714
 convertedFromHtml: true
 ---
 Breadcrumbs:

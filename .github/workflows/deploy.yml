@@ -1,4 +1,4 @@
-name: "CI & Production Deployment"
+name: 'CI & Production Deployment'
 
 on:
   push:
@@ -32,8 +32,8 @@ jobs:
       - name: 🔧 Setup Node from .nvmrc (+ cache)
         uses: actions/setup-node@v5
         with:
-          node-version-file: '.nvmrc'   # e.g. "24"
-          check-latest: true            # latest 24.x
+          node-version-file: '.nvmrc' # e.g. "24"
+          check-latest: true # latest 24.x
           cache: 'npm'
 
       # --- CI steps for the web service ---

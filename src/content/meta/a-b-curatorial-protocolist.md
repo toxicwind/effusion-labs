@@ -1,6 +1,6 @@
 ---
-title: "Comparative Analysis of Candidate Framework Designations"
-layout: "layouts/base.njk"
+title: 'Comparative Analysis of Candidate Framework Designations'
+layout: 'layouts/base.njk'
 date: 2025-07-12
 status: complete
 certainty: definitive
@@ -17,9 +17,9 @@ spark_type: comparative-analysis
 target: Candidate Framework Designations ("Curatorial Generativism" vs. "Protocolist Art")
 analytic_lens: protocol-centrism, structural-honesty, market-distinctiveness, media-extensibility
 memory_ref:
-  - "[protocolist-art-framework]"
-  - "[curatorial-generativism-obsolete]"
-  - "[rhizomatic-protocol]"
+  - '[protocolist-art-framework]'
+  - '[curatorial-generativism-obsolete]'
+  - '[rhizomatic-protocol]'
 ---
 
 ### 1.0 Objective
@@ -39,10 +39,10 @@ The analysis is based on four core differentiators identified as critical to the
 
 This framework was defined in the artifact `Curatorial Generativism: An Artistic Framework`.
 
-* **Protocol-Centrism:** **Low.** The name effectively identifies the *actors* in the system: the "Curator" (who) and the "Generative" engine (what). However, it fails to highlight the *how*—the protocol itself. The core aesthetic principle of the process-as-artwork is obscured.
-* **Structural Honesty:** **Low.** Nothing in the name implies the rigorous, version-locked, and traceable nature of the artifacts. It could easily describe a far looser, less structured form of human-AI collaboration. The key differentiators of "Rhizomatic Traceability" and "Reproducible Editions" are not captured.
-* **Market Distinctiveness:** **Low.** As noted in the diagnostic snapshot, the term risks semantic collision with existing discourse on "generative curation" and the general hashtag "generativism." Its distinctiveness is prone to rapid erosion.
-* **Media Extensibility:** **Moderate.** While applicable to other media, the term "curatorial" has strong connotations of selecting from existing objects, which may not fully capture the act of generating novel images or sounds from a prompt.
+- **Protocol-Centrism:** **Low.** The name effectively identifies the _actors_ in the system: the "Curator" (who) and the "Generative" engine (what). However, it fails to highlight the _how_—the protocol itself. The core aesthetic principle of the process-as-artwork is obscured.
+- **Structural Honesty:** **Low.** Nothing in the name implies the rigorous, version-locked, and traceable nature of the artifacts. It could easily describe a far looser, less structured form of human-AI collaboration. The key differentiators of "Rhizomatic Traceability" and "Reproducible Editions" are not captured.
+- **Market Distinctiveness:** **Low.** As noted in the diagnostic snapshot, the term risks semantic collision with existing discourse on "generative curation" and the general hashtag "generativism." Its distinctiveness is prone to rapid erosion.
+- **Media Extensibility:** **Moderate.** While applicable to other media, the term "curatorial" has strong connotations of selecting from existing objects, which may not fully capture the act of generating novel images or sounds from a prompt.
 
 **Conclusion:** "Curatorial Generativism" accurately describes the inputs to the system but fails to describe the system's unique structure, its core philosophical claims, or the nature of its outputs.
 
@@ -50,8 +50,7 @@ This framework was defined in the artifact `Curatorial Generativism: An Artistic
 
 This framework is defined in the artifact `The Protocolist Art Framework`.
 
-* **Protocol-Centrism:** **High.** The name explicitly and immediately elevates the **protocol** to the primary position. It defines the practitioner not by their tool, but by their methodology. It successfully signals that the artwork is the governed procedure itself.
-* **Structural Honesty:** **High.** A "protocol" inherently implies a system of rules, procedures, and specifications that can be documented, versioned, and audited. The name strongly supports the concepts of "Rhizomatic Traceability," "Reproducible Editions," and the "Bias-Audit Loop." It suggests a practice of rigor and transparency.
-* **Market Distinctiveness:** **High.** The term is novel, concise, and specific. It carries a manifesto-like quality that resists easy co-option and is unlikely to be confused with broader, less-defined trends. It effectively carves out a unique conceptual space.
-* **Media Extensibility:** **High.** A protocol is medium-agnostic. One can design a protocol for generating text, images, architectural plans, music, or business strategies. The name is inherently future-proof and does not tie the practice to a single medium like text.
-
+- **Protocol-Centrism:** **High.** The name explicitly and immediately elevates the **protocol** to the primary position. It defines the practitioner not by their tool, but by their methodology. It successfully signals that the artwork is the governed procedure itself.
+- **Structural Honesty:** **High.** A "protocol" inherently implies a system of rules, procedures, and specifications that can be documented, versioned, and audited. The name strongly supports the concepts of "Rhizomatic Traceability," "Reproducible Editions," and the "Bias-Audit Loop." It suggests a practice of rigor and transparency.
+- **Market Distinctiveness:** **High.** The term is novel, concise, and specific. It carries a manifesto-like quality that resists easy co-option and is unlikely to be confused with broader, less-defined trends. It effectively carves out a unique conceptual space.
+- **Media Extensibility:** **High.** A protocol is medium-agnostic. One can design a protocol for generating text, images, architectural plans, music, or business strategies. The name is inherently future-proof and does not tie the practice to a single medium like text.

@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-09-15T01:43:48.867Z",
+  "timestamp": "2025-09-15T01:58:23.882Z",
   "roots": [
     "src"
   ],
@@ -1078,12 +1078,12 @@
       "rewrites": 0
     },
     {
-      "file": "src/content/docs/vendors/tailwindcss/4.1.11/readme.md",
+      "file": "src/content/docs/vendors/postcss/8.5.6/index.md",
       "changed": false,
       "rewrites": 0
     },
     {
-      "file": "src/content/docs/vendors/postcss/8.5.6/index.md",
+      "file": "src/content/docs/vendors/tailwindcss/4.1.11/readme.md",
       "changed": false,
       "rewrites": 0
     },

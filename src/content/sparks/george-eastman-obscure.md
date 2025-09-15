@@ -1,6 +1,6 @@
 ---
-title: "George Eastman - A Life in Precision"
-layout: "layouts/base.njk"
+title: 'George Eastman - A Life in Precision'
+layout: 'layouts/base.njk'
 date: 2025-07-02
 status: draft
 certainty: medium
@@ -44,8 +44,12 @@ On 14 March 1932, George Eastman assembled his friends for what appeared to be a
 
 ## ⌬ Sources
 
-[^1]: George Eastman Museum, “Historic Mansion,” [↗source](https://www.eastman.org/historic-mansion)  
-[^2]: PBS American Experience, “The Innovator,” [↗source](https://www.pbs.org/wgbh/americanexperience/features/eastman-innovator/)  
-[^3]: Atlas Obscura, “When Kodak Used a Bizarre 13-Month Calendar,” [↗source](https://www.atlasobscura.com/articles/kodak-calendar)  
-[^4]: National Museum of American History, “Original Kodak Camera, Serial No. 540,” [↗source](https://americanhistory.si.edu/collections/nmah_760118)  
+[^1]: George Eastman Museum, “Historic Mansion,” [↗source](https://www.eastman.org/historic-mansion)
+
+[^2]: PBS American Experience, “The Innovator,” [↗source](https://www.pbs.org/wgbh/americanexperience/features/eastman-innovator/)
+
+[^3]: Atlas Obscura, “When Kodak Used a Bizarre 13-Month Calendar,” [↗source](https://www.atlasobscura.com/articles/kodak-calendar)
+
+[^4]: National Museum of American History, “Original Kodak Camera, Serial No. 540,” [↗source](https://americanhistory.si.edu/collections/nmah_760118)
+
 [^5]: Open Culture, “The Very Concise Suicide Note of Kodak Founder George Eastman,” [↗source](https://www.openculture.com/2013/08/the-very-concise-suicide-note-by-kodak-founder-george-eastman-my-work-is-done-why-wait-1932.html)

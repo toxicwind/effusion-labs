@@ -16,27 +16,16 @@
             "type": "string"
           },
           "from": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": ["string", "null"]
           },
           "to": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": ["string", "null"]
           },
           "source": {
             "type": "string"
           }
         },
-        "required": [
-          "field",
-          "from",
-          "to",
-          "source"
-        ]
+        "required": ["field", "from", "to", "source"]
       }
     },
     "brand": {
@@ -610,9 +599,5 @@
       "type": "string"
     }
   },
-  "required": [
-    "title",
-    "source",
-    "Deltas"
-  ]
+  "required": ["title", "source", "Deltas"]
 }

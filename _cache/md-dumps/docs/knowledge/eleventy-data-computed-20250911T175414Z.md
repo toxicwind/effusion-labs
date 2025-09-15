@@ -3,7 +3,7 @@ layout: "layouts/converted-html.njk"
 title: "Computed Data"
 excerpt: "A docs page for Eleventy, a simpler static site generator."
 sourcePath: "./src/content/docs/knowledge/eleventy-data-computed-20250911T175414Z.html"
-readabilityLength: 8293
+readabilityLength: 12241
 convertedFromHtml: true
 ---
 Breadcrumbs:

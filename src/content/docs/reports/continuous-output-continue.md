@@ -1,4 +1,5 @@
 # Continuous Output Continuation
+
 - recap: silent flags and /dev/null redirects removed from init scripts; progress flag added; tests enforce visibility.
 - next:
   1. audit remaining scripts and Docker files for quiet flags.

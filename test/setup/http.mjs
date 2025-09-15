@@ -1,24 +1,24 @@
-import { MockAgent, setGlobalDispatcher } from 'undici';
+import { MockAgent, setGlobalDispatcher } from 'undici'
 
-const mockAgent = new MockAgent();
-mockAgent.disableNetConnect();
+const mockAgent = new MockAgent()
+mockAgent.disableNetConnect()
 
 mockAgent.on('no match', ({ method, origin, path }) => {
   throw new Error(
-    `Unmatched request: ${method} ${origin}${path}.\nAdd a mock in test/mocks/`,
-  );
-});
+    `Unmatched request: ${method} ${origin}${path}.\nAdd a mock in test/mocks/`
+  )
+})
 
 const httpMock = {
   mock(origin, setup) {
-    return mockAgent.get(origin).intercept(setup);
+    return mockAgent.get(origin).intercept(setup)
   },
   allowNetFor(re) {
-    mockAgent.enableNetConnect(re);
+    mockAgent.enableNetConnect(re)
   },
-};
+}
 
-globalThis.httpMock = httpMock;
+globalThis.httpMock = httpMock
 
-setGlobalDispatcher(mockAgent);
-export { mockAgent };
+setGlobalDispatcher(mockAgent)
+export { mockAgent }

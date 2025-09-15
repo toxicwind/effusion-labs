@@ -1,6 +1,7 @@
 # typography-colors Ledger
 
 ## Criteria & Proof
+
 1. Light and dark backgrounds set to accessible values.
    - Evidence: `src/styles/tokens.css`
    - Test: `docs/knowledge/typography-colors-green.log`
@@ -14,8 +15,9 @@
    - Check: `docs/knowledge/typography-colors-docs.log`
 
 ## Index
+
 4/4 criteria satisfied
 
 ## Rollback
-`git reset --hard 8a93dd4989c4a234db8e8025e92ae18fd3ae0e95`
 
+`git reset --hard 8a93dd4989c4a234db8e8025e92ae18fd3ae0e95`

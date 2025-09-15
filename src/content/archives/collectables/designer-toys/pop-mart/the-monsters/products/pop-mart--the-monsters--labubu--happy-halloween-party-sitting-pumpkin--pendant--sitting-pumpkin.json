@@ -12,9 +12,7 @@
   },
   "distribution": {
     "region_lock": false,
-    "markets": [
-      "AU"
-    ]
+    "markets": ["AU"]
   },
   "release_date": "2024-10-25",
   "market_listings": [

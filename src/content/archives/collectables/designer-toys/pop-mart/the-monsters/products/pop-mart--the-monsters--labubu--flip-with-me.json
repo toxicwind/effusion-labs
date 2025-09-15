@@ -12,10 +12,7 @@
   },
   "distribution": {
     "region_lock": false,
-    "markets": [
-      "CN",
-      "US"
-    ]
+    "markets": ["CN", "US"]
   },
   "size": {
     "unit": "cm",
@@ -73,9 +70,7 @@
     }
   },
   "designer": "Kasing Lung (龙家升)",
-  "accessories": [
-    "Removable glasses"
-  ],
+  "accessories": ["Removable glasses"],
   "articulation": "Movable eyes with flip feature (spiral eyes), posable hands and head",
   "colorway": "Cream-colored fur with blue striped shirt and denim pants",
   "Deltas": [
