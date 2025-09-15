@@ -55,6 +55,7 @@ A fast, opinionated Eleventy + Tailwind static site—curated as a digital garde
 - **Link verification** — `npm run lint:links` uses `markdown-link-check` to detect broken links. `npm run lint` runs link checks as part of linting.
 
 - **Testing & coverage** — Integration tests live in `test/` and run via **Playwright**, with coverage via `c8`. Use `npm run test:watch` for continuous feedback.
+- **npm-utils** — Built-in CLI to search, analyze, and install npm packages. We love new packages and libraries; always consider them.
 
 ---
 
@@ -81,7 +82,7 @@ npm run build
 
 # run format check, lint, and tests
 npm run check
-````
+```
 
 When the dev server prints a local URL, open it in your browser. Files under `src/content/` and `src/assets/` are watched and reloaded automatically.
 
@@ -109,12 +110,13 @@ When the dev server prints a local URL, open it in your browser. Files under `sr
 
 ### Tooling / Utilities
 
-| Script            | Purpose                                                 |
-| ----------------- | ------------------------------------------------------- |
-| `verify:patches`  | Ensure required dependency patches are applied          |
-| `deps:playwright` | Install Playwright Chromium dependency (no-fail helper) |
-| `patch:ternary`   | Patch Nunjucks ternary patterns                         |
-| `scan:ternary`    | Scan Nunjucks ternary usage                             |
+| Script            | Purpose                                                                        |
+| ----------------- | ------------------------------------------------------------------------------ |
+| `verify:patches`  | Ensure required dependency patches are applied                                 |
+| `deps:playwright` | Install Playwright Chromium dependency (no-fail helper)                        |
+| `patch:ternary`   | Patch Nunjucks ternary patterns                                                |
+| `scan:ternary`    | Scan Nunjucks ternary usage                                                    |
+| `npm-utils`       | Search, view, analyze, and install npm packages; always consider new libraries |
 
 ### MCP (optional experiments)
 
@@ -147,9 +149,9 @@ Assets in `src/assets/` emit to `/assets/` by Vite; images processed by the Elev
 
 Effusion Labs treats wiki-style links as first-class citizens.
 
-* `[[product:Tempura Shrimp]]` → `/archives/product/tempura-shrimp/`
-* `[[character:Momo Fox]]` → `/archives/character/momo-fox/`
-* Kindless links attempt: `work → character → product → series → concept → project → spark → meta`.
+- `[[product:Tempura Shrimp]]` → `/archives/product/tempura-shrimp/`
+- `[[character:Momo Fox]]` → `/archives/character/momo-fox/`
+- Kindless links attempt: `work → character → product → series → concept → project → spark → meta`.
 
 All slugs normalize to lowercase, NFKD, punctuation-free identifiers.
 Unresolved links are recorded in `artifacts/reports/interlinker-unresolved.json` and can fail CI when thresholds are exceeded.
@@ -158,9 +160,9 @@ Unresolved links are recorded in `artifacts/reports/interlinker-unresolved.json`
 
 ## Tailwind & Theming
 
-* **Config:** `tailwind.config.mjs` defines tokens and typography.
-* **Styles:** `src/assets/css/app.css` imports Tailwind, typography, and daisyUI; adds Hyperbrut utilities.
-* **Themes:** `light` and `dark` registered in CSS; `src/assets/js/app.js` toggles `data-theme` and Lucide icons.
+- **Config:** `tailwind.config.mjs` defines tokens and typography.
+- **Styles:** `src/assets/css/app.css` imports Tailwind, typography, and daisyUI; adds Hyperbrut utilities.
+- **Themes:** `light` and `dark` registered in CSS; `src/assets/js/app.js` toggles `data-theme` and Lucide icons.
 
 ---
 
@@ -179,10 +181,11 @@ This starts a gateway container and FlareSolverr solver, useful when converting 
 
 ## Development Workflow
 
-* Use `npm run dev` for local editing.
-* Keep dependency hotfixes under `patches/` using `patch-package`.
-* Run `npm run check` before opening a PR.
-* CI may enforce unresolved-link thresholds and script consistency.
+- Use `npm run dev` for local editing.
+- Keep dependency hotfixes under `patches/` using `patch-package`.
+- Run `npm run check` before opening a PR.
+- CI may enforce unresolved-link thresholds and script consistency.
+- Explore new packages with `npm-utils`; we love new libraries and always consider them.
 
 ---
 
@@ -190,9 +193,9 @@ This starts a gateway container and FlareSolverr solver, useful when converting 
 
 For fast repo mapping and sampling large files:
 
-* List files: `fd` / `fdfind` or `rg --files`
-* Read in small windows (head/anchor/tail); avoid dumping minified or >4k-line blocks
-* Treat heavy zones cautiously: `node_modules/`, `_site/`, `artifacts/`, `logs/`, `lib_content.json`
+- List files: `fd` / `fdfind` or `rg --files`
+- Read in small windows (head/anchor/tail); avoid dumping minified or >4k-line blocks
+- Treat heavy zones cautiously: `node_modules/`, `_site/`, `artifacts/`, `logs/`, `lib_content.json`
 
 See `AGENTS.md` for the full protocol, clamps, and Preview Capsule format.
 
@@ -212,12 +215,12 @@ This project is licensed under the [ISC License](./LICENSE).
 
 ## References
 
-* [`package.json`](./package.json)
-* [`config/interlinkers/route-registry.mjs`](./config/interlinkers/route-registry.mjs)
-* [`config/interlinkers/unresolved-report.mjs`](./config/interlinkers/unresolved-report.mjs)
-* [`patches/@photogabble+eleventy-plugin-interlinker+1.1.0.patch`](./patches/@photogabble+eleventy-plugin-interlinker+1.1.0.patch)
-* [`config/plugins.js`](./config/plugins.js)
-* [`config/register.mjs`](./config/register.mjs)
-* [`tailwind.config.mjs`](./tailwind.config.mjs)
-* [`src/assets/css/app.css`](./src/assets/css/app.css)
-* [`markdown_gateway/docker-compose.yml`](./markdown_gateway/docker-compose.yml)
+- [`package.json`](./package.json)
+- [`config/interlinkers/route-registry.mjs`](./config/interlinkers/route-registry.mjs)
+- [`config/interlinkers/unresolved-report.mjs`](./config/interlinkers/unresolved-report.mjs)
+- [`patches/@photogabble+eleventy-plugin-interlinker+1.1.0.patch`](./patches/@photogabble+eleventy-plugin-interlinker+1.1.0.patch)
+- [`config/plugins.js`](./config/plugins.js)
+- [`config/register.mjs`](./config/register.mjs)
+- [`tailwind.config.mjs`](./tailwind.config.mjs)
+- [`src/assets/css/app.css`](./src/assets/css/app.css)
+- [`markdown_gateway/docker-compose.yml`](./markdown_gateway/docker-compose.yml)
