@@ -1,11 +1,11 @@
 {# src/_includes/components/header.njk #}
-{% from "components/nav-items.njk" import navItems %}
+{% from "components/nav.njk" import nav as navMenu %}
 {% from "components/icons.njk" import icon %}
 
 {% macro header(nav, page) %}
   {% set navLabel = 'Primary navigation' %}
   <header data-site-header class="relative w-full bg-base-100 border-b border-base-content/10">
-    <div class="navbar container-fluid px-6">
+    <div class="navbar max-w-screen-xl mx-auto px-6">
       <!-- Brand -->
       <div class="flex-1">
         <a href="{{ '/' | url }}" class="flex items-center gap-2 font-heading text-3xl text-primary no-underline">
@@ -20,18 +20,14 @@
           <label tabindex="0" class="btn btn-ghost btn-square" aria-label="Open menu">
             {{ icon('menu', { class: 'w-6 h-6', 'aria-hidden': 'true' }) }}
           </label>
-          <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[100] p-2 shadow bg-base-100 rounded-box w-56" role="menu">
-            {{ navItems(nav, page.url) }}
-          </ul>
+          {{ navMenu(nav, page.url, 'menu-sm dropdown-content mt-3 z-[100] p-2 shadow bg-base-100 rounded-box w-56') }}
         </nav>
       </div>
 
       <!-- Desktop nav + theme toggle -->
       <div class="flex-none flex items-center gap-2">
-        <nav class="hidden lg:flex" aria-label="{{ navLabel }}">
-          <ul class="menu menu-horizontal px-1">
-            {{ navItems(nav, page.url, 'link-underline hover:text-primary') }}
-          </ul>
+        <nav class="hidden lg:block" aria-label="{{ navLabel }}">
+          {{ navMenu(nav, page.url, 'menu-horizontal px-1', 'link-underline hover:text-primary') }}
         </nav>
 
         <button

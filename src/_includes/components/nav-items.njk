@@ -12,7 +12,7 @@
     <li>
       <a
         href="{{ finalHref }}"
-        class="transition-colors rounded-sm px-1 py-0.5 {{ linkClass }} {% if isActive %}text-primary{% endif %}"
+        class="link link-hover rounded-sm px-1 py-0.5 {{ linkClass }} {% if isActive %}text-primary underline{% endif %}"
         {% if isExternal %}target="_blank" rel="noopener noreferrer"{% endif %}
         {% if isActive %}aria-current="page" data-active="true"{% endif %}
       >
