@@ -8,9 +8,6 @@ trap 'rm -f "$TMP"' EXIT
 # Build a null-delimited list of files without spawning login shells.
 add_file() { [ -f "$1" ] && printf '%s\0' "$1" >> "$TMP"; }
 
-# Directories (only if present)
-[ -d src/assets/css ] && find src/assets/css -type f -print0 >> "$TMP"
-[ -d src/assets/js  ] && find src/assets/js  -type f -print0 >> "$TMP"
 
 # Config files (include whichever exist)
 add_file package.json

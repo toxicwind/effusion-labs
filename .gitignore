@@ -37,10 +37,5 @@ coverage/
 .dead-links.json
 tmp/
 
-# Generated CSS
-src/assets/css/*
-!src/assets/css/.gitkeep
-!src/assets/css/app.css
-
 # HYPEBRUT sidecars
 .hb-logs/

@@ -5,7 +5,7 @@ uses **Eleventy v3** as a static-site generator with **Vite** for modern
 bundling and hot-module reloading. Content is authored in **Markdown** and
 **Nunjucks** under `src/content/` and compiled into a deployable static site in
 `_site/`. Styles are managed with **Tailwind CSS v4** and **daisyUI v5**, with a
-single entry stylesheet at `src/assets/css/app.css`. The project targets
+single entry stylesheet. The project targets
 **Node.js ≥24** and runs fully in **ECMAScript-module (ESM)** mode.
 
 ---
@@ -24,13 +24,11 @@ single entry stylesheet at `src/assets/css/app.css`. The project targets
     - [MCP (optional experiments)](#mcp-optional-experiments)
   - [Project Structure](#project-structure)
   - [Linking \& Route Canon](#linking--route-canon)
-  - [Tailwind \& Theming](#tailwind--theming)
   - [Optional Services](#optional-services)
   - [Development Workflow](#development-workflow)
   - [Search \& View (quick orientation)](#search--view-quick-orientation)
   - [Contributing](#contributing)
   - [License](#license)
-  - [References](#references)
 
 ---
 
@@ -60,20 +58,16 @@ Batteries included, CI-ready, and friendly to autonomous coding agents.
   Markdown-it and JSDOM.
 
 - **Eleventy plugins** — Navigation, RSS, sitemap, schema, plus official Vite
-  integration. The Vite plugin exposes `/assets/js/app.js` as entry, maintains a
-  stable temp dir, and supports middleware mode.
+  integration. 
 
-- **Tailwind & daisyUI** — CSS-first styling. Tokens, fonts, and breakpoints
-  live in `tailwind.config.mjs`. Themes and utility layers are defined in
-  `src/assets/css/app.css`. DaisyUI registers `light` and `dark`; a toggle in
-  `src/assets/js/app.js` switches `data-theme`.
+- **Tailwind & daisyUI** — CSS-first styling. 
 
 - **Content collections** — Custom collections expose “featured,” “interactive,”
   and “recentAll.” The `work` collection aggregates sparks, concepts, projects,
   and meta content.
 
 - **Image optimization** — The Eleventy image plugin generates AVIF, WebP, and
-  fallback images at multiple widths under `/assets/images/`. Filenames are
+  fallback images at multiple widths under `/public`. Filenames are
   slugified for determinism.
 
 - **Link verification** — `npm run lint:links` uses `markdown-link-check` to
@@ -112,8 +106,7 @@ npm run build
 npm run check
 ```
 
-When the dev server prints a local URL, open it in your browser. Files under
-`src/content/` and `src/assets/` are watched and reloaded automatically.
+When the dev server prints a local URL, open it in your browser.
 
 ---
 
@@ -163,15 +156,12 @@ When the dev server prints a local URL, open it in your browser. Files under
 config/        → Eleventy & Vite configuration (plugins, collections, site settings)
 utils/         → Development and build helpers
 src/content/   → Markdown & Nunjucks pages
-src/assets/    → Client JS, images, and CSS (compiled to /assets/)
 test/          → Integration & unit tests (Playwright)
 patches/       → Hotfixes via patch-package
 artifacts/     → Reports (e.g., unresolved links), worklogs, export bundles
 ```
 
 Collections: `sparks`, `concepts`, `projects`, `meta`, `archives`, `work`.
-Assets in `src/assets/` emit to `/assets/` by Vite; images processed by the
-Eleventy image plugin appear in `/assets/images/`.
 
 ---
 
@@ -187,16 +177,6 @@ Effusion Labs treats wiki-style links as first-class citizens.
 All slugs normalize to lowercase, NFKD, punctuation-free identifiers. Unresolved
 links are recorded in `artifacts/reports/interlinker-unresolved.json` and can
 fail CI when thresholds are exceeded.
-
----
-
-## Tailwind & Theming
-
-- **Config:** `tailwind.config.mjs` defines tokens and typography.
-- **Styles:** `src/assets/css/app.css` imports Tailwind, typography, and
-  daisyUI; adds Hyperbrut utilities.
-- **Themes:** `light` and `dark` registered in CSS; `src/assets/js/app.js`
-  toggles `data-theme` and Lucide icons.
 
 ---
 
@@ -251,17 +231,3 @@ conventions. For agent workflows, see [`AGENTS.md`](./AGENTS.md).
 ## License
 
 This project is licensed under the [ISC License](./LICENSE).
-
----
-
-## References
-
-- [`package.json`](./package.json)
-- [`config/interlinkers/route-registry.mjs`](./config/interlinkers/route-registry.mjs)
-- [`config/interlinkers/unresolved-report.mjs`](./config/interlinkers/unresolved-report.mjs)
-- [`patches/@photogabble+eleventy-plugin-interlinker+1.1.0.patch`](./patches/@photogabble+eleventy-plugin-interlinker+1.1.0.patch)
-- [`config/plugins.js`](./config/plugins.js)
-- [`config/register.mjs`](./config/register.mjs)
-- [`tailwind.config.mjs`](./tailwind.config.mjs)
-- [`src/assets/css/app.css`](./src/assets/css/app.css)
-- [`markdown_gateway/docker-compose.yml`](./markdown_gateway/docker-compose.yml)

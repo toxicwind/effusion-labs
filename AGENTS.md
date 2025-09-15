@@ -11,7 +11,7 @@ SYSTEM mandates.
 - Node ≥24, ESM
 - Dynamic generation
 - Content root: `src/content/`
-- Assets: `src/assets/` → `/assets/`
+- Assets: `public/`
 - Output: `_site/`
 
 ## Scripts & Locations
@@ -35,7 +35,7 @@ SYSTEM mandates.
 
 - Index filenames first (`rg --files` or `fd`).
 - Traverse in order: `package.json`, `eleventy.config.mjs`, `config/`, `utils/`,
-  `src/content/`, `src/assets/`, `vite.config.mjs`, `tailwind.config.mjs`,
+  `src/content/`, `public/`, `vite.config.mjs`, `tailwind.config.mjs`,
   `test/`.
 - Treat `node_modules/`, `_site/`, `artifacts/`, `logs/`, and `lib_content.json`
   as heavy; sample only when needed.
@@ -58,6 +58,6 @@ chars. Replace any overages with a Preview Capsule.
 ## Success Criteria
 
 - Dev and build scripts resolve paths above.
-- `_site/` contains generated output; assets publish under `/assets/`.
+- `_site/` contains generated output;
 - `npm test` and `npm run lint` complete or improve the baseline.
 - Commit message states intent and key commands.

@@ -1,5 +1,0 @@
-uname -a: Linux 0bd838b31262 6.12.13 #1 SMP Thu Mar 13 11:34:50 UTC 2025 x86_64 x86_64 x86_64 GNU/Linux
-SHELL: /bin/bash
-bash --version: GNU bash, version 5.2.21(1)-release (x86_64-pc-linux-gnu)
-set flags: ehuB
-PID: 4168
