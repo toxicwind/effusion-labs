@@ -43,13 +43,6 @@ export default function register(eleventyConfig) {
     },
   })
 
-  // --- Asset Passthroughs & Watch Targets ---
-
-  eleventyConfig.addPassthroughCopy({ 'src/favicon.ico': 'favicon.ico' })
-
-
-  eleventyConfig.addWatchTarget('src/assets/css/')
-
   // After build: write unresolved report (log-only, no CI fail)
   eleventyConfig.on('eleventy.after', () => {
     try {

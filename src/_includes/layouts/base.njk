@@ -31,16 +31,25 @@
 
     {{ headExtra | safe }}
 
-    {# Theme boot — CSS injected by Vite, run early util #}
-    <script>window.ThemeUtils?.initEarly?.();</script>
+    {# Early theme: zero-dep, prevents FART w/ daisyUI #}
+    <script>
+      try {
+        const saved = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia?.('(prefers-color-scheme: dark)').matches;
+        const theme = saved || (prefersDark ? 'dim' : 'light');
+        document.documentElement.setAttribute('data-theme', theme);
+      } catch {}
+    </script>
 
     {# Fonts #}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Rubik:wght@400..900&family=Space+Grotesk:wght@400..700&display=swap" rel="stylesheet">
 
-    {# Vite entry: this file imports ../css/app.css — Tailwind+daisyUI come through Vite #}
-    <script type="module" src="{{ '/src/assets/js/app.js' | url }}"></script>
+    {# Vite entry: imports '@/assets/css/app.css' inside the module #}
+    <script type="module">
+      import '@/assets/js/app.js';
+    </script>
 
     <style>
       :root { --neon-a:#00E0FF; --neon-b:#9AFF00; --neon-c:#FF1CF7; --focus-clr: var(--neon-a); }
@@ -54,9 +63,9 @@
       }
     </style>
 
-    <link rel="icon" type="image/png" href="{{ '/favicon.ico' | url }}" sizes="96x96">
+    {# Favicons / PWA (all live in /public per audit) #}
     <link rel="icon" type="image/svg+xml" href="{{ '/favicon.svg' | url }}">
-    <link rel="shortcut icon" href="{{ '/favicon.ico' | url }}">
+    <link rel="icon" href="{{ '/favicon.ico' | url }}">
     <link rel="apple-touch-icon" sizes="180x180" href="{{ '/apple-touch-icon.png' | url }}">
     <meta name="apple-mobile-web-app-title" content="Effusion Labs">
     <link rel="manifest" href="{{ '/site.webmanifest' | url }}">
@@ -86,6 +95,5 @@
     </main>
 
     {{ footer(buildTime) }}
-
   </body>
 </html>

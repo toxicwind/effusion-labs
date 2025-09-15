@@ -1,0 +1,2178 @@
+// eleventy.config.mjs (FLATTENED)
+// Generated 2025-09-15T20:59:07.363Z
+// This file inlines prior modules from ./config/**. Do not edit the old files—remove them after verifying.
+// Vite handles /public passthrough; no Eleventy passthrough for src/assets.
+
+
+
+/* ==== Inlined config modules (from ./config) ==== */
+
+// ───────────────────────────────────────────────────────────────
+// BEGIN inline: config/archives.mjs
+// ESM only; no external deps
+import fs from 'node:fs'
+import path from 'node:path'
+import { slugCanonicalProduct } from '../utils/build/naming-canon.mjs'
+
+const TYPES = ['products', 'characters', 'series']
+
+// Accept both layouts: src/content/archives OR src/archives (or plain archives)
+const CANDIDATES = [
+  path.join('src', 'content', 'archives'),
+  path.join('src', 'archives'),
+  'archives',
+]
+
+const toPosix = p => p.replaceAll('\\', '/')
+const exists = p => {
+  try {
+    return fs.existsSync(p)
+  } catch {
+    return false
+  }
+}
+const ARCHIVES_BASE = CANDIDATES.find(exists) ?? CANDIDATES[0] // best-effort
+
+// Tiny, safe slugify (no dep)
+function slugify(s) {
+  return (
+    String(s ?? '')
+      .normalize('NFKD')
+      .toLowerCase()
+      .replace(/[^\w\s-]/g, '')
+      .trim()
+      .replace(/\s+/g, '-')
+      .replace(/-+/g, '-') || 'item'
+  )
+}
+
+function titleFromSlug(slug) {
+  return String(slug || '')
+    .split('-')
+    .filter(Boolean)
+    .map(w => w[0]?.toUpperCase() + w.slice(1))
+    .join(' ')
+}
+
+function walkJsonFiles(dirAbs) {
+  const out = []
+  if (!exists(dirAbs)) return out
+  for (const ent of fs.readdirSync(dirAbs, { withFileTypes: true })) {
+    const p = path.join(dirAbs, ent.name)
+    if (ent.isDirectory()) out.push(...walkJsonFiles(p))
+    else if (ent.isFile() && p.endsWith('.json')) out.push(p)
+  }
+  return out
+}
+
+// Parse path → industry/category/company/line/section/locale
+function parsePath(absPath) {
+  const rel = toPosix(path.relative(ARCHIVES_BASE, absPath))
+  const parts = rel.split('/')
+  const file = parts.at(-1)
+  let section,
+    line,
+    company,
+    category,
+    industry,
+    locale = 'en'
+
+  const i18nIdx = parts.lastIndexOf('i18n')
+  if (i18nIdx !== -1) {
+    locale = parts[i18nIdx + 1] || 'en'
+    section = parts[i18nIdx + 2]
+    line = parts[i18nIdx - 1]
+    company = parts[i18nIdx - 2]
+    category = parts[i18nIdx - 3]
+    industry = parts[i18nIdx - 4]
+  } else {
+    section = parts.at(-2)
+    line = parts.at(-3)
+    company = parts.at(-4)
+    category = parts.at(-5)
+    industry = parts.at(-6)
+  }
+
+  return {
+    file,
+    section,
+    line,
+    company,
+    category,
+    industry,
+    locale,
+    rel,
+  }
+}
+
+function buildUrl({ industry, category, company, line, section, slug }) {
+  return `/archives/${industry}/${category}/${company}/${line}/${section}/${slug}/`
+}
+
+function normalizeData(absPath) {
+  const raw = JSON.parse(fs.readFileSync(absPath, 'utf8'))
+  const { section, line, company, category, industry, locale } =
+    parsePath(absPath)
+  const fileSlug = path.basename(absPath, '.json')
+
+  // IDs/slugs by section
+  const productId = raw.product_id ?? raw.id ?? raw.slug ?? fileSlug
+  const characterId = raw.slug ?? raw.name ?? raw.character ?? fileSlug
+  const seriesId = raw.slug ?? raw.title ?? fileSlug
+
+  const lineSlug = slugify(line)
+  const companySlug = slugify(company)
+  const categorySlug = slugify(category)
+  const industrySlug = slugify(industry)
+
+  const data = {
+    // lineage
+    industry,
+    industrySlug,
+    category,
+    categorySlug,
+    company,
+    companySlug,
+    line,
+    lineSlug,
+    section,
+    locale,
+
+    __source: toPosix(absPath),
+    __rel: toPosix(path.relative(ARCHIVES_BASE, absPath)),
+
+    product_id: productId,
+    productSlug: slugify(productId),
+    name: raw.name ?? null,
+    charSlug: slugify(characterId),
+    seriesSlug: slugify(seriesId),
+    title: raw.title ?? raw.name ?? productId,
+
+    ...raw,
+  }
+
+  if (section === 'products') {
+    let slugCanonical = slugCanonicalProduct(raw)
+    if (!slugCanonical || slugCanonical === 'item')
+      slugCanonical = data.productSlug
+    data.slugCanonical = slugCanonical
+    data.canonicalUrl = `/archives/product/${slugCanonical}/`
+
+    // Aliases and legacy path handling
+    const aliasSet = new Set()
+    if (data.productSlug && data.productSlug !== data.slugCanonical)
+      aliasSet.add(data.productSlug)
+    if (Array.isArray(raw.slugAliases))
+      raw.slugAliases.forEach(s => s && aliasSet.add(slugify(s)))
+    data.slugAliases = Array.from(aliasSet)
+
+    data.urlLegacy = buildUrl({
+      industry: industrySlug,
+      category: categorySlug,
+      company: companySlug,
+      line: lineSlug,
+      section: 'products',
+      slug: data.productSlug,
+    })
+    data.legacyPaths = [
+      data.urlLegacy,
+      ...data.slugAliases.map(a => `/archives/product/${a}/`),
+    ]
+  } else if (section === 'characters') {
+    data.canonicalUrl = `/archives/character/${data.charSlug}/`
+    data.urlLegacy = buildUrl({
+      industry: industrySlug,
+      category: categorySlug,
+      company: companySlug,
+      line: lineSlug,
+      section: 'characters',
+      slug: data.charSlug,
+    })
+  } else if (section === 'series') {
+    data.canonicalUrl = `/archives/series/${data.seriesSlug}/`
+    data.urlLegacy = buildUrl({
+      industry: industrySlug,
+      category: categorySlug,
+      company: companySlug,
+      line: lineSlug,
+      section: 'series',
+      slug: data.seriesSlug,
+    })
+  }
+
+  data.lineTitle = titleFromSlug(line)
+  data.companyTitle = titleFromSlug(company)
+  data.categoryTitle = titleFromSlug(category)
+  data.industryTitle = titleFromSlug(industry)
+
+  return { data }
+}
+
+function aggregateCompanies(items) {
+  const map = new Map()
+  for (const it of items) {
+    const d = it.data
+    const key = `${d.industrySlug}/${d.categorySlug}/${d.companySlug}`
+    if (!map.has(key)) {
+      map.set(key, {
+        key,
+        industry: d.industry,
+        industrySlug: d.industrySlug,
+        category: d.category,
+        categorySlug: d.categorySlug,
+        company: d.company,
+        companySlug: d.companySlug,
+        companyTitle: d.companyTitle,
+        lines: new Map(),
+      })
+    }
+    const comp = map.get(key)
+    if (!comp.lines.has(d.lineSlug)) {
+      comp.lines.set(d.lineSlug, {
+        lineSlug: d.lineSlug,
+        lineTitle: d.lineTitle,
+      })
+    }
+  }
+  return Array.from(map.values())
+    .map(c => ({
+      ...c,
+      lines: Array.from(c.lines.values()).sort((a, b) =>
+        a.lineTitle.localeCompare(b.lineTitle)
+      ),
+    }))
+    .sort((a, b) => a.companyTitle.localeCompare(b.companyTitle))
+}
+
+// Public API ------------------------------------------------------------
+function registerArchive(eleventyConfig) {
+  const files = walkJsonFiles(ARCHIVES_BASE)
+  const normalized = files
+    .map(normalizeData)
+    .filter(it => TYPES.includes(it.data.section))
+
+  const archiveProducts = normalized.filter(
+    it => it.data.section === 'products'
+  )
+  const archiveCharacters = normalized.filter(
+    it => it.data.section === 'characters'
+  )
+  const archiveSeries = normalized.filter(it => it.data.section === 'series')
+
+  // Locale-scoped unique helpers
+  const uniqueBy = (arr, key) => {
+    const seen = new Set()
+    const out = []
+    for (const x of arr) {
+      const v = x?.data?.[key]
+      if (!seen.has(v)) {
+        seen.add(v)
+        out.push(x)
+      }
+    }
+    return out
+  }
+  const archiveProductsEn = uniqueBy(
+    archiveProducts.filter(x => x.data.locale === 'en'),
+    'productSlug'
+  )
+  const archiveCharactersEn = uniqueBy(
+    archiveCharacters.filter(x => x.data.locale === 'en'),
+    'charSlug'
+  )
+  const archiveSeriesEn = uniqueBy(
+    archiveSeries.filter(x => x.data.locale === 'en'),
+    'seriesSlug'
+  )
+
+  eleventyConfig.addCollection('archiveProducts', () => archiveProducts)
+  eleventyConfig.addCollection('archiveCharacters', () => archiveCharacters)
+  eleventyConfig.addCollection('archiveSeries', () => archiveSeries)
+
+  eleventyConfig.addFilter('byLine', (arr, lineSlug) =>
+    (arr ?? []).filter(x => x.data.lineSlug === slugify(lineSlug))
+  )
+  eleventyConfig.addFilter('byCompany', (arr, companySlug) =>
+    (arr ?? []).filter(x => x.data.companySlug === slugify(companySlug))
+  )
+  eleventyConfig.addFilter('byLocale', (arr, locale) =>
+    (arr ?? []).filter(x => x.data.locale === (locale || 'en'))
+  )
+  eleventyConfig.addFilter('uniqueBy', (arr, key) => {
+    const seen = new Set()
+    const out = []
+    for (const x of arr ?? []) {
+      const v = x?.data?.[key]
+      if (!seen.has(v)) {
+        seen.add(v)
+        out.push(x)
+      }
+    }
+    return out
+  })
+  eleventyConfig.addFilter('byCharacter', (items, id) => {
+    const target = slugify(id)
+    return (items ?? []).filter(
+      p => slugify(p?.data?.charSlug ?? p?.data?.character) === target
+    )
+  })
+  eleventyConfig.addFilter('bySeries', (items, id) => {
+    const target = slugify(id)
+    return (items ?? []).filter(
+      p => slugify(p?.data?.seriesSlug ?? p?.data?.series) === target
+    )
+  })
+
+  const companies = aggregateCompanies(normalized)
+  const linesFlat = normalized
+    .map(it => ({
+      industry: it.data.industry,
+      industrySlug: it.data.industrySlug,
+      category: it.data.category,
+      categorySlug: it.data.categorySlug,
+      company: it.data.company,
+      companySlug: it.data.companySlug,
+      line: it.data.line,
+      lineSlug: it.data.lineSlug,
+      lineTitle: it.data.lineTitle,
+    }))
+    .filter(
+      (v, i, arr) =>
+        arr.findIndex(
+          x => x.lineSlug === v.lineSlug && x.companySlug === v.companySlug
+        ) === i
+    )
+    .sort((a, b) => a.lineTitle.localeCompare(b.lineTitle))
+
+  if (typeof eleventyConfig.addGlobalData === 'function') {
+    eleventyConfig.addGlobalData('archiveCompanies', companies)
+    eleventyConfig.addGlobalData('archiveLines', linesFlat)
+    eleventyConfig.addGlobalData('archiveAllProducts', archiveProducts)
+    eleventyConfig.addGlobalData('archiveAllCharacters', archiveCharacters)
+    eleventyConfig.addGlobalData('archiveAllSeries', archiveSeries)
+    eleventyConfig.addGlobalData('archiveProductsEn', archiveProductsEn)
+    eleventyConfig.addGlobalData('archiveCharactersEn', archiveCharactersEn)
+    eleventyConfig.addGlobalData('archiveSeriesEn', archiveSeriesEn)
+  }
+
+  console.log(
+    `🗂  Archives loaded from "${ARCHIVES_BASE}": ${normalized.length} items (${archiveProducts.length} products, ${archiveCharacters.length} characters, ${archiveSeries.length} series)`
+  )
+
+  // Collision handling
+  const collisions = new Map()
+  const canonIndex = new Map()
+  for (const it of archiveProducts) {
+    const canon = it.data.slugCanonical || it.data.productSlug
+    if (canonIndex.has(canon)) {
+      if (!collisions.has(canon)) collisions.set(canon, [])
+      collisions.get(canon).push(it)
+    } else {
+      canonIndex.set(canon, it)
+    }
+  }
+
+  for (const [slug, items] of collisions.entries()) {
+    let counter = 2
+    for (const it of items) {
+      const newSlug = `${slug}-v${counter++}`
+      it.data.slugCanonical = newSlug
+      it.data.canonicalUrl = `/archives/product/${newSlug}/`
+      const s = new Set(it.data.slugAliases || [])
+      s.add(slug)
+      it.data.slugAliases = Array.from(s)
+      it.data.legacyPaths = [
+        it.data.urlLegacy,
+        ...it.data.slugAliases.map(a => `/archives/product/${a}/`),
+      ]
+    }
+  }
+
+  eleventyConfig.addGlobalData(
+    'archiveProductMap',
+    archiveProducts.map(p => ({
+      id: p.data.product_id,
+      title: p.data.title || p.data.product_title || p.data.product_id,
+      slugCanonical: p.data.slugCanonical,
+      canonicalUrl: p.data.canonicalUrl,
+      slugAliases: p.data.slugAliases || [],
+      legacyPaths: p.data.legacyPaths || [],
+    }))
+  )
+}
+// END inline: config/archives.mjs
+// ───────────────────────────────────────────────────────────────
+
+// ───────────────────────────────────────────────────────────────
+// BEGIN inline: config/build-info.js
+// A simple, synchronous utility to get build information without relying on Git.
+
+function getBuildInfo() {
+  const date = new Date()
+  const isCI = process.env.GITHUB_ACTIONS === 'true'
+
+  return {
+    // In CI, the commit hash is free. Locally, we don't need it.
+    hash: isCI
+      ? (process.env.GITHUB_SHA || 'ci-build').substring(0, 7)
+      : 'local',
+    fullHash: isCI ? process.env.GITHUB_SHA : null,
+    branch: isCI ? process.env.GITHUB_REF_NAME : null,
+
+    // Author/subject are omitted for speed and simplicity.
+    author: null,
+    subject: null,
+
+    // The date is always the current build time, which is more relevant for a static site.
+    date: date,
+    iso: date.toISOString(),
+
+    // The 'dirty' flag is irrelevant without Git. CI is always clean.
+    dirty: false,
+
+    // The environment of the build.
+    env: process.env.ELEVENTY_ENV || (isCI ? 'production' : 'development'),
+  }
+}
+
+const buildInfo = { getBuildInfo };
+// END inline: config/build-info.js
+// ───────────────────────────────────────────────────────────────
+
+// ───────────────────────────────────────────────────────────────
+// BEGIN inline: config/collections.js
+// config/collections.js
+function addCustomCollections(eleventyConfig) {
+  eleventyConfig.addCollection('featured', api =>
+    api
+      .getAll()
+      .filter(p => p.data?.featured === true)
+      .sort((a, b) => b.date - a.date)
+  )
+
+  eleventyConfig.addCollection('interactive', api =>
+    api
+      .getAll()
+      .filter(p => {
+        const tags = p.data.tags || []
+        return tags.includes('prototype') || p.data.interactive === true
+      })
+      .sort((a, b) => b.date - a.date)
+  )
+
+  eleventyConfig.addCollection('work', api =>
+    ['projects', 'concepts', 'sparks', 'meta']
+      .flatMap(tag => api.getFilteredByTag(tag))
+      .sort((a, b) => b.date - a.date)
+  )
+
+  eleventyConfig.addCollection('recentAll', api => {
+    const items = api.getAll().filter(p => p.data.type)
+    items.sort((a, b) => b.date - a.date)
+    items.take = n => items.slice(0, n)
+    return items
+  })
+}
+// END inline: config/collections.js
+// ───────────────────────────────────────────────────────────────
+
+// ───────────────────────────────────────────────────────────────
+// BEGIN inline: config/content-area.js
+function contentArea(name) {
+  return {
+    tags: [name],
+    eleventyComputed: {
+      permalink: data => {
+        if (data.permalink) return data.permalink
+        if (data.page.fileSlug === 'index' || data.page.fileSlug === '_index') {
+          return `/${name}/`
+        }
+        return `/${name}/${data.page.fileSlug}/`
+      },
+      layout: data => data.layout ?? 'layouts/base.njk',
+    },
+  }
+}
+
+const contentArea = contentArea
+;
+// END inline: config/content-area.js
+// ───────────────────────────────────────────────────────────────
+
+// ───────────────────────────────────────────────────────────────
+// BEGIN inline: config/fix-njk-ternaries.mjs
+import fs from 'node:fs'
+import fsp from 'node:fs/promises'
+import path from 'node:path'
+
+const isText = p => /\.(njk|md|html)$/i.test(p)
+
+function listFiles(dir, exts) {
+  const out = []
+  const ents = fs.readdirSync(dir, { withFileTypes: true })
+  for (const ent of ents) {
+    const p = path.join(dir, ent.name)
+    if (ent.isDirectory()) out.push(...listFiles(p, exts))
+    else if (ent.isFile() && exts.includes(path.extname(p))) out.push(p)
+  }
+  return out
+}
+
+// Convert JS ternary → Nunjucks inline-if inside a single {{ ... }} expression.
+// Handles one top-level ternary per expression; multiple/nested are processed
+// by running the replacer repeatedly until stable.
+function convertExpr(expr) {
+  // Skip if there is no '?' or ':' at all
+  if (!expr.includes('?') || !expr.includes(':')) return null
+
+  // Find a top-level ? : (not inside quotes or parentheses)
+  let depth = 0,
+    quote = null,
+    q = -1,
+    c = -1
+  for (let i = 0; i < expr.length; i++) {
+    const ch = expr[i],
+      prev = expr[i - 1]
+    if (quote) {
+      if (ch === quote && prev !== '\\') quote = null
+      continue
+    }
+    if (ch === "'" || ch === '"') {
+      quote = ch
+      continue
+    }
+    if (ch === '(') depth++
+    else if (ch === ')') depth = Math.max(0, depth - 1)
+    else if (depth === 0 && ch === '?' && q === -1) q = i
+    else if (depth === 0 && ch === ':' && q !== -1) {
+      c = i
+      break
+    }
+  }
+  if (q === -1 || c === -1) return null
+
+  const cond = expr.slice(0, q).trim()
+  const whenTrue = expr.slice(q + 1, c).trim()
+  const whenFalse = expr.slice(c + 1).trim()
+
+  if (!cond || !whenTrue || !whenFalse) return null
+  return `${whenTrue} if ${cond} else ${whenFalse}`
+}
+
+// Replace all `{{ ... ? ... : ... }}` blocks in content.
+function rewriteContent(content) {
+  const report = []
+  let changed = false
+
+  const re = /\{\{\s*([\s\S]*?)\s*\}\}/g // match {{ ... }} non-greedy
+  const out = content.replace(re, (m, inner) => {
+    let prev = inner,
+      next = null,
+      iterations = 0
+    // apply repeatedly to handle multiple ternaries within the same {{ ... }}
+    do {
+      next = convertExpr(prev) ?? prev
+      iterations++
+      if (next !== prev) {
+        report.push({ before: `{{ ${prev} }}`, after: `{{ ${next} }}` })
+        prev = next
+        changed = true
+      }
+    } while (next !== prev && iterations < 6)
+    return `{{ ${prev} }}`
+  })
+
+  return { out, changed, report }
+}
+
+export async function fixRepoTernaries({
+  roots = ['src'],
+  exts = ['.njk'],
+  dryRun = false,
+  logFile = '.njk-fix-report.json',
+} = {}) {
+  const files = roots.flatMap(r => listFiles(r, exts)).filter(isText)
+  const summary = { files: 0, changed: 0, edits: 0, details: [] }
+
+  for (const file of files) {
+    const raw = await fsp.readFile(file, 'utf8')
+    const { out, changed, report } = rewriteContent(raw)
+    summary.files++
+    if (changed) {
+      summary.changed++
+      summary.edits += report.length
+      summary.details.push({ file, edits: report.length })
+      if (!dryRun) await fsp.writeFile(file, out, 'utf8')
+    }
+  }
+
+  await fsp.writeFile(logFile, JSON.stringify(summary, null, 2), 'utf8')
+  const msg = `[fix-njk-ternaries] scanned ${summary.files}, changed ${summary.changed} files, ${summary.edits} edits → ${logFile}`
+  console.log(msg)
+  return summary
+}
+
+// Allow running directly: `node scripts/fix-njk-ternaries.mjs`
+if (import.meta.url === `file://${process.argv[1]}`) {
+  const dryRun = process.argv.includes('--dry-run')
+  fixRepoTernaries({
+    roots: ['src'],
+    exts: ['.njk', '.md', '.html'],
+    dryRun,
+  }).catch(e => {
+    console.error(e)
+    process.exit(1)
+  })
+}
+// END inline: config/fix-njk-ternaries.mjs
+// ───────────────────────────────────────────────────────────────
+
+// ───────────────────────────────────────────────────────────────
+// BEGIN inline: config/html-to-markdown-unified.mjs
+import path from 'node:path'
+import fs from 'node:fs/promises'
+import { JSDOM } from 'jsdom'
+import { Readability } from '@mozilla/readability'
+
+import { unified } from 'unified'
+import rehypeParse from 'rehype-parse'
+import rehypeRemark from 'rehype-remark'
+import remarkStringify from 'remark-stringify'
+import remarkGfm from 'remark-gfm'
+import remarkSmartypants from 'remark-smartypants'
+import remarkFootnotes from 'remark-footnotes'
+import remarkMath from 'remark-math'
+
+// Simple pre-clean: drop noisy tags before HTML→Markdown
+function rehypeStripTags(tags = ['script', 'style', 'noscript']) {
+  return function stripTags() {
+    return tree => {
+      if (!tree || !tree.children) return
+      tree.children = tree.children.filter(node => {
+        if (node.type === 'element' && tags.includes(node.tagName)) return false
+        return true
+      })
+    }
+  }
+}
+
+function inScope(inputPath, root) {
+  const p = path.normalize(inputPath)
+  const r = path.normalize(root) + path.sep
+  return p.includes(r)
+}
+
+async function htmlFragmentToMarkdown(html) {
+  const file = await unified()
+    .use(rehypeParse, { fragment: true })
+    .use(rehypeStripTags(['script', 'style', 'noscript']))
+    .use(rehypeRemark) // HAST → MDAST
+    .use(remarkGfm) // tables, task lists, strikethrough, autolinks
+    .use(remarkFootnotes, { inlineNotes: true })
+    .use(remarkMath)
+    .use(remarkSmartypants)
+    .use(remarkStringify, {
+      bullet: '-',
+      rule: '-',
+      fences: true,
+      fence: '`',
+      listItemIndent: 'one',
+      emphasis: '_',
+      strong: '*',
+      quote: '"',
+    })
+    .process(html)
+
+  return String(file)
+}
+
+function htmlToMarkdownUnified(
+  eleventyConfig,
+  {
+    rootDir = 'src/content',
+    dumpMarkdownTo = null,
+    defaultLayout = null,
+    pageTitlePrefix = '',
+    frontMatterExtra = {},
+  } = {}
+) {
+  // IMPORTANT: do not set `key` when overriding a built-in language like "html"
+  eleventyConfig.addExtension('html', {
+    outputFileExtension: 'md', // emit Markdown so your normal MD pipeline/layouts apply
+
+    compile: function (inputContent, inputPath) {
+      if (!inScope(inputPath, rootDir)) return undefined
+
+      return async () => {
+        // 1) Readability extraction
+        const dom = new JSDOM(inputContent, { url: 'https://local.source/' })
+        const reader = new Readability(dom.window.document)
+        const article = reader.parse()
+
+        const title =
+          article?.title || path.basename(inputPath).replace(/\.html$/i, '')
+        const byline = article?.byline || ''
+        const excerpt = article?.excerpt || ''
+        const length = article?.length || 0
+
+        const extractedHtml = article?.content || inputContent
+
+        // 2) HTML → Markdown (unified pipeline)
+        const markdownBody = await htmlFragmentToMarkdown(extractedHtml)
+
+        // 3) Minimal front matter—do not set tags/layout unless explicitly requested
+        const fm = {
+          ...(defaultLayout ? { layout: defaultLayout } : {}),
+          title: `${pageTitlePrefix}${title}`,
+          byline,
+          excerpt,
+          sourcePath: inputPath,
+          readabilityLength: length,
+          ...frontMatterExtra,
+        }
+
+        const fmLines = [
+          '---',
+          ...Object.entries(fm)
+            .filter(([, v]) => v !== undefined && v !== '')
+            .map(([k, v]) => {
+              if (typeof v === 'string') {
+                const safe = v.replace(/"/g, '\\"')
+                return `${k}: "${safe}"`
+              }
+              return `${k}: ${JSON.stringify(v)}`
+            }),
+          '---',
+          '',
+        ]
+
+        const mdFull = fmLines.join('\n') + markdownBody.trim() + '\n'
+
+        // Optional debug dump of the generated .md
+        if (dumpMarkdownTo) {
+          const relOut = inputPath.replace(
+            path.normalize(rootDir) + path.sep,
+            ''
+          )
+          const mdOutPath = path.join(
+            dumpMarkdownTo,
+            relOut.replace(/\.html$/i, '.md')
+          )
+          await fs.mkdir(path.dirname(mdOutPath), { recursive: true })
+          await fs.writeFile(mdOutPath, mdFull, 'utf8')
+        }
+
+        return mdFull
+      }
+    },
+  })
+}
+// END inline: config/html-to-markdown-unified.mjs
+// ───────────────────────────────────────────────────────────────
+
+// ───────────────────────────────────────────────────────────────
+// BEGIN inline: config/interlinkers/resolvers.mjs
+// Generalized resolvers powered by the Route Registry; crash-safe and dynamic-by-default.
+
+import { routeRegistry, getByPath } from './route-registry.mjs'
+import { recordUnresolved } from './unresolved-report.mjs'
+
+const toStr = v => (v == null ? '' : String(v))
+const slugify = s =>
+  toStr(s)
+    .normalize('NFKD')
+    .toLowerCase()
+    .replace(/[^\w\s-]/g, '')
+    .trim()
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-')
+
+const escapeHtml = str =>
+  toStr(str)
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#39;')
+
+function buildIndex(kind, arr) {
+  const def = routeRegistry.kinds[kind]
+  const idx = new Map()
+  const put = (key, entry) => {
+    const k = slugify(key)
+    if (k) idx.set(k, entry)
+  }
+  for (const entry of arr ?? []) {
+    const data = entry?.data || entry // collections expose page objects; archives expose { data }
+    const href = entry?.url || def.canonicalFromData(data)
+    const labels = [
+      data?.title,
+      data?.name,
+      data?.product_id,
+      data?.seriesSlug,
+      data?.charSlug,
+      entry?.fileSlug,
+    ].filter(Boolean)
+    const record = { href, data, labels }
+    for (const kf of def.keyFields) {
+      const v = kf.includes('.')
+        ? getByPath(entry, kf) || getByPath(record, kf)
+        : (data?.[kf] ?? entry?.[kf])
+      if (v) put(v, record)
+    }
+    for (const a of def.aliasesFromData(data)) put(a, record)
+  }
+  return idx
+}
+
+function localePrefix(currentPage) {
+  if (!routeRegistry.localePrefixEnabled) return ''
+  const pageLocale =
+    currentPage?.data?.locale ||
+    currentPage?.data?.page?.lang ||
+    routeRegistry.defaultLocale
+  return pageLocale && pageLocale !== routeRegistry.defaultLocale
+    ? `/${pageLocale}`
+    : ''
+}
+
+function guessHref(kind, nameSlug, currentPage) {
+  const def = routeRegistry.kinds[kind]
+  const prefix = localePrefix(currentPage)
+  return `${prefix}${def.basePath}/${nameSlug}/`
+}
+
+function resolverFor(kind) {
+  const def = routeRegistry.kinds[kind]
+  if (!def) throw new Error(`Unknown kind: ${kind}`)
+  return (link, currentPage /*, interlinker */) => {
+    try {
+      const data = currentPage?.data || {}
+      let dataset = []
+      for (const key of def.datasetKeys) {
+        const arr = getByPath(data, key)
+        if (Array.isArray(arr) && arr.length) {
+          dataset = arr
+          break
+        }
+      }
+      const index = buildIndex(kind, dataset)
+      const wantSlug = slugify(link?.name)
+      const entry = index.get(wantSlug)
+      let href = entry?.href || def.canonicalFromData(entry?.data || {})
+      const prefix = localePrefix(currentPage)
+      if (prefix && typeof href === 'string' && href.startsWith('/'))
+        href = prefix + href
+      if (!entry) href = guessHref(kind, wantSlug, currentPage)
+      const label = escapeHtml(
+        link?.title ||
+          entry?.data?.title ||
+          entry?.labels?.find(Boolean) ||
+          link?.name
+      )
+      if (!entry) {
+        recordUnresolved({
+          kind,
+          key: link?.name,
+          sourcePage:
+            currentPage?.inputPath ||
+            currentPage?.data?.page?.inputPath ||
+            null,
+          guessedKind: kind,
+          attemptedKinds: [kind],
+        })
+        link.href = href
+        return `<a class="interlink interlink--${kind} interlink--soft" href="${href}">${label}</a>`
+      }
+      link.href = href
+      return `<a class="interlink interlink--${kind}" href="${href}">${label}</a>`
+    } catch (e) {
+      const wantSlug = slugify(link?.name)
+      const href = guessHref(kind, wantSlug, currentPage)
+      const label = escapeHtml(link?.title || link?.name)
+      return `<a class="interlink interlink--${kind} interlink--soft" href="${href}">${label}</a>`
+    }
+  }
+}
+
+function dispatcherForOmittedKind() {
+  const order = routeRegistry.defaultKindsPriority
+  const subResolvers = new Map(order.map(k => [k, resolverFor(k)]))
+  return (link, currentPage /*, interlinker */) => {
+    const attempted = []
+    const nameSlug = slugify(link?.name)
+    for (const kind of order) {
+      attempted.push(kind)
+      const html = subResolvers.get(kind)(link, currentPage)
+      // Soft links contain interlink--soft; if missing, we found a match
+      if (!/interlink--soft/.test(html)) return html
+    }
+    // None resolved; record once with guesses
+    recordUnresolved({
+      kind: 'unknown',
+      key: link?.name,
+      sourcePage:
+        currentPage?.inputPath || currentPage?.data?.page?.inputPath || null,
+      guessedKind: order[0],
+      attemptedKinds: attempted,
+    })
+    const href = guessHref(order[0], nameSlug, currentPage)
+    const label = escapeHtml(link?.title || link?.name)
+    return `<a class="interlink interlink--soft" href="${href}">${label}</a>`
+  }
+}
+
+function createResolvers() {
+  const map = new Map()
+  // Default
+  map.set('default', link => {
+    const href = link.href || link.link || '#'
+    const label = link.title || link.name || href
+    return `<a class="interlink" href="${href}">${label}</a>`
+  })
+  // Named kinds
+  for (const kind of Object.keys(routeRegistry.kinds)) {
+    map.set(kind, resolverFor(kind))
+  }
+  // generic docs resolver falls back to default link behaviour
+  map.set('docs', link => map.get('default')(link))
+  // Back-compat synonyms: archive:product etc.
+  map.set('archive', (link, currentPage) => {
+    const raw = toStr(link?.name)
+    const idx = raw.indexOf(':')
+    if (idx === -1) return dispatcherForOmittedKind()(link, currentPage)
+    const type = raw.slice(0, idx).trim()
+    const name = raw.slice(idx + 1).trim()
+    const sub = map.get(type) || dispatcherForOmittedKind()
+    const next = { ...link, name }
+    return sub(next, currentPage)
+  })
+  map.set('archive:product', map.get('product'))
+  map.set('archive:character', map.get('character'))
+  map.set('archive:series', map.get('series'))
+  // Omitted kind dispatcher
+  map.set('omitted', dispatcherForOmittedKind())
+  return map
+}
+// END inline: config/interlinkers/resolvers.mjs
+// ───────────────────────────────────────────────────────────────
+
+// ───────────────────────────────────────────────────────────────
+// BEGIN inline: config/interlinkers/route-registry.mjs
+// Central registry of linkable kinds and how to index/resolve them.
+
+function _defaultRegistry() {
+  return {
+    // Locale handling
+    defaultLocale: 'en',
+    localePrefixEnabled: false, // when true, prefix hrefs with /:locale/
+
+    // If a wikilink omits kind (e.g., [[labubu]]), check kinds in order
+    defaultKindsPriority: [
+      'work',
+      'character',
+      'product',
+      'series',
+      'concept',
+      'project',
+      'spark',
+      'meta',
+    ],
+
+    // Kind definitions
+    kinds: {
+      // Archives — canonical dynamic routes
+      product: {
+        basePath: '/archives/product',
+        // Where to find items from current page context
+        datasetKeys: [
+          'archiveProductsEn',
+          'archiveAllProducts',
+          'archiveProducts',
+        ],
+        keyFields: [
+          'slugCanonical',
+          'productSlug',
+          'slug',
+          'product_id',
+          'title',
+        ],
+        canonicalFromData: d =>
+          `/archives/product/${d.slugCanonical || d.productSlug || d.slug}/`,
+        aliasesFromData: d => [
+          ...(Array.isArray(d.slugAliases) ? d.slugAliases : []),
+          ...(Array.isArray(d.legacyPaths)
+            ? d.legacyPaths
+                .map(p =>
+                  typeof p === 'string'
+                    ? p.match(/\/archives\/product\/([^/]+)/)?.[1] || null
+                    : null
+                )
+                .filter(Boolean)
+            : []),
+        ],
+      },
+      character: {
+        basePath: '/archives/character',
+        datasetKeys: [
+          'archiveCharactersEn',
+          'archiveAllCharacters',
+          'archiveCharacters',
+        ],
+        keyFields: ['charSlug', 'name', 'title', 'slug'],
+        canonicalFromData: d => `/archives/character/${d.charSlug || d.slug}/`,
+        aliasesFromData: () => [],
+      },
+      series: {
+        basePath: '/archives/series',
+        datasetKeys: ['archiveSeriesEn', 'archiveAllSeries', 'archiveSeries'],
+        keyFields: ['seriesSlug', 'title', 'slug'],
+        canonicalFromData: d => `/archives/series/${d.seriesSlug || d.slug}/`,
+        aliasesFromData: () => [],
+      },
+
+      // First-class content scaffolds
+      spark: {
+        basePath: '/sparks',
+        datasetKeys: ['collections.sparks'],
+        keyFields: ['fileSlug', 'data.title'],
+        canonicalFromData: d => `/sparks/${d.fileSlug || d.slug || ''}/`,
+        aliasesFromData: d =>
+          Array.isArray(d?.data?.aliases) ? d.data.aliases : [],
+      },
+      concept: {
+        basePath: '/concepts',
+        datasetKeys: ['collections.concepts'],
+        keyFields: ['fileSlug', 'data.title'],
+        canonicalFromData: d => `/concepts/${d.fileSlug || d.slug || ''}/`,
+        aliasesFromData: d =>
+          Array.isArray(d?.data?.aliases) ? d.data.aliases : [],
+      },
+      project: {
+        basePath: '/projects',
+        datasetKeys: ['collections.projects'],
+        keyFields: ['fileSlug', 'data.title'],
+        canonicalFromData: d => `/projects/${d.fileSlug || d.slug || ''}/`,
+        aliasesFromData: d =>
+          Array.isArray(d?.data?.aliases) ? d.data.aliases : [],
+      },
+      meta: {
+        basePath: '/meta',
+        datasetKeys: ['collections.meta'],
+        keyFields: ['fileSlug', 'data.title'],
+        canonicalFromData: d => `/meta/${d.fileSlug || d.slug || ''}/`,
+        aliasesFromData: d =>
+          Array.isArray(d?.data?.aliases) ? d.data.aliases : [],
+      },
+      // Work: aggregator over content areas
+      work: {
+        basePath: '/work',
+        datasetKeys: [
+          'collections.work',
+          'collections.sparks',
+          'collections.concepts',
+          'collections.projects',
+          'collections.meta',
+        ],
+        keyFields: ['fileSlug', 'data.title'],
+        canonicalFromData: d =>
+          d?.url || `/${d?.data?.type || 'work'}/${d?.fileSlug || ''}/`,
+        aliasesFromData: d =>
+          Array.isArray(d?.data?.aliases) ? d.data.aliases : [],
+      },
+    },
+  }
+}
+
+import fs from 'node:fs'
+import path from 'node:path'
+
+function _mergeFromDiscovery(reg) {
+  try {
+    const p = path.join('artifacts', 'reports', 'interlinker-discovery.json')
+    if (!fs.existsSync(p)) return reg
+    const disc = JSON.parse(fs.readFileSync(p, 'utf8'))
+    if (disc?.i18n) {
+      reg.defaultLocale = disc.i18n.defaultLocale || reg.defaultLocale
+      reg.localePrefixEnabled = !!disc.i18n.localePrefixes
+    }
+    if (Array.isArray(disc?.scaffoldMap)) {
+      const order = disc.scaffoldMap.map(k => k.kind)
+      if (order.length) reg.defaultKindsPriority = order
+      for (const k of disc.scaffoldMap) {
+        if (reg.kinds[k.kind]) {
+          reg.kinds[k.kind].datasetKeys =
+            Array.isArray(k.datasetKeys) && k.datasetKeys.length
+              ? k.datasetKeys
+              : reg.kinds[k.kind].datasetKeys
+          reg.kinds[k.kind].basePath = k.base || reg.kinds[k.kind].basePath
+        } else {
+          // Generic kind using discovery base/datasets; shallow semantics
+          reg.kinds[k.kind] = {
+            basePath: `/${k.base?.replace(/^\//, '') || k.kind}`,
+            datasetKeys: Array.isArray(k.datasetKeys) ? k.datasetKeys : [],
+            keyFields: Array.isArray(k.keyFields)
+              ? k.keyFields
+              : ['slug', 'fileSlug', 'title'],
+            canonicalFromData: d =>
+              `${`/${k.base?.replace(/^\//, '') || k.kind}`}/${d.slug || d.fileSlug || ''}/`,
+            aliasesFromData: d =>
+              Array.isArray(d?.slugAliases) ? d.slugAliases : [],
+          }
+        }
+      }
+    }
+  } catch {}
+  return reg
+}
+
+// Initialize registry and attempt to hydrate from discovery artifact if present
+const routeRegistry= _mergeFromDiscovery(_defaultRegistry())
+
+// Helper to read a nested key like 'collections.work'
+function getByPath(obj, key) {
+  if (!obj || !key) return undefined
+  const parts = key.split('.')
+  let cur = obj
+  for (const p of parts) {
+    if (cur && typeof cur === 'object' && p in cur) cur = cur[p]
+    else return undefined
+  }
+  return cur
+}
+// END inline: config/interlinkers/route-registry.mjs
+// ───────────────────────────────────────────────────────────────
+
+// ───────────────────────────────────────────────────────────────
+// BEGIN inline: config/interlinkers/unresolved-report.mjs
+// Stable unresolved link reporting with dedupe, schema, and *no CI gating* by default.
+
+import fs from 'node:fs'
+import path from 'node:path'
+
+const OUT_PATH = path.join(
+  'artifacts',
+  'reports',
+  'interlinker-unresolved.json'
+)
+const keyFor = (kind, key, sourcePage) =>
+  `${kind}::${key || ''}::${sourcePage || ''}`
+
+const state = {
+  map: new Map(), // key -> item
+  count: 0,
+}
+
+function toISO(d = new Date()) {
+  return new Date(d).toISOString()
+}
+
+function recordUnresolved({
+  kind,
+  key,
+  sourcePage,
+  guessedKind,
+  attemptedKinds,
+}) {
+  const k = keyFor(kind, key, sourcePage)
+  if (!state.map.has(k)) {
+    state.map.set(k, {
+      kind,
+      key: String(key ?? ''),
+      sourcePage: sourcePage || null,
+      guessedKind: guessedKind || null,
+      attemptedKinds: Array.isArray(attemptedKinds) ? attemptedKinds : [],
+      when: toISO(),
+    })
+    state.count++
+  }
+}
+
+function getUnresolvedItems() {
+  return Array.from(state.map.values())
+}
+
+function flushUnresolved() {
+  const items = getUnresolvedItems()
+  const payload = {
+    schemaVersion: 1,
+    generatedAt: toISO(),
+    count: items.length,
+    items,
+  }
+  fs.mkdirSync(path.dirname(OUT_PATH), { recursive: true })
+  fs.writeFileSync(OUT_PATH, JSON.stringify(payload, null, 2))
+  return payload
+}
+
+// Simple logger-only summary. No thresholds, no throwing.
+function summarize({ log = true } = {}) {
+  const payload = flushUnresolved()
+  if (log) {
+    // eslint-disable-next-line no-console
+    console.log(`Interlinker: unresolved=${payload.count} → ${OUT_PATH}`)
+  }
+  return payload
+}
+
+// --- Optional legacy helper kept for flexibility; not used in config ---
+function parseBool(v, fallback = false) {
+  if (v == null) return fallback
+  const s = String(v).toLowerCase()
+  return s === '1' || s === 'true' || s === 'yes' || s === 'on'
+}
+function parseNum(v, fallback) {
+  const n = Number(v)
+  return Number.isFinite(n) ? n : fallback
+}
+function summarizeAndGate() {
+  const isCI = parseBool(process.env.CI, false)
+  const defaultThreshold = isCI ? 200 : Infinity
+  const maxUnresolved = parseNum(
+    process.env.INTERLINKER_MAX_UNRESOLVED,
+    defaultThreshold
+  )
+  const shouldFail = parseBool(
+    process.env.INTERLINKER_FAIL_ON_UNRESOLVED,
+    false
+  )
+
+  const payload = flushUnresolved()
+  const count = payload.count
+  const action = shouldFail && count > maxUnresolved ? 'fail' : 'warn'
+  // eslint-disable-next-line no-console
+  console.log(
+    `Interlinker: unresolved=${count} threshold=${maxUnresolved} action=${action}`
+  )
+  if (action === 'fail') {
+    throw new Error(
+      `Interlinker unresolved links (${count}) exceeded threshold (${maxUnresolved}).`
+    )
+  }
+}
+
+// Auto-flush on exit so the report is always up-to-date
+process.on('exit', () => {
+  try {
+    flushUnresolved()
+  } catch {}
+})
+process.on('beforeExit', () => {
+  try {
+    flushUnresolved()
+  } catch {}
+})
+process.on('SIGINT', () => {
+  try {
+    flushUnresolved()
+  } catch {}
+  process.exit(130)
+})
+process.on('SIGTERM', () => {
+  try {
+    flushUnresolved()
+  } catch {}
+  process.exit(143)
+})
+// END inline: config/interlinkers/unresolved-report.mjs
+// ───────────────────────────────────────────────────────────────
+
+// ───────────────────────────────────────────────────────────────
+// BEGIN inline: config/markdown/footnotes.js
+// config/markdown/footnotes.js
+// Cleaner footnotes with inline popovers and nice cards.
+// Keeps defaults from markdown-it-footnote but overrides rendering to be
+// more “hyperbrut” and accessible.
+
+/**
+ * Render the footnote block using chunky “cards”.
+ * Keeps the footnotes where the library would normally place them, but
+ * you’ll mostly rely on popovers inline (see footnotePopoverRefs).
+ */
+function hybridFootnotes(md) {
+  md.renderer.rules.footnote_block_open = () =>
+    '<section class="footnotes-hybrid not-prose mt-8">\n'
+  md.renderer.rules.footnote_block_close = () => '</section>\n'
+
+  md.renderer.rules.footnote_open = (tokens, idx, options, env, slf) => {
+    const id = slf.rules.footnote_anchor_name(tokens, idx, options, env, slf)
+    return `<aside class="footnote-aside card bg-base-100 border-2 shadow-[6px_6px_0_rgba(0,0,0,.85)] my-3" role="note" id="fn${id}"><div class="card-body p-4 text-sm">`
+  }
+  md.renderer.rules.footnote_close = () => `</div></aside>\n`
+
+  md.renderer.rules.footnote_anchor = (tokens, idx, options, env, slf) => {
+    const id = slf.rules.footnote_anchor_name(tokens, idx, options, env, slf)
+    return `<a href="#fnref${id}" class="footnote-backref link text-xs opacity-70 ml-2">↩︎</a>`
+  }
+}
+
+/**
+ * Replace footnote reference markers with inline popover balloons.
+ * Falls back to default ref if anything goes sideways.
+ */
+function footnotePopoverRefs(md) {
+  const base =
+    md.renderer.rules.footnote_ref ||
+    ((t, i, o, e, s) => s.renderToken(t, i, o))
+
+  md.renderer.rules.footnote_ref = (tokens, idx, options, env, self) => {
+    try {
+      const meta = tokens[idx].meta || {}
+      const id = Number(meta.id)
+      const list = env.footnotes?.list
+      if (!Array.isArray(list) || !list[id])
+        return base(tokens, idx, options, env, self)
+
+      // Render the footnote definition content as HTML
+      let contentHtml = ''
+      const def = list[id]
+      if (Array.isArray(def.tokens)) {
+        const tempEnv = { ...env }
+        contentHtml = md.renderer.render(def.tokens, options, tempEnv).trim()
+      } else if (def.content) {
+        contentHtml = md.renderInline(def.content).trim()
+      }
+
+      // Light cleanup for inline use
+      contentHtml = contentHtml
+        .replace(/<\/?p[^>]*>/g, '')
+        .replace(/\s+/g, ' ')
+        .trim()
+
+      const n = id + 1
+      const refId = `fnref${n}`
+      const defId = `fn${n}`
+
+      return (
+        `<sup class="fn-pop annotation-ref align-super">` +
+        `<a href="#${defId}" id="${refId}" class="annotation-anchor">[${n}]</a>` +
+        `<span class="fn-balloon rounded-box">${contentHtml}</span>` +
+        `</sup>`
+      )
+    } catch {
+      return base(tokens, idx, options, env, self)
+    }
+  }
+}
+
+const footnotes = { hybridFootnotes, footnotePopoverRefs };
+// END inline: config/markdown/footnotes.js
+// ───────────────────────────────────────────────────────────────
+
+// ───────────────────────────────────────────────────────────────
+// BEGIN inline: config/markdown/index.js
+// config/markdown/index.js
+import markdownItFootnote from 'markdown-it-footnote'
+import { hybridFootnotes, footnotePopoverRefs } from './footnotes.js'
+import { audioEmbed, qrEmbed } from './inlineMacros.js'
+import { externalLinks } from './links.js'
+
+/**
+ * Apply markdown-it extensions.
+ * Keep this compact and resilient; failures should not tank the build.
+ */
+function applyMarkdownExtensions(md) {
+  // Core footnotes
+  md.use(markdownItFootnote)
+
+  // Aesthetic & UX layers
+  try {
+    hybridFootnotes(md)
+  } catch (e) {
+    console.error('[md-it] hybridFootnotes:', e?.message || e)
+  }
+  try {
+    footnotePopoverRefs(md)
+  } catch (e) {
+    console.error('[md-it] footnotePopoverRefs:', e?.message || e)
+  }
+
+  // Inline macros
+  try {
+    audioEmbed(md)
+  } catch (e) {
+    console.error('[md-it] audioEmbed:', e?.message || e)
+  }
+  try {
+    qrEmbed(md)
+  } catch (e) {
+    console.error('[md-it] qrEmbed:', e?.message || e)
+  }
+
+  // External links
+  try {
+    externalLinks(md)
+  } catch (e) {
+    console.error('[md-it] externalLinks:', e?.message || e)
+  }
+
+  return md
+}
+
+const index = { applyMarkdownExtensions };
+// END inline: config/markdown/index.js
+// ───────────────────────────────────────────────────────────────
+
+// ───────────────────────────────────────────────────────────────
+// BEGIN inline: config/markdown/inlineMacros.js
+// config/markdown/inlineMacros.js
+// Small, robust inline macros with quoted argument support.
+// Usage: @audio("https://…"), @qr("some text")
+
+const toStr = v => (v == null ? '' : String(v))
+
+/** Parse balanced (...) with optional quoted commas */
+function parseArgs(src) {
+  // Strip wrapping whitespace and quotes
+  let s = src.trim()
+  const out = []
+  let cur = ''
+  let inStr = false
+  let chStr = ''
+  let depth = 0
+
+  for (let i = 0; i < s.length; i++) {
+    const ch = s[i]
+    if (inStr) {
+      if (ch === chStr && s[i - 1] !== '\\') {
+        inStr = false
+      }
+      cur += ch
+      continue
+    }
+    if (ch === '"' || ch === "'") {
+      inStr = true
+      chStr = ch
+      cur += ch
+      continue
+    }
+    if (ch === '(') {
+      depth++
+      cur += ch
+      continue
+    }
+    if (ch === ')') {
+      depth = Math.max(0, depth - 1)
+      cur += ch
+      continue
+    }
+    if (ch === ',' && depth === 0) {
+      out.push(cur.trim().replace(/^['"]|['"]$/g, ''))
+      cur = ''
+      continue
+    }
+    cur += ch
+  }
+  if (cur) out.push(cur.trim().replace(/^['"]|['"]$/g, ''))
+  return out
+}
+
+function inlineMacro(name, after, render) {
+  const re = new RegExp(`^@${name}\\(([^)]*)\\)`)
+  return md => {
+    md.inline.ruler.after(after, name, (state, silent) => {
+      if (!state) return false
+      const src = state.src.slice(state.pos)
+      const m = src.match(re)
+      if (!m) return false
+      if (!silent) {
+        const args = parseArgs(m[1])
+        const html = render(...args.map(toStr))
+        state.push({ type: 'html_inline', content: html })
+      }
+      state.pos += m[0].length
+      return true
+    })
+  }
+}
+
+// @audio(url)
+// Optional: @audio(url, "label")
+const audioEmbed= inlineMacro('audio', 'emphasis', (url, label) => {
+  const u = toStr(url)
+  const lab = toStr(label || '')
+  const cap = lab
+    ? `<figcaption class="text-xs opacity-70 mt-1">${lab}</figcaption>`
+    : ''
+  return (
+    `<figure class="audio-embed not-prose">` +
+    `<audio controls class="w-full" src="${u}"></audio>` +
+    cap +
+    `</figure>`
+  )
+})
+
+// @qr(text)
+const qrEmbed= inlineMacro('qr', 'audio', text => {
+  const v = encodeURIComponent(toStr(text))
+  return `<img class="qr-code border-2 shadow-[4px_4px_0_rgba(0,0,0,.85)]" src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${v}" alt="QR code">`
+})
+
+const inlineMacros = { audioEmbed, qrEmbed };
+// END inline: config/markdown/inlineMacros.js
+// ───────────────────────────────────────────────────────────────
+
+// ───────────────────────────────────────────────────────────────
+// BEGIN inline: config/markdown/links.js
+// config/markdown/links.js
+// Add affordances to external links and keep internal links clean.
+
+function externalLinks(md) {
+  const base =
+    md.renderer.rules.link_open || ((t, i, o, e, s) => s.renderToken(t, i, o))
+
+  md.renderer.rules.link_open = (tokens, idx, options, env, self) => {
+    const href = tokens[idx].attrGet('href') || ''
+    const isHttp = /^https?:\/\//i.test(href)
+    const siteUrl = env?.site?.url || ''
+    const isOwnAbsolute = siteUrl && href.startsWith(siteUrl)
+
+    if (isHttp && !isOwnAbsolute) {
+      tokens[idx].attrSet('target', '_blank')
+      tokens[idx].attrSet('rel', 'noopener noreferrer ugc')
+      tokens[idx].attrJoin('class', 'external-link')
+      // Add icon affordance if the next token is text
+      const nxt = tokens[idx + 1]
+      if (nxt?.type === 'text' && !/^↗/.test(nxt.content.trim())) {
+        nxt.content = `↗ ${nxt.content}`
+      }
+    }
+
+    return base(tokens, idx, options, env, self)
+  }
+}
+
+const links = { externalLinks };
+// END inline: config/markdown/links.js
+// ───────────────────────────────────────────────────────────────
+
+// ───────────────────────────────────────────────────────────────
+// BEGIN inline: config/plugins.js
+// config/plugins.js
+import interlinker from '@photogabble/eleventy-plugin-interlinker'
+import navigation from '@11ty/eleventy-navigation'
+import rss from '@11ty/eleventy-plugin-rss'
+import sitemap from '@quasibit/eleventy-plugin-sitemap'
+import schema from '@quasibit/eleventy-plugin-schema'
+import vitePlugin from '@11ty/eleventy-plugin-vite'
+import { createResolvers } from '../config/interlinkers/resolvers.mjs'
+
+function getPlugins() {
+  const plugins = [
+    [
+      interlinker,
+      {
+        // Use your normal site shell
+        defaultLayout: 'layouts/base.njk',
+        resolvingFns: createResolvers(),
+        deadLinkReport: 'json', // write unresolved report artifact only (no gating)
+      },
+    ],
+    [navigation],
+    [rss],
+    [sitemap, { sitemap: { hostname: 'https://effusionlabs.com' } }],
+    [schema],
+  ]
+
+  // Vite: enable for dev/prod, but skip in tests
+  const isTest = process.env.ELEVENTY_ENV === 'test'
+  if (!isTest) {
+    plugins.push([
+      vitePlugin,
+      {
+        // keep the temp dir stable
+        tempFolderName: '.11ty-vite',
+        viteOptions: {
+          clearScreen: false,
+          appType: 'custom',
+          server: { middlewareMode: true },
+          css: { devSourcemap: true },
+          build: {
+            manifest: true,
+            rollupOptions: {
+              // Ensure our JS entry (which imports CSS) is known to Vite
+              input: ['/src/assets/js/app.js'],
+            },
+          },
+        },
+      },
+    ])
+  }
+
+  return plugins
+}
+// END inline: config/plugins.js
+// ───────────────────────────────────────────────────────────────
+
+// ───────────────────────────────────────────────────────────────
+// BEGIN inline: config/register.mjs
+// config/register.mjs
+import path from 'node:path'
+import slugify from 'slugify'
+import { eleventyImageTransformPlugin } from '@11ty/eleventy-img'
+import getPlugins from './plugins.js'
+import { applyMarkdownExtensions } from './markdown/index.js'
+import { addFilters, addShortcodes } from './templating.js'
+import addCustomCollections from './collections.js'
+import { dirs } from './site.js'
+import { flushUnresolved } from './interlinkers/unresolved-report.mjs'
+
+function register(eleventyConfig) {
+  // --- Plugins ---
+  getPlugins().forEach(([plugin, opts = {}]) =>
+    eleventyConfig.addPlugin(plugin, opts)
+  )
+  eleventyConfig.ignores.add('src/content/docs/vendor/**')
+  eleventyConfig.ignores.add('src/content/docs/vendors/**')
+
+  // --- Markdown Engine Customization ---
+  eleventyConfig.amendLibrary('md', md => {
+    eleventyConfig.markdownLibrary = md
+    return applyMarkdownExtensions(md)
+  })
+
+  // --- Templating: Filters & Shortcodes ---
+  addFilters(eleventyConfig)
+  addShortcodes(eleventyConfig)
+
+  // --- Data Collections ---
+  addCustomCollections(eleventyConfig)
+
+  // --- Image Processing ---
+  eleventyConfig.addPlugin(eleventyImageTransformPlugin, {
+    urlPath: '/images/',
+    outputDir: path.join(dirs.output, 'images/'),
+    formats: ['avif', 'webp', 'auto'],
+    widths: [320, 640, 960, 1200, 1800, 'auto'],
+    filenameFormat: (id, src, width, format) => {
+      const { name } = path.parse(src)
+      const s = slugify(name, { lower: true, strict: true })
+      return `${s}-${width}.${format}`
+    },
+  })
+
+  // After build: write unresolved report (log-only, no CI fail)
+  eleventyConfig.on('eleventy.after', () => {
+    try {
+      const payload = flushUnresolved()
+      console.log(`Interlinker unresolved (logged only): ${payload.count}`)
+    } catch (e) {
+      console.error(String(e?.message || e))
+      // don’t set exitCode; log-only by design
+    }
+  })
+}
+// END inline: config/register.mjs
+// ───────────────────────────────────────────────────────────────
+
+// ───────────────────────────────────────────────────────────────
+// BEGIN inline: config/site.js
+// config/site.js
+import path from 'node:path'
+
+/** Eleventy directory settings */
+const dirs= {
+  input: 'src',
+  output: process.env.ELEVENTY_TEST_OUTPUT || '_site',
+  includes: '_includes',
+  data: '_data',
+}
+
+/** Root directory for markdown content */
+const baseContentPath= 'src/content'
+
+/** Absolute path to concepts directory */
+const CONCEPTS_DIR= path.join(baseContentPath, 'concepts')
+
+/** Primary content areas used for collections and navigation */
+const CONTENT_AREAS= [
+  'sparks',
+  'concepts',
+  'projects',
+  'archives',
+  'meta',
+]
+
+const site = { dirs, baseContentPath, CONCEPTS_DIR, CONTENT_AREAS };
+// END inline: config/site.js
+// ───────────────────────────────────────────────────────────────
+
+// ───────────────────────────────────────────────────────────────
+// BEGIN inline: config/templating.js
+// config/templating.js
+import fs from 'node:fs'
+import path from 'node:path'
+import { DateTime } from 'luxon'
+import { icons } from 'lucide'
+import defaultAttributes from 'lucide/dist/esm/defaultAttributes.js'
+import generateConceptMapJSONLD from '../utils/build/concept-map.js'
+import seeded from '../utils/build/seeded.js' // (kept; even if unused elsewhere)
+
+// --- Inlined Utilities (for stability) ---
+const fileCache = new Map()
+function readFileCached(p) {
+  try {
+    const { mtimeMs } = fs.statSync(p)
+    const cached = fileCache.get(p)
+    if (cached?.mtimeMs === mtimeMs) return cached.data
+    const data = fs.readFileSync(p, 'utf8')
+    fileCache.set(p, { mtimeMs, data })
+    return data
+  } catch {
+    return null
+  }
+}
+function ordinalSuffix(n) {
+  const abs = Math.abs(n)
+  if (abs % 100 >= 11 && abs % 100 <= 13) return 'th'
+  return ['th', 'st', 'nd', 'rd'][abs % 10] || 'th'
+}
+function _isPresent(v) {
+  if (v == null) return false
+  if (typeof v === 'string') return v.trim().length > 0
+  if (Array.isArray(v)) return v.length > 0
+  if (typeof v === 'object') return Object.keys(v).length > 0
+  return true
+}
+
+// --- Core Helpers ---
+const toStr = v => String(v ?? '')
+const slug = s =>
+  String(s ?? '')
+    .normalize('NFKD')
+    .toLowerCase()
+    .replace(/[^\w\s-]/g, '')
+    .trim()
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-')
+const escapeHtml = str =>
+  String(str ?? '')
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#39;')
+
+// --- Filters ---
+const defaultFilters = {
+  readableDate: (d, zone = 'utc') => {
+    if (!(d instanceof Date)) return ''
+    const dt = DateTime.fromJSDate(d, { zone })
+    return `${dt.toFormat('MMMM d')}${ordinalSuffix(dt.day)}, ${dt.toFormat('yyyy')}`
+  },
+  htmlDateString: d =>
+    d instanceof Date
+      ? DateTime.fromJSDate(d, { zone: 'utc' }).toFormat('yyyy-MM-dd')
+      : '',
+  readingTime: (text = '', wordsPerMinute = 200) => {
+    const count = toStr(text).trim().split(/\s+/).filter(Boolean).length
+    const minutes = Math.max(1, Math.ceil(count / wordsPerMinute))
+    return `${minutes} min read`
+  },
+  truncate: (str = '', n = 140) => {
+    if (typeof str !== 'string' || n <= 0) return ''
+    return str.length > n ? `${str.slice(0, n)}…` : str
+  },
+  slugify: (str = '') =>
+    String(str)
+      .toLowerCase()
+      .trim()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/(^-|-$)+/g, ''),
+  limit: (arr = [], n = 5) => (Array.isArray(arr) ? arr.slice(0, n) : []),
+  isNew: (d, days = 14) => {
+    if (!(d instanceof Date)) return false
+    const now = DateTime.now().toUTC()
+    const then = DateTime.fromJSDate(d, { zone: 'utc' })
+    return now.diff(then, 'days').days <= days
+  },
+  shout: (str = '') => toStr(str).toUpperCase(),
+  money: (value = 0, code = '') => {
+    const num = Number(value)
+    const cur = toStr(code).toUpperCase()
+    if (Number.isNaN(num)) return ''
+    // Keep the simple "CODE 0.00" format sitewide for consistency
+    return cur ? `${cur} ${num.toFixed(2)}` : `${num.toFixed(2)}`
+  },
+  yesNo: v => (v ? 'Yes' : 'No'),
+  humanDate: (iso = '') => {
+    if (typeof iso !== 'string' || !iso) return ''
+    const d = DateTime.fromISO(iso, { zone: 'utc' })
+    if (!d.isValid) return ''
+    const fmt = d.toFormat('yyyy-LL-dd')
+    return `<time datetime="${escapeHtml(iso)}">${fmt}</time>`
+  },
+  titleizeSlug: (str = '') =>
+    toStr(str)
+      .split('-')
+      .filter(Boolean)
+      .map(s => s.charAt(0).toUpperCase() + s.slice(1))
+      .join(' '),
+  hostname: (url = '') => {
+    try {
+      return new URL(url).hostname
+    } catch {
+      return ''
+    }
+  },
+  absoluteUrl: (path = '', base = process.env.SITE_URL || '') => {
+    try {
+      return new URL(path, base).toString()
+    } catch {
+      return path
+    }
+  },
+  conceptMapJSONLD: (pages = []) =>
+    JSON.stringify(generateConceptMapJSONLD(pages)),
+  jsonify: v => JSON.stringify(v),
+  date: (value, fmt = 'yyyy-LL-dd') => {
+    try {
+      let dt
+      if (value instanceof Date)
+        dt = DateTime.fromJSDate(value, { zone: 'utc' })
+      else if (typeof value === 'number')
+        dt = DateTime.fromMillis(value, { zone: 'utc' })
+      else if (typeof value === 'string')
+        dt = DateTime.fromISO(value, { zone: 'utc' })
+      else return ''
+      return dt.isValid ? dt.toFormat(fmt) : ''
+    } catch {
+      return ''
+    }
+  },
+  provenanceSources: (ref = '') => {
+    // Defensive: return [] on any weird input
+    if (typeof ref !== 'string' || ref.trim() === '') return []
+    const rel = ref.startsWith('/') ? ref.slice(1) : ref
+    const full = path.join(process.cwd(), 'src', rel)
+    const raw = readFileCached(full)
+    if (raw === null) return []
+    return raw
+      .trim()
+      .split('\n')
+      .filter(Boolean)
+      .map(line => {
+        try {
+          return JSON.parse(line)
+        } catch {
+          return null
+        }
+      })
+      .filter(Boolean)
+  },
+  provenanceViewerUrl: (ref = '') => {
+    if (typeof ref !== 'string' || !ref.includes('/provenance/')) return ref
+    const clean = ref.replace(/^\/*content\//, '')
+    const parts = clean.split('/')
+    const idx = parts.lastIndexOf('provenance')
+    if (idx < 0 || !parts[idx + 1]) return ref
+    const file = parts[idx + 1].replace(/\.jsonl$/, '')
+    const slug = file.replace(/--+/g, '-')
+    const prefix = parts.slice(1, idx).join('/')
+    return `/archives/${prefix}/provenance/${slug}/`
+  },
+  provenanceDownloadUrl: (ref = '') => {
+    if (typeof ref !== 'string' || !ref.includes('/provenance/')) return ref
+    const clean = ref.replace(/^\/*content\//, '')
+    const parts = clean.split('/')
+    const idx = parts.lastIndexOf('provenance')
+    if (idx < 0 || !parts[idx + 1]) return ref
+    const file = parts[idx + 1].replace(/\.jsonl$/, '')
+    const slug = file.replace(/--+/g, '-')
+    const prefix = parts.slice(1, idx).join('/')
+    return `/archives/${prefix}/provenance/${slug}.jsonl`
+  },
+}
+
+function fieldCounts(obj = {}, excludeKeys = []) {
+  try {
+    const o = obj && typeof obj === 'object' ? obj : {}
+    const sys = new Set(
+      [
+        'industry',
+        'industrySlug',
+        'category',
+        'categorySlug',
+        'company',
+        'companySlug',
+        'line',
+        'lineSlug',
+        'section',
+        'locale',
+        '__source',
+        '__rel',
+        'url',
+        'title',
+        'lineTitle',
+        'companyTitle',
+        'categoryTitle',
+        'industryTitle',
+        'productSlug',
+        'product_id',
+        'charSlug',
+        'name',
+        'seriesSlug',
+        'page',
+        'collections',
+      ].concat(Array.isArray(excludeKeys) ? excludeKeys : [])
+    )
+    const keys = Object.keys(o).filter(k => !sys.has(k))
+    const total = keys.length
+    let present = 0
+    for (const k of keys) if (_isPresent(o[k])) present += 1
+    return { total, present }
+  } catch {
+    return { total: 0, present: 0 }
+  }
+}
+
+function fieldRatio(obj = {}, excludeKeys = []) {
+  const { total, present } = fieldCounts(obj, excludeKeys)
+  return `${present}/${total}`
+}
+
+const len = v => (Array.isArray(v) ? v.length : 0)
+
+defaultFilters.fieldCounts = fieldCounts
+defaultFilters.fieldRatio = fieldRatio
+defaultFilters.len = len
+
+// --- Mutation helpers for Nunjucks use (safe, defensive) ---
+function setAttribute(obj, key, value) {
+  try {
+    if (!obj || typeof obj !== 'object') return obj
+    obj[key] = value
+    return obj
+  } catch {
+    return obj
+  }
+}
+function push(arr, value) {
+  try {
+    if (Array.isArray(arr)) {
+      arr.push(value)
+      return arr
+    }
+    return arr
+  } catch {
+    return arr
+  }
+}
+
+// --- Shortcodes ---
+function specnote(variant, content, tooltip) {
+  const cls =
+    {
+      soft: 'spec-note-soft',
+      subtle: 'spec-note-subtle',
+      liminal: 'spec-note-liminal',
+      archival: 'spec-note-archival',
+      ghost: 'spec-note-ghost',
+    }[variant] || 'spec-note-soft'
+  const safeTooltip = tooltip?.replace(/"/g, '&quot;') || ''
+  return `<span class="${cls}" title="${safeTooltip}">${content}</span>`
+}
+
+function createCalloutShortcode(eleventyConfig) {
+  return function (content, opts = {}) {
+    const md = eleventyConfig.markdownLibrary
+    const isObj = opts && typeof opts === 'object' && !Array.isArray(opts)
+    const {
+      title = '',
+      kicker = '',
+      variant = 'neutral',
+      position = 'center',
+      icon = '',
+      headingLevel = 3,
+    } = isObj ? opts : { title: opts }
+    const safeTitle = escapeHtml(title)
+    const id = `callout-${title ? slug(title) : Date.now()}`
+    const body = md.render(String(content), this.ctx ?? {})
+    return `<aside class="callout callout--${variant}" role="note" aria-labelledby="${id}">
+      <div class="callout-head">
+        <h${headingLevel} id="${id}" class="callout-title">
+          ${icon ? `<span class="callout-icon">${icon}</span>` : ''}${safeTitle}
+        </h${headingLevel}>
+        ${kicker ? `<p class="callout-kicker">${escapeHtml(kicker)}</p>` : ''}
+      </div>
+      <div class="callout-body">${body}</div>
+    </aside>`
+  }
+}
+
+// --- Registration Functions ---
+function addFilters(eleventyConfig) {
+  // Base filters
+  Object.entries(defaultFilters).forEach(([name, fn]) =>
+    eleventyConfig.addFilter(name, fn)
+  )
+
+  // Safe helpers used across templates
+  const safeUpper = (value, fallback = '', coerce = false) => {
+    if (typeof value === 'string') return value.toUpperCase()
+    if (value == null) return fallback
+    return coerce ? String(value).toUpperCase() : fallback
+  }
+  eleventyConfig.addFilter('safe_upper', safeUpper)
+  eleventyConfig.addFilter('compactUnique', arr =>
+    Array.from(new Set((arr || []).filter(Boolean)))
+  )
+
+  // SAFER JSON: never return undefined; always a string
+  const toJson = (value, spaces = 0) => {
+    // stringify null if value is undefined so `.replace` always works
+    const json = JSON.stringify(value ?? null, null, spaces)
+    return String(json)
+      .replace(/</g, '\\u003C')
+      .replace(/--(?:!?)>/g, '\\u002D\\u002D>')
+  }
+
+  eleventyConfig.addFilter('json', toJson)
+  eleventyConfig.addNunjucksFilter('json', toJson)
+  eleventyConfig.addFilter('dump', toJson)
+  eleventyConfig.addNunjucksFilter('dump', toJson)
+
+  // New: mutation filters used in your Nunjucks templates
+  eleventyConfig.addFilter('setAttribute', setAttribute)
+  eleventyConfig.addNunjucksFilter('setAttribute', setAttribute)
+  eleventyConfig.addFilter('push', push)
+  eleventyConfig.addNunjucksFilter('push', push)
+
+  // Lucide (kept)
+  eleventyConfig.addFilter('lucide', (name, attrs = {}) => {
+    try {
+      if (!name || typeof name !== 'string') return ''
+      const toPascal = s =>
+        s
+          .split(/[:._\-\s]+/)
+          .filter(Boolean)
+          .map(p => p.charAt(0).toUpperCase() + p.slice(1))
+          .join('')
+      const key = toPascal(name)
+      const node = icons[key] || icons[name]
+      if (!node) return ''
+      const attrsMerged = { ...defaultAttributes, ...attrs }
+      const toAttrString = obj =>
+        Object.entries(obj)
+          .map(([k, v]) => `${k}="${escapeHtml(v)}"`)
+          .join(' ')
+      const children = Array.isArray(node[2])
+        ? node[2]
+            .map(([tag, attr]) => `<${tag} ${toAttrString(attr)} />`)
+            .join('')
+        : ''
+      return `<svg ${toAttrString(attrsMerged)}>${children}</svg>`
+    } catch {
+      return ''
+    }
+  })
+}
+
+function addShortcodes(eleventyConfig) {
+  eleventyConfig.addShortcode('specnote', specnote)
+  const callout = createCalloutShortcode(eleventyConfig)
+  eleventyConfig.addPairedShortcode('callout', callout)
+  eleventyConfig.addPairedShortcode(
+    'failbox',
+    function (content, titleOrOpts, kicker) {
+      const opts =
+        titleOrOpts && typeof titleOrOpts === 'object'
+          ? { ...titleOrOpts, variant: 'error' }
+          : { title: titleOrOpts, kicker, variant: 'error' }
+      return callout.call(this, content, opts)
+    }
+  )
+}
+// END inline: config/templating.js
+// ───────────────────────────────────────────────────────────────
+
+/* ==== End inlined config modules ==== */
+
+// eleventy.config.mjs
+// Node 24+ ESM • Eleventy 3.x • @11ty/eleventy-plugin-vite v7
+// Assets are now served by Vite from /public (no Eleventy passthrough).
+
+import fs from 'node:fs'
+import fsp from 'node:fs/promises'
+import path from 'node:path'
+
+import register from './config/register.mjs'
+import registerArchive from './config/archives.mjs'
+import { getBuildInfo } from './config/build-info.js'
+import { dirs } from './config/site.js'
+import htmlToMarkdownUnified from './config/html-to-markdown-unified.mjs'
+
+import EleventyVitePlugin from '@11ty/eleventy-plugin-vite'
+
+export default function (eleventyConfig) {
+  // Nunjucks DX
+  eleventyConfig.setNunjucksEnvironmentOptions({
+    trimBlocks: false,
+    lstripBlocks: false,
+    noCache: true,
+    throwOnUndefined: false,
+  })
+
+  // Tiny ternary helper: {{ cond | ternary('a','b') }}
+  eleventyConfig.addNunjucksFilter('ternary', (val, a, b) => (val ? a : b))
+
+  // Pre-clean Vite’s temp folder to avoid stale-dir issues
+  eleventyConfig.on('eleventy.before', async () => {
+    const viteTemp = path.resolve(process.cwd(), '.11ty-vite')
+    try {
+      if (fs.existsSync(viteTemp)) {
+        await fsp.rm(viteTemp, { recursive: true, force: true })
+      }
+    } catch { }
+  })
+
+  // Auto-rewrite simple njk ternaries (`? :` → `| ternary(a,b)`)
+  eleventyConfig.on('eleventy.before', async () => {
+    try {
+      const { fixRepoTernaries } = await import('./utils/scripts/fix-njk-ternaries.mjs')
+      await fixRepoTernaries({
+        roots: ['src'],
+        exts: ['.njk', '.md', '.html'],
+        dryRun: false,
+        logFile: '.njk-fix-report.json',
+        quiet: true,
+      })
+    } catch (err) {
+      console.error('[njk-fix] failed:', err?.message || err)
+    }
+  })
+
+  // IMPORTANT: No passthroughs for src/assets — Vite owns static via /public
+  // (Removed:)
+
+  // Your existing setup
+  register(eleventyConfig)
+  registerArchive(eleventyConfig)
+
+  eleventyConfig.addGlobalData('build', getBuildInfo())
+  eleventyConfig.addGlobalData('buildTime', new Date().toISOString())
+
+  // HTML → Markdown pipeline
+  htmlToMarkdownUnified(eleventyConfig, {
+    rootDir: 'src/content',
+    dumpMarkdownTo: '_cache/md-dumps',
+    pageTitlePrefix: '',
+    defaultLayout: 'layouts/converted-html.njk',
+    frontMatterExtra: { convertedFromHtml: true },
+  })
+
+  // Vite integration (minimal): let vite.config.mjs dictate plugins/options.
+  // The Eleventy plugin will run Vite in middleware mode and handle rewrites.
+  eleventyConfig.addPlugin(EleventyVitePlugin, {
+    tempFolderName: '.11ty-vite',
+    // No viteOptions here — keep all Vite/Tailwind/daisyUI config in vite.config.mjs
+  })
+
+  return {
+    dir: dirs, // expect { input: 'src', output: '_site', includes: '_includes', data: '_data', … }
+    markdownTemplateEngine: 'njk',
+    htmlTemplateEngine: false, // don’t parse raw .html through Liquid
+    templateFormats: ['md', 'njk', 'html', '11ty.js'],
+    pathPrefix: '/', // if deploying under a subpath, update this AND Vite's `base`
+  }
+}
