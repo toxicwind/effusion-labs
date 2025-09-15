@@ -17,6 +17,12 @@ export default function addCustomCollections(eleventyConfig) {
       .sort((a, b) => b.date - a.date)
   )
 
+  eleventyConfig.addCollection('work', api =>
+    ['projects', 'concepts', 'sparks', 'meta']
+      .flatMap(tag => api.getFilteredByTag(tag))
+      .sort((a, b) => b.date - a.date)
+  )
+
   eleventyConfig.addCollection('recentAll', api => {
     const items = api.getAll().filter(p => p.data.type)
     items.sort((a, b) => b.date - a.date)
