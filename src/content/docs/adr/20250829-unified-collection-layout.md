@@ -6,11 +6,13 @@ Accepted
 
 ## Context
 
-Sparks, Concepts, and Projects index pages duplicated listing markup and descriptions.
+Sparks, Concepts, and Projects index pages duplicated listing markup and
+descriptions.
 
 ## Decision
 
-Introduce `layouts/collection.njk` with centralized `sections` data to render collection pages from metadata.
+Introduce `layouts/collection.njk` with centralized `sections` data to render
+collection pages from metadata.
 
 ## Consequences
 

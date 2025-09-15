@@ -2,7 +2,8 @@
 
 ## Context Recap
 
-Product template now surfaces complete metadata for Pop Mart "The Monsters" products.
+Product template now surfaces complete metadata for Pop Mart "The Monsters"
+products.
 
 ## Outstanding Items
 

@@ -10,4 +10,5 @@ Append bracketed status text beside the type in the shared list item component.
 
 ## Consequences
 
-Readers can see draft or stable states at a glance; regression covered by an automated test.
+Readers can see draft or stable states at a glance; regression covered by an
+automated test.

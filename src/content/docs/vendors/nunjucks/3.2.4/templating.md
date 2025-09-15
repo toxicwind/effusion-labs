@@ -2,59 +2,89 @@
 
 This is an overview of the templating features available in Nunjucks.
 
-> Nunjucks is essentially a port of [jinja2](http://jinja.pocoo.org/docs/), so you can read their [docs](http://jinja.pocoo.org/docs/templates/) if you find anything lacking here. Read about the differences [here](http://mozilla.github.io/nunjucks/faq.html#can-i-use-the-same-templates-between-nunjucks-and-jinja2-what-are-the-differences).
+> Nunjucks is essentially a port of [jinja2](http://jinja.pocoo.org/docs/), so
+> you can read their [docs](http://jinja.pocoo.org/docs/templates/) if you find
+> anything lacking here. Read about the differences
+> [here](http://mozilla.github.io/nunjucks/faq.html#can-i-use-the-same-templates-between-nunjucks-and-jinja2-what-are-the-differences).
 
 ## User-Defined Templates Warning
 
-nunjucks does not sandbox execution so **it is not safe to run user-defined templates or inject user-defined content into template definitions**. On the server, you can expose attack vectors for accessing sensitive data and remote code execution. On the client, you can expose cross-site scripting vulnerabilities even for precompiled templates (which can be mitigated with a strong [CSP](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy)). See [this issue](https://github.com/mozilla/nunjucks-docs/issues/17) for more information.
+nunjucks does not sandbox execution so **it is not safe to run user-defined
+templates or inject user-defined content into template definitions**. On the
+server, you can expose attack vectors for accessing sensitive data and remote
+code execution. On the client, you can expose cross-site scripting
+vulnerabilities even for precompiled templates (which can be mitigated with a
+strong
+[CSP](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy)).
+See [this issue](https://github.com/mozilla/nunjucks-docs/issues/17) for more
+information.
 
 ## File Extensions
 
-Although you are free to use any file extension you wish for your Nunjucks template files, the Nunjucks community has adopted `.njk`.
+Although you are free to use any file extension you wish for your Nunjucks
+template files, the Nunjucks community has adopted `.njk`.
 
-If you are developing tools or editor syntax helpers for Nunjucks, please include recognition of the `.njk` extension.
+If you are developing tools or editor syntax helpers for Nunjucks, please
+include recognition of the `.njk` extension.
 
 ## Syntax Highlighting
 
-Plugins are available in various editors to support the `jinja` syntax highlighting of Nunjucks.
+Plugins are available in various editors to support the `jinja` syntax
+highlighting of Nunjucks.
 
-- atom [https://github.com/alohaas/language-nunjucks](https://github.com/alohaas/language-nunjucks)
-- vim [https://github.com/niftylettuce/vim-jinja](https://github.com/niftylettuce/vim-jinja)
-- brackets [https://github.com/axelboc/nunjucks-brackets](https://github.com/axelboc/nunjucks-brackets)
-- sublime [https://github.com/mogga/sublime-nunjucks/blob/master/Nunjucks.tmLanguage](https://github.com/mogga/sublime-nunjucks/blob/master/Nunjucks.tmLanguage)
+- atom
+  [https://github.com/alohaas/language-nunjucks](https://github.com/alohaas/language-nunjucks)
+- vim
+  [https://github.com/niftylettuce/vim-jinja](https://github.com/niftylettuce/vim-jinja)
+- brackets
+  [https://github.com/axelboc/nunjucks-brackets](https://github.com/axelboc/nunjucks-brackets)
+- sublime
+  [https://github.com/mogga/sublime-nunjucks/blob/master/Nunjucks.tmLanguage](https://github.com/mogga/sublime-nunjucks/blob/master/Nunjucks.tmLanguage)
 - emacs [http://web-mode.org](http://web-mode.org/)
-- vscode [https://github.com/ronnidc/vscode-nunjucks](https://github.com/ronnidc/vscode-nunjucks)
+- vscode
+  [https://github.com/ronnidc/vscode-nunjucks](https://github.com/ronnidc/vscode-nunjucks)
 
 ## Variables
 
-A variable looks up a value from the template context. If you wanted to simply display a variable, you would do:
+A variable looks up a value from the template context. If you wanted to simply
+display a variable, you would do:
 
     {{ username }}
 
-This looks up `username` from the context and displays it. Variable names can have dots in them which lookup properties, just like javascript. You can also use the square bracket syntax.
+This looks up `username` from the context and displays it. Variable names can
+have dots in them which lookup properties, just like javascript. You can also
+use the square bracket syntax.
 
     {{ foo.bar }}
     {{ foo["bar"] }}
 
 These two forms to the exact same thing, just like javascript.
 
-If a value is `undefined` or `null`, nothing is displayed. The same behavior occurs when referencing undefined or null objects. The following all output nothing if `foo` is undefined: `{{ foo }}`, `{{ foo.bar }}`, `{{ foo.bar.baz }}`.
+If a value is `undefined` or `null`, nothing is displayed. The same behavior
+occurs when referencing undefined or null objects. The following all output
+nothing if `foo` is undefined: `{{ foo }}`, `{{ foo.bar }}`,
+`{{ foo.bar.baz }}`.
 
 ## Filters
 
-Filters are essentially functions that can be applied to variables. They are called with a pipe operator (`|`) and can take arguments.
+Filters are essentially functions that can be applied to variables. They are
+called with a pipe operator (`|`) and can take arguments.
 
     {{ foo | title }}
     {{ foo | join(",") }}
     {{ foo | replace("foo", "bar") | capitalize }}
 
-The third example shows how you can chain filters. It would display "Bar", by first replacing "foo" with "bar" and then capitalizing it.
+The third example shows how you can chain filters. It would display "Bar", by
+first replacing "foo" with "bar" and then capitalizing it.
 
-Nunjucks comes with several [builtin filters](#builtin-filters), and you can [add your own](https://mozilla.github.io/nunjucks/api#custom-filters) as well.
+Nunjucks comes with several [builtin filters](#builtin-filters), and you can
+[add your own](https://mozilla.github.io/nunjucks/api#custom-filters) as well.
 
 ## Template Inheritance
 
-Template inheritance is a way to make it easy to reuse templates. When writing a template, you can define "blocks" that child templates can override. The inheritance chain can be as long as you like.
+Template inheritance is a way to make it easy to reuse templates. When writing a
+template, you can define "blocks" that child templates can override. The
+inheritance chain can be as long as you like.
 
 If we have a template `parent.html` that looks like this:
 
@@ -96,15 +126,22 @@ The output would be:
       This is the right side!
     </section>
 
-You can store the template to inherit in a variable and use it by omitting quotes. This variable can contain a string that points to a template file, or it can contain a compiled Template object that has been added to the context. That way you can dynamically change which template is inherited when rendering by setting it in the context.
+You can store the template to inherit in a variable and use it by omitting
+quotes. This variable can contain a string that points to a template file, or it
+can contain a compiled Template object that has been added to the context. That
+way you can dynamically change which template is inherited when rendering by
+setting it in the context.
 
     {% extends parentTemplate %}
 
-You leverage inheritance with the [`extends`](#extends) and [`block`](#block) tags. A more detailed explanation of inheritance can be found in the [jinja2 docs](http://jinja.pocoo.org/docs/templates/#template-inheritance).
+You leverage inheritance with the [`extends`](#extends) and [`block`](#block)
+tags. A more detailed explanation of inheritance can be found in the
+[jinja2 docs](http://jinja.pocoo.org/docs/templates/#template-inheritance).
 
 ### super
 
-You can render the contents of the parent block inside a child block by calling `super`. If in the child template from above you had:
+You can render the contents of the parent block inside a child block by calling
+`super`. If in the child template from above you had:
 
     {% block right %}
     {{ super() }}
@@ -116,19 +153,24 @@ The output of the block would be:
     This is more content
     Right side!
 
-Tags are special blocks that perform operations on sections of the template. Nunjucks comes with several builtin, but [you can add your own](https://mozilla.github.io/nunjucks/api.html#custom-tags).
+Tags are special blocks that perform operations on sections of the template.
+Nunjucks comes with several builtin, but
+[you can add your own](https://mozilla.github.io/nunjucks/api.html#custom-tags).
 
 ### if
 
-`if` tests a condition and lets you selectively display content. It behaves exactly as javascript's `if` behaves.
+`if` tests a condition and lets you selectively display content. It behaves
+exactly as javascript's `if` behaves.
 
     {% if variable %}
       It is true
     {% endif %}
 
-If variable is defined and evaluates to true, "It is true" will be displayed. Otherwise, nothing will be.
+If variable is defined and evaluates to true, "It is true" will be displayed.
+Otherwise, nothing will be.
 
-You can specify alternate conditions with `elif` (or `elseif`, which is simply an alias of `elif`) and `else`:
+You can specify alternate conditions with `elif` (or `elseif`, which is simply
+an alias of `elif`) and `else`:
 
     {% if hungry %}
       I am hungry
@@ -154,7 +196,8 @@ You can also use if as an [inline expression](#if-expression).
 
 `for` iterates over arrays and dictionaries.
 
-> If you are using a custom template loader that is asynchronous, see [`asyncEach`](#asynceach))
+> If you are using a custom template loader that is asynchronous, see
+> [`asyncEach`](#asynceach))
 
     var items = [{ title: "foo", id: 1 }, { title: "bar", id: 2}];
 
@@ -168,7 +211,9 @@ You can also use if as an [inline expression](#if-expression).
     {% endfor %}
     </ul>
 
-The above example lists all the posts using the `title` attribute of each item in the `items` array as the display value. If the `items` array were empty, the contents of the optional `else` clause would instead be rendered.
+The above example lists all the posts using the `title` attribute of each item
+in the `items` array as the display value. If the `items` array were empty, the
+contents of the optional `else` clause would instead be rendered.
 
 You can also iterate over objects/hashes:
 
@@ -183,9 +228,11 @@ You can also iterate over objects/hashes:
       Use {{ amount }} of {{ ingredient }}
     {% endfor %}
 
-The [`dictsort`](http://jinja.pocoo.org/docs/templates/#dictsort) filter is available for sorting objects when iterating over them.
+The [`dictsort`](http://jinja.pocoo.org/docs/templates/#dictsort) filter is
+available for sorting objects when iterating over them.
 
-ES iterators are supported, like the new builtin Map and Set. But also anything implementing the iterable protocol.
+ES iterators are supported, like the new builtin Map and Set. But also anything
+implementing the iterable protocol.
 
     var fruits = new Map([
       ["banana", "yellow"],
@@ -219,13 +266,24 @@ Inside loops, you have access to a few special variables:
 
 ### asyncEach
 
-> This is only applicable to asynchronous templates. Read about them [here](https://mozilla.github.io/nunjucks/api.html#asynchronous-support)
+> This is only applicable to asynchronous templates. Read about them
+> [here](https://mozilla.github.io/nunjucks/api.html#asynchronous-support)
 
-`asyncEach` is an asynchronous version of `for`. You only need this if you are using a [custom template loader that is asynchronous](#asynchronous); otherwise you will never need it. Async filters and extensions also need this, but internally loops are automatically converted into `asyncEach` if any async filters and extensions are used within the loop.
+`asyncEach` is an asynchronous version of `for`. You only need this if you are
+using a [custom template loader that is asynchronous](#asynchronous); otherwise
+you will never need it. Async filters and extensions also need this, but
+internally loops are automatically converted into `asyncEach` if any async
+filters and extensions are used within the loop.
 
-`asyncEach` has exactly the same behavior of `for`, but it enables asynchronous control of the loop. The reason those tags are separate is performance; most people use templates synchronously and it's much faster for `for` to compile to a straight JavaScript `for` loop.
+`asyncEach` has exactly the same behavior of `for`, but it enables asynchronous
+control of the loop. The reason those tags are separate is performance; most
+people use templates synchronously and it's much faster for `for` to compile to
+a straight JavaScript `for` loop.
 
-At compile-time, Nunjucks is not aware how templates are loaded so it's unable to determine if an `include` block is asynchronous or not. That's why it can't automatically convert loops for you, and you must use `asyncEach` for iteration if you are loading templates asynchronously inside the loop.
+At compile-time, Nunjucks is not aware how templates are loaded so it's unable
+to determine if an `include` block is asynchronous or not. That's why it can't
+automatically convert loops for you, and you must use `asyncEach` for iteration
+if you are loading templates asynchronously inside the loop.
 
     // If you are using a custom loader that is async, you need asyncEach
     var env = new nunjucks.Environment(AsyncLoaderFromDatabase, opts);
@@ -240,11 +298,16 @@ At compile-time, Nunjucks is not aware how templates are loaded so it's unable t
 
 ### asyncAll
 
-> This is only applicable to asynchronous templates. Read about them [here](https://mozilla.github.io/nunjucks/api.html#asynchronous-support)
+> This is only applicable to asynchronous templates. Read about them
+> [here](https://mozilla.github.io/nunjucks/api.html#asynchronous-support)
 
-`asyncAll` is similar to `asyncEach`, except it renders all the items in parallel, preserving the order of the items. This is only helpful if you are using asynchronous filters, extensions, or loaders. Otherwise you should never use this.
+`asyncAll` is similar to `asyncEach`, except it renders all the items in
+parallel, preserving the order of the items. This is only helpful if you are
+using asynchronous filters, extensions, or loaders. Otherwise you should never
+use this.
 
-Let's say you created a filter named `lookup` that fetches some text from a database. You could then render multiple items in parallel with `asyncAll`:
+Let's say you created a filter named `lookup` that fetches some text from a
+database. You could then render multiple items in parallel with `asyncAll`:
 
     <h1>Posts</h1>
     <ul>
@@ -253,11 +316,15 @@ Let's say you created a filter named `lookup` that fetches some text from a data
     {% endall %}
     </ul>
 
-If `lookup` is an asynchronous filter, it's probably doing something slow like fetching something from disk. `asyncAll` allows you reduce the time it would take to execute the loop sequentially by doing all the async work in parallel, and the template rendering resumes once all the items are done.
+If `lookup` is an asynchronous filter, it's probably doing something slow like
+fetching something from disk. `asyncAll` allows you reduce the time it would
+take to execute the loop sequentially by doing all the async work in parallel,
+and the template rendering resumes once all the items are done.
 
 ### macro
 
-`macro` allows you to define reusable chunks of content. It is similar to a function in a programming language. Here's an example:
+`macro` allows you to define reusable chunks of content. It is similar to a
+function in a programming language. Here's an example:
 
     {% macro field(name, value='', type='text') %}
     <div class="field">
@@ -271,11 +338,16 @@ Now `field` is available to be called like a normal function:
     {{ field('user') }}
     {{ field('pass', type='password') }}
 
-Keyword/default arguments are available. See [keyword arguments](#keyword-arguments) for a more detailed explanation.
+Keyword/default arguments are available. See
+[keyword arguments](#keyword-arguments) for a more detailed explanation.
 
-You can [import](#import) macros from other templates, allowing you to reuse them freely across your project.
+You can [import](#import) macros from other templates, allowing you to reuse
+them freely across your project.
 
-**Important note**: If you are using the asynchronous API, please be aware that you **cannot** do anything asynchronous inside macros. This is because macros are called like normal functions. In the future we may have a way to call a function asynchronously. If you do this now, the behavior is undefined.
+**Important note**: If you are using the asynchronous API, please be aware that
+you **cannot** do anything asynchronous inside macros. This is because macros
+are called like normal functions. In the future we may have a way to call a
+function asynchronously. If you do this now, the behavior is undefined.
 
 ### set
 
@@ -291,9 +363,13 @@ You can introduce new variables, and also set multiple at once:
 
     {% set x, y, z = 5 %}
 
-If `set` is used at the top-level, it changes the value of the global template context. If used inside scoped blocks like an include or a macro, it only modifies the current scope.
+If `set` is used at the top-level, it changes the value of the global template
+context. If used inside scoped blocks like an include or a macro, it only
+modifies the current scope.
 
-It is also possible to capture the contents of a block into a variable using block assignments. The syntax is similar to the standard `set`, except that the `=` is omitted, and everything until the `{% endset %}` is captured.
+It is also possible to capture the contents of a block into a variable using
+block assignments. The syntax is similar to the standard `set`, except that the
+`=` is omitted, and everything until the `{% endset %}` is captured.
 
 This can be useful in some situations as an alternative for macros:
 
@@ -305,21 +381,31 @@ This can be useful in some situations as an alternative for macros:
 
 ### extends
 
-`extends` is used to specify template inheritance. The specified template is used as a base template. See [Template Inheritance](#template-inheritance).
+`extends` is used to specify template inheritance. The specified template is
+used as a base template. See [Template Inheritance](#template-inheritance).
 
     {% extends "base.html" %}
 
-You can store the template to inherit in a variable and use it by omitting quotes. This variable can contain a string that points to a template file, or it can contain a compiled Template object that has been added to the context. That way you can dynamically change which template is inherited when rendering by setting it in the context.
+You can store the template to inherit in a variable and use it by omitting
+quotes. This variable can contain a string that points to a template file, or it
+can contain a compiled Template object that has been added to the context. That
+way you can dynamically change which template is inherited when rendering by
+setting it in the context.
 
     {% extends parentTemplate %}
 
-In fact, `extends` accepts any arbitrary expression, so you can pass anything into it, as long as that expression evaluates to a string or a compiled Template object:
+In fact, `extends` accepts any arbitrary expression, so you can pass anything
+into it, as long as that expression evaluates to a string or a compiled Template
+object:
 
     {% extends name + ".html" %}`.
 
 ### block
 
-`block` defines a section on the template and identifies it with a name. This is used by template inheritance. Base templates can specify blocks and child templates can override them with new content. See [Template Inheritance](#template-inheritance).
+`block` defines a section on the template and identifies it with a name. This is
+used by template inheritance. Base templates can specify blocks and child
+templates can override them with new content. See
+[Template Inheritance](#template-inheritance).
 
     {% block css %}
     <link rel="stylesheet" href="app.css" />
@@ -339,11 +425,13 @@ Child templates can override the `item` block and change how it is displayed:
     The name of the item is: {{ item.name }}
     {% endblock %}
 
-A special function `super` is available within blocks which will render the parent block's content. See [super](#super).
+A special function `super` is available within blocks which will render the
+parent block's content. See [super](#super).
 
 ### include
 
-`include` pulls in other templates in place. It's useful when you need to share smaller chunks across several templates that already inherit other templates.
+`include` pulls in other templates in place. It's useful when you need to share
+smaller chunks across several templates that already inherit other templates.
 
     {% include "item.html" %}
 
@@ -353,21 +441,35 @@ You can even include templates in the middle of loops:
     {% include "item.html" %}
     {% endfor %}
 
-This is especially useful for cutting up templates into pieces so that the browser-side environment can render the small chunks when it needs to change the page.
+This is especially useful for cutting up templates into pieces so that the
+browser-side environment can render the small chunks when it needs to change the
+page.
 
-`include` actually accepts any arbitrary expression, so you can pass anything into it, as long as the expression evaluates to a string or a compiled Template object: `{% include name + ".html" %}`.
+`include` actually accepts any arbitrary expression, so you can pass anything
+into it, as long as the expression evaluates to a string or a compiled Template
+object: `{% include name + ".html" %}`.
 
-It might be useful to not throw an error if a template does not exist. Use the `ignore missing` option to suppress such errors.
+It might be useful to not throw an error if a template does not exist. Use the
+`ignore missing` option to suppress such errors.
 
     {% include "missing.html" ignore missing %}
 
-Included templates can themselves `extend` another template (so you could have a set of related includes that all inherit a common structure). An included template does not participate in the block structure of its including template; it has a totally separate inheritance tree and block namespace. In other words, an `include` is _not_ a pre-processor that pulls the included template code into the including template before rendering; instead, it fires off a separate render of the included template, and the results of that render are included.
+Included templates can themselves `extend` another template (so you could have a
+set of related includes that all inherit a common structure). An included
+template does not participate in the block structure of its including template;
+it has a totally separate inheritance tree and block namespace. In other words,
+an `include` is _not_ a pre-processor that pulls the included template code into
+the including template before rendering; instead, it fires off a separate render
+of the included template, and the results of that render are included.
 
 ### import
 
-`import` loads a different template and allows you to access its exported values. Macros and top-level assignments (done with [`set`](#set)) are exported from templates, allowing you to access them in a different template.
+`import` loads a different template and allows you to access its exported
+values. Macros and top-level assignments (done with [`set`](#set)) are exported
+from templates, allowing you to access them in a different template.
 
-Imported templates are processed without the current context by default, so they do not have access to any of the current template variables.
+Imported templates are processed without the current context by default, so they
+do not have access to any of the current template variables.
 
 Let's start with a template called `forms.html` that has the following in it:
 
@@ -384,7 +486,8 @@ Let's start with a template called `forms.html` that has the following in it:
     </div>
     {% endmacro %}
 
-We can import this template and bind all of its exported values to a variable so that we can use it:
+We can import this template and bind all of its exported values to a variable so
+that we can use it:
 
     {% import "forms.html" as forms %}
 
@@ -393,7 +496,8 @@ We can import this template and bind all of its exported values to a variable so
     {{ forms.label('Password') }}
     {{ forms.field('pass', type='password') }}
 
-You can also import specific values from a template into the current namespace with `from import`:
+You can also import specific values from a template into the current namespace
+with `from import`:
 
     {% from "forms.html" import field, label as description %}
 
@@ -402,23 +506,32 @@ You can also import specific values from a template into the current namespace w
     {{ description('Password') }}
     {{ field('pass', type='password') }}
 
-By adding `with context` to the end of an `import` directive, the imported template is processed with the current context.
+By adding `with context` to the end of an `import` directive, the imported
+template is processed with the current context.
 
     {% from "forms.html" import field with context %}
 
-`import` actually accepts any arbitrary expression, so you can pass anything into it, as long as the expression evaluates to a string or a compiled Template object: `{% import name + ".html" as obj %}`.
+`import` actually accepts any arbitrary expression, so you can pass anything
+into it, as long as the expression evaluates to a string or a compiled Template
+object: `{% import name + ".html" as obj %}`.
 
 ### raw
 
-If you want to output any of the special Nunjucks tags like `{{`, you can use a `{{`, you can use a `{% raw %}` block and anything inside of it will be output as plain text.
+If you want to output any of the special Nunjucks tags like `{{`, you can use a
+`{{`, you can use a `{% raw %}` block and anything inside of it will be output
+as plain text.
 
 ### verbatim
 
-`{% verbatim %}` has identical behavior as [`{% raw %}`](#raw). It is added for compatibility with the [Twig `verbatim` tag](http://twig.sensiolabs.org/doc/tags/verbatim.html).
+`{% verbatim %}` has identical behavior as [`{% raw %}`](#raw). It is added for
+compatibility with the
+[Twig `verbatim` tag](http://twig.sensiolabs.org/doc/tags/verbatim.html).
 
 ### filter
 
-A `filter` block allows you to call a filter with the contents of the block. Instead passing a value with the `|` syntax, the render contents from the block will be passed.
+A `filter` block allows you to call a filter with the contents of the block.
+Instead passing a value with the `|` syntax, the render contents from the block
+will be passed.
 
     {% filter title %}
     may the force be with you
@@ -432,7 +545,9 @@ NOTE: You cannot do anything asynchronous inside these blocks.
 
 ### call
 
-A `call` block enables you to call a macro with all the text inside the tag. This is helpful if you want to pass a lot of content into a macro. The content is available inside the macro as `caller()`.
+A `call` block enables you to call a macro with all the text inside the tag.
+This is helpful if you want to pass a lot of content into a macro. The content
+is available inside the macro as `caller()`.
 
     {% macro add(x, y) %}
     {{ caller() }}: {{ x + y }}
@@ -446,19 +561,27 @@ The above example would output "The result is: 3".
 
 ## Keyword Arguments
 
-jinja2 uses Python's keyword arguments support to allow keyword arguments in functions, filters, and macros. Nunjucks supports keyword arguments as well by introducing a new calling convention.
+jinja2 uses Python's keyword arguments support to allow keyword arguments in
+functions, filters, and macros. Nunjucks supports keyword arguments as well by
+introducing a new calling convention.
 
 Keyword arguments look like this:
 
     {{ foo(1, 2, bar=3, baz=4) }}
 
-`bar` and `baz` are keyword arguments. Nunjucks converts them into a hash and passes it as the last argument. It's equivalent to this call in javascript:
+`bar` and `baz` are keyword arguments. Nunjucks converts them into a hash and
+passes it as the last argument. It's equivalent to this call in javascript:
 
     foo(1, 2, { bar: 3, baz: 4})
 
-Since this is a standard calling convention, it works for all functions and filters if they are written to expect them. [Read more](https://mozilla.github.io/nunjucks/api#Keyword-Arguments) about this in the API section.
+Since this is a standard calling convention, it works for all functions and
+filters if they are written to expect them.
+[Read more](https://mozilla.github.io/nunjucks/api#Keyword-Arguments) about this
+in the API section.
 
-Macros allow you to also use keyword arguments in the definition, which allows you to specify default values. Nunjucks automatically maps the keyword arguments to the ones defined with the macro.
+Macros allow you to also use keyword arguments in the definition, which allows
+you to specify default values. Nunjucks automatically maps the keyword arguments
+to the ones defined with the macro.
 
     {% macro foo(x, y, z=5, w=6) %}
     {{ x }}, {{ y }}, {{ z }}, {{ w}}
@@ -467,7 +590,8 @@ Macros allow you to also use keyword arguments in the definition, which allows y
     {{ foo(1, 2) }}        -> 1, 2, 5, 6
     {{ foo(1, 2, w=10) }}  -> 1, 2, 5, 10
 
-You can mix positional and keyword arguments with macros. For example, you can specify a positional argument as a keyword argument:
+You can mix positional and keyword arguments with macros. For example, you can
+specify a positional argument as a keyword argument:
 
     {{ foo(20, y=21) }}     -> 20, 21, 5, 6
 
@@ -479,28 +603,36 @@ In this way, you can "skip" positional arguments:
 
     {{ foo(8, z=7) }}      -> 8, , 7, 6
 
-You can write comments using `{#` and `#}`. Comments are completely stripped out when rendering.
+You can write comments using `{#` and `#}`. Comments are completely stripped out
+when rendering.
 
     {# Loop through all the users #}
     {% for user in users %}...{% endfor %}
 
 ## Whitespace Control
 
-Normally the template engine outputs everything outside of variable and tag blocks verbatim, with all the whitespace as it is in the file. Occasionally you don't want the extra whitespace, but you still want to format the template cleanly, which requires whitespace.
+Normally the template engine outputs everything outside of variable and tag
+blocks verbatim, with all the whitespace as it is in the file. Occasionally you
+don't want the extra whitespace, but you still want to format the template
+cleanly, which requires whitespace.
 
-You can tell the engine to strip all leading or trailing whitespace by adding a minus sign (`-`) to the start or end block or a variable.
+You can tell the engine to strip all leading or trailing whitespace by adding a
+minus sign (`-`) to the start or end block or a variable.
 
     {% for i in [1,2,3,4,5] -%}
       {{ i }}
     {%- endfor %}
 
-The exact output of the above would be "12345". The `{%-` strips the whitespace right before the tag, and `-%}` the strips the whitespace right after the tag.
+The exact output of the above would be "12345". The `{%-` strips the whitespace
+right before the tag, and `-%}` the strips the whitespace right after the tag.
 
-And the same is for variables: `{{-` will strip the whitespace before the variable, and `-}}` will strip the whitespace after the variable.
+And the same is for variables: `{{-` will strip the whitespace before the
+variable, and `-}}` will strip the whitespace after the variable.
 
 ## Expressions
 
-You can use many types of literal expressions that you are used to in javascript.
+You can use many types of literal expressions that you are used to in
+javascript.
 
 - Strings: `"How are you?"`, `'How are you?'`
 - Numbers: `40`, `30.123`
@@ -510,7 +642,8 @@ You can use many types of literal expressions that you are used to in javascript
 
 ### Math
 
-Nunjucks allows you to operate on values (though it should be used sparingly, as most of your logic should be in code). The following operators are available:
+Nunjucks allows you to operate on values (though it should be used sparingly, as
+most of your logic should be in code). The following operators are available:
 
 - Addition: `+`
 - Subtraction: `-`
@@ -557,11 +690,13 @@ Examples:
 
 ### If Expression
 
-Similar to javascript's ternary operator, you can use `if` as if it were an inline expression:
+Similar to javascript's ternary operator, you can use `if` as if it were an
+inline expression:
 
     {{ "true" if foo else "false" }}
 
-The above outputs the string "true" if foo is truthy, otherwise "false". This is especially useful for default values like so:
+The above outputs the string "true" if foo is truthy, otherwise "false". This is
+especially useful for default values like so:
 
     {{ baz(foo if foo else "default") }}
 
@@ -571,20 +706,24 @@ Unlike javascript's ternary operator, the `else` is optional:
 
 ### Function Calls
 
-If you have passed a javascript method to your template, you can call it like normal.
+If you have passed a javascript method to your template, you can call it like
+normal.
 
     {{ foo(1, 2, 3) }}
 
 ### Regular Expressions
 
-A regular expression can be created just like JavaScript, but needs to be prefixed with `r`:
+A regular expression can be created just like JavaScript, but needs to be
+prefixed with `r`:
 
     {% set regExp = r/^foo.*/g %}
     {% if regExp.test('foo') %}
       Foo in the house!
     {% endif %}
 
-The supported flags are the following. See [Regex on MDN](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/RegExp) for more information.
+The supported flags are the following. See
+[Regex on MDN](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/RegExp)
+for more information.
 
 - `g`: apply globally
 - `i`: case insensitive
@@ -593,12 +732,15 @@ The supported flags are the following. See [Regex on MDN](https://developer.mozi
 
 ## Autoescaping
 
-If autoescaping is turned on in the environment, all output will automatically be escaped for safe output. To manually mark output as safe, use the `safe` filter. Nunjucks will not escape this output.
+If autoescaping is turned on in the environment, all output will automatically
+be escaped for safe output. To manually mark output as safe, use the `safe`
+filter. Nunjucks will not escape this output.
 
     {{ foo }}           // &lt;span%gt;
     {{ foo | safe }}    // <span>
 
-If autoescaping is turned off, all output will be rendered as it is. You can manually escape variables with the `escape` filter.
+If autoescaping is turned off, all output will be rendered as it is. You can
+manually escape variables with the `escape` filter.
 
     {{ foo }}           // <span>
     {{ foo | escape }}  // &lt;span&gt;
@@ -609,7 +751,9 @@ There are a few builtin global functions that cover some common cases.
 
 ### range(\[start\], stop, \[step\])
 
-If you need to iterate over a fixed set of numbers, `range` generates the set for you. The numbers begin at `start` (default 0) and increment by `step` (default 1) until it reaches `stop`, not including it.
+If you need to iterate over a fixed set of numbers, `range` generates the set
+for you. The numbers begin at `start` (default 0) and increment by `step`
+(default 1) until it reaches `stop`, not including it.
 
     {% for i in range(0, 5) -%}
       {{ i }},
@@ -619,29 +763,38 @@ The above outputs `0,1,2,3,4`.
 
 ### cycler(item1, item2, ...itemN)
 
-An easy way to rotate through several values is to use `cycler`, which takes any number of arguments and cycles through them.
+An easy way to rotate through several values is to use `cycler`, which takes any
+number of arguments and cycles through them.
 
     {% set cls = cycler("odd", "even") %}
     {% for row in rows %}
       <div class="{{ cls.next() }}">{{ row.name }}</div>
     {% endfor %}
 
-In the above example, odd rows have the class "odd" and even rows have the class "even". You can access the current item on the `current` property (in the above example, `cls.current`).
+In the above example, odd rows have the class "odd" and even rows have the class
+"even". You can access the current item on the `current` property (in the above
+example, `cls.current`).
 
 ### joiner(\[separator\])
 
-When combining multiple items, it's common to want to delimit them with something like a comma, but you don't want to output the separator for the first item. The `joiner` class will output `separator` (default ",") whenever it is called except for the first time.
+When combining multiple items, it's common to want to delimit them with
+something like a comma, but you don't want to output the separator for the first
+item. The `joiner` class will output `separator` (default ",") whenever it is
+called except for the first time.
 
     {% set comma = joiner() %}
     {% for tag in tags -%}
       {{ comma() }} {{ tag }}
     {%- endfor %}
 
-If `tags` was `["food", "beer", "dessert"]`, the above example would output `food, beer, dessert`.
+If `tags` was `["food", "beer", "dessert"]`, the above example would output
+`food, beer, dessert`.
 
 ## Builtin Filters
 
-Nunjucks has ported most of [jinja's filters](http://jinja.pocoo.org/docs/dev/templates/#builtin-filters), and has a few of its own:
+Nunjucks has ported most of
+[jinja's filters](http://jinja.pocoo.org/docs/dev/templates/#builtin-filters),
+and has a few of its own:
 
 ### abs
 
@@ -701,9 +854,15 @@ Center the value in a field of a given width:
 
 (aliased as `d`)
 
-If `value` is strictly `undefined`, return `default`, otherwise `value`. If `boolean` is true, any JavaScript falsy value will return `default` (false, "", etc)
+If `value` is strictly `undefined`, return `default`, otherwise `value`. If
+`boolean` is true, any JavaScript falsy value will return `default` (false, "",
+etc)
 
-**In version 2.0, this filter changed the default behavior of this filter. Previously, it acted as if `boolean` was true by default, and any falsy value would return `default`. In 2.0 the default is only an `undefined` value returns `default`. You can get the old behavior by passing `true` to `boolean`, or just use `value or default`.**
+**In version 2.0, this filter changed the default behavior of this filter.
+Previously, it acted as if `boolean` was true by default, and any falsy value
+would return `default`. In 2.0 the default is only an `undefined` value returns
+`default`. You can get the old behavior by passing `true` to `boolean`, or just
+use `value or default`.**
 
 ### dictsort
 
@@ -727,7 +886,10 @@ Sort a dict and yield (key, value) pairs:
 
 ### dump
 
-Call [`JSON.stringify`](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify) on an object and dump the result into the template. Useful for debugging: `{{ items | dump }}`.
+Call
+[`JSON.stringify`](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify)
+on an object and dump the result into the template. Useful for debugging:
+`{{ items | dump }}`.
 
 **Input**
 
@@ -738,7 +900,8 @@ Call [`JSON.stringify`](https://developer.mozilla.org/en/docs/Web/JavaScript/Ref
 
     ["a",1,{"b":true}]
 
-Dump provides the spaces parameter to add spaces or tabs to the resulting values. This makes the results more readable.
+Dump provides the spaces parameter to add spaces or tabs to the resulting
+values. This makes the results more readable.
 
 **Input**
 
@@ -772,7 +935,9 @@ Dump provides the spaces parameter to add spaces or tabs to the resulting values
 
 ### escape (aliased as e)
 
-Convert the characters &, <, >, ‘, and ” in strings to HTML-safe sequences. Use this if you need to display text that might contain such characters in HTML. Marks return value as markup string
+Convert the characters &, <, >, ‘, and ” in strings to HTML-safe sequences. Use
+this if you need to display text that might contain such characters in HTML.
+Marks return value as markup string
 
 **Input**
 
@@ -802,7 +967,8 @@ Get the first item in an array or the first letter if it's a string:
 
 ### float
 
-Convert a value into a floating point number. If the conversion fails 0.0 is returned. This default can be overridden by using the first parameter.
+Convert a value into a floating point number. If the conversion fails 0.0 is
+returned. This default can be overridden by using the first parameter.
 
 **Input**
 
@@ -879,7 +1045,8 @@ Attribute can use dot notation to use nested attribute, like `date.year`.
 
 ### indent
 
-Indent a string using spaces. Default behaviour is _not_ to indent the first line. Default indentation is 4 spaces.
+Indent a string using spaces. Default behaviour is _not_ to indent the first
+line. Default indentation is 4 spaces.
 
 **Input**
 
@@ -940,7 +1107,8 @@ Return a string which is the concatenation of the strings in a sequence:
 
     123
 
-The separator between elements is an empty string by default which can be defined with an optional parameter:
+The separator between elements is an empty string by default which can be
+defined with an optional parameter:
 
 **Input**
 
@@ -1003,7 +1171,8 @@ Return the length of an array or string, or the number of keys in an object:
 
 ### list
 
-Convert the value into a list. If it was a string the returned list will be a list of characters.
+Convert the value into a list. If it was a string the returned list will be a
+list of characters.
 
 **Input**
 
@@ -1039,7 +1208,8 @@ Replace new lines with `<br />` HTML elements:
 
 ### random
 
-Select a random value from an array. (This will change everytime the page is refreshed).
+Select a random value from an array. (This will change everytime the page is
+refreshed).
 
 **Input**
 
@@ -1051,7 +1221,8 @@ A random value between 1-9 (inclusive).
 
 ### reject
 
-Filters a sequence of objects by applying a test to each object, and rejecting the objects with the test succeeding.
+Filters a sequence of objects by applying a test to each object, and rejecting
+the objects with the test succeeding.
 
 If no test is specified, each object will be evaluated as a boolean.
 
@@ -1073,7 +1244,8 @@ If no test is specified, each object will be evaluated as a boolean.
 
 ### rejectattr (only the single-argument form)
 
-Filter a sequence of objects by applying a test to the specified attribute of each object, and rejecting the objects with the test succeeding.
+Filter a sequence of objects by applying a test to the specified attribute of
+each object, and rejecting the objects with the test succeeding.
 
 This is the opposite of `selectattr` filter.
 
@@ -1090,7 +1262,8 @@ If no test is specified, the attribute’s value will be evaluated as a boolean.
 
 ### replace
 
-Replace one item with another. The first item is the item to be replaced, the second item is the replaced value.
+Replace one item with another. The first item is the item to be replaced, the
+second item is the replaced value.
 
 **Input**
 
@@ -1101,7 +1274,8 @@ Replace one item with another. The first item is the item to be replaced, the se
 
     123.56
 
-Insert a replaced item before and after a value, by adding quote marks and replacing them surrounding an item:
+Insert a replaced item before and after a value, by adding quote marks and
+replacing them surrounding an item:
 
 **Input**
 
@@ -1112,7 +1286,8 @@ Insert a replaced item before and after a value, by adding quote marks and repla
 
     .a.a.a.b.b.b.c.c.c.
 
-Every instance of an item up to a given number (item to be replaced, item replacement, number to be replaced):
+Every instance of an item up to a given number (item to be replaced, item
+replacement, number to be replaced):
 
 **Input**
 
@@ -1194,7 +1369,8 @@ Specify the number of digits to round:
 
 ### safe
 
-Mark the value as safe which means that in an environment with automatic escaping enabled this variable will not be escaped.
+Mark the value as safe which means that in an environment with automatic
+escaping enabled this variable will not be escaped.
 
 **Input**
 
@@ -1206,7 +1382,8 @@ Mark the value as safe which means that in an environment with automatic escapin
 
 ### select
 
-Filters a sequence of objects by applying a test to each object, and only selecting the objects with the test succeeding.
+Filters a sequence of objects by applying a test to each object, and only
+selecting the objects with the test succeeding.
 
 If no test is specified, each object will be evaluated as a boolean.
 
@@ -1228,7 +1405,8 @@ If no test is specified, each object will be evaluated as a boolean.
 
 ### selectattr (only the single-argument form)
 
-Filter a sequence of objects by applying a test to the specified attribute of each object, and only selecting the objects with the test succeeding.
+Filter a sequence of objects by applying a test to the specified attribute of
+each object, and only selecting the objects with the test succeeding.
 
 This is the opposite to `rejectattr`.
 
@@ -1283,7 +1461,10 @@ Slice an iterator and return a list of lists containing those items:
 
 ### sort(arr, reverse, caseSens, attr)
 
-Sort `arr` with JavaScript's `arr.sort` function. If `reverse` is true, result will be reversed. Sort is case-insensitive by default, but setting `caseSens` to true makes it case-sensitive. If `attr` is passed, will compare `attr` from each item.
+Sort `arr` with JavaScript's `arr.sort` function. If `reverse` is true, result
+will be reversed. Sort is case-insensitive by default, but setting `caseSens` to
+true makes it case-sensitive. If `attr` is passed, will compare `attr` from each
+item.
 
 ### string
 
@@ -1302,7 +1483,12 @@ Convert an object to a string:
 
 ### striptags (value, \[preserve_linebreaks\])
 
-Analog of jinja's [striptags](http://jinja.pocoo.org/docs/templates/#striptags). If `preserve_linebreaks` is false (default), strips SGML/XML tags and replaces adjacent whitespace with one space. If `preserve_linebreaks` is true, normalizes whitespace, trying to preserve original linebreaks. Use second behavior if you want to pipe `{{ text | striptags(true) | escape | nl2br }}`. Use default one otherwise.
+Analog of jinja's [striptags](http://jinja.pocoo.org/docs/templates/#striptags).
+If `preserve_linebreaks` is false (default), strips SGML/XML tags and replaces
+adjacent whitespace with one space. If `preserve_linebreaks` is true, normalizes
+whitespace, trying to preserve original linebreaks. Use second behavior if you
+want to pipe `{{ text | striptags(true) | escape | nl2br }}`. Use default one
+otherwise.
 
 ### sum
 
@@ -1343,7 +1529,11 @@ Strip leading and trailing whitespace:
 
 ### truncate
 
-Return a truncated copy of the string. The length is specified with the first parameter which defaults to 255. If the second parameter is true the filter will cut the text at length. Otherwise it will discard the last word. If the text was in fact truncated it will append an ellipsis sign ("..."). A different ellipsis sign than "(...)" can be specified using the third parameter.
+Return a truncated copy of the string. The length is specified with the first
+parameter which defaults to 255. If the second parameter is true the filter will
+cut the text at length. Otherwise it will discard the last word. If the text was
+in fact truncated it will append an ellipsis sign ("..."). A different ellipsis
+sign than "(...)" can be specified using the third parameter.
 
 Truncate to 3 characters:
 
@@ -1379,7 +1569,8 @@ Convert the string to upper case:
 
 ### urlencode
 
-Escape strings for use in URLs, using UTF-8 encoding. Accepts both dictionaries and regular strings as well as pairwise iterables.
+Escape strings for use in URLs, using UTF-8 encoding. Accepts both dictionaries
+and regular strings as well as pairwise iterables.
 
 **Input**
 
@@ -1424,4 +1615,6 @@ Count and output the number of words in a string:
 
     2
 
-Alternatively, it's easy to [read the JavaScript code](https://github.com/mozilla/nunjucks/blob/master/nunjucks/src/filters.js) that implements these filters.
+Alternatively, it's easy to
+[read the JavaScript code](https://github.com/mozilla/nunjucks/blob/master/nunjucks/src/filters.js)
+that implements these filters.

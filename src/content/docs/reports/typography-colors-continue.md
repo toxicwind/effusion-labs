@@ -2,7 +2,8 @@
 
 ## Context Recap
 
-Implemented accessible color tokens, updated typography, and synchronized documentation.
+Implemented accessible color tokens, updated typography, and synchronized
+documentation.
 
 ## Outstanding Items
 

@@ -10,60 +10,52 @@
 
 A tool for transforming CSS with JavaScript
 
-Add vendor prefixes to CSS rules using values from Can I Use. [Autoprefixer](https://github.com/postcss/autoprefixer) will use the data based on current browser popularity and property support to apply prefixes for you.
+Add vendor prefixes to CSS rules using values from Can I Use.
+[Autoprefixer](https://github.com/postcss/autoprefixer) will use the data based
+on current browser popularity and property support to apply prefixes for you.
 
-:fullscreen {
-}
+:fullscreen { }
 
 CSS input
 
-:-webkit-full-screen {
-}
-:-ms-fullscreen {
-}
-:fullscreen {
-}
+:-webkit-full-screen { } :-ms-fullscreen { } :fullscreen { }
 
 CSS output
 
-[PostCSS Preset Env](https://preset-env.cssdb.org/), lets you convert modern CSS into something most browsers can understand, determining the polyfills you need based on your targeted browsers or runtime environments, using [cssdb](https://cssdb.org/).
+[PostCSS Preset Env](https://preset-env.cssdb.org/), lets you convert modern CSS
+into something most browsers can understand, determining the polyfills you need
+based on your targeted browsers or runtime environments, using
+[cssdb](https://cssdb.org/).
 
-body {
-color: oklch(61% 0.2 29);
-}
+body { color: oklch(61% 0.2 29); }
 
 CSS input
 
-body {
-color: rgb(225, 65, 52);
-}
+body { color: rgb(225, 65, 52); }
 
 CSS output
 
-[CSS Modules](https://github.com/css-modules/css-modules) means you never need to worry about your names being too generic, just use whatever makes the most sense.
+[CSS Modules](https://github.com/css-modules/css-modules) means you never need
+to worry about your names being too generic, just use whatever makes the most
+sense.
 
-.name {
-color: gray;
-}
+.name { color: gray; }
 
 CSS input
 
-.Logo\_\_name\_\_SVK0g {
-color: gray;
-}
+.Logo\_\_name\_\_SVK0g { color: gray; }
 
 CSS output
 
-Enforce consistent conventions and avoid errors in your stylesheets with [stylelint](https://stylelint.io/), a modern CSS linter. It supports the latest CSS syntax, as well as CSS-like syntaxes, such as SCSS.
+Enforce consistent conventions and avoid errors in your stylesheets with
+[stylelint](https://stylelint.io/), a modern CSS linter. It supports the latest
+CSS syntax, as well as CSS-like syntaxes, such as SCSS.
 
-a {
-color: #d3;
-}
+a { color: #d3; }
 
 CSS input
 
-app.css
-2:10 Invalid hex color
+app.css 2:10 Invalid hex color
 
 Console output
 

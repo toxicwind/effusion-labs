@@ -2,7 +2,8 @@
 
 ## Context Recap
 
-`@vscode/ripgrep` caused GitHub 403 errors during `npm ci`. The dependency was removed and docs updated.
+`@vscode/ripgrep` caused GitHub 403 errors during `npm ci`. The dependency was
+removed and docs updated.
 
 ## Outstanding Items
 
@@ -11,7 +12,8 @@
 
 ## Execution Strategy
 
-Implement optional ripgrep detection script using local binaries; stabilize browser tests with required dependencies.
+Implement optional ripgrep detection script using local binaries; stabilize
+browser tests with required dependencies.
 
 ## Trigger Command
 

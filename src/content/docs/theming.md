@@ -1,6 +1,8 @@
 # Theming
 
-Effusion Labs ships with a default dark theme and an optional light mode. Theme colors and typography are driven by CSS custom properties declared in `src/styles/tokens.css` and exposed to Tailwind as design tokens.
+Effusion Labs ships with a default dark theme and an optional light mode. Theme
+colors and typography are driven by CSS custom properties declared in
+`src/styles/tokens.css` and exposed to Tailwind as design tokens.
 
 ## Tokens
 
@@ -22,14 +24,19 @@ html[data-theme='light'] {
 }
 ```
 
-Headings use the Merriweather typeface while body copy defaults to Inter for improved readability.
+Headings use the Merriweather typeface while body copy defaults to Inter for
+improved readability.
 
-Utilities like `bg-background`, `bg-surface` and `text-text` resolve to these variables so the same classes work across themes.
+Utilities like `bg-background`, `bg-surface` and `text-text` resolve to these
+variables so the same classes work across themes.
 
 ## Toggle
 
-The header exposes a keyboard-accessible button that switches between dark and light modes. The choice is saved to `localStorage` and applies on first paint without flashing.
+The header exposes a keyboard-accessible button that switches between dark and
+light modes. The choice is saved to `localStorage` and applies on first paint
+without flashing.
 
 ## Extending
 
-Add new variables in `tokens.css` and reference them from `tailwind.config.mjs` to create additional color roles or extend the type scale.
+Add new variables in `tokens.css` and reference them from `tailwind.config.mjs`
+to create additional color roles or extend the type scale.

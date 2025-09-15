@@ -15,4 +15,5 @@ Refine branding data and plugin settings to expand breakpoint coverage.
 
 ## Trigger Command
 
-NODE_OPTIONS=--import=./test/setup/http.mjs node --test test/integration/logo-image.spec.mjs test/integration/homepage.spec.mjs
+NODE_OPTIONS=--import=./test/setup/http.mjs node --test
+test/integration/logo-image.spec.mjs test/integration/homepage.spec.mjs

@@ -1,6 +1,7 @@
 # Archive Normalization Ledger
 
-- **Audit**: ripgrep search across `src/` found zero Markdown records with archive front matter fields.
+- **Audit**: ripgrep search across `src/` found zero Markdown records with
+  archive front matter fields.
 
 Status: 1/1 items captured.
 

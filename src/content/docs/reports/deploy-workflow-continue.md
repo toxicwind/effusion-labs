@@ -2,7 +2,8 @@
 
 ## Context Recap
 
-Build and Deploy workflow now runs only after merges to main; build job is gated to push events.
+Build and Deploy workflow now runs only after merges to main; build job is gated
+to push events.
 
 ## Outstanding Items
 
@@ -11,7 +12,8 @@ Build and Deploy workflow now runs only after merges to main; build job is gated
 
 ## Execution Strategy
 
-Add tests for workflow_dispatch behavior and update README with deployment instructions.
+Add tests for workflow_dispatch behavior and update README with deployment
+instructions.
 
 ## Trigger Command
 

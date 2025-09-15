@@ -101,7 +101,7 @@ html {
   }
 
   code {
-    @apply font-mono text-sm px-1 rounded bg-base-300;
+    @apply bg-base-300 rounded px-1 font-mono text-sm;
   }
   /* Ensure typography inverts when data-theme=dark is active */
   html[data-theme='dark'] .prose {
@@ -443,7 +443,7 @@ html {
   .input,
   .select,
   .textarea {
-    @apply focus:outline-none focus:ring-2 focus:ring-primary;
+    @apply focus:ring-primary focus:ring-2 focus:outline-none;
   }
   .modal {
     @apply backdrop-blur;
@@ -497,7 +497,7 @@ html {
 @layer components {
   /* Soft glass cards for elevated 2025 feel */
   .glass-card {
-    @apply bg-base-100/70 backdrop-blur-md border border-base-300/40 shadow-lg;
+    @apply bg-base-100/70 border-base-300/40 border shadow-lg backdrop-blur-md;
   }
 }
 

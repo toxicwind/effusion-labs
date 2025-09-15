@@ -12,7 +12,8 @@
 ## Execution Strategy
 
 - Extend the overlay engine with additional modular layers driven by seeded RNG.
-- Add CSS scroll-driven effects with Motion-based fallbacks respecting prefers-reduced-motion.
+- Add CSS scroll-driven effects with Motion-based fallbacks respecting
+  prefers-reduced-motion.
 
 ## Trigger Command
 

@@ -6,7 +6,8 @@ accepted
 
 ## Context
 
-Need a brief note connecting personal greeting to emission tally, keeping raw log lines.
+Need a brief note connecting personal greeting to emission tally, keeping raw
+log lines.
 
 ## Decision
 

@@ -2,7 +2,8 @@
 
 ## Context Recap
 
-Logo image now transforms to AVIF and WebP via Eleventy image plugin and tests assert generated variants.
+Logo image now transforms to AVIF and WebP via Eleventy image plugin and tests
+assert generated variants.
 
 ## Outstanding Items
 
@@ -11,8 +12,10 @@ Logo image now transforms to AVIF and WebP via Eleventy image plugin and tests a
 
 ## Execution Strategy
 
-Add further integration tests for other templates and ensure widths array suits assets.
+Add further integration tests for other templates and ensure widths array suits
+assets.
 
 ## Trigger Command
 
-node --test test/integration/logo-image.spec.mjs test/integration/homepage.spec.mjs
+node --test test/integration/logo-image.spec.mjs
+test/integration/homepage.spec.mjs

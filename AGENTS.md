@@ -1,6 +1,7 @@
 # AGENTS.md — Effusion Labs
 
-USER → AGENTS.md → SYSTEM.md. This file carries project facts; avoid restating SYSTEM mandates.
+USER → AGENTS.md → SYSTEM.md. This file carries project facts; avoid restating
+SYSTEM mandates.
 
 ## Stack & Runtime
 
@@ -33,19 +34,26 @@ USER → AGENTS.md → SYSTEM.md. This file carries project facts; avoid restati
 ## Repo Search & View Protocol
 
 - Index filenames first (`rg --files` or `fd`).
-- Traverse in order: `package.json`, `eleventy.config.mjs`, `config/`, `utils/`, `src/content/`, `src/assets/`, `vite.config.mjs`, `tailwind.config.mjs`, `test/`.
-- Treat `node_modules/`, `_site/`, `artifacts/`, `logs/`, and `lib_content.json` as heavy; sample only when needed.
-- Use small windows (head/anchor/tail); avoid exposing lines >≈240 chars or blocks >≈4k chars.
-- If content is minified or oversized, output a Preview Capsule: `type • origin • shape • metrics • head≤120 • tail≤120 • digest • decision note`.
+- Traverse in order: `package.json`, `eleventy.config.mjs`, `config/`, `utils/`,
+  `src/content/`, `src/assets/`, `vite.config.mjs`, `tailwind.config.mjs`,
+  `test/`.
+- Treat `node_modules/`, `_site/`, `artifacts/`, `logs/`, and `lib_content.json`
+  as heavy; sample only when needed.
+- Use small windows (head/anchor/tail); avoid exposing lines >≈240 chars or
+  blocks >≈4k chars.
+- If content is minified or oversized, output a Preview Capsule:
+  `type • origin • shape • metrics • head≤120 • tail≤120 • digest • decision note`.
 - Keep terminology neutral: capture layer, output channel, renderer, clamp.
 
 ## Operating Loop & Capabilities
 
-Act first. Use npm, GitHub, docs, or the wider web when it speeds delivery. Patch dependencies if useful; keep moves small and reversible.
+Act first. Use npm, GitHub, docs, or the wider web when it speeds delivery.
+Patch dependencies if useful; keep moves small and reversible.
 
 ## Runner/Output Discipline
 
-Single output channel with clamps: max line ≈240 chars, max fenced block ≈4 000 chars. Replace any overages with a Preview Capsule.
+Single output channel with clamps: max line ≈240 chars, max fenced block ≈4 000
+chars. Replace any overages with a Preview Capsule.
 
 ## Success Criteria
 

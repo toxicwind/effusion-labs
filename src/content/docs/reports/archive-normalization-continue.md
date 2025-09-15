@@ -11,7 +11,8 @@ Ripgrep audit found no record-style Markdown files under `src/`.
 
 ## Execution Strategy
 
-Proceed in small batches, converting legacy records to JSON and ensuring URL stability.
+Proceed in small batches, converting legacy records to JSON and ensuring URL
+stability.
 
 ## Trigger Command
 

@@ -1,6 +1,12 @@
 # Effusion Labs
 
-Effusion Labs is a digital studio and knowledge base for rapid iteration. It uses **Eleventy v3** as a static-site generator with **Vite** for modern bundling and hot-module reloading. Content is authored in **Markdown** and **Nunjucks** under `src/content/` and compiled into a deployable static site in `_site/`. Styles are managed with **Tailwind CSS v4** and **daisyUI v5**, with a single entry stylesheet at `src/assets/css/app.css`. The project targets **Node.js ≥24** and runs fully in **ECMAScript-module (ESM)** mode.
+Effusion Labs is a digital studio and knowledge base for rapid iteration. It
+uses **Eleventy v3** as a static-site generator with **Vite** for modern
+bundling and hot-module reloading. Content is authored in **Markdown** and
+**Nunjucks** under `src/content/` and compiled into a deployable static site in
+`_site/`. Styles are managed with **Tailwind CSS v4** and **daisyUI v5**, with a
+single entry stylesheet at `src/assets/css/app.css`. The project targets
+**Node.js ≥24** and runs fully in **ECMAScript-module (ESM)** mode.
 
 ---
 
@@ -30,32 +36,54 @@ Effusion Labs is a digital studio and knowledge base for rapid iteration. It use
 
 ## Overview
 
-A fast, opinionated Eleventy + Tailwind static site—curated as a digital garden. Batteries included, CI-ready, and friendly to autonomous coding agents.
+A fast, opinionated Eleventy + Tailwind static site—curated as a digital garden.
+Batteries included, CI-ready, and friendly to autonomous coding agents.
 
 ---
 
 ## Features
 
-- **Dynamic interlinking** — Uses `@photogabble/eleventy-plugin-interlinker` to resolve wiki-style links across multiple content types. If a link omits a kind (e.g. `[[Labubu]]`), the resolver falls back through:  
+- **Dynamic interlinking** — Uses `@photogabble/eleventy-plugin-interlinker` to
+  resolve wiki-style links across multiple content types. If a link omits a kind
+  (e.g. `[[Labubu]]`), the resolver falls back through:  
   `work → character → product → series → concept → project → spark → meta`.  
-  Named kinds such as `product`, `character`, and `series` map to canonical archive routes like `/archives/product/<slug>/`.
+  Named kinds such as `product`, `character`, and `series` map to canonical
+  archive routes like `/archives/product/<slug>/`.
 
-- **Unresolved-link reporting** — Each build writes `artifacts/reports/interlinker-unresolved.json`. CI can be configured with `INTERLINKER_MAX_UNRESOLVED` and `INTERLINKER_FAIL_ON_UNRESOLVED` to fail on overs.
+- **Unresolved-link reporting** — Each build writes
+  `artifacts/reports/interlinker-unresolved.json`. CI can be configured with
+  `INTERLINKER_MAX_UNRESOLVED` and `INTERLINKER_FAIL_ON_UNRESOLVED` to fail on
+  overs.
 
-- **Patched interlinker** — A hotfix via `patch-package` adds a `toHtmlString` coercion and guards non-string inputs across ESM/CJS, preventing crashes in Markdown-it and JSDOM.
+- **Patched interlinker** — A hotfix via `patch-package` adds a `toHtmlString`
+  coercion and guards non-string inputs across ESM/CJS, preventing crashes in
+  Markdown-it and JSDOM.
 
-- **Eleventy plugins** — Navigation, RSS, sitemap, schema, plus official Vite integration. The Vite plugin exposes `/assets/js/app.js` as entry, maintains a stable temp dir, and supports middleware mode.
+- **Eleventy plugins** — Navigation, RSS, sitemap, schema, plus official Vite
+  integration. The Vite plugin exposes `/assets/js/app.js` as entry, maintains a
+  stable temp dir, and supports middleware mode.
 
-- **Tailwind & daisyUI** — CSS-first styling. Tokens, fonts, and breakpoints live in `tailwind.config.mjs`. Themes and utility layers are defined in `src/assets/css/app.css`. DaisyUI registers `light` and `dark`; a toggle in `src/assets/js/app.js` switches `data-theme`.
+- **Tailwind & daisyUI** — CSS-first styling. Tokens, fonts, and breakpoints
+  live in `tailwind.config.mjs`. Themes and utility layers are defined in
+  `src/assets/css/app.css`. DaisyUI registers `light` and `dark`; a toggle in
+  `src/assets/js/app.js` switches `data-theme`.
 
-- **Content collections** — Custom collections expose “featured,” “interactive,” and “recentAll.” The `work` collection aggregates sparks, concepts, projects, and meta content.
+- **Content collections** — Custom collections expose “featured,” “interactive,”
+  and “recentAll.” The `work` collection aggregates sparks, concepts, projects,
+  and meta content.
 
-- **Image optimization** — The Eleventy image plugin generates AVIF, WebP, and fallback images at multiple widths under `/assets/images/`. Filenames are slugified for determinism.
+- **Image optimization** — The Eleventy image plugin generates AVIF, WebP, and
+  fallback images at multiple widths under `/assets/images/`. Filenames are
+  slugified for determinism.
 
-- **Link verification** — `npm run lint:links` uses `markdown-link-check` to detect broken links. `npm run lint` runs link checks as part of linting.
+- **Link verification** — `npm run lint:links` uses `markdown-link-check` to
+  detect broken links. `npm run lint` runs link checks as part of linting.
 
-- **Testing & coverage** — Integration tests live in `test/` and run via **Playwright**, with coverage via `c8`. Use `npm run test:watch` for continuous feedback.
-- **npm-utils** — Built-in CLI to search, analyze, and install npm packages. We love new packages and libraries; always consider them.
+- **Testing & coverage** — Integration tests live in `test/` and run via
+  **Playwright**, with coverage via `c8`. Use `npm run test:watch` for
+  continuous feedback.
+- **npm-utils** — Built-in CLI to search, analyze, and install npm packages. We
+  love new packages and libraries; always consider them.
 
 ---
 
@@ -84,7 +112,8 @@ npm run build
 npm run check
 ```
 
-When the dev server prints a local URL, open it in your browser. Files under `src/content/` and `src/assets/` are watched and reloaded automatically.
+When the dev server prints a local URL, open it in your browser. Files under
+`src/content/` and `src/assets/` are watched and reloaded automatically.
 
 ---
 
@@ -141,7 +170,8 @@ artifacts/     → Reports (e.g., unresolved links), worklogs, export bundles
 ```
 
 Collections: `sparks`, `concepts`, `projects`, `meta`, `archives`, `work`.
-Assets in `src/assets/` emit to `/assets/` by Vite; images processed by the Eleventy image plugin appear in `/assets/images/`.
+Assets in `src/assets/` emit to `/assets/` by Vite; images processed by the
+Eleventy image plugin appear in `/assets/images/`.
 
 ---
 
@@ -151,31 +181,37 @@ Effusion Labs treats wiki-style links as first-class citizens.
 
 - `[[product:Tempura Shrimp]]` → `/archives/product/tempura-shrimp/`
 - `[[character:Momo Fox]]` → `/archives/character/momo-fox/`
-- Kindless links attempt: `work → character → product → series → concept → project → spark → meta`.
+- Kindless links attempt:
+  `work → character → product → series → concept → project → spark → meta`.
 
-All slugs normalize to lowercase, NFKD, punctuation-free identifiers.
-Unresolved links are recorded in `artifacts/reports/interlinker-unresolved.json` and can fail CI when thresholds are exceeded.
+All slugs normalize to lowercase, NFKD, punctuation-free identifiers. Unresolved
+links are recorded in `artifacts/reports/interlinker-unresolved.json` and can
+fail CI when thresholds are exceeded.
 
 ---
 
 ## Tailwind & Theming
 
 - **Config:** `tailwind.config.mjs` defines tokens and typography.
-- **Styles:** `src/assets/css/app.css` imports Tailwind, typography, and daisyUI; adds Hyperbrut utilities.
-- **Themes:** `light` and `dark` registered in CSS; `src/assets/js/app.js` toggles `data-theme` and Lucide icons.
+- **Styles:** `src/assets/css/app.css` imports Tailwind, typography, and
+  daisyUI; adds Hyperbrut utilities.
+- **Themes:** `light` and `dark` registered in CSS; `src/assets/js/app.js`
+  toggles `data-theme` and Lucide icons.
 
 ---
 
 ## Optional Services
 
-A companion `markdown_gateway/` service provides an HTML→Markdown proxy via Docker Compose.
+A companion `markdown_gateway/` service provides an HTML→Markdown proxy via
+Docker Compose.
 
 ```bash
 cd markdown_gateway
 docker compose up
 ```
 
-This starts a gateway container and FlareSolverr solver, useful when converting external HTML into Markdown for inclusion in the digital garden.
+This starts a gateway container and FlareSolverr solver, useful when converting
+external HTML into Markdown for inclusion in the digital garden.
 
 ---
 
@@ -185,7 +221,8 @@ This starts a gateway container and FlareSolverr solver, useful when converting 
 - Keep dependency hotfixes under `patches/` using `patch-package`.
 - Run `npm run check` before opening a PR.
 - CI may enforce unresolved-link thresholds and script consistency.
-- Explore new packages with `npm-utils`; we love new libraries and always consider them.
+- Explore new packages with `npm-utils`; we love new libraries and always
+  consider them.
 
 ---
 
@@ -194,8 +231,10 @@ This starts a gateway container and FlareSolverr solver, useful when converting 
 For fast repo mapping and sampling large files:
 
 - List files: `fd` / `fdfind` or `rg --files`
-- Read in small windows (head/anchor/tail); avoid dumping minified or >4k-line blocks
-- Treat heavy zones cautiously: `node_modules/`, `_site/`, `artifacts/`, `logs/`, `lib_content.json`
+- Read in small windows (head/anchor/tail); avoid dumping minified or >4k-line
+  blocks
+- Treat heavy zones cautiously: `node_modules/`, `_site/`, `artifacts/`,
+  `logs/`, `lib_content.json`
 
 See `AGENTS.md` for the full protocol, clamps, and Preview Capsule format.
 
@@ -203,7 +242,9 @@ See `AGENTS.md` for the full protocol, clamps, and Preview Capsule format.
 
 ## Contributing
 
-Pull requests are welcome. Keep patches focused and run `npm run check` before submitting. Contributions should comply with the **ISC License** and follow repo conventions. For agent workflows, see [`AGENTS.md`](./AGENTS.md).
+Pull requests are welcome. Keep patches focused and run `npm run check` before
+submitting. Contributions should comply with the **ISC License** and follow repo
+conventions. For agent workflows, see [`AGENTS.md`](./AGENTS.md).
 
 ---
 

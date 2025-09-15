@@ -19,8 +19,10 @@ test/unit/no-silent-ops.test.mjs       | 19 +++++++++++++++++++
   - failing: logs/no-silent-ops-red.log
   - passing: logs/no-silent-ops-green.log
 - knowledge captures:
-  - docs/knowledge/no-silent-ops-red.log (sha256: 5439d2f19bf82d7536568d8b3c8225c9a7f6c7b806b89b0850bbb7f035739920)
-  - docs/knowledge/no-silent-ops-green.log (sha256: 45760c491ee0c34bb910f905e13d132333c062ae918579a628a445ff51854353)
+  - docs/knowledge/no-silent-ops-red.log (sha256:
+    5439d2f19bf82d7536568d8b3c8225c9a7f6c7b806b89b0850bbb7f035739920)
+  - docs/knowledge/no-silent-ops-green.log (sha256:
+    45760c491ee0c34bb910f905e13d132333c062ae918579a628a445ff51854353)
 - commit graph:
 
 ```

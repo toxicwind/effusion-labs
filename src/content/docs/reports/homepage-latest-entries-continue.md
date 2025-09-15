@@ -2,7 +2,8 @@
 
 ## Context Recap
 
-Homepage now uses a `takeLatest` helper to sort each section by date before limiting.
+Homepage now uses a `takeLatest` helper to sort each section by date before
+limiting.
 
 ## Outstanding Items
 

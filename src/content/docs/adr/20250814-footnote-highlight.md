@@ -2,7 +2,8 @@
 
 ## Context
 
-Inline styles in `footnote-nav.js` duplicated Tailwind definitions and ignored reduced-motion preferences.
+Inline styles in `footnote-nav.js` duplicated Tailwind definitions and ignored
+reduced-motion preferences.
 
 ## Decision
 

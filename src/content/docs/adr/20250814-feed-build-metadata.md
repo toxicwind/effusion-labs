@@ -6,11 +6,13 @@ Accepted
 
 ## Context
 
-The RSS feed lacked explicit provenance, limiting transparency and cache friendliness.
+The RSS feed lacked explicit provenance, limiting transparency and cache
+friendliness.
 
 ## Decision
 
-Expose commit hash and build timestamp via Eleventy global data and render them within the feed template.
+Expose commit hash and build timestamp via Eleventy global data and render them
+within the feed template.
 
 ## Consequences
 

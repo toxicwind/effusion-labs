@@ -2,7 +2,8 @@
 
 ## Context Recap
 
-Eleventy image transform now produces slugified filenames and writes to the configured output directory.
+Eleventy image transform now produces slugified filenames and writes to the
+configured output directory.
 
 ## Outstanding Items
 
@@ -11,7 +12,8 @@ Eleventy image transform now produces slugified filenames and writes to the conf
 
 ## Execution Strategy
 
-Adjust width configuration or introduce upscaling policy and add further integration tests covering more assets.
+Adjust width configuration or introduce upscaling policy and add further
+integration tests covering more assets.
 
 ## Trigger Command
 

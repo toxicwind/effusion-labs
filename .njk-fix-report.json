@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-09-15T01:58:23.882Z",
+  "timestamp": "2025-09-15T02:00:53.164Z",
   "roots": [
     "src"
   ],
@@ -463,6 +463,41 @@
       "rewrites": 0
     },
     {
+      "file": "src/content/flower_reports_showcase/reports/Magic_City_Cannabis___Colorado_20250810_report.html",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/flower_reports_showcase/reports/Reefer_Madness_20250810_report.html",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/flower_reports_showcase/reports/Reefer_Madness_20250825_report.html",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/flower_reports_showcase/reports/Reefer_Madness_20250826_report.html",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/flower_reports_showcase/reports/Reefer_Madness_20250830_report.html",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/flower_reports_showcase/reports/nearby_value_cache_status.html",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/flower_reports_showcase/reports/nearby_value_leaderboard.html",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
       "file": "src/content/docs/adr/20250813-hero-image-perf.md",
       "changed": false,
       "rewrites": 0
@@ -919,41 +954,6 @@
     },
     {
       "file": "src/content/docs/worklogs/20250914T025746Z-exec-surface.md",
-      "changed": false,
-      "rewrites": 0
-    },
-    {
-      "file": "src/content/flower_reports_showcase/reports/Magic_City_Cannabis___Colorado_20250810_report.html",
-      "changed": false,
-      "rewrites": 0
-    },
-    {
-      "file": "src/content/flower_reports_showcase/reports/Reefer_Madness_20250810_report.html",
-      "changed": false,
-      "rewrites": 0
-    },
-    {
-      "file": "src/content/flower_reports_showcase/reports/Reefer_Madness_20250825_report.html",
-      "changed": false,
-      "rewrites": 0
-    },
-    {
-      "file": "src/content/flower_reports_showcase/reports/Reefer_Madness_20250826_report.html",
-      "changed": false,
-      "rewrites": 0
-    },
-    {
-      "file": "src/content/flower_reports_showcase/reports/Reefer_Madness_20250830_report.html",
-      "changed": false,
-      "rewrites": 0
-    },
-    {
-      "file": "src/content/flower_reports_showcase/reports/nearby_value_cache_status.html",
-      "changed": false,
-      "rewrites": 0
-    },
-    {
-      "file": "src/content/flower_reports_showcase/reports/nearby_value_leaderboard.html",
       "changed": false,
       "rewrites": 0
     },

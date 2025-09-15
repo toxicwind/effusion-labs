@@ -24,27 +24,30 @@ export default function getPlugins() {
     [schema],
   ]
 
-  // Vite: always on (you said you want it extensively)
-  plugins.push([
-    vitePlugin,
-    {
-      // keep the temp dir stable
-      tempFolderName: '.11ty-vite',
-      viteOptions: {
-        clearScreen: false,
-        appType: 'custom',
-        server: { middlewareMode: true },
-        css: { devSourcemap: true },
-        build: {
-          manifest: true,
-          rollupOptions: {
-            // Ensure our JS entry (which imports CSS) is known to Vite
-            input: ['/assets/js/app.js'],
+  // Vite: enable for dev/prod, but skip in tests
+  const isTest = process.env.ELEVENTY_ENV === 'test'
+  if (!isTest) {
+    plugins.push([
+      vitePlugin,
+      {
+        // keep the temp dir stable
+        tempFolderName: '.11ty-vite',
+        viteOptions: {
+          clearScreen: false,
+          appType: 'custom',
+          server: { middlewareMode: true },
+          css: { devSourcemap: true },
+          build: {
+            manifest: true,
+            rollupOptions: {
+              // Ensure our JS entry (which imports CSS) is known to Vite
+              input: ['/assets/js/app.js'],
+            },
           },
         },
       },
-    },
-  ])
+    ])
+  }
 
   return plugins
 }

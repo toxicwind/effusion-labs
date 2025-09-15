@@ -15,7 +15,8 @@
 
 How to install daisyUI as a Tailwind CSS plugin?
 
-You need [Node.js](https://nodejs.org/en/download/) and [Tailwind CSS](https://tailwindcss.com/docs/installation/) installed.
+You need [Node.js](https://nodejs.org/en/download/) and
+[Tailwind CSS](https://tailwindcss.com/docs/installation/) installed.
 
 1\. Install daisyUI as a Node package:
 
@@ -46,7 +47,8 @@ Deno
 
 ## [](#framework-install-tutorials)Framework install tutorials
 
-See example setup of daisyUI and Tailwind CSS on different frameworks and build tools.
+See example setup of daisyUI and Tailwind CSS on different frameworks and build
+tools.
 
 ![daisyUI store](https://img.daisyui.com/images/store/nexus.webp)
 
