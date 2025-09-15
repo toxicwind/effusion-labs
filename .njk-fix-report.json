@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-09-13T18:14:45.318Z",
+  "timestamp": "2025-09-15T01:11:27.437Z",
   "roots": [
     "src"
   ],
@@ -213,6 +213,16 @@
       "rewrites": 0
     },
     {
+      "file": "src/content/docs/stream-guard-3500.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/theming.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
       "file": "src/content/concepts/aesthetic-inquiry.md",
       "changed": false,
       "rewrites": 0
@@ -283,11 +293,6 @@
       "rewrites": 0
     },
     {
-      "file": "src/content/docs/theming.md",
-      "changed": false,
-      "rewrites": 0
-    },
-    {
       "file": "src/content/meta/a-b-curatorial-protocolist.md",
       "changed": false,
       "rewrites": 0
@@ -324,6 +329,26 @@
     },
     {
       "file": "src/content/meta/unified-referencing-syntax.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/projects/index.njk",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/projects/llm-release-watcher.njk",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/projects/patent-intelligence-agent.njk",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/projects/project-dandelion.md",
       "changed": false,
       "rewrites": 0
     },
@@ -369,26 +394,6 @@
     },
     {
       "file": "src/content/sparks/vapor-linked-governance.md",
-      "changed": false,
-      "rewrites": 0
-    },
-    {
-      "file": "src/content/projects/index.njk",
-      "changed": false,
-      "rewrites": 0
-    },
-    {
-      "file": "src/content/projects/llm-release-watcher.njk",
-      "changed": false,
-      "rewrites": 0
-    },
-    {
-      "file": "src/content/projects/patent-intelligence-agent.njk",
-      "changed": false,
-      "rewrites": 0
-    },
-    {
-      "file": "src/content/projects/project-dandelion.md",
       "changed": false,
       "rewrites": 0
     },
@@ -508,6 +513,11 @@
       "rewrites": 0
     },
     {
+      "file": "src/content/docs/knowledge/branch-policy.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
       "file": "src/content/docs/knowledge/eleventy-collections-20250911T175345Z.html",
       "changed": false,
       "rewrites": 0
@@ -619,6 +629,11 @@
     },
     {
       "file": "src/content/docs/reports/esm-audit-20250820T215642Z.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/reports/exec-surface.md",
       "changed": false,
       "rewrites": 0
     },
@@ -903,6 +918,11 @@
       "rewrites": 0
     },
     {
+      "file": "src/content/docs/worklogs/20250914T025746Z-exec-surface.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
       "file": "src/content/flower_reports_showcase/reports/Magic_City_Cannabis___Colorado_20250810_report.html",
       "changed": false,
       "rewrites": 0
@@ -1053,12 +1073,12 @@
       "rewrites": 0
     },
     {
-      "file": "src/content/docs/vendors/nunjucks/3.2.4/templating.md",
+      "file": "src/content/docs/vendors/postcss/8.5.6/index.md",
       "changed": false,
       "rewrites": 0
     },
     {
-      "file": "src/content/docs/vendors/postcss/8.5.6/index.md",
+      "file": "src/content/docs/vendors/nunjucks/3.2.4/templating.md",
       "changed": false,
       "rewrites": 0
     },
