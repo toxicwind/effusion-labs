@@ -13,7 +13,7 @@
   {% if page and page.url %}<link rel="canonical" href="{{ page.url | url }}">{% endif %}
 
   {# App CSS — version with build hash when available #}
-  <link rel="stylesheet" href="/assets/css/app.css{% if build and (build.hash or build.commit or build.version) %}?v={{ build.hash or build.commit or build.version }}{% endif %}">
+  <link rel="stylesheet" href="/src/assets/css/app.css{% if build and (build.hash or build.commit or build.version) %}?v={{ build.hash or build.commit or build.version }}{% endif %}">
 </head>
 <body class="bg-base-100 text-base-content font-body antialiased">
   <main class="mx-auto max-w-screen-lg px-4 sm:px-6 lg:px-8 py-8">
@@ -37,6 +37,6 @@
   </main>
 
   {# Optional overlay CSS (if you ship it) #}
-  <link rel="stylesheet" href="/assets/css/mschf-overlay.css{% if build and (build.hash or build.commit or build.version) %}?v={{ build.hash or build.commit or build.version }}{% endif %}">
+  <link rel="stylesheet" href="/src/assets/css/mschf-overlay.css{% if build and (build.hash or build.commit or build.version) %}?v={{ build.hash or build.commit or build.version }}{% endif %}">
 </body>
 </html>

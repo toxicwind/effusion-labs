@@ -28,7 +28,7 @@
     {{ headExtra | safe }}
 
     {# Early theme (prevents FART) #}
-    <script src="{{ '/assets/js/theme-utils.js' | url }}"></script>
+    <script src="{{ '/js/theme-utils.js' | url }}"></script>
     <script>try{ ThemeUtils && ThemeUtils.initEarly && ThemeUtils.initEarly(); }catch(_){}</script>
 
     {# Fonts #}
@@ -40,7 +40,7 @@
     />
 
     {# Favicons / manifest #}
-    <link rel="icon" type="image/png" href="{{ '/favicon-96x96.png' | url }}" sizes="96x96" />
+    <link rel="icon" type="image/png" href="{{ '/favicon.ico' | url }}" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="{{ '/favicon.svg' | url }}" />
     <link rel="shortcut icon" href="{{ '/favicon.ico' | url }}" />
     <link rel="apple-touch-icon" sizes="180x180" href="{{ '/apple-touch-icon.png' | url }}" />
@@ -54,9 +54,9 @@
     </main>
 
     {# Theme toggle UI logic (button exists in the page) #}
-    <script src="{{ '/assets/js/theme-toggle.js' | url }}" defer></script>
+    <script src="{{ '/js/theme-toggle.js' | url }}" defer></script>
 
     {# Vite entry: imports app.css; plugin injects the built CSS #}
-    <script type="module" src="{{ '/assets/js/app.js' | url }}"></script>
+    <script type="module" src="{{ '/src/assets/js/app.js' | url }}"></script>
   </body>
 </html>

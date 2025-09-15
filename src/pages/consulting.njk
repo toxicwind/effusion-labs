@@ -174,9 +174,9 @@ permalink: /consulting/
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="{{ DATA.desc }}">
   <link rel="preload" href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Inter:wght@400;700;900&display=swap" as="style">
-  <link rel="stylesheet" href="/assets/css/app.css?v={{ build.hash or build.commit or build.version or buildTime }}">
+  <link rel="stylesheet" href="/src/assets/css/app.css?v={{ build.hash or build.commit or build.version or buildTime }}">
   <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
-  <script src="/assets/js/theme-utils.js"></script>
+  <script src="/src/js/theme-utils.js"></script>
   <script>
     ThemeUtils.configure({
       allowed: ['silk', 'dim'],

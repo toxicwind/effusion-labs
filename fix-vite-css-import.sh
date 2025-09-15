@@ -8,7 +8,7 @@ echo "→ Ensuring CSS import in $APP_JS uses alias '@/assets/css/app.css'"
 if [ -f "$APP_JS" ]; then
   # rewrite any absolute or relative variants to the alias
   sed -i \
-    -e 's#import[[:space:]]\+["'\'']\(/assets/css/app.css\|../css/app.css\)["'\'']#import "@/assets/css/app.css"#' \
+    -e 's#import[[:space:]]\+["'\'']\(/src/assets/css/app.css\|../css/app.css\)["'\'']#import "@/assets/css/app.css"#' \
     "$APP_JS"
 else
   echo "!! Missing $APP_JS — adjust the path in this script if your entry file differs"

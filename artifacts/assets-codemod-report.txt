@@ -1,0 +1,8 @@
+ASSETS CODEMOD • 2025-09-15T20:31:14.295Z
+root: /home/toxic/effusion_labs_final
+files scanned: 30411
+files rewritten: 6
+total replacements: 3
+removed passthrough from: eleventy.config.mjs
+eleventy-img path rewrites: 1
+vite input rewrites: 1

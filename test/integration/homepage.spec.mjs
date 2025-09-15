@@ -49,7 +49,7 @@ test('homepage hero and work filters', async () => {
   // Logo
   const logo = doc.querySelector('img.hero-logo')
   assert(logo)
-  assert.equal(logo.getAttribute('src'), '/assets/static/logo.png')
+  assert.equal(logo.getAttribute('src'), '/logo.png')
   assert(!logo.hasAttribute('width'))
   assert(!logo.hasAttribute('height'))
   assert.match(logo.getAttribute('class') || '', /w-28/)
@@ -125,7 +125,7 @@ test('homepage hero and work filters', async () => {
   })
 
   // Contract: frontend script present
-  const scriptPath = path.join(outDir, 'assets/js/work-filters.js')
+  const scriptPath = path.join(outDir, 'js/work-filters.js')
   assert(existsSync(scriptPath))
   const scriptContent = readFileSync(scriptPath, 'utf8')
   assert.match(scriptContent, /data-filter/)

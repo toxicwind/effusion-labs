@@ -1,4 +1,7 @@
 // eleventy.config.mjs
+// Node 24+ ESM • Eleventy 3.x • @11ty/eleventy-plugin-vite v7
+// Assets are now served by Vite from /public (no Eleventy passthrough).
+
 import fs from 'node:fs'
 import fsp from 'node:fs/promises'
 import path from 'node:path'
@@ -9,13 +12,10 @@ import { getBuildInfo } from './config/build-info.js'
 import { dirs } from './config/site.js'
 import htmlToMarkdownUnified from './config/html-to-markdown-unified.mjs'
 
-// (optional) Vite integration here too, safe to no-op if you already add it elsewhere
 import EleventyVitePlugin from '@11ty/eleventy-plugin-vite'
-import tailwind from '@tailwindcss/vite'
 
 export default function (eleventyConfig) {
-  const fromRoot = (...p) => path.resolve(process.cwd(), ...p)
-  // saner nunjucks errors while debugging
+  // Nunjucks DX
   eleventyConfig.setNunjucksEnvironmentOptions({
     trimBlocks: false,
     lstripBlocks: false,
@@ -23,25 +23,23 @@ export default function (eleventyConfig) {
     throwOnUndefined: false,
   })
 
-  // ternary filter (pairs with the rewrite step below)
+  // Tiny ternary helper: {{ cond | ternary('a','b') }}
   eleventyConfig.addNunjucksFilter('ternary', (val, a, b) => (val ? a : b))
 
-  // pre-clean vite temp dir to prevent EISDIR on stale folders
+  // Pre-clean Vite’s temp folder to avoid stale-dir issues
   eleventyConfig.on('eleventy.before', async () => {
-    const viteTemp = path.join(process.cwd(), '.11ty-vite')
+    const viteTemp = path.resolve(process.cwd(), '.11ty-vite')
     try {
       if (fs.existsSync(viteTemp)) {
         await fsp.rm(viteTemp, { recursive: true, force: true })
       }
-    } catch {}
+    } catch { }
   })
 
-  // auto-fix simple nunjucks ternaries `? :` → `| ternary(a,b)`
+  // Auto-rewrite simple njk ternaries (`? :` → `| ternary(a,b)`)
   eleventyConfig.on('eleventy.before', async () => {
     try {
-      const { fixRepoTernaries } = await import(
-        './utils/scripts/fix-njk-ternaries.mjs'
-      )
+      const { fixRepoTernaries } = await import('./utils/scripts/fix-njk-ternaries.mjs')
       await fixRepoTernaries({
         roots: ['src'],
         exts: ['.njk', '.md', '.html'],
@@ -54,11 +52,10 @@ export default function (eleventyConfig) {
     }
   })
 
-  // ⬇️ CRITICAL: copy all assets (css, js, images) so Vite can import "../css/app.css" from the built JS
-  eleventyConfig.addPassthroughCopy({ 'src/assets': 'assets' })
-  eleventyConfig.addWatchTarget('src/assets')
+  // IMPORTANT: No passthroughs for src/assets — Vite owns static via /public
+  // (Removed:)
 
-  // your existing setup (this also installs plugins via config/plugins.js)
+  // Your existing setup
   register(eleventyConfig)
   registerArchive(eleventyConfig)
 
@@ -74,41 +71,18 @@ export default function (eleventyConfig) {
     frontMatterExtra: { convertedFromHtml: true },
   })
 
-  // Optional: if your dev runner doesn’t already add the Vite plugin, this will.
-  const isTest = process.env.ELEVENTY_ENV === 'test'
-  try {
-    if (!isTest) {
-      eleventyConfig.addPlugin(EleventyVitePlugin, {
-        tempFolderName: '.11ty-vite',
-        viteOptions: {
-          clearScreen: false,
-          appType: 'mpa',
-          plugins: [tailwind()],
-          resolve: {
-            alias: {
-              '@': fromRoot('src'),
-              '/node_modules': fromRoot('node_modules'),
-            },
-          },
-          server: {
-            fs: {
-              strict: true,
-              allow: [fromRoot(), fromRoot('src')],
-            },
-          },
-          css: { devSourcemap: true },
-        },
-      })
-    }
-  } catch {
-    // ignore if already added elsewhere
-  }
+  // Vite integration (minimal): let vite.config.mjs dictate plugins/options.
+  // The Eleventy plugin will run Vite in middleware mode and handle rewrites.
+  eleventyConfig.addPlugin(EleventyVitePlugin, {
+    tempFolderName: '.11ty-vite',
+    // No viteOptions here — keep all Vite/Tailwind/daisyUI config in vite.config.mjs
+  })
 
   return {
-    dir: dirs,
+    dir: dirs, // expect { input: 'src', output: '_site', includes: '_includes', data: '_data', … }
     markdownTemplateEngine: 'njk',
     htmlTemplateEngine: false, // don’t parse raw .html through Liquid
     templateFormats: ['md', 'njk', 'html', '11ty.js'],
-    pathPrefix: '/',
+    pathPrefix: '/', // if deploying under a subpath, update this AND Vite's `base`
   }
 }

@@ -1,0 +1,829 @@
+File Path                                     [Kind]         Size       Details
+-----------------------------------------------------------------------------------------------------------
+./AGENTS.md                                   [md          ]     2611B   Title: AGENTS.md — Effusion Labs
+./LICENSE                                     [other       ]      744B   
+./README.md                                   [md          ]    10017B   Title: Effusion Labs
+./SYSTEM.md                                   [md          ]     9733B   Title: HYPEBRUT OS — EMERGENT CORTEX SPINE (`SYSTEM.md`)
+./TREE.txt                                    [other       ]    61245B   
+./_cache/md-dumps/docs/knowledge/eleventy-collections-20250911T175345Z.md [md          ]    16063B   Title: Collections
+./_cache/md-dumps/docs/knowledge/eleventy-data-cascade-20250911T175348Z.md [md          ]     3776B   Title: Data Cascade
+./_cache/md-dumps/docs/knowledge/eleventy-data-computed-20250911T175414Z.md [md          ]    10255B   Title: Computed Data
+./_cache/md-dumps/docs/knowledge/eleventy-data-template-dir-20250911T175432Z.md [md          ]     4783B   Title: Template and Directory Data Files
+./_cache/md-dumps/flower_reports_showcase/reports/Magic_City_Cannabis___Colorado_20250810_report.md [md          ]   239896B   Title: Medical Flower Price Report - Magic City Cannabis
+./_cache/md-dumps/flower_reports_showcase/reports/Reefer_Madness_20250810_report.md [md          ]     6319B   Title: Medical Flower Price Report - Reefer Madness
+./_cache/md-dumps/flower_reports_showcase/reports/Reefer_Madness_20250825_report.md [md          ]     7168B   Title: Medical Flower Price Report - Reefer Madness
+./_cache/md-dumps/flower_reports_showcase/reports/Reefer_Madness_20250826_report.md [md          ]     7162B   Title: Medical Flower Price Report - Reefer Madness
+./_cache/md-dumps/flower_reports_showcase/reports/Reefer_Madness_20250830_report.md [md          ]     7835B   Title: Medical Flower Price Report - Reefer Madness
+./_cache/md-dumps/flower_reports_showcase/reports/nearby_value_cache_status.md [md          ]     9617B   Title: nearby_value_cache_status
+./_cache/md-dumps/flower_reports_showcase/reports/nearby_value_leaderboard.md [md          ]     7957B   Title: Nearby Value Leaderboard
+./artifacts/_data_bundle.json                 [json        ]    19567B   Keys: generatedAt, root, files
+./artifacts/reports/20250908T174424Z.md       [md          ]     3335B   
+./artifacts/reports/interlinker-unresolved.json [json        ]     7773B   Keys: schemaVersion, generatedAt, count, items
+./artifacts/status.json                       [json        ]       21B   Keys: result
+./artifacts/worklogs/20250908T174424Z.md      [md          ]      338B   Title: Worklog for consulting page rewrite
+./artifacts/worklogs/20250910T210224Z.md      [md          ]     1387B   Title: Worklog
+./bin/_lib.sh                                 [shell       ]      741B   
+./bin/bat                                     [executable  ]      280B   
+./bin/fd                                      [executable  ]      275B   
+./bin/jq                                      [executable  ]      591B   
+./bin/mtemp                                   [executable  ]      138B   
+./bin/node                                    [executable  ]      309B   
+./bin/npm                                     [executable  ]      409B   
+./bin/prettier                                [executable  ]      781B   
+./bin/rg                                      [executable  ]      328B   
+./bin/shtap                                   [executable  ]      266B   
+./bin/tree                                    [executable  ]      340B   
+./bin/yq                                      [executable  ]      594B   
+./collect-eleventy-vite-bundle.sh             [shell       ]     2469B   
+./collect-lib-content.sh                      [shell       ]     1066B   
+./config/archives.mjs                         [other       ]    11344B   
+./config/build-info.js                        [other       ]      954B   
+./config/collections.js                       [other       ]      916B   
+./config/content-area.js                      [other       ]      442B   
+./config/fix-njk-ternaries.mjs                [other       ]     3650B   
+./config/html-to-markdown-unified.mjs         [other       ]     4222B   
+./config/interlinkers/resolvers.mjs           [other       ]     6034B   
+./config/interlinkers/route-registry.mjs      [other       ]     6083B   
+./config/interlinkers/unresolved-report.mjs   [other       ]     3119B   
+./config/markdown/footnotes.js                [other       ]     2830B   
+./config/markdown/index.js                    [other       ]     1141B   
+./config/markdown/inlineMacros.js             [other       ]     2413B   
+./config/markdown/links.js                    [other       ]     1001B   
+./config/plugins.js                           [other       ]     1527B   
+./config/register.mjs                         [other       ]     2324B   
+./config/site.js                              [other       ]      654B   
+./config/templating.js                        [other       ]    12003B   
+./docker-compose.yml                          [other       ]      180B   
+./eleventy.config.mjs                         [other       ]     3610B   
+./fix-vite-css-import.sh                      [shell       ]     2266B   
+./intelligent_lskindv2.sh                     [shell       ]     3869B   
+./inventory.mjs                               [other       ]     2183B   
+./lib_content.json                            [json        ]        0B   (Invalid or non-object JSON)
+./logs/archiveProductMap.cache.json           [json        ]    30195B   (Invalid or non-object JSON)
+./markdown_gateway/Dockerfile                 [other       ]      595B   
+./markdown_gateway/app.py                     [other       ]     2046B   
+./markdown_gateway/docker-compose.yml         [other       ]      883B   
+./markdown_gateway/requirements.txt           [other       ]       73B   
+./mcp-stack/README.md                         [md          ]     1765B   Title: or
+./mcp-stack/ci/README.md                      [md          ]      526B   
+./mcp-stack/ci/compose.ci.yml                 [other       ]      746B   
+./mcp-stack/ci/compose.dev.yml                [other       ]      483B   
+./mcp-stack/ci/compose.prod.yml               [other       ]      424B   
+./mcp-stack/ci/smoke.sh                       [shell       ]      155B   
+./mcp-stack/ci/stubs/curl-proxy.js            [other       ]      244B   
+./mcp-stack/ci/stubs/data/curl.json           [json        ]       44B   Keys: ok, status, body
+./mcp-stack/ci/stubs/data/flaresolverr.json   [json        ]      128B   Keys: status, solution
+./mcp-stack/ci/stubs/data/screenshot.json     [json        ]       50B   Keys: ok, mime, base64
+./mcp-stack/ci/stubs/data/searxng.json        [json        ]       70B   Keys: results
+./mcp-stack/ci/stubs/flaresolverr.js          [other       ]      418B   
+./mcp-stack/ci/stubs/screenshot.js            [other       ]      298B   
+./mcp-stack/ci/stubs/searxng.js               [other       ]      295B   
+./mcp-stack/ci/stubs/searxng/mappings/cf.json [json        ]      272B   Keys: request, response
+./mcp-stack/ci/stubs/start-stubs.sh           [shell       ]      196B   
+./mcp-stack/docs/README.md                    [md          ]     4929B   
+./mcp-stack/docs/RESEARCH-TRACE.md            [md          ]     2591B   
+./mcp-stack/gateway/Dockerfile                [other       ]      394B   
+./mcp-stack/gateway/config.mjs                [other       ]     1873B   
+./mcp-stack/gateway/lib/host-allowlist.mjs    [other       ]      454B   
+./mcp-stack/gateway/lib/webToMd.js            [other       ]      756B   
+./mcp-stack/gateway/logger.mjs                [other       ]     1336B   
+./mcp-stack/gateway/package.json              [json        ]      289B   Keys: name, version, type, private, main, engines, de...
+./mcp-stack/gateway/ports.mjs                 [other       ]      743B   
+./mcp-stack/gateway/queue.mjs                 [other       ]     1459B   
+./mcp-stack/gateway/readers.mjs               [other       ]     6366B   
+./mcp-stack/gateway/server.mjs                [other       ]    15446B   
+./mcp-stack/gateway/sse.mjs                   [other       ]      800B   
+./mcp-stack/gateway/supervisor.mjs            [other       ]     3075B   
+./mcp-stack/profiles/dev.env                  [other       ]       40B   
+./mcp-stack/profiles/prod.env                 [other       ]       77B   
+./mcp-stack/scripts/check-health.sh           [shell       ]      764B   
+./mcp-stack/scripts/engine-detect.sh          [shell       ]      192B   
+./mcp-stack/scripts/run.sh                    [shell       ]      722B   
+./mcp-stack/servers/registry.mjs              [other       ]     2053B   
+./mcp-stack/servers/templates/stdio-demo.mjs  [other       ]     1275B   
+./mcp-stack/sidecars/resolver.mjs             [other       ]      807B   
+./mcp-stack/test/engine-aware.test.mjs        [other       ]      942B   
+./mcp-stack/tests/integration.mjs             [other       ]     6259B   
+./mcp-stack/tests/smoke.mjs                   [other       ]     2133B   
+./oneoff/Untitled-1-1.ipynb                   [other       ]   228040B   
+./oneoff/Untitled-1.html                      [other       ]   594882B   
+./oneoff/Untitled-1.ipynb                     [other       ]  1101828B   
+./oneoff/Untitled-2-Copy1.ipynb               [other       ]   127983B   
+./oneoff/Untitled-2-Copy2.ipynb               [other       ]   394641B   
+./oneoff/Untitled-2.html                      [other       ]   764199B   
+./oneoff/Untitled-2.ipynb                     [other       ]    72096B   
+./oneoff/Untitled-2.pdf                       [other       ]   143131B   
+./oneoff/aestheticyear.js                     [other       ]    28146B   
+./oneoff/aestheticyearbroken.txt              [other       ]    18320B   
+./oneoff/cell.py                              [other       ]    26844B   
+./oneoff/link-check.config.json               [json        ]     1197B   Keys: timeout, retryOn429, retryCount, fallbackRetryD...
+./oneoff/popmart.py                           [other       ]    16783B   
+./package-lock.json                           [json        ]   550698B   Keys: name, version, lockfileVersion, requires, packages
+./package.json                                [json        ]     3909B   Keys: name, version, description, keywords, license, ...
+./patches/@photogabble+eleventy-plugin-interlinker+1.1.0.patch [other       ]     9202B   
+./patches/tree-cli+0.6.7.patch                [other       ]      814B   
+./plan/build.spec.json                        [json        ]      301B   Keys: passthrough, cleanup
+./plan/make-plan.mjs                          [other       ]    19734B   
+./plan/master-refactor.mjs                    [other       ]    14761B   
+./plan/relocate.spec.json                     [json        ]      448B   Keys: dryRun, maxFilesPerBatch, maxBatches, intents
+./plan/rewrites.spec.json                     [json        ]      451B   Keys: surfaces, excludes, pairs, publicUrlChanges
+./plan/src-normalize.spec.json                [json        ]      405B   Keys: allowOverlayAssets, roles, templatePattern
+./report.txt                                  [other       ]    11312B   
+./research/COMPLETED SEEDS.txt                [other       ]   105256B   
+./research/PRIMARY TARGETS — Completed(1).txt [other       ]    79527B   
+./research/PRIMARY TARGETS — Completed(2).txt [other       ]    84859B   
+./run.sh                                      [shell       ]     2287B   
+./schema/character.schema.json                [json        ]      478B   Keys: $schema, type, required, properties, additional...
+./schema/completed-seeds.schema.json          [json        ]    11279B   Keys: type, properties, required
+./schema/product.schema.json                  [json        ]     2196B   Keys: $schema, type, required, properties, additional...
+./schema/series.schema.json                   [json        ]      782B   Keys: $schema, type, required, properties, additional...
+./scripts/araca/hb-guard-fix.sh               [shell       ]    15917B   
+./scripts/git/new-branch                      [other       ]      200B   
+./scripts/git/ns-guard.sh                     [shell       ]      768B   
+./scripts/probe/fd_demo.sh                    [shell       ]      122B   
+./scripts/probe/step1_fd_tty.sh               [shell       ]      505B   
+./scripts/probe/step2_merge.sh                [shell       ]      383B   
+./scripts/probe/step3_line_length.sh          [shell       ]      526B   
+./scripts/probe/step4_source_redir.sh         [shell       ]      682B   
+./scripts/probe/step5_subshell.sh             [shell       ]      192B   
+./setup-dependabot-automerge.sh               [shell       ]     2997B   
+./setup-no-approvals.sh                       [shell       ]     1401B   
+./src/_data/archivesNav.js                    [global-data ]      151B   (Invalid or non-object JSON)
+./src/_data/branding.js                       [global-data ]      138B   (Invalid or non-object JSON)
+./src/_data/build.mjs                         [global-data ]     2657B   (Invalid or non-object JSON)
+./src/_data/eleventyComputed.js               [global-data ]      749B   (Invalid or non-object JSON)
+./src/_data/nav.js                            [global-data ]      569B   (Invalid or non-object JSON)
+./src/_data/sections.js                       [global-data ]      452B   (Invalid or non-object JSON)
+./src/_data/site.js                           [global-data ]      115B   (Invalid or non-object JSON)
+./src/_includes/components/archive-nav.njk    [njk         ]      585B   
+./src/_includes/components/back-link.njk      [njk         ]      667B   
+./src/_includes/components/badge.njk          [njk         ]      581B   
+./src/_includes/components/embed.njk          [njk         ]     2073B   
+./src/_includes/components/ext-link.njk       [njk         ]      490B   
+./src/_includes/components/feed-entry.njk     [njk         ]     1430B   
+./src/_includes/components/feed-section.njk   [njk         ]      358B   
+./src/_includes/components/footer.njk         [njk         ]      640B   
+./src/_includes/components/header.njk         [njk         ]     1947B   
+./src/_includes/components/hero-tile.njk      [njk         ]     1147B   
+./src/_includes/components/hero.njk           [njk         ]     3012B   
+./src/_includes/components/icons.njk          [njk         ]      371B   
+./src/_includes/components/kpis.njk           [njk         ]      654B   
+./src/_includes/components/list-item.njk      [njk         ]     1542B   
+./src/_includes/components/map-cta.njk        [njk         ]      634B   
+./src/_includes/components/meta-aside.njk     [njk         ]     1433B   
+./src/_includes/components/nav-items.njk      [njk         ]     1185B   
+./src/_includes/components/nav.njk            [njk         ]      270B   
+./src/_includes/components/neon-card.njk      [njk         ]     1323B   
+./src/_includes/components/pagination.njk     [njk         ]      753B   
+./src/_includes/components/pathway.njk        [njk         ]      613B   
+./src/_includes/components/products/MarketTable.njk [njk         ]     5249B   
+./src/_includes/components/products/MetaNotes.njk [njk         ]     1426B   
+./src/_includes/components/products/ProvenanceList.njk [njk         ]     3357B   
+./src/_includes/components/products/SpecSheet.njk [njk         ]    11415B   
+./src/_includes/components/resume-entry.njk   [njk         ]      709B   
+./src/_includes/components/resume/expander.njk [njk         ]     1306B   
+./src/_includes/components/section.njk        [njk         ]      498B   
+./src/_includes/components/tile.njk           [njk         ]     1215B   
+./src/_includes/components/work-feed.njk      [njk         ]     1252B   
+./src/_includes/layouts/base.njk              [njk         ]     4194B   
+./src/_includes/layouts/collection.njk        [njk         ]     2851B   Title: {{ sections[section].title or (section | title) }}
+./src/_includes/layouts/converted-html.njk    [njk         ]     6416B   
+./src/_includes/layouts/embed.njk             [njk         ]     1877B   
+./src/_includes/layouts/project.njk           [njk         ]     2336B   Title: Project
+./src/_includes/layouts/redirect.njk          [njk         ]      457B   Title: Redirecting…
+./src/_includes/layouts/resume.njk            [njk         ]     2932B   
+./src/_includes/macros/meta.njk               [njk         ]      571B   
+./src/_redirects                              [other       ]      372B   
+./src/assets/css/app.css                      [css         ]    18151B   
+./src/assets/icons/apple-touch-icon.png       [other       ]    47159B   
+./src/assets/icons/favicon-96x96.png          [other       ]    15053B   
+./src/assets/icons/favicon.ico                [other       ]    15086B   
+./src/assets/icons/favicon.svg                [other       ]  1720312B   
+./src/assets/icons/site.webmanifest           [other       ]      605B   
+./src/assets/icons/web-app-manifest-192x192.png [other       ]    52954B   
+./src/assets/icons/web-app-manifest-512x512.png [other       ]   305061B   
+./src/assets/images/logo.png                  [other       ]  1289950B   
+./src/assets/images/og/og-ai-safety.jpg       [other       ]      285B   
+./src/assets/js/app.js                        [client-js   ]     8090B   
+./src/assets/js/mschf-overlay.js              [client-js   ]    91466B   
+./src/assets/js/theme-utils.js                [client-js   ]     4688B   
+./src/content/archives/_dynamic/characters.njk [njk         ]     3175B   
+./src/content/archives/_dynamic/jsonl-download.11ty.js [11ty-tpl    ]      708B   
+./src/content/archives/_dynamic/jsonl-index.11ty.js [11ty-tpl    ]     1591B   
+./src/content/archives/_dynamic/jsonl-viewer.11ty.js [11ty-tpl    ]     3381B   
+./src/content/archives/_dynamic/product-redirect-stubs.11ty.js [11ty-tpl    ]     2026B   
+./src/content/archives/_dynamic/products.njk  [njk         ]     5269B   
+./src/content/archives/_dynamic/provenance.11ty.js [11ty-tpl    ]     5382B   
+./src/content/archives/_dynamic/series.njk    [njk         ]     5057B   
+./src/content/archives/collectables/designer-toys/index.njk [njk         ]     3421B   Title: Designer Toys
+./src/content/archives/collectables/designer-toys/pop-mart/index.njk [njk         ]     4068B   
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/characters/labubu.json [json        ]      189B   Keys: type, brand, line, slug, name, aliases, notes
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/characters/mokoko.json [json        ]      186B   Keys: type, brand, line, slug, name, aliases, notes
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/characters/zimomo.json [json        ]      186B   Keys: type, brand, line, slug, name, aliases, notes
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/i18n/zh/characters/labubu.json [json        ]       57B   Keys: title, notes
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/i18n/zh/products/pop-mart--the-monsters--labubu--fall-in-wild--plush-doll--std--40cm--20240712.json [json        ]       94B   Keys: title, notes
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/i18n/zh/series/fall-in-wild.json [json        ]       66B   Keys: title, notes
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/index.njk [njk         ]     3770B   
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--best-of-luck.json [json        ]     3563B   Keys: type, product_id, brand, line, character, serie...
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--big-into-energy--blind-box--single.json [json        ]      882B   Keys: type, product_id, brand, line, character, serie...
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--big-into-energy--blind-box-set--sealed.json [json        ]      895B   Keys: type, product_id, brand, line, character, serie...
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--coca-cola--blind-box--single.json [json        ]      864B   Keys: type, product_id, brand, line, character, serie...
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--coca-cola--blind-box-set--sealed.json [json        ]      877B   Keys: type, product_id, brand, line, character, serie...
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--dress-be-latte.json [json        ]     2960B   Keys: type, product_id, brand, line, character, serie...
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--exciting-macaron--blind-box--single.json [json        ]      885B   Keys: type, product_id, brand, line, character, serie...
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--exciting-macaron--blind-box-set--sealed.json [json        ]      898B   Keys: type, product_id, brand, line, character, serie...
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--exciting-macaron-v1--vinyl-face-blind-box-pendant.json [json        ]     7789B   Keys: product, release_date, price, sections, Deltas,...
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--fall-in-wild--pendant--std--17cm.json [json        ]      913B   Keys: type, product_id, brand, line, character, serie...
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--fall-in-wild.json [json        ]     3580B   Keys: type, product_id, brand, line, character, serie...
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--flip-with-me.json [json        ]     3416B   Keys: type, product_id, brand, line, character, serie...
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--forest-fairy-tale-china--figure--std--20250526--reg-cn.json [json        ]      901B   Keys: type, product_id, brand, line, character, serie...
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--good-lucky-to-you-thailand.json [json        ]     3005B   Keys: type, product_id, brand, line, character, serie...
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--happy-halloween-party-sitting-pumpkin--pendant--sitting-pumpkin.json [json        ]      964B   Keys: type, product_id, brand, line, character, serie...
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--have-a-seat--blind-box--single--15cm.json [json        ]     1037B   Keys: type, product_id, brand, line, character, serie...
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--have-a-seat--blind-box-set--sealed--15cm.json [json        ]     1051B   Keys: type, product_id, brand, line, character, serie...
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--hide-and-seek-in-singapore.json [json        ]     3192B   Keys: type, product_id, brand, line, character, serie...
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--jump-for-joy.json [json        ]     2957B   Keys: type, product_id, brand, line, character, serie...
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--lets-checkmate--pendant--std--17cm.json [json        ]      921B   Keys: type, product_id, brand, line, character, serie...
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--lets-checkmate--plush-doll--std--37cm.json [json        ]      923B   Keys: type, product_id, brand, line, character, serie...
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--pronounce-be-fancy-now--plush--std.json [json        ]      879B   Keys: type, product_id, brand, line, character, serie...
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--pronounce-wings-of-fantasy--plush--std.json [json        ]      895B   Keys: type, product_id, brand, line, character, serie...
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--pronounce-wings-of-fortune--pendant--std.json [json        ]      892B   Keys: type, product_id, brand, line, character, serie...
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--time-to-chill.json [json        ]     3258B   Keys: type, product_id, brand, line, character, serie...
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--wacky-mart-china--figure--std--20250612--reg-cn.json [json        ]      882B   Keys: type, product_id, brand, line, character, serie...
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--labubu--walk-by-fortune.json [json        ]     2931B   Keys: type, product_id, brand, line, character, serie...
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--mokoko--blue-diamond.json [json        ]     2852B   Keys: type, product_id, brand, line, character, serie...
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--mokoko--close-to-sweet-v1--pendant--std--17cm.json [json        ]      868B   Keys: type, product_id, brand, line, character, serie...
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--mokoko--close-to-sweet-v1.json [json        ]     2894B   Keys: type, product_id, brand, line, character, serie...
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--mokoko--fall-into-spring--pendant--std--17cm.json [json        ]      925B   Keys: type, product_id, brand, line, character, serie...
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--mokoko--fall-into-spring.json [json        ]     2887B   Keys: type, product_id, brand, line, character, serie...
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--mokoko--magic-of-pumpkin--pendant--std--17cm.json [json        ]      925B   Keys: type, product_id, brand, line, character, serie...
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--mokoko--twinkly-fairy-tale.json [json        ]     2855B   Keys: type, product_id, brand, line, character, serie...
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--zimomo--angel-in-clouds-v2.json [json        ]     3515B   Keys: type, product_id, brand, line, character, serie...
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters--zimomo--i-found-you-v1.json [json        ]     3270B   Keys: type, product_id, brand, line, character, serie...
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters-pronounce--labubu--be-fancy-now.json [json        ]     8166B   Keys: brand, line, character, series, product_title, ...
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart--the-monsters-x-coca-cola--labubu-zimomo--coca-cola.json [json        ]     9302B   Keys: title, date, price, body, deltas, source, brand...
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart-coca-cola--the-monsters-coca-cola--labubu-zimomo--coca-cola.json [json        ]     1676B   Keys: product_id, brand, line, character, series, pro...
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart-pronounce--the-monsters--labubu--wings-of-fantasy.json [json        ]     6892B   Keys: title, release_date, msrp_currency, msrp, brand...
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart-pronounce--the-monsters--labubu--wings-of-fortune.json [json        ]     8110B   Keys: brand, line, character, series, product_title, ...
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart-pronounce--the-monsters-pronounce--labubu--be-fancy-now.json [json        ]     1542B   Keys: product_id, brand, line, character, series, pro...
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/products/pop-mart-pronounce--the-monsters-pronounce--labubu--wings-of-fortune.json [json        ]     1308B   Keys: product_id, brand, line, character, series, pro...
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/provenance/pop-mart--the-monsters--labubu--best-of-luck--plush--std--20231230--reg-cn.jsonl [jsonl       ]      282B   
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/provenance/pop-mart--the-monsters--labubu--big-into-energy--blind-box--single--20250425.jsonl [jsonl       ]      282B   
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/provenance/pop-mart--the-monsters--labubu--big-into-energy--blind-box-set--sealed--20250425.jsonl [jsonl       ]      282B   
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/provenance/pop-mart--the-monsters--labubu--coca-cola--blind-box--single--20250124.jsonl [jsonl       ]      282B   
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/provenance/pop-mart--the-monsters--labubu--coca-cola--blind-box-set--sealed--20250124.jsonl [jsonl       ]      282B   
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/provenance/pop-mart--the-monsters--labubu--dress-be-latte--plush--std--20231026.jsonl [jsonl       ]      282B   
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/provenance/pop-mart--the-monsters--labubu--exciting-macaron--blind-box--single--20241027.jsonl [jsonl       ]      282B   
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/provenance/pop-mart--the-monsters--labubu--exciting-macaron--blind-box-set--sealed--20241027.jsonl [jsonl       ]      282B   
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/provenance/pop-mart--the-monsters--labubu--fall-in-wild--pendant--std--17cm--20240712.jsonl [jsonl       ]      282B   
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/provenance/pop-mart--the-monsters--labubu--fall-in-wild--plush-doll--std--40cm--20240712.jsonl [jsonl       ]      282B   
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/provenance/pop-mart--the-monsters--labubu--flip-with-me--plush--std--40cm--20240712.jsonl [jsonl       ]      282B   
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/provenance/pop-mart--the-monsters--labubu--forest-fairy-tale-china--figure--std--20250526--reg-cn.jsonl [jsonl       ]      282B   
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/provenance/pop-mart--the-monsters--labubu--good-lucky-to-you-thailand--figure--std--20241220--reg-th.jsonl [jsonl       ]      282B   
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/provenance/pop-mart--the-monsters--labubu--happy-halloween-party-sitting-pumpkin--pendant--sitting-pumpkin--20241025.jsonl [jsonl       ]      282B   
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/provenance/pop-mart--the-monsters--labubu--have-a-seat--blind-box--single--15cm--20240712.jsonl [jsonl       ]      282B   
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/provenance/pop-mart--the-monsters--labubu--have-a-seat--blind-box-set--sealed--15cm--20240712.jsonl [jsonl       ]      282B   
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/provenance/pop-mart--the-monsters--labubu--hide-and-seek-in-singapore--figure--std--17.5cm--reg-sg.jsonl [jsonl       ]      960B   
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/provenance/pop-mart--the-monsters--labubu--jump-for-joy--plush--std--20230525.jsonl [jsonl       ]      282B   
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/provenance/pop-mart--the-monsters--labubu--lets-checkmate--pendant--std--17cm--20250207.jsonl [jsonl       ]      282B   
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/provenance/pop-mart--the-monsters--labubu--lets-checkmate--plush-doll--std--37cm--20250207.jsonl [jsonl       ]      943B   
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/provenance/pop-mart--the-monsters--labubu--pronounce-be-fancy-now--plush--std--20240315.jsonl [jsonl       ]      282B   
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/provenance/pop-mart--the-monsters--labubu--pronounce-wings-of-fantasy--plush--std--20241004.jsonl [jsonl       ]      282B   
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/provenance/pop-mart--the-monsters--labubu--pronounce-wings-of-fortune--pendant--std--20241004.jsonl [jsonl       ]      941B   
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/provenance/pop-mart--the-monsters--labubu--time-to-chill--plush--std--20221031.jsonl [jsonl       ]      907B   
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/provenance/pop-mart--the-monsters--labubu--wacky-mart-china--figure--std--20250612--reg-cn.jsonl [jsonl       ]      282B   
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/provenance/pop-mart--the-monsters--labubu--walk-by-fortune--plush--std--20231229.jsonl [jsonl       ]      282B   
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/provenance/pop-mart--the-monsters--mokoko--blue-diamond--pendant--std--17cm--20240618.jsonl [jsonl       ]      282B   
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/provenance/pop-mart--the-monsters--mokoko--close-to-sweet-v1--pendant--std--17cm.jsonl [jsonl       ]      929B   
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/provenance/pop-mart--the-monsters--mokoko--close-to-sweet-v1--plush--std.jsonl [jsonl       ]      282B   
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/provenance/pop-mart--the-monsters--mokoko--fall-into-spring--pendant--std--17cm--20240308.jsonl [jsonl       ]      282B   
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/provenance/pop-mart--the-monsters--mokoko--fall-into-spring--plush--std--20240308.jsonl [jsonl       ]      282B   
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/provenance/pop-mart--the-monsters--mokoko--magic-of-pumpkin--pendant--std--17cm--20241027.jsonl [jsonl       ]      282B   
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/provenance/pop-mart--the-monsters--mokoko--twinkly-fairy-tale--pendant--std--17cm--20241128.jsonl [jsonl       ]      282B   
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/provenance/pop-mart--the-monsters--zimomo--angel-in-clouds-v2--plush--std--58cm--20241025.jsonl [jsonl       ]      282B   
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/provenance/pop-mart--the-monsters--zimomo--i-found-you-v1--plush--std--58cm--20231215.jsonl [jsonl       ]      282B   
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/series/angel-in-clouds-v2.json [json        ]      235B   Keys: type, brand, line, slug, title, character_slugs...
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/series/best-of-luck.json [json        ]      221B   Keys: type, brand, line, slug, title, character_slugs...
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/series/big-into-energy.json [json        ]      227B   Keys: type, brand, line, slug, title, character_slugs...
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/series/blue-diamond.json [json        ]      221B   Keys: type, brand, line, slug, title, character_slugs...
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/series/close-to-sweet-v1.json [json        ]      233B   Keys: type, brand, line, slug, title, character_slugs...
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/series/coca-cola.json [json        ]      215B   Keys: type, brand, line, slug, title, character_slugs...
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/series/dress-be-latte.json [json        ]      225B   Keys: type, brand, line, slug, title, character_slugs...
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/series/exciting-macaron.json [json        ]      229B   Keys: type, brand, line, slug, title, character_slugs...
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/series/fall-in-wild.json [json        ]      221B   Keys: type, brand, line, slug, title, character_slugs...
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/series/fall-into-spring.json [json        ]      229B   Keys: type, brand, line, slug, title, character_slugs...
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/series/flip-with-me.json [json        ]      221B   Keys: type, brand, line, slug, title, character_slugs...
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/series/forest-fairy-tale-china.json [json        ]      245B   Keys: type, brand, line, slug, title, character_slugs...
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/series/good-lucky-to-you-thailand.json [json        ]      251B   Keys: type, brand, line, slug, title, character_slugs...
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/series/happy-halloween-party-sitting-pumpkin.json [json        ]      275B   Keys: type, brand, line, slug, title, character_slugs...
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/series/have-a-seat.json [json        ]      219B   Keys: type, brand, line, slug, title, character_slugs...
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/series/hide-and-seek-in-singapore.json [json        ]      249B   Keys: type, brand, line, slug, title, character_slugs...
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/series/i-found-you-v1.json [json        ]      227B   Keys: type, brand, line, slug, title, character_slugs...
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/series/jump-for-joy.json [json        ]      221B   Keys: type, brand, line, slug, title, character_slugs...
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/series/lets-checkmate.json [json        ]      228B   Keys: type, brand, line, slug, title, character_slugs...
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/series/magic-of-pumpkin.json [json        ]      229B   Keys: type, brand, line, slug, title, character_slugs...
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/series/pop-mart--the-monsters--labubu--best-of-luck-overseas-exclusive.json [json        ]    13500B   Keys: brand, line, character, series, product_title, ...
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/series/pop-mart--the-monsters--labubu--dress-be-latte.json [json        ]    12448B   Keys: brand, line, character, series, product_title, ...
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/series/pop-mart--the-monsters--labubu--exciting-macaron-v1.json [json        ]    11759B   Keys: _forest_fairy_tale_china_points_redemption, _go...
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/series/pop-mart--the-monsters--labubu--fall-in-wild.json [json        ]    14173B   Keys: brand, line, character, series, product_title, ...
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/series/pop-mart--the-monsters--labubu--flip-with-me.json [json        ]    12088B   Keys: brand, line, character, series, product_title, ...
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/series/pop-mart--the-monsters--labubu--forest-fairy-tale.json [json        ]     1366B   Keys: product_id, brand, line, character, series, pro...
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/series/pop-mart--the-monsters--labubu--happy-halloween-party.json [json        ]     6913B   Keys: title, date, price, body, deltas, source, brand...
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/series/pop-mart--the-monsters--labubu--jump-for-joy.json [json        ]    11082B   Keys: brand, line, character, series, product_title, ...
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/series/pop-mart--the-monsters--labubu--let-s-checkmate.json [json        ]    10616B   Keys: title, date, price, body, deltas, source, brand...
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/series/pop-mart--the-monsters--labubu--wacky-mart.json [json        ]     1341B   Keys: product_id, brand, line, character, series, pro...
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/series/pop-mart--the-monsters--labubu--walk-by-fortune.json [json        ]    10953B   Keys: brand, line, character, series, product_title, ...
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/series/pop-mart--the-monsters--mokoko--magic-of-pumpkin-halloween.json [json        ]     1177B   Keys: product_id, brand, line, character, series, pro...
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/series/pronounce-be-fancy-now.json [json        ]      245B   Keys: type, brand, line, slug, title, character_slugs...
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/series/pronounce-wings-of-fantasy.json [json        ]      253B   Keys: type, brand, line, slug, title, character_slugs...
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/series/pronounce-wings-of-fortune.json [json        ]      253B   Keys: type, brand, line, slug, title, character_slugs...
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/series/time-to-chill.json [json        ]      223B   Keys: type, brand, line, slug, title, character_slugs...
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/series/twinkly-fairy-tale.json [json        ]      233B   Keys: type, brand, line, slug, title, character_slugs...
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/series/wacky-mart-china.json [json        ]      231B   Keys: type, brand, line, slug, title, character_slugs...
+./src/content/archives/collectables/designer-toys/pop-mart/the-monsters/series/walk-by-fortune.json [json        ]      227B   Keys: type, brand, line, slug, title, character_slugs...
+./src/content/archives/collectables/index.njk [njk         ]     2845B   Title: Collectables
+./src/content/archives/golden_record_20250819T081755Z.json [json        ]   320831B   (Invalid or non-object JSON)
+./src/content/archives/golden_record_test.json [json        ]    38780B   (Invalid or non-object JSON)
+./src/content/archives/index.njk              [njk         ]      574B   Title: Archives
+./src/content/archives/provenance/index.njk   [njk         ]     4511B   Title: Provenance Explorer
+./src/content/concepts/aesthetic-inquiry.md   [md          ]    22579B   
+./src/content/concepts/atlas-process.md       [md          ]    26134B   
+./src/content/concepts/autocatalytic-system.md [md          ]     7802B   Title: 'The Site as an Autocatalytic System: A Final Synthesis'
+./src/content/concepts/block-ledger.md        [md          ]      433B   Title: 'Block Ledger'
+./src/content/concepts/compliant-spire.md     [md          ]    38352B   
+./src/content/concepts/concepts.11tydata.js   [11tydata    ]      102B   
+./src/content/concepts/ghost-byline.md        [md          ]    28357B   
+./src/content/concepts/ghost-engine.md        [md          ]    20821B   
+./src/content/concepts/index.njk              [njk         ]      198B   Title: Concepts
+./src/content/concepts/parroting-mimicry.md   [md          ]    13956B   Title: 'On The Sociality Of Stochastic Parrots'
+./src/content/concepts/readers-journey.md     [md          ]     7592B   Title: The Reader's Journey and the Divergence from the Singular Author Model
+./src/content/concepts/rhizomatic-protocol.md [md          ]    15160B   Title: 'The Rhizomatic Protocol: A Corrected Model of the Effusion Labs System'
+./src/content/concepts/three-studies-sensory.md [md          ]    17173B   Title: 'Three Studies in Embodied Regulation'
+./src/content/concepts/verification-is-an-ecology.md [md          ]    24388B   Title: 'A Field Guide to the Ecology of Doubt'
+./src/content/concepts/workshop-weather.md    [md          ]    34986B   
+./src/content/docs/adr/20250813-hero-image-perf.md [md          ]      350B   Title: 20250813-hero-image-perf
+./src/content/docs/adr/20250813-truncate-filter.md [md          ]      314B   Title: 20250813-truncate-filter
+./src/content/docs/adr/20250814-code-copy.md  [md          ]      355B   Title: 20250814-code-copy
+./src/content/docs/adr/20250814-feed-build-metadata.md [md          ]      401B   Title: 20250814-feed-build-metadata
+./src/content/docs/adr/20250814-footnote-highlight.md [md          ]      489B   Title: ADR: Move footnote highlight styling to Tailwind
+./src/content/docs/adr/20250814-monsters-hub.md [md          ]      468B   Title: POP MART The Monsters hub and cross-links
+./src/content/docs/adr/20250814-nav-ledger.md [md          ]      549B   Title: ADR: Nav Ledger Order
+./src/content/docs/adr/20250814-spark-status.md [md          ]      347B   Title: 20250814-spark-status — expose spark status in listings
+./src/content/docs/adr/20250816-carbon-handshake.md [md          ]      328B   Title: 20250816 - carbon handshake spark
+./src/content/docs/adr/20250829-unified-collection-layout.md [md          ]      362B   Title: 20250829-unified-collection-layout
+./src/content/docs/knowledge/branch-policy.md [md          ]      347B   Title: Branch Policy
+./src/content/docs/knowledge/daisyui-fetch-error-20250911T174939Z.log [other       ]     3239B   
+./src/content/docs/knowledge/deploy-workflow-green.log [other       ]      425B   
+./src/content/docs/knowledge/deploy-workflow-red.log [other       ]     4239B   
+./src/content/docs/knowledge/eleventy-collections-20250911T175345Z.html [other       ]   330261B   
+./src/content/docs/knowledge/eleventy-data-cascade-20250911T175348Z.html [other       ]   189868B   
+./src/content/docs/knowledge/eleventy-data-computed-20250911T175414Z.html [other       ]   182448B   
+./src/content/docs/knowledge/eleventy-data-template-dir-20250911T175432Z.html [other       ]   152347B   
+./src/content/docs/knowledge/eleventy-vite-20250913T180254Z.html.raw [other       ]   111796B   
+./src/content/docs/knowledge/eleventy-vite-20250913T180254Z.txt [other       ]    17010B   
+./src/content/docs/knowledge/gha-actions-upgrade/hashes.txt [other       ]      234B   
+./src/content/docs/knowledge/gha-actions-upgrade/test-fail.log [other       ]     8054B   
+./src/content/docs/knowledge/gha-actions-upgrade/test-success.log [other       ]      276B   
+./src/content/docs/knowledge/golden_record_20250819T062726Z.json [json        ]   372434B   (Invalid or non-object JSON)
+./src/content/docs/knowledge/golden_record_20250819T081736Z.json [json        ]   361048B   (Invalid or non-object JSON)
+./src/content/docs/knowledge/golden_record_20250819T081755Z.json [json        ]   361048B   (Invalid or non-object JSON)
+./src/content/docs/knowledge/homepage-feed-green.log [other       ]     2124B   
+./src/content/docs/knowledge/homepage-feed-red.log [other       ]     2706B   
+./src/content/docs/knowledge/homepage-hero-green.log [other       ]     2124B   
+./src/content/docs/knowledge/homepage-hero-map-green.log [other       ]     2124B   
+./src/content/docs/knowledge/homepage-hero-map-red.log [other       ]     2669B   
+./src/content/docs/knowledge/homepage-logo-green.log [other       ]     1114B   
+./src/content/docs/knowledge/homepage-logo-red.log [other       ]     1662B   
+./src/content/docs/knowledge/image-filename-seo-green.log [other       ]     1148B   
+./src/content/docs/knowledge/image-filename-seo-install.log [other       ]      234B   
+./src/content/docs/knowledge/image-filename-seo-red.log [other       ]     1766B   
+./src/content/docs/knowledge/interlinker-unresolved-20250911T175224Z.log [other       ]        0B   
+./src/content/docs/knowledge/logo-image-transform-green.log [other       ]     2132B   
+./src/content/docs/knowledge/logo-image-transform-red.log [other       ]     2905B   
+./src/content/docs/knowledge/monsters-product-metadata-green.log [other       ]    21011B   
+./src/content/docs/knowledge/no-silent-ops-green.log [other       ]      300B   
+./src/content/docs/knowledge/no-silent-ops-red.log [other       ]      930B   
+./src/content/docs/knowledge/node-shim-prove.md [md          ]      164B   Title: Node shim failure
+./src/content/docs/knowledge/prettier-guardrails/test-green.log [other       ]      106B   
+./src/content/docs/knowledge/prettier-guardrails/test-red.log [other       ]      127B   
+./src/content/docs/knowledge/product-template-fail.md [md          ]      328B   
+./src/content/docs/knowledge/responsive-logo-green.log [other       ]     2132B   
+./src/content/docs/knowledge/responsive-logo-red.log [other       ]     3337B   
+./src/content/docs/knowledge/ripgrep/docs-validate.log [other       ]      108B   
+./src/content/docs/knowledge/ripgrep/test-success.log [other       ]      763B   
+./src/content/docs/knowledge/stabilize-ci-tests-green.log [other       ]   139950B   
+./src/content/docs/knowledge/stabilize-ci-tests-install.log [other       ]      653B   
+./src/content/docs/knowledge/stabilize-ci-tests-red.log [other       ]    36553B   
+./src/content/docs/knowledge/synthesized_archive-20250818-202538.json [json        ]   131485B   (Invalid or non-object JSON)
+./src/content/docs/knowledge/synthesized_archive-20250818-202551.json [json        ]   282497B   (Invalid or non-object JSON)
+./src/content/docs/knowledge/synthesized_archive-20250818-202612.json [json        ]   108490B   (Invalid or non-object JSON)
+./src/content/docs/knowledge/synthesized_archive-20250818-202854.json [json        ]     2192B   (Invalid or non-object JSON)
+./src/content/docs/knowledge/synthesized_archive_20250818T202820Z.json [json        ]   208417B   (Invalid or non-object JSON)
+./src/content/docs/knowledge/synthesized_archive_20250818T202825Z.json [json        ]   133649B   (Invalid or non-object JSON)
+./src/content/docs/knowledge/synthesized_archive_20250818T202833Z.json [json        ]   155126B   (Invalid or non-object JSON)
+./src/content/docs/knowledge/synthesized_archive_20250818T203403Z.json [json        ]    32096B   (Invalid or non-object JSON)
+./src/content/docs/knowledge/synthesized_archive_20250818T203415Z.json [json        ]    43885B   (Invalid or non-object JSON)
+./src/content/docs/knowledge/synthesized_archive_20250818T203419Z.json [json        ]    68852B   (Invalid or non-object JSON)
+./src/content/docs/knowledge/synthesized_archive_20250818T203545Z.json [json        ]     8912B   (Invalid or non-object JSON)
+./src/content/docs/knowledge/synthesized_archive_20250818T203603Z.json [json        ]     7567B   (Invalid or non-object JSON)
+./src/content/docs/knowledge/synthesized_archive_20250818T203640Z.json [json        ]        3B   (Invalid or non-object JSON)
+./src/content/docs/knowledge/synthesized_archive_20250818T203805Z.json [json        ]        3B   (Invalid or non-object JSON)
+./src/content/docs/knowledge/synthesized_archive_20250818T204046Z.json [json        ]     3828B   (Invalid or non-object JSON)
+./src/content/docs/knowledge/synthesized_archive_20250818T204119Z.json [json        ]   291586B   (Invalid or non-object JSON)
+./src/content/docs/knowledge/synthesized_archive_20250818T204212Z.json [json        ]    12159B   (Invalid or non-object JSON)
+./src/content/docs/knowledge/synthesized_archive_20250818T204244Z.json [json        ]   160176B   (Invalid or non-object JSON)
+./src/content/docs/knowledge/synthesized_archive_20250819T081707Z.json [json        ]    12159B   (Invalid or non-object JSON)
+./src/content/docs/knowledge/synthesized_archive_20250819T081750Z.json [json        ]    12159B   (Invalid or non-object JSON)
+./src/content/docs/knowledge/tailwind-fetch-error-20250911T174938Z.log [other       ]     3231B   
+./src/content/docs/knowledge/tailwind-v4-20250913T180254Z.html.raw [other       ]   347917B   
+./src/content/docs/knowledge/tailwind-v4-20250913T180254Z.txt [other       ]    27742B   
+./src/content/docs/knowledge/test-failures.txt [other       ]      144B   
+./src/content/docs/knowledge/time-to-chill-size-green.log [other       ]     5475B   
+./src/content/docs/knowledge/utils-test-green.md [md          ]      233B   
+./src/content/docs/knowledge/utils-test-red.md [md          ]      215B   
+./src/content/docs/knowledge/wikilink-filter-build-green.log [other       ]    20660B   
+./src/content/docs/knowledge/wikilink-filter-green.log [other       ]      542B   
+./src/content/docs/migration/class-map.json   [json        ]        3B   (Invalid or non-object JSON)
+./src/content/docs/migration/path-map.json    [json        ]      306B   Keys: src/assets/css/tailwind.css, src/assets/js/base...
+./src/content/docs/reports/2025-08-20-shiki-migration.md [md          ]      416B   Title: Shiki Migration Audit – 2025-08-20
+./src/content/docs/reports/20250911T175310Z.md [md          ]      235B   Title: Report: Tailwind DaisyUI integration
+./src/content/docs/reports/20250911T175533Z.md [md          ]      113B   Title: Report 2025-09-11
+./src/content/docs/reports/20250913T180936Z.md [md          ]      128B   Title: Report 2025-09-13
+./src/content/docs/reports/archive-normalization-audit.md [md          ]      532B   Title: Archive Normalization Audit
+./src/content/docs/reports/archive-normalization-continue.md [md          ]      417B   Title: Continuation – Archive Normalization
+./src/content/docs/reports/archive-normalization-ledger.md [md          ]      335B   Title: Archive Normalization Ledger
+./src/content/docs/reports/continuous-output-continue.md [md          ]      714B   Title: Continuous Output Continuation
+./src/content/docs/reports/continuous-output-ledger.md [md          ]     1330B   Title: Continuous Output Ledger
+./src/content/docs/reports/deploy-workflow-continue.md [md          ]      432B   Title: Continuation – Deploy Workflow
+./src/content/docs/reports/deploy-workflow-ledger.md [md          ]      565B   Title: deploy-workflow Ledger (1/1)
+./src/content/docs/reports/eleventy-runner-continue.md [md          ]      551B   Title: Continuation Plan
+./src/content/docs/reports/eleventy-runner-ledger.md [md          ]      409B   Title: Eleventy Runner Ledger
+./src/content/docs/reports/esm-audit-20250820T215642Z.md [md          ]      925B   Title: ESM Audit 20250820T215642Z
+./src/content/docs/reports/exec-surface.md    [md          ]     1572B   Title: Unguarded Execution Surface
+./src/content/docs/reports/external-arrow-continue.md [md          ]      497B   Title: Continuation: external-arrow
+./src/content/docs/reports/external-arrow-ledger.md [md          ]      576B   Title: Ledger: external-arrow
+./src/content/docs/reports/gha-actions-upgrade-continue.md [md          ]      351B   Title: Continuation: gha-actions-upgrade
+./src/content/docs/reports/gha-actions-upgrade-ledger.md [md          ]      676B   Title: gha-actions-upgrade Ledger
+./src/content/docs/reports/homepage-hero-continue.md [md          ]      663B   Title: Continuation – Homepage Hero
+./src/content/docs/reports/homepage-hero-ledger.md [md          ]     1289B   Title: homepage-hero Ledger (5/5)
+./src/content/docs/reports/homepage-latest-entries-continue.md [md          ]      374B   Title: Continuation: homepage-latest-entries
+./src/content/docs/reports/homepage-latest-entries-ledger.md [md          ]      407B   Title: Ledger: homepage-latest-entries
+./src/content/docs/reports/homepage-logo-continue.md [md          ]      456B   Title: Continuation – Homepage Logo
+./src/content/docs/reports/homepage-logo-ledger.md [md          ]      541B   Title: homepage-logo Ledger (1/1)
+./src/content/docs/reports/image-filename-seo-continue.md [md          ]      508B   Title: Continuation – Image Filename SEO
+./src/content/docs/reports/image-filename-seo-ledger.md [md          ]      754B   Title: image-filename-seo Ledger (1/1)
+./src/content/docs/reports/link-hygiene-r3-continue.md [md          ]      366B   Title: Context Recap
+./src/content/docs/reports/link-hygiene-r3-ledger.md [md          ]      927B   Title: link-hygiene-r3 Ledger (2/2)
+./src/content/docs/reports/llm-keepalive-continue.md [md          ]      333B   Title: llm-keepalive Continuation
+./src/content/docs/reports/llm-keepalive-ledger.md [md          ]      303B   Title: llm-keepalive Ledger
+./src/content/docs/reports/logo-image-transform-continue.md [md          ]      510B   Title: Continuation – Logo Image Transform
+./src/content/docs/reports/logo-image-transform-ledger.md [md          ]      581B   Title: logo-image-transform Ledger (1/1)
+./src/content/docs/reports/monsters-product-metadata-continue.md [md          ]      305B   Title: Continuation — monsters-product-metadata
+./src/content/docs/reports/monsters-product-metadata-ledger.md [md          ]      271B   Title: Ledger — monsters-product-metadata
+./src/content/docs/reports/mschf-overlay-continue.md [md          ]      496B   Title: mschf-overlay Continuation
+./src/content/docs/reports/mschf-overlay-ledger.md [md          ]      575B   Title: mschf-overlay Ledger (1/1)
+./src/content/docs/reports/node-shim-continue.md [md          ]      422B   Title: node-shim Continuation
+./src/content/docs/reports/node-shim-ledger.md [md          ]      888B   Title: node-shim Ledger
+./src/content/docs/reports/pop-mart-provenance-continue.md [md          ]      256B   Title: pop-mart-provenance continuation
+./src/content/docs/reports/pop-mart-provenance-ledger.md [md          ]      278B   Title: pop-mart-provenance ledger
+./src/content/docs/reports/prettier-guardrails-continue.md [md          ]      686B   Title: Continuation: prettier-guardrails
+./src/content/docs/reports/prettier-guardrails-ledger.md [md          ]     1813B   Title: Ledger: prettier-guardrails
+./src/content/docs/reports/products-template-continue.md [md          ]      284B   Title: Continuation: products-template
+./src/content/docs/reports/products-template-ledger.md [md          ]     1043B   Title: Ledger: products-template
+./src/content/docs/reports/research-ingest-continue.md [md          ]      355B   Title: Research Ingest Continuation
+./src/content/docs/reports/research-ingest-ledger.md [md          ]      400B   Title: Research Ingest Ledger
+./src/content/docs/reports/responsive-logo-continue.md [md          ]      497B   Title: Continuation – Responsive Logo
+./src/content/docs/reports/responsive-logo-ledger.md [md          ]      559B   Title: responsive-logo Ledger (1/1)
+./src/content/docs/reports/ripgrep-fix-continue.md [md          ]      452B   Title: Continuation: ripgrep-fix
+./src/content/docs/reports/ripgrep-fix-ledger.md [md          ]      807B   Title: ripgrep-fix Ledger
+./src/content/docs/reports/site-redesign-r3-continue.md [md          ]      562B   Title: Continuation – Site Redesign R3
+./src/content/docs/reports/site-redesign-r3-ledger.md [md          ]      623B   Title: site-redesign-r3 Ledger
+./src/content/docs/reports/solver-url-env-continue.md [md          ]      228B   Title: Continuation — solver-url-env
+./src/content/docs/reports/solver-url-env-ledger.md [md          ]     1337B   Title: Ledger — solver-url-env
+./src/content/docs/reports/stabilize-ci-tests-continue.md [md          ]      323B   Title: Context Recap
+./src/content/docs/reports/stabilize-ci-tests-ledger.md [md          ]      567B   Title: stabilize-ci-tests Ledger (1/1)
+./src/content/docs/reports/tags-metadata-continue.md [md          ]      385B   Title: Continuation: tags-metadata
+./src/content/docs/reports/tags-metadata-ledger.md [md          ]      972B   Title: tags-metadata Ledger
+./src/content/docs/reports/tests-green-continue.md [md          ]      314B   Title: Continuation for tests-green
+./src/content/docs/reports/tests-green-ledger.md [md          ]      312B   Title: Ledger for tests-green
+./src/content/docs/reports/typography-colors-continue.md [md          ]      288B   Title: typography-colors Continuation
+./src/content/docs/reports/typography-colors-ledger.md [md          ]      654B   Title: typography-colors Ledger
+./src/content/docs/reports/utils-ordinal-suffix-continue.md [md          ]      592B   Title: Continuation: utils-ordinal-suffix
+./src/content/docs/reports/utils-ordinal-suffix-ledger.md [md          ]     2102B   Title: Ledger: utils-ordinal-suffix
+./src/content/docs/reports/work-pages-continue.md [md          ]      249B   Title: Continuation
+./src/content/docs/reports/work-pages-ledger.md [md          ]      313B   Title: work-pages-ledger
+./src/content/docs/stream-guard-3500.md       [md          ]     1023B   Title: Stream Guard — 3500 default
+./src/content/docs/theming.md                 [md          ]     1257B   Title: Theming
+./src/content/docs/ux/mschf-overlay.md        [md          ]     2311B   Title: MSCHF Overlay
+./src/content/docs/vendor/daisyui/README.md   [md          ]      456B   
+./src/content/docs/vendor/daisyui/base.html   [other       ]   295267B   
+./src/content/docs/vendor/daisyui/colors.html [other       ]   329096B   
+./src/content/docs/vendor/daisyui/components.html [other       ]   441795B   
+./src/content/docs/vendor/daisyui/config.html [other       ]   320473B   
+./src/content/docs/vendor/daisyui/configuration.html [other       ]   320479B   
+./src/content/docs/vendor/daisyui/install.html [other       ]   634901B   
+./src/content/docs/vendor/daisyui/themes.html [other       ]   438386B   
+./src/content/docs/vendor/daisyui/upgrade.html [other       ]   395383B   
+./src/content/docs/vendor/daisyui/v5.html     [other       ]   538387B   
+./src/content/docs/vendor/tailwind/README.md  [md          ]      559B   
+./src/content/docs/vendor/tailwind/configuration.html [other       ]  1066089B   
+./src/content/docs/vendor/tailwind/content-configuration.html [other       ]   533710B   
+./src/content/docs/vendor/tailwind/content-configuration.html.bak [other       ]   455230B   
+./src/content/docs/vendor/tailwind/detecting-classes.html [other       ]   533710B   
+./src/content/docs/vendor/tailwind/detecting-classes.html.bak [other       ]   455230B   
+./src/content/docs/vendor/tailwind/functions-and-directives.html [other       ]   475258B   
+./src/content/docs/vendor/tailwind/plugins.html [other       ]   681227B   
+./src/content/docs/vendor/tailwind/tailwindcss-v4-blog.html [other       ]   420586B   
+./src/content/docs/vendor/tailwind/upgrade-guide.html [other       ]   702973B   
+./src/content/docs/vendor/tailwind/v4-blog.html [other       ]   420512B   
+./src/content/docs/vendors/@11ty/eleventy/3.1.2/configuration.md [md          ]    26643B   
+./src/content/docs/vendors/@11ty/eleventy/3.1.2/getting-started.md [md          ]    50825B   
+./src/content/docs/vendors/@11ty/eleventy/3.1.2/manifest.json [json        ]      598B   (Invalid or non-object JSON)
+./src/content/docs/vendors/_inventory.json    [json        ]     1115B   (Invalid or non-object JSON)
+./src/content/docs/vendors/_manifest.json     [json        ]     1182B   Keys: libraries
+./src/content/docs/vendors/daisyui/5.0.50/install.md [md          ]     1169B   
+./src/content/docs/vendors/daisyui/5.0.50/manifest.json [json        ]      302B   (Invalid or non-object JSON)
+./src/content/docs/vendors/index.md           [md          ]      934B   Title: Vendor Documentation Index
+./src/content/docs/vendors/markdown-it/14.1.0/index.md [md          ]       87B   
+./src/content/docs/vendors/markdown-it/14.1.0/manifest.json [json        ]      363B   (Invalid or non-object JSON)
+./src/content/docs/vendors/nunjucks/3.2.4/manifest.json [json        ]      309B   (Invalid or non-object JSON)
+./src/content/docs/vendors/nunjucks/3.2.4/templating.md [md          ]    39228B   
+./src/content/docs/vendors/postcss/8.5.6/index.md [md          ]     2289B   
+./src/content/docs/vendors/postcss/8.5.6/manifest.json [json        ]      315B   (Invalid or non-object JSON)
+./src/content/docs/vendors/tailwindcss/4.1.11/manifest.json [json        ]      455B   (Invalid or non-object JSON)
+./src/content/docs/vendors/tailwindcss/4.1.11/readme.md [md          ]     1389B   
+./src/content/docs/worklogs/20250911T175310Z.md [md          ]      286B   Title: CSS plugin integration worklog
+./src/content/docs/worklogs/20250911T175533Z.md [md          ]      228B   Title: Worklog 2025-09-11
+./src/content/docs/worklogs/20250913T180936Z.md [md          ]      199B   Title: Worklog 2025-09-13
+./src/content/docs/worklogs/20250914T025746Z-exec-surface.md [md          ]      305B   Title: Worklog: exec-surface
+./src/content/flower_reports_showcase/normalized/listings.csv [other       ]     4415B   
+./src/content/flower_reports_showcase/normalized/menus/a-cut-above-denver.csv [other       ]        1B   
+./src/content/flower_reports_showcase/normalized/menus/a-cut-off-the-top-2059-w-9th-ave-80204.csv [other       ]        1B   
+./src/content/flower_reports_showcase/normalized/menus/affinity-dispensary.csv [other       ]        1B   
+./src/content/flower_reports_showcase/normalized/menus/alternative-medicine-on-capitol-hill.csv [other       ]     6760B   
+./src/content/flower_reports_showcase/normalized/menus/amch-adult-use.csv [other       ]        1B   
+./src/content/flower_reports_showcase/normalized/menus/apothecary-farms-denver.csv [other       ]      416B   
+./src/content/flower_reports_showcase/normalized/menus/dank.csv [other       ]     2137B   
+./src/content/flower_reports_showcase/normalized/menus/den-rec-medical.csv [other       ]        1B   
+./src/content/flower_reports_showcase/normalized/menus/denco-adult-use.csv [other       ]        1B   
+./src/content/flower_reports_showcase/normalized/menus/denco-alternative-medicine-recreational.csv [other       ]        1B   
+./src/content/flower_reports_showcase/normalized/menus/denver-kush-club-more-than-a-club-adult-use.csv [other       ]     9027B   
+./src/content/flower_reports_showcase/normalized/menus/doctors-orders-3.csv [other       ]        1B   
+./src/content/flower_reports_showcase/normalized/menus/everbloom-on-jackson.csv [other       ]        1B   
+./src/content/flower_reports_showcase/normalized/menus/family-grown.csv [other       ]        1B   
+./src/content/flower_reports_showcase/normalized/menus/green-cross-of-cherry-creek-2.csv [other       ]     3973B   
+./src/content/flower_reports_showcase/normalized/menus/greenfields-4.csv [other       ]        1B   
+./src/content/flower_reports_showcase/normalized/menus/greenfields-5.csv [other       ]    35139B   
+./src/content/flower_reports_showcase/normalized/menus/house-of-dankness-3.csv [other       ]     1866B   
+./src/content/flower_reports_showcase/normalized/menus/kinds-meds.csv [other       ]     4869B   
+./src/content/flower_reports_showcase/normalized/menus/lemonnade-denver-1.csv [other       ]        1B   
+./src/content/flower_reports_showcase/normalized/menus/life-flower-dispensary-recreational.csv [other       ]     8055B   
+./src/content/flower_reports_showcase/normalized/menus/life-flower-dispensary.csv [other       ]     4440B   
+./src/content/flower_reports_showcase/normalized/menus/lightshade-peoria-2.csv [other       ]     1671B   
+./src/content/flower_reports_showcase/normalized/menus/little-brown-house.csv [other       ]    13184B   
+./src/content/flower_reports_showcase/normalized/menus/lova-downtown.csv [other       ]     3622B   
+./src/content/flower_reports_showcase/normalized/menus/lova-sheridan.csv [other       ]     5672B   
+./src/content/flower_reports_showcase/normalized/menus/magic-city-cannabis-colorado.csv [other       ]    15516B   
+./src/content/flower_reports_showcase/normalized/menus/mecca-federal.csv [other       ]     3037B   
+./src/content/flower_reports_showcase/normalized/menus/medicine-man-denver.csv [other       ]     3699B   
+./src/content/flower_reports_showcase/normalized/menus/native-roots-apothecary-medical.csv [other       ]        1B   
+./src/content/flower_reports_showcase/normalized/menus/native-roots-denver-highlands-med.csv [other       ]        1B   
+./src/content/flower_reports_showcase/normalized/menus/native-roots-south.csv [other       ]        1B   
+./src/content/flower_reports_showcase/normalized/menus/nuvue-pharma-denver.csv [other       ]        1B   
+./src/content/flower_reports_showcase/normalized/menus/potco-2.csv [other       ]        1B   
+./src/content/flower_reports_showcase/normalized/menus/reefer-madness.csv [other       ]    33236B   
+./src/content/flower_reports_showcase/normalized/menus/rino-supply-co-rec.csv [other       ]        1B   
+./src/content/flower_reports_showcase/normalized/menus/riverrock-south-recreational.csv [other       ]        1B   
+./src/content/flower_reports_showcase/normalized/menus/sacred-seed-recreational.csv [other       ]     1026B   
+./src/content/flower_reports_showcase/normalized/menus/seed-smith-cannabis.csv [other       ]      309B   
+./src/content/flower_reports_showcase/normalized/menus/snaxland-bryant.csv [other       ]        1B   
+./src/content/flower_reports_showcase/normalized/menus/spark-3.csv [other       ]        1B   
+./src/content/flower_reports_showcase/normalized/menus/standing-akimbo-denver.csv [other       ]        1B   
+./src/content/flower_reports_showcase/normalized/menus/starbuds-du.csv [other       ]        1B   
+./src/content/flower_reports_showcase/normalized/menus/strawberry-fields-denver.csv [other       ]        1B   
+./src/content/flower_reports_showcase/normalized/menus/the-center-3.csv [other       ]     6211B   
+./src/content/flower_reports_showcase/normalized/menus/the-grove-29.csv [other       ]        1B   
+./src/content/flower_reports_showcase/normalized/menus/the-herbal-cure-recreational.csv [other       ]     4887B   
+./src/content/flower_reports_showcase/normalized/menus/three-rivers-dispensary-broadway-med.csv [other       ]     4006B   
+./src/content/flower_reports_showcase/normalized/menus/three-rivers-dispensary-broadway-rec.csv [other       ]        1B   
+./src/content/flower_reports_showcase/normalized/menus/xclusive-smith.csv [other       ]     8755B   
+./src/content/flower_reports_showcase/reports/Magic_City_Cannabis___Colorado_20250810_report.html [other       ]   281206B   
+./src/content/flower_reports_showcase/reports/Reefer_Madness_20250810_report.html [other       ]   278528B   
+./src/content/flower_reports_showcase/reports/Reefer_Madness_20250825_report.html [other       ]   280385B   
+./src/content/flower_reports_showcase/reports/Reefer_Madness_20250826_report.html [other       ]   280199B   
+./src/content/flower_reports_showcase/reports/Reefer_Madness_20250830_report.html [other       ]   294458B   
+./src/content/flower_reports_showcase/reports/audits/audit_alternative-medicine-on-capitol-hill.csv [other       ]     4078B   
+./src/content/flower_reports_showcase/reports/audits/audit_apothecary-farms-denver.csv [other       ]      478B   
+./src/content/flower_reports_showcase/reports/audits/audit_dank.csv [other       ]     2409B   
+./src/content/flower_reports_showcase/reports/audits/audit_denver-kush-club-more-than-a-club-adult-use.csv [other       ]     3486B   
+./src/content/flower_reports_showcase/reports/audits/audit_green-cross-of-cherry-creek-2.csv [other       ]     3779B   
+./src/content/flower_reports_showcase/reports/audits/audit_greenfields-5.csv [other       ]     4615B   
+./src/content/flower_reports_showcase/reports/audits/audit_house-of-dankness-3.csv [other       ]     2081B   
+./src/content/flower_reports_showcase/reports/audits/audit_kinds-meds.csv [other       ]     3858B   
+./src/content/flower_reports_showcase/reports/audits/audit_life-flower-dispensary-recreational.csv [other       ]     3309B   
+./src/content/flower_reports_showcase/reports/audits/audit_life-flower-dispensary.csv [other       ]     3130B   
+./src/content/flower_reports_showcase/reports/audits/audit_lightshade-peoria-2.csv [other       ]     1832B   
+./src/content/flower_reports_showcase/reports/audits/audit_little-brown-house.csv [other       ]     5177B   
+./src/content/flower_reports_showcase/reports/audits/audit_lova-downtown.csv [other       ]     3782B   
+./src/content/flower_reports_showcase/reports/audits/audit_lova-sheridan.csv [other       ]     4165B   
+./src/content/flower_reports_showcase/reports/audits/audit_magic-city-cannabis-colorado.csv [other       ]     5348B   
+./src/content/flower_reports_showcase/reports/audits/audit_mecca-federal.csv [other       ]     3341B   
+./src/content/flower_reports_showcase/reports/audits/audit_medicine-man-denver.csv [other       ]     4186B   
+./src/content/flower_reports_showcase/reports/audits/audit_reefer-madness.csv [other       ]     5221B   
+./src/content/flower_reports_showcase/reports/audits/audit_sacred-seed-recreational.csv [other       ]     1129B   
+./src/content/flower_reports_showcase/reports/audits/audit_seed-smith-cannabis.csv [other       ]      357B   
+./src/content/flower_reports_showcase/reports/audits/audit_the-center-3.csv [other       ]     3527B   
+./src/content/flower_reports_showcase/reports/audits/audit_the-herbal-cure-recreational.csv [other       ]     3850B   
+./src/content/flower_reports_showcase/reports/audits/audit_three-rivers-dispensary-broadway-med.csv [other       ]     3048B   
+./src/content/flower_reports_showcase/reports/audits/audit_xclusive-smith.csv [other       ]     3698B   
+./src/content/flower_reports_showcase/reports/nearby_value_cache_status.html [other       ]    19035B   
+./src/content/flower_reports_showcase/reports/nearby_value_leaderboard.html [other       ]    52253B   
+./src/content/meta/a-b-curatorial-protocolist.md [md          ]     4547B   Title: 'Comparative Analysis of Candidate Framework Designations'
+./src/content/meta/core-concept.md            [md          ]     4019B   Title: 'Effusion Labs: Core Concept'
+./src/content/meta/curatorial-generativism.md [md          ]    16549B   Title: 'Curatorial Generativism: An Artistic Framework'
+./src/content/meta/index.njk                  [njk         ]      546B   Title: Meta
+./src/content/meta/meta.11tydata.js           [11tydata    ]       98B   
+./src/content/meta/methodology.md             [md          ]     2272B   Title: 'Methodology'
+./src/content/meta/protocolist.md             [md          ]    13984B   Title: 'The Protocolist Art Framework'
+./src/content/meta/style-guide.md             [md          ]     8419B   Title: 'Effusion Labs: Style Guide'
+./src/content/meta/unified-referencing-syntax.md [md          ]     3627B   Title: 'The Unified Referencing Syntax'
+./src/content/projects/index.njk              [njk         ]      243B   Title: Projects
+./src/content/projects/llm-release-watcher.njk [njk         ]      121B   
+./src/content/projects/patent-intelligence-agent.njk [njk         ]      127B   
+./src/content/projects/project-dandelion.md   [md          ]     6100B   Title: 'Project Dandelion: Structural Emergence in Restricted LLM Systems'
+./src/content/projects/projects.11tydata.js   [11tydata    ]      102B   
+./src/content/sparks/academic-blindness.md    [md          ]    20060B   
+./src/content/sparks/breakfast-eggs.md        [md          ]    12079B   
+./src/content/sparks/george-eastman-obscure.md [md          ]     4271B   Title: 'George Eastman - A Life in Precision'
+./src/content/sparks/illusion-japan-nicotine.md [md          ]    22986B   
+./src/content/sparks/index.njk                [njk         ]      252B   Title: Sparks
+./src/content/sparks/murakami-market-analysis-2025.md [md          ]    61356B   
+./src/content/sparks/paulin-paulin-paulin-marketing.md [md          ]    22177B   
+./src/content/sparks/smoker-sysadmin.md       [md          ]     9794B   
+./src/content/sparks/sparks.11tydata.js       [11tydata    ]      100B   
+./src/content/sparks/vapor-linked-governance.md [md          ]    12586B   Title: 'Vapor-Linked Governance: How Japan Made Tobacco a Civic Utility'
+./src/content/work/work.11tydata.js           [11tydata    ]      225B   
+./src/favicon.ico                             [other       ]     9509B   
+./src/index.11tydata.js                       [11tydata    ]     2410B   
+./src/index.njk                               [njk         ]    10664B   
+./src/pages/404.njk                           [njk         ]      916B   Title: Lost in the Lab
+./src/pages/concept-map.json.njk              [njk         ]      123B   
+./src/pages/consulting.njk                    [njk         ]    14207B   
+./src/pages/feed.njk                          [njk         ]     1229B   
+./src/pages/map.njk                           [njk         ]     8677B   Title: Effusion Labs: Concept Map
+./src/pages/resume/index.njk                  [njk         ]    13773B   Title: Resume
+./src/pages/resume/index.njk.bak              [other       ]    13873B   
+./src/pages/resume/resume.json                [json        ]    11261B   Keys: name, title, location, phoneNote, email, linked...
+./src/pages/work/drop.11ty.js                 [11ty-tpl    ]      768B   
+./src/pages/work/index.njk                    [njk         ]      430B   Title: All Work
+./src/pages/work/latest.11ty.js               [11ty-tpl    ]      685B   
+./src/pages/work/work-list.njk                [njk         ]      344B   
+./src/redirects.11ty.js                       [11ty-tpl    ]      794B   
+./src/test/dynamic-archives.md                [md          ]      296B   Title: Dynamic Archives — Canon Defaults
+./test/browser/browser-capability.test.skip.mjs [other       ]      652B   
+./test/browser/browser-engine.test.skip.mjs   [other       ]     1428B   
+./test/docs/docsync.test.mjs                  [other       ]      465B   
+./test/fuzz/canary-nonstring-match.test.mjs   [other       ]      348B   
+./test/fuzz/parser-inputs.test.mjs            [other       ]     1301B   
+./test/hb_guard/000_arm_quiet.t               [other       ]      411B   
+./test/hb_guard/01-arm-quiet.t                [other       ]      320B   
+./test/hb_guard/010_longline_wrap.t           [other       ]      335B   
+./test/hb_guard/02-wrap-3500.t                [other       ]      398B   
+./test/hb_guard/020_ctrl_suppression.t        [other       ]      314B   
+./test/hb_guard/03-cr-progress.t              [other       ]      326B   
+./test/hb_guard/030_child_inherit.t           [other       ]      511B   
+./test/hb_guard/04-backspace-spinner.t        [other       ]      374B   
+./test/hb_guard/040_idempotence.t             [other       ]      321B   
+./test/hb_guard/05-ansi-progress.t            [other       ]      390B   
+./test/hb_guard/050_disarm_restore.t          [other       ]      253B   
+./test/hb_guard/06-unsafe-bytes.t             [other       ]      473B   
+./test/hb_guard/060_no_banner_stdout.t        [other       ]      252B   
+./test/hb_guard/07-delimiterless.t            [other       ]      380B   
+./test/hb_guard/070_cr_progress.t             [other       ]      364B   
+./test/hb_guard/08-child-inherit.t            [other       ]      357B   
+./test/hb_guard/080_minified_one_liner.t      [other       ]      291B   
+./test/hb_guard/09-idempotence-teardown.t     [other       ]      451B   
+./test/hb_guard/10-sidecar-integrity.t        [other       ]      572B   
+./test/helpers/color.mjs                      [other       ]      445B   
+./test/helpers/eleventy-env.mjs               [other       ]     1020B   
+./test/integration/build-timestamp.spec.mjs   [other       ]      607B   
+./test/integration/code-copy.spec.mjs         [other       ]      789B   
+./test/integration/collection-layout.spec.mjs [other       ]      654B   
+./test/integration/concept-map-jsonld.spec.mjs [other       ]      976B   
+./test/integration/dynamic-archive-defaults.test.mjs [other       ]     1092B   
+./test/integration/feed-build-meta.spec.mjs   [other       ]      860B   
+./test/integration/header-nav-aria.spec.mjs   [other       ]      719B   
+./test/integration/homepage-latest.spec.mjs   [other       ]      827B   
+./test/integration/homepage.spec.mjs          [other       ]     4959B   
+./test/integration/interlinker-unresolved.test.mjs [other       ]      924B   
+./test/integration/logo-image.spec.mjs        [other       ]     1430B   
+./test/integration/markdown-anchor.spec.mjs   [other       ]      572B   
+./test/integration/nav-aria.spec.mjs          [other       ]      524B   
+./test/integration/nav-ledger.spec.mjs        [other       ]      243B   
+./test/integration/product-canon-realization.test.mjs [other       ]     2133B   
+./test/integration/runner.spec.mjs            [other       ]      628B   
+./test/integration/sparks-status.spec.mjs     [other       ]      437B   
+./test/integration/work-pages.spec.mjs        [other       ]      729B   
+./test/lib/concept-map.js                     [other       ]      113B   
+./test/lib/markdownGateway.js                 [other       ]      383B   
+./test/mocks/example.mjs                      [other       ]      146B   
+./test/plan/build-intent.test.mjs             [other       ]      590B   
+./test/plan/dry-run-no-mutation.test.mjs      [other       ]     1291B   
+./test/plan/edge-cases-as-needed.test.mjs     [other       ]      689B   
+./test/plan/existence-and-shape.test.mjs      [other       ]     2151B   
+./test/plan/relocate-coverage.test.mjs        [other       ]      988B   
+./test/plan/rewrites-coverage.test.mjs        [other       ]     1170B   
+./test/plan/size-discipline.test.mjs          [other       ]      949B   
+./test/plan/src-role-map.test.mjs             [other       ]      758B   
+./test/plan/writers-and-unref.test.mjs        [other       ]      897B   
+./test/setup/http.mjs                         [other       ]      531B   
+./test/setup/llm-keepalive.mjs                [other       ]     1051B   
+./test/setup/msw.mjs                          [other       ]      214B   
+./test/src/_data/nav.js                       [other       ]       52B   
+./test/tools/shared/probe-browser.mjs         [other       ]       57B   
+./test/unit/advisory-lint.test.mjs            [other       ]      686B   
+./test/unit/archive-canon.test.mjs            [other       ]     1517B   
+./test/unit/callout-shortcode.test.mjs        [other       ]     1098B   
+./test/unit/design-tokens.test.mjs            [other       ]     2129B   
+./test/unit/docs-governance.test.mjs          [other       ]     1575B   
+./test/unit/footnote-popover.test.mjs         [other       ]     1087B   
+./test/unit/i18n-prefix.test.mjs              [other       ]      798B   
+./test/unit/index-data.test.mjs               [other       ]      693B   
+./test/unit/interlinker-stability.test.mjs    [other       ]      787B   
+./test/unit/interlinker-version.test.mjs      [other       ]      403B   
+./test/unit/llm-keepalive.test.mjs            [other       ]      984B   
+./test/unit/markdown-gateway-config.test.mjs  [other       ]      639B   
+./test/unit/markdown-links.test.mjs           [other       ]     1192B   
+./test/unit/mschf-overlay-style.test.mjs      [other       ]     3505B   
+./test/unit/node-shim.test.mjs                [other       ]      988B   
+./test/unit/omitted-kind.test.mjs             [other       ]      712B   
+./test/unit/overlay-once.test.mjs             [other       ]     4667B   
+./test/unit/patch-tree-cli.test.mjs           [other       ]      550B   
+./test/unit/prettier-package.test.mjs         [other       ]      412B   
+./test/unit/pty-runner.test.mjs               [other       ]      552B   
+./test/unit/resolvers-general.test.mjs        [other       ]     1116B   
+./test/unit/taxonomy.test.mjs                 [other       ]     1382B   
+./test/unit/utils.test.mjs                    [other       ]     1748B   
+./test/unit/workflow-actions.test.mjs         [other       ]      701B   
+./utils/build/archive-nav.js                  [other       ]     1494B   
+./utils/build/archive-utils.mjs               [other       ]      704B   
+./utils/build/concept-map.js                  [other       ]     2194B   
+./utils/build/homepage.js                     [other       ]     3328B   
+./utils/build/naming-canon.mjs                [other       ]      749B   
+./utils/build/seeded.js                       [other       ]      983B   
+./utils/build/utils-node.mjs                  [other       ]     1082B   
+./utils/build/wikilink-scan.mjs               [other       ]      513B   
+./utils/dev/eleventy-with-codeframes.mjs      [other       ]     1993B   
+./utils/dev/eleventy-wrapper.mjs              [other       ]     5845B   
+./utils/network/flareClient.mjs               [other       ]     1689B   
+./utils/network/markdownGateway.mjs           [other       ]     1097B   
+./utils/network/outboundProxy.mjs             [other       ]      864B   
+./utils/network/proxyAgent.mjs                [other       ]      814B   
+./utils/network/webpageToMarkdown.mjs         [other       ]     1219B   
+./utils/scripts/filters/hb_filter.cjs         [other       ]     4105B   
+./utils/scripts/fix-njk-ternaries.mjs         [other       ]     3373B   
+./utils/scripts/interlinker-operator.sh       [shell       ]     2616B   
+./utils/scripts/npm-utils.js                  [other       ]     1877B   
+./utils/scripts/patch-njk-ternaries.mjs       [other       ]     2141B   
+./utils/scripts/run-server.sh                 [shell       ]      304B   
+./utils/scripts/scan-njk-ternaries.mjs        [other       ]      524B   
+./utils/scripts/setup/env-bootstrap.sh        [shell       ]     4284B   
+./utils/scripts/setup/install.sh              [shell       ]       27B   
+./utils/scripts/setup/provision-env.sh        [shell       ]       27B   
+./utils/scripts/validation/proxy-health.mjs   [other       ]      904B   
+./utils/scripts/validation/validate-frontmatter.mjs [other       ]     2106B   
+./utils/scripts/validation/verify-patch-applied.mjs [other       ]     4019B   
+./var/exec_probe/child_env.txt                [other       ]       16B   
+./var/exec_probe/console_S1024.txt            [other       ]      201B   
+./var/exec_probe/console_S2048.txt            [other       ]      201B   
+./var/exec_probe/console_S3072.txt            [other       ]      201B   
+./var/exec_probe/console_S3500.txt            [other       ]      201B   
+./var/exec_probe/console_S3800.txt            [other       ]      201B   
+./var/exec_probe/console_S5000.txt            [other       ]      201B   
+./var/exec_probe/fd1_type.txt                 [other       ]       11B   
+./var/exec_probe/fd2_type.txt                 [other       ]       11B   
+./var/exec_probe/fd_demo_caseA.err.txt        [other       ]       28B   
+./var/exec_probe/fd_demo_caseA.out.txt        [other       ]       28B   
+./var/exec_probe/fd_demo_caseB.err.txt        [other       ]       16B   
+./var/exec_probe/fd_demo_caseB.out.txt        [other       ]       16B   
+./var/exec_probe/fd_tty_info.txt              [other       ]      221B   
+./var/exec_probe/full_S1024.txt               [other       ]     1025B   
+./var/exec_probe/full_S2048.txt               [other       ]     2049B   
+./var/exec_probe/full_S3072.txt               [other       ]     3073B   
+./var/exec_probe/full_S3500.txt               [other       ]     3501B   
+./var/exec_probe/full_S3800.txt               [other       ]     3801B   
+./var/exec_probe/full_S5000.txt               [other       ]     5001B   
+./var/exec_probe/line_length_summary.tsv      [other       ]      117B   
+./var/exec_probe/merge_console.txt            [other       ]       10B   
+./var/exec_probe/merge_stderr.txt             [other       ]       10B   
+./var/exec_probe/merge_stdout.txt             [other       ]       10B   
+./var/exec_probe/parent_env.txt               [other       ]       18B   
+./var/exec_probe/source_wrap.err.txt          [other       ]        0B   
+./var/exec_probe/step4_console.txt            [other       ]       12B   
+./var/exec_probe/step4_stderr.txt             [other       ]       12B   
+./var/exec_probe/step4_stdout.txt             [other       ]       12B   
+./var/exec_probe/stty.txt                     [other       ]      617B   
+./var/exec_probe/tty.txt                      [other       ]       10B   
+./var/refactor/src-refactor-plan.json         [json        ]     4982B   Keys: dry, moves, merges, skipped, touched, rewrites,...
+./var/refactor/src-refactor-plan.txt          [other       ]     4470B   
+./vite.config.mjs                             [other       ]     1032B   

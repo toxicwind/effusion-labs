@@ -41,7 +41,7 @@ export default function getPlugins() {
             manifest: true,
             rollupOptions: {
               // Ensure our JS entry (which imports CSS) is known to Vite
-              input: ['/assets/js/app.js'],
+              input: ['/src/assets/js/app.js'],
             },
           },
         },

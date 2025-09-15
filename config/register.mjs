@@ -32,8 +32,8 @@ export default function register(eleventyConfig) {
 
   // --- Image Processing ---
   eleventyConfig.addPlugin(eleventyImageTransformPlugin, {
-    urlPath: '/assets/images/',
-    outputDir: path.join(dirs.output, 'assets/images/'),
+    urlPath: '/images/',
+    outputDir: path.join(dirs.output, 'images/'),
     formats: ['avif', 'webp', 'auto'],
     widths: [320, 640, 960, 1200, 1800, 'auto'],
     filenameFormat: (id, src, width, format) => {
@@ -44,10 +44,10 @@ export default function register(eleventyConfig) {
   })
 
   // --- Asset Passthroughs & Watch Targets ---
-  eleventyConfig.addPassthroughCopy({ 'src/assets/js': 'assets/js' })
+
   eleventyConfig.addPassthroughCopy({ 'src/favicon.ico': 'favicon.ico' })
-  eleventyConfig.addPassthroughCopy({ 'src/assets/static': 'assets' })
-  eleventyConfig.addPassthroughCopy({ 'src/assets/icons': 'assets/icons' })
+
+
   eleventyConfig.addWatchTarget('src/assets/css/')
 
   // After build: write unresolved report (log-only, no CI fail)

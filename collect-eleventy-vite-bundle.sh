@@ -57,7 +57,7 @@ for f in src/main.ts src/main.js main.ts main.js; do add_file "$f"; done
 
 # --- Any file that references the legacy path /assets/css/app.css
 # (This pinpoints the offending template that Vite is trying to resolve.)
-grep -RIl --exclude-dir=node_modules '/assets/css/app\.css' . 2>/dev/null | while read -r f; do
+grep -RIl --exclude-dir=node_modules '/src/assets/css/app\.css' . 2>/dev/null | while read -r f; do
   add_file "$f"
 done
 

@@ -299,4 +299,4 @@ eleventyExcludeFromCollections: true
     }
   }
 </script>
-<script src="/assets/js/theme-toggle.js" defer></script>
+<script src="/js/theme-toggle.js" defer></script>
