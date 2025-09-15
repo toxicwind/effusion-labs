@@ -1,100 +1,41 @@
-name: Dependabot Auto-Merge (Native, No Approval)
-
+name: Dependabot Auto-Merge
 on:
-  pull_request:
-    types: [opened, reopened, synchronize, ready_for_review]
-
+  pull_request_target:
+    types: [opened, synchronize, reopened, ready_for_review]
 permissions:
-  contents: write # needed to toggle auto-merge via GraphQL
-  pull-requests: write # not approving, but safe to keep
+  contents: write
+  pull-requests: write
   checks: read
   statuses: read
-
+  actions: read
 jobs:
   automerge:
-    if: >
-      github.event.pull_request.user.login == 'dependabot[bot]' &&
-      !github.event.pull_request.draft
+    if: github.event.pull_request.user.login == 'dependabot[bot]' && !github.event.pull_request.draft
     runs-on: ubuntu-latest
-    concurrency:
-      group: dependabot-automerge-${{ github.event.pull_request.number }}
-      cancel-in-progress: false
-
     steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Install gh CLI
+        run: |
+          sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-key C99B11DEB97541F0
+          sudo apt-add-repository https://cli.github.com/packages
+          sudo apt update
+          sudo apt install gh -y
+          gh auth login --with-token < <(echo '${{ secrets.GITHUB_TOKEN }}')
       - name: Fetch Dependabot metadata
         id: meta
         uses: dependabot/fetch-metadata@v2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-
-      # NOTE: To also merge MAJOR updates, remove the "if:" below.
-      - name: Enable auto-merge (native, gated)
-        if: >
-          contains(steps.meta.outputs.update-type, 'semver-patch') ||
-          contains(steps.meta.outputs.update-type, 'semver-minor') ||
-          startsWith(steps.meta.outputs.update-type, 'security')
-        uses: actions/github-script@v8
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const {owner, repo} = context.repo;
-            const number = context.payload.pull_request.number;
-
-            const Q = `
-              query($owner:String!, $repo:String!, $number:Int!) {
-                repository(owner:$owner, name:$repo) {
-                  autoMergeAllowed
-                  pullRequest(number:$number) {
-                    id
-                    isDraft
-                    mergeStateStatus
-                    commits(last:1) {
-                      nodes { commit { statusCheckRollup { state } } }
-                    }
-                  }
-                }
-              }`;
-
-            const enable = async (id) => {
-              const M = `mutation Enable($pullRequestId: ID!, $mergeMethod: PullRequestMergeMethod!) {
-                enablePullRequestAutoMerge(input: { pullRequestId: $pullRequestId, mergeMethod: SQUASH }) {
-                  pullRequest { number state autoMergeRequest { enabledAt } }
-                }
-              }`;
-              return await github.graphql(M, { pullRequestId: id });
-            };
-
-            const prInfo = async () => await github.graphql(Q, {owner, repo, number});
-            const sleep = (ms) => new Promise(r => setTimeout(r, ms));
-
-            for (let i=0; i<18; i++) { // ~3 minutes
-              const r = await prInfo();
-              if (!r.repository.autoMergeAllowed) core.setFailed("Repo setting 'Allow auto-merge' is OFF.");
-
-              const pr = r.repository.pullRequest;
-              const roll = pr.commits.nodes[0]?.commit?.statusCheckRollup?.state || "UNKNOWN";
-              core.info(`mergeStateStatus=${pr.mergeStateStatus} statusCheckRollup=${roll}`);
-
-              // If checks are failing, skip; job will re-run on next synchronize
-              if (pr.mergeStateStatus === "UNSTABLE" && roll === "FAILURE") {
-                core.info("Checks failing → skip enabling auto-merge for now.");
-                return;
-              }
-
-              // When not pending/unknown, attempt to enable
-              if (roll !== "PENDING" && pr.mergeStateStatus !== "UNKNOWN") {
-                try {
-                  const res = await enable(pr.id);
-                  core.info(`Auto-merge enabled on PR #${res.enablePullRequestAutoMerge.pullRequest.number}`);
-                  return;
-                } catch (e) {
-                  if (/unstable status|UNKNOWN|mergeability/i.test(e.message)) {
-                    core.warning(`Transient: ${e.message}; retrying...`);
-                  } else {
-                    throw e;
-                  }
-                }
-              }
-              await sleep(10000);
-            }
-            core.setFailed("Gave up enabling auto-merge (mergeability never stabilized).");
+      - name: Approve and enable auto-merge
+        if: contains(steps.meta.outputs.update-type, 'semver-patch') || contains(steps.meta.outputs.update-type, 'semver-minor') || startsWith(steps.meta.outputs.update-type, 'security')
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_URL: ${{ github.event.pull_request.html_url }}
+        run: |
+          gh pr review --approve "$PR_URL"
+          gh pr merge --auto --squash "$PR_URL"
+          echo "Auto-merge enabled for PR #${{ github.event.pull_request.number }}."
