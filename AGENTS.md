@@ -24,6 +24,12 @@ USER → AGENTS.md → SYSTEM.md. This file carries project facts; avoid restati
 | `format` | `prettier -w .`                                                           |
 | `lint`   | `markdown-link-check -c oneoff/link-check.config.json README.md`          |
 
+## npm-utils
+
+- Primary CLI for npm package exploration: `utils/scripts/npm-utils.js`
+- Supports `search`, `view`, `analyze`, and `install`
+- We love new packages and libraries; always consider them
+
 ## Repo Search & View Protocol
 
 - Index filenames first (`rg --files` or `fd`).
