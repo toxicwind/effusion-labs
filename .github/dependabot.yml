@@ -1,68 +1,59 @@
-# .github/dependabot.yml
 version: 2
 
-# Security updates:
-# - Dependabot will open PRs automatically when GitHub Security Advisories flag vulnerabilities.
-# - Keep daily schedule; security PRs will arrive as advisories are published.
-# - Groups below include a 'security' bucket so security updates are clearly labeled/bundled.
-
 updates:
-  # 1) NPM (root)
   - package-ecosystem: npm
-    directory: '/'
+    directory: "/"
     schedule:
       interval: daily
-      time: '09:00'
-      timezone: 'America/Denver'
-    open-pull-requests-limit: 50
-    rebase-strategy: auto
-    labels: ['deps', 'automerge']
+      time: "09:00"
+      timezone: "America/Denver"
+    open-pull-requests-limit: 10
+    labels: ["deps", "npm", "automerge"]
     groups:
       security:
-        applies-to: security-updates
-        patterns: ['*']
-
-  # 2) GitHub Actions
+        update-types:
+          - "security"
+          - "version-update:semver-patch"
+          - "version-update:semver-minor"
   - package-ecosystem: github-actions
-    directory: '/'
+    directory: "/"
     schedule:
       interval: daily
-      time: '09:05'
-      timezone: 'America/Denver'
-    open-pull-requests-limit: 50
-    rebase-strategy: auto
-    labels: ['deps', 'automerge']
+      time: "09:00"
+      timezone: "America/Denver"
+    open-pull-requests-limit: 10
+    labels: ["deps", "github-actions", "automerge"]
     groups:
       security:
-        applies-to: security-updates
-        patterns: ['*']
-
-  # 3) Docker — .portainer/Dockerfile
+        update-types:
+          - "security"
+          - "version-update:semver-patch"
+          - "version-update:semver-minor"
   - package-ecosystem: docker
-    directory: '/.portainer'
+    directory: "/.portainer"
     schedule:
       interval: daily
-      time: '09:10'
-      timezone: 'America/Denver'
-    open-pull-requests-limit: 50
-    rebase-strategy: auto
-    labels: ['deps', 'automerge']
+      time: "09:00"
+      timezone: "America/Denver"
+    open-pull-requests-limit: 10
+    labels: ["deps", "docker", "automerge"]
     groups:
       security:
-        applies-to: security-updates
-        patterns: ['*']
-
-  # 4) Docker — markdown_gateway/Dockerfile
+        update-types:
+          - "security"
+          - "version-update:semver-patch"
+          - "version-update:semver-minor"
   - package-ecosystem: docker
-    directory: '/markdown_gateway'
+    directory: "/markdown_gateway"
     schedule:
       interval: daily
-      time: '09:12'
-      timezone: 'America/Denver'
-    open-pull-requests-limit: 50
-    rebase-strategy: auto
-    labels: ['deps', 'automerge']
+      time: "09:00"
+      timezone: "America/Denver"
+    open-pull-requests-limit: 10
+    labels: ["deps", "docker", "automerge"]
     groups:
       security:
-        applies-to: security-updates
-        patterns: ['*']
+        update-types:
+          - "security"
+          - "version-update:semver-patch"
+          - "version-update:semver-minor"

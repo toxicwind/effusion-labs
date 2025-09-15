@@ -27,7 +27,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: ⬇️ Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: 🔧 Setup Node from .nvmrc (+ cache)
         uses: actions/setup-node@v5
@@ -91,7 +91,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: ⬇️ Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: 🐳 Setup Buildx
         uses: docker/setup-buildx-action@v3
