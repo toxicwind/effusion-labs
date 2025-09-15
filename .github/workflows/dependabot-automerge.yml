@@ -1,13 +1,15 @@
-name: Dependabot Auto-Merge
+
 on:
   pull_request_target:
     types: [opened, synchronize, reopened, ready_for_review]
+
 permissions:
   contents: write
   pull-requests: write
   checks: read
   statuses: read
   actions: read
+
 jobs:
   automerge:
     if: github.event.pull_request.user.login == 'dependabot[bot]' && !github.event.pull_request.draft
