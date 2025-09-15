@@ -1,88 +1,70 @@
-#!/bin/bash
-#
-# Lists files with intelligent, content-aware details for specific types.
-# It extracts titles from Markdown/11ty files and keys from JSON files,
-# and attempts to fix common JSON errors before analysis.
-#
-# USAGE:
-#   ./lskind_v2.sh           # Prints a formatted report to the console
-#   ./lskind_v2.sh report.txt # Saves the report to report.txt
+#!/usr/bin/env bash
+# audit-gh-protection.sh — compact, pager-free audit of Actions & branch protection
+# Usage: ./audit-gh-protection.sh [owner/repo] [branch]
+set -Eeuo pipefail
 
-# Redirect all output. If an argument ($1) is given, output to that file.
-# Otherwise, output to standard output (/dev/stdout).
-exec > "${1:-/dev/stdout}"
+R="${1:-${R:-toxicwind/effusion-labs}}"
+B="${2:-${B:-main}}"
 
-# Add a header with a new "Details" column
-printf "%-45s %-14s %-10s %s\n" "File Path" "[Kind]" "Size" "Details"
-printf "%s\n" "-----------------------------------------------------------------------------------------------------------"
+# Hard kill any paging
+export PAGER=
+export GH_PAGER=
 
-# Use 'fd' to find all files and pipe them into the processing loop
-fd --type f --print0 . | sort -z | while IFS= read -r -d "" f; do
-    kind="other"
-    details="" # <-- Will hold our dynamic info
+need() { command -v "$1" >/dev/null || { echo "missing required tool: $1" >&2; exit 127; }; }
+need gh
+need jq
 
-    # 1. Initial classification based on path/extension (this is fast)
-    case "$f" in
-        ./src/_data/*)                kind="global-data" ;;
-        *.11tydata.js)                kind="11tydata" ;;
-        *.11ty.js)                    kind="11ty-tpl" ;;
-        *.njk)                        kind="njk" ;;
-        *.md)                         kind="md" ;;
-        ./src/assets/js/*)            kind="client-js" ;;
-        ./src/styles/*|./src/assets/css/*) kind="css" ;;
-        *.jsonl)                      kind="jsonl" ;;
-        *.json)                       kind="json" ;;
-        *.sh)                         kind="shell" ;;
-        ./bin/*)                      kind="executable" ;;
-    esac
+# gh_json ENDPOINT [extra gh api args...]
+# - returns valid JSON to stdout
+# - on error/404, prints fallback (2nd echo) and sets non-zero, but we still consume a JSON fallback
+gh_json() {
+  local endpoint="$1"; shift || true
+  local out
+  if ! out="$(gh api "$endpoint" "$@" 2>/dev/null)"; then
+    printf ''
+    return 1
+  fi
+  if ! jq -e . >/dev/null 2>&1 <<<"$out"; then
+    printf ''
+    return 2
+  fi
+  printf '%s' "$out"
+}
 
-    # 2. Dynamic inspection based on the 'kind' to get useful details
-    case "$kind" in
-        "md" | "njk")
-            # For Markdown/Nunjucks, find a title.
-            # It first checks for a 'title:' in YAML frontmatter. If not found,
-            # it falls back to the first H1 heading (e.g., # My Title).
-            # Using 'read' with process substitution is safer than 'xargs'
-            # and prevents errors with quotes in titles.
-            read -r title < <(awk '
-                /^---$/ { in_frontmatter = !in_frontmatter; next }
-                in_frontmatter && /^\s*title:/ { sub(/^\s*title:\s*/, ""); gsub(/"/, ""); print; exit }
-                !in_frontmatter && /^# / { sub(/^# /, ""); print; exit }
-            ' "$f")
+# Fetch with sane fallbacks
+ap="$(gh_json "repos/$R/actions/permissions" || echo '{}')"
+aw="$(gh_json "repos/$R/actions/permissions/workflow" || echo '{}')"
+prot="$(gh_json "repos/$R/branches/$B/protection" || echo '{}')"
+pr="$(gh_json "repos/$R/branches/$B/protection/required_pull_request_reviews" || echo '{}')"
+ctx="$(gh_json "repos/$R/branches/$B/protection/required_status_checks/contexts" || echo '[]')"
 
-            if [ -n "$title" ]; then
-                details="Title: $title"
-            fi
-            ;;
-        "json" | "global-data")
-            # For JSON files, list the top-level keys for a quick summary.
-            # This requires 'jq' to be installed.
-            if command -v jq &> /dev/null; then
-                # FIX: Attempt to repair common JSON errors (like trailing commas)
-                # with 'sed' before parsing with 'jq'. This makes the script more robust.
-                repaired_json=$(sed 's/,\s*\([}\]]\)/\1/g' "$f")
-                keys=$(echo "$repaired_json" | jq -r 'if type == "object" then keys_unsorted | join(", ") else "" end' 2>/dev/null)
-                
-                if [ -n "$keys" ]; then
-                    # Truncate long key lists to keep the output clean
-                    if (( ${#keys} > 50 )); then
-                        keys="${keys:0:47}..."
-                    fi
-                    details="Keys: $keys"
-                else
-                    # This now correctly identifies truly invalid or non-object JSON files.
-                    details="(Invalid or non-object JSON)"
-                fi
-            else
-                details="(jq not found for analysis)"
-            fi
-            ;;
-    esac
-
-    # Get file size in bytes
-    size=$(wc -c < "$f" | xargs)
-
-    # Print the final formatted output
-    printf "%-45s [%-12s] %8sB   %s\n" "$f" "$kind" "$size" "$details"
-done
-
+# Emit one compact JSON line
+jq -c -n \
+  --arg repo "$R" \
+  --arg branch "$B" \
+  --argjson ap   "$ap" \
+  --argjson aw   "$aw" \
+  --argjson prot "$prot" \
+  --argjson pr   "$pr" \
+  --argjson ctx  "$ctx" \
+'{
+  repo:$repo, branch:$branch,
+  actions:{
+    enabled:($ap.enabled // null),
+    allowed_actions:($ap.allowed_actions // null),
+    default_workflow_permissions:($aw.default_workflow_permissions // null),
+    can_approve_pull_request_reviews:($aw.can_approve_pull_request_reviews // null)
+  },
+  protection:{
+    enforce_admins:(($prot.enforce_admins.enabled)//($prot.enforce_admins)//false),
+    required_status_checks:{
+      strict:($prot.required_status_checks.strict // false),
+      contexts:$ctx
+    },
+    required_pull_request_reviews:{
+      require_code_owner_reviews:($pr.require_code_owner_reviews // false),
+      required_approving_review_count:($pr.required_approving_review_count // 0),
+      bypass_pull_request_allowances:($pr.bypass_pull_request_allowances // {users:[],teams:[],apps:[]})
+    }
+  }
+}'
