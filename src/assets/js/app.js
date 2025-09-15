@@ -156,7 +156,7 @@ function initThemeToggle() {
   const moon = btn.querySelector('.lucide-moon')
 
   const reflect = theme => {
-    const dark = utils ? utils.THEMES.dark : 'dark'
+    const dark = utils ? utils.THEMES.dark : 'dim'
     const isDark = theme === dark
     btn.setAttribute('aria-pressed', String(isDark))
     btn.setAttribute(
@@ -172,7 +172,7 @@ function initThemeToggle() {
   reflect(
     (utils && utils.getTheme()) ||
       document.documentElement.getAttribute('data-theme') ||
-      'light'
+      'dim'
   )
 
   if (utils) {
@@ -182,8 +182,8 @@ function initThemeToggle() {
     // Fallback (shouldn’t happen)
     btn.addEventListener('click', () => {
       const el = document.documentElement
-      const cur = el.getAttribute('data-theme') || 'light'
-      const next = cur === 'dark' ? 'light' : 'dark'
+      const cur = el.getAttribute('data-theme') || 'dim'
+      const next = cur === 'dim' ? 'silk' : 'dim'
       el.setAttribute('data-theme', next)
       reflect(next)
     })

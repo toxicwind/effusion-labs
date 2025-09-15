@@ -4,14 +4,14 @@
 {% from "components/meta-aside.njk" import metaAside %}
 
 <!DOCTYPE html>
-<html lang="en" class="scroll-pt-16" data-theme="light">
+<html lang="en" class="scroll-pt-16" data-theme="dim">
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-    <meta name="color-scheme" content="light dark">
-    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
-    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0b0b0e">
-    <meta name="msapplication-TileColor" content="#0b0b0e">
+    <meta name="color-scheme" content="dark light">
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f7f5f3">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#2a303c">
+    <meta name="msapplication-TileColor" content="#2a303c">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
@@ -52,19 +52,6 @@
         border-radius: 8px;
         transition: box-shadow 120ms ease-out;
       }
-      .hb-tile {
-        border: 1px solid color-mix(in oklab, hsl(var(--bc)) 14%, transparent);
-        box-shadow: 0 1px 0 rgba(0,0,0,.12), 0 10px 24px rgba(0,0,0,.06);
-        transition: box-shadow .18s ease, border-color .18s ease, transform .18s ease;
-      }
-      .hb-tile:hover {
-        border-color: color-mix(in oklab, hsl(var(--p)) 42%, transparent);
-        box-shadow:
-          0 2px 0 rgba(0,0,0,.20),
-          0 18px 36px color-mix(in oklab, hsl(var(--p)) 18%, transparent),
-          0 0 18px color-mix(in oklab, hsl(var(--p)) 10%, transparent);
-      }
-      .fluid-title { font-size: clamp(1.75rem, 2.2vw + 1rem, 3rem); }
     </style>
 
     <link rel="icon" type="image/png" href="{{ '/favicon-96x96.png' | url }}" sizes="96x96">

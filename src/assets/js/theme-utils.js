@@ -5,22 +5,55 @@
   'use strict'
 
   var STORAGE_KEY = 'theme'
-  var THEMES = { light: 'light', dark: 'dark' }
-  var DEFAULT = THEMES.light
+  var THEMES = { light: 'silk', dark: 'dim' }
+  var LIGHT_NAME = THEMES.light
   var DARK_NAME = THEMES.dark
-  var ALLOWED = [THEMES.light, THEMES.dark]
+  var DEFAULT = DARK_NAME
+  var ALLOWED = [LIGHT_NAME, DARK_NAME]
+
+  function normalize(name) {
+    if (!name) return name
+    if (name === 'light') return LIGHT_NAME
+    if (name === 'dark') return DARK_NAME
+    return name
+  }
+
+  function syncAllowed(list) {
+    var merged = Array.isArray(list) && list.length ? list.slice() : ALLOWED.slice()
+    merged.push(LIGHT_NAME, DARK_NAME)
+    ALLOWED = Array.from(
+      new Set(
+        merged
+          .map(function (value) {
+            return normalize(String(value))
+          })
+          .filter(Boolean)
+      )
+    )
+  }
+
+  syncAllowed()
 
   function configure(opts) {
     try {
       if (!opts || typeof opts !== 'object') return
-      if (Array.isArray(opts.allowed) && opts.allowed.length) {
-        ALLOWED = opts.allowed.map(String)
-      }
-      if (opts.defaultTheme && typeof opts.defaultTheme === 'string') {
-        DEFAULT = opts.defaultTheme
+      if (opts.lightTheme && typeof opts.lightTheme === 'string') {
+        LIGHT_NAME = normalize(opts.lightTheme)
       }
       if (opts.darkTheme && typeof opts.darkTheme === 'string') {
-        DARK_NAME = opts.darkTheme
+        DARK_NAME = normalize(opts.darkTheme)
+      }
+      if (opts.defaultTheme && typeof opts.defaultTheme === 'string') {
+        DEFAULT = normalize(opts.defaultTheme)
+      } else {
+        DEFAULT = normalize(DEFAULT)
+      }
+      THEMES.light = LIGHT_NAME
+      THEMES.dark = DARK_NAME
+      if (Array.isArray(opts.allowed) && opts.allowed.length) {
+        syncAllowed(opts.allowed)
+      } else {
+        syncAllowed()
       }
       if (opts.storageKey && typeof opts.storageKey === 'string') {
         STORAGE_KEY = opts.storageKey
@@ -32,11 +65,11 @@
 
   function getTheme() {
     var el = document.documentElement
-    var t = el.getAttribute('data-theme')
+    var t = normalize(el.getAttribute('data-theme'))
     if (!t || ALLOWED.indexOf(t) === -1) {
       // Fallback to storage then default
       try {
-        var s = localStorage.getItem(STORAGE_KEY)
+        var s = normalize(localStorage.getItem(STORAGE_KEY))
         if (s && ALLOWED.indexOf(s) !== -1) t = s
       } catch (_) {}
     }
@@ -44,25 +77,25 @@
   }
 
   function setTheme(name, persist, source) {
-    if (ALLOWED.indexOf(name) === -1) return
+    var target = normalize(name)
+    if (ALLOWED.indexOf(target) === -1) return
     var el = document.documentElement
-    el.setAttribute('data-theme', name)
+    el.setAttribute('data-theme', target)
     el.dataset.themeSource = source || 'user'
     var meta = document.querySelector('meta[name="color-scheme"]')
-    if (meta)
-      meta.setAttribute(
-        'content',
-        name === DEFAULT ? 'light dark' : 'dark light'
-      )
+    if (meta) {
+      var isDark = target === DARK_NAME
+      meta.setAttribute('content', isDark ? 'dark light' : 'light dark')
+    }
     if (persist) {
       try {
-        localStorage.setItem(STORAGE_KEY, name)
+        localStorage.setItem(STORAGE_KEY, target)
       } catch (_) {}
     }
     try {
       document.dispatchEvent(
         new CustomEvent('themechange', {
-          detail: { theme: name, source: source || 'user' },
+          detail: { theme: target, source: source || 'user' },
         })
       )
     } catch (_) {}
@@ -70,8 +103,8 @@
 
   function toggleTheme(persist) {
     var cur = getTheme()
-    // Prefer binary toggle between DEFAULT and DARK_NAME
-    var next = cur === DARK_NAME ? DEFAULT : DARK_NAME
+    // Prefer binary toggle between LIGHT_NAME and DARK_NAME
+    var next = cur === DARK_NAME ? LIGHT_NAME : DARK_NAME
     setTheme(next, persist !== false, 'toggle')
     return next
   }
@@ -79,14 +112,8 @@
   function initEarly() {
     // Run as early as possible in <head> to avoid FART.
     try {
-      var stored = localStorage.getItem(STORAGE_KEY)
-      var picked =
-        stored && ALLOWED.indexOf(stored) !== -1
-          ? stored
-          : window.matchMedia &&
-              window.matchMedia('(prefers-color-scheme: dark)').matches
-            ? DARK_NAME
-            : DEFAULT
+      var stored = normalize(localStorage.getItem(STORAGE_KEY))
+      var picked = ALLOWED.indexOf(stored) !== -1 ? stored : DEFAULT
       document.documentElement.setAttribute('data-theme', picked)
       document.documentElement.dataset.themeSource = stored
         ? 'storage'
@@ -99,7 +126,7 @@
           document.head.appendChild(m)
           return m
         })()
-      meta.content = picked === DEFAULT ? 'light dark' : 'dark light'
+      meta.content = picked === DARK_NAME ? 'dark light' : 'light dark'
     } catch (_) {
       document.documentElement.setAttribute('data-theme', DEFAULT)
       document.documentElement.dataset.themeSource = 'fallback'

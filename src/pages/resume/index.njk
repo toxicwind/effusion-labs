@@ -35,7 +35,7 @@ eleventyExcludeFromCollections: true
         <h1 class="text-4xl md:text-5xl font-black tracking-tight title-glow">
           {{ resume and resume.name or "Your Name" }}
         </h1>
-        <p class="mt-2 text-lg opacity-85 ink-soft">
+        <p class="mt-2 text-lg opacity-85 hb-ink-soft">
           {{ resume and resume.title or "Creative Technologist & Engineer" }}
         </p>
 
@@ -71,7 +71,7 @@ eleventyExcludeFromCollections: true
 
       {% if resume and resume.summary %}
         {% call neonCard({ title: "Summary", bodyCls: "prose prose-sm sm:prose-base dark:prose-invert max-w-none", neon: false, frame: 'none', rail: false }) %}
-          <p class="mt-2 ink-soft">{{ resume.summary }}</p>
+          <p class="mt-2 hb-ink-soft">{{ resume.summary }}</p>
         {% endcall %}
       {% endif %}
 
@@ -84,10 +84,10 @@ eleventyExcludeFromCollections: true
               {% for s in resume.highlights %}
                 <li class="hb-tabrow" role="listitem" {% if loop.index0 == 0 %}data-active="true"{% endif %}>
                   <div class="flex items-baseline justify-between gap-3">
-                    <div class="hb-tablabel ink-soft">{{ s.title }}</div>
+                    <div class="hb-tablabel hb-ink-soft">{{ s.title }}</div>
                     <div class="hb-tabvalue"><span class="kpi-badge text-glow-sm">{{ s.value }}</span></div>
                   </div>
-                  {% if s.sub %}<div class="mt-1 hb-tabsub opacity-80 ink-soft">{{ s.sub }}</div>{% endif %}
+                  {% if s.sub %}<div class="mt-1 hb-tabsub opacity-80 hb-ink-soft">{{ s.sub }}</div>{% endif %}
                 </li>
               {% endfor %}
             </ul>
@@ -150,7 +150,7 @@ eleventyExcludeFromCollections: true
                   <ul class="hb-ex-bullets mt-2 space-y-1.5 text-[15px] leading-6">
                     {% for h in job.highlights %}
                       {% if loop.index0 < _maxBul %}
-                        <li class="hb-minirow hl-line ink-soft">{{ h }}</li>
+                        <li class="hb-minirow hl-line hb-ink-soft">{{ h }}</li>
                       {% endif %}
                     {% endfor %}
                   </ul>
@@ -160,7 +160,7 @@ eleventyExcludeFromCollections: true
                     <ul class="mt-2 space-y-1.5 text-[15px] leading-6">
                       {% for h in job.highlights %}
                         {% if loop.index0 >= _maxBul %}
-                          <li class="hl-line ink-soft">{{ h }}</li>
+                          <li class="hl-line hb-ink-soft">{{ h }}</li>
                         {% endif %}
                       {% endfor %}
                     </ul>
@@ -185,12 +185,12 @@ eleventyExcludeFromCollections: true
         <div class="mt-3 space-y-3">
           {% for p in resume.projects %}
             {% call expander(p.name or 'Untitled Project', { subtitle: p.subtitle, badge: p.badge, href: p.url }) %}
-              {% if p.blurb %}<p class="text-sm leading-6 mt-1.5 ink-soft">{{ p.blurb }}</p>{% endif %}
+              {% if p.blurb %}<p class="text-sm leading-6 mt-1.5 hb-ink-soft">{{ p.blurb }}</p>{% endif %}
 
               {% if p.highlights and (p.highlights | length) %}
                 <h4 class="mt-3 text-sm font-semibold">Highlights</h4>
                 <ul class="mt-1.5 space-y-1.5 text-sm leading-6">
-                  {% for h in p.highlights %}<li class="hl-line ink-soft">{{ h }}</li>{% endfor %}
+                  {% for h in p.highlights %}<li class="hl-line hb-ink-soft">{{ h }}</li>{% endfor %}
                 </ul>
               {% endif %}
 
@@ -202,7 +202,7 @@ eleventyExcludeFromCollections: true
               {% endif %}
 
               {% if p.status %}
-                <div class="mt-3 text-xs opacity-80 ink-soft">{{ p.status }}</div>
+                <div class="mt-3 text-xs opacity-80 hb-ink-soft">{{ p.status }}</div>
               {% endif %}
             {% endcall %}
           {% endfor %}
@@ -219,7 +219,7 @@ eleventyExcludeFromCollections: true
                 <h3 class="text-base font-medium m-0 title-glow">{{ e.school }}</h3>
                 <div class="text-sm opacity-90"><span class="meta-chip">{{ e.start }}{% if e.end %} — {{ e.end }}{% endif %}</span></div>
               </div>
-              <div class="text-sm opacity-90 mt-1 ink-soft">
+              <div class="text-sm opacity-90 mt-1 hb-ink-soft">
                 {{ e.degree }}{% if e.meta %} — {{ e.meta }}{% endif %}
               </div>
             </article>

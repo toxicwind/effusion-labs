@@ -1243,11 +1243,29 @@
       ...scanMeta,
       mount(p) {
         node = el('div', 'mschf-scanline', p)
-        if (State.reduceMotion) node.classList.add('static')
+        if (State.reduceMotion) {
+          node.classList.add('static')
+        } else {
+          const speed = 6.5 + Math.random() * 5.5
+          node.style.setProperty('--mschf-scan-speed', speed.toFixed(2) + 's')
+          node.style.setProperty(
+            '--mschf-scan-delay',
+            (-Math.random() * speed).toFixed(2) + 's'
+          )
+        }
       },
       update() {
-        if (!State.reduceMotion && Math.random() < 0.0015)
-          node.classList.toggle('static', Math.random() < 0.5)
+        if (!node || State.reduceMotion) return
+        if (Math.random() < 0.0009)
+          node.classList.toggle('static', Math.random() < 0.35)
+        if (Math.random() < 0.0006) {
+          const speed = 6 + Math.random() * 6
+          node.style.setProperty('--mschf-scan-speed', speed.toFixed(2) + 's')
+          node.style.setProperty(
+            '--mschf-scan-delay',
+            (-Math.random() * speed).toFixed(2) + 's'
+          )
+        }
       },
       node,
     }

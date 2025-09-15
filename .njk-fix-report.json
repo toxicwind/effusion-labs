@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-09-15T17:12:05.334Z",
+  "timestamp": "2025-09-15T18:53:56.594Z",
   "roots": [
     "src"
   ],
@@ -468,41 +468,6 @@
       "rewrites": 0
     },
     {
-      "file": "src/content/flower_reports_showcase/reports/Magic_City_Cannabis___Colorado_20250810_report.html",
-      "changed": false,
-      "rewrites": 0
-    },
-    {
-      "file": "src/content/flower_reports_showcase/reports/Reefer_Madness_20250810_report.html",
-      "changed": false,
-      "rewrites": 0
-    },
-    {
-      "file": "src/content/flower_reports_showcase/reports/Reefer_Madness_20250825_report.html",
-      "changed": false,
-      "rewrites": 0
-    },
-    {
-      "file": "src/content/flower_reports_showcase/reports/Reefer_Madness_20250826_report.html",
-      "changed": false,
-      "rewrites": 0
-    },
-    {
-      "file": "src/content/flower_reports_showcase/reports/Reefer_Madness_20250830_report.html",
-      "changed": false,
-      "rewrites": 0
-    },
-    {
-      "file": "src/content/flower_reports_showcase/reports/nearby_value_cache_status.html",
-      "changed": false,
-      "rewrites": 0
-    },
-    {
-      "file": "src/content/flower_reports_showcase/reports/nearby_value_leaderboard.html",
-      "changed": false,
-      "rewrites": 0
-    },
-    {
       "file": "src/content/docs/adr/20250813-hero-image-perf.md",
       "changed": false,
       "rewrites": 0
@@ -553,6 +518,11 @@
       "rewrites": 0
     },
     {
+      "file": "src/content/docs/ux/mschf-overlay.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
       "file": "src/content/docs/knowledge/branch-policy.md",
       "changed": false,
       "rewrites": 0
@@ -594,11 +564,6 @@
     },
     {
       "file": "src/content/docs/knowledge/utils-test-red.md",
-      "changed": false,
-      "rewrites": 0
-    },
-    {
-      "file": "src/content/docs/ux/mschf-overlay.md",
       "changed": false,
       "rewrites": 0
     },
@@ -963,7 +928,87 @@
       "rewrites": 0
     },
     {
+      "file": "src/content/flower_reports_showcase/reports/Magic_City_Cannabis___Colorado_20250810_report.html",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/flower_reports_showcase/reports/Reefer_Madness_20250810_report.html",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/flower_reports_showcase/reports/Reefer_Madness_20250825_report.html",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/flower_reports_showcase/reports/Reefer_Madness_20250826_report.html",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/flower_reports_showcase/reports/Reefer_Madness_20250830_report.html",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/flower_reports_showcase/reports/nearby_value_cache_status.html",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/flower_reports_showcase/reports/nearby_value_leaderboard.html",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
       "file": "src/content/archives/collectables/designer-toys/index.njk",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/vendor/tailwind/README.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/vendor/tailwind/configuration.html",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/vendor/tailwind/content-configuration.html",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/vendor/tailwind/detecting-classes.html",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/vendor/tailwind/functions-and-directives.html",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/vendor/tailwind/plugins.html",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/vendor/tailwind/tailwindcss-v4-blog.html",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/vendor/tailwind/upgrade-guide.html",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/vendor/tailwind/v4-blog.html",
       "changed": false,
       "rewrites": 0
     },
@@ -1014,51 +1059,6 @@
     },
     {
       "file": "src/content/docs/vendor/daisyui/v5.html",
-      "changed": false,
-      "rewrites": 0
-    },
-    {
-      "file": "src/content/docs/vendor/tailwind/README.md",
-      "changed": false,
-      "rewrites": 0
-    },
-    {
-      "file": "src/content/docs/vendor/tailwind/configuration.html",
-      "changed": false,
-      "rewrites": 0
-    },
-    {
-      "file": "src/content/docs/vendor/tailwind/content-configuration.html",
-      "changed": false,
-      "rewrites": 0
-    },
-    {
-      "file": "src/content/docs/vendor/tailwind/detecting-classes.html",
-      "changed": false,
-      "rewrites": 0
-    },
-    {
-      "file": "src/content/docs/vendor/tailwind/functions-and-directives.html",
-      "changed": false,
-      "rewrites": 0
-    },
-    {
-      "file": "src/content/docs/vendor/tailwind/plugins.html",
-      "changed": false,
-      "rewrites": 0
-    },
-    {
-      "file": "src/content/docs/vendor/tailwind/tailwindcss-v4-blog.html",
-      "changed": false,
-      "rewrites": 0
-    },
-    {
-      "file": "src/content/docs/vendor/tailwind/upgrade-guide.html",
-      "changed": false,
-      "rewrites": 0
-    },
-    {
-      "file": "src/content/docs/vendor/tailwind/v4-blog.html",
       "changed": false,
       "rewrites": 0
     },

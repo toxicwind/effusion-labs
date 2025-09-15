@@ -168,7 +168,7 @@ permalink: /consulting/
 {% endfor %}
 
 <!doctype html>
-<html lang="en" data-theme="business">
+<html lang="en" data-theme="dim">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -177,7 +177,15 @@ permalink: /consulting/
   <link rel="stylesheet" href="/assets/css/app.css?v={{ build.hash or build.commit or build.version or buildTime }}">
   <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
   <script src="/assets/js/theme-utils.js"></script>
-  <script>ThemeUtils.configure({ allowed: ['nord','night','business','light','dark'], defaultTheme: 'business', darkTheme: 'business' }); ThemeUtils.initEarly();</script>
+  <script>
+    ThemeUtils.configure({
+      allowed: ['silk', 'dim'],
+      defaultTheme: 'dim',
+      lightTheme: 'silk',
+      darkTheme: 'dim'
+    });
+    ThemeUtils.initEarly();
+  </script>
   <script type="application/ld+json">
   {{ {
     "@context": "https://schema.org",
