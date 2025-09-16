@@ -2,7 +2,7 @@
 title:
   'The Aesthetic of the Protocol: An Inquiry into the Effusion Labs Project as a
   Systems-Based Art Object'
-layout: 'layouts/base.njk'
+layout: 'base.njk'
 date: 2025-07-12
 status: complete
 certainty: speculative-analysis

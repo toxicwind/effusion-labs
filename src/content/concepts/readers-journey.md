@@ -1,6 +1,6 @@
 ---
 title: "The Reader's Journey and the Divergence from the Singular Author Model"
-layout: 'layouts/base.njk'
+layout: 'base.njk'
 date: 2025-07-12
 status: complete
 certainty: analytic

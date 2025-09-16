@@ -1,4 +1,4 @@
-// src/assets/js/theme-utils.js
+// public/js/theme-utils.js
 // Framework-agnostic theme helpers for DaisyUI v5 themes.
 // Exposes a tiny global `ThemeUtils` for non-module usage and works without bundlers.
 ;(function (global) {

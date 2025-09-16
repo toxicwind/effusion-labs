@@ -1,7 +1,7 @@
 ---
 permalink: "/resume/"
 title: "Resume"
-layout: "layouts/resume.njk"
+layout: "resume.njk"
 eleventyExcludeFromCollections: true
 ---
 

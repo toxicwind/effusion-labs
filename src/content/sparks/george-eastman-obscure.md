@@ -1,6 +1,6 @@
 ---
 title: 'George Eastman - A Life in Precision'
-layout: 'layouts/base.njk'
+layout: 'base.njk'
 date: 2025-07-02
 status: draft
 certainty: medium

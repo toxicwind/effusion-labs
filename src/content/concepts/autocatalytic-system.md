@@ -1,6 +1,6 @@
 ---
 title: 'The Site as an Autocatalytic System: A Final Synthesis'
-layout: 'layouts/base.njk'
+layout: 'base.njk'
 date: 2025-07-12
 status: complete
 certainty: definitive

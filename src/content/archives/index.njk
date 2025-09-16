@@ -1,17 +1,14 @@
 ---
-layout: layouts/base.njk
+layout: base.njk
 title: "Archives"
 showTitle: false
 ---
-{% from "components/archive-nav.njk" import archiveNav %}
 
+{% from "components/archive-nav.njk" import archiveNav %}
 <section class="rounded-box border-2 border-black bg-base-200 p-5 sm:p-7 shadow-[6px_6px_0_rgba(0,0,0,0.85)]">
   <h1 class="m-0 font-extrabold tracking-tight fluid-title">Archives</h1>
   <p class="mt-2 opacity-85">A living index of lines, series, characters, and products.</p>
 </section>
-
 <section class="card bg-base-100 border shadow-sm mt-6">
-  <div class="card-body p-4 sm:p-6">
-    {{ archiveNav(page.url, archivesNav) }}
-  </div>
+  <div class="card-body p-4 sm:p-6">{{ archiveNav(page.url, archivesNav) }}</div>
 </section>

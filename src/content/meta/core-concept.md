@@ -1,6 +1,6 @@
 ---
 title: 'Effusion Labs: Core Concept'
-layout: 'layouts/base.njk'
+layout: 'base.njk'
 date: 2025-07-01
 status: stable
 tags: [core-concept, methodology, digital-garden]

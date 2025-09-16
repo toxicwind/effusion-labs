@@ -1,14 +1,12 @@
 ---
-layout: layouts/base.njk
+layout: base.njk
 title: "{{ sections[section].title or (section | title) }}"
 showTitle: true
 metaDisable: true
 ---
 
 {% from "components/list-item.njk" import listItem %}
-
 <p class="text-base-content/80 max-w-prose">{{ sections[section].intro }}</p>
-
 <div class="mt-4 flex flex-wrap items-center gap-2 text-sm">
   <span class="opacity-70">View:</span>
   <button class="btn btn-xs btn-outline" type="button" data-view="comfort">Comfort</button>
@@ -17,23 +15,17 @@ metaDisable: true
   <button class="btn btn-xs btn-outline" type="button" data-sort="date">Date</button>
   <button class="btn btn-xs btn-ghost"   type="button" data-sort="title">Title</button>
 </div>
-
 <div id="collection-grid"
      class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6 items-stretch mt-4"
      data-section="{{ section }}">
   {% for item in collections[section] %}
     {% if item.url != page.url %}
-      <div
-        class="group"
-        data-title="{{ (item.data.title or '') | escape }}"
-        {% if item.date %}data-date="{{ item.date | htmlDateString }}"{% endif %}
-      >
-        {{ listItem(item) }}
-      </div>
+      <div class="group"
+           data-title="{{ (item.data.title or '') | escape }}"
+           {% if item.date %}data-date="{{ item.date | htmlDateString }}"{% endif %}>{{ listItem(item) }}</div>
     {% endif %}
   {% endfor %}
 </div>
-
 <script>
   (function () {
     const grid = document.getElementById('collection-grid');

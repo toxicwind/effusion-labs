@@ -1,6 +1,6 @@
 ---
 title: 'Vapor-Linked Governance: How Japan Made Tobacco a Civic Utility'
-layout: 'layouts/base.njk'
+layout: 'base.njk'
 date: 2025-07-24
 status: Stable
 certainty: adversarial-analytic

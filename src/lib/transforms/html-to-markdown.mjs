@@ -9,7 +9,6 @@ import rehypeRemark from 'rehype-remark'
 import remarkStringify from 'remark-stringify'
 import remarkGfm from 'remark-gfm'
 import remarkSmartypants from 'remark-smartypants'
-import remarkFootnotes from 'remark-footnotes'
 import remarkMath from 'remark-math'
 
 // Simple pre-clean: drop noisy tags before HTML→Markdown
@@ -37,7 +36,6 @@ async function htmlFragmentToMarkdown(html) {
     .use(rehypeStripTags(['script', 'style', 'noscript']))
     .use(rehypeRemark) // HAST → MDAST
     .use(remarkGfm) // tables, task lists, strikethrough, autolinks
-    .use(remarkFootnotes, { inlineNotes: true })
     .use(remarkMath)
     .use(remarkSmartypants)
     .use(remarkStringify, {

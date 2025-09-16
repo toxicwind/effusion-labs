@@ -1,5 +1,5 @@
 ---
-layout: layouts/base.njk
+layout: base.njk
 title: "Provenance Explorer"
 showTitle: false
 ---
@@ -8,9 +8,7 @@ showTitle: false
   <h1 class="m-0 font-extrabold tracking-tight fluid-title text-primary">Provenance Explorer</h1>
   <p class="mt-2 opacity-85">Browse all JSONL sources across hosts, markets, currencies, and products.</p>
 </section>
-
 {% set provenance = provenance or global.provenance or {} %}
-
 <section class="grid gap-4 md:grid-cols-3 mt-6">
   <div class="stat bg-base-100 border rounded-xl">
     <div class="stat-title">Products</div>
@@ -25,7 +23,6 @@ showTitle: false
     <div class="stat-value">{{ provenance.stats and provenance.stats.entries or 0 }}</div>
   </div>
 </section>
-
 <section class="mt-8">
   <div role="tablist" class="tabs tabs-boxed">
     <a role="tab" class="tab tab-active" href="#hosts">Hosts</a>
@@ -33,68 +30,73 @@ showTitle: false
     <a role="tab" class="tab" href="#markets">Markets</a>
     <a role="tab" class="tab" href="#products">Products</a>
   </div>
-
   <div id="hosts" class="mt-4">
     <div class="form-control max-w-md">
-      <label class="label"><span class="label-text">Filter hosts</span></label>
-      <input id="hostFilter" class="input input-bordered" placeholder="type to filter..." />
+      <label class="label">
+        <span class="label-text">Filter hosts</span>
+      </label>
+      <input id="hostFilter"
+             class="input input-bordered"
+             placeholder="type to filter..." />
     </div>
     <ul id="hostList" class="mt-4 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
       {% for h in (provenance.hosts or []) | slice(0,60) %}
-      {% set sample = (provenance.byProduct[h.products[0]] or {}) %}
-      <li class="card bg-base-100 border hover:shadow-xl hover:border-primary/50 transition">
-        <div class="card-body p-4">
-          <div class="flex items-center justify-between">
-            <h3 class="card-title text-base m-0">{{ h.host }}</h3>
-            <span class="badge badge-outline">{{ h.entries }}</span>
+        {% set sample = (provenance.byProduct[h.products[0]] or {}) %}
+        <li class="card bg-base-100 border hover:shadow-xl hover:border-primary/50 transition">
+          <div class="card-body p-4">
+            <div class="flex items-center justify-between">
+              <h3 class="card-title text-base m-0">{{ h.host }}</h3>
+              <span class="badge badge-outline">{{ h.entries }}</span>
+            </div>
+            <div class="mt-2 flex flex-wrap gap-2">
+              {% for slug in h.products | slice(0,6) %}
+                {% set p = provenance.byProduct[slug] %}
+                {% if p %}<a class="badge badge-ghost hover:badge-info" href="{{ p.url | url }}">{{ p.slug }}</a>{% endif %}
+              {% endfor %}
+            </div>
           </div>
-          <div class="mt-2 flex flex-wrap gap-2">
-            {% for slug in h.products | slice(0,6) %}
-              {% set p = provenance.byProduct[slug] %}
-              {% if p %}<a class="badge badge-ghost hover:badge-info" href="{{ p.url | url }}">{{ p.slug }}</a>{% endif %}
-            {% endfor %}
-          </div>
-        </div>
-      </li>
+        </li>
       {% endfor %}
     </ul>
   </div>
-
   <div id="currencies" class="mt-10">
     <h2 class="text-xl font-semibold mb-3">Currencies</h2>
     <ul class="flex flex-wrap gap-2">
       {% for c in (provenance.currencies or []) %}
-        <li><span class="badge badge-outline">{{ c.code }} · {{ c.entries }}{% if c.min != null and c.max != null %} ({{ c.min }}–{{ c.max }}){% endif %}</span></li>
+        <li>
+          <span class="badge badge-outline">{{ c.code }} · {{ c.entries }}
+            {% if c.min != null and c.max != null %}({{ c.min }}–{{ c.max }}){% endif %}
+          </span>
+        </li>
       {% endfor %}
     </ul>
   </div>
-
   <div id="markets" class="mt-10">
     <h2 class="text-xl font-semibold mb-3">Markets</h2>
     <ul class="flex flex-wrap gap-2">
       {% for m in (provenance.markets or []) %}
-        <li><span class="badge badge-outline">{{ m.code }} · {{ m.entries }}</span></li>
+        <li>
+          <span class="badge badge-outline">{{ m.code }} · {{ m.entries }}</span>
+        </li>
       {% endfor %}
     </ul>
   </div>
-
   <div id="products" class="mt-10">
     <h2 class="text-xl font-semibold mb-3">Most-cited products</h2>
     <ul class="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
       {% for p in (provenance.products or []) | slice(0,24) %}
-      <li class="card bg-base-100 border hover:shadow-xl hover:border-primary/50 transition">
-        <a class="card-body p-4 block no-underline" href="{{ p.url | url }}">
-          <h3 class="card-title text-base m-0">{{ p.title }}</h3>
-          <div class="mt-2 flex flex-wrap gap-2">
-            {% for h in p.hosts | slice(0,6) %}<span class="badge badge-ghost">{{ h }}</span>{% endfor %}
-          </div>
-        </a>
-      </li>
+        <li class="card bg-base-100 border hover:shadow-xl hover:border-primary/50 transition">
+          <a class="card-body p-4 block no-underline" href="{{ p.url | url }}">
+            <h3 class="card-title text-base m-0">{{ p.title }}</h3>
+            <div class="mt-2 flex flex-wrap gap-2">
+              {% for h in p.hosts | slice(0,6) %}<span class="badge badge-ghost">{{ h }}</span>{% endfor %}
+            </div>
+          </a>
+        </li>
       {% endfor %}
     </ul>
   </div>
 </section>
-
 <script type="module">
   const input = document.getElementById('hostFilter');
   const list = document.getElementById('hostList');

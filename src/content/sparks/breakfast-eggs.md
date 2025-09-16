@@ -2,7 +2,7 @@
 title:
   'The Semiotic Collapse of a Toasted Request: On the Emotional Thermodynamics
   of Eggs-on-Bread'
-layout: 'layouts/base.njk'
+layout: 'base.njk'
 date: 2025-07-12
 status: Stable
 certainty: speculative-analytic

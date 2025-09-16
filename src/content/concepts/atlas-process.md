@@ -1,7 +1,7 @@
 ---
 title:
   'The Atlas of a Process: A Synthesis of the Effusion Labs Operating System'
-layout: 'layouts/base.njk'
+layout: 'base.njk'
 date: 2025-07-12
 status: complete
 certainty: definitive

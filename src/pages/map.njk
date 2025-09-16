@@ -1,6 +1,6 @@
 ---
 title: "Effusion Labs: Concept Map"
-layout: "layouts/base.njk"
+layout: "base.njk"
 status: stable
 date: 2025-07-01
 certainty: high
@@ -34,22 +34,16 @@ memory_ref:
     into ideas and converge into projects.
   </p>
 </div>
-
 {# Card wrapper for the visualization #}
 <section class="mt-6 card bg-base-100 border border-base-300 shadow">
   <div class="card-body p-4 sm:p-6">
     <div id="concept-map-container" class="h-[80vh] w-full rounded-box"></div>
   </div>
 </section>
-
 {# JSON-LD for SEO/graph data #}
-<script type="application/ld+json">
-{{ collections.nodes | conceptMapJSONLD | safe }}
-</script>
-
+<script type="application/ld+json">{{ collections.nodes | conceptMapJSONLD | safe }}</script>
 {# vis-network bundle #}
 <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
-
 {# Graph renderer that reads daisyUI theme vars #}
 <script>
 (function () {

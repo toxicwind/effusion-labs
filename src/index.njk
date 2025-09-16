@@ -1,5 +1,5 @@
 ---
-layout: "layouts/base.njk"
+layout: "base.njk"
 metaDisable: true
 showTitle: false
 prose: false
@@ -14,40 +14,43 @@ prose: false
   - Latest across the lab
   - Concept map CTA
 #}
-
 {% from "components/icons.njk" import icon %}
-
 {# Safeguards for counts #}
 {% set allWork = collections.work or [] %}
 {% set projectsAll = collections.projects or [] %}
 {% set conceptsAll = collections.concepts or [] %}
 {% set sparksAll = collections.sparks or [] %}
-
-<div id="page-shell" data-mschf="auto" data-mschf-intensity="calm" data-mschf-style="structural">
+<div id="page-shell"
+     data-mschf="auto"
+     data-mschf-intensity="calm"
+     data-mschf-style="structural">
   <!-- HERO -->
   <section class="hero min-h-[55vh] bg-base-200/40">
     <div class="hero-content text-center">
       <div class="max-w-3xl">
         {% if branding and branding.logoSrc %}
-        {% set _sizes = branding.logoSizes or '(max-width: 640px) 112px, 160px' %}
-        <img src="{{ branding.logoSrc | url }}" alt="{{ branding.logoAlt or 'Logo' }}" sizes="{{ _sizes }}" loading="eager" fetchpriority="high" class="mx-auto mb-4 w-24 sm:w-28 md:w-32"/>
+          {% set _sizes = branding.logoSizes or '(max-width: 640px) 112px, 160px' %}
+          <img src="{{ branding.logoSrc | url }}"
+               alt="{{ branding.logoAlt or 'Logo' }}"
+               sizes="{{ _sizes }}"
+               loading="eager"
+               fetchpriority="high"
+               class="mx-auto mb-4 w-24 sm:w-28 md:w-32" />
         {% endif %}
         <h1 class="text-4xl md:text-6xl font-heading font-black tracking-[-0.02em] leading-tight">
           {{ title or 'Ideas, prototypes, and tools—shipped straight from the lab.' }}
         </h1>
-        {% if lede %}
-          <p class="mt-4 text-base md:text-lg opacity-90">{{ lede }}</p>
-        {% endif %}
+        {% if lede %}<p class="mt-4 text-base md:text-lg opacity-90">{{ lede }}</p>{% endif %}
         <div class="mt-6 flex items-center justify-center gap-3">
           {% for c in (ctas or []) %}
             {% set _href = (c.href or '/work/') | url %}
             {% set _label = c.label or 'Explore work' %}
             {% set _variant = (c.variant or 'primary') %}
-            {% set _btn = 'btn btn-primary' %}
+            {% set _btn = "btn btn-primary" %}
             {% if _variant == 'ghost' %}
-              {% set _btn = 'btn btn-ghost' %}
+              {% set _btn = "btn btn-ghost" %}
             {% elif _variant == 'outline' %}
-              {% set _btn = 'btn btn-outline' %}
+              {% set _btn = "btn btn-outline" %}
             {% endif %}
             <a class="{{ _btn }} px-6" href="{{ _href }}">{{ _label }}</a>
           {% endfor %}
@@ -56,9 +59,9 @@ prose: false
       </div>
     </div>
   </section>
-
   <!-- STATS STRIP -->
-  <section aria-labelledby="stats-heading" class="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 -mt-10">
+  <section aria-labelledby="stats-heading"
+           class="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 -mt-10">
     <div class="stats glass-card w-full">
       <div class="stat">
         <div class="stat-title">Total entries</div>
@@ -82,7 +85,6 @@ prose: false
       </div>
     </div>
   </section>
-
   <!-- FEATURES -->
   <section class="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 mt-12">
     <div class="grid gap-4 md:grid-cols-3">
@@ -115,7 +117,6 @@ prose: false
       </div>
     </div>
   </section>
-
   <!-- BY TYPE (4 columns) -->
   {% set pList = (collections.projects or []) | slice(0,5) %}
   {% set cList = (collections.concepts or []) | slice(0,5) %}
@@ -128,96 +129,90 @@ prose: false
         {title:'Concepts', items:cList, tone:'secondary'},
         {title:'Sparks',   items:sList, tone:'accent'},
         {title:'Meta',     items:mList, tone:'info'}
-      ] %}
-      <div class="card glass-card">
-        <div class="card-body p-4">
-          <h3 class="card-title text-base">
-            <span class="badge badge-{{ col.tone }} badge-sm">{{ col.title }}</span>
-          </h3>
-          <ul class="mt-2 space-y-2">
-            {% for item in col.items %}
-            <li>
-              <a class="link no-underline hover:underline" href="{{ item.url | url }}">{{ item.data.title }}</a>
-              {% if item.data.description %}
-                <div class="text-xs opacity-70 line-clamp-2">{{ item.data.description | truncate(120) }}</div>
-              {% endif %}
-            </li>
-            {% else %}
-            <li class="opacity-70 text-sm">No entries yet.</li>
-            {% endfor %}
-          </ul>
+        ] %}
+        <div class="card glass-card">
+          <div class="card-body p-4">
+            <h3 class="card-title text-base">
+              <span class="badge badge-{{ col.tone }} badge-sm">{{ col.title }}</span>
+            </h3>
+            <ul class="mt-2 space-y-2">
+              {% for item in col.items %}
+                <li>
+                  <a class="link no-underline hover:underline" href="{{ item.url | url }}">{{ item.data.title }}</a>
+                  {% if item.data.description %}
+                    <div class="text-xs opacity-70 line-clamp-2">{{ item.data.description | truncate(120) }}</div>
+                  {% endif %}
+                </li>
+              {% else %}
+                <li class="opacity-70 text-sm">No entries yet.</li>
+              {% endfor %}
+            </ul>
+          </div>
         </div>
-      </div>
       {% endfor %}
     </div>
   </section>
-
   <!-- FEATURED PROJECTS -->
   {% if projects and (projects | length) %}
-  <section class="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 mt-14 space-y-4">
-    <div class="flex items-center justify-between">
-      <h2 class="text-2xl font-heading">Featured projects</h2>
-      <a href="{{ '/work/' | url }}" class="link link-primary">Browse all</a>
-    </div>
-    <div class="grid gap-4 md:grid-cols-3">
-      {% for p in projects %}
-      <article class="card glass-card">
-        <div class="card-body">
-          <div class="flex items-start justify-between">
-            <span class="badge badge-outline">Project</span>
-            {% if p.date %}
-              <time class="text-xs opacity-70" datetime="{{ p.date | htmlDateString }}">{{ p.date | readableDate }}</time>
-            {% endif %}
-          </div>
-          <h3 class="card-title text-lg leading-tight">
-            <a class="no-underline hover:underline" href="{{ p.url | url }}">{{ p.data.title }}</a>
-          </h3>
-          {% if p.data.description %}
-          <p class="opacity-90">{{ p.data.description | truncate(140) }}</p>
-          {% endif %}
-          <div class="card-actions justify-start mt-2">
-            <a class="btn btn-sm btn-primary" href="{{ p.url | url }}">Open</a>
-          </div>
-        </div>
-      </article>
-      {% endfor %}
-    </div>
-  </section>
+    <section class="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 mt-14 space-y-4">
+      <div class="flex items-center justify-between">
+        <h2 class="text-2xl font-heading">Featured projects</h2>
+        <a href="{{ '/work/' | url }}" class="link link-primary">Browse all</a>
+      </div>
+      <div class="grid gap-4 md:grid-cols-3">
+        {% for p in projects %}
+          <article class="card glass-card">
+            <div class="card-body">
+              <div class="flex items-start justify-between">
+                <span class="badge badge-outline">Project</span>
+                {% if p.date %}
+                  <time class="text-xs opacity-70" datetime="{{ p.date | htmlDateString }}">{{ p.date | readableDate }}</time>
+                {% endif %}
+              </div>
+              <h3 class="card-title text-lg leading-tight">
+                <a class="no-underline hover:underline" href="{{ p.url | url }}">{{ p.data.title }}</a>
+              </h3>
+              {% if p.data.description %}<p class="opacity-90">{{ p.data.description | truncate(140) }}</p>{% endif %}
+              <div class="card-actions justify-start mt-2">
+                <a class="btn btn-sm btn-primary" href="{{ p.url | url }}">Open</a>
+              </div>
+            </div>
+          </article>
+        {% endfor %}
+      </div>
+    </section>
   {% endif %}
-
   <!-- LATEST ACROSS THE LAB -->
   {% set latest = work or allWork | slice(0,9) %}
   {% if latest and (latest | length) %}
-  <section class="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 mt-14 space-y-4">
-    <h2 class="text-2xl font-heading">Latest across the lab</h2>
-    <ul class="grid gap-4 md:gap-6 grid-cols-[repeat(auto-fit,minmax(18rem,1fr))] list-none p-0 m-0">
-      {% for item in latest %}
-      <li>
-        <article class="card glass-card h-full">
-          <div class="card-body">
-            <div class="flex items-start justify-between">
-              <span class="badge badge-ghost">{{ (item.type or item.data.type) | capitalize }}</span>
-              {% if item.date %}
-                <time class="text-xs opacity-70" datetime="{{ item.date | htmlDateString }}">{{ item.date | readableDate }}</time>
-              {% endif %}
-            </div>
-            <h3 class="card-title text-base leading-snug">
-              <a class="no-underline hover:underline" href="{{ item.url | url }}">{{ item.data.title }}</a>
-            </h3>
-            {% if item.data.description %}
-              <p class="text-sm opacity-90">{{ item.data.description | truncate(140) }}</p>
-            {% endif %}
-            <div class="card-actions justify-start mt-2">
-              <a class="btn btn-xs btn-outline" href="{{ item.url | url }}">Read</a>
-            </div>
-          </div>
-        </article>
-      </li>
-      {% endfor %}
-    </ul>
-  </section>
+    <section class="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 mt-14 space-y-4">
+      <h2 class="text-2xl font-heading">Latest across the lab</h2>
+      <ul class="grid gap-4 md:gap-6 grid-cols-[repeat(auto-fit,minmax(18rem,1fr))] list-none p-0 m-0">
+        {% for item in latest %}
+          <li>
+            <article class="card glass-card h-full">
+              <div class="card-body">
+                <div class="flex items-start justify-between">
+                  <span class="badge badge-ghost">{{ (item.type or item.data.type) | capitalize }}</span>
+                  {% if item.date %}
+                    <time class="text-xs opacity-70"
+                          datetime="{{ item.date | htmlDateString }}">{{ item.date | readableDate }}</time>
+                  {% endif %}
+                </div>
+                <h3 class="card-title text-base leading-snug">
+                  <a class="no-underline hover:underline" href="{{ item.url | url }}">{{ item.data.title }}</a>
+                </h3>
+                {% if item.data.description %}<p class="text-sm opacity-90">{{ item.data.description | truncate(140) }}</p>{% endif %}
+                <div class="card-actions justify-start mt-2">
+                  <a class="btn btn-xs btn-outline" href="{{ item.url | url }}">Read</a>
+                </div>
+              </div>
+            </article>
+          </li>
+        {% endfor %}
+      </ul>
+    </section>
   {% endif %}
-
   <!-- CONCEPT MAP CTA -->
   <section class="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 mt-16">
     <div class="hero rounded-box glass-card">
@@ -230,24 +225,29 @@ prose: false
       </div>
     </div>
   </section>
-
   <!-- FAQ (optional quick clarity) -->
   <section class="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 mb-16">
     <div class="grid gap-3 md:grid-cols-3">
       <div class="collapse collapse-arrow glass-card">
         <input type="checkbox" />
         <div class="collapse-title text-md font-medium">What is Effusion Labs?</div>
-        <div class="collapse-content"><p>An exploration space for systems thinking, design, and code—shipping artifacts you can use.</p></div>
+        <div class="collapse-content">
+          <p>An exploration space for systems thinking, design, and code—shipping artifacts you can use.</p>
+        </div>
       </div>
       <div class="collapse collapse-arrow glass-card">
         <input type="checkbox" />
         <div class="collapse-title text-md font-medium">How often is this updated?</div>
-        <div class="collapse-content"><p>Work is added continuously; the lists above always reflect the latest entries.</p></div>
+        <div class="collapse-content">
+          <p>Work is added continuously; the lists above always reflect the latest entries.</p>
+        </div>
       </div>
       <div class="collapse collapse-arrow glass-card">
         <input type="checkbox" />
         <div class="collapse-title text-md font-medium">Can I contribute?</div>
-        <div class="collapse-content"><p>Yes—join the group discussions on GitHub or open issues with ideas and fixes.</p></div>
+        <div class="collapse-content">
+          <p>Yes—join the group discussions on GitHub or open issues with ideas and fixes.</p>
+        </div>
       </div>
     </div>
   </section>

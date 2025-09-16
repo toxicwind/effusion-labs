@@ -1,6 +1,6 @@
 ---
 title: 'Three Studies in Embodied Regulation'
-layout: 'layouts/base.njk'
+layout: 'base.njk'
 date: 2025-07-30
 status: Stable
 certainty: Analytic-Synthesis

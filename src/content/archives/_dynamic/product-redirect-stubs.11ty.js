@@ -9,7 +9,7 @@ export default class {
     if (!on) return { pagination: { size: 0 } }
 
     return {
-      layout: 'layouts/base.njk',
+      layout: 'base.njk',
       pagination: {
         data: 'archiveProductMap',
         size: 1,

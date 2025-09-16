@@ -1,6 +1,6 @@
 ---
 title: 'Effusion Labs: Style Guide'
-layout: 'layouts/base.njk'
+layout: 'base.njk'
 status: stable
 date: 2025-07-01
 certainty: high

@@ -2,7 +2,7 @@
 title:
   'The Workshop and the Weather: A Retreat from Metaphor in Analyzing Generative
   Systems'
-layout: 'layouts/base.njk'
+layout: 'base.njk'
 date: 2025-07-12
 status: complete
 certainty: argumentative

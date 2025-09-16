@@ -32,7 +32,7 @@ test('collage style includes base, ephemera, and lab modules', async () => {
       return { observe() {}, unobserve() {}, disconnect() {} }
     }
 
-  const scriptPath = path.resolve('src/assets/js/mschf-overlay.js')
+  const scriptPath = path.resolve('js/mschf-overlay.js')
   dom.window.eval(readFileSync(scriptPath, 'utf8'))
   dom.window.document.dispatchEvent(new dom.window.Event('DOMContentLoaded'))
   // Allow boot + first RAF tick
@@ -80,7 +80,7 @@ test('auto style mounts overlay in auto mode', async () => {
     function () {
       return { observe() {}, unobserve() {}, disconnect() {} }
     }
-  const scriptPath = path.resolve('src/assets/js/mschf-overlay.js')
+  const scriptPath = path.resolve('js/mschf-overlay.js')
   dom.window.eval(readFileSync(scriptPath, 'utf8'))
   dom.window.document.dispatchEvent(new dom.window.Event('DOMContentLoaded'))
   await new Promise(r => setTimeout(r, 50))

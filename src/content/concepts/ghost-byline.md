@@ -1,7 +1,7 @@
 ---
 title:
   'The Ghost in the Byline: On the Structural Honesty of a Co-Authored Text'
-layout: 'layouts/base.njk'
+layout: 'base.njk'
 date: 2025-07-12
 status: complete
 certainty: declarative

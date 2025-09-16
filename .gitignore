@@ -39,3 +39,8 @@ tmp/
 
 # HYPEBRUT sidecars
 .hb-logs/
+
+.netlify/
+logs
+*.log
+npm-debug.log*

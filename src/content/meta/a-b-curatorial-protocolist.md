@@ -1,6 +1,6 @@
 ---
 title: 'Comparative Analysis of Candidate Framework Designations'
-layout: 'layouts/base.njk'
+layout: 'base.njk'
 date: 2025-07-12
 status: complete
 certainty: definitive

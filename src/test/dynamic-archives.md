@@ -1,6 +1,6 @@
 ---
 title: Dynamic Archives — Canon Defaults
-layout: layouts/base.njk
+layout: base.njk
 ---
 
 This page verifies that archive-linked wikilinks resolve to canonical dynamic

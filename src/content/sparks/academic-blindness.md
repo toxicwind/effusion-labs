@@ -2,7 +2,7 @@
 title:
   'The Recursive Shadow of Algorithmic Absence: An Archaeological Survey of the
   Invisible Infrastructure of Contemporary LLM Research'
-layout: 'layouts/base.njk'
+layout: 'base.njk'
 date: 2025-07-29
 status: Stable
 certainty: adversarial-analytic

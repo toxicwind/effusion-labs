@@ -1,6 +1,6 @@
 // Redirect: /work/latest → newest work item (any type)
 export const data = {
-  layout: 'layouts/redirect.njk',
+  layout: 'redirect.njk',
   permalink: '/work/latest/index.html',
   eleventyComputed: {
     outboundLinks: () => [],

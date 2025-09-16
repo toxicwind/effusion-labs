@@ -2,7 +2,7 @@
 title:
   'Takashi Murakami - Lithographs, Signed Works, and Small-format Prints: A 2025
   Market Topography'
-layout: 'layouts/base.njk'
+layout: 'base.njk'
 date: 2025-07-02
 status: complete-ongoing
 certainty: speculative

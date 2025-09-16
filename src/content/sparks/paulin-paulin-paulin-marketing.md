@@ -2,7 +2,7 @@
 title:
   'How to Manufacture a Legacy: The Pierre Paulin Estate Between Preservation
   and Product'
-layout: 'layouts/base.njk'
+layout: 'base.njk'
 date: 2025-08-02
 status: Stable
 certainty: adversarial-analytic

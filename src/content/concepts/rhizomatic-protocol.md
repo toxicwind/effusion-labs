@@ -1,6 +1,6 @@
 ---
 title: 'The Rhizomatic Protocol: A Corrected Model of the Effusion Labs System'
-layout: 'layouts/base.njk'
+layout: 'base.njk'
 date: 2025-07-12
 status: complete
 certainty: corrective

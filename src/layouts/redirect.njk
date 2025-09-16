@@ -1,5 +1,5 @@
 ---
-layout: layouts/base.njk
+layout: base.njk
 showTitle: false
 metaDisable: true
 eleventyComputed:
@@ -10,7 +10,7 @@ eleventyComputed:
 title: "Redirecting…"
 ---
 
-<p>Redirecting to <a class="link link-hover" href="{{ redirect }}">{{ redirect }}</a>…</p>
-<script>
-  try { location.replace({{ redirect | dump }}); } catch(_) {}
-</script>
+<p>
+  Redirecting to <a class="link link-hover" href="{{ redirect }}">{{ redirect }}</a>…
+</p>
+<script>try { location.replace({{ redirect | dump }}); } catch(_) {}</script>

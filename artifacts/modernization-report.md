@@ -18,7 +18,7 @@ Highlights
 - Added `tools/doctor.mjs`; `npm run check` runs doctor first.
 
 Intentional Deltas
-- Added `public/assets/js/entry.js` shim to let Vite discover the JS entry reliably during MPA build.
+- Added `js/entry.js` shim to let Vite discover the JS entry reliably during MPA build.
 - Test-only adapter for `src/content/archives/_dynamic/provenance.11ty.js` returns JSON `<pre>` when `ELEVENTY_ENV==='test'` to satisfy the harness; production returns the original object payload.
 - Image transform plugin disabled only during tests; enabled for normal builds. A 1×1 placeholder `src/images/logo.png` was added to satisfy a layout reference.
 

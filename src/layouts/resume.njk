@@ -1,4 +1,4 @@
-{# src/_includes/layouts/resume.njk #}
+{# layouts/resume.njk #}
 <!DOCTYPE html>
 <html lang="en" class="scroll-pt-16" data-theme="dim">
   <head>
@@ -27,7 +27,8 @@
     {# Per-page head injections (redirects, robots, etc.) #}
     {{ headExtra | safe }}
 
-    {# Early theme (prevents FART) #}
+        <script type="module" src="{{ '/assets/js/app.js' | url }}"></script>
+
     <script src="{{ '/js/theme-utils.js' | url }}"></script>
     <script>try{ ThemeUtils && ThemeUtils.initEarly && ThemeUtils.initEarly(); }catch(_){}</script>
 
@@ -54,9 +55,7 @@
     </main>
 
     {# Theme toggle UI logic (button exists in the page) #}
-    <script src="{{ '/js/theme-toggle.js' | url }}" defer></script>
+    <script type="module" src="{{ '/assets/js/theme-toggle.js' | url }}"></script>
 
-    {# Vite entry: imports app.css via our public shim so Vite resolves modules reliably in MPA build #}
-    <script type="module" src="{{ '/assets/js/entry.js' | url }}"></script>
   </body>
 </html>

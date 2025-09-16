@@ -1,6 +1,5 @@
 // Redirect: /work/drop → newest item with type "drop"
 export const data = {
-  layout: 'layouts/redirect.njk',
   permalink: '/work/drop/index.html',
   eleventyComputed: {
     outboundLinks: () => [],

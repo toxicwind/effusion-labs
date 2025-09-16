@@ -1,11 +1,11 @@
 ---
-layout: layouts/base.njk
+layout: base.njk
 title: "Collectables"
 showTitle: false
 ---
+
 {% from "components/archive-nav.njk" import archiveNav %}
 {% from "components/tile.njk" import tile %}
-
 {# Derive top companies (by product count) across the archives. #}
 {% set prodAll = collections.archiveProducts or [] %}
 {% set byCompany = {} %}
@@ -19,45 +19,46 @@ showTitle: false
   {% endif %}
 {% endfor %}
 {% set companies = [] %}
-{% for k,v in byCompany %}{% set companies = companies.concat([v]) %}{% endfor %}
+{% for k,v in byCompany %}
+  {% set companies = companies.concat([v]) %}
+{% endfor %}
 {% set companies = companies | sort(false, true, 'count') %}
-
 <section class="rounded-box border-2 border-black bg-base-200 p-5 sm:p-7 shadow-[6px_6px_0_rgba(0,0,0,0.85)]">
   <h1 class="m-0 font-extrabold tracking-tight fluid-title">Collectables</h1>
   <p class="mt-2 opacity-85">Company lines, blind boxes, series, and drops.</p>
 </section>
-
 <section class="card bg-base-100 border shadow-sm mt-6">
-  <div class="card-body p-4 sm:p-6">
-    {{ archiveNav(page.url, archivesNav) }}
-  </div>
+  <div class="card-body p-4 sm:p-6">{{ archiveNav(page.url, archivesNav) }}</div>
 </section>
-
 {% if companies.length %}
-<section class="mt-8">
-  <div class="flex items-end justify-between gap-3">
-    <h2 class="text-xl font-semibold m-0">Featured Companies</h2>
-    <div class="form-control max-w-xs">
-      <label class="label"><span class="label-text">Filter companies</span></label>
-      <input id="companyFilter" class="input input-bordered input-sm" placeholder="type to filter…" />
+  <section class="mt-8">
+    <div class="flex items-end justify-between gap-3">
+      <h2 class="text-xl font-semibold m-0">Featured Companies</h2>
+      <div class="form-control max-w-xs">
+        <label class="label">
+          <span class="label-text">Filter companies</span>
+        </label>
+        <input id="companyFilter"
+               class="input input-bordered input-sm"
+               placeholder="type to filter…" />
+      </div>
     </div>
-  </div>
-  <ul id="companyList" class="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-    {% for c in companies | slice(0,12) %}
-      <li class="card bg-base-100 border hover:shadow-xl hover:border-primary/50 transition">
-        <a class="card-body p-4 block no-underline"
-           href="{{ ('/archives/collectables/designer-toys/' + c.slug + '/') | url }}">
-          <h3 class="card-title text-base m-0">{{ c.title | replace('-', ' ') | title }}</h3>
-          <div class="mt-2">
-            <span class="badge badge-outline">Products: {{ c.count }}</span>
-          </div>
-        </a>
-      </li>
-    {% endfor %}
-  </ul>
-</section>
-
-<script type="module">
+    <ul id="companyList"
+        class="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {% for c in companies | slice(0,12) %}
+        <li class="card bg-base-100 border hover:shadow-xl hover:border-primary/50 transition">
+          <a class="card-body p-4 block no-underline"
+             href="{{ ('/archives/collectables/designer-toys/' + c.slug + '/') | url }}">
+            <h3 class="card-title text-base m-0">{{ c.title | replace('-', ' ') | title }}</h3>
+            <div class="mt-2">
+              <span class="badge badge-outline">Products: {{ c.count }}</span>
+            </div>
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+  </section>
+  <script type="module">
   const input = document.getElementById('companyFilter');
   const list = document.getElementById('companyList');
   if (input && list) {
@@ -69,5 +70,5 @@ showTitle: false
       }
     });
   }
-</script>
+  </script>
 {% endif %}

@@ -44,7 +44,7 @@ function normalizeSlug(base) {
 
 export const data = () => {
   return {
-    layout: 'layouts/base.njk',
+    layout: 'base.njk',
     pagination: {
       data: 'collections.jsonlProvenance',
       size: 1,

@@ -2,7 +2,7 @@
 title:
   'The Ghost in the Engine: On the Unseen Architecture of the Effusion Labs
   Protocol'
-layout: 'layouts/base.njk'
+layout: 'base.njk'
 date: 2025-07-12
 status: complete
 certainty: deductive

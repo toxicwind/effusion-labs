@@ -1,7 +1,6 @@
-// ✨ FIX: Import the main stylesheet through the Vite alias.
-import '@/assets/css/app.css'
+//import '/assets/css/app.css'
 
-// src/assets/js/app.js
+// public/js/app.js
 // Vite entry: imports CSS and initializes all page-level JS.
 // Consolidates: footnote nav, theme toggle, code copy, work filters.
 // Lazily loads the heavy overlay only when conditions are good.

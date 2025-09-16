@@ -1,31 +1,27 @@
 ---
-layout: layouts/base.njk
+layout: base.njk
 title: "Designer Toys"
 showTitle: false
 ---
-{% from "components/archive-nav.njk" import archiveNav %}
 
+{% from "components/archive-nav.njk" import archiveNav %}
 {# Aggregate companies for this category #}
 {% set prodAll = collections.archiveProducts or [] %}
 {% set agg = {} %}
-
 {% for p in prodAll %}
   {% if p.data and p.data.companySlug %}
     {% set slug = p.data.companySlug %}
-
     {# Ensure bucket exists (use array; dedupe later) #}
     {% if not agg[slug] %}
       {% set _ = agg | setAttribute(slug, {
-        slug: slug,
-        title: p.data.companyTitle or slug,
-        count: 0,
-        lines: []
-      }) %}
+              slug: slug,
+              title: p.data.companyTitle or slug,
+              count: 0,
+              lines: []
+            }) %}
     {% endif %}
-
     {# bump count #}
     {% set _ = agg[slug] | setAttribute('count', (agg[slug].count + 1)) %}
-
     {# collect line slugs (push -> then assign) #}
     {% if p.data.lineSlug %}
       {% set newLines = (agg[slug].lines or []) | push(p.data.lineSlug) %}
@@ -33,7 +29,6 @@ showTitle: false
     {% endif %}
   {% endif %}
 {% endfor %}
-
 {# flatten to array with unique line counts #}
 {% set companies = [] %}
 {% for k, v in agg %}
@@ -42,44 +37,43 @@ showTitle: false
   {% set companies = companies | push({ slug: v.slug, title: v.title, count: v.count, lineCount: lc }) %}
 {% endfor %}
 {% set companies = companies | sort(false, true, 'count') %}
-
 <section class="rounded-box border-2 border-black bg-base-200 p-5 sm:p-7 shadow-[6px_6px_0_rgba(0,0,0,0.85)]">
   <h1 class="m-0 font-extrabold tracking-tight fluid-title">Designer Toys</h1>
   <p class="mt-2 opacity-85">Art toys, platform figures, and collab series.</p>
 </section>
-
 <section class="card bg-base-100 border shadow-sm mt-6">
-  <div class="card-body p-4 sm:p-6">
-    {{ archiveNav(page.url, archivesNav) }}
-  </div>
+  <div class="card-body p-4 sm:p-6">{{ archiveNav(page.url, archivesNav) }}</div>
 </section>
-
 {% if companies and (companies | length) %}
-<section class="mt-8">
-  <div class="flex items-end justify-between gap-3">
-    <h2 class="text-xl font-semibold m-0">Companies</h2>
-    <div class="form-control max-w-xs">
-      <label class="label"><span class="label-text">Filter companies</span></label>
-      <input id="companyFilterDT" class="input input-bordered input-sm" placeholder="type to filter…" />
+  <section class="mt-8">
+    <div class="flex items-end justify-between gap-3">
+      <h2 class="text-xl font-semibold m-0">Companies</h2>
+      <div class="form-control max-w-xs">
+        <label class="label">
+          <span class="label-text">Filter companies</span>
+        </label>
+        <input id="companyFilterDT"
+               class="input input-bordered input-sm"
+               placeholder="type to filter…" />
+      </div>
     </div>
-  </div>
-
-  <ul id="companyListDT" class="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-    {% for c in companies %}
-      <li class="card bg-base-100 border hover:shadow-xl hover:border-primary/50 transition">
-        <a class="card-body p-4 block no-underline" href="{{ ('/archives/collectables/designer-toys/' + c.slug + '/') | url }}">
-          <h3 class="card-title text-base m-0">{{ c.title | replace('-', ' ') | titleizeSlug }}</h3>
-          <div class="mt-2 flex flex-wrap gap-2">
-            <span class="badge badge-outline">Products: {{ c.count }}</span>
-            <span class="badge badge-outline">Lines: {{ c.lineCount }}</span>
-          </div>
-        </a>
-      </li>
-    {% endfor %}
-  </ul>
-</section>
-
-<script type="module">
+    <ul id="companyListDT"
+        class="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {% for c in companies %}
+        <li class="card bg-base-100 border hover:shadow-xl hover:border-primary/50 transition">
+          <a class="card-body p-4 block no-underline"
+             href="{{ ('/archives/collectables/designer-toys/' + c.slug + '/') | url }}">
+            <h3 class="card-title text-base m-0">{{ c.title | replace('-', ' ') | titleizeSlug }}</h3>
+            <div class="mt-2 flex flex-wrap gap-2">
+              <span class="badge badge-outline">Products: {{ c.count }}</span>
+              <span class="badge badge-outline">Lines: {{ c.lineCount }}</span>
+            </div>
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+  </section>
+  <script type="module">
   const input = document.getElementById('companyFilterDT');
   const list  = document.getElementById('companyListDT');
   if (input && list) {
@@ -91,5 +85,5 @@ showTitle: false
       }
     });
   }
-</script>
+  </script>
 {% endif %}

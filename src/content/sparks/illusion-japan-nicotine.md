@@ -1,7 +1,7 @@
 ---
 title:
   'The Illusion of Choice: Engineering Adult Agency in Japan’s Nicotine Market'
-layout: 'layouts/base.njk'
+layout: 'base.njk'
 date: 2025-07-24
 status: Stable
 certainty: evidence-analytic

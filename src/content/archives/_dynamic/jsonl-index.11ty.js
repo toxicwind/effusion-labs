@@ -1,5 +1,5 @@
 export const data = () => ({
-  layout: 'layouts/base.njk',
+  layout: 'base.njk',
   pagination: { data: 'collections.jsonlDirs', size: 1, alias: 'dir' },
   eleventyComputed: {
     title: ({ dir }) => `Provenance — ${dir?.rel ?? ''}`,

@@ -1,6 +1,6 @@
 ---
 title: 'Block Ledger'
-layout: 'layouts/base.njk'
+layout: 'base.njk'
 date: 2025-08-13
 status: draft
 tags: [concept, block]

@@ -1,6 +1,6 @@
 ---
 title: 'On The Sociality Of Stochastic Parrots'
-layout: 'layouts/base.njk'
+layout: 'base.njk'
 date: 2025-07-17
 status: complete
 certainty: definitive

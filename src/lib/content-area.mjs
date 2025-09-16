@@ -9,7 +9,7 @@ export function contentArea(name) {
         }
         return `/${name}/${data.page.fileSlug}/`
       },
-      layout: data => data.layout ?? 'layouts/base.njk',
+      layout: data => data.layout ?? 'base.njk',
     },
   }
 }

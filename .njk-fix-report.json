@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-09-15T23:30:33.959Z",
+  "timestamp": "2025-09-16T18:16:41.295Z",
   "roots": [
     "src"
   ],
@@ -14,6 +14,41 @@
   "results": [
     {
       "file": "src/index.njk",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/layouts/base.njk",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/layouts/collection.njk",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/layouts/converted-html.njk",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/layouts/embed.njk",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/layouts/project.njk",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/layouts/redirect.njk",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/layouts/resume.njk",
       "changed": false,
       "rewrites": 0
     },
@@ -44,41 +79,6 @@
     },
     {
       "file": "src/test/dynamic-archives.md",
-      "changed": false,
-      "rewrites": 0
-    },
-    {
-      "file": "src/_includes/layouts/base.njk",
-      "changed": false,
-      "rewrites": 0
-    },
-    {
-      "file": "src/_includes/layouts/collection.njk",
-      "changed": false,
-      "rewrites": 0
-    },
-    {
-      "file": "src/_includes/layouts/converted-html.njk",
-      "changed": false,
-      "rewrites": 0
-    },
-    {
-      "file": "src/_includes/layouts/embed.njk",
-      "changed": false,
-      "rewrites": 0
-    },
-    {
-      "file": "src/_includes/layouts/project.njk",
-      "changed": false,
-      "rewrites": 0
-    },
-    {
-      "file": "src/_includes/layouts/redirect.njk",
-      "changed": false,
-      "rewrites": 0
-    },
-    {
-      "file": "src/_includes/layouts/resume.njk",
       "changed": false,
       "rewrites": 0
     },

@@ -25,5 +25,5 @@ test('archives dynamic templates treated as templates', () => {
 })
 
 test('published CSS app.css exists', () => {
-  assert.ok(fs.existsSync('src/assets/css/app.css'))
+  assert.ok(fs.existsSync('css/app.css'))
 })

@@ -1,7 +1,7 @@
 ---
 title:
   "The Smoker as Sysadmin: Managing the Self in Japan's Nicotine Technopoly"
-layout: 'layouts/base.njk'
+layout: 'base.njk'
 date: 2025-07-24
 status: Stable
 certainty: ethnographic-interpretive

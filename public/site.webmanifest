@@ -1,12 +1,13 @@
 {
-  "id": "/",
+  "lang": "en",
+  "dir": "ltr",
   "name": "Effusion Labs",
   "short_name": "Effusion Labs",
   "description": "Ideas, prototypes, and projects, shipped straight from the lab.",
-  "start_url": "/",
-  "scope": "/",
+  "start_url": "/index.html",
+
   "display": "standalone",
-  "orientation": "any",
+  "orientation": "natural",
   "icons": [
     {
       "src": "/icons/icon-192.png",
