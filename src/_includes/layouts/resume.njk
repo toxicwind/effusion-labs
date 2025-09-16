@@ -56,7 +56,7 @@
     {# Theme toggle UI logic (button exists in the page) #}
     <script src="{{ '/js/theme-toggle.js' | url }}" defer></script>
 
-    {# Vite entry: imports app.css; plugin injects the built CSS #}
-    <script type="module" src="{{ '/src/assets/js/app.js' | url }}"></script>
+    {# Vite entry: imports app.css via our public shim so Vite resolves modules reliably in MPA build #}
+    <script type="module" src="{{ '/assets/js/entry.js' | url }}"></script>
   </body>
 </html>

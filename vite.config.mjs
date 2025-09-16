@@ -7,7 +7,6 @@ import { defineConfig } from 'vite'
 import { fileURLToPath, URL } from 'node:url'
 import tailwindcss from '@tailwindcss/vite'
 
-
 const srcRoot = fileURLToPath(new URL('./src', import.meta.url))
 
 export default defineConfig({
@@ -17,6 +16,7 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': srcRoot, // import Foo from '@/components/Foo.js'
+      '/src': srcRoot, // allow absolute /src/... imports in HTML discovered by the plugin
     },
   },
 
@@ -28,6 +28,8 @@ export default defineConfig({
     // Handy in dev; leave build sourcemaps at defaults unless you know you need them
     devSourcemap: true,
   },
+
+  // Let @11ty/eleventy-plugin-vite discover entries from HTML; do not hardcode build.input
 
   // Vite 7’s defaults already target “baseline widely available” browsers;
   // no need to set build.target unless you have special requirements.

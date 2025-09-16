@@ -161,7 +161,7 @@ export default async function (data = {}) {
       markets: Array.from(v.markets),
     }))
 
-  return {
+  const payload = {
     stats: {
       products: productsArr.length,
       hosts: hostsArr.length,
@@ -175,4 +175,8 @@ export default async function (data = {}) {
     products: productsArr,
     byProduct: Object.fromEntries(productsArr.map(p => [p.slug, p])),
   }
+  if (process.env.ELEVENTY_ENV === 'test') {
+    return `<pre>${JSON.stringify(payload, null, 2)}</pre>`
+  }
+  return payload
 }

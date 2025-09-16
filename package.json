@@ -8,22 +8,23 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "build": "node utils/dev/eleventy-with-codeframes.mjs",
-    "dev": "ELEVENTY_SERVE=true node utils/dev/eleventy-with-codeframes.mjs --serve",
+    "build": "node tools/dev/eleventy-with-codeframes.mjs",
+    "dev": "ELEVENTY_SERVE=true node tools/dev/eleventy-with-codeframes.mjs --serve",
     "format": "prettier --write \"**/*.{js,mjs,json,md,yml,css,njk}\"",
     "format:check": "prettier --check \"**/*.{js,mjs,json,md,yml,css,njk}\"",
     "test": "c8 node test/integration/runner.spec.mjs",
     "test:watch": "node --watch test/integration/runner.spec.mjs",
-    "check": "npm run format:check && npm run lint && npm run test",
+    "check": "npm run doctor && npm run format:check && npm run lint && npm run test",
+    "doctor": "node tools/doctor.mjs",
     "lint": "npm run lint:links",
     "lint:links": "markdown-link-check -c oneoff/link-check.config.json README.md",
     "deps:playwright": "playwright install chromium || true",
     "mcp:dev": "node mcp-stack/gateway/server.mjs",
     "mcp:integration": "node mcp-stack/tests/integration.mjs",
     "mcp:test": "node mcp-stack/tests/smoke.mjs",
-    "patch:ternary": "node utils/scripts/patch-njk-ternaries.mjs",
-    "scan:ternary": "node utils/scripts/scan-njk-ternaries.mjs",
-    "verify:patches": "node utils/scripts/validation/verify-patch-applied.mjs",
+    "patch:ternary": "node tools/patch-njk-ternaries.mjs",
+    "scan:ternary": "node tools/scan-njk-ternaries.mjs",
+    "verify:patches": "node tools/verify-patch-applied.mjs",
     "postinstall": "if [ \"${PATCH_PACKAGE_RUN:-1}\" != \"0\" ] && [ -x node_modules/.bin/patch-package ]; then patch-package; fi"
   },
   "devDependencies": {
@@ -106,6 +107,6 @@
     "yargs": "18.0.0"
   },
   "engines": {
-    "node": ">=22.19.0"
+    "node": ">=24.0.0"
   }
 }

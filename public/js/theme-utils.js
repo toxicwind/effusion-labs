@@ -19,7 +19,8 @@
   }
 
   function syncAllowed(list) {
-    var merged = Array.isArray(list) && list.length ? list.slice() : ALLOWED.slice()
+    var merged =
+      Array.isArray(list) && list.length ? list.slice() : ALLOWED.slice()
     merged.push(LIGHT_NAME, DARK_NAME)
     ALLOWED = Array.from(
       new Set(

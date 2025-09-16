@@ -5,8 +5,8 @@ uses **Eleventy v3** as a static-site generator with **Vite** for modern
 bundling and hot-module reloading. Content is authored in **Markdown** and
 **Nunjucks** under `src/content/` and compiled into a deployable static site in
 `_site/`. Styles are managed with **Tailwind CSS v4** and **daisyUI v5**, with a
-single entry stylesheet. The project targets
-**Node.js ≥24** and runs fully in **ECMAScript-module (ESM)** mode.
+single entry stylesheet. The project targets **Node.js ≥24** and runs fully in
+**ECMAScript-module (ESM)** mode.
 
 ---
 
@@ -58,17 +58,17 @@ Batteries included, CI-ready, and friendly to autonomous coding agents.
   Markdown-it and JSDOM.
 
 - **Eleventy plugins** — Navigation, RSS, sitemap, schema, plus official Vite
-  integration. 
+  integration.
 
-- **Tailwind & daisyUI** — CSS-first styling. 
+- **Tailwind & daisyUI** — CSS-first styling.
 
 - **Content collections** — Custom collections expose “featured,” “interactive,”
   and “recentAll.” The `work` collection aggregates sparks, concepts, projects,
   and meta content.
 
 - **Image optimization** — The Eleventy image plugin generates AVIF, WebP, and
-  fallback images at multiple widths under `/public`. Filenames are
-  slugified for determinism.
+  fallback images at multiple widths under `/public`. Filenames are slugified
+  for determinism.
 
 - **Link verification** — `npm run lint:links` uses `markdown-link-check` to
   detect broken links. `npm run lint` runs link checks as part of linting.
@@ -122,7 +122,8 @@ When the dev server prints a local URL, open it in your browser.
 | `preview`      | Serve via the Eleventy wrapper with `--serve` (explicit preview) |
 | `eleventy`     | Invoke Eleventy CLI directly (`npx @11ty/eleventy`)              |
 | `build`        | Build the static site to `_site/`                                |
-| `check`        | Run format check, lint, and tests                                |
+| `doctor`       | Verify local environment (Node, npm, rg, fd/fdfind, jq, sd)      |
+| `check`        | Run doctor, format check, lint, and tests                        |
 | `test`         | Run Playwright integration tests under coverage (`c8`)           |
 | `test:watch`   | Watch tests during development                                   |
 | `format`       | Format the repo with Prettier (`prettier -w .`)                  |
@@ -153,8 +154,10 @@ When the dev server prints a local URL, open it in your browser.
 ## Project Structure
 
 ```
-config/        → Eleventy & Vite configuration (plugins, collections, site settings)
-utils/         → Development and build helpers
+eleventy.config.mjs → Monolithic Eleventy configuration (single source of truth)
+src/lib/       → Runtime helpers (filters, shortcodes, collections, markdown, archives, data, transforms)
+utils/         → Dev wrappers and scripts (no runtime code)
+tools/         → Build/validation CLIs (e.g., doctor)
 src/content/   → Markdown & Nunjucks pages
 test/          → Integration & unit tests (Playwright)
 patches/       → Hotfixes via patch-package
@@ -162,6 +165,11 @@ artifacts/     → Reports (e.g., unresolved links), worklogs, export bundles
 ```
 
 Collections: `sparks`, `concepts`, `projects`, `meta`, `archives`, `work`.
+
+Globals: only editorial data remains in `src/_data/` (e.g., branding, sections).
+Programmatic data (build metadata, computed keys, navigation, archive nav) is
+injected once via `addGlobalData` from modules in `src/lib/data/` and
+`src/lib/archives/`.
 
 ---
 

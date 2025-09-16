@@ -25,9 +25,8 @@ html[data-theme='silk'] {
 }
 ```
 
-Tailwind utilities such as `bg-background`, `bg-surface` and `text-text`
-resolve to these values, so the same markup adapts across modes without
-duplicates.
+Tailwind utilities such as `bg-background`, `bg-surface` and `text-text` resolve
+to these values, so the same markup adapts across modes without duplicates.
 
 ## Toggle
 

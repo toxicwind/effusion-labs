@@ -136,19 +136,46 @@ html {
   }
   @keyframes hb-float {
     0% {
-      transform: translate3d(0, calc(var(--hb-float-base-y, 0px) - var(--hb-float-range, 24px) / 2), 0) rotate3d(0, 0, 1, calc(var(--hb-float-tilt, 2deg) * -1));
+      transform: translate3d(
+          0,
+          calc(var(--hb-float-base-y, 0px) - var(--hb-float-range, 24px) / 2),
+          0
+        )
+        rotate3d(0, 0, 1, calc(var(--hb-float-tilt, 2deg) * -1));
     }
     25% {
-      transform: translate3d(0, calc(var(--hb-float-base-y, 0px) + var(--hb-float-range, 24px) * 0.15), 0) rotate3d(0, 0, 1, calc(var(--hb-float-tilt, 2deg) * -0.35));
+      transform: translate3d(
+          0,
+          calc(
+            var(--hb-float-base-y, 0px) + var(--hb-float-range, 24px) * 0.15
+          ),
+          0
+        )
+        rotate3d(0, 0, 1, calc(var(--hb-float-tilt, 2deg) * -0.35));
     }
     50% {
-      transform: translate3d(0, calc(var(--hb-float-base-y, 0px) + var(--hb-float-range, 24px) / 2), 0) rotate3d(0, 0, 1, var(--hb-float-tilt, 2deg));
+      transform: translate3d(
+          0,
+          calc(var(--hb-float-base-y, 0px) + var(--hb-float-range, 24px) / 2),
+          0
+        )
+        rotate3d(0, 0, 1, var(--hb-float-tilt, 2deg));
     }
     75% {
-      transform: translate3d(0, calc(var(--hb-float-base-y, 0px) - var(--hb-float-range, 24px) * 0.1), 0) rotate3d(0, 0, 1, calc(var(--hb-float-tilt, 2deg) * 0.45));
+      transform: translate3d(
+          0,
+          calc(var(--hb-float-base-y, 0px) - var(--hb-float-range, 24px) * 0.1),
+          0
+        )
+        rotate3d(0, 0, 1, calc(var(--hb-float-tilt, 2deg) * 0.45));
     }
     100% {
-      transform: translate3d(0, calc(var(--hb-float-base-y, 0px) - var(--hb-float-range, 24px) / 2), 0) rotate3d(0, 0, 1, calc(var(--hb-float-tilt, 2deg) * -1));
+      transform: translate3d(
+          0,
+          calc(var(--hb-float-base-y, 0px) - var(--hb-float-range, 24px) / 2),
+          0
+        )
+        rotate3d(0, 0, 1, calc(var(--hb-float-tilt, 2deg) * -1));
     }
   }
 
@@ -657,13 +684,22 @@ html {
     inset: -35% -12%;
     height: 45%;
     transform: translate3d(0, -120%, 0);
-    background:
-      linear-gradient(180deg, rgba(255, 255, 255, 0.36) 0%, rgba(255, 255, 255, 0.12) 32%, transparent 70%),
-      repeating-linear-gradient(180deg, rgba(255, 255, 255, 0.14) 0 2px, transparent 2px 5px);
+    background: linear-gradient(
+        180deg,
+        rgba(255, 255, 255, 0.36) 0%,
+        rgba(255, 255, 255, 0.12) 32%,
+        transparent 70%
+      ),
+      repeating-linear-gradient(
+        180deg,
+        rgba(255, 255, 255, 0.14) 0 2px,
+        transparent 2px 5px
+      );
     mix-blend-mode: screen;
     filter: saturate(145%) blur(0.4px);
     opacity: 0.38;
-    animation: mschf-scan-sweep var(--mschf-scan-speed, 9s) cubic-bezier(0.37, 0.01, 0.13, 1) infinite;
+    animation: mschf-scan-sweep var(--mschf-scan-speed, 9s)
+      cubic-bezier(0.37, 0.01, 0.13, 1) infinite;
     animation-delay: var(--mschf-scan-delay, -2s);
     pointer-events: none;
   }
@@ -671,7 +707,12 @@ html {
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(90deg, transparent 30%, rgba(255, 255, 255, 0.55) 50%, transparent 70%);
+    background: linear-gradient(
+      90deg,
+      transparent 30%,
+      rgba(255, 255, 255, 0.55) 50%,
+      transparent 70%
+    );
     mix-blend-mode: soft-light;
     opacity: 0.45;
     filter: blur(1px);

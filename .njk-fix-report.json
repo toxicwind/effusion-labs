@@ -1,0 +1,1113 @@
+{
+  "timestamp": "2025-09-15T23:30:33.959Z",
+  "roots": [
+    "src"
+  ],
+  "exts": [
+    ".njk",
+    ".md",
+    ".html"
+  ],
+  "dryRun": false,
+  "modified": 0,
+  "totalRewrites": 0,
+  "results": [
+    {
+      "file": "src/index.njk",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/pages/404.njk",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/pages/concept-map.json.njk",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/pages/consulting.njk",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/pages/feed.njk",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/pages/map.njk",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/test/dynamic-archives.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/_includes/layouts/base.njk",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/_includes/layouts/collection.njk",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/_includes/layouts/converted-html.njk",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/_includes/layouts/embed.njk",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/_includes/layouts/project.njk",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/_includes/layouts/redirect.njk",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/_includes/layouts/resume.njk",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/_includes/components/archive-nav.njk",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/_includes/components/back-link.njk",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/_includes/components/badge.njk",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/_includes/components/embed.njk",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/_includes/components/ext-link.njk",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/_includes/components/feed-entry.njk",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/_includes/components/feed-section.njk",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/_includes/components/footer.njk",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/_includes/components/header.njk",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/_includes/components/hero-tile.njk",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/_includes/components/hero.njk",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/_includes/components/icons.njk",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/_includes/components/kpis.njk",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/_includes/components/list-item.njk",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/_includes/components/map-cta.njk",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/_includes/components/meta-aside.njk",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/_includes/components/nav-items.njk",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/_includes/components/nav.njk",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/_includes/components/neon-card.njk",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/_includes/components/pagination.njk",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/_includes/components/pathway.njk",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/_includes/components/resume-entry.njk",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/_includes/components/section.njk",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/_includes/components/tile.njk",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/_includes/components/work-feed.njk",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/_includes/macros/meta.njk",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/archives/index.njk",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/concepts/aesthetic-inquiry.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/concepts/atlas-process.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/concepts/autocatalytic-system.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/concepts/block-ledger.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/concepts/compliant-spire.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/concepts/ghost-byline.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/concepts/ghost-engine.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/concepts/index.njk",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/concepts/parroting-mimicry.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/concepts/readers-journey.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/concepts/rhizomatic-protocol.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/concepts/three-studies-sensory.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/concepts/verification-is-an-ecology.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/concepts/workshop-weather.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/stream-guard-3500.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/theming.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/meta/a-b-curatorial-protocolist.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/meta/core-concept.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/meta/curatorial-generativism.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/meta/index.njk",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/meta/methodology.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/meta/protocolist.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/meta/style-guide.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/meta/unified-referencing-syntax.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/projects/index.njk",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/projects/llm-release-watcher.njk",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/projects/patent-intelligence-agent.njk",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/projects/project-dandelion.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/sparks/academic-blindness.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/sparks/breakfast-eggs.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/sparks/george-eastman-obscure.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/sparks/illusion-japan-nicotine.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/sparks/index.njk",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/sparks/murakami-market-analysis-2025.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/sparks/paulin-paulin-paulin-marketing.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/sparks/smoker-sysadmin.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/sparks/vapor-linked-governance.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/pages/resume/index.njk",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/pages/work/index.njk",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/pages/work/work-list.njk",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/_includes/components/products/MarketTable.njk",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/_includes/components/products/MetaNotes.njk",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/_includes/components/products/ProvenanceList.njk",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/_includes/components/products/SpecSheet.njk",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/_includes/components/resume/expander.njk",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/archives/_dynamic/characters.njk",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/archives/_dynamic/products.njk",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/archives/_dynamic/series.njk",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/archives/collectables/index.njk",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/archives/provenance/index.njk",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/adr/20250813-hero-image-perf.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/adr/20250813-truncate-filter.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/adr/20250814-code-copy.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/adr/20250814-feed-build-metadata.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/adr/20250814-footnote-highlight.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/adr/20250814-monsters-hub.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/adr/20250814-nav-ledger.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/adr/20250814-spark-status.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/adr/20250816-carbon-handshake.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/adr/20250829-unified-collection-layout.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/knowledge/branch-policy.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/knowledge/eleventy-collections-20250911T175345Z.html",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/knowledge/eleventy-data-cascade-20250911T175348Z.html",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/knowledge/eleventy-data-computed-20250911T175414Z.html",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/knowledge/eleventy-data-template-dir-20250911T175432Z.html",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/knowledge/node-shim-prove.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/knowledge/product-template-fail.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/knowledge/utils-test-green.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/knowledge/utils-test-red.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/ux/mschf-overlay.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/reports/2025-08-20-shiki-migration.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/reports/20250911T175310Z.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/reports/20250911T175533Z.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/reports/20250913T180936Z.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/reports/archive-normalization-audit.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/reports/archive-normalization-continue.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/reports/archive-normalization-ledger.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/reports/continuous-output-continue.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/reports/continuous-output-ledger.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/reports/deploy-workflow-continue.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/reports/deploy-workflow-ledger.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/reports/eleventy-runner-continue.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/reports/eleventy-runner-ledger.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/reports/esm-audit-20250820T215642Z.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/reports/exec-surface.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/reports/external-arrow-continue.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/reports/external-arrow-ledger.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/reports/gha-actions-upgrade-continue.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/reports/gha-actions-upgrade-ledger.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/reports/homepage-hero-continue.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/reports/homepage-hero-ledger.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/reports/homepage-latest-entries-continue.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/reports/homepage-latest-entries-ledger.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/reports/homepage-logo-continue.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/reports/homepage-logo-ledger.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/reports/image-filename-seo-continue.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/reports/image-filename-seo-ledger.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/reports/link-hygiene-r3-continue.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/reports/link-hygiene-r3-ledger.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/reports/llm-keepalive-continue.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/reports/llm-keepalive-ledger.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/reports/logo-image-transform-continue.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/reports/logo-image-transform-ledger.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/reports/monsters-product-metadata-continue.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/reports/monsters-product-metadata-ledger.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/reports/mschf-overlay-continue.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/reports/mschf-overlay-ledger.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/reports/node-shim-continue.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/reports/node-shim-ledger.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/reports/pop-mart-provenance-continue.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/reports/pop-mart-provenance-ledger.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/reports/prettier-guardrails-continue.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/reports/prettier-guardrails-ledger.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/reports/products-template-continue.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/reports/products-template-ledger.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/reports/research-ingest-continue.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/reports/research-ingest-ledger.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/reports/responsive-logo-continue.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/reports/responsive-logo-ledger.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/reports/ripgrep-fix-continue.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/reports/ripgrep-fix-ledger.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/reports/site-redesign-r3-continue.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/reports/site-redesign-r3-ledger.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/reports/solver-url-env-continue.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/reports/solver-url-env-ledger.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/reports/stabilize-ci-tests-continue.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/reports/stabilize-ci-tests-ledger.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/reports/tags-metadata-continue.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/reports/tags-metadata-ledger.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/reports/tests-green-continue.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/reports/tests-green-ledger.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/reports/typography-colors-continue.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/reports/typography-colors-ledger.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/reports/utils-ordinal-suffix-continue.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/reports/utils-ordinal-suffix-ledger.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/reports/work-pages-continue.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/reports/work-pages-ledger.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/vendors/index.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/worklogs/20250911T175310Z.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/worklogs/20250911T175533Z.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/worklogs/20250913T180936Z.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/worklogs/20250914T025746Z-exec-surface.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/flower_reports_showcase/reports/Magic_City_Cannabis___Colorado_20250810_report.html",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/flower_reports_showcase/reports/Reefer_Madness_20250810_report.html",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/flower_reports_showcase/reports/Reefer_Madness_20250825_report.html",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/flower_reports_showcase/reports/Reefer_Madness_20250826_report.html",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/flower_reports_showcase/reports/Reefer_Madness_20250830_report.html",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/flower_reports_showcase/reports/nearby_value_cache_status.html",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/flower_reports_showcase/reports/nearby_value_leaderboard.html",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/archives/collectables/designer-toys/index.njk",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/vendor/daisyui/README.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/vendor/daisyui/base.html",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/vendor/daisyui/colors.html",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/vendor/daisyui/components.html",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/vendor/daisyui/config.html",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/vendor/daisyui/configuration.html",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/vendor/daisyui/install.html",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/vendor/daisyui/themes.html",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/vendor/daisyui/upgrade.html",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/vendor/daisyui/v5.html",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/vendor/tailwind/README.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/vendor/tailwind/configuration.html",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/vendor/tailwind/content-configuration.html",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/vendor/tailwind/detecting-classes.html",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/vendor/tailwind/functions-and-directives.html",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/vendor/tailwind/plugins.html",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/vendor/tailwind/tailwindcss-v4-blog.html",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/vendor/tailwind/upgrade-guide.html",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/vendor/tailwind/v4-blog.html",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/archives/collectables/designer-toys/pop-mart/index.njk",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/vendors/daisyui/5.0.50/install.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/vendors/markdown-it/14.1.0/index.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/vendors/nunjucks/3.2.4/templating.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/vendors/postcss/8.5.6/index.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/vendors/tailwindcss/4.1.11/readme.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/archives/collectables/designer-toys/pop-mart/the-monsters/index.njk",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/vendors/@11ty/eleventy/3.1.2/configuration.md",
+      "changed": false,
+      "rewrites": 0
+    },
+    {
+      "file": "src/content/docs/vendors/@11ty/eleventy/3.1.2/getting-started.md",
+      "changed": false,
+      "rewrites": 0
+    }
+  ],
+  "logFile": ".njk-fix-report.json",
+  "quiet": true
+}

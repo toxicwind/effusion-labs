@@ -18,25 +18,24 @@ SYSTEM mandates.
 
 | Script   | Target                                                                    |
 | -------- | ------------------------------------------------------------------------- |
-| `dev`    | `ELEVENTY_SERVE=true node utils/dev/eleventy-with-codeframes.mjs --serve` |
-| `build`  | `node utils/dev/eleventy-with-codeframes.mjs`                             |
-| `check`  | `npm run format:check && npm run lint && npm run test`                    |
+| `dev`    | `ELEVENTY_SERVE=true node tools/dev/eleventy-with-codeframes.mjs --serve` |
+| `build`  | `node tools/dev/eleventy-with-codeframes.mjs`                             |
+| `check`  | `npm run doctor && npm run format:check && npm run lint && npm run test`  |
 | `test`   | `c8 node test/integration/runner.spec.mjs`                                |
 | `format` | `prettier -w .`                                                           |
 | `lint`   | `markdown-link-check -c oneoff/link-check.config.json README.md`          |
 
 ## npm-utils
 
-- Primary CLI for npm package exploration: `utils/scripts/npm-utils.js`
+- Primary CLI for npm package exploration: `tools/npm-utils.js`
 - Supports `search`, `view`, `analyze`, and `install`
 - We love new packages and libraries; always consider them
 
 ## Repo Search & View Protocol
 
 - Index filenames first (`rg --files` or `fd`).
-- Traverse in order: `package.json`, `eleventy.config.mjs`, `config/`, `utils/`,
-  `src/content/`, `public/`, `vite.config.mjs`, `tailwind.config.mjs`,
-  `test/`.
+- Traverse in order: `package.json`, `eleventy.config.mjs`, `src/lib/`, `tools/`,
+  `src/content/`, `public/`, `vite.config.mjs`, `tailwind.config.mjs`, `test/`.
 - Treat `node_modules/`, `_site/`, `artifacts/`, `logs/`, and `lib_content.json`
   as heavy; sample only when needed.
 - Use small windows (head/anchor/tail); avoid exposing lines >≈240 chars or

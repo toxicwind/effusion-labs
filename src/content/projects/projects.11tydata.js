@@ -1,3 +1,3 @@
-import { contentArea } from '../../../config/content-area.js'
+import { contentArea } from '../../../src/lib/content-area.mjs'
 
 export default contentArea('projects')

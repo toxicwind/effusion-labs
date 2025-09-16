@@ -47,9 +47,7 @@
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Rubik:wght@400..900&family=Space+Grotesk:wght@400..700&display=swap" rel="stylesheet">
 
     {# Vite entry: imports '@/assets/css/app.css' inside the module #}
-    <script type="module">
-      import '@/assets/js/app.js';
-    </script>
+    <script type="module" src="{{ '/assets/js/entry.js' | url }}"></script>
 
     <style>
       :root { --neon-a:#00E0FF; --neon-b:#9AFF00; --neon-c:#FF1CF7; --focus-clr: var(--neon-a); }
