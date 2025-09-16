@@ -1,13 +1,113 @@
 #!/usr/bin/env bash
-set -euo pipefail
-
+# fd shim — autonomous, non-hijacking repairs for LLM-driven invocations
+# - ONLY rewrites CLI args and execs fd (no piping, no post-processing)
+# - Fixed safe defaults (no env toggles): max-depth=6, one-file-system, color=never
+# - Removes/transforms exec modes (-x / -X) into safe listing and emits diagnostics to stderr
+# - Conservative: warns visibly about hidden/no-ignore/follow-symlink requests
+set -Eeuo pipefail
 . "$(cd "$(dirname "$0")" && pwd)/_lib.sh"
 
-retry_exec "$@" -- \
-  "$REPO_ROOT/node_modules/.bin/fd" \
-  "$TOOLS_DIR/fd/fd" \
-  fdfind \
-  fd
+_find_fd() {
+  local c
+  for c in \
+    "$REPO_ROOT/node_modules/.bin/fd" \
+    "$REPO_ROOT/node_modules/.bin/fdfind" \
+    "$TOOLS_DIR/fd/fd" \
+    /usr/bin/fd \
+    /usr/local/bin/fd \
+    "$(command -v fd 2>/dev/null || true)" \
+    "$(command -v fdfind 2>/dev/null || true)"
+  ; do
+    [[ -n "${c}" && -x "${c}" ]] && { printf '%s\n' "$c"; return 0; }
+  done
+  return 1
+}
 
-echo "❌ fd not available; ensure devDeps installed or provide a system 'fd'." >&2
-exit 127
+FD_BIN="$(_find_fd)" || {
+  echo "❌ fd not available; ensure devDeps installed or provide a system 'fd'." >&2
+  exit 127
+}
+
+# ---------- fixed safety knobs (no env toggles) ----------
+SAFE_MAX_DEPTH=6          # limit directory recursion to reduce scan blast radius
+INJECTED_FLAGS=( --max-depth "$SAFE_MAX_DEPTH" --one-file-system --color=never )
+
+# ---------- parse & repair arguments ----------
+orig=( "$@" )
+sanitized=()
+show_change=0
+# capture whether user explicitly requested JSON-like machine mode (fd has no JSON, but -0 indicates pipe intent)
+has_print0=0
+# We will remove -x/-X (exec) as an automatic hardening step (transformed to safe listing).
+# We will preserve -0/--print0 when present (used for safe piping).
+i=0
+while (( i < ${#orig[@]} )); do
+  a="${orig[i]}"
+  case "$a" in
+    -x|--exec)
+      # per fd docs -x executes command per result (parallel); risky to let an LLM craft destructive commands
+      printf '%s\n' "fd-shim: removed exec flag '-x/--exec' for safety; invocation will only list matches. If you intended to run commands, run them explicitly after review." >&2
+      show_change=1
+      # skip template tokens until semicolon-terminated or end-of-args:
+      # fd -x cmd {} \;  OR fd -x cmd {} ';'  OR fd -x sh -c '...' etc. We conservatively skip next token if it's not starting with '-' (best-effort).
+      # In practice we drop the flag and any immediate token that looks like the command (best-effort).
+      if (( i+1 < ${#orig[@]} )); then
+        # skip one following token (command template); cannot robustly parse arbitrary templates without execing - so we drop one token safely.
+        ((i++))
+      fi
+      ;;
+    -X|--exec-batch)
+      printf '%s\n' "fd-shim: removed batch-exec flag '-X/--exec-batch' to avoid passing many paths into external commands. Listing only." >&2
+      show_change=1
+      # if a command token follows, skip one token to avoid misinterpreting it as a path later
+      if (( i+1 < ${#orig[@]} )); then ((i++)); fi
+      ;;
+    -H|--hidden)
+      # visible request to include hidden files; allowed but warn because it increases output surface
+      printf '%s\n' "fd-shim: warning: '--hidden' requested; scanning hidden files (this may increase result size)." >&2
+      show_change=1
+      sanitized+=( "$a" )
+      ;;
+    -I|--no-ignore)
+      # show-danger but honor; scanning ignored files can include node_modules etc. keep but warn
+      printf '%s\n' "fd-shim: warning: '--no-ignore' requested; ignoring .gitignore/.fdignore (this may include large paths like node_modules)." >&2
+      show_change=1
+      sanitized+=( "$a" )
+      ;;
+    -L|--follow)
+      # following symlinks can traverse outside repo or create loops; warn but allow with max-depth enforced
+      printf '%s\n' "fd-shim: warning: '--follow' requested; symlinks will be followed but traversal depth is limited to ${SAFE_MAX_DEPTH}." >&2
+      show_change=1
+      sanitized+=( "$a" )
+      ;;
+    -0|--print0)
+      has_print0=1
+      sanitized+=( "$a" )
+      ;;
+    --color=*)
+      # canonicalize color: we will set --color=never; skip user color flags in sanitized list
+      printf '%s\n' "fd-shim: normalizing color output to --color=never for deterministic results." >&2
+      show_change=1
+      ;;
+    --help|--version|-h|-V)
+      # pass trivial flags through untouched
+      sanitized+=( "$a" )
+      ;;
+    *)
+      sanitized+=( "$a" )
+      ;;
+  esac
+  ((i++))
+done
+
+# build final args: inject safety flags unless user explicitly used --print0 (we still inject)
+final_args=()
+final_args+=( "${INJECTED_FLAGS[@]}" )
+final_args+=( "${sanitized[@]}" )
+
+if [[ "$show_change" -eq 1 ]]; then
+  printf '%s\n' "fd-shim: executing fd with safe defaults (max-depth=${SAFE_MAX_DEPTH}, one-file-system, color=never)." >&2
+fi
+
+# exec the real fd; no post-processing, no piping; shim only rewrites CLI
+exec "${FD_BIN}" "${final_args[@]}"

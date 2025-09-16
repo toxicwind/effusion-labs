@@ -1385,14 +1385,11 @@
 │   ├── doctor.mjs
 │   ├── filters
 │   │   └── hb_filter.cjs
-│   ├── fix-njk-ternaries.mjs
+│   ├── flatten-config.mjs
 │   ├── npm-utils.js
-│   ├── patch-njk-ternaries.mjs
-│   ├── run.mjs
-│   ├── scan-njk-ternaries.mjs
 │   ├── validate-frontmatter.mjs
 │   ├── validate-proxy.mjs
 │   └── verify-patch-applied.mjs
 └── vite.config.mjs
 
-387 directories, 1009 files
+387 directories, 1006 files
