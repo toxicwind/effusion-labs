@@ -157,8 +157,8 @@ and culture, a model diametrically opposed to U.S. prohibitionist impulses.
 > Source: [Family Smoking Prevention and Tobacco Control Act](https://en.wikipedia.org/wiki/Family_Smoking_Prevention_and_Tobacco_Control_Act)
 
 [^5]:
-    **PR Times, 2025** – _山田孝之さんが心の豊かさを探す「鬼」を演じるJTの新CM第
-    三弾 「鬼のゆく道 茶屋」篇が、4月14日(月)より放映開始_
+    **PR Times, 2025** –
+    _山田孝之さんが心の豊かさを探す「鬼」を演じるJTの新CM第三弾 「鬼のゆく道 茶屋」篇が、4月14日(月)より放映開始_
 
 > _Epistemic Note (Primary):_ Corporate press release confirms campaign launch
 > details; first‑order artifact from JT’s official channel.  
@@ -177,10 +177,10 @@ and culture, a model diametrically opposed to U.S. prohibitionist impulses.
     **Kyoto University, 2025; Tokyo Pride, 2025** – _寄附講座等設置状況_; *Tokyo
     Pride 2025 Sponsors*
 
-> _Epistemic Note (Primary):_ Official Kyoto University page shows “こころの豊か
-> さ研究部門” endowed by Japan Tobacco Inc. through March 2026; Tokyo Pride
-> sponsor page lists JT as a Rainbow Sponsor. Forestry carbon‑sink sponsorship
-> remains undocumented.  
+> _Epistemic Note (Primary):_ Official Kyoto University page shows
+> “こころの豊かさ研究部門” endowed by Japan Tobacco Inc. through March 2026;
+> Tokyo Pride sponsor page lists JT as a Rainbow Sponsor. Forestry carbon‑sink
+> sponsorship remains undocumented.  
 > Source: [寄附講座等設置状況](https://www.kyoto-u.ac.jp/ja/research/donation/course/kouza)
 > ; [Tokyo Pride Sponsors](https://pride.tokyo/festival/sponsor/jt-2/)
 
@@ -202,8 +202,8 @@ and culture, a model diametrically opposed to U.S. prohibitionist impulses.
 > Source: [Takehiko Tsutsui, JTI: By 2027…](https://n1info.rs/english/news/takehiko-tsutsui-jti-by-2027-we-plan-to-invest-approximately-650-billion-yen-in-reduced-risk-products/)
 
 [^10]:
-    **有限会社オーバーロード, 2025** – _〖2025年〗加熱式タバコの最新人気シェア率
-    調査。アイコス、グロー、プルームでNo.1はどれ？（リラゾ）_
+    **有限会社オーバーロード, 2025** –
+    _〖2025年〗加熱式タバコの最新人気シェア率調査。アイコス、グロー、プルームでNo.1はどれ？（リラゾ）_
 
 > _Epistemic Note (Primary):_ Press release of an internet survey of 11,405
 > smokers reporting 39.29 % overall HTP adoption, 57.19 % among 20‑year‑olds,
@@ -236,8 +236,8 @@ and culture, a model diametrically opposed to U.S. prohibitionist impulses.
 > Source: [たばこ税等に関する資料](https://www.mof.go.jp/tax_policy/summary/consumption/d09.htm)
 
 [^14]:
-    **British American Tobacco Japan, 2025** – _日本の未来に向けた提言：政策・医
-    療・経済・業界の有識者が統合的アプローチを語るフォーラムを開催_
+    **British American Tobacco Japan, 2025** –
+    _日本の未来に向けた提言：政策・医療・経済・業界の有識者が統合的アプローチを語るフォーラムを開催_
 
 > _Epistemic Note (Primary):_ BAT Japan press release confirms April 23 2025
 > forum with policymakers, medical experts, and industry to unveil Omni™

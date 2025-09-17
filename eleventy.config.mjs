@@ -7,7 +7,7 @@ import markdownItAnchor from 'markdown-it-anchor'
 
 import EleventyVitePlugin from '@11ty/eleventy-plugin-vite'
 
-import EleventyPluginNavigation from '@11ty/eleventy-navigation';
+import EleventyPluginNavigation from '@11ty/eleventy-navigation'
 import EleventyPluginRss from '@11ty/eleventy-plugin-rss'
 import EleventyPluginSyntaxhighlight from '@11ty/eleventy-plugin-syntaxhighlight'
 import interlinker from '@photogabble/eleventy-plugin-interlinker'
@@ -35,26 +35,26 @@ export default function (eleventyConfig) {
   // --- Start: Event Handlers ---
   eleventyConfig.on('eleventy.before', async () => {
     // Clean Vite temp to avoid stale-dir issues
-    const viteTemp = path.resolve(process.cwd(), '.11ty-vite');
+    const viteTemp = path.resolve(process.cwd(), '.11ty-vite')
     if (fs.existsSync(viteTemp)) {
-      await fsp.rm(viteTemp, { recursive: true, force: true });
+      await fsp.rm(viteTemp, { recursive: true, force: true })
     }
-  });
+  })
 
   // After build: write unresolved interlinker report (log-only)
   eleventyConfig.on('eleventy.after', () => {
     try {
-      const payload = flushUnresolved();
-      console.log(`Interlinker unresolved (logged only): ${payload.count}`);
+      const payload = flushUnresolved()
+      console.log(`Interlinker unresolved (logged only): ${payload.count}`)
     } catch (e) {
-      console.error(String(e?.message || e));
+      console.error(String(e?.message || e))
     }
-  });
+  })
 
   // --- End: Event Handlers ---
-  eleventyConfig.setServerPassthroughCopyBehavior('copy');
-  eleventyConfig.addPassthroughCopy("public");
-  eleventyConfig.ignores.add("src/content/docs/**");
+  eleventyConfig.setServerPassthroughCopyBehavior('copy')
+  eleventyConfig.addPassthroughCopy('public')
+  eleventyConfig.ignores.add('src/content/docs/**')
 
   // Plugins
   eleventyConfig.addPlugin(EleventyPluginNavigation)
@@ -84,49 +84,47 @@ export default function (eleventyConfig) {
             chunkFileNames: 'assets/[name].[hash].js',
             entryFileNames: 'assets/[name].[hash].js',
           },
-          plugins: [rollupPluginCritical({
-            criticalUrl: './_site/',
-            criticalBase: './_site/',
-            criticalPages: [
-              { uri: 'index.html' },
-              { uri: '404.html' },
-            ],
-            criticalConfig: {
-              inline: true,
-              dimensions: [
-                {
-                  height: 900,
-                  width: 375,
-                },
-                {
-                  height: 720,
-                  width: 1280,
-                },
-                {
-                  height: 1080,
-                  width: 1920,
-                }
-              ]
-            }
-          })
-          ]
-        }
-      }
-    }
+          plugins: [
+            rollupPluginCritical({
+              criticalUrl: './_site/',
+              criticalBase: './_site/',
+              criticalPages: [{ uri: 'index.html' }, { uri: '404.html' }],
+              criticalConfig: {
+                inline: true,
+                dimensions: [
+                  {
+                    height: 900,
+                    width: 375,
+                  },
+                  {
+                    height: 720,
+                    width: 1280,
+                  },
+                  {
+                    height: 1080,
+                    width: 1920,
+                  },
+                ],
+              },
+            }),
+          ],
+        },
+      },
+    },
   })
 
   eleventyConfig.addPlugin(interlinker, {
     defaultLayout: 'embed.njk',
     resolvingFns: createResolvers(),
     deadLinkReport: 'json',
-  });
+  })
 
   eleventyConfig.addPlugin(sitemap, {
     sitemap: { hostname: 'https://effusionlabs.com' },
-  });
-  eleventyConfig.addPlugin(schema);
+  })
+  eleventyConfig.addPlugin(schema)
 
-  const isTest = process.env.ELEVENTY_ENV === 'test';
+  const isTest = process.env.ELEVENTY_ENV === 'test'
   if (!isTest) {
     eleventyConfig.addPlugin(eleventyImageTransformPlugin, {
       urlPath: '/images/',
@@ -134,13 +132,13 @@ export default function (eleventyConfig) {
       formats: ['avif', 'webp', 'auto'],
       widths: [320, 640, 960, 1200, 1800, 'auto'],
       filenameFormat: (id, src, width, format) => {
-        const { name } = path.parse(src);
+        const { name } = path.parse(src)
         const s = String(name || '')
           .toLowerCase()
-          .replace(/[^a-z0-9]+/g, '-');
-        return `${s}-${width}.${format}`;
+          .replace(/[^a-z0-9]+/g, '-')
+        return `${s}-${width}.${format}`
       },
-    });
+    })
   }
 
   // --- End: Plugins ---
@@ -150,18 +148,17 @@ export default function (eleventyConfig) {
   let markdownLibrary = markdownIt({
     html: true,
     breaks: true,
-    linkify: true
+    linkify: true,
   }).use(markdownItAnchor, {
     permalink: markdownItAnchor.permalink.ariaHidden({
       placement: 'after',
       class: 'direct-link',
       symbol: '#',
-      level: [1, 2, 3, 4]
+      level: [1, 2, 3, 4],
     }),
-    slugify: eleventyConfig.getFilter('slug')
+    slugify: eleventyConfig.getFilter('slug'),
   })
   eleventyConfig.setLibrary('md', markdownLibrary)
-
 
   // Nunjucks DX
   eleventyConfig.setNunjucksEnvironmentOptions({
@@ -169,37 +166,37 @@ export default function (eleventyConfig) {
     lstripBlocks: false,
     noCache: true,
     throwOnUndefined: false,
-  });
-  eleventyConfig.addNunjucksFilter('ternary', (val, a, b) => (val ? a : b));
+  })
+  eleventyConfig.addNunjucksFilter('ternary', (val, a, b) => (val ? a : b))
 
   // Markdown
   eleventyConfig.amendLibrary('md', md => {
-    eleventyConfig.markdownLibrary = md;
-    return applyMarkdownExtensions(md);
-  });
+    eleventyConfig.markdownLibrary = md
+    return applyMarkdownExtensions(md)
+  })
 
   // Filters, shortcodes, collections, archives from your /lib folder
-  registerFilters(eleventyConfig);
-  registerShortcodes(eleventyConfig);
-  registerCollections(eleventyConfig);
-  registerArchive(eleventyConfig);
+  registerFilters(eleventyConfig)
+  registerShortcodes(eleventyConfig)
+  registerCollections(eleventyConfig)
+  registerArchive(eleventyConfig)
   // Layouts
   eleventyConfig.addLayoutAlias('base', 'base.njk')
   // Programmatic Global Data
-  eleventyConfig.addGlobalData('eleventyComputed', computedGlobal);
-  eleventyConfig.addGlobalData('nav', buildNav());
-  eleventyConfig.addGlobalData('archivesNav', buildArchiveNav());
+  eleventyConfig.addGlobalData('eleventyComputed', computedGlobal)
+  eleventyConfig.addGlobalData('nav', buildNav())
+  eleventyConfig.addGlobalData('archivesNav', buildArchiveNav())
   eleventyConfig.addGlobalData('build', async () => {
-    const meta = getBuildInfo();
-    const fx = await buildGlobals();
+    const meta = getBuildInfo()
+    const fx = await buildGlobals()
     return {
       ...fx,
       builtAtIso: meta.iso,
       env: meta.env,
       fullHash: meta.fullHash,
       branch: meta.branch,
-    };
-  });
+    }
+  })
 
   // HTML → Markdown importer for raw HTML inside content tree
   htmlToMarkdownUnified(eleventyConfig, {
@@ -208,7 +205,7 @@ export default function (eleventyConfig) {
     pageTitlePrefix: '',
     defaultLayout: 'converted-html.njk',
     frontMatterExtra: { convertedFromHtml: true },
-  });
+  })
 
   // --- End: Libraries & Custom Functions ---
   // Copy/pass-through files
@@ -225,7 +222,7 @@ export default function (eleventyConfig) {
       output: '_site',
       includes: '_includes',
       layouts: 'layouts',
-      data: '_data'
-    }
+      data: '_data',
+    },
   }
 }

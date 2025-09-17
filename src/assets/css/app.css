@@ -350,7 +350,8 @@ html {
   }
 
   .hb-grid {
-    background-image: radial-gradient(
+    background-image:
+      radial-gradient(
         circle at 2px 2px,
         rgba(0, 255, 65, 0.18) 1.2px,
         transparent 0
@@ -501,7 +502,8 @@ html {
     content: '';
     position: fixed;
     inset: 0;
-    background-image: repeating-linear-gradient(
+    background-image:
+      repeating-linear-gradient(
         0deg,
         rgba(255, 255, 255, 0.02) 0 1px,
         transparent 1px 2px
@@ -560,7 +562,8 @@ html {
     mix-blend-mode: screen;
   }
   .mschf-grid[data-variant='dots'] {
-    background-image: radial-gradient(
+    background-image:
+      radial-gradient(
         circle at 1px 1px,
         rgba(255, 255, 255, 0.35) 1px,
         transparent 1.8px
@@ -578,11 +581,8 @@ html {
       0 0;
   }
   .mschf-grid[data-variant='lines'] {
-    background-image: linear-gradient(
-        to right,
-        rgba(255, 255, 255, 0.18) 1px,
-        transparent 1px
-      ),
+    background-image:
+      linear-gradient(to right, rgba(255, 255, 255, 0.18) 1px, transparent 1px),
       linear-gradient(to bottom, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
     background-size:
       24px 24px,
@@ -684,7 +684,8 @@ html {
     inset: -35% -12%;
     height: 45%;
     transform: translate3d(0, -120%, 0);
-    background: linear-gradient(
+    background:
+      linear-gradient(
         180deg,
         rgba(255, 255, 255, 0.36) 0%,
         rgba(255, 255, 255, 0.12) 32%,

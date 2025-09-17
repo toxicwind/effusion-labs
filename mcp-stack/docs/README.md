@@ -55,7 +55,6 @@ export FLARESOLVERR_URL=http://127.0.0.1:8191
 ### Real‑world Examples (validated Sep 4, 2025)
 
 - Cloudflare‑guarded (without sidecar → degraded; with sidecar → success):
-
   - Pop Mart:
     `curl -sX POST $BASE/servers/readweb/info -d '{"url":"https://www.popmart.com"}'`
   - KAWS:

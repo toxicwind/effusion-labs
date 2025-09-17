@@ -16,7 +16,8 @@ fi
 
 retry_exec "$@" -- \
   "$REPO_ROOT/node_modules/.bin/yq" \
-  "$TOOLS_DIR/yq/yq"
+  "$TOOLS_DIR/yq/yq" \
+  yq
 
 echo "❌ yq not available; ensure devDeps installed." >&2
 exit 127

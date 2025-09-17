@@ -263,8 +263,8 @@ convincing its performance, must never be mistaken for the real thing.
 > - **URL:** `https://arxiv.org/abs/2306.12001`
 
 [^10]:
-    **[Bender, E. M., et al. (2021)]** – _On the Dangers of Stochastic Parrots: Can
-    Language Models Be Too Big? 🦜_
+    **[Bender, E. M., et al. (2021)]** – _On the Dangers of Stochastic Parrots:
+    Can Language Models Be Too Big? 🦜_
 
 > _Epistemic Note (Adversarial):_ The classic paper that provides the
 > philosophical underpinning for the "parroting" critique. It serves as a

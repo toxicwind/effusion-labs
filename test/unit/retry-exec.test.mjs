@@ -2,7 +2,7 @@ import test from 'node:test'
 import assert from 'node:assert/strict'
 import { execFileSync } from 'node:child_process'
 
-const run = (script) =>
+const run = script =>
   execFileSync('bash', ['-lc', script], {
     cwd: process.cwd(),
     encoding: 'utf8',
@@ -36,7 +36,9 @@ test('retry_exec errors when the separator is missing', () => {
       source ./bin/_lib.sh
       retry_exec foo bar
     `)
-    assert.fail('retry_exec should exit with an error when the separator is absent')
+    assert.fail(
+      'retry_exec should exit with an error when the separator is absent'
+    )
   } catch (err) {
     assert.equal(err.status, 1)
     assert.match(err.stderr, /missing '--' separator/)
