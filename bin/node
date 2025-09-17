@@ -1,10 +1,16 @@
 #!/usr/bin/env bash
 set -euo pipefail
-DIR="$(cd "$(dirname "$0")" && pwd)"
-PATH_WITHOUT_DIR=$(printf "%s" "$PATH" | sed "s|$DIR:||;s|:$DIR||;s|$DIR||")
-REAL_NODE="$(PATH="$PATH_WITHOUT_DIR" command -v node)"
-if [ -z "$REAL_NODE" ]; then
+. "$(cd "$(dirname "$0")" && pwd)/_lib.sh"
+
+PATH_WITHOUT_REPO_BIN="$(path_without_repo_bin)"
+REAL_NODE=""
+if [[ -n "$PATH_WITHOUT_REPO_BIN" ]]; then
+  REAL_NODE="$(PATH="$PATH_WITHOUT_REPO_BIN" command -v node 2>/dev/null || true)"
+fi
+
+if [[ -z "$REAL_NODE" ]]; then
   echo "node binary not found" >&2
   exit 127
 fi
+
 exec "$REAL_NODE" "$@"

@@ -1,9 +1,27 @@
 #!/usr/bin/env bash
-# Repo-local npm shim: inject keepalive for npm test invocations.
+# Repo-local npm shim: inject keepalive for npm test invocations and reuse bin/_lib helpers.
 set -euo pipefail
+. "$(cd "$(dirname "$0")" && pwd)/_lib.sh"
+
 orig_args=("$@")
 if [[ "${1:-}" == "test" ]] || { [[ "${1:-}" == "run" ]] && [[ "${2:-}" == "test" ]]; }; then
   export NODE_OPTIONS="${NODE_OPTIONS:-} --import=./test/setup/llm-keepalive.mjs"
 fi
-REAL_NPM="$(command -v -a npm | awk 'NR==2{print;exit}')"
-exec "${REAL_NPM:-/usr/bin/npm}" "${orig_args[@]}"
+
+PATH_WITHOUT_REPO_BIN="$(path_without_repo_bin)"
+REAL_NPM=""
+if [[ -n "$PATH_WITHOUT_REPO_BIN" ]]; then
+  REAL_NPM="$(PATH="$PATH_WITHOUT_REPO_BIN" command -v npm 2>/dev/null || true)"
+fi
+
+candidates=(
+  "$REPO_ROOT/node_modules/.bin/npm"
+)
+if [[ -n "$REAL_NPM" ]]; then
+  candidates+=("$REAL_NPM")
+fi
+
+retry_exec "${orig_args[@]}" -- "${candidates[@]}"
+
+echo "❌ npm not available; ensure Node.js/npm is installed." >&2
+exit 127
