@@ -4,6 +4,7 @@ _site/
 
 # Cache files
 .cache/
+.tools/
 
 # Node.js
 # Dependencies and lock files

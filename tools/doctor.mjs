@@ -1,7 +1,24 @@
 #!/usr/bin/env node
 // tools/doctor.mjs — quick env check for contributors and CI
 import { execFileSync } from 'node:child_process'
+import { fileURLToPath } from 'node:url'
+import { join } from 'node:path'
 import process from 'node:process'
+
+const repoRoot = fileURLToPath(new URL('..', import.meta.url))
+const repoBin = join(repoRoot, 'bin')
+
+const shim = name => join(repoBin, name)
+
+function npmVersion() {
+  const agent = process.env.npm_config_user_agent || ''
+  const token = agent.split(' ')[0] || ''
+  const version = token.includes('/') ? token.split('/')[1] : ''
+  if (version) {
+    return version
+  }
+  return bin(shim('npm'))
+}
 
 function bin(name, args = ['--version']) {
   try {
@@ -16,15 +33,15 @@ function bin(name, args = ['--version']) {
 
 const checks = []
 checks.push(['node', process.versions.node, v => Number(v.split('.')[0]) >= 24])
-checks.push(['npm', bin('npm'), v => !!v])
-checks.push(['rg', bin('rg', ['--version']), v => !!v])
+checks.push(['npm', npmVersion(), v => !!v])
+checks.push(['rg', bin(shim('rg'), ['--version']), v => !!v])
 checks.push([
   'fd',
-  bin('fd', ['--version']) || bin('fdfind', ['--version']),
+  bin(shim('fd'), ['--version']) || bin('fdfind', ['--version']),
   v => !!v,
 ])
-checks.push(['jq', bin('jq', ['--version']), v => !!v])
-checks.push(['sd', bin('sd', ['--version']), v => !!v])
+checks.push(['jq', bin(shim('jq'), ['--version']), v => !!v])
+checks.push(['sd', bin(shim('sd'), ['--version']), v => !!v])
 
 let ok = true
 for (const [name, version, pass] of checks) {

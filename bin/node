@@ -2,15 +2,28 @@
 set -euo pipefail
 . "$(cd "$(dirname "$0")" && pwd)/_lib.sh"
 
+if ! ensure_node_runtime 24; then
+  echo "node-shim: warning: failed to provision Node >= 24; falling back to system resolution." >&2
+fi
+
+PATH="${REPO_ROOT}/bin:${PATH:-}"
+
 PATH_WITHOUT_REPO_BIN="$(path_without_repo_bin)"
 REAL_NODE=""
 if [[ -n "$PATH_WITHOUT_REPO_BIN" ]]; then
   REAL_NODE="$(PATH="$PATH_WITHOUT_REPO_BIN" command -v node 2>/dev/null || true)"
 fi
 
-if [[ -z "$REAL_NODE" ]]; then
-  echo "node binary not found" >&2
-  exit 127
+candidates=(
+  "$REPO_ROOT/node_modules/.bin/node"
+  "$TOOLS_DIR/node/node"
+)
+if [[ -n "$REAL_NODE" ]]; then
+  candidates+=("$REAL_NODE")
 fi
+candidates+=(node)
 
-exec "$REAL_NODE" "$@"
+retry_exec "$@" -- "${candidates[@]}"
+
+echo "❌ node not available; ensure Node.js is installed." >&2
+exit 127

@@ -989,14 +989,14 @@
       const chosen = CNR.pick()
       if (!chosen) {
         DEBUG && warn('bail: no free corner for stickers')
-        return DEBUG && groupEnd(), false
+        return (DEBUG && groupEnd(), false)
       }
       actor.corner = chosen // handed to actor.mount
       CNR.claim(actor, [chosen])
     } else if (wantsCorners(actor.kind)) {
       if (!CNR.can(['tl', 'tr', 'bl', 'br'])) {
         DEBUG && warn('bail: corners occupied')
-        return DEBUG && groupEnd(), false
+        return (DEBUG && groupEnd(), false)
       }
       CNR.claim(actor, ['tl', 'tr', 'bl', 'br'])
     }
@@ -1042,7 +1042,7 @@
     } catch (e) {
       DEBUG && warn('actor.mount threw', e)
       CNR.release(actor)
-      return DEBUG && groupEnd(), false
+      return (DEBUG && groupEnd(), false)
     }
     // record bounding box to discourage future overlaps
     try {

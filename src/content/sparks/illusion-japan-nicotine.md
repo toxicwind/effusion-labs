@@ -324,7 +324,8 @@ but the castle was designed by the house.
 ### Annotated Appendix
 
 [^1]:
-    **[RELAZO-2025 / HTP Catalog]** – _Relazo.net, Japanese product metadata aggregator_
+    **[RELAZO-2025 / HTP Catalog]** – _Relazo.net, Japanese product metadata
+    aggregator_
 
 > _Epistemic Note (Primary):_ Provides a comprehensive, real‑time snapshot of
 > the HTP SKUs available in the Japanese market as of 2025. Essential for
@@ -359,8 +360,8 @@ but the castle was designed by the house.
 > Source: [EP1850685B1](https://patents.google.com/patent/EP1850685B1/en)
 
 [^5]:
-    **[Philip Morris, 2023]** – _Hydrophobic surface treatments on capsules for smoking
-    articles (US11849756B2)_
+    **[Philip Morris, 2023]** – _Hydrophobic surface treatments on capsules for
+    smoking articles (US11849756B2)_
 
 > _Epistemic Note (Primary):_ Recent patent for hydrophobic surface treatments
 > on capsules, demonstrating the ongoing advanced materials science applied to
@@ -377,7 +378,8 @@ but the castle was designed by the house.
 > Source: [EP4420536A1](https://patents.google.com/patent/EP4420536A1/en)
 
 [^7]:
-    **[KT&G, 2020]** – _Flavor capsule optimized for heated tobacco products (WO2020153465A1)_
+    **[KT&G, 2020]** – _Flavor capsule optimized for heated tobacco products
+    (WO2020153465A1)_
 
 > _Epistemic Note (Primary):_ Competitor patent specifically for HTP‑optimized
 > capsules, showing how innovation occurs on targeted technical vectors to gain
@@ -394,8 +396,8 @@ but the castle was designed by the house.
 > Source: [Ploom X Ranking](https://relazo.net/ploomx_ranking/)
 
 [^9]:
-    **[Tabuchi, 2019]** – _Japan “Society and New Tobacco” Internet Survey (JASTIS
-    Study)_
+    **[Tabuchi, 2019]** – _Japan “Society and New Tobacco” Internet Survey
+    (JASTIS Study)_
 
 > _Epistemic Note (Primary):_ Longitudinal survey data providing demographic and
 > behavioral context for Japanese tobacco users, useful for showing patterns of
@@ -403,8 +405,8 @@ but the castle was designed by the house.
 > Source: [PMC6776477](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6776477/)
 
 [^10]:
-    **[UCSF, 2020]** – _Analysis of FDA’s IQOS marketing authorisation and its policy
-    impacts_
+    **[UCSF, 2020]** – _Analysis of FDA’s IQOS marketing authorisation and its
+    policy impacts_
 
 > _Epistemic Note (Adversarial):_ Critical perspective on the US regulatory
 > approach, highlighting the denial of reduced‑risk claims and framing the
@@ -435,8 +437,8 @@ but the castle was designed by the house.
 > Source: [JTI Corporate Site](https://www.jti.com/)
 
 [^14]:
-    **[WHO, 2025]** – _Information Sheet: Flavour accessories in tobacco products
-    enhance attractiveness and appeal_
+    **[WHO, 2025]** – _Information Sheet: Flavour accessories in tobacco
+    products enhance attractiveness and appeal_
 
 > _Epistemic Note (Adversarial):_ Public health report arguing that flavor
 > accessories enhance attractiveness and may undermine cessation, offering a

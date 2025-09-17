@@ -16,7 +16,8 @@ fi
 
 retry_exec "$@" -- \
   "$REPO_ROOT/node_modules/.bin/jq" \
-  "$TOOLS_DIR/jq/jq"
+  "$TOOLS_DIR/jq/jq" \
+  jq
 
 echo "❌ jq not available; ensure devDeps installed." >&2
 exit 127

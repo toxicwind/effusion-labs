@@ -7,26 +7,9 @@
 set -Eeuo pipefail
 . "$(cd "$(dirname "$0")" && pwd)/_lib.sh"
 
-_find_fd() {
-  local c
-  for c in \
-    "$REPO_ROOT/node_modules/.bin/fd" \
-    "$REPO_ROOT/node_modules/.bin/fdfind" \
-    "$TOOLS_DIR/fd/fd" \
-    /usr/bin/fd \
-    /usr/local/bin/fd \
-    "$(command -v fd 2>/dev/null || true)" \
-    "$(command -v fdfind 2>/dev/null || true)"
-  ; do
-    [[ -n "${c}" && -x "${c}" ]] && { printf '%s\n' "$c"; return 0; }
-  done
-  return 1
-}
-
-FD_BIN="$(_find_fd)" || {
-  echo "❌ fd not available; ensure devDeps installed or provide a system 'fd'." >&2
-  exit 127
-}
+if ! ensure_fd_tool; then
+  printf '%s\n' "fd-shim: warning: unable to provision fd automatically; falling back to system resolution." >&2
+fi
 
 # ---------- fixed safety knobs (no env toggles) ----------
 SAFE_MAX_DEPTH=6          # limit directory recursion to reduce scan blast radius
@@ -53,14 +36,14 @@ while (( i < ${#orig[@]} )); do
       # In practice we drop the flag and any immediate token that looks like the command (best-effort).
       if (( i+1 < ${#orig[@]} )); then
         # skip one following token (command template); cannot robustly parse arbitrary templates without execing - so we drop one token safely.
-        ((i++))
+        ((i += 1))
       fi
       ;;
     -X|--exec-batch)
       printf '%s\n' "fd-shim: removed batch-exec flag '-X/--exec-batch' to avoid passing many paths into external commands. Listing only." >&2
       show_change=1
       # if a command token follows, skip one token to avoid misinterpreting it as a path later
-      if (( i+1 < ${#orig[@]} )); then ((i++)); fi
+      if (( i+1 < ${#orig[@]} )); then ((i += 1)); fi
       ;;
     -H|--hidden)
       # visible request to include hidden files; allowed but warn because it increases output surface
@@ -97,7 +80,7 @@ while (( i < ${#orig[@]} )); do
       sanitized+=( "$a" )
       ;;
   esac
-  ((i++))
+  ((i += 1))
 done
 
 # build final args: inject safety flags unless user explicitly used --print0 (we still inject)
@@ -110,4 +93,13 @@ if [[ "$show_change" -eq 1 ]]; then
 fi
 
 # exec the real fd; no post-processing, no piping; shim only rewrites CLI
-exec "${FD_BIN}" "${final_args[@]}"
+retry_exec "${final_args[@]}" -- \
+  "$REPO_ROOT/node_modules/.bin/fd" \
+  "$REPO_ROOT/node_modules/.bin/fdfind" \
+  "$TOOLS_DIR/fd/fd" \
+  "$TOOLS_DIR/fd/fdfind" \
+  fd \
+  fdfind
+
+echo "❌ fd not available; ensure devDeps installed or provide a system 'fd'." >&2
+exit 127

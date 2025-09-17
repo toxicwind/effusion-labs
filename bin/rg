@@ -5,26 +5,6 @@
 set -Eeuo pipefail
 . "$(cd "$(dirname "$0")" && pwd)/_lib.sh"
 
-_find_rg() {
-  local c
-  for c in \
-    "$REPO_ROOT/node_modules/.bin/rg" \
-    "$REPO_ROOT/node_modules/.bin/ripgrep" \
-    "$TOOLS_DIR/rg/rg" \
-    /usr/bin/rg \
-    /usr/local/bin/rg \
-    "$(command -v rg 2>/dev/null || true)"
-  ; do
-    [[ -n "${c}" && -x "${c}" ]] && { printf '%s\n' "$c"; return 0; }
-  done
-  return 1
-}
-
-RG_BIN="$(_find_rg)" || {
-  echo "❌ ripgrep (rg) not available; install or provide 'rg' on PATH." >&2
-  exit 127
-}
-
 # ---------- fixed safety knobs (no env toggles) ----------
 MAX_COLUMNS=4000      # keep below typical PIPE_BUF (4096) to avoid huge atomic writes
 MAX_FILESIZE=10M
@@ -116,4 +96,13 @@ if [[ "$showed_change" -eq 1 ]]; then
 fi
 
 # Final exec -> do not pipe, do not post-process; hand control to rg with repaired args.
-exec "${RG_BIN}" "${final_args[@]}"
+retry_exec "${final_args[@]}" -- \
+  "$REPO_ROOT/node_modules/.bin/rg" \
+  "$REPO_ROOT/node_modules/.bin/ripgrep" \
+  "$TOOLS_DIR/rg/rg" \
+  "$TOOLS_DIR/rg/ripgrep" \
+  rg \
+  ripgrep
+
+echo "❌ ripgrep (rg) not available; install or provide 'rg' on PATH." >&2
+exit 127
