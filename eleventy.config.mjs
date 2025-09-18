@@ -142,7 +142,10 @@ export default function (eleventyConfig) {
   })
   eleventyConfig.addPlugin(schema)
 
-  if (!isTest) {
+  const enableImagePlugin =
+    !isTest || process.env.ELEVENTY_TEST_ENABLE_IMAGES === '1'
+
+  if (enableImagePlugin) {
     eleventyConfig.addPlugin(eleventyImageTransformPlugin, {
       urlPath: '/images/',
       outputDir: path.join(dirs.output, 'images/'),
@@ -156,6 +159,10 @@ export default function (eleventyConfig) {
         return `${s}-${width}.${format}`
       },
     })
+  }
+
+  if (!enableImagePlugin) {
+    eleventyConfig.addPassthroughCopy({ 'src/images': 'images' })
   }
 
   // --- End: Plugins ---

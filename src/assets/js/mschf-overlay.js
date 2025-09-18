@@ -117,17 +117,42 @@
   // External dep loader (PixiJS v8)
   async function loadPixi() {
     if (globalThis.PIXI && globalThis.PIXI.Application) return globalThis.PIXI
+
     const sources = [
-      'https://cdn.jsdelivr.net/npm/pixi.js@8.2.1/dist/pixi.min.mjs',
-      'https://esm.sh/pixi.js@8',
-      'https://cdn.skypack.dev/pixi.js@8',
+      [
+        'https://cdn.jsdelivr.net/npm/pixi.js@8.2.1/dist/pixi.min.mjs',
+        () =>
+          import(
+            /* @vite-ignore */
+            'https://cdn.jsdelivr.net/npm/pixi.js@8.2.1/dist/pixi.min.mjs'
+          ),
+      ],
+      [
+        'https://esm.sh/pixi.js@8',
+        () => import(/* @vite-ignore */ 'https://esm.sh/pixi.js@8'),
+      ],
+      [
+        'https://cdn.skypack.dev/pixi.js@8',
+        () => import(/* @vite-ignore */ 'https://cdn.skypack.dev/pixi.js@8'),
+      ],
     ]
-    for (const src of sources) {
+
+    for (const [url, importer] of sources) {
       try {
-        const mod = await import(/* @vite-ignore */ src)
-        return mod.default || mod
-      } catch {}
+        const mod = await importer()
+        return mod?.default || mod
+      } catch (error) {
+        try {
+          if (typeof console !== 'undefined' && typeof console.warn === 'function') {
+            console.warn(
+              `[mschf-overlay] Failed to load Pixi from ${url}`,
+              error && error.message ? error.message : error
+            )
+          }
+        } catch {}
+      }
     }
+
     return null
   }
 
