@@ -124,11 +124,16 @@ test('homepage hero and work filters', async () => {
     assert(cls.includes('focus:-translate-y-1'))
   })
 
-  // Contract: frontend script present
-  const scriptPath = path.join(outDir, 'js/work-filters.js')
-  assert(existsSync(scriptPath))
-  const scriptContent = readFileSync(scriptPath, 'utf8')
-  assert.match(scriptContent, /data-filter/)
+  // Contract: Vite bundle ships the work filters script
+  const manifestPath = path.join(outDir, '.vite', 'manifest.json')
+  assert(existsSync(manifestPath))
+  const manifest = JSON.parse(readFileSync(manifestPath, 'utf8'))
+  const workEntry = manifest['work/index.html']
+  assert(workEntry)
+  const bundlePath = path.join(outDir, workEntry.file)
+  assert(existsSync(bundlePath))
+  const bundleContent = readFileSync(bundlePath, 'utf8')
+  assert.match(bundleContent, /data-filter/)
 
   // Lab seal flourish
   assert(doc.querySelector('.lab-seal'))

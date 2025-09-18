@@ -15,6 +15,7 @@ import sitemap from '@quasibit/eleventy-plugin-sitemap'
 import schema from '@quasibit/eleventy-plugin-schema'
 import { eleventyImageTransformPlugin } from '@11ty/eleventy-img'
 import rollupPluginCritical from 'rollup-plugin-critical'
+import tailwindcss from '@tailwindcss/vite'
 
 import { dirs } from './src/lib/site.mjs'
 import { applyMarkdownExtensions } from './src/lib/markdown/index.mjs'
@@ -55,6 +56,7 @@ export default function (eleventyConfig) {
   eleventyConfig.setServerPassthroughCopyBehavior('copy')
   eleventyConfig.addPassthroughCopy('public')
   eleventyConfig.ignores.add('src/content/docs/**')
+  const isTest = process.env.ELEVENTY_ENV === 'test'
 
   // Plugins
   eleventyConfig.addPlugin(EleventyPluginNavigation)
@@ -67,12 +69,19 @@ export default function (eleventyConfig) {
     viteOptions: {
       publicDir: 'public',
       clearScreen: false,
+      plugins: [tailwindcss()],
       server: {
         mode: 'development',
         middlewareMode: true,
       },
       appType: 'custom',
       assetsInclude: ['**/*.xml', '**/*.txt'],
+      resolve: {
+        alias: {
+          '@': path.resolve(process.cwd(), 'src'),
+          '/src': path.resolve(process.cwd(), 'src'),
+        },
+      },
       build: {
         mode: 'production',
         sourcemap: 'true',
@@ -84,30 +93,32 @@ export default function (eleventyConfig) {
             chunkFileNames: 'assets/[name].[hash].js',
             entryFileNames: 'assets/[name].[hash].js',
           },
-          plugins: [
-            rollupPluginCritical({
-              criticalUrl: './_site/',
-              criticalBase: './_site/',
-              criticalPages: [{ uri: 'index.html' }, { uri: '404.html' }],
-              criticalConfig: {
-                inline: true,
-                dimensions: [
-                  {
-                    height: 900,
-                    width: 375,
+          plugins: isTest
+            ? []
+            : [
+                rollupPluginCritical({
+                  criticalUrl: './_site/',
+                  criticalBase: './_site/',
+                  criticalPages: [{ uri: 'index.html' }, { uri: '404.html' }],
+                  criticalConfig: {
+                    inline: true,
+                    dimensions: [
+                      {
+                        height: 900,
+                        width: 375,
+                      },
+                      {
+                        height: 720,
+                        width: 1280,
+                      },
+                      {
+                        height: 1080,
+                        width: 1920,
+                      },
+                    ],
                   },
-                  {
-                    height: 720,
-                    width: 1280,
-                  },
-                  {
-                    height: 1080,
-                    width: 1920,
-                  },
-                ],
-              },
-            }),
-          ],
+                }),
+              ],
         },
       },
     },
@@ -124,7 +135,6 @@ export default function (eleventyConfig) {
   })
   eleventyConfig.addPlugin(schema)
 
-  const isTest = process.env.ELEVENTY_ENV === 'test'
   if (!isTest) {
     eleventyConfig.addPlugin(eleventyImageTransformPlugin, {
       urlPath: '/images/',
@@ -209,7 +219,6 @@ export default function (eleventyConfig) {
 
   // --- End: Libraries & Custom Functions ---
   // Copy/pass-through files
-  eleventyConfig.addPassthroughCopy('src/assets/css')
   eleventyConfig.addPassthroughCopy('src/assets/js')
 
   return {
@@ -219,7 +228,7 @@ export default function (eleventyConfig) {
     dir: {
       input: 'src',
       // better not use "public" as the name of the output folder (see above...)
-      output: '_site',
+      output: process.env.ELEVENTY_TEST_OUTPUT || '_site',
       includes: '_includes',
       layouts: 'layouts',
       data: '_data',

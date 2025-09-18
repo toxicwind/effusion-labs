@@ -2,6 +2,7 @@ import test from 'node:test'
 import assert from 'node:assert'
 import fs from 'node:fs'
 import { buildLean } from '../helpers/eleventy-env.mjs'
+import './daisyui-css.spec.mjs'
 
 // Acceptance: buildLean sets ELEVENTY_ENV and creates a clean output directory
 // Property: output directory exists and is recreated for each run

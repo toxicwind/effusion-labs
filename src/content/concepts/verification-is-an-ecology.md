@@ -1,6 +1,7 @@
 ---
 title: 'A Field Guide to the Ecology of Doubt'
 layout: 'base.njk'
+templateEngineOverride: njk,md
 date: 2025-08-20
 status: Final
 certainty: conceptual

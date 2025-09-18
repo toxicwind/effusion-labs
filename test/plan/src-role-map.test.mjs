@@ -24,6 +24,6 @@ test('archives dynamic templates treated as templates', () => {
   assert.ok(pattern.includes('11ty.js'))
 })
 
-test('published CSS app.css exists', () => {
-  assert.ok(fs.existsSync('css/app.css'))
+test('tailwind entry css exists in src assets', () => {
+  assert.ok(fs.existsSync('src/assets/css/app.css'))
 })
