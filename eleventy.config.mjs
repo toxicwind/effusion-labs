@@ -2,6 +2,7 @@
 import fs from 'node:fs'
 import fsp from 'node:fs/promises'
 import path from 'node:path'
+import { fileURLToPath } from 'node:url'
 import markdownIt from 'markdown-it'
 import markdownItAnchor from 'markdown-it-anchor'
 
@@ -32,11 +33,14 @@ import { createResolvers } from './src/lib/interlinkers/resolvers.mjs'
 import { flushUnresolved } from './src/lib/interlinkers/unresolved-report.mjs'
 import { eleventyComputed as computedGlobal } from './src/lib/data/computed.mjs'
 
+const projectRoot = path.dirname(fileURLToPath(import.meta.url))
+const srcDir = path.join(projectRoot, 'src')
+
 export default function (eleventyConfig) {
   // --- Start: Event Handlers ---
   eleventyConfig.on('eleventy.before', async () => {
     // Clean Vite temp to avoid stale-dir issues
-    const viteTemp = path.resolve(process.cwd(), '.11ty-vite')
+    const viteTemp = path.join(projectRoot, '.11ty-vite')
     if (fs.existsSync(viteTemp)) {
       await fsp.rm(viteTemp, { recursive: true, force: true })
     }
@@ -73,13 +77,16 @@ export default function (eleventyConfig) {
       server: {
         mode: 'development',
         middlewareMode: true,
+        fs: {
+          allow: [projectRoot, srcDir],
+        },
       },
       appType: 'custom',
       assetsInclude: ['**/*.xml', '**/*.txt'],
       resolve: {
         alias: {
-          '@': path.resolve(process.cwd(), 'src'),
-          '/src': path.resolve(process.cwd(), 'src'),
+          '@': srcDir,
+          '/src': srcDir,
         },
       },
       build: {
