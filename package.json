@@ -26,7 +26,8 @@
     "mcp:dev": "node mcp-stack/gateway/server.mjs",
     "mcp:integration": "node mcp-stack/tests/integration.mjs",
     "mcp:test": "node mcp-stack/tests/smoke.mjs",
-    "postinstall": "if [ \"${PATCH_PACKAGE_RUN:-1}\" != \"0\" ] && [ -x node_modules/.bin/patch-package ]; then patch-package; fi"
+    "postinstall": "if [ \"${PATCH_PACKAGE_RUN:-1}\" != \"0\" ] && [ -x node_modules/.bin/patch-package ]; then patch-package; fi",
+    "preinstall": "node --unhandled-rejections=strict tools/dev/ensure-system-headless.mjs"
   },
   "devDependencies": {
     "@11ty/eleventy": "3.1.2",
@@ -96,6 +97,7 @@
     "patch-package": "8.0.0",
     "picocolors": "1.1.1",
     "playwright-extra": "4.3.6",
+    "postcss": "^8.5.6",
     "postcss-nesting": "^13.0.0",
     "prettier": "3.6.2",
     "prettier-plugin-jinja-template": "^2.1.0",
