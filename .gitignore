@@ -45,3 +45,5 @@ tmp/
 logs
 *.log
 npm-debug.log*
+
+artifacts/reports/interlinker-unresolved.json
