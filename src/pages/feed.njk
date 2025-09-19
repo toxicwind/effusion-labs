@@ -9,7 +9,6 @@ json:
     base: "https://effusionlabs.com/"
 ---
 {% set posts = collections.recentAll | slice(0, 20) %}
-<!-- prettier-ignore-start -->
 <?xml version="1.0" encoding="utf-8"?>
 <!-- build: {{ build.hash }} -->
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
@@ -32,4 +31,3 @@ json:
     {%- endfor %}
   </channel>
 </rss>
-<!-- prettier-ignore-end -->
