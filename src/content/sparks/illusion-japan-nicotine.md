@@ -1,7 +1,7 @@
 ---
 title:
-  'The Illusion of Choice: Engineering Adult Agency in Japan’s Nicotine Market'
-layout: 'base.njk'
+  "The Illusion of Choice: Engineering Adult Agency in Japan’s Nicotine Market"
+layout: "base.njk"
 date: 2025-07-24
 status: Stable
 certainty: evidence-analytic
@@ -23,16 +23,16 @@ analytic_lens:
   - consumer-literacy
   - market-theater
 memory_ref:
-  - '[japanese-tobacco-market]'
-  - '[engineering-of-choice]'
-  - '[regulatory-comparisons]'
-  - '[consumer-feedback]'
-  - '[product-lockin]'
+  - "[japanese-tobacco-market]"
+  - "[engineering-of-choice]"
+  - "[regulatory-comparisons]"
+  - "[consumer-feedback]"
+  - "[product-lockin]"
 preamble:
   classification:
-    '[META] Meta-ironic technology audit of Japan’s tobacco market as engineered
-    adult agency'
-  version: '1.0-agency-illusion'
+    "[META] Meta-ironic technology audit of Japan’s tobacco market as engineered
+    adult agency"
+  version: "1.0-agency-illusion"
 ---
 
 > _A regulatory system that treats its adult citizens as children will
@@ -131,7 +131,7 @@ solution and crystallizing during storage, a significant technical hurdle.
 Patent EP1850685B1 focuses on crystallization inhibitors, while US11849756B2
 describes specialized hydrophobic surface treatments using fatty acids to ensure
 capsule integrity and reliable crush-release performance after months on a
-shelf.[^4] [^5] This is closer to pharmaceutical formulation than traditional
+shelf.[^4][^5] This is closer to pharmaceutical formulation than traditional
 cigarette manufacturing. The arms race is not just about taste, but about
 chemical stability and mechanical precision.
 
@@ -323,124 +323,111 @@ but the castle was designed by the house.
 
 ### Annotated Appendix
 
-[^1]:
-    **[RELAZO-2025 / HTP Catalog]** – _Relazo.net, Japanese product metadata
+[^1]: **[RELAZO-2025 / HTP Catalog]** – _Relazo.net, Japanese product metadata
     aggregator_
 
 > _Epistemic Note (Primary):_ Provides a comprehensive, real‑time snapshot of
 > the HTP SKUs available in the Japanese market as of 2025. Essential for
-> establishing the “option density” argument.  
+> establishing the “option density” argument.\
 > Source: [HTP Catalog](https://relazo.net/haetedtabacco_all/)
 
-[^2]:
-    **[RELAZO-2025 / Ploom Tech+ Catalog]** – _Relazo.net, Japanese product
+[^2]: **[RELAZO-2025 / Ploom Tech+ Catalog]** – _Relazo.net, Japanese product
     metadata aggregator_
 
 > _Epistemic Note (Primary):_ Documents the product lineage and churn for a
 > specific capsule-based system, demonstrating the high rate of product
-> experimentation and discontinuation.  
+> experimentation and discontinuation.\
 > Source: [Ploom Tech+ Catalog](https://relazo.net/ploomtechplus_flavor/)
 
-[^3]:
-    **[Japan Tobacco, 2020]** – _Method and apparatus for manufacturing flavor
+[^3]: **[Japan Tobacco, 2020]** – _Method and apparatus for manufacturing flavor
     capsule of tobacco (US10694777B2)_
 
 > _Epistemic Note (Primary):_ A patent for manufacturing multi‑layered flavor
 > capsules, providing direct technical evidence of the engineering
-> sophistication behind sequential flavor release.  
+> sophistication behind sequential flavor release.\
 > Source: [US10694777B2](https://patents.google.com/patent/US10694777B2/en)
 
-[^4]:
-    **[Philip Morris, 2006]** – _Capsule for articles for smoking and methods of
+[^4]: **[Philip Morris, 2006]** – _Capsule for articles for smoking and methods of
     producing same (EP1850685B1)_
 
 > _Epistemic Note (Primary):_ Early patent focused on the chemical stability of
 > capsule contents, specifically preventing menthol crystallization. Shows that
-> the R&D focus was on reliability and shelf‑life from the beginning.  
+> the R&D focus was on reliability and shelf‑life from the beginning.\
 > Source: [EP1850685B1](https://patents.google.com/patent/EP1850685B1/en)
 
-[^5]:
-    **[Philip Morris, 2023]** – _Hydrophobic surface treatments on capsules for
+[^5]: **[Philip Morris, 2023]** – _Hydrophobic surface treatments on capsules for
     smoking articles (US11849756B2)_
 
 > _Epistemic Note (Primary):_ Recent patent for hydrophobic surface treatments
 > on capsules, demonstrating the ongoing advanced materials science applied to
-> these components.  
+> these components.\
 > Source: [US11849756B2](https://patents.google.com/patent/US11849756B2/en)
 
-[^6]:
-    **[Japan Tobacco, 2024]** – _Flavor stick, heat‑not‑burn‑type flavor
+[^6]: **[Japan Tobacco, 2024]** – _Flavor stick, heat‑not‑burn‑type flavor
     inhalation product, and method for producing flavor stick (EP4420536A1)_
 
 > _Epistemic Note (Primary):_ Patent detailing complex airflow management within
 > a flavor‑generating segment, evidencing the move toward integrated, systemic
-> flavor delivery beyond simple capsules.  
+> flavor delivery beyond simple capsules.\
 > Source: [EP4420536A1](https://patents.google.com/patent/EP4420536A1/en)
 
-[^7]:
-    **[KT&G, 2020]** – _Flavor capsule optimized for heated tobacco products
+[^7]: **[KT&G, 2020]** – _Flavor capsule optimized for heated tobacco products
     (WO2020153465A1)_
 
 > _Epistemic Note (Primary):_ Competitor patent specifically for HTP‑optimized
 > capsules, showing how innovation occurs on targeted technical vectors to gain
-> market entry.  
+> market entry.\
 > Source: [WO2020153465A1](https://patents.google.com/patent/WO2020153465A1/en)
 
-[^8]:
-    **[RELAZO-2025 / Ploom X Ranking]** – _Relazo.net, Japanese product metadata
+[^8]: **[RELAZO-2025 / Ploom X Ranking]** – _Relazo.net, Japanese product metadata
     aggregator_
 
 > _Epistemic Note (Primary):_ Direct consumer preference data from a poll of
 > adult users, providing empirical grounding for claims about consumer literacy
-> and the criteria (kick, fidelity) they use to judge products.  
+> and the criteria (kick, fidelity) they use to judge products.\
 > Source: [Ploom X Ranking](https://relazo.net/ploomx_ranking/)
 
-[^9]:
-    **[Tabuchi, 2019]** – _Japan “Society and New Tobacco” Internet Survey
+[^9]: **[Tabuchi, 2019]** – _Japan “Society and New Tobacco” Internet Survey
     (JASTIS Study)_
 
 > _Epistemic Note (Primary):_ Longitudinal survey data providing demographic and
 > behavioral context for Japanese tobacco users, useful for showing patterns of
-> experimentation, dual‑use, and innovation fatigue.  
+> experimentation, dual‑use, and innovation fatigue.\
 > Source: [PMC6776477](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6776477/)
 
-[^10]:
-    **[UCSF, 2020]** – _Analysis of FDA’s IQOS marketing authorisation and its
+[^10]: **[UCSF, 2020]** – _Analysis of FDA’s IQOS marketing authorisation and its
     policy impacts_
 
 > _Epistemic Note (Adversarial):_ Critical perspective on the US regulatory
 > approach, highlighting the denial of reduced‑risk claims and framing the
-> context of the American market’s limitations.  
+> context of the American market’s limitations.\
 > Source: [PubMed ID 32601147](https://pubmed.ncbi.nlm.nih.gov/32601147/)
 
-[^11]:
-    **[RELAZO-2025 / IQOS Pearl Discontinuation]** – _Relazo.net, Japanese
+[^11]: **[RELAZO-2025 / IQOS Pearl Discontinuation]** – _Relazo.net, Japanese
     product metadata aggregator_
 
 > _Epistemic Note (Primary):_ Market report on the discontinuation of the IQOS
 > Pearl capsule series, illustrating a failure of materials science that even a
-> permissive market will not tolerate for long.  
+> permissive market will not tolerate for long.\
 > Source: [IQOS Pearl Discontinuation](https://relazo.net/iqos_pearl/)
 
-[^12]:
-    **[Lee, 2020]** – _Kent cigarette brand marketing in the Republic of Korea_
+[^12]: **[Lee, 2020]** – _Kent cigarette brand marketing in the Republic of Korea_
 
 > _Epistemic Note (Conceptual):_ Framework for understanding rapid product
 > iteration as a deliberate brand‑positioning strategy, not just a response to
-> consumer demand.  
+> consumer demand.\
 > Source: [Tobacco Control 29(6):695–698](https://tobaccocontrol.bmj.com/content/29/6/695)
 
 [^13]: **[JTI, 2025]** – _Corporate marketing language used to frame innovation_
 
 > _Epistemic Note (Primary):_ Corporate source material for analyzing the
-> “product theater” argument.  
+> “product theater” argument.\
 > Source: [JTI Corporate Site](https://www.jti.com/)
 
-[^14]:
-    **[WHO, 2025]** – _Information Sheet: Flavour accessories in tobacco
+[^14]: **[WHO, 2025]** – _Information Sheet: Flavour accessories in tobacco
     products enhance attractiveness and appeal_
 
 > _Epistemic Note (Adversarial):_ Public health report arguing that flavor
 > accessories enhance attractiveness and may undermine cessation, offering a
-> counterpoint to the “consumer empowerment” narrative.  
+> counterpoint to the “consumer empowerment” narrative.\
 > Source: [WHO Infosheet](https://cdn.who.int/media/docs/default-source/tobacco-hq/infosheet-flavouraccessories.pdf)

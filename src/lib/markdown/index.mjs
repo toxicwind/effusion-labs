@@ -1,6 +1,6 @@
 // src/lib/markdown/index.mjs
 import markdownItFootnote from 'markdown-it-footnote'
-import { hybridFootnotes, footnotePopoverRefs } from './parts/footnotes.js'
+import { footnotePopoverRefs, hybridFootnotes } from './parts/footnotes.js'
 import { audioEmbed, qrEmbed } from './parts/inlineMacros.js'
 import { externalLinks } from './parts/links.js'
 

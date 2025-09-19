@@ -9,7 +9,7 @@ export const data = {
         ? data.collections.work
         : []
       const sorted = [...items].sort(
-        (a, b) => (b?.date?.valueOf?.() ?? 0) - (a?.date?.valueOf?.() ?? 0)
+        (a, b) => (b?.date?.valueOf?.() ?? 0) - (a?.date?.valueOf?.() ?? 0),
       )
       return sorted[0]?.url ?? '/work/'
     },

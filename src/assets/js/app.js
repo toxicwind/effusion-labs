@@ -3,7 +3,7 @@
 
 import '@/assets/css/app.css'
 import './theme-utils.js'
-import { onReady, bootSite } from './site-init.js'
+import { bootSite, onReady } from './site-init.js'
 
 onReady(() => {
   bootSite()

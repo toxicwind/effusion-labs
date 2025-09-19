@@ -2,12 +2,12 @@
    Tailwind v4 + daisyUI v5 via Vite (CSS-first)
    Single entry: includes tokens + Hyperbrut layers. */
 
-@import 'tailwindcss';
+@import "tailwindcss";
 @plugin "@tailwindcss/typography";
 @plugin "daisyui";
 
 /* Map Tailwind's `dark:` variant to daisyUI's data-theme switch */
-@custom-variant dark (&:where([data-theme='dim'], [data-theme='dim'] *));
+@custom-variant dark (&:where([data-theme="dim"], [data-theme="dim"] *));
 
 /* -------------------- */
 /* Site tokens in CSS   */
@@ -24,7 +24,7 @@
   --color-code-bg: 36 41 51;
   --color-code-text: 178 204 214;
 }
-html[data-theme='dim'] {
+html[data-theme="dim"] {
   color-scheme: dark;
   --color-bg: 42 48 60;
   --color-surface: 36 41 51;
@@ -34,7 +34,7 @@ html[data-theme='dim'] {
   --color-code-bg: 36 41 51;
   --color-code-text: 178 204 214;
 }
-html[data-theme='silk'] {
+html[data-theme="silk"] {
   color-scheme: light;
   --color-bg: 247 245 243;
   --color-surface: 243 237 233;
@@ -117,7 +117,7 @@ html {
     @apply bg-base-300 rounded px-1 font-mono text-sm;
   }
   /* Ensure typography inverts when data-theme=dark is active */
-  html[data-theme='dim'] .prose {
+  html[data-theme="dim"] .prose {
     @apply prose-invert;
   }
 }
@@ -137,45 +137,38 @@ html {
   @keyframes hb-float {
     0% {
       transform: translate3d(
-          0,
-          calc(var(--hb-float-base-y, 0px) - var(--hb-float-range, 24px) / 2),
-          0
-        )
-        rotate3d(0, 0, 1, calc(var(--hb-float-tilt, 2deg) * -1));
+        0,
+        calc(var(--hb-float-base-y, 0px) - var(--hb-float-range, 24px) / 2),
+        0
+      ) rotate3d(0, 0, 1, calc(var(--hb-float-tilt, 2deg) * -1));
     }
     25% {
       transform: translate3d(
-          0,
-          calc(
-            var(--hb-float-base-y, 0px) + var(--hb-float-range, 24px) * 0.15
-          ),
-          0
-        )
-        rotate3d(0, 0, 1, calc(var(--hb-float-tilt, 2deg) * -0.35));
+        0,
+        calc(var(--hb-float-base-y, 0px) + var(--hb-float-range, 24px) * 0.15),
+        0
+      ) rotate3d(0, 0, 1, calc(var(--hb-float-tilt, 2deg) * -0.35));
     }
     50% {
       transform: translate3d(
-          0,
-          calc(var(--hb-float-base-y, 0px) + var(--hb-float-range, 24px) / 2),
-          0
-        )
-        rotate3d(0, 0, 1, var(--hb-float-tilt, 2deg));
+        0,
+        calc(var(--hb-float-base-y, 0px) + var(--hb-float-range, 24px) / 2),
+        0
+      ) rotate3d(0, 0, 1, var(--hb-float-tilt, 2deg));
     }
     75% {
       transform: translate3d(
-          0,
-          calc(var(--hb-float-base-y, 0px) - var(--hb-float-range, 24px) * 0.1),
-          0
-        )
-        rotate3d(0, 0, 1, calc(var(--hb-float-tilt, 2deg) * 0.45));
+        0,
+        calc(var(--hb-float-base-y, 0px) - var(--hb-float-range, 24px) * 0.1),
+        0
+      ) rotate3d(0, 0, 1, calc(var(--hb-float-tilt, 2deg) * 0.45));
     }
     100% {
       transform: translate3d(
-          0,
-          calc(var(--hb-float-base-y, 0px) - var(--hb-float-range, 24px) / 2),
-          0
-        )
-        rotate3d(0, 0, 1, calc(var(--hb-float-tilt, 2deg) * -1));
+        0,
+        calc(var(--hb-float-base-y, 0px) - var(--hb-float-range, 24px) / 2),
+        0
+      ) rotate3d(0, 0, 1, calc(var(--hb-float-tilt, 2deg) * -1));
     }
   }
 
@@ -281,7 +274,7 @@ html {
     position: relative;
   }
   .hb-accent::before {
-    content: '';
+    content: "";
     position: absolute;
     inset: 0 auto 0 -1px;
     width: var(--spec-rail-w, 3px);
@@ -325,10 +318,7 @@ html {
     box-shadow:
       0 1px 0 rgba(255, 255, 255, 0.04) inset,
       0 14px 28px rgba(0, 0, 0, 0.2);
-    transition:
-      transform 0.18s ease,
-      box-shadow 0.18s ease,
-      filter 0.18s ease;
+    transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
   }
   .hb-brut-card:hover {
     transform: translateY(-2px);
@@ -357,11 +347,12 @@ html {
         transparent 0
       ),
       linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
-    background-size:
-      40px 40px,
-      20px 20px,
-      20px 20px;
+      linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0.05) 1px,
+      transparent 1px
+    );
+    background-size: 40px 40px, 20px 20px, 20px 20px;
   }
 
   .hb-underline {
@@ -370,7 +361,7 @@ html {
     padding-bottom: 0.35rem;
   }
   .hb-underline::after {
-    content: '';
+    content: "";
     position: absolute;
     left: 0;
     bottom: 0;
@@ -392,7 +383,7 @@ html {
     position: relative;
   }
   .hb-accent-top::before {
-    content: '';
+    content: "";
     position: absolute;
     inset: -1px 0 auto 0;
     height: var(--spec-rail-w, 3px);
@@ -421,9 +412,7 @@ html {
   }
 
   .hb-anim {
-    transition:
-      transform 0.18s ease,
-      box-shadow 0.18s ease;
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
   }
   .hb-overflow-visible {
     overflow: visible !important;
@@ -463,7 +452,7 @@ html {
   }
   .hb-blobs::before,
   .hb-blobs::after {
-    content: '';
+    content: "";
     position: fixed;
     inset: auto auto 10% -10%;
     width: 40vmax;
@@ -491,7 +480,7 @@ html {
     );
   }
   .hb-vignette::after {
-    content: '';
+    content: "";
     position: fixed;
     inset: 0;
     box-shadow: inset 0 0 120px rgba(0, 0, 0, 0.35);
@@ -499,7 +488,7 @@ html {
     z-index: 0;
   }
   .hb-noise::after {
-    content: '';
+    content: "";
     position: fixed;
     inset: 0;
     background-image:
@@ -509,10 +498,10 @@ html {
         transparent 1px 2px
       ),
       repeating-linear-gradient(
-        90deg,
-        rgba(255, 255, 255, 0.02) 0 1px,
-        transparent 1px 2px
-      );
+      90deg,
+      rgba(255, 255, 255, 0.02) 0 1px,
+      transparent 1px 2px
+    );
     mix-blend-mode: overlay;
     pointer-events: none;
     z-index: 0;
@@ -561,7 +550,7 @@ html {
     opacity: 0.04;
     mix-blend-mode: screen;
   }
-  .mschf-grid[data-variant='dots'] {
+  .mschf-grid[data-variant="dots"] {
     background-image:
       radial-gradient(
         circle at 1px 1px,
@@ -569,24 +558,18 @@ html {
         transparent 1.8px
       ),
       radial-gradient(
-        circle at 1px 1px,
-        rgba(0, 0, 0, 0.25) 1px,
-        transparent 1.8px
-      );
-    background-size:
-      18px 18px,
-      36px 36px;
-    background-position:
-      0 0,
-      0 0;
+      circle at 1px 1px,
+      rgba(0, 0, 0, 0.25) 1px,
+      transparent 1.8px
+    );
+    background-size: 18px 18px, 36px 36px;
+    background-position: 0 0, 0 0;
   }
-  .mschf-grid[data-variant='lines'] {
+  .mschf-grid[data-variant="lines"] {
     background-image:
       linear-gradient(to right, rgba(255, 255, 255, 0.18) 1px, transparent 1px),
       linear-gradient(to bottom, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
-    background-size:
-      24px 24px,
-      24px 24px;
+    background-size: 24px 24px, 24px 24px;
   }
 
   /* Rings */
@@ -661,21 +644,19 @@ html {
     inset: 10px 10px auto 10px;
     height: 1px;
     background: linear-gradient(
-        90deg,
-        rgba(255, 255, 255, 0.25) 50%,
-        transparent 0
-      )
-      0 0/8px 1px repeat-x;
+      90deg,
+      rgba(255, 255, 255, 0.25) 50%,
+      transparent 0
+    ) 0 0/8px 1px repeat-x;
   }
   .mschf-ruler-left {
     inset: 10px auto 10px 10px;
     width: 1px;
     background: linear-gradient(
-        180deg,
-        rgba(255, 255, 255, 0.25) 50%,
-        transparent 0
-      )
-      0 0/1px 8px repeat-y;
+      180deg,
+      rgba(255, 255, 255, 0.25) 50%,
+      transparent 0
+    ) 0 0/1px 8px repeat-y;
   }
 
   /* Scanline */
@@ -692,10 +673,10 @@ html {
         transparent 70%
       ),
       repeating-linear-gradient(
-        180deg,
-        rgba(255, 255, 255, 0.14) 0 2px,
-        transparent 2px 5px
-      );
+      180deg,
+      rgba(255, 255, 255, 0.14) 0 2px,
+      transparent 2px 5px
+    );
     mix-blend-mode: screen;
     filter: saturate(145%) blur(0.4px);
     opacity: 0.38;
@@ -705,7 +686,7 @@ html {
     pointer-events: none;
   }
   .mschf-scanline::after {
-    content: '';
+    content: "";
     position: absolute;
     inset: 0;
     background: linear-gradient(
@@ -731,10 +712,7 @@ html {
   .mschf-stamp {
     position: absolute;
     padding: 0.25rem 0.5rem;
-    font:
-      700 10px/1 ui-monospace,
-      Menlo,
-      monospace;
+    font: 700 10px/1 ui-monospace, Menlo, monospace;
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: rgba(255, 255, 255, 0.8);
@@ -747,10 +725,7 @@ html {
     display: inline-block;
     margin: 0.125rem;
     padding: 0.25rem 0.5rem;
-    font:
-      700 10px/1 ui-monospace,
-      Menlo,
-      monospace;
+    font: 700 10px/1 ui-monospace, Menlo, monospace;
     letter-spacing: 0.06em;
     color: #000;
     background: hsl(var(--p));
@@ -798,10 +773,7 @@ html {
     left: 0;
     top: 0;
     padding: 0.1rem 0.35rem;
-    font:
-      700 10px/1 ui-monospace,
-      Menlo,
-      monospace;
+    font: 700 10px/1 ui-monospace, Menlo, monospace;
     letter-spacing: 0.06em;
     color: #000;
     background: rgba(255, 255, 255, 0.85);

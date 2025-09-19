@@ -14,8 +14,8 @@
     "bench": "DEBUG=Eleventy:Benchmark* npx @11ty/eleventy",
     "build": "npx @11ty/eleventy",
     "clean": "del-cli _site",
-    "format:check": "prettier --check \"**/*.{js,mjs,json,md,yml,css,njk}\" --ignore-path .prettierignore",
-    "format": "prettier --write \"**/*.{js,mjs,json,md,yml,css,njk}\" --ignore-path .prettierignore",
+    "format:check": "dprint check",
+    "format": "dprint fmt",
     "test": "c8 node test/integration/runner.spec.mjs",
     "test:watch": "node --watch test/integration/runner.spec.mjs",
     "check": "npm run doctor && npm run format:check && npm run lint && npm run test",
@@ -27,7 +27,10 @@
     "mcp:dev": "node mcp-stack/gateway/server.mjs",
     "mcp:integration": "node mcp-stack/tests/integration.mjs",
     "mcp:test": "node mcp-stack/tests/smoke.mjs",
-    "postinstall": "node tools/dev/link-local-chrome-shims.mjs && if [ \"${PATCH_PACKAGE_RUN:-1}\" != \"0\" ] && [ -x node_modules/.bin/patch-package ]; then patch-package; fi"
+    "postinstall": "node tools/dev/link-local-chrome-shims.mjs && if [ \"${PATCH_PACKAGE_RUN:-1}\" != \"0\" ] && [ -x node_modules/.bin/patch-package ]; then patch-package; fi",
+    "fmt:classes": "rustywind --write \"src/**/*.{njk,html,js,jsx,ts,tsx}\"",
+    "format:all": "npm run fmt:classes && npm run format",
+    "format:check:all": "npm run format:check"
   },
   "devDependencies": {
     "@11ty/eleventy": "3.1.2",
@@ -61,6 +64,7 @@
     "date-fns": "4.1.0",
     "del-cli": "^7.0.0",
     "depcheck": "^1.4.7",
+    "dprint": "^0.50.2",
     "eslint": "^9.35.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-config-standard": "^17.1.0",
@@ -116,6 +120,7 @@
     "remark-smartypants": "3.0.2",
     "remark-stringify": "11.0.0",
     "rollup-plugin-critical": "^1.0.15",
+    "rustywind": "^0.24.3",
     "sass": "^1.77.8",
     "shiki": "3.12.2",
     "slugify": "1.6.6",

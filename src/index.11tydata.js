@@ -1,13 +1,14 @@
 export default {
   // Hero copy
   title: 'Ideas, prototypes, and tools—shipped straight from the lab.',
-  lede: 'Effusion Labs explores concepts until they become working systems. Browse projects in progress, sparks of inspiration, and the models that tie them together.',
+  lede:
+    'Effusion Labs explores concepts until they become working systems. Browse projects in progress, sparks of inspiration, and the models that tie them together.',
 
   eleventyComputed: {
     // Hero CTAs
     ctas: data => {
       const projects = (data.collections.projects || []).sort(
-        (a, b) => b.date - a.date
+        (a, b) => b.date - a.date,
       )
       const latestProject = projects[0]
       return [

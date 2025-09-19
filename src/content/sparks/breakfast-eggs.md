@@ -1,8 +1,8 @@
 ---
 title:
-  'The Semiotic Collapse of a Toasted Request: On the Emotional Thermodynamics
-  of Eggs-on-Bread'
-layout: 'base.njk'
+  "The Semiotic Collapse of a Toasted Request: On the Emotional Thermodynamics
+  of Eggs-on-Bread"
+layout: "base.njk"
 date: 2025-07-12
 status: Stable
 certainty: speculative-analytic
@@ -21,15 +21,15 @@ analytic_lens:
   performative-etiquette, emotional-thermodynamics, microaggression-mimesis,
   irony-as-structure, recursive-discomfort
 memory_ref:
-  - '[emotional-labor]'
-  - '[sociology-of-everyday-life]'
-  - '[irony-theory]'
-  - '[foucault-microphysics]'
-  - '[pareidolia]'
-  - '[ritual-embarrassment]'
+  - "[emotional-labor]"
+  - "[sociology-of-everyday-life]"
+  - "[irony-theory]"
+  - "[foucault-microphysics]"
+  - "[pareidolia]"
+  - "[ritual-embarrassment]"
 preamble:
-  classification: '[META] Micro-sociological vignette, analytic parody'
-  version: '1.0-toast'
+  classification: "[META] Micro-sociological vignette, analytic parody"
+  version: "1.0-toast"
 ---
 
 > _—Or, How I Learned to Stop Worrying and Overanalyze Eggs on Toast—_
@@ -206,8 +206,7 @@ because there never was a problem.
 
 ## Annotated Appendix
 
-[^1]:
-    **Meta-Irony of Trivial Analysis** – _This entire article exemplifies the
+[^1]: **Meta-Irony of Trivial Analysis** – _This entire article exemplifies the
     deliberate over-interpretation of mundane phenomena, designed to parody
     academic gravitas while simultaneously fulfilling its protocols._
 
@@ -221,16 +220,14 @@ because there never was a problem.
 > Source:
 > [Wikipedia - Austen's Themes](https://en.wikipedia.org/wiki/Styles_and_themes_of_Jane_Austen)
 
-[^3]:
-    **Poe’s Law** – _Without a clear signal of intent, parody becomes
+[^3]: **Poe’s Law** – _Without a clear signal of intent, parody becomes
     indistinguishable from sincerity._
 
 > _Epistemic Note (Conceptual):_ Applied here to the etiquette of small
 > requests—where irony is assumed, sincerity questioned, and vice versa. Source:
 > [Wikipedia - Poe’s Law](https://en.wikipedia.org/wiki/Poe%27s_law)
 
-[^4]:
-    **Jonathan Swift's _A Modest Proposal_** – _Suggests Irish children be eaten
+[^4]: **Jonathan Swift's _A Modest Proposal_** – _Suggests Irish children be eaten
     as a solution to poverty._
 
 > _Epistemic Note (Adversarial):_ An absurd overreaction masquerading as reason.
@@ -238,24 +235,21 @@ because there never was a problem.
 > evaluated. Source:
 > [Gutenberg - A Modest Proposal](https://www.gutenberg.org/files/1080/1080-h/1080-h.htm)
 
-[^5]:
-    **Emotional Labor** – _The act of managing one's emotions as part of
+[^5]: **Emotional Labor** – _The act of managing one's emotions as part of
     professional performance._
 
 > _Epistemic Note (Primary):_ Explains the café owner’s frustration as
 > structural, not personal. Source: Hochschild, A. R. (1983). _The Managed
 > Heart._
 
-[^6]:
-    **Foucault’s Microphysics of Power** – _Power operates in small, everyday
+[^6]: **Foucault’s Microphysics of Power** – _Power operates in small, everyday
     interactions._
 
 > _Epistemic Note (Conceptual):_ Applies to the café dynamic where even tiny
 > social expectations regulate behavior. Source: Foucault, M. (1977).
 > _Discipline and Punish._
 
-[^7]:
-    **Hipster Racism** – _Irony as plausible deniability for offensive
+[^7]: **Hipster Racism** – _Irony as plausible deniability for offensive
     behavior._
 
 > _Epistemic Note (Adversarial):_ Highlights how performative civility can

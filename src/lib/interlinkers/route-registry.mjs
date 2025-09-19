@@ -36,18 +36,17 @@ function _defaultRegistry() {
           'product_id',
           'title',
         ],
-        canonicalFromData: d =>
-          `/archives/product/${d.slugCanonical || d.productSlug || d.slug}/`,
+        canonicalFromData: d => `/archives/product/${d.slugCanonical || d.productSlug || d.slug}/`,
         aliasesFromData: d => [
           ...(Array.isArray(d.slugAliases) ? d.slugAliases : []),
           ...(Array.isArray(d.legacyPaths)
             ? d.legacyPaths
-                .map(p =>
-                  typeof p === 'string'
-                    ? p.match(/\/archives\/product\/([^/]+)/)?.[1] || null
-                    : null
-                )
-                .filter(Boolean)
+              .map(p =>
+                typeof p === 'string'
+                  ? p.match(/\/archives\/product\/([^/]+)/)?.[1] || null
+                  : null
+              )
+              .filter(Boolean)
             : []),
         ],
       },
@@ -76,32 +75,28 @@ function _defaultRegistry() {
         datasetKeys: ['collections.sparks'],
         keyFields: ['fileSlug', 'data.title'],
         canonicalFromData: d => `/sparks/${d.fileSlug || d.slug || ''}/`,
-        aliasesFromData: d =>
-          Array.isArray(d?.data?.aliases) ? d.data.aliases : [],
+        aliasesFromData: d => Array.isArray(d?.data?.aliases) ? d.data.aliases : [],
       },
       concept: {
         basePath: '/concepts',
         datasetKeys: ['collections.concepts'],
         keyFields: ['fileSlug', 'data.title'],
         canonicalFromData: d => `/concepts/${d.fileSlug || d.slug || ''}/`,
-        aliasesFromData: d =>
-          Array.isArray(d?.data?.aliases) ? d.data.aliases : [],
+        aliasesFromData: d => Array.isArray(d?.data?.aliases) ? d.data.aliases : [],
       },
       project: {
         basePath: '/projects',
         datasetKeys: ['collections.projects'],
         keyFields: ['fileSlug', 'data.title'],
         canonicalFromData: d => `/projects/${d.fileSlug || d.slug || ''}/`,
-        aliasesFromData: d =>
-          Array.isArray(d?.data?.aliases) ? d.data.aliases : [],
+        aliasesFromData: d => Array.isArray(d?.data?.aliases) ? d.data.aliases : [],
       },
       meta: {
         basePath: '/meta',
         datasetKeys: ['collections.meta'],
         keyFields: ['fileSlug', 'data.title'],
         canonicalFromData: d => `/meta/${d.fileSlug || d.slug || ''}/`,
-        aliasesFromData: d =>
-          Array.isArray(d?.data?.aliases) ? d.data.aliases : [],
+        aliasesFromData: d => Array.isArray(d?.data?.aliases) ? d.data.aliases : [],
       },
       // Work: aggregator over content areas
       work: {
@@ -114,10 +109,8 @@ function _defaultRegistry() {
           'collections.meta',
         ],
         keyFields: ['fileSlug', 'data.title'],
-        canonicalFromData: d =>
-          d?.url || `/${d?.data?.type || 'work'}/${d?.fileSlug || ''}/`,
-        aliasesFromData: d =>
-          Array.isArray(d?.data?.aliases) ? d.data.aliases : [],
+        canonicalFromData: d => d?.url || `/${d?.data?.type || 'work'}/${d?.fileSlug || ''}/`,
+        aliasesFromData: d => Array.isArray(d?.data?.aliases) ? d.data.aliases : [],
       },
     },
   }
@@ -140,10 +133,9 @@ function _mergeFromDiscovery(reg) {
       if (order.length) reg.defaultKindsPriority = order
       for (const k of disc.scaffoldMap) {
         if (reg.kinds[k.kind]) {
-          reg.kinds[k.kind].datasetKeys =
-            Array.isArray(k.datasetKeys) && k.datasetKeys.length
-              ? k.datasetKeys
-              : reg.kinds[k.kind].datasetKeys
+          reg.kinds[k.kind].datasetKeys = Array.isArray(k.datasetKeys) && k.datasetKeys.length
+            ? k.datasetKeys
+            : reg.kinds[k.kind].datasetKeys
           reg.kinds[k.kind].basePath = k.base || reg.kinds[k.kind].basePath
         } else {
           // Generic kind using discovery base/datasets; shallow semantics
@@ -153,10 +145,8 @@ function _mergeFromDiscovery(reg) {
             keyFields: Array.isArray(k.keyFields)
               ? k.keyFields
               : ['slug', 'fileSlug', 'title'],
-            canonicalFromData: d =>
-              `${`/${k.base?.replace(/^\//, '') || k.kind}`}/${d.slug || d.fileSlug || ''}/`,
-            aliasesFromData: d =>
-              Array.isArray(d?.slugAliases) ? d.slugAliases : [],
+            canonicalFromData: d => `${`/${k.base?.replace(/^\//, '') || k.kind}`}/${d.slug || d.fileSlug || ''}/`,
+            aliasesFromData: d => Array.isArray(d?.slugAliases) ? d.slugAliases : [],
           }
         }
       }

@@ -6,10 +6,9 @@ import path from 'node:path'
 const OUT_PATH = path.join(
   'artifacts',
   'reports',
-  'interlinker-unresolved.json'
+  'interlinker-unresolved.json',
 )
-const keyFor = (kind, key, sourcePage) =>
-  `${kind}::${key || ''}::${sourcePage || ''}`
+const keyFor = (kind, key, sourcePage) => `${kind}::${key || ''}::${sourcePage || ''}`
 
 const state = {
   map: new Map(), // key -> item
@@ -83,11 +82,11 @@ export function summarizeAndGate() {
   const defaultThreshold = isCI ? 200 : Infinity
   const maxUnresolved = parseNum(
     process.env.INTERLINKER_MAX_UNRESOLVED,
-    defaultThreshold
+    defaultThreshold,
   )
   const shouldFail = parseBool(
     process.env.INTERLINKER_FAIL_ON_UNRESOLVED,
-    false
+    false,
   )
 
   const payload = flushUnresolved()
@@ -95,11 +94,11 @@ export function summarizeAndGate() {
   const action = shouldFail && count > maxUnresolved ? 'fail' : 'warn'
   // eslint-disable-next-line no-console
   console.log(
-    `Interlinker: unresolved=${count} threshold=${maxUnresolved} action=${action}`
+    `Interlinker: unresolved=${count} threshold=${maxUnresolved} action=${action}`,
   )
   if (action === 'fail') {
     throw new Error(
-      `Interlinker unresolved links (${count}) exceeded threshold (${maxUnresolved}).`
+      `Interlinker unresolved links (${count}) exceeded threshold (${maxUnresolved}).`,
     )
   }
 }

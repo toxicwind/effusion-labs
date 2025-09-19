@@ -100,8 +100,7 @@ function buildUrl({ industry, category, company, line, section, slug }) {
 
 function normalizeData(absPath) {
   const raw = JSON.parse(fs.readFileSync(absPath, 'utf8'))
-  const { section, line, company, category, industry, locale } =
-    parsePath(absPath)
+  const { section, line, company, category, industry, locale } = parsePath(absPath)
   const fileSlug = path.basename(absPath, '.json')
 
   // IDs/slugs by section
@@ -142,17 +141,20 @@ function normalizeData(absPath) {
 
   if (section === 'products') {
     let slugCanonical = slugCanonicalProduct(raw)
-    if (!slugCanonical || slugCanonical === 'item')
+    if (!slugCanonical || slugCanonical === 'item') {
       slugCanonical = data.productSlug
+    }
     data.slugCanonical = slugCanonical
     data.canonicalUrl = `/archives/product/${slugCanonical}/`
 
     // Aliases and legacy path handling
     const aliasSet = new Set()
-    if (data.productSlug && data.productSlug !== data.slugCanonical)
+    if (data.productSlug && data.productSlug !== data.slugCanonical) {
       aliasSet.add(data.productSlug)
-    if (Array.isArray(raw.slugAliases))
+    }
+    if (Array.isArray(raw.slugAliases)) {
       raw.slugAliases.forEach(s => s && aliasSet.add(slugify(s)))
+    }
     data.slugAliases = Array.from(aliasSet)
 
     data.urlLegacy = buildUrl({
@@ -226,9 +228,7 @@ function aggregateCompanies(items) {
   return Array.from(map.values())
     .map(c => ({
       ...c,
-      lines: Array.from(c.lines.values()).sort((a, b) =>
-        a.lineTitle.localeCompare(b.lineTitle)
-      ),
+      lines: Array.from(c.lines.values()).sort((a, b) => a.lineTitle.localeCompare(b.lineTitle)),
     }))
     .sort((a, b) => a.companyTitle.localeCompare(b.companyTitle))
 }
@@ -241,10 +241,10 @@ export default function registerArchive(eleventyConfig) {
     .filter(it => TYPES.includes(it.data.section))
 
   const archiveProducts = normalized.filter(
-    it => it.data.section === 'products'
+    it => it.data.section === 'products',
   )
   const archiveCharacters = normalized.filter(
-    it => it.data.section === 'characters'
+    it => it.data.section === 'characters',
   )
   const archiveSeries = normalized.filter(it => it.data.section === 'series')
 
@@ -263,30 +263,27 @@ export default function registerArchive(eleventyConfig) {
   }
   const archiveProductsEn = uniqueBy(
     archiveProducts.filter(x => x.data.locale === 'en'),
-    'productSlug'
+    'productSlug',
   )
   const archiveCharactersEn = uniqueBy(
     archiveCharacters.filter(x => x.data.locale === 'en'),
-    'charSlug'
+    'charSlug',
   )
   const archiveSeriesEn = uniqueBy(
     archiveSeries.filter(x => x.data.locale === 'en'),
-    'seriesSlug'
+    'seriesSlug',
   )
 
   eleventyConfig.addCollection('archiveProducts', () => archiveProducts)
   eleventyConfig.addCollection('archiveCharacters', () => archiveCharacters)
   eleventyConfig.addCollection('archiveSeries', () => archiveSeries)
 
-  eleventyConfig.addFilter('byLine', (arr, lineSlug) =>
-    (arr ?? []).filter(x => x.data.lineSlug === slugify(lineSlug))
+  eleventyConfig.addFilter('byLine', (arr, lineSlug) => (arr ?? []).filter(x => x.data.lineSlug === slugify(lineSlug)))
+  eleventyConfig.addFilter(
+    'byCompany',
+    (arr, companySlug) => (arr ?? []).filter(x => x.data.companySlug === slugify(companySlug)),
   )
-  eleventyConfig.addFilter('byCompany', (arr, companySlug) =>
-    (arr ?? []).filter(x => x.data.companySlug === slugify(companySlug))
-  )
-  eleventyConfig.addFilter('byLocale', (arr, locale) =>
-    (arr ?? []).filter(x => x.data.locale === (locale || 'en'))
-  )
+  eleventyConfig.addFilter('byLocale', (arr, locale) => (arr ?? []).filter(x => x.data.locale === (locale || 'en')))
   eleventyConfig.addFilter('uniqueBy', (arr, key) => {
     const seen = new Set()
     const out = []
@@ -302,13 +299,13 @@ export default function registerArchive(eleventyConfig) {
   eleventyConfig.addFilter('byCharacter', (items, id) => {
     const target = slugify(id)
     return (items ?? []).filter(
-      p => slugify(p?.data?.charSlug ?? p?.data?.character) === target
+      p => slugify(p?.data?.charSlug ?? p?.data?.character) === target,
     )
   })
   eleventyConfig.addFilter('bySeries', (items, id) => {
     const target = slugify(id)
     return (items ?? []).filter(
-      p => slugify(p?.data?.seriesSlug ?? p?.data?.series) === target
+      p => slugify(p?.data?.seriesSlug ?? p?.data?.series) === target,
     )
   })
 
@@ -328,8 +325,8 @@ export default function registerArchive(eleventyConfig) {
     .filter(
       (v, i, arr) =>
         arr.findIndex(
-          x => x.lineSlug === v.lineSlug && x.companySlug === v.companySlug
-        ) === i
+          x => x.lineSlug === v.lineSlug && x.companySlug === v.companySlug,
+        ) === i,
     )
     .sort((a, b) => a.lineTitle.localeCompare(b.lineTitle))
 
@@ -345,7 +342,7 @@ export default function registerArchive(eleventyConfig) {
   }
 
   console.log(
-    `🗂  Archives loaded from "${ARCHIVES_BASE}": ${normalized.length} items (${archiveProducts.length} products, ${archiveCharacters.length} characters, ${archiveSeries.length} series)`
+    `🗂  Archives loaded from "${ARCHIVES_BASE}": ${normalized.length} items (${archiveProducts.length} products, ${archiveCharacters.length} characters, ${archiveSeries.length} series)`,
   )
 
   // Collision handling
@@ -386,6 +383,6 @@ export default function registerArchive(eleventyConfig) {
       canonicalUrl: p.data.canonicalUrl,
       slugAliases: p.data.slugAliases || [],
       legacyPaths: p.data.legacyPaths || [],
-    }))
+    })),
   )
 }

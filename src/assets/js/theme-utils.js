@@ -1,7 +1,7 @@
 // public/js/theme-utils.js
 // Framework-agnostic theme helpers for DaisyUI v5 themes.
 // Exposes a tiny global `ThemeUtils` for non-module usage and works without bundlers.
-;(function (global) {
+;(function(global) {
   'use strict'
 
   var STORAGE_KEY = 'theme'
@@ -19,17 +19,16 @@
   }
 
   function syncAllowed(list) {
-    var merged =
-      Array.isArray(list) && list.length ? list.slice() : ALLOWED.slice()
+    var merged = Array.isArray(list) && list.length ? list.slice() : ALLOWED.slice()
     merged.push(LIGHT_NAME, DARK_NAME)
     ALLOWED = Array.from(
       new Set(
         merged
-          .map(function (value) {
+          .map(function(value) {
             return normalize(String(value))
           })
-          .filter(Boolean)
-      )
+          .filter(Boolean),
+      ),
     )
   }
 
@@ -97,7 +96,7 @@
       document.dispatchEvent(
         new CustomEvent('themechange', {
           detail: { theme: target, source: source || 'user' },
-        })
+        }),
       )
     } catch (_) {}
   }
@@ -119,9 +118,8 @@
       document.documentElement.dataset.themeSource = stored
         ? 'storage'
         : 'default'
-      var meta =
-        document.querySelector('meta[name="color-scheme"]') ||
-        (function () {
+      var meta = document.querySelector('meta[name="color-scheme"]')
+        || (function() {
           var m = document.createElement('meta')
           m.name = 'color-scheme'
           document.head.appendChild(m)
@@ -135,8 +133,8 @@
   }
 
   function onChange(handler) {
-    if (typeof handler !== 'function') return function () {}
-    var fn = function (e) {
+    if (typeof handler !== 'function') return function() {}
+    var fn = function(e) {
       handler(e?.detail?.theme || getTheme(), e?.detail?.source || 'event')
     }
     document.addEventListener('themechange', fn)

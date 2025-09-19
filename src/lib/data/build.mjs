@@ -1,6 +1,6 @@
 // src/lib/data/build.mjs
 // Programmatic build metadata and FX snapshot with on-disk cache under .cache/
-import { readFile, writeFile, mkdir } from 'node:fs/promises'
+import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 
 const CACHE_DIR = path.join(process.cwd(), '.cache')
@@ -31,7 +31,7 @@ async function getFx(base = 'USD') {
   async function fawwaz() {
     const res = await fetch(
       `https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/${base.toLowerCase()}.json`,
-      { timeout: 6000 }
+      { timeout: 6000 },
     )
     if (!res.ok) throw new Error('fawwaz failed')
     const d = await res.json()
@@ -54,7 +54,7 @@ async function getFx(base = 'USD') {
     await mkdir(CACHE_DIR, { recursive: true })
     await writeFile(
       FX_FILE,
-      JSON.stringify({ ...fx, saved_at: new Date().toISOString() }, null, 2)
+      JSON.stringify({ ...fx, saved_at: new Date().toISOString() }, null, 2),
     )
   } catch {}
 
@@ -64,11 +64,10 @@ async function getFx(base = 'USD') {
 export async function buildGlobals() {
   const baseCurrency = process.env.FX_BASE?.toUpperCase?.() || 'USD'
   const fx = await getFx(baseCurrency)
-  const commit =
-    process.env.COMMIT_REF ||
-    process.env.VERCEL_GIT_COMMIT_SHA ||
-    process.env.GITHUB_SHA ||
-    null
+  const commit = process.env.COMMIT_REF
+    || process.env.VERCEL_GIT_COMMIT_SHA
+    || process.env.GITHUB_SHA
+    || null
   const version = process.env.npm_package_version || null
   return {
     hash: commit,

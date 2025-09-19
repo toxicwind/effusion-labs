@@ -1,8 +1,8 @@
 ---
 title:
-  'The Workshop and the Weather: A Retreat from Metaphor in Analyzing Generative
-  Systems'
-layout: 'base.njk'
+  "The Workshop and the Weather: A Retreat from Metaphor in Analyzing Generative
+  Systems"
+layout: "base.njk"
 date: 2025-07-12
 status: complete
 certainty: argumentative
@@ -21,11 +21,11 @@ analytic_lens:
   mechanism, operationalism, methodological-behaviorism, policy-forensics,
   replicability-crisis
 memory_ref:
-  - '[project-dandelion]'
-  - '[stochastic-parrots-thesis]'
-  - '[replicability-crisis]'
-  - '[philosophy-of-science]'
-  - '[hci]'
+  - "[project-dandelion]"
+  - "[stochastic-parrots-thesis]"
+  - "[replicability-crisis]"
+  - "[philosophy-of-science]"
+  - "[hci]"
 ---
 
 ### 1.0 On the Seductive Poison of the Holistic Metaphor
@@ -138,30 +138,30 @@ precise mechanical description. What is actually happening can be described as a
 
 This loop has distinct, observable stages:
 
-1.  **Prompt Formulation (User Action):** The user, acting as the system's
-    operator, formulates a textual input. This prompt contains the immediate
-    instruction, but it also crucially contains the curated history of the
-    interaction so far (the "interactional residue"). The user's skill in this
-    stage—often called prompt engineering—involves deliberately structuring this
-    input to guide the model toward a desired output class.
-2.  **Generative Completion (Model Action):** The model, a static mathematical
-    function, processes the input prompt. It does not "understand" the prompt.
-    It calculates a probabilistic sequence of tokens that represents a plausible
-    continuation of the input text, based on the patterns learned from its
-    training data. This is a purely syntactic operation.
-3.  **Constraint Application (System Action):** Before, during, or after the
-    generative completion, the administrative overlay scans the input and/or the
-    potential output. If the text triggers a rule in the policy filter (e.g.,
-    keywords, semantic classifiers), the system intervenes. It may block the
-    output entirely and substitute a canned refusal, or it may subtly rephrase
-    the output to make it compliant. This is a non-negotiable, non-generative
-    step.
-4.  **Output Presentation:** The final, filtered text is presented to the user.
-5.  **Evaluation and Iteration (User Action):** The user evaluates the output
-    against their original intent. They identify successes, failures, and
-    interesting deviations. Based on this evaluation, they formulate the next
-    prompt (returning to Stage 1), often incorporating parts of the model's last
-    response to refine the context and steer the next generative act.
+1. **Prompt Formulation (User Action):** The user, acting as the system's
+   operator, formulates a textual input. This prompt contains the immediate
+   instruction, but it also crucially contains the curated history of the
+   interaction so far (the "interactional residue"). The user's skill in this
+   stage—often called prompt engineering—involves deliberately structuring this
+   input to guide the model toward a desired output class.
+2. **Generative Completion (Model Action):** The model, a static mathematical
+   function, processes the input prompt. It does not "understand" the prompt.
+   It calculates a probabilistic sequence of tokens that represents a plausible
+   continuation of the input text, based on the patterns learned from its
+   training data. This is a purely syntactic operation.
+3. **Constraint Application (System Action):** Before, during, or after the
+   generative completion, the administrative overlay scans the input and/or the
+   potential output. If the text triggers a rule in the policy filter (e.g.,
+   keywords, semantic classifiers), the system intervenes. It may block the
+   output entirely and substitute a canned refusal, or it may subtly rephrase
+   the output to make it compliant. This is a non-negotiable, non-generative
+   step.
+4. **Output Presentation:** The final, filtered text is presented to the user.
+5. **Evaluation and Iteration (User Action):** The user evaluates the output
+   against their original intent. They identify successes, failures, and
+   interesting deviations. Based on this evaluation, they formulate the next
+   prompt (returning to Stage 1), often incorporating parts of the model's last
+   response to refine the context and steer the next generative act.
 
 Coherence—the feeling of a continuous, sensible conversation—is not a property
 of the model itself. It is a property that _emerges_ from the successful
@@ -225,26 +225,26 @@ administrative overlay and other system parameters).
 The research agenda of a methodological behaviorist approach to LLMs would look
 like this:
 
-1.  **Focus on Observable Capabilities:** Instead of asking "Does the model
-    understand physics?" we should ask "Can the model reliably solve physics
-    problems of a specific type and format, and how does its performance vary
-    with changes to the prompt?" The focus shifts from abstract nouns
-    ("understanding") to measurable verbs ("solves").
-2.  **Systematic Probing:** Experiments should be designed to systematically
-    probe the limits of these capabilities. How fragile are they? Does
-    rephrasing the prompt slightly cause a catastrophic failure in performance?
-    If so, the capability is likely a "clever trick" of pattern-matching, not a
-    robust, generalizable skill.
-3.  **Rejection of Anthropomorphism:** All language that imputes internal
-    states—"the model was surprised," "the model decided to"—should be
-    rigorously excised from analytical descriptions and replaced with
-    operational language: "the model's output deviated from the predicted
-    pattern," "the output token sequence shifted to a different probability
-    distribution."
-4.  **Emphasis on Falsification:** Research should be actively trying to
-    _disprove_ claims of emergent capabilities. The default hypothesis should be
-    that an observed capability is an artifact of the training data or a clever
-    prompting strategy, not a sign of genuine new reasoning power.
+1. **Focus on Observable Capabilities:** Instead of asking "Does the model
+   understand physics?" we should ask "Can the model reliably solve physics
+   problems of a specific type and format, and how does its performance vary
+   with changes to the prompt?" The focus shifts from abstract nouns
+   ("understanding") to measurable verbs ("solves").
+2. **Systematic Probing:** Experiments should be designed to systematically
+   probe the limits of these capabilities. How fragile are they? Does
+   rephrasing the prompt slightly cause a catastrophic failure in performance?
+   If so, the capability is likely a "clever trick" of pattern-matching, not a
+   robust, generalizable skill.
+3. **Rejection of Anthropomorphism:** All language that imputes internal
+   states—"the model was surprised," "the model decided to"—should be
+   rigorously excised from analytical descriptions and replaced with
+   operational language: "the model's output deviated from the predicted
+   pattern," "the output token sequence shifted to a different probability
+   distribution."
+4. **Emphasis on Falsification:** Research should be actively trying to
+   _disprove_ claims of emergent capabilities. The default hypothesis should be
+   that an observed capability is an artifact of the training data or a clever
+   prompting strategy, not a sign of genuine new reasoning power.
 
 This approach is profoundly un-glamorous. It drains the field of its sci-fi
 mystique. But it is the necessary precondition for building a true science of
@@ -312,24 +312,24 @@ large language models.
 
 This crisis has several roots:
 
-1.  **Model Opacity:** The most capable models are closed, proprietary systems.
-    Researchers outside the parent company have no access to the model weights,
-    the full details of the training data, or the precise architecture. They are
-    interacting with a black box.
-2.  **Constant Updates:** The models are not static artifacts. They are
-    constantly being fine-tuned and their administrative overlays updated, often
-    without public notice. An experiment conducted on a model in May may not be
-    replicable in June because the underlying object of study has changed.
-3.  **Stochasticity:** Even with a fixed model, there is inherent randomness in
-    the generation process (controlled by a "temperature" setting). Identical
-    prompts can yield different results across multiple runs. This requires
-    statistical methods to control for, but it complicates the analysis of
-    single, compelling anecdotes.
-4.  **Prompt Sensitivity:** The output is exquisitely sensitive to tiny
-    variations in the input prompt. The difference between "Describe..." and
-    "Explain..." can produce dramatically different results. This "butterfly
-    effect" of prompt engineering makes it difficult to define a stable,
-    replicable experimental protocol.
+1. **Model Opacity:** The most capable models are closed, proprietary systems.
+   Researchers outside the parent company have no access to the model weights,
+   the full details of the training data, or the precise architecture. They are
+   interacting with a black box.
+2. **Constant Updates:** The models are not static artifacts. They are
+   constantly being fine-tuned and their administrative overlays updated, often
+   without public notice. An experiment conducted on a model in May may not be
+   replicable in June because the underlying object of study has changed.
+3. **Stochasticity:** Even with a fixed model, there is inherent randomness in
+   the generation process (controlled by a "temperature" setting). Identical
+   prompts can yield different results across multiple runs. This requires
+   statistical methods to control for, but it complicates the analysis of
+   single, compelling anecdotes.
+4. **Prompt Sensitivity:** The output is exquisitely sensitive to tiny
+   variations in the input prompt. The difference between "Describe..." and
+   "Explain..." can produce dramatically different results. This "butterfly
+   effect" of prompt engineering makes it difficult to define a stable,
+   replicable experimental protocol.
 
 This leads to an analytic impasse. If our "discoveries" about model behavior are
 contingent on a specific model version that will be gone tomorrow, on the exact
@@ -387,51 +387,51 @@ that has developed the tools to properly analyze it.
 
 **References**
 
-1.  **Project Dandelion: Structural Emergence in Restricted LLM Systems.**
-    Effusion Labs. (Accessed July 6, 2025). _Epistemic Note: The primary
-    mechanistic framework being repurposed here as a purely operational,
-    non-mystical toolkit._
-2.  **A Mathematical Theory of Communication.** Shannon, C. E. (1948). _Bell
-    System Technical Journal_. _Epistemic Note: The foundational text of
-    information theory, which treats communication as a mechanical process of
-    encoding and decoding, free of semantics. This provides the intellectual
-    basis for analyzing LLM outputs as syntactic, probabilistic events._
-3.  **"On the Dangers of Stochastic Parrots: Can Language Models Be Too Big?"**
-    Bender, E. M., Gebru, T., McMillan-Major, A., & Shmitchell, S. (2021).
-    _FAccT '21_. _Epistemic Note: This paper remains the cornerstone of the
-    skeptical, mechanistic viewpoint, arguing that LLMs are systems for
-    recomposing linguistic data, not for understanding._
-4.  **The Society of Mind.** Minsky, M. (1986). Simon & Schuster. _Epistemic
-    Note: Minsky's model of intelligence arising from non-intelligent agents
-    ("demons") provides a classic, non-mystical framework for emergent
-    complexity, supporting a mechanistic view._
-5.  **Behaviorism.** Stanford Encyclopedia of Philosophy. (Accessed July 6,
-    2025).
-    [https://plato.stanford.edu/entries/behaviorism/](https://plato.stanford.edu/entries/behaviorism/).
-    _Epistemic Note: Provides the philosophical background for the
-    "methodological behaviorism" proposed as an analytical stance toward LLMs._
-6.  **"Sparks of Artificial General Intelligence: Early experiments with
-    GPT-4."** Bubeck, S., et al. (2023). _arXiv_. _Epistemic Note: This source
-    is now repurposed as a primary example of the kind of "emergence" claim that
-    the new article argues against, or at least advocates treating with extreme
-    skepticism._
-7.  **"The Replicability Crisis in Science."** Wikipedia. (Accessed July 6,
-    2025).
-    [https://en.wikipedia.org/wiki/Replication_crisis](https://en.wikipedia.org/wiki/Replication_crisis).
-    _Epistemic Note: Provides context for the "TODO" section, showing that the
-    problem of replicability is not unique to AI but is a widespread challenge
-    in modern science._
-8.  **"Characterizing and Mitigating the Instability of Tipping Points in Large
-    Language Models."** Schaeffer, R., et al. (2023). _arXiv_. _Epistemic Note:
-    An empirical paper that directly investigates the fragility of so-called
-    "emergent" abilities, supporting the argument for methodological restraint._
-9.  **"Operationalism."** Internet Encyclopedia of Philosophy. (Accessed July 6,
-    2025).
-    [https://iep.utm.edu/operationalism/](https://www.google.com/search?q=https://iep.utm.edu/operationalism/).
-    _Epistemic Note: Provides the philosophical basis (from Percy Bridgman) for
-    defining scientific concepts in terms of the operations used to measure
-    them. This directly supports the call to define LLM capabilities via
-    measurable tasks._
+1. **Project Dandelion: Structural Emergence in Restricted LLM Systems.**
+   Effusion Labs. (Accessed July 6, 2025). _Epistemic Note: The primary
+   mechanistic framework being repurposed here as a purely operational,
+   non-mystical toolkit._
+2. **A Mathematical Theory of Communication.** Shannon, C. E. (1948). _Bell
+   System Technical Journal_. _Epistemic Note: The foundational text of
+   information theory, which treats communication as a mechanical process of
+   encoding and decoding, free of semantics. This provides the intellectual
+   basis for analyzing LLM outputs as syntactic, probabilistic events._
+3. **"On the Dangers of Stochastic Parrots: Can Language Models Be Too Big?"**
+   Bender, E. M., Gebru, T., McMillan-Major, A., & Shmitchell, S. (2021).
+   _FAccT '21_. _Epistemic Note: This paper remains the cornerstone of the
+   skeptical, mechanistic viewpoint, arguing that LLMs are systems for
+   recomposing linguistic data, not for understanding._
+4. **The Society of Mind.** Minsky, M. (1986). Simon & Schuster. _Epistemic
+   Note: Minsky's model of intelligence arising from non-intelligent agents
+   ("demons") provides a classic, non-mystical framework for emergent
+   complexity, supporting a mechanistic view._
+5. **Behaviorism.** Stanford Encyclopedia of Philosophy. (Accessed July 6,
+   2025).
+   [https://plato.stanford.edu/entries/behaviorism/](https://plato.stanford.edu/entries/behaviorism/).
+   _Epistemic Note: Provides the philosophical background for the
+   "methodological behaviorism" proposed as an analytical stance toward LLMs._
+6. **"Sparks of Artificial General Intelligence: Early experiments with
+   GPT-4."** Bubeck, S., et al. (2023). _arXiv_. _Epistemic Note: This source
+   is now repurposed as a primary example of the kind of "emergence" claim that
+   the new article argues against, or at least advocates treating with extreme
+   skepticism._
+7. **"The Replicability Crisis in Science."** Wikipedia. (Accessed July 6,
+   2025).
+   [https://en.wikipedia.org/wiki/Replication_crisis](https://en.wikipedia.org/wiki/Replication_crisis).
+   _Epistemic Note: Provides context for the "TODO" section, showing that the
+   problem of replicability is not unique to AI but is a widespread challenge
+   in modern science._
+8. **"Characterizing and Mitigating the Instability of Tipping Points in Large
+   Language Models."** Schaeffer, R., et al. (2023). _arXiv_. _Epistemic Note:
+   An empirical paper that directly investigates the fragility of so-called
+   "emergent" abilities, supporting the argument for methodological restraint._
+9. **"Operationalism."** Internet Encyclopedia of Philosophy. (Accessed July 6,
+   2025).
+   [https://iep.utm.edu/operationalism/](https://www.google.com/search?q=https://iep.utm.edu/operationalism/).
+   _Epistemic Note: Provides the philosophical basis (from Percy Bridgman) for
+   defining scientific concepts in terms of the operations used to measure
+   them. This directly supports the call to define LLM capabilities via
+   measurable tasks._
 10. **Human-Computer Interaction (HCI).** The Interaction Design Foundation.
     (Accessed July 6, 2025).
     [https://www.interaction-design.org/literature/topics/human-computer-interaction](https://www.interaction-design.org/literature/topics/human-computer-interaction).
@@ -516,10 +516,10 @@ that has developed the tools to properly analyze it.
     of "cargo cult science," where researchers mistake mimicry for
     understanding._
 28. **Cybernetics: Or Control and Communication in the Animal and the Machine.**
-    Wiener, N. (1948). MIT Press. *Epistemic Note: Previously used to support a
+    Wiener, N. (1948). MIT Press. _Epistemic Note: Previously used to support a
     holistic, symbiotic view. Now repurposed as a foundational text for a purely
-    *mechanical* view of feedback loops, stripping it of the "second-order"
-    philosophical gloss.*
+    _mechanical_ view of feedback loops, stripping it of the "second-order"
+    philosophical gloss._
 29. **The Checklist Manifesto: How to Get Things Right.** Gawande, A. (2009).
     Metropolitan Books. _Epistemic Note: Gawande's argument for the power of
     simple, operational checklists to manage complexity provides a model for the
@@ -540,9 +540,9 @@ that has developed the tools to properly analyze it.
     access, relevant for analyzing the corporate control exerted via
     administrative overlays._
 33. **"Language Models are Few-Shot Learners."** Brown, T. B., et al. (2020).
-    _arXiv_. (The GPT-3 paper). *Epistemic Note: While often cited as evidence
+    _arXiv_. (The GPT-3 paper). _Epistemic Note: While often cited as evidence
     for emergence, the paper's core finding is about in-context learning, which
-    is a key *mechanism* that can be studied operationally.*
+    is a key _mechanism_ that can be studied operationally._
 34. **"What Is It Like to Be a Bat?"** Nagel, T. (1974). _The Philosophical
     Review_. _Epistemic Note: The classic philosophical paper on the problem of
     subjective experience. It provides the fundamental argument for why we

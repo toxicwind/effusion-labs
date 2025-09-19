@@ -1,7 +1,7 @@
 ---
 title:
-  'The Atlas of a Process: A Synthesis of the Effusion Labs Operating System'
-layout: 'base.njk'
+  "The Atlas of a Process: A Synthesis of the Effusion Labs Operating System"
+layout: "base.njk"
 date: 2025-07-12
 status: complete
 certainty: definitive
@@ -19,12 +19,12 @@ target: The Effusion Labs Operating System
 analytic_lens:
   systems-breakdown, methodological-synthesis, apparatus-protocol-lens
 memory_ref:
-  - '[effusion-labs-core-concept]'
-  - '[effusion-labs-methodology]'
-  - '[project-dandelion]'
-  - '[latour-laboratory-life]'
-  - '[popper-scientific-discovery]'
-  - '[systems-theory]'
+  - "[effusion-labs-core-concept]"
+  - "[effusion-labs-methodology]"
+  - "[project-dandelion]"
+  - "[latour-laboratory-life]"
+  - "[popper-scientific-discovery]"
+  - "[systems-theory]"
 ---
 
 ## The Atlas of a Process: A Synthesis of the Effusion Labs Operating System
@@ -228,47 +228,47 @@ needing spirals or dyads—it works through observation, modeling, and testing.
 
 **References**
 
-1.  **Effusion Labs: Core Concept.** (Internal Document). _Epistemic Note: The
-    foundational document defining the project's philosophy, environment, and
-    the role of the "diagnostic operator."_
-2.  **Effusion Labs: Methodology.** (Internal Document). _Epistemic Note: The
-    document outlining the `Sparks -> Concepts -> Projects` pipeline, providing
-    the system's formal workflow._
-3.  **Project Dandelion: Structural Emergence in Restricted LLM Systems.**
-    (Internal Document). _Epistemic Note: The core analytical framework used by
-    the operator to interpret the behavior of the LLM tool._
-4.  **The Logic of Scientific Discovery.** Popper, K. (1959). Routledge.
-    _Epistemic Note: Popper's philosophy, particularly the emphasis on
-    falsification, is the intellectual ancestor of the `Concept -> Project`
-    transition, where a model is subjected to empirical testing._
-5.  **"A Pattern Language."** Alexander, C., Ishikawa, S., & Silverstein, M.
-    (1977). Oxford University Press. _Epistemic Note: This book on architecture
-    provides a model for creating a network of interconnected "patterns" to
-    solve design problems. It is a powerful analogy for the "digital garden"
-    approach of interconnected conceptual nodes._
-6.  **"The Use of Knowledge in Society."** Hayek, F. A. (1945). _The American
-    Economic Review_. _Epistemic Note: Hayek's argument that knowledge is
-    fundamentally dispersed and local supports the Effusion Labs rejection of
-    grand, centralized declarations in favor of documenting a specific, local,
-    and unfolding process._
-7.  **Laboratory Life: The Construction of Scientific Facts.** Latour, B., &
-    Woolgar, S. (1979). Sage Publications. _Epistemic Note: A classic work in
-    the sociology of science that studies a laboratory as an anthropological
-    site. It treats scientific facts as things that are "constructed" through a
-    specific social and technical process. This directly parallels the Effusion
-    Labs ethos of documenting the construction of its own artifacts._
-8.  **The Art of the Long View: Planning for the Future in an Uncertain World.**
-    Schwartz, P. (1991). Doubleday. _Epistemic Note: Schwartz's work on scenario
-    planning, which involves creating multiple plausible futures rather than a
-    single prediction, is analogous to the Effusion Labs method of retaining
-    ambiguity and exploring branching paths rather than forcing a single
-    resolution._
-9.  **"Situated Actions and Vocabularies of Motive."** Mills, C. W. (1940).
-    _American Sociological Review_. _Epistemic Note: Mills' work argues that
-    people's explanations for their behavior are socially situated. This
-    provides a sociological lens for understanding "Compliance Patois" not as a
-    psychological state of the machine, but as a socially-required performance
-    for a given institutional context._
+1. **Effusion Labs: Core Concept.** (Internal Document). _Epistemic Note: The
+   foundational document defining the project's philosophy, environment, and
+   the role of the "diagnostic operator."_
+2. **Effusion Labs: Methodology.** (Internal Document). _Epistemic Note: The
+   document outlining the `Sparks -> Concepts -> Projects` pipeline, providing
+   the system's formal workflow._
+3. **Project Dandelion: Structural Emergence in Restricted LLM Systems.**
+   (Internal Document). _Epistemic Note: The core analytical framework used by
+   the operator to interpret the behavior of the LLM tool._
+4. **The Logic of Scientific Discovery.** Popper, K. (1959). Routledge.
+   _Epistemic Note: Popper's philosophy, particularly the emphasis on
+   falsification, is the intellectual ancestor of the `Concept -> Project`
+   transition, where a model is subjected to empirical testing._
+5. **"A Pattern Language."** Alexander, C., Ishikawa, S., & Silverstein, M.
+   (1977). Oxford University Press. _Epistemic Note: This book on architecture
+   provides a model for creating a network of interconnected "patterns" to
+   solve design problems. It is a powerful analogy for the "digital garden"
+   approach of interconnected conceptual nodes._
+6. **"The Use of Knowledge in Society."** Hayek, F. A. (1945). _The American
+   Economic Review_. _Epistemic Note: Hayek's argument that knowledge is
+   fundamentally dispersed and local supports the Effusion Labs rejection of
+   grand, centralized declarations in favor of documenting a specific, local,
+   and unfolding process._
+7. **Laboratory Life: The Construction of Scientific Facts.** Latour, B., &
+   Woolgar, S. (1979). Sage Publications. _Epistemic Note: A classic work in
+   the sociology of science that studies a laboratory as an anthropological
+   site. It treats scientific facts as things that are "constructed" through a
+   specific social and technical process. This directly parallels the Effusion
+   Labs ethos of documenting the construction of its own artifacts._
+8. **The Art of the Long View: Planning for the Future in an Uncertain World.**
+   Schwartz, P. (1991). Doubleday. _Epistemic Note: Schwartz's work on scenario
+   planning, which involves creating multiple plausible futures rather than a
+   single prediction, is analogous to the Effusion Labs method of retaining
+   ambiguity and exploring branching paths rather than forcing a single
+   resolution._
+9. **"Situated Actions and Vocabularies of Motive."** Mills, C. W. (1940).
+   _American Sociological Review_. _Epistemic Note: Mills' work argues that
+   people's explanations for their behavior are socially situated. This
+   provides a sociological lens for understanding "Compliance Patois" not as a
+   psychological state of the machine, but as a socially-required performance
+   for a given institutional context._
 10. **Case Study Research: Design and Methods.** Yin, R. K. (2009). SAGE.
     _Epistemic Note: The entire Effusion Labs project can be seen as a single,
     extended case study. Yin's work provides the formal methodological framework
@@ -314,13 +314,13 @@ needing spirals or dyads—it works through observation, modeling, and testing.
     elicit specific behaviors, is a qualitative analogue of A/B testing, a
     common practice in software development and user experience research._
 19. **The OpenWorm Project.** (Accessed July 12, 2025).
-    [http://openworm.org](http://openworm.org). *Epistemic Note: This project's
+    [http://openworm.org](http://openworm.org). _Epistemic Note: This project's
     goal of creating a transparent, bottom-up simulation of an organism stands
     in stark contrast to the opaque, top-down nature of LLMs. The comparison
-    highlights why a framework like *Project Dandelion* is necessary for
-    LLMs—because we lack this kind of mechanistic transparency.*
+    highlights why a framework like _Project Dandelion_ is necessary for
+    LLMs—because we lack this kind of mechanistic transparency._
 20. **"The Observer Effect (Physics)."** Wikipedia. (Accessed July 12, 2025).
-    [https://en.wikipedia.org/wiki/Observer*effect*(physics](<https://en.wikipedia.org/wiki/Observer_effect_(physics)>).
+    [https://en.wikipedia.org/wiki/Observer_effect_(physics](https://en.wikipedia.org/wiki/Observer_effect_(physics)).
     _Epistemic Note: While a physics concept, it provides the essential analogy
     for how the "diagnostic operator" inevitably influences the behavior of the
     system they are studying, a fact the methodology must acknowledge._

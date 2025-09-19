@@ -54,10 +54,10 @@ in v3.0.0Eleventy v3 added support for both ESM and Asynchronous callbacks.
 
 We look for the following configuration files:
 
-1.  `eleventy.config.mjs`
-2.  `eleventy.config.mjs` Added in v2.0.0
-3.  `eleventy.config.mjs` Added in v3.0.0
-4.  `eleventy.config.cjs` Added in v2.0.0
+1. `eleventy.config.mjs`
+2. `eleventy.config.mjs` Added in v2.0.0
+3. `eleventy.config.mjs` Added in v3.0.0
+4. `eleventy.config.cjs` Added in v2.0.0
 
 The first configuration file found is used. The others are ignored.
 

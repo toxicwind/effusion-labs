@@ -1,4 +1,4 @@
-//import '/assets/css/app.css'
+// import '/assets/css/app.css'
 
 // public/js/app.js
 // Vite entry: imports CSS and initializes all page-level JS.
@@ -17,8 +17,7 @@ export const onReady = cb => {
 }
 const qs = (sel, root = document) => root.querySelector(sel)
 const qsa = (sel, root = document) => Array.from(root.querySelectorAll(sel))
-const prefersReducedMotion = () =>
-  window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches ?? false
+const prefersReducedMotion = () => window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches ?? false
 const saveData = () => {
   try {
     const c = navigator.connection
@@ -36,17 +35,17 @@ export function initFootnotes() {
   const EXTRA = 16
 
   const getHeaderEl = () =>
-    qs('[data-site-header]') ||
-    qs('[role="banner"]') ||
-    qs('header.site-header') ||
-    qs('body > header') ||
-    qs('header')
+    qs('[data-site-header]')
+    || qs('[role="banner"]')
+    || qs('header.site-header')
+    || qs('body > header')
+    || qs('header')
 
   const readCssVar = () =>
     parseFloat(
       getComputedStyle(document.documentElement).getPropertyValue(
-        '--header-height'
-      )
+        '--header-height',
+      ),
     ) || null
 
   const calcHeaderHeight = () => {
@@ -58,8 +57,7 @@ export function initFootnotes() {
     return Math.ceil(r.height) + EXTRA
   }
 
-  const setVar = px =>
-    document.documentElement.style.setProperty('--header-height', `${px}px`)
+  const setVar = px => document.documentElement.style.setProperty('--header-height', `${px}px`)
 
   const updateHeaderVar = () => setVar(calcHeaderHeight())
 
@@ -127,7 +125,7 @@ export function initFootnotes() {
       e.preventDefault()
       smoothScrollTo(target)
     },
-    false
+    false,
   )
 
   const handleInitial = () => {
@@ -160,7 +158,7 @@ export function initThemeToggle() {
     btn.setAttribute('aria-pressed', String(isDark))
     btn.setAttribute(
       'aria-label',
-      isDark ? 'Switch to light theme' : 'Switch to dark theme'
+      isDark ? 'Switch to light theme' : 'Switch to dark theme',
     )
     if (sun && moon) {
       sun.classList.toggle('hidden', isDark)
@@ -169,9 +167,9 @@ export function initThemeToggle() {
   }
 
   reflect(
-    (utils && utils.getTheme()) ||
-      document.documentElement.getAttribute('data-theme') ||
-      'dim'
+    (utils && utils.getTheme())
+      || document.documentElement.getAttribute('data-theme')
+      || 'dim',
   )
 
   if (utils) {
@@ -247,16 +245,13 @@ export function initWorkFilters() {
 --------------------------------*/
 export function initOverlayLoader() {
   const body = document.body || document.documentElement
-  const overlayOff =
-    body?.dataset?.mschf === 'off' || localStorage.getItem('mschf:off') === '1'
-  const forceOn =
-    new URLSearchParams(location.search).get('overlay') === '1' ||
-    body?.dataset?.overlay === '1'
+  const overlayOff = body?.dataset?.mschf === 'off' || localStorage.getItem('mschf:off') === '1'
+  const forceOn = new URLSearchParams(location.search).get('overlay') === '1'
+    || body?.dataset?.overlay === '1'
   const isLg = window.matchMedia?.('(min-width: 1024px)')?.matches ?? false
 
   // Conditions: not disabled, large screens, no save-data, no reduced motion
-  const shouldLoad =
-    !overlayOff && (forceOn || (isLg && !saveData() && !prefersReducedMotion()))
+  const shouldLoad = !overlayOff && (forceOn || (isLg && !saveData() && !prefersReducedMotion()))
 
   if (!shouldLoad) return
 

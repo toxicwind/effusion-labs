@@ -34,7 +34,7 @@ const hostname = (u = '') => {
   }
 }
 
-export default async function (data = {}) {
+export default async function(data = {}) {
   const collections = data?.collections || {}
   const archiveProducts = Array.isArray(collections.archiveProducts)
     ? collections.archiveProducts
@@ -78,8 +78,7 @@ export default async function (data = {}) {
       const h = hostname(e.url || e.source || '')
       const ccy = (e.currency || '').toString().trim().toUpperCase()
       const mkt = (e.market || e.region || '').toString().trim().toUpperCase()
-      const price =
-        typeof e.price === 'number' ? e.price : Number(e.price) || null
+      const price = typeof e.price === 'number' ? e.price : Number(e.price) || null
       const ts = e.retrieved_at || e.date || e.timestamp || null
       ps.entries.push({
         host: h,

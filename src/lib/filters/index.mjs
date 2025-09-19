@@ -1,9 +1,9 @@
 // src/lib/filters/index.mjs
-import fs from 'node:fs'
-import path from 'node:path'
-import { DateTime } from 'luxon'
 import { icons } from 'lucide'
 import defaultAttributes from 'lucide/dist/esm/defaultAttributes.js'
+import { DateTime } from 'luxon'
+import fs from 'node:fs'
+import path from 'node:path'
 import generateConceptMapJSONLD from '../build/concept-map.js'
 
 const fileCache = new Map()
@@ -102,19 +102,18 @@ const defaultFilters = {
       return p
     }
   },
-  conceptMapJSONLD: (pages = []) =>
-    JSON.stringify(generateConceptMapJSONLD(pages)),
+  conceptMapJSONLD: (pages = []) => JSON.stringify(generateConceptMapJSONLD(pages)),
   jsonify: v => JSON.stringify(v),
   date: (value, fmt = 'yyyy-LL-dd') => {
     try {
       let dt
-      if (value instanceof Date)
+      if (value instanceof Date) {
         dt = DateTime.fromJSDate(value, { zone: 'utc' })
-      else if (typeof value === 'number')
+      } else if (typeof value === 'number') {
         dt = DateTime.fromMillis(value, { zone: 'utc' })
-      else if (typeof value === 'string')
+      } else if (typeof value === 'string') {
         dt = DateTime.fromISO(value, { zone: 'utc' })
-      else return ''
+      } else return ''
       return dt.isValid ? dt.toFormat(fmt) : ''
     } catch {
       return ''
@@ -193,25 +192,27 @@ function fieldCounts(obj = {}, excludeKeys = []) {
         'seriesSlug',
         'page',
         'collections',
-      ].concat(Array.isArray(excludeKeys) ? excludeKeys : [])
+      ].concat(Array.isArray(excludeKeys) ? excludeKeys : []),
     )
     const keys = Object.keys(o).filter(k => !sys.has(k))
     const total = keys.length
     let present = 0
-    for (const k of keys)
+    for (const k of keys) {
       if (
         (v =>
           v == null
             ? false
             : Array.isArray(v)
-              ? v.length > 0
-              : typeof v === 'string'
-                ? v.trim().length > 0
-                : typeof v === 'object'
-                  ? Object.keys(v).length > 0
-                  : true)(o[k])
-      )
+            ? v.length > 0
+            : typeof v === 'string'
+            ? v.trim().length > 0
+            : typeof v === 'object'
+            ? Object.keys(v).length > 0
+            : true)(o[k])
+      ) {
         present += 1
+      }
+    }
     return { total, present }
   } catch {
     return { total: 0, present: 0 }
@@ -221,9 +222,7 @@ function fieldCounts(obj = {}, excludeKeys = []) {
 const len = v => (Array.isArray(v) ? v.length : 0)
 
 export function registerFilters(eleventyConfig) {
-  Object.entries(defaultFilters).forEach(([name, fn]) =>
-    eleventyConfig.addFilter(name, fn)
-  )
+  Object.entries(defaultFilters).forEach(([name, fn]) => eleventyConfig.addFilter(name, fn))
 
   const toJson = (value, spaces = 0) => {
     const json = JSON.stringify(value ?? null, null, spaces)
@@ -244,16 +243,14 @@ export function registerFilters(eleventyConfig) {
   eleventyConfig.addFilter('len', len)
 
   // Extra helpers used across templates
-  eleventyConfig.addFilter('compactUnique', arr =>
-    Array.from(new Set((arr || []).filter(Boolean)))
-  )
+  eleventyConfig.addFilter('compactUnique', arr => Array.from(new Set((arr || []).filter(Boolean))))
   eleventyConfig.addFilter(
     'safe_upper',
     (value, fallback = '', coerce = false) => {
       if (typeof value === 'string') return value.toUpperCase()
       if (value == null) return fallback
       return coerce ? String(value).toUpperCase() : fallback
-    }
+    },
   )
 
   // Mutation helpers for Nunjucks use (safe, defensive)
@@ -302,8 +299,8 @@ export function registerFilters(eleventyConfig) {
           .join(' ')
       const children = Array.isArray(node[2])
         ? node[2]
-            .map(([tag, attr]) => `<${tag} ${toAttrString(attr)} />`)
-            .join('')
+          .map(([tag, attr]) => `<${tag} ${toAttrString(attr)} />`)
+          .join('')
         : ''
       return `<svg ${toAttrString(attrsMerged)}>${children}</svg>`
     } catch {

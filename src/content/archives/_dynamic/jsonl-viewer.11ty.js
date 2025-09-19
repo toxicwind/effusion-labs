@@ -54,11 +54,15 @@ export const data = () => {
       title: ({ entry }) => `Provenance — ${entry?.base ?? ''}`,
       permalink: ({ entry }) =>
         entry
-          ? `/archives/${entry.industry}/${entry.category}/${entry.company}/${entry.line}/provenance/${normalizeSlug(entry.base)}/index.html`
+          ? `/archives/${entry.industry}/${entry.category}/${entry.company}/${entry.line}/provenance/${
+            normalizeSlug(entry.base)
+          }/index.html`
           : false,
       downloadUrl: ({ entry }) =>
         entry
-          ? `/archives/${entry.industry}/${entry.category}/${entry.company}/${entry.line}/provenance/${normalizeSlug(entry.base)}.jsonl`
+          ? `/archives/${entry.industry}/${entry.category}/${entry.company}/${entry.line}/provenance/${
+            normalizeSlug(entry.base)
+          }.jsonl`
           : '#',
       showTitle: false,
     },

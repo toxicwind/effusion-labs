@@ -1,8 +1,8 @@
 ---
 title:
-  'Takashi Murakami - Lithographs, Signed Works, and Small-format Prints: A 2025
-  Market Topography'
-layout: 'base.njk'
+  "Takashi Murakami - Lithographs, Signed Works, and Small-format Prints: A 2025
+  Market Topography"
+layout: "base.njk"
 date: 2025-07-02
 status: complete-ongoing
 certainty: speculative
@@ -19,11 +19,11 @@ analytic_lens:
   lithographs, signed works, small-format prints, valuation, distribution,
   authentication
 memory_ref:
-  - '[style-guide]'
-  - '[methodology]'
-  - '[murakami-market-ecosystem]'
-  - '[print-authentication]'
-  - '[superflat-concept]'
+  - "[style-guide]"
+  - "[methodology]"
+  - "[murakami-market-ecosystem]"
+  - "[print-authentication]"
+  - "[superflat-concept]"
 ---
 
 > “Japanese people accept that art and commerce will be blended; and, in fact,
@@ -384,46 +384,46 @@ A comprehensive framework for assessing a print's market value rests on six key
 pillars. These pillars, when analyzed together, provide a robust methodology for
 determining an object's position within the market hierarchy.
 
-1.  **Medium & Technique:** This is the foundational element of value. As
-    established, there is a clear hierarchy: silkscreens command the highest
-    prices due to their manual production and superior visual qualities; they
-    are followed by offset lithographs that feature complex embellishments (like
-    cold foil stamping or glitter); and finally, standard, unembellished offset
-    lithographs form the base of the market.[^6][^7][^9]
-2.  **Signature & Numbering:** A hand-signed and numbered print is the
-    non-negotiable standard for a work to be considered a valuable limited
-    edition.[^24] Unsigned works are considered reproductions with minimal
-    investment value. While a particularly low edition number (e.g., 1/300) or
-    an artist's proof (AP) may command a slight premium, the presence of the
-    authentic, hand-applied signature is the primary value driver.
-3.  **Edition Size:** Scarcity is a paramount factor in the art market, and this
-    holds true for Murakami's prints. A work from a small edition of 50 will be
-    inherently more valuable and sought-after than a comparable work from a
-    standard edition of 300 or a special-release edition of 1000.[^24][^26]
-4.  **Motif & Iconography:** The subject matter depicted is a major driver of
-    commercial appeal and liquidity. Prints featuring Murakami's most famous and
-    globally recognized motifs—the smiling Flowers, the protean Mr. DOB, the
-    grinning Skulls, and the charming Kaikai & Kiki—are consistently the most
-    sought-after by collectors and perform best at auction.[^1][^26][^40]
-    Furthermore, prints related to his iconic collaboration with Louis Vuitton
-    carry a significant historical cachet and price premium.[^24] The popularity
-    of these motifs creates a clear hierarchy of desirability, effectively
-    turning them into distinct sub-brands within the artist's broader market.
-5.  **Condition:** For industrially produced prints where thousands of similar
-    examples may exist, pristine condition becomes a primary axis of value
-    differentiation. The market expectation is for perfection. Any condition
-    issues, such as light fading from UV exposure, paper discoloration
-    (including "frame burn" from contact with acidic mounting materials), foxing
-    (brown spots), creases, or tears, will significantly diminish a print's
-    value.[^24][^26] The ideal, most valuable state for a print is "as new,"
-    preferably still sealed in its original Kaikai Kiki packaging.
-6.  **Provenance:** As will be detailed further, ironclad provenance is
-    critical. A print accompanied by its original, multi-layered Kaikai Kiki
-    box, the official invoice (納品書), and matching shipping labels represents
-    the gold standard. A verifiable chain of ownership from an official source
-    minimizes risk and supports the highest possible valuation. A lack of such
-    documentation introduces uncertainty and will suppress the price a collector
-    is willing to pay.[^24][^26][^41]
+1. **Medium & Technique:** This is the foundational element of value. As
+   established, there is a clear hierarchy: silkscreens command the highest
+   prices due to their manual production and superior visual qualities; they
+   are followed by offset lithographs that feature complex embellishments (like
+   cold foil stamping or glitter); and finally, standard, unembellished offset
+   lithographs form the base of the market.[^6][^7][^9]
+2. **Signature & Numbering:** A hand-signed and numbered print is the
+   non-negotiable standard for a work to be considered a valuable limited
+   edition.[^24] Unsigned works are considered reproductions with minimal
+   investment value. While a particularly low edition number (e.g., 1/300) or
+   an artist's proof (AP) may command a slight premium, the presence of the
+   authentic, hand-applied signature is the primary value driver.
+3. **Edition Size:** Scarcity is a paramount factor in the art market, and this
+   holds true for Murakami's prints. A work from a small edition of 50 will be
+   inherently more valuable and sought-after than a comparable work from a
+   standard edition of 300 or a special-release edition of 1000.[^24][^26]
+4. **Motif & Iconography:** The subject matter depicted is a major driver of
+   commercial appeal and liquidity. Prints featuring Murakami's most famous and
+   globally recognized motifs—the smiling Flowers, the protean Mr. DOB, the
+   grinning Skulls, and the charming Kaikai & Kiki—are consistently the most
+   sought-after by collectors and perform best at auction.[^1][^26][^40]
+   Furthermore, prints related to his iconic collaboration with Louis Vuitton
+   carry a significant historical cachet and price premium.[^24] The popularity
+   of these motifs creates a clear hierarchy of desirability, effectively
+   turning them into distinct sub-brands within the artist's broader market.
+5. **Condition:** For industrially produced prints where thousands of similar
+   examples may exist, pristine condition becomes a primary axis of value
+   differentiation. The market expectation is for perfection. Any condition
+   issues, such as light fading from UV exposure, paper discoloration
+   (including "frame burn" from contact with acidic mounting materials), foxing
+   (brown spots), creases, or tears, will significantly diminish a print's
+   value.[^24][^26] The ideal, most valuable state for a print is "as new,"
+   preferably still sealed in its original Kaikai Kiki packaging.
+6. **Provenance:** As will be detailed further, ironclad provenance is
+   critical. A print accompanied by its original, multi-layered Kaikai Kiki
+   box, the official invoice (納品書), and matching shipping labels represents
+   the gold standard. A verifiable chain of ownership from an official source
+   minimizes risk and supports the highest possible valuation. A lack of such
+   documentation introduces uncertainty and will suppress the price a collector
+   is willing to pay.[^24][^26][^41]
 
 **Table 2: Valuation Matrix for Murakami Prints**
 
@@ -627,26 +627,26 @@ packaging, the official invoice, and the shipping labels.[^41][^62] In this
 market, these ephemeral materials are not just accessories; they are a critical
 part of the artwork's identity and value.
 
-1.  **The Original Packaging:** The meticulous, multi-layered Kaikai Kiki box is
-    the first and most important physical indicator of authenticity. A print
-    that is still sealed in this original packaging—which includes layers of
-    glassine paper, heavy plastic wrap affixed to a cardboard board, two
-    styrofoam layers, and branded inner and outer boxes—is considered pristine
-    and highly trustworthy.[^41][^62] The distinctive fragile stickers featuring
-    Murakami's characters and the branded tape used to secure the print are key
-    details that are difficult to replicate perfectly.[^41]
-2.  **The Official Invoice (納品書 - _Nōhinsho_):** Found inside the shipping
-    box, the official invoice or delivery note is a critical piece of
-    documentation.[^41] This document, typically issued by Hidari Zingaro and
-    written in Japanese, lists the artwork's title and, crucially, the name and
-    address of the original purchaser, creating a direct link between the person
-    and the object.[^41][^62]
-3.  **The Shipping Labels:** The original shipping labels affixed to the outside
-    of the box provide a canonical, third-party-verifiable record of where and
-    when the print was first shipped by Kaikai Kiki.[^62] These labels
-    corroborate the details on the invoice and are extremely difficult to forge
-    convincingly, making them one of the strongest pieces of provenance
-    evidence.
+1. **The Original Packaging:** The meticulous, multi-layered Kaikai Kiki box is
+   the first and most important physical indicator of authenticity. A print
+   that is still sealed in this original packaging—which includes layers of
+   glassine paper, heavy plastic wrap affixed to a cardboard board, two
+   styrofoam layers, and branded inner and outer boxes—is considered pristine
+   and highly trustworthy.[^41][^62] The distinctive fragile stickers featuring
+   Murakami's characters and the branded tape used to secure the print are key
+   details that are difficult to replicate perfectly.[^41]
+2. **The Official Invoice (納品書 - _Nōhinsho_):** Found inside the shipping
+   box, the official invoice or delivery note is a critical piece of
+   documentation.[^41] This document, typically issued by Hidari Zingaro and
+   written in Japanese, lists the artwork's title and, crucially, the name and
+   address of the original purchaser, creating a direct link between the person
+   and the object.[^41][^62]
+3. **The Shipping Labels:** The original shipping labels affixed to the outside
+   of the box provide a canonical, third-party-verifiable record of where and
+   when the print was first shipped by Kaikai Kiki.[^62] These labels
+   corroborate the details on the invoice and are extremely difficult to forge
+   convincingly, making them one of the strongest pieces of provenance
+   evidence.
 
 A print accompanied by all three of these elements, with matching information
 across the documents, represents the highest level of trust and will command a
@@ -727,283 +727,220 @@ object's true place and value within Murakami's ever-expanding universe.
 
 ## ⌬ Sources
 
-[^1]:
-    Why Collect Takashi Murakami? A Guide - Guy Hepner, accessed July 2,
+[^1]: Why Collect Takashi Murakami? A Guide - Guy Hepner, accessed July 2,
     2025[↗source](https://guyhepner.com/news/350-a-collector-s-guide-to-takashi-murakami-prints-why-collect-takashi-murakami/)
 
-[^2]:
-    Kaikai Kiki Co., Ltd. | General trading company of art, accessed July 2,
+[^2]: Kaikai Kiki Co., Ltd. | General trading company of art, accessed July 2,
     2025[↗source](https://www.kaikaikiki.com/en/)
 
-[^3]:
-    COMPANY | Kaikai Kiki Co., Ltd., accessed July 2,
+[^3]: COMPANY | Kaikai Kiki Co., Ltd., accessed July 2,
     2025[↗source](https://www.kaikaikiki.com/en/company/)
 
-[^4]:
-    Takashi Murakami Art, Bio, Ideas | TheArtStory, accessed July 2,
+[^4]: Takashi Murakami Art, Bio, Ideas | TheArtStory, accessed July 2,
     2025[↗source](https://www.theartstory.org/artist/murakami-takashi/)
 
-[^5]:
-    Murakami's artistic techniques: acrylics, prints, and more, accessed July 2,
+[^5]: Murakami's artistic techniques: acrylics, prints, and more, accessed July 2,
     2025[↗source](https://www.canvasprintsaustralia.net.au/murakamis-artistic-techniques-acrylics-prints-and-more/)
 
-[^6]:
-    The Murakami 727 silkscreen vs the 727 offset, what's the difference ...,
+[^6]: The Murakami 727 silkscreen vs the 727 offset, what's the difference ...,
     accessed July 2,
     2025[↗source](https://www.sugimoto68.com/2017/01/25/the-murakami-727-silkscreen-vs-the-727-offset-whats-the-difference/)
 
-[^7]:
-    Knowing the Takashi Murakami print types you can buy -, accessed July 2,
+[^7]: Knowing the Takashi Murakami print types you can buy -, accessed July 2,
     2025[↗source](https://allaboutartgallery.sg/feature-space/knowing-the-takashi-murakami-print-types-you-can-buy/)
 
-[^8]:
-    Hand-drawn Portraits and Limited Edition Prints by Takashi ..., accessed
+[^8]: Hand-drawn Portraits and Limited Edition Prints by Takashi ..., accessed
     July 2, 2025[↗source](https://www.clevelandart.org/takashi)
 
-[^9]:
-    Artetrama Blog - About Takashi Murakami Limited Editions, accessed July 2,
+[^9]: Artetrama Blog - About Takashi Murakami Limited Editions, accessed July 2,
     2025[↗source](https://www.artetrama.com/blogs/news/about-takashi-murakami-limited-editions)
 
-[^10]:
-    Takashi Murakami | dob and then, and then, and then (2006) - Composition
+[^10]: Takashi Murakami | dob and then, and then, and then (2006) - Composition
     Gallery, accessed July 2,
     2025[↗source](https://www.composition.gallery/art/takashi-murakami-dob-and-then-and-then-and-then/)
 
-[^11]:
-    Takashi Murakami - Beyond the dimensions - Miura Gallery, accessed July 2,
+[^11]: Takashi Murakami - Beyond the dimensions - Miura Gallery, accessed July 2,
     2025[↗source](https://www.miuragallery.com/shop/p/takashi-murakami-beyond-the-dimension)
 
-[^12]:
-    Takashi Murakami - So Much Fun, Under the Blue Sky - Edition of 300 - Lucky
+[^12]: Takashi Murakami - So Much Fun, Under the Blue Sky - Edition of 300 - Lucky
     Cat Gallery, accessed July 2,
     2025[↗source](https://www.luckycat.gallery/product/takashi-murakami-so-much-fun-under-the-blue-sky-edition-of-300/)
 
-[^13]:
-    Takashi Murakami Beyond the Dimensions Round 28” Diameter Signed Limited
+[^13]: Takashi Murakami Beyond the Dimensions Round 28” Diameter Signed Limited
     Edition Lithograph - Modern Artifact, accessed July 2,
     2025[↗source](https://modernartifact.com/products/takashi-murakami-beyond-the-dimensions-round-28-diameter-signed-limited-edition-lithograph)
 
-[^14]:
-    Takashi Murakami at Martin Lawrence Galleries, accessed July 2,
+[^14]: Takashi Murakami at Martin Lawrence Galleries, accessed July 2,
     2025[↗source](https://martinlawrence.com/collections/takashi-murakami-1)
 
-[^15]:
-    How Does Takashi Murakami Make His Art? - Inside Museum Walls - YouTube,
+[^15]: How Does Takashi Murakami Make His Art? - Inside Museum Walls - YouTube,
     accessed July 2, 2025[↗source](https://www.youtube.com/watch?v=0FPYdJ8Ov2s)
 
-[^16]:
-    How does takashi murakami works? On paper? : r/ContemporaryArt - Reddit,
+[^16]: How does takashi murakami works? On paper? : r/ContemporaryArt - Reddit,
     accessed July 2,
     2025[↗source](https://www.reddit.com/r/ContemporaryArt/comments/ex61ho/how_does_takashi_murakami_works_on_paper/)
 
-[^17]:
-    Takashi Murakami TM/KK\> Pop Artist Graffiti Street Artworks - Sprayed Paint
+[^17]: Takashi Murakami TM/KK\> Pop Artist Graffiti Street Artworks - Sprayed Paint
     Art Collection, accessed July 2,
     2025[↗source](https://sprayedpaint.com/collections/takashi-murakami-tm-kk)
 
-[^18]:
-    Doraemon Exhibition Tokyo Archival Pigment Plate by Takashi Murakami TM/KK,
+[^18]: Doraemon Exhibition Tokyo Archival Pigment Plate by Takashi Murakami TM/KK,
     accessed July 2,
     2025[↗source](https://sprayedpaint.com/products/doraemon-exhibition-tokyo-archival-pigment-plate-by-takashi-murakami-tm-kk)
 
-[^19]:
-    Buy and Sell Takashi Murakami Prints - StockX, accessed July 2,
+[^19]: Buy and Sell Takashi Murakami Prints - StockX, accessed July 2,
     2025[↗source](https://stockx.com/brands/takashi-murakami?category=prints)
 
-[^20]:
-    Takashi Murakami | Gagosian, accessed July 2,
+[^20]: Takashi Murakami | Gagosian, accessed July 2,
     2025[↗source](https://gagosian.com/artists/takashi-murakami/)
 
-[^21]:
-    Murakami: 'And Then And Then And Then And Then And Then' (1996-2013): A
+[^21]: Murakami: 'And Then And Then And Then And Then And Then' (1996-2013): A
     Definitive Study - Composition Gallery, accessed July 2,
     2025[↗source](https://www.composition.gallery/journal/murakami-and-then-and-then-and-then-and-then-and-then-1996-2013-a-definitive-study/)
 
-[^22]:
-    479: TAKASHI MURAKAMI, Flower Ball (Dumpling) \< The Collection of Shawn &
+[^22]: 479: TAKASHI MURAKAMI, Flower Ball (Dumpling) \< The Collection of Shawn &
     Andrew Hosner of Thinkspace LA: Online Only, 13 September 2024 \< Auctions,
     accessed July 2,
     2025[↗source](https://www.lamodern.com/auctions/2024/09/the-collection-of-shawn-andrew-hosner-of-thinkspace-la-online-only/479)
 
-[^23]:
-    takashi murakami signed products for sale - eBay, accessed July 2,
+[^23]: takashi murakami signed products for sale - eBay, accessed July 2,
     2025[↗source](https://www.ebay.com/b/takashi-murakami-signed/bn_7024736978)
 
-[^24]:
-    A Guide to Takashi Murakami Prints and Their Value - Mark Littler, accessed
+[^24]: A Guide to Takashi Murakami Prints and Their Value - Mark Littler, accessed
     July 2,
     2025[↗source](https://www.marklittler.com/a-guide-to-takashi-murakami-prints-and-their-value/)
 
-[^25]:
-    Takashi Murakami: 727 Poster - MoMA Design Store, accessed July 2,
+[^25]: Takashi Murakami: 727 Poster - MoMA Design Store, accessed July 2,
     2025[↗source](https://store.moma.org/products/takashi-murakami-727-poster)
 
-[^26]:
-    Top Things to Look for When Collecting Takashi Murakami Prints - Lougher
+[^26]: Top Things to Look for When Collecting Takashi Murakami Prints - Lougher
     Contemporary, accessed July 2,
     2025[↗source](https://www.loughercontemporary.com/blogs/editorial/collecting-takashi-murakami-lougher-contemporary)
 
-[^27]:
-    Exclusive Takashi Murakami Print Collection On NTWRK Raises Over $1.3m,
+[^27]: Exclusive Takashi Murakami Print Collection On NTWRK Raises Over $1.3m,
     accessed July 2,
     2025[↗source](https://shorefire.com/releases/entry/takashi-murakami-print-collection-on-ntwrk-raises-over-1.3m)
 
-[^28]:
-    Takashi Murakami | Art, Prints (Flowers) for Sale - Rise Art, accessed July
+[^28]: Takashi Murakami | Art, Prints (Flowers) for Sale - Rise Art, accessed July
     2, 2025[↗source](https://www.riseart.com/artist/8932/takashi-murakami)
 
-[^29]:
-    Murakami Painting Canvas - Etsy, accessed July 2,
+[^29]: Murakami Painting Canvas - Etsy, accessed July 2,
     2025[↗source](https://www.etsy.com/market/murakami_painting_canvas?ref=lp_queries_internal_bottom-19)
 
-[^30]:
-    Takashi Murakami Print Art - Etsy, accessed July 2,
+[^30]: Takashi Murakami Print Art - Etsy, accessed July 2,
     2025[↗source](https://www.etsy.com/market/takashi_murakami_print_art?ref=lp_queries_external_bottom-18)
 
-[^31]:
-    Takashi Murakami | Buy Original Art Online - Artsper, accessed July 2,
+[^31]: Takashi Murakami | Buy Original Art Online - Artsper, accessed July 2,
     2025[↗source](https://www.artsper.com/us/contemporary-artists/japan/1028/takashi-murakami)
 
-[^32]:
-    Limited-Edition Prints by Takashi Murakami - Cleveland Museum of Art,
+[^32]: Limited-Edition Prints by Takashi Murakami - Cleveland Museum of Art,
     accessed July 2,
     2025[↗source](https://shop.clevelandart.org/collections/takashi-murakami-limited-edition-prints)
 
-[^33]:
-    Takashi Murakami Art Prints for sale - eBay, accessed July 2,
+[^33]: Takashi Murakami Art Prints for sale - eBay, accessed July 2,
     2025[↗source](https://www.ebay.com/b/Takashi-Murakami-Art-Prints/360/bn_29647728)
 
-[^34]:
-    Items for Takashi Murakami Mononoke Kyoto Card - magi - TCG & Sneakers
+[^34]: Items for Takashi Murakami Mononoke Kyoto Card - magi - TCG & Sneakers
     Marketplace, accessed July 2,
     2025[↗source](https://en.magi.camp/series/100586/items)
 
-[^35]:
-    Takashi Murakami - Murakami.Flowers Collectible Trading Card ..., accessed
+[^35]: Takashi Murakami - Murakami.Flowers Collectible Trading Card ..., accessed
     July 2,
     2025[↗source](https://www.newarteditions.com/takashi-murakami-murakami-flowers-collectible-trading-card-prints/)
 
-[^36]:
-    Takashi Murakami Sold at Auction Prices - Invaluable.com, accessed July 2,
+[^36]: Takashi Murakami Sold at Auction Prices - Invaluable.com, accessed July 2,
     2025[↗source](https://www.invaluable.com/artist/murakami-takashi-yn9egwsj0v/sold-at-auction-prices/?page=12)
 
-[^37]:
-    Cosmos Offset Lithograph Print by Takashi Murakami TM/KK - Sprayed Paint Art
+[^37]: Cosmos Offset Lithograph Print by Takashi Murakami TM/KK - Sprayed Paint Art
     Collection, accessed July 2,
     2025[↗source](https://sprayedpaint.com/products/cosmos-offset-lithograph-print-by-takashi-murakami-tm-kk)
 
-[^38]:
-    Lot of 210+ Cards 50+ Envelopes All Occasions Birthday Christmas, accessed
+[^38]: Lot of 210+ Cards 50+ Envelopes All Occasions Birthday Christmas, accessed
     July 2, 2025[↗source](https://casamodernaplanejados.com.br/167495165.html)
 
-[^39]:
-    Designstoresyd: Shop Official Murakami Products & Authentic Designer Toys
+[^39]: Designstoresyd: Shop Official Murakami Products & Authentic Designer Toys
     Online, accessed July 2, 2025[↗source](https://dssyd.com/)
 
-[^40]:
-    Takashi Murakami Art for Sale: Prints & Originals | MyArtBroker, accessed
+[^40]: Takashi Murakami Art for Sale: Prints & Originals | MyArtBroker, accessed
     July 2, 2025[↗source](https://www.myartbroker.com/artist-takashi-murakami)
 
-[^41]:
-    Takashi Murakami Prints: A Collector's Guide to Authenticity | Lucky ...,
+[^41]: Takashi Murakami Prints: A Collector's Guide to Authenticity | Lucky ...,
     accessed July 2,
     2025[↗source](https://www.luckycat.gallery/takashi-murakami-prints-a-collectors-guide-to-authenticity/)
 
-[^42]:
-    Takashi Murakami - Prints | Artsy, accessed July 2,
+[^42]: Takashi Murakami - Prints | Artsy, accessed July 2,
     2025[↗source](https://www.artsy.net/artist/takashi-murakami?additional_gene_ids%5B0%5D=prints&page=30)
 
-[^43]:
-    Takashi Murakami – Warp | Editions - Hang-Up Gallery, accessed July 2,
+[^43]: Takashi Murakami – Warp | Editions - Hang-Up Gallery, accessed July 2,
     2025[↗source](https://hanguppictures.com/artworks/takashi-murakami-warp)
 
-[^44]:
-    351: TAKASHI MURAKAMI, Planet 66 \< Prints & Multiples, 13 May 2025 \<
+[^44]: 351: TAKASHI MURAKAMI, Planet 66 \< Prints & Multiples, 13 May 2025 \<
     Auctions, accessed July 2,
     2025[↗source](https://www.lamodern.com/auctions/2025/05/prints-multiples/351)
 
-[^45]:
-    Takashi Murakami: Works for Sale, Upcoming Auctions & Past Results -
+[^45]: Takashi Murakami: Works for Sale, Upcoming Auctions & Past Results -
     Phillips Auction, accessed July 2,
     2025[↗source](https://www.phillips.com/artist/10897/takashi-murakami)
 
-[^46]:
-    Art Market Trends 2025 | Artsy, accessed July 2,
+[^46]: Art Market Trends 2025 | Artsy, accessed July 2,
     2025[↗source](https://www.artsy.net/article/artsy-editorial-art-market-trends-2025)
 
-[^47]:
-    Takashi Murakami | Gagosian Shop, accessed July 2,
+[^47]: Takashi Murakami | Gagosian Shop, accessed July 2,
     2025[↗source](https://gagosianshop.com/collections/takashi-murakami)
 
-[^48]:
-    SHOP\&GOODS | Zingaro official Web, accessed July 2,
+[^48]: SHOP\&GOODS | Zingaro official Web, accessed July 2,
     2025[↗source](https://zingarokk.com/tonarinozingaro/)
 
-[^49]:
-    First-Time Collaborators Takashi Murakami and Post Malone Unveil a Capsule
+[^49]: First-Time Collaborators Takashi Murakami and Post Malone Unveil a Capsule
     Collection of Apparel and Beer Merch | Artnet News, accessed July 2,
     2025[↗source](https://news.artnet.com/art-world/takashi-murakami-post-malone-collaboration-apparel-beer-merch-ntwrk-2216201)
 
-[^50]:
-    Welcome to Zingaro—a cultural space run by Kaikai Kiki headed by Takashi
+[^50]: Welcome to Zingaro—a cultural space run by Kaikai Kiki headed by Takashi
     Murakami, accessed July 2,
     2025[↗source](https://narita-akihabara.jp/culture/post-000060)
 
-[^51]:
-    Purchasing issues tonari no zingaro : r/TakashiMurakami - Reddit, accessed
+[^51]: Purchasing issues tonari no zingaro : r/TakashiMurakami - Reddit, accessed
     July 2,
     2025[↗source](https://www.reddit.com/r/TakashiMurakami/comments/s1mgov/purchasing_issues_tonari_no_zingaro/)
 
-[^52]:
-    Tips for buying from Tonari no Zingaro? : r/TakashiMurakami - Reddit,
+[^52]: Tips for buying from Tonari no Zingaro? : r/TakashiMurakami - Reddit,
     accessed July 2,
     2025[↗source](https://www.reddit.com/r/TakashiMurakami/comments/1kb6mvs/tips_for_buying_from_tonari_no_zingaro/)
 
-[^53]:
-    Takashi Murakami - Artworks for Sale & More | Artsy, accessed July 2,
+[^53]: Takashi Murakami - Artworks for Sale & More | Artsy, accessed July 2,
     2025[↗source](https://www.artsy.net/artist/takashi-murakami)
 
-[^54]:
-    Takashi Murakami - Auction Results and Sales Data | Artsy, accessed July 2,
+[^54]: Takashi Murakami - Auction Results and Sales Data | Artsy, accessed July 2,
     2025[↗source](https://www.artsy.net/artist/takashi-murakami/auction-results?hide_upcoming=false&page=2&allow_empty_created_dates=true)
 
-[^55]:
-    Takashi Murakami - Auction Results and Sales Data | Artsy, accessed July 2,
+[^55]: Takashi Murakami - Auction Results and Sales Data | Artsy, accessed July 2,
     2025[↗source](https://www.artsy.net/artist/takashi-murakami/auction-results)
 
-[^56]:
-    Takashi Murakami & Virgil Abloh Work Sells for $145,800 to Deliver a 4%
+[^56]: Takashi Murakami & Virgil Abloh Work Sells for $145,800 to Deliver a 4%
     Annualized Return - HENI, accessed July 2,
     2025[↗source](https://heni.com/news/article/takashi-murakami-virgil-abloh-flower-2025-05-27)
 
-[^57]:
-    Takashi Murakami - Auction Results and Sales Data | Artsy, accessed July 2,
+[^57]: Takashi Murakami - Auction Results and Sales Data | Artsy, accessed July 2,
     2025[↗source](https://www.artsy.net/artist/takashi-murakami/auction-results?hide_upcoming=false&allow_empty_created_dates=true&currency=&include_estimate_range=false&include_unknown_prices=true&allow_unspecified_sale_dates=true)
 
-[^58]:
-    Takashi Murakami | Beyond the Dimensions (2022) | Available for Sale -
+[^58]: Takashi Murakami | Beyond the Dimensions (2022) | Available for Sale -
     Artsy, accessed July 2,
     2025[↗source](https://www.artsy.net/artwork/takashi-murakami-beyond-the-dimensions-59)
 
-[^59]:
-    Murakami Prints? : r/TakashiMurakami - Reddit, accessed July 2,
+[^59]: Murakami Prints? : r/TakashiMurakami - Reddit, accessed July 2,
     2025[↗source](https://www.reddit.com/r/TakashiMurakami/comments/glg1mp/murakami_prints/)
 
-[^60]:
-    Buy and Sell Takashi Murakami - StockX, accessed July 2,
+[^60]: Buy and Sell Takashi Murakami - StockX, accessed July 2,
     2025[↗source](https://stockx.com/brands/takashi-murakami)
 
-[^61]:
-    How to Authenticate Genuine Takashi Murakami Art Editions: A Quick Guide -
+[^61]: How to Authenticate Genuine Takashi Murakami Art Editions: A Quick Guide -
     Takaoka Art, accessed July 2,
     2025[↗source](https://www.takaoka-art.com/blogs/news/how-to-authenticate-genuine-takashi-murakami-art-editions-a-quick-guide)
 
-[^62]:
-    Authenticating Your Murakami - Japanese Pop Art – Sugimoto68, accessed July
+[^62]: Authenticating Your Murakami - Japanese Pop Art – Sugimoto68, accessed July
     2,
     2025[↗source](https://www.sugimoto68.com/2014/07/16/authenticating-your-murakami/)
 
-[^63]:
-    An Homage to Mono Pink, 1960 D 2012 Limited Edition Print by Takashi
+[^63]: An Homage to Mono Pink, 1960 D 2012 Limited Edition Print by Takashi
     Murakami, accessed July 2,
     2025[↗source](https://www.artbrokerage.com/Takashi-Murakami/An-Homage-to-Mono-Pink-1960-D-2012-141216)

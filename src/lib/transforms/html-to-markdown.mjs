@@ -1,15 +1,15 @@
-import path from 'node:path'
-import fs from 'node:fs/promises'
-import { JSDOM } from 'jsdom'
 import { Readability } from '@mozilla/readability'
+import { JSDOM } from 'jsdom'
+import fs from 'node:fs/promises'
+import path from 'node:path'
 
-import { unified } from 'unified'
 import rehypeParse from 'rehype-parse'
 import rehypeRemark from 'rehype-remark'
-import remarkStringify from 'remark-stringify'
 import remarkGfm from 'remark-gfm'
-import remarkSmartypants from 'remark-smartypants'
 import remarkMath from 'remark-math'
+import remarkSmartypants from 'remark-smartypants'
+import remarkStringify from 'remark-stringify'
+import { unified } from 'unified'
 
 // Simple pre-clean: drop noisy tags before HTML→Markdown
 function rehypeStripTags(tags = ['script', 'style', 'noscript']) {
@@ -61,13 +61,13 @@ export default function htmlToMarkdownUnified(
     defaultLayout = null,
     pageTitlePrefix = '',
     frontMatterExtra = {},
-  } = {}
+  } = {},
 ) {
   // IMPORTANT: do not set `key` when overriding a built-in language like "html"
   eleventyConfig.addExtension('html', {
     outputFileExtension: 'md', // emit Markdown so your normal MD pipeline/layouts apply
 
-    compile: function (inputContent, inputPath) {
+    compile: function(inputContent, inputPath) {
       if (!inScope(inputPath, rootDir)) return undefined
 
       return async () => {
@@ -76,8 +76,7 @@ export default function htmlToMarkdownUnified(
         const reader = new Readability(dom.window.document)
         const article = reader.parse()
 
-        const title =
-          article?.title || path.basename(inputPath).replace(/\.html$/i, '')
+        const title = article?.title || path.basename(inputPath).replace(/\.html$/i, '')
         const byline = article?.byline || ''
         const excerpt = article?.excerpt || ''
         const length = article?.length || 0
@@ -119,11 +118,11 @@ export default function htmlToMarkdownUnified(
         if (dumpMarkdownTo) {
           const relOut = inputPath.replace(
             path.normalize(rootDir) + path.sep,
-            ''
+            '',
           )
           const mdOutPath = path.join(
             dumpMarkdownTo,
-            relOut.replace(/\.html$/i, '.md')
+            relOut.replace(/\.html$/i, '.md'),
           )
           await fs.mkdir(path.dirname(mdOutPath), { recursive: true })
           await fs.writeFile(mdOutPath, mdFull, 'utf8')

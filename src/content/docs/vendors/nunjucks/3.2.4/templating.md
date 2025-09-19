@@ -1078,9 +1078,9 @@ Change default indentation to 6 spaces and indent the first line:
 
 **Output**
 
-          one
-          two
-          three
+    one
+    two
+    three
 
 ### int
 

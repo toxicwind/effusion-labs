@@ -3,8 +3,7 @@ export const data = () => ({
   pagination: { data: 'collections.jsonlDirs', size: 1, alias: 'dir' },
   eleventyComputed: {
     title: ({ dir }) => `Provenance — ${dir?.rel ?? ''}`,
-    permalink: ({ dir }) =>
-      dir ? `/archives/${dir.rel}/provenance/index.html` : false,
+    permalink: ({ dir }) => dir ? `/archives/${dir.rel}/provenance/index.html` : false,
     showTitle: false,
   },
 })
@@ -22,7 +21,7 @@ export const render = ({ dir }) => {
           <a class="link" href="${it.rawUrl}">Raw</a>
           <a class="link" href="${it.rawUrl}?download=1">Download</a>
         </div>
-      </li>`
+      </li>`,
     )
     .join('\n')
 

@@ -1,6 +1,6 @@
 ---
-title: 'A Field Guide to the Ecology of Doubt'
-layout: 'base.njk'
+title: "A Field Guide to the Ecology of Doubt"
+layout: "base.njk"
 templateEngineOverride: njk,md
 date: 2025-08-20
 status: Final
@@ -28,14 +28,14 @@ analytic_lens:
   - human-algorithm-teaming
   - reputation-mechanisms
 memory_ref:
-  - '[verification]'
-  - '[human-algorithm]'
-  - '[risk-management]'
-  - '[reputation-systems]'
-  - '[decision-theory]'
+  - "[verification]"
+  - "[human-algorithm]"
+  - "[risk-management]"
+  - "[reputation-systems]"
+  - "[decision-theory]"
 preamble:
-  classification: '[CONCEPT] Verification dynamics in hybrid ecosystems'
-  version: '1.0'
+  classification: "[CONCEPT] Verification dynamics in hybrid ecosystems"
+  version: "1.0"
 ---
 
 > _The greatest enemy of knowledge is not ignorance, it is the illusion of
@@ -297,8 +297,7 @@ enemy of knowledge—it is the rent you pay to keep any of it alive.
 
 ---
 
-[^1]:
-    **O’Connor, C. & Weatherall, J. O. (2019)** – _The Misinformation Age: How
+[^1]: **O’Connor, C. & Weatherall, J. O. (2019)** – _The Misinformation Age: How
     False Beliefs Spread._
 
 > _Epistemic Note (Information Ecology):_ This work provides the foundational
@@ -306,11 +305,10 @@ enemy of knowledge—it is the rent you pay to keep any of it alive.
 > true and false, move through a system with a life of their own, treating the
 > spread of misinformation not as a failure of logic but as a complex,
 > self-organizing contagion. It frames the entire discussion of verification as
-> a force that shapes the organism's resistance.  
+> a force that shapes the organism's resistance.\
 > Source: [press.princeton.edu](https://press.princeton.edu/books/hardcover/9780691179232/the-misinformation-age)
 
-[^2]:
-    **Centola, D. (2018)** – _How Behavior Spreads: The Science of Complex
+[^2]: **Centola, D. (2018)** – _How Behavior Spreads: The Science of Complex
     Contagions._
 
 > _Epistemic Note (Social Contagion):_ A key conceptual bridge that explains why
@@ -318,11 +316,10 @@ enemy of knowledge—it is the rent you pay to keep any of it alive.
 > utility is in demonstrating how verification is not a solitary act but a
 > collective behavior that spreads through "strong ties" and peer clusters,
 > illustrating why a community's standards are more important than any single
-> individual's skepticism.  
+> individual's skepticism.\
 > Source: [press.princeton.edu](https://press.princeton.edu/books/hardcover/9780691175319/how-behavior-spreads)
 
-[^3]:
-    **Ware, M. & Monkman, M. (2015)** – _Peer Review: An Introduction and
+[^3]: **Ware, M. & Monkman, M. (2015)** – _Peer Review: An Introduction and
     Guide._
 
 > _Epistemic Note (Academic Governance):_ This source codifies a primitive form
@@ -330,22 +327,20 @@ enemy of knowledge—it is the rent you pay to keep any of it alive.
 > high-friction verification process was formalized into a bureaucratic
 > mechanism, institutionalizing doubt as a sanctioned tool for quality control
 > and transforming the act of questioning from a personal trait into a mandatory
-> gatekeeping function.  
+> gatekeeping function.\
 > Source: [publishingresearchconsortium.com](https://publishingresearchconsortium.com/index.php/102-prc-guides/peer-review-an-introduction-and-guide)
 
-[^4]:
-    **Wang, R. Y. & Strong, D. M. (1996)** – “Beyond Accuracy: What Data Quality
+[^4]: **Wang, R. Y. & Strong, D. M. (1996)** – “Beyond Accuracy: What Data Quality
     Means to Data Consumers.”
 
 > _Epistemic Note (Data Theory):_ This seminal paper provides the formal
 > language for the "scavenger's" work. Its primary function is to deconstruct
 > the single notion of "truth" into a multi-dimensional, actionable checklist
 > (e.g., accuracy, timeliness, completeness), thereby moving the concept of data
-> quality from an abstract ideal to a concrete, tactical set of tasks.  
+> quality from an abstract ideal to a concrete, tactical set of tasks.\
 > Source: [doi.org](https://doi.org/10.1080/07421222.1996.11518099)
 
-[^5]:
-    **Resnick, P. & Zeckhauser, R. (2002)** – “Trust Among Strangers in Internet
+[^5]: **Resnick, P. & Zeckhauser, R. (2002)** – “Trust Among Strangers in Internet
     Transactions: Empirical Analysis of eBay’s Reputation System.”
 
 > _Epistemic Note (Behavioral Economics):_ This study provides a real-world,
@@ -353,22 +348,20 @@ enemy of knowledge—it is the rent you pay to keep any of it alive.
 > showing how a designed feedback mechanism, like eBay's, creates a new
 > selective pressure, making trustworthiness a quantifiable trait and
 > transforming a social virtue into an essential organ for a digital community's
-> survival.  
-> Source: [doi.org](<https://doi.org/10.1016/S0167-6245(01)00062-4>)
+> survival.\
+> Source: [doi.org](https://doi.org/10.1016/S0167-6245(01)00062-4)
 
-[^6]:
-    **Dellarocas, C. (2003)** – “The Digitization of Word of Mouth: Promise and
+[^6]: **Dellarocas, C. (2003)** – “The Digitization of Word of Mouth: Promise and
     Challenges of Online Feedback Mechanisms.”
 
 > _Epistemic Note (Information Systems):_ An essential conceptual follow-up to
 > earlier trust models. Its primary function is to formalize how "word of mouth"
 > transforms from an analog, personal force into a digitized, scalable system,
 > articulating the challenges of cultivating a reputation system that resists
-> manipulation and serves as a reliable trellis for trust.  
+> manipulation and serves as a reliable trellis for trust.\
 > Source: [doi.org](https://doi.org/10.1287/mnsc.49.10.1407.17378)
 
-[^7]:
-    **Fricker, M. (2007)** – _Epistemic Injustice: Power and the Ethics of
+[^7]: **Fricker, M. (2007)** – _Epistemic Injustice: Power and the Ethics of
     Knowing._
 
 > _Epistemic Note (Epistemology):_ The philosophical bedrock for the "labor
@@ -376,7 +369,7 @@ enemy of knowledge—it is the rent you pay to keep any of it alive.
 > certain individuals or groups are systematically required to do more work to
 > prove their claims, making it clear that skepticism is not a neutral tool but
 > can be wielded as an act of power, with real consequences for the unpaid labor
-> of justification.  
+> of justification.\
 > Source: [global.oup.com](https://global.oup.com/academic/product/epistemic-injustice-9780198237907)
 
 [^8]: **Cialdini, R. B. (2009)** – _Influence: Science and Practice._
@@ -385,7 +378,7 @@ enemy of knowledge—it is the rent you pay to keep any of it alive.
 > social cues. Its utility is in providing the playbook for how group
 > consensus—"social proof"—can be used as both a reliable shortcut to truth and
 > a powerful mechanism for manufacturing false consensus, providing crucial
-> context for the performative aspects of verification.  
+> context for the performative aspects of verification.\
 > Source: [pearson.com](https://www.pearson.com/en-us/subject-catalog/p/influence/P200000006695/9780205609994)
 
 [^9]: **Goffman, E. (1959)** – _The Presentation of Self in Everyday Life._
@@ -394,7 +387,7 @@ enemy of knowledge—it is the rent you pay to keep any of it alive.
 > foundation for the "Theatre of Trust." Its function is to frame all public
 > interactions as performances, demonstrating that the act of "verifying" is not
 > merely about finding truth but is a form of social cosplay, a ritualized
-> performance of competence, belonging, or dominance.  
+> performance of competence, belonging, or dominance.\
 > Source: [monoskop.org](https://monoskop.org/images/1/19/Goffman_Erving_The_Presentation_of_Self_in_Everyday_Life.pdf)
 
 [^10]: **Taleb, N. N. (2012)** – _Antifragile: Things That Gain from Disorder._
@@ -403,44 +396,40 @@ enemy of knowledge—it is the rent you pay to keep any of it alive.
 > for the "heavy tails" concept. Its primary utility is to remind us that not
 > all risks are equal; some domains have a hidden potential for catastrophic
 > failure, providing the crucial rationale for why certain categories of
-> claims—the "red tiers"—must be managed with extreme caution.  
+> claims—the "red tiers"—must be managed with extreme caution.\
 > Source: [penguinrandomhouse.com](https://www.penguinrandomhouse.com/books/215462/antifragile-by-nassim-nicholas-taleb/)
 
-[^11]:
-    **Kahneman, D. & Tversky, A. (1979)** – “Prospect Theory: An Analysis of
+[^11]: **Kahneman, D. & Tversky, A. (1979)** – “Prospect Theory: An Analysis of
     Decision under Risk.”
 
 > _Epistemic Note (Behavioral Economics):_ A foundational paper that explains
 > why humans are so bad at the "finite game vs. infinite game" problem. Its
 > function is to document the cognitive biases that lead us to mis-price risk,
 > providing the psychological justification for why a formal risk-tiering system
-> is necessary to prevent our instincts from making irrational trade-offs.  
+> is necessary to prevent our instincts from making irrational trade-offs.\
 > Source: [doi.org](https://doi.org/10.2307/1914185)
 
-[^12]:
-    **Kleinberg, J., Lakkaraju, H., Leskovec, J., Ludwig, J., & Mullainathan, S.
+[^12]: **Kleinberg, J., Lakkaraju, H., Leskovec, J., Ludwig, J., & Mullainathan, S.
     (2018)** – “Human Decisions and Machine Predictions.”
 
 > _Epistemic Note (Human-Algorithm Teaming):_ A key empirical study that
 > provides the quantitative basis for human-machine synergy. Its function is to
 > demonstrate that the value of AI is not in its independence but in its
 > complementarity with human oversight, thereby providing a clear data-driven
-> argument for the existence of the "Red/Amber/Green" tiering system.  
+> argument for the existence of the "Red/Amber/Green" tiering system.\
 > Source: [doi.org](https://doi.org/10.1093/qje/qjx032)
 
-[^13]:
-    **Lai, V., Chen, C., & Tan, C. (2019/2021)** – “On Human-AI
+[^13]: **Lai, V., Chen, C., & Tan, C. (2019/2021)** – “On Human-AI
     Complementarity.”
 
 > _Epistemic Note (Human-Algorithm Teaming):_ This follow-up study reinforces
 > the core argument of human-AI collaboration. Its utility is in refining our
 > understanding of the specific conditions under which human-machine teams
 > outperform either agent alone, providing the crucial justification for the
-> specific "dance" of human-supervised machine exploration.  
+> specific "dance" of human-supervised machine exploration.\
 > Source: [arxiv.org](https://arxiv.org/abs/2112.04237)
 
-[^14]:
-    **Manning, C. D., Raghavan, P., & Schütze, H. (2008)** – _Introduction to
+[^14]: **Manning, C. D., Raghavan, P., & Schütze, H. (2008)** – _Introduction to
     Information Retrieval._
 
 > _Epistemic Note (Computational Linguistics):_ A canonical textbook that
@@ -448,38 +437,35 @@ enemy of knowledge—it is the rent you pay to keep any of it alive.
 > Its function is to formalize the trade-off between finding everything
 > ("recall") and finding only the right things ("precision"), serving as the
 > technical justification for a design philosophy that prioritizes trustworthy
-> top results over exhaustive, but unreliable, coverage.  
+> top results over exhaustive, but unreliable, coverage.\
 > Source: [doi.org](https://doi.org/10.1017/CBO9780511809071)
 
-[^15]:
-    **Ji, Z., Lee, N., Frieske, R., et al. (2023)** – “Survey of Hallucination
+[^15]: **Ji, Z., Lee, N., Frieske, R., et al. (2023)** – “Survey of Hallucination
     in Natural Language Generation.”
 
 > _Epistemic Note (Natural Language Processing):_ A comprehensive audit of the
 > primary failure mode in modern language models. Its function is to catalog the
 > specific, predictable ways in which these systems fabricate information,
 > providing the crucial technical basis for why design solutions like "no
-> source, no claim" are necessary to prevent catastrophic hallucinations.  
+> source, no claim" are necessary to prevent catastrophic hallucinations.\
 > Source: [arxiv.org](https://arxiv.org/abs/2302.02430)
 
-[^16]:
-    **Maynez, J., Narayan, S., Bohnet, B., & McDonald, R. (2020)** – “On
+[^16]: **Maynez, J., Narayan, S., Bohnet, B., & McDonald, R. (2020)** – “On
     Faithfulness and Factuality in Abstractive Summarization.”
 
 > _Epistemic Note (Natural Language Processing):_ This study provides a specific
 > case study of machine deception. Its utility is in demonstrating how a system
 > can be factually correct while still be unfaithful to its source, providing a
 > nuanced justification for why source-pinning and transparency are more
-> effective than simple fact-checking for preventing misleading claims.  
+> effective than simple fact-checking for preventing misleading claims.\
 > Source: [doi.org](https://doi.org/10.18653/v1/2020.acl-main.450)
 
-[^17]:
-    **Kadavath, S., Conerly, T., Askell, A., et al. (2022)** – “Language Models
+[^17]: **Kadavath, S., Conerly, T., Askell, A., et al. (2022)** – “Language Models
     (Mostly) Know What They Know.”
 
 > _Epistemic Note (AI Alignment):_ A provocative empirical finding that provides
 > the theoretical basis for an "abstain" button. Its function is to demonstrate
 > that models have a faint, internal sense of their own ignorance, suggesting
 > that a well-designed system can be trained to defer to a human rather than
-> fabricate a plausible-sounding lie.  
+> fabricate a plausible-sounding lie.\
 > Source: [arxiv.org](https://arxiv.org/abs/2207.05221)

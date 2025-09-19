@@ -1,8 +1,8 @@
 ---
 title:
-  'How to Manufacture a Legacy: The Pierre Paulin Estate Between Preservation
-  and Product'
-layout: 'base.njk'
+  "How to Manufacture a Legacy: The Pierre Paulin Estate Between Preservation
+  and Product"
+layout: "base.njk"
 date: 2025-08-02
 status: Stable
 certainty: adversarial-analytic
@@ -25,15 +25,15 @@ analytic_lens:
   - market-as-verdict
   - posthumous-authorship
 memory_ref:
-  - '[estate-law]'
-  - '[brand-management]'
-  - '[cultural-capital]'
-  - '[luxury-goods-theory]'
-  - '[provenance]'
+  - "[estate-law]"
+  - "[brand-management]"
+  - "[cultural-capital]"
+  - "[luxury-goods-theory]"
+  - "[provenance]"
 preamble:
   classification:
-    '[META] Brand audit and critique of posthumous legacy management'
-  version: '6.0-final-dense'
+    "[META] Brand audit and critique of posthumous legacy management"
+  version: "6.0-final-dense"
 ---
 
 > **"My father didn't consider himself a creator; he considered himself a
@@ -276,8 +276,7 @@ replaces it with something more commercially viable.
 > strategically misleading. Source:
 > [YouTube](https://www.youtube.com/watch?v=YJY6woWTie0&utm_source=chatgpt.com)
 
-[^3]:
-    **Paulin, Paulin & Paulin v. Interior Icons, LLC, 2024** – _Case No.
+[^3]: **Paulin, Paulin & Paulin v. Interior Icons, LLC, 2024** – _Case No.
     2:24-cv-09641_
 
 > _Epistemic Note (Legal / Adversarial):_ Legal filings strip away the
@@ -319,8 +318,7 @@ replaces it with something more commercially viable.
 > until you see the machine doing the work. Source:
 > [Architectural Digest](https://www.architecturaldigest.com/story/pierre-paulin-debuts-at-ralph-pucci?utm_source=chatgpt.com)
 
-[^8]:
-    **West86th, 2016** – _Pierre Paulin – Centre Pompidou Retrospective Review_
+[^8]: **West86th, 2016** – _Pierre Paulin – Centre Pompidou Retrospective Review_
 
 > _Epistemic Note (Institutional):_ Academic review that illustrates
 > institutional validation power dynamics. When your exhibition depends on
@@ -344,8 +342,7 @@ replaces it with something more commercially viable.
 > become investment instruments. Source:
 > [Sotheby’s](https://www.sothebys.com/en/articles/pierre-paulin-design-icon?utm_source=chatgpt.com)
 
-[^11]:
-    **Homes & Gardens, 2025** – _Kim Kardashian, Flea, and Travis Scott have
+[^11]: **Homes & Gardens, 2025** – _Kim Kardashian, Flea, and Travis Scott have
     this space-age sofa in their living room_
 
 > _Epistemic Note (Lifestyle Journalism):_ Celebrity endorsement as critical
@@ -355,8 +352,7 @@ replaces it with something more commercially viable.
 > Source:
 > [Homes & Gardens](https://www.homesandgardens.com/celebrity-style/pierre-paulin-celebrity-sofa-trend?utm_source=chatgpt.com)
 
-[^12]:
-    **designboom, 2024** – _‘Pierre Paulin: Action House’ exhibits legacy of
+[^12]: **designboom, 2024** – _‘Pierre Paulin: Action House’ exhibits legacy of
     radical design in NYC_
 
 > _Epistemic Note (Design Media):_ Coverage that functions as frictionless PR
@@ -374,8 +370,7 @@ replaces it with something more commercially viable.
 > Source:
 > [OYUNA](https://oyuna.com/blogs/journal/circle-conversations-maia-paulin?srsltid=AfmBOoqoQjwvoMaSY3F0Nq9K68-ZoHvo4QL-44GGClnlhu0WbHNHM1ku&utm_source=chatgpt.com)
 
-[^14]:
-    **Financial Times, 2023** – _“It’s all about the curves”: a 1960s vision of
+[^14]: **Financial Times, 2023** – _“It’s all about the curves”: a 1960s vision of
     a domestic utopia_
 
 > _Epistemic Note (Journalism):_ Rare mainstream critical nuance. "Dimensional

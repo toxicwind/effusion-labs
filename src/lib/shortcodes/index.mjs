@@ -17,20 +17,19 @@ const slug = s =>
     .replace(/-+/g, '-')
 
 function specnote(variant, content, tooltip) {
-  const cls =
-    {
-      soft: 'spec-note-soft',
-      subtle: 'spec-note-subtle',
-      liminal: 'spec-note-liminal',
-      archival: 'spec-note-archival',
-      ghost: 'spec-note-ghost',
-    }[variant] || 'spec-note-soft'
+  const cls = {
+    soft: 'spec-note-soft',
+    subtle: 'spec-note-subtle',
+    liminal: 'spec-note-liminal',
+    archival: 'spec-note-archival',
+    ghost: 'spec-note-ghost',
+  }[variant] || 'spec-note-soft'
   const safeTooltip = tooltip?.replace(/"/g, '&quot;') || ''
   return `<span class="${cls}" title="${safeTooltip}">${content}</span>`
 }
 
 function createCalloutShortcode(eleventyConfig) {
-  return function (content, opts = {}) {
+  return function(content, opts = {}) {
     const md = eleventyConfig.markdownLibrary
     const isObj = opts && typeof opts === 'object' && !Array.isArray(opts)
     const {
@@ -62,13 +61,12 @@ export function registerShortcodes(eleventyConfig) {
   eleventyConfig.addPairedShortcode('callout', callout)
   eleventyConfig.addPairedShortcode(
     'failbox',
-    function (content, titleOrOpts, kicker) {
-      const opts =
-        titleOrOpts && typeof titleOrOpts === 'object'
-          ? { ...titleOrOpts, variant: 'error' }
-          : { title: titleOrOpts, kicker, variant: 'error' }
+    function(content, titleOrOpts, kicker) {
+      const opts = titleOrOpts && typeof titleOrOpts === 'object'
+        ? { ...titleOrOpts, variant: 'error' }
+        : { title: titleOrOpts, kicker, variant: 'error' }
       return callout.call(this, content, opts)
-    }
+    },
   )
 }
 

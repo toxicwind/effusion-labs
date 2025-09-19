@@ -1,6 +1,6 @@
 ---
 title: "The Reader's Journey and the Divergence from the Singular Author Model"
-layout: 'base.njk'
+layout: "base.njk"
 date: 2025-07-12
 status: complete
 certainty: analytic
@@ -19,11 +19,11 @@ analytic_lens:
   comparative-analysis, user-journey-mapping, audience-segmentation,
   trust-models
 memory_ref:
-  - '[gwern-branwen-model]'
-  - '[effusion-labs-protocol]'
-  - '[ghost-in-the-byline]'
-  - '[hci]'
-  - '[reader-response-theory]'
+  - "[gwern-branwen-model]"
+  - "[effusion-labs-protocol]"
+  - "[ghost-in-the-byline]"
+  - "[hci]"
+  - "[reader-response-theory]"
 ---
 
 The initial conceptual model for this project—a "version of `gwern.net`"—is a
@@ -97,33 +97,33 @@ The reaction to this structural rupture will determine the reader's "fate"
 within the Effusion Labs ecosystem. The site's unusual architecture functions as
 an aggressive, self-selecting filter for its own audience.
 
-1.  **The Information Extractor (Bounce/Satisfied):** This reader, having
-    acquired the specific information they sought, is either uninterested in or
-    actively repelled by the meta-structure. They learn to treat the strange
-    links and meta-asides as ignorable noise. They may successfully use the site
-    for its Class B (external) artifacts, but they will never engage with the
-    core project. They see a collection of useful but weirdly-formatted
-    articles. This is the largest, but least engaged, potential audience.
+1. **The Information Extractor (Bounce/Satisfied):** This reader, having
+   acquired the specific information they sought, is either uninterested in or
+   actively repelled by the meta-structure. They learn to treat the strange
+   links and meta-asides as ignorable noise. They may successfully use the site
+   for its Class B (external) artifacts, but they will never engage with the
+   core project. They see a collection of useful but weirdly-formatted
+   articles. This is the largest, but least engaged, potential audience.
 
-2.  **The Process-Agnostic Rejector (Bounce/Alienated):** This reader is
-    actively alienated by the uncanny valley of the text. Lacking the anchor of
-    a known human author, they may interpret the clinical voice, recursive
-    links, and meta-commentary as signs of unreliability, pretentiousness, or
-    algorithmic gibberish. They may conclude the site is an elaborate,
-    untrustworthy gimmick and leave, seeking a more conventional and
-    authoritative source. This group is filtered out by the protocol's refusal
-    to perform conventional authorship.
+2. **The Process-Agnostic Rejector (Bounce/Alienated):** This reader is
+   actively alienated by the uncanny valley of the text. Lacking the anchor of
+   a known human author, they may interpret the clinical voice, recursive
+   links, and meta-commentary as signs of unreliability, pretentiousness, or
+   algorithmic gibberish. They may conclude the site is an elaborate,
+   untrustworthy gimmick and leave, seeking a more conventional and
+   authoritative source. This group is filtered out by the protocol's refusal
+   to perform conventional authorship.
 
-3.  **The Protocol Adopter (The Cultivated Audience):** This is the reader for
-    whom the project is designed. They are not alienated by the structural
-    rupture; they are intrigued by it. Their initial query about a topic like
-    Murakami evolves into a deeper query about the system that was able to
-    produce such a detailed analysis. They begin to intentionally navigate the
-    `[META]` and `[CONCEPT]` links. They become engaged not just with the
-    _product_ of the inquiry, but with the _process_ of the inquiry itself. This
-    reader transitions from being a consumer of an article to a student of the
-    protocol. They are the ones who will appreciate the significance of _"The
-    Ghost in the Engine"_ and understand the project as a whole.
+3. **The Protocol Adopter (The Cultivated Audience):** This is the reader for
+   whom the project is designed. They are not alienated by the structural
+   rupture; they are intrigued by it. Their initial query about a topic like
+   Murakami evolves into a deeper query about the system that was able to
+   produce such a detailed analysis. They begin to intentionally navigate the
+   `[META]` and `[CONCEPT]` links. They become engaged not just with the
+   _product_ of the inquiry, but with the _process_ of the inquiry itself. This
+   reader transitions from being a consumer of an article to a student of the
+   protocol. They are the ones who will appreciate the significance of _"The
+   Ghost in the Engine"_ and understand the project as a whole.
 
 ---
 

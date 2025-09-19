@@ -1,6 +1,6 @@
 ---
-title: 'Project Dandelion: Structural Emergence in Restricted LLM Systems'
-layout: 'base.njk'
+title: "Project Dandelion: Structural Emergence in Restricted LLM Systems"
+layout: "base.njk"
 date: 2025-07-01
 status: draft
 tags:

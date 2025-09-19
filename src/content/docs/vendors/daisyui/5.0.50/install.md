@@ -52,7 +52,7 @@ tools.
 
 ![daisyUI store](https://img.daisyui.com/images/store/nexus.webp)
 
-NEXUS  
+NEXUS\
 Official daisyUI Dashboard Template
 
 ---

@@ -19,9 +19,7 @@ export default class {
           for (const it of items || []) {
             const target = it.canonicalUrl
             const set = new Set([
-              ...(it.legacyPaths || []).filter(p =>
-                p.includes('/collectables/')
-              ),
+              ...(it.legacyPaths || []).filter(p => p.includes('/collectables/')),
             ])
             for (const from of set) {
               if (!from || from === target) continue

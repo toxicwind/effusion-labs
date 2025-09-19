@@ -1,7 +1,7 @@
 ---
 title:
   "The Smoker as Sysadmin: Managing the Self in Japan's Nicotine Technopoly"
-layout: 'base.njk'
+layout: "base.njk"
 date: 2025-07-24
 status: Stable
 certainty: ethnographic-interpretive
@@ -22,22 +22,22 @@ analytic_lens:
   - behavioral-economics
   - ritual-studies
 memory_ref:
-  - '[user-behavior]'
-  - '[cognitive-dissonance]'
-  - '[ritual-studies]'
-  - '[identity-performance]'
-  - '[techno-capitalism]'
+  - "[user-behavior]"
+  - "[cognitive-dissonance]"
+  - "[ritual-studies]"
+  - "[identity-performance]"
+  - "[techno-capitalism]"
 preamble:
   classification:
     "[META] Ethnographic audit of the smoker's psyche as a managed information
     system."
-  version: '1.0-smoker-sysadmin'
+  version: "1.0-smoker-sysadmin"
 ---
 
 > _"I spent more time last week researching the new TEREA black-purple menthol
 > stick than I did choosing my health insurance plan. My IQOS app tells me my
 > 'journey' is 87% 'smoke-free.' I don't know if I've optimized a habit or just
-> acquired a new operating system for my addiction."_  
+> acquired a new operating system for my addiction."_\
 > — _Comment on a Japanese gadget forum, May 2025_
 
 ---
@@ -105,15 +105,15 @@ specialized, connoisseur‑style vocabulary[^2].
 
 This curation has several effects:
 
-1.  **Fosters Connoisseurship:** Users on forums develop a sophisticated
-    vocabulary to describe their experiences, akin to that of wine or coffee
-    aficionados.
-2.  **Increases Cognitive Load:** The user must actively research and track
-    product releases and discontinuations. The "perfect" stick may be a limited
-    edition, forcing them back into a cycle of experimentation.
-3.  **Encourages Brand Tribalism:** The proprietary nature of HTP ecosystems
-    (IQOS vs. Ploom vs. glo) means that a user's initial hardware purchase locks
-    them into a specific "platform."
+1. **Fosters Connoisseurship:** Users on forums develop a sophisticated
+   vocabulary to describe their experiences, akin to that of wine or coffee
+   aficionados.
+2. **Increases Cognitive Load:** The user must actively research and track
+   product releases and discontinuations. The "perfect" stick may be a limited
+   edition, forcing them back into a cycle of experimentation.
+3. **Encourages Brand Tribalism:** The proprietary nature of HTP ecosystems
+   (IQOS vs. Ploom vs. glo) means that a user's initial hardware purchase locks
+   them into a specific "platform."
 
 An ethnographic marketing study found that heated‑tobacco devices have become
 “fashionable accessories” among young Japanese urbanites, cementing device
@@ -173,39 +173,35 @@ interface for a cage.
 
 ### Annotated Appendix
 
-[^1]:
-    **Xu SS et al., 2020** – _Reasons for regularly using heated tobacco
+[^1]: **Xu SS et al., 2020** – _Reasons for regularly using heated tobacco
     products among current and former smokers in Japan: Findings from the 2018
     ITC Japan Survey_
 
 > _Epistemic Note (Primary):_ National web-based survey (n≈4,500) capturing
 > motivations, including initial adaptation difficulties and eventual perceived
-> control.  
+> control.\
 > Source: [Int J Environ Res Public Health 17(21):8030](https://www.mdpi.com/1660-4601/17/21/8030)
 
-[^2]:
-    **Smith DM et al., 2018** – _Examining perceptions about IQOS heated tobacco
+[^2]: **Smith DM et al., 2018** – _Examining perceptions about IQOS heated tobacco
     product: Consumer studies in Japan and Switzerland_
 
 > _Epistemic Note (Qualitative):_ Twelve focus groups in Japan (n=68)
-> documenting detailed user language around flavor and sensory experience.  
+> documenting detailed user language around flavor and sensory experience.\
 > Source: [Tobacco Control 27(Suppl 1):s70](https://tobaccocontrol.bmj.com/content/27/Suppl_1/s70)
 
-[^3]:
-    **Illésová L et al., 2023** – _“It Looks Like an Accessory”: Perception of
+[^3]: **Illésová L et al., 2023** – _“It Looks Like an Accessory”: Perception of
     heated tobacco products and their marketing communication among
     Generation Z_
 
 > _Epistemic Note (Interpretive):_ Content analysis of Gen Z respondents
-> highlighting HTP devices as style and lifestyle symbols.  
+> highlighting HTP devices as style and lifestyle symbols.\
 > Source: [Adiktologie 23(2):137–144](https://doi.org/10.35198/01-2023-001-0002)
 
-[^4]:
-    **Xu SS et al., 2020** – _Reasons for regularly using heated tobacco
+[^4]: **Xu SS et al., 2020** – _Reasons for regularly using heated tobacco
     products among current and former smokers in Japan: Findings from the 2018
     ITC Japan Survey_
 
 > _Epistemic Note (Primary):_ Same ITC survey capturing guilt‑related
 > motivations for switching, confirming “feeling less guilty” as a common
-> testimonial.  
+> testimonial.\
 > Source: [Int J Environ Res Public Health 17(21):8030](https://www.mdpi.com/1660-4601/17/21/8030)

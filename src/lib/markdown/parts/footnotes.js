@@ -1,7 +1,6 @@
 // src/lib/markdown/parts/footnotes.js
 export function hybridFootnotes(md) {
-  md.renderer.rules.footnote_block_open = () =>
-    '<section class="footnotes-hybrid not-prose mt-8">\n'
+  md.renderer.rules.footnote_block_open = () => '<section class="footnotes-hybrid not-prose mt-8">\n'
   md.renderer.rules.footnote_block_close = () => '</section>\n'
   md.renderer.rules.footnote_open = (tokens, idx, options, env, slf) => {
     const id = slf.rules.footnote_anchor_name(tokens, idx, options, env, slf)
@@ -15,16 +14,16 @@ export function hybridFootnotes(md) {
 }
 
 export function footnotePopoverRefs(md) {
-  const base =
-    md.renderer.rules.footnote_ref ||
-    ((t, i, o, e, s) => s.renderToken(t, i, o))
+  const base = md.renderer.rules.footnote_ref
+    || ((t, i, o, e, s) => s.renderToken(t, i, o))
   md.renderer.rules.footnote_ref = (tokens, idx, options, env, self) => {
     try {
       const meta = tokens[idx].meta || {}
       const id = Number(meta.id)
       const list = env.footnotes?.list
-      if (!Array.isArray(list) || !list[id])
+      if (!Array.isArray(list) || !list[id]) {
         return base(tokens, idx, options, env, self)
+      }
       let contentHtml = ''
       const def = list[id]
       if (Array.isArray(def.tokens)) {
@@ -41,10 +40,10 @@ export function footnotePopoverRefs(md) {
       const refId = `fnref${n}`
       const defId = `fn${n}`
       return (
-        `<sup class="fn-pop annotation-ref align-super">` +
-        `<a href="#${defId}" id="${refId}" class="annotation-anchor">[${n}]</a>` +
-        `<span class="fn-balloon rounded-box">${contentHtml}</span>` +
-        `</sup>`
+        `<sup class="fn-pop annotation-ref align-super">`
+        + `<a href="#${defId}" id="${refId}" class="annotation-anchor">[${n}]</a>`
+        + `<span class="fn-balloon rounded-box">${contentHtml}</span>`
+        + `</sup>`
       )
     } catch {
       return base(tokens, idx, options, env, self)

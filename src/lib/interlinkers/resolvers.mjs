@@ -1,6 +1,6 @@
 // Generalized resolvers powered by the Route Registry; crash-safe and dynamic-by-default.
 
-import { routeRegistry, getByPath } from './route-registry.mjs'
+import { getByPath, routeRegistry } from './route-registry.mjs'
 import { recordUnresolved } from './unresolved-report.mjs'
 
 const toStr = v => (v == null ? '' : String(v))
@@ -53,10 +53,9 @@ function buildIndex(kind, arr) {
 
 function localePrefix(currentPage) {
   if (!routeRegistry.localePrefixEnabled) return ''
-  const pageLocale =
-    currentPage?.data?.locale ||
-    currentPage?.data?.page?.lang ||
-    routeRegistry.defaultLocale
+  const pageLocale = currentPage?.data?.locale
+    || currentPage?.data?.page?.lang
+    || routeRegistry.defaultLocale
   return pageLocale && pageLocale !== routeRegistry.defaultLocale
     ? `/${pageLocale}`
     : ''
@@ -87,23 +86,23 @@ function resolverFor(kind) {
       const entry = index.get(wantSlug)
       let href = entry?.href || def.canonicalFromData(entry?.data || {})
       const prefix = localePrefix(currentPage)
-      if (prefix && typeof href === 'string' && href.startsWith('/'))
+      if (prefix && typeof href === 'string' && href.startsWith('/')) {
         href = prefix + href
+      }
       if (!entry) href = guessHref(kind, wantSlug, currentPage)
       const label = escapeHtml(
-        link?.title ||
-          entry?.data?.title ||
-          entry?.labels?.find(Boolean) ||
-          link?.name
+        link?.title
+          || entry?.data?.title
+          || entry?.labels?.find(Boolean)
+          || link?.name,
       )
       if (!entry) {
         recordUnresolved({
           kind,
           key: link?.name,
-          sourcePage:
-            currentPage?.inputPath ||
-            currentPage?.data?.page?.inputPath ||
-            null,
+          sourcePage: currentPage?.inputPath
+            || currentPage?.data?.page?.inputPath
+            || null,
           guessedKind: kind,
           attemptedKinds: [kind],
         })
@@ -137,8 +136,7 @@ function dispatcherForOmittedKind() {
     recordUnresolved({
       kind: 'unknown',
       key: link?.name,
-      sourcePage:
-        currentPage?.inputPath || currentPage?.data?.page?.inputPath || null,
+      sourcePage: currentPage?.inputPath || currentPage?.data?.page?.inputPath || null,
       guessedKind: order[0],
       attemptedKinds: attempted,
     })

@@ -8,7 +8,7 @@ and promotes `silk` as the high-key fallback. Both modes are defined in
 
 ```css
 :root,
-html[data-theme='dim'] {
+html[data-theme="dim"] {
   color-scheme: dark;
   --color-bg: 42 48 60;
   --color-surface: 36 41 51;
@@ -16,7 +16,7 @@ html[data-theme='dim'] {
   --color-primary: 159 232 141;
 }
 
-html[data-theme='silk'] {
+html[data-theme="silk"] {
   color-scheme: light;
   --color-bg: 247 245 243;
   --color-surface: 243 237 233;

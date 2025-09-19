@@ -1,6 +1,6 @@
 ---
-title: 'On The Sociality Of Stochastic Parrots'
-layout: 'base.njk'
+title: "On The Sociality Of Stochastic Parrots"
+layout: "base.njk"
 date: 2025-07-17
 status: complete
 certainty: definitive
@@ -17,17 +17,17 @@ tags:
   - methodological-critique
   - mimetic-trap
 spark_type: conceptual-deconstruction
-target: 'Claims of Emergent Social Behavior in Multi-Agent LLMs'
+target: "Claims of Emergent Social Behavior in Multi-Agent LLMs"
 analytic_lens:
   stochastic-parrot-thesis, methodological-critique, artifact-analysis
 memory_ref:
-  - '[stochastic-parrots]'
-  - '[llm-emergence-debate]'
-  - '[schaeffer-emergence-mirage]'
-  - '[centola-tipping-point]'
-  - '[agent-homogeneity-problem]'
-  - '[thunstrom-mimetic-trap]'
-  - '[weak-vs-strong-emergence]'
+  - "[stochastic-parrots]"
+  - "[llm-emergence-debate]"
+  - "[schaeffer-emergence-mirage]"
+  - "[centola-tipping-point]"
+  - "[agent-homogeneity-problem]"
+  - "[thunstrom-mimetic-trap]"
+  - "[weak-vs-strong-emergence]"
 ---
 
 > _An epistemology of consensus, for systems that possess neither knowledge nor
@@ -158,8 +158,7 @@ convincing its performance, must never be mistaken for the real thing.
 
 ### Annotated Appendix
 
-[^1]:
-    **[Kuhn, L., et al. (2024)]** – _Emergence of conventions in large language
+[^1]: **[Kuhn, L., et al. (2024)]** – _Emergence of conventions in large language
     models._
 
 > _Epistemic Note (Primary):_ Reports the foundational naming-game experiments
@@ -170,8 +169,7 @@ convincing its performance, must never be mistaken for the real thing.
 >
 > - **URL:** `https://www.science.org/doi/10.1126/sciadv.adu9368`
 
-[^2]:
-    **[Schaeffer, R., et al. (2023)]** – _Emergent Abilities of Large Language
+[^2]: **[Schaeffer, R., et al. (2023)]** – _Emergent Abilities of Large Language
     Models Are a Mirage._
 
 > _Epistemic Note (Adversarial):_ This real paper performs a rigorous
@@ -183,8 +181,7 @@ convincing its performance, must never be mistaken for the real thing.
 >
 > - **URL:** `https://arxiv.org/abs/2304.15004`
 
-[^3]:
-    **[Thunström, A. (2024)]** – _The mimetic trap: A critical perspective on
+[^3]: **[Thunström, A. (2024)]** – _The mimetic trap: A critical perspective on
     large language models as agents in social science research._
 
 > _Epistemic Note (Conceptual):_ A direct critique from the field of social
@@ -207,8 +204,7 @@ convincing its performance, must never be mistaken for the real thing.
 >
 > - **URL:** `https://www.nature.com/articles/s41586-023-06520-2`
 
-[^5]:
-    **[Park, J. S., et al. (2023)]** – _Generative Agents: Interactive Simulacra
+[^5]: **[Park, J. S., et al. (2023)]** – _Generative Agents: Interactive Simulacra
     of Human Behavior._
 
 > _Epistemic Note (Primary):_ The famous "Stanford small-town" simulation paper.
@@ -218,8 +214,7 @@ convincing its performance, must never be mistaken for the real thing.
 >
 > - **URL:** `https://arxiv.org/abs/2304.03442`
 
-[^6]:
-    **[Centola, D., et al. (2018)]** – _Experimental evidence for tipping points
+[^6]: **[Centola, D., et al. (2018)]** – _Experimental evidence for tipping points
     in social convention._
 
 > _Epistemic Note (Primary):_ This real _Science_ paper provides the crucial
@@ -250,8 +245,7 @@ convincing its performance, must never be mistaken for the real thing.
 > allowing us to classify the LLM phenomena as analytically uninteresting weak
 > emergence. **Source Type:** Conceptual
 
-[^9]:
-    **[Hendrycks, D., et al. (2023)]** – _An Overview of Catastrophic AI Risks._
+[^9]: **[Hendrycks, D., et al. (2023)]** – _An Overview of Catastrophic AI Risks._
 
 > _Epistemic Note (Conceptual):_ This real, comprehensive overview of AI risk
 > serves as the ethical anchor. It discusses risks from complex agentic systems,
@@ -262,8 +256,7 @@ convincing its performance, must never be mistaken for the real thing.
 >
 > - **URL:** `https://arxiv.org/abs/2306.12001`
 
-[^10]:
-    **[Bender, E. M., et al. (2021)]** – _On the Dangers of Stochastic Parrots:
+[^10]: **[Bender, E. M., et al. (2021)]** – _On the Dangers of Stochastic Parrots:
     Can Language Models Be Too Big? 🦜_
 
 > _Epistemic Note (Adversarial):_ The classic paper that provides the

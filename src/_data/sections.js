@@ -5,8 +5,7 @@ export default {
       "Here you'll find nascent ideas, quick notes, and experimental fragments that may one day ignite into full concepts or projects.",
   },
   concepts: {
-    intro:
-      'This is the central hub for all individual concepts explored within the lab.',
+    intro: 'This is the central hub for all individual concepts explored within the lab.',
   },
   projects: {
     intro: 'This is the central hub for all projects explored within the lab.',

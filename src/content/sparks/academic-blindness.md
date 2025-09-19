@@ -1,8 +1,8 @@
 ---
 title:
-  'The Recursive Shadow of Algorithmic Absence: An Archaeological Survey of the
-  Invisible Infrastructure of Contemporary LLM Research'
-layout: 'base.njk'
+  "The Recursive Shadow of Algorithmic Absence: An Archaeological Survey of the
+  Invisible Infrastructure of Contemporary LLM Research"
+layout: "base.njk"
 date: 2025-07-29
 status: Stable
 certainty: adversarial-analytic
@@ -25,17 +25,17 @@ analytic_lens:
   - infrastructural-inversion
   - measurement-theater
 memory_ref:
-  - '[epistemic-failure]'
-  - '[incentive-capture]'
-  - '[state-of-the-art-illusion]'
-  - '[proprietary-knowledge]'
-  - '[invisible-work]'
-  - '[structural-holes]'
+  - "[epistemic-failure]"
+  - "[incentive-capture]"
+  - "[state-of-the-art-illusion]"
+  - "[proprietary-knowledge]"
+  - "[invisible-work]"
+  - "[structural-holes]"
 preamble:
   classification:
-    '[META] An archaeological critique of knowledge infrastructure in
-    computational linguistics'
-  version: '1.0-recursive-shadow'
+    "[META] An archaeological critique of knowledge infrastructure in
+    computational linguistics"
+  version: "1.0-recursive-shadow"
 ---
 
 > _The following exhaustive analysis represents a synthesis of prior drafts,
@@ -205,8 +205,7 @@ so._
 
 ---
 
-[^1]:
-    **White et al., 2024** – _LiveBench: Contamination-Limited Evaluation for
+[^1]: **White et al., 2024** – _LiveBench: Contamination-Limited Evaluation for
     Large Language Models_
 
 > _Epistemic Note (Adversarial):_ Demonstrates the systematic failure of static
@@ -216,8 +215,7 @@ so._
 > intelligence. Source:
 > [LiveBench: Contamination-Limited Evaluation for Large Language Models](https://www.semanticscholar.org/paper/774d01e152003f342596031c0c0fbf1936dee41a)
 
-[^2]:
-    **Sainz et al., 2023** – _NLP Evaluation in Trouble: A Survey on the
+[^2]: **Sainz et al., 2023** – _NLP Evaluation in Trouble: A Survey on the
     State-of-the-Art in Large Language Model Evaluation_
 
 > _Epistemic Note (Conceptual):_ Argues for a community effort to detect
@@ -226,8 +224,7 @@ so._
 > rather than architectural. Source:
 > [NLP Evaluation in Trouble](https://aclanthology.org/2023.findings-emnlp.722/)
 
-[^3]:
-    **Zhang et al., 2024** – _A Survey on Data Contamination in Large Language
+[^3]: **Zhang et al., 2024** – _A Survey on Data Contamination in Large Language
     Models_
 
 > _Epistemic Note (Primary):_ A comprehensive review that reveals contamination
@@ -236,8 +233,7 @@ so._
 > between static evaluation and dynamic capability. Source:
 > [A Survey on Data Contamination in Large Language Models](https://arxiv.org/abs/2406.04244)
 
-[^4]:
-    **Liu et al., 2025** – _LessLeak-Bench: A Large-Scale Dataset for Data
+[^4]: **Liu et al., 2025** – _LessLeak-Bench: A Large-Scale Dataset for Data
     Leakage Investigation in Software Engineering Benchmarks_
 
 > _Epistemic Note (Primary):_ The first large-scale contamination analysis
@@ -246,8 +242,7 @@ so._
 > than questioning the static evaluation paradigm itself. Source:
 > [LessLeak-Bench](https://arxiv.org/html/2502.06215v1)
 
-[^5]:
-    **Zhang et al., 2025** – _Beyond Static Datasets: A Survey on Dynamic
+[^5]: **Zhang et al., 2025** – _Beyond Static Datasets: A Survey on Dynamic
     Evaluations for Large Language Models_
 
 > _Epistemic Note (Adversarial):_ Demonstrates the effectiveness of dynamic
@@ -256,8 +251,7 @@ so._
 > rebuilding the evaluation architecture. Source:
 > [Beyond Static Datasets](https://arxiv.org/abs/2309.04369)
 
-[^6]:
-    **Fan et al., 2024** – _WorkflowLLM: A Data-Centric Evaluation Framework for
+[^6]: **Fan et al., 2024** – _WorkflowLLM: A Data-Centric Evaluation Framework for
     LLM-Based Workflow Orchestration Capabilities_
 
 > _Epistemic Note (Conceptual):_ Demonstrates sophisticated architectural
@@ -266,8 +260,7 @@ so._
 > understanding. A key piece of "invisible" architecture. Source:
 > [WorkflowLLM](https://arxiv.org/abs/2411.05451)
 
-[^7]:
-    **Schires, A., 2024** – _A Developer's Guide to LLM Orchestration
+[^7]: **Schires, A., 2024** – _A Developer's Guide to LLM Orchestration
     Frameworks_
 
 > _Epistemic Note (Epistolary):_ Industry blog posts and documentation that hint
@@ -276,8 +269,7 @@ so._
 > lines is required. Source:
 > [A Developer's Guide to LLM Orchestration Frameworks](https://mirascope.com/blog/llm-orchestration)
 
-[^8]:
-    **Sahoo et al., 2024** – _A Comprehensive Survey of 150+ Advancements in
+[^8]: **Sahoo et al., 2024** – _A Comprehensive Survey of 150+ Advancements in
     Large Language Models across All Modalities_
 
 > _Epistemic Note (Meta):_ An extensive catalog of prompting methods that
@@ -294,8 +286,7 @@ so._
 > frameworks being developed in practice. Source:
 > [What is Prompt Scaffolding?](https://www.promptlayer.com/glossary/prompt-scaffolding)
 
-[^10]:
-    **Kumar, S., 2024** – _Prompt-Layered Architecture (PLA): A Novel Prompt
+[^10]: **Kumar, S., 2024** – _Prompt-Layered Architecture (PLA): A Novel Prompt
     Engineering Framework for Software Architecture_
 
 > _Epistemic Note (Fragmentary):_ A rare academic paper describing a systematic,
@@ -304,8 +295,7 @@ so._
 > Source:
 > [Prompt-Layered Architecture (PLA)](https://ijsrm.net/index.php/ijsrm/article/view/5670)
 
-[^11]:
-    **Stengel-Eskin et al., 2024** – _Scope Ambiguities in Large Language
+[^11]: **Stengel-Eskin et al., 2024** – _Scope Ambiguities in Large Language
     Models_
 
 > _Epistemic Note (Anomaly):_ A systematic study demonstrating sophisticated
@@ -314,8 +304,7 @@ so._
 > Source:
 > [Scope Ambiguities in Large Language Models](https://direct.mit.edu/tacl/article/doi/10.1162/tacl_a_00670/121540/Scope-Ambiguities-in-Large-Language-Models)
 
-[^12]:
-    **Wang et al., 2024** – _Uncertainty Aware Learning for Improving the
+[^12]: **Wang et al., 2024** – _Uncertainty Aware Learning for Improving the
     Alignment of Large Language Models with Human-Created Text_
 
 > _Epistemic Note (Primary):_ Demonstrates how integrating uncertainty improves
@@ -324,8 +313,7 @@ so._
 > uncertainty. Source:
 > [Uncertainty Aware Learning for Improving Alignment](https://aclanthology.org/2024.acl-long.597.pdf)
 
-[^13]:
-    **Li et al., 2025** – _Ambiguity Type-Chain of Thought Prompting for
+[^13]: **Li et al., 2025** – _Ambiguity Type-Chain of Thought Prompting for
     Enhancing Reasoning in Large Language Models_
 
 > _Epistemic Note (Adversarial):_ Shows how controlled ambiguity enhances
@@ -334,8 +322,7 @@ so._
 > architectural potential. Source:
 > [Ambiguity Type-Chain of Thought Prompting](https://arxiv.org/html/2504.12113v1)
 
-[^14]:
-    **Han et al., 2024** – _An Uncertainty-Aware Language Agent that Can Use
+[^14]: **Han et al., 2024** – _An Uncertainty-Aware Language Agent that Can Use
     Tools_
 
 > _Epistemic Note (Conceptual):_ Demonstrates how systematic uncertainty
@@ -344,8 +331,7 @@ so._
 > architectural innovation. Source:
 > [An Uncertainty-Aware Language Agent](https://aclanthology.org/2024.findings-acl.398/)
 
-[^15]:
-    **Park & Kim, 2025** – _Where do Language Models Encode the Knowledge for
+[^15]: **Park & Kim, 2025** – _Where do Language Models Encode the Knowledge for
     Ambiguity Detection? An Empirical Study based on the Probing of Intermediate
     Layer Representations_
 
@@ -355,8 +341,7 @@ so._
 > productive _use_ of ambiguity. Source:
 > [Where do LMs Encode Ambiguity Knowledge?](https://aclanthology.org/2025.coling-industry.38/)
 
-[^16]:
-    **UALA Project Team, 2024** – _UALA: An Uncertainty-Aware Language Agent
+[^16]: **UALA Project Team, 2024** – _UALA: An Uncertainty-Aware Language Agent
     that Can Use Tools_
 
 > _Epistemic Note (Implementation):_ The project website and code reveal a
@@ -372,8 +357,7 @@ so._
 > constraints. Source:
 > [Industry now dominates AI research](https://mitsloan.mit.edu/ideas-made-to-matter/study-industry-now-dominates-ai-research)
 
-[^18]:
-    **Li et al., 2024** – _Who is Leading the AI Race? A new perspective based
+[^18]: **Li et al., 2024** – _Who is Leading the AI Race? A new perspective based
     on a large-scale analysis of 16K LLM papers across 77 top-tier conferences_
 
 > _Epistemic Note (Quantitative):_ Shows a publication focus shifting toward
@@ -389,8 +373,7 @@ so._
 > architectural thinking becomes literally unthinkable within existing
 > categories. Source: [EMNLP 2024](https://2024.emnlp.org/)
 
-[^20]:
-    **Litmaps Blog, 2023** – _The future of AI research is in the industry. What
+[^20]: **Litmaps Blog, 2023** – _The future of AI research is in the industry. What
     does this mean for academia?_
 
 > _Epistemic Note (Economic):_ Analysis showing that 70% of AI PhDs now enter

@@ -1,6 +1,6 @@
 ---
-title: 'Three Studies in Embodied Regulation'
-layout: 'base.njk'
+title: "Three Studies in Embodied Regulation"
+layout: "base.njk"
 date: 2025-07-30
 status: Stable
 certainty: Analytic-Synthesis
@@ -24,16 +24,16 @@ analytic_lens:
   - phenomenology
   - embodied-regulation
 memory_ref:
-  - '[interoception]'
-  - '[sensory-gating]'
-  - '[stigmergy]'
-  - '[folksonomy]'
-  - '[identity-performance]'
+  - "[interoception]"
+  - "[sensory-gating]"
+  - "[stigmergy]"
+  - "[folksonomy]"
+  - "[identity-performance]"
 preamble:
   classification:
-    '[META] A comparative review of three distinct, community-validated sensory
-    regulation techniques.'
-  version: '1.0-resonant-self'
+    "[META] A comparative review of three distinct, community-validated sensory
+    regulation techniques."
+  version: "1.0-resonant-self"
 ---
 
 > The internet acts as a substrate for the crystallization of previously
@@ -218,8 +218,7 @@ them. They're for you.
 
 ---
 
-[^1]:
-    **Burns, E. M., et al. (1993)** – _Voluntary contraction of middle ear
+[^1]: **Burns, E. M., et al. (1993)** – _Voluntary contraction of middle ear
     muscles: effects on input impedance, energy reflectance and spontaneous
     otoacoustic emissions._
 
@@ -231,8 +230,7 @@ them. They're for you.
 > ear-tensing. Source:
 > [pubmed.ncbi.nlm.nih.gov](https://pubmed.ncbi.nlm.nih.gov/8340262/)
 
-[^2]:
-    **r/earrumblersassemble (2017)** – _“Guide: How to check if you can
+[^2]: **r/earrumblersassemble (2017)** – _“Guide: How to check if you can
     voluntarily ear rumble.”_
 
 > _Epistemic Note (Community Manual):_ A primary source illustrating
@@ -242,8 +240,7 @@ them. They're for you.
 > framework. It exemplifies the "digital crucible" concept. Source:
 > [reddit.com](https://www.reddit.com/r/earrumblersassemble/comments/95lirl/guide_how_to_check_if_you_can_voluntarily_ear/)
 
-[^3]:
-    **Poerio, G. L., et al. (2018)** – _More than a feeling: Autonomous sensory
+[^3]: **Poerio, G. L., et al. (2018)** – _More than a feeling: Autonomous sensory
     meridian response (ASMR) is characterized by reliable changes in affect and
     physiology._
 
@@ -254,8 +251,7 @@ them. They're for you.
 > experience has objective, measurable correlates. Source:
 > [journals.plos.org](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0196645)
 
-[^4]:
-    **Lochte, B. C., et al. (2018)** – _An fMRI investigation of 'brain tingles'
+[^4]: **Lochte, B. C., et al. (2018)** – _An fMRI investigation of 'brain tingles'
     in autonomous sensory meridian response._
 
 > _Epistemic Note (Neuroimaging):_ This study provides the crucial neural basis
@@ -265,8 +261,7 @@ them. They're for you.
 > comforting, linking it to fundamental social-bonding pathways. Source:
 > [pubmed.ncbi.nlm.nih.gov](https://pubmed.ncbi.nlm.nih.gov/30397584/)
 
-[^5]:
-    **Terashima, H., et al. (2024)** – _Predicting tingling sensations induced
+[^5]: **Terashima, H., et al. (2024)** – _Predicting tingling sensations induced
     by ASMR videos based on sound texture statistics: a comparison to pleasant
     feelings._
 
@@ -277,8 +272,7 @@ them. They're for you.
 > therapeutic stimuli. Source:
 > [royalsocietypublishing.org](https://royalsocietypublishing.org/doi/10.1098/rstb.2023.0254)
 
-[^6]:
-    **Wignall, L., et al. (2024)** – _“Be Dog Have Fun”: Narratives of
+[^6]: **Wignall, L., et al. (2024)** – _“Be Dog Have Fun”: Narratives of
     Discovery, Meaning, and Coping in Pup Play._
 
 > _Epistemic Note (Qualitative Study):_ The key source for rich, qualitative
@@ -288,8 +282,7 @@ them. They're for you.
 > observation to lived experience. Source:
 > [link.springer.com](https://link.springer.com/article/10.1007/s12119-024-10242-y)
 
-[^7]:
-    **Wignall, L., et al. (2023)** – _Autistic traits of people who engage in
+[^7]: **Wignall, L., et al. (2023)** – _Autistic traits of people who engage in
     pup play._
 
 > _Epistemic Note (Survey Epidemiology):_ This study provides the critical

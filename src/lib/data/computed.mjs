@@ -2,11 +2,12 @@
 const toArray = v => (Array.isArray(v) ? v : v ? [v] : [])
 const normalizeTitle = t => {
   if (typeof t === 'string') return t
-  if (Array.isArray(t))
+  if (Array.isArray(t)) {
     return t
       .filter(v => v != null)
       .map(String)
       .join(' / ')
+  }
   if (t && typeof t === 'object') return String(t.name ?? '')
   return ''
 }

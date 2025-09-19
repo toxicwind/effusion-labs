@@ -1,6 +1,6 @@
 ---
-title: 'Comparative Analysis of Candidate Framework Designations'
-layout: 'base.njk'
+title: "Comparative Analysis of Candidate Framework Designations"
+layout: "base.njk"
 date: 2025-07-12
 status: complete
 certainty: definitive
@@ -21,9 +21,9 @@ analytic_lens:
   protocol-centrism, structural-honesty, market-distinctiveness,
   media-extensibility
 memory_ref:
-  - '[protocolist-art-framework]'
-  - '[curatorial-generativism-obsolete]'
-  - '[rhizomatic-protocol]'
+  - "[protocolist-art-framework]"
+  - "[curatorial-generativism-obsolete]"
+  - "[rhizomatic-protocol]"
 ---
 
 ### 1.0 Objective
@@ -40,15 +40,15 @@ documented operational logic.
 The analysis is based on four core differentiators identified as critical to the
 project's identity:
 
-1.  **Protocol-Centrism:** The degree to which the name foregrounds the
-    governed, versioned process as the primary aesthetic object.
-2.  **Structural Honesty:** The degree to which the name implies the principles
-    of traceability, reproducibility, and the networked, rhizomatic nature of
-    the artifacts.
-3.  **Market Distinctiveness:** The degree to which the name is novel,
-    memorable, and avoids collision with existing terminology.
-4.  **Media Extensibility:** The degree to which the name accommodates future
-    work in non-textual media (e.g., image, sound).
+1. **Protocol-Centrism:** The degree to which the name foregrounds the
+   governed, versioned process as the primary aesthetic object.
+2. **Structural Honesty:** The degree to which the name implies the principles
+   of traceability, reproducibility, and the networked, rhizomatic nature of
+   the artifacts.
+3. **Market Distinctiveness:** The degree to which the name is novel,
+   memorable, and avoids collision with existing terminology.
+4. **Media Extensibility:** The degree to which the name accommodates future
+   work in non-textual media (e.g., image, sound).
 
 ### 3.0 Analysis of Candidate A: "Curatorial Generativism"
 

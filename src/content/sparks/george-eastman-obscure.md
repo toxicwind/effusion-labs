@@ -1,6 +1,6 @@
 ---
-title: 'George Eastman - A Life in Precision'
-layout: 'base.njk'
+title: "George Eastman - A Life in Precision"
+layout: "base.njk"
 date: 2025-07-02
 status: draft
 certainty: medium
@@ -10,7 +10,7 @@ memory_ref: [methodology, dandelion]
 ---
 
 > “What we do during our working hours determines what we have; what we do in
-> our leisure hours determines what we are.”  
+> our leisure hours determines what we are.”\
 > — George Eastman
 
 ## ⌬ Preamble
@@ -76,23 +76,18 @@ little room for delay, debate, or second opinions.[^5]
 
 ## ⌬ Sources
 
-[^1]:
-    George Eastman Museum, “Historic Mansion,”
+[^1]: George Eastman Museum, “Historic Mansion,”
     [↗source](https://www.eastman.org/historic-mansion)
 
-[^2]:
-    PBS American Experience, “The Innovator,”
+[^2]: PBS American Experience, “The Innovator,”
     [↗source](https://www.pbs.org/wgbh/americanexperience/features/eastman-innovator/)
 
-[^3]:
-    Atlas Obscura, “When Kodak Used a Bizarre 13-Month Calendar,”
+[^3]: Atlas Obscura, “When Kodak Used a Bizarre 13-Month Calendar,”
     [↗source](https://www.atlasobscura.com/articles/kodak-calendar)
 
-[^4]:
-    National Museum of American History, “Original Kodak Camera, Serial No.
+[^4]: National Museum of American History, “Original Kodak Camera, Serial No.
     540,” [↗source](https://americanhistory.si.edu/collections/nmah_760118)
 
-[^5]:
-    Open Culture, “The Very Concise Suicide Note of Kodak Founder George
+[^5]: Open Culture, “The Very Concise Suicide Note of Kodak Founder George
     Eastman,”
     [↗source](https://www.openculture.com/2013/08/the-very-concise-suicide-note-by-kodak-founder-george-eastman-my-work-is-done-why-wait-1932.html)

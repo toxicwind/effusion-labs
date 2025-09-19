@@ -1,6 +1,6 @@
 ---
-title: 'The Protocolist Art Framework'
-layout: 'base.njk'
+title: "The Protocolist Art Framework"
+layout: "base.njk"
 date: 2025-07-12
 status: Stable
 certainty: codified
@@ -19,15 +19,15 @@ analytic_lens:
   protocol-as-aesthetic, curator-sovereignty, rhizomatic-traceability,
   reproducible-editions, bias-audit-loop
 memory_ref:
-  - '[reproducible-research]'
-  - '[open-source-hardware]'
-  - '[dogme-95]'
-  - '[version-control-git]'
-  - '[rhizomatic-protocol]'
-  - '[procedural-rhetoric]'
+  - "[reproducible-research]"
+  - "[open-source-hardware]"
+  - "[dogme-95]"
+  - "[version-control-git]"
+  - "[rhizomatic-protocol]"
+  - "[procedural-rhetoric]"
 preamble:
-  classification: '[META] Project: Formalization'
-  version: '2.0-paf'
+  classification: "[META] Project: Formalization"
+  version: "2.0-paf"
 ---
 
 ### 1.0 A Declaration of a New Practice
@@ -145,47 +145,47 @@ extensible system designed for proliferation.
 
 **References**
 
-1.  **The Open-Source Hardware (OSHW) movement.** _Epistemic Note: The principle
-    of a "Fork-Friendly Licence" is directly adapted from the ethos of
-    open-source hardware, where sharing designs for physical objects is
-    encouraged. The Protocol is treated as a piece of intellectual hardware._
-2.  **"Reproducible Research."** A movement in computational science. _Epistemic
-    Note: The principle of "Reproducible Editions" is a direct application of
-    standards from computational science, where providing code and data to
-    reproduce results is a mark of rigor. Protocolist Art imports this
-    scientific ethic into an artistic context._
-3.  **The "Vow of Chastity" of the Dogme 95 film movement.** _Epistemic Note:
-    The Dogme 95 manifesto, with its ten explicit rules for filmmaking, is a
-    historical precedent for an artistic practice defined by a strict, published
-    protocol._
-4.  **The concept of "procedural rhetoric" as defined by Ian Bogost.**
-    _Epistemic Note: Bogost argues that video games and simulations make
-    arguments through their rules and processes. Protocolist Art likewise
-    engages in procedural rhetoric, making its primary argument through the
-    structure of its protocol._
-5.  **The history of musical notation.** _Epistemic Note: A musical score is a
-    protocol for producing a performance. Its evolution shows a long history of
-    artists developing formal systems to make their work reproducible and
-    interpretable by others. The Protocolist's documented framework is a form of
-    hyper-specific score._
-6.  **"Algorithmic Accountability."** A field of study in computer science and
-    law. _Epistemic Note: The "Bias-Audit Loop" is a direct implementation of
-    principles from this field, transforming a requirement of ethical
-    engineering into a formal principle of aesthetic practice._
-7.  **"A Thousand Plateaus."** Deleuze, G., & Guattari, F. (1980). _Epistemic
-    Note: The concept of the "rhizome" remains the foundational model for the
-    "Rhizomatic Traceability" principle, emphasizing a non-hierarchical network
-    of connections._
-8.  **The practice of "version control" in software development (e.g., Git).**
-    _Epistemic Note: The principles of versioning, hashing (SHA), and branching
-    are technical implementations that directly enable both "Reproducible
-    Editions" and a "Fork-Friendly Licence." Protocolist Art adapts a
-    developer's workflow._
-9.  **The work of choreographer William Forsythe.** _Epistemic Note: Forsythe is
-    known for creating "improvisation technologies" and choreographic
-    objects—systems of rules and concepts that can be used by dancers to
-    generate novel movement. This is a direct parallel to the Protocolist's
-    creation of a system for generating novel text._
+1. **The Open-Source Hardware (OSHW) movement.** _Epistemic Note: The principle
+   of a "Fork-Friendly Licence" is directly adapted from the ethos of
+   open-source hardware, where sharing designs for physical objects is
+   encouraged. The Protocol is treated as a piece of intellectual hardware._
+2. **"Reproducible Research."** A movement in computational science. _Epistemic
+   Note: The principle of "Reproducible Editions" is a direct application of
+   standards from computational science, where providing code and data to
+   reproduce results is a mark of rigor. Protocolist Art imports this
+   scientific ethic into an artistic context._
+3. **The "Vow of Chastity" of the Dogme 95 film movement.** _Epistemic Note:
+   The Dogme 95 manifesto, with its ten explicit rules for filmmaking, is a
+   historical precedent for an artistic practice defined by a strict, published
+   protocol._
+4. **The concept of "procedural rhetoric" as defined by Ian Bogost.**
+   _Epistemic Note: Bogost argues that video games and simulations make
+   arguments through their rules and processes. Protocolist Art likewise
+   engages in procedural rhetoric, making its primary argument through the
+   structure of its protocol._
+5. **The history of musical notation.** _Epistemic Note: A musical score is a
+   protocol for producing a performance. Its evolution shows a long history of
+   artists developing formal systems to make their work reproducible and
+   interpretable by others. The Protocolist's documented framework is a form of
+   hyper-specific score._
+6. **"Algorithmic Accountability."** A field of study in computer science and
+   law. _Epistemic Note: The "Bias-Audit Loop" is a direct implementation of
+   principles from this field, transforming a requirement of ethical
+   engineering into a formal principle of aesthetic practice._
+7. **"A Thousand Plateaus."** Deleuze, G., & Guattari, F. (1980). _Epistemic
+   Note: The concept of the "rhizome" remains the foundational model for the
+   "Rhizomatic Traceability" principle, emphasizing a non-hierarchical network
+   of connections._
+8. **The practice of "version control" in software development (e.g., Git).**
+   _Epistemic Note: The principles of versioning, hashing (SHA), and branching
+   are technical implementations that directly enable both "Reproducible
+   Editions" and a "Fork-Friendly Licence." Protocolist Art adapts a
+   developer's workflow._
+9. **The work of choreographer William Forsythe.** _Epistemic Note: Forsythe is
+   known for creating "improvisation technologies" and choreographic
+   objects—systems of rules and concepts that can be used by dancers to
+   generate novel movement. This is a direct parallel to the Protocolist's
+   creation of a system for generating novel text._
 10. **The "Request for Comments" (RFC) documents of the IETF.** _Epistemic Note:
     The documents that define the core protocols of the internet are themselves
     an example of a versioned, community-driven, and highly technical form of

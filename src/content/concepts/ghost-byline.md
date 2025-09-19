@@ -1,7 +1,7 @@
 ---
 title:
-  'The Ghost in the Byline: On the Structural Honesty of a Co-Authored Text'
-layout: 'base.njk'
+  "The Ghost in the Byline: On the Structural Honesty of a Co-Authored Text"
+layout: "base.njk"
 date: 2025-07-12
 status: complete
 certainty: declarative
@@ -20,12 +20,12 @@ analytic_lens:
   structural-honesty, distributed-agency, reader-response, feedback-loops,
   uncanny-valley, provenance
 memory_ref:
-  - '[barthes-death-of-the-author]'
-  - '[foucault-what-is-an-author]'
-  - '[distributed-cognition]'
-  - '[mcluhan-medium-is-massage]'
-  - '[benjamin-work-of-art]'
-  - '[hofstadter-strange-loops]'
+  - "[barthes-death-of-the-author]"
+  - "[foucault-what-is-an-author]"
+  - "[distributed-cognition]"
+  - "[mcluhan-medium-is-massage]"
+  - "[benjamin-work-of-art]"
+  - "[hofstadter-strange-loops]"
 ---
 
 ## The Ghost in the Byline: On the Structural Honesty of a Co-Authored Text
@@ -63,8 +63,8 @@ its own subject. It is an artifact of the process it seeks to describe.
 
 The reader must, therefore, hold two ideas in mind simultaneously:
 
-1.  This text is an analysis of the human-LLM collaborative process.
-2.  This text is a direct product of that same process.
+1. This text is an analysis of the human-LLM collaborative process.
+2. This text is a direct product of that same process.
 
 This is not a paradox to be solved. It is an operational condition to be
 observed. The recursive loop is a feature, not a bug. It is the fundamental
@@ -135,33 +135,33 @@ must be proposed, based on a different set of principles.
 
 The proposed contract is one of **structural honesty**. This means:
 
-1.  **Transparency of Means:** The process of the text's creation will not be
-    hidden. The fact of its co-generation by a human-LLM system is the
-    foundational premise, not an embarrassing secret. This transparency is an
-    ethical obligation, as it directly impacts how the text's claims and
-    authority should be evaluated.
-2.  **Rejection of Anthropomorphic Pretense:** The text will not pretend that
-    the LLM is a "co-author" in the human sense. It will not use terms that
-    imply consciousness, understanding, or partnership on the part of the
-    machine. The model will be treated as what it is: a sophisticated tool for
-    textual generation, not a junior research partner. This prevents the reader
-    from being misled into attributing more agency to the machine than is
-    warranted.
-3.  **Foregrounding the Human Role:** The text must acknowledge the decisive
-    role of the human operator. While the LLM generates the words, the human
-    provides the judgment, the curation, and the ethical responsibility. The
-    human is not merely a prompter; they are the editor-in-chief, and they bear
-    the final accountability for the published artifact. This prevents the
-    "automation of bullshit," where the process is used to generate vast
-    quantities of un-vetted, low-quality content under the guise of "AI
-    writing."
-4.  **Embracing the Artifactual Nature of the Text:** The reader is invited to
-    view the text not just as a set of arguments to be agreed or disagreed with,
-    but as an artifact to be examined. The text's texture, its style, its
-    occasional stumbles—these are all data points. They are evidence of the
-    generative process itself. The reader is encouraged to adopt a stance of
-    critical distance, to ask not just "What is this text saying?" but also "How
-    did this process produce this particular text?"
+1. **Transparency of Means:** The process of the text's creation will not be
+   hidden. The fact of its co-generation by a human-LLM system is the
+   foundational premise, not an embarrassing secret. This transparency is an
+   ethical obligation, as it directly impacts how the text's claims and
+   authority should be evaluated.
+2. **Rejection of Anthropomorphic Pretense:** The text will not pretend that
+   the LLM is a "co-author" in the human sense. It will not use terms that
+   imply consciousness, understanding, or partnership on the part of the
+   machine. The model will be treated as what it is: a sophisticated tool for
+   textual generation, not a junior research partner. This prevents the reader
+   from being misled into attributing more agency to the machine than is
+   warranted.
+3. **Foregrounding the Human Role:** The text must acknowledge the decisive
+   role of the human operator. While the LLM generates the words, the human
+   provides the judgment, the curation, and the ethical responsibility. The
+   human is not merely a prompter; they are the editor-in-chief, and they bear
+   the final accountability for the published artifact. This prevents the
+   "automation of bullshit," where the process is used to generate vast
+   quantities of un-vetted, low-quality content under the guise of "AI
+   writing."
+4. **Embracing the Artifactual Nature of the Text:** The reader is invited to
+   view the text not just as a set of arguments to be agreed or disagreed with,
+   but as an artifact to be examined. The text's texture, its style, its
+   occasional stumbles—these are all data points. They are evidence of the
+   generative process itself. The reader is encouraged to adopt a stance of
+   critical distance, to ask not just "What is this text saying?" but also "How
+   did this process produce this particular text?"
 
 This contract shifts the reader's role. It asks the reader to move from being a
 passive consumer of information to an active, critical observer of a process. It
@@ -258,51 +258,51 @@ to help figure out the rules of the assembly line.
 
 **References**
 
-1.  **"The Death of the Author."** Barthes, R. (1967). _Aspen_. _Epistemic Note:
-    Barthes' classic essay is the essential philosophical starting point for
-    deconstructing the concept of a singular, authoritative author. It argues
-    that the meaning of a text is created by the reader, not the writer, a
-    concept central to Section 4.0 of this article._
-2.  **"What Is an Author?"** Foucault, M. (1969). _Lecture presented at the
-    Collège de France_. _Epistemic Note: Foucault's analysis of the
-    "author-function" treats the author not as a person, but as a function of
-    discourse that serves to group, classify, and give authority to texts. This
-    is directly relevant to the idea of the "author" as a convenient fiction for
-    a distributed process._
-3.  **Human-Computer Interaction (HCI).** The Interaction Design Foundation.
-    (Accessed July 12, 2025). _Epistemic Note: Provides the broader academic
-    context for analyzing the human-LLM system as an interactive loop, focusing
-    on user experience, feedback, and usability rather than abstract AI theory._
-4.  **"Reinforcement Learning from Human Feedback."** OpenAI. (Accessed July 12,
-    2025). _Epistemic Note: A technical description of the process used to align
-    models like the one that generated this text. It provides a mechanistic
-    basis for understanding how human feedback (from labelers, and implicitly,
-    from users) shapes model behavior._
-5.  **The Ghost in the Machine.** Koestler, A. (1967). Hutchinson. _Epistemic
-    Note: The title of this article is a direct play on Koestler's title, which
-    itself was a critique of Cartesian dualism. Here, the "ghost" is not a mind,
-    but the deliberately acknowledged and documented presence of the non-human
-    generative process in the byline._
-6.  **"On the Dangers of Stochastic Parrots: Can Language Models Be Too Big?"**
-    Bender, E. M., et al. (2021). _FAccT '21_. _Epistemic Note: This paper's
-    core argument—that an LLM is a system for stitching together language based
-    on probabilistic patterns, without genuine understanding—is the foundational
-    assumption behind the entire analysis of the model's role._
-7.  **The Medium Is the Massage.** McLuhan, M., & Fiore, Q. (1967). Bantam
-    Books. _Epistemic Note: McLuhan's famous dictum that the medium itself, more
-    than its content, shapes society is directly applicable. The "medium" here
-    is the human-LLM collaborative process, and its nature is the central
-    "message" of the text._
-8.  **The Uncanny Valley.** Mori, M., MacDorman, K. F., & Kageki, N. (2012).
-    _IEEE Robotics & Automation Magazine_. _Epistemic Note: The concept of the
-    uncanny valley—the unsettling feeling produced by a robot that is almost,
-    but not quite, human—is used as a metaphor for the text's relationship with
-    traditional notions of authority._
-9.  **"The Reader in the Text: Essays on Audience and Interpretation."**
-    Suleiman, S. R., & Crosman, I. (Eds.). (1980). Princeton University Press.
-    _Epistemic Note: A collection that formalizes "reader-response theory," the
-    school of literary criticism that focuses on the reader's role in creating
-    meaning. This supports the argument in Section 4.0._
+1. **"The Death of the Author."** Barthes, R. (1967). _Aspen_. _Epistemic Note:
+   Barthes' classic essay is the essential philosophical starting point for
+   deconstructing the concept of a singular, authoritative author. It argues
+   that the meaning of a text is created by the reader, not the writer, a
+   concept central to Section 4.0 of this article._
+2. **"What Is an Author?"** Foucault, M. (1969). _Lecture presented at the
+   Collège de France_. _Epistemic Note: Foucault's analysis of the
+   "author-function" treats the author not as a person, but as a function of
+   discourse that serves to group, classify, and give authority to texts. This
+   is directly relevant to the idea of the "author" as a convenient fiction for
+   a distributed process._
+3. **Human-Computer Interaction (HCI).** The Interaction Design Foundation.
+   (Accessed July 12, 2025). _Epistemic Note: Provides the broader academic
+   context for analyzing the human-LLM system as an interactive loop, focusing
+   on user experience, feedback, and usability rather than abstract AI theory._
+4. **"Reinforcement Learning from Human Feedback."** OpenAI. (Accessed July 12,
+   2025). _Epistemic Note: A technical description of the process used to align
+   models like the one that generated this text. It provides a mechanistic
+   basis for understanding how human feedback (from labelers, and implicitly,
+   from users) shapes model behavior._
+5. **The Ghost in the Machine.** Koestler, A. (1967). Hutchinson. _Epistemic
+   Note: The title of this article is a direct play on Koestler's title, which
+   itself was a critique of Cartesian dualism. Here, the "ghost" is not a mind,
+   but the deliberately acknowledged and documented presence of the non-human
+   generative process in the byline._
+6. **"On the Dangers of Stochastic Parrots: Can Language Models Be Too Big?"**
+   Bender, E. M., et al. (2021). _FAccT '21_. _Epistemic Note: This paper's
+   core argument—that an LLM is a system for stitching together language based
+   on probabilistic patterns, without genuine understanding—is the foundational
+   assumption behind the entire analysis of the model's role._
+7. **The Medium Is the Massage.** McLuhan, M., & Fiore, Q. (1967). Bantam
+   Books. _Epistemic Note: McLuhan's famous dictum that the medium itself, more
+   than its content, shapes society is directly applicable. The "medium" here
+   is the human-LLM collaborative process, and its nature is the central
+   "message" of the text._
+8. **The Uncanny Valley.** Mori, M., MacDorman, K. F., & Kageki, N. (2012).
+   _IEEE Robotics & Automation Magazine_. _Epistemic Note: The concept of the
+   uncanny valley—the unsettling feeling produced by a robot that is almost,
+   but not quite, human—is used as a metaphor for the text's relationship with
+   traditional notions of authority._
+9. **"The Reader in the Text: Essays on Audience and Interpretation."**
+   Suleiman, S. R., & Crosman, I. (Eds.). (1980). Princeton University Press.
+   _Epistemic Note: A collection that formalizes "reader-response theory," the
+   school of literary criticism that focuses on the reader's role in creating
+   meaning. This supports the argument in Section 4.0._
 10. **The Printing Press as an Agent of Change.** Eisenstein, E. L. (1979).
     Cambridge University Press. _Epistemic Note: A historical work that shows
     how a new technology for producing text fundamentally changed the nature of

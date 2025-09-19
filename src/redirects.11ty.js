@@ -7,7 +7,7 @@ export const data = {
   eleventyExcludeFromCollections: true,
 }
 
-export default function (data) {
+export default function(data) {
   const on = (process.env.ARCHIVE_CANON_ROUTES ?? 'true') !== 'false'
   if (!on) return ''
   const items = data.archiveProductMap || []

@@ -1,6 +1,6 @@
 ---
-title: 'Effusion Labs: Style Guide'
-layout: 'base.njk'
+title: "Effusion Labs: Style Guide"
+layout: "base.njk"
 status: stable
 date: 2025-07-01
 certainty: high
@@ -15,8 +15,8 @@ aliases:
   - Effusion Style Guide
   - Writing Guidelines
 memory_ref:
-  - '/meta/methodology/'
-  - '[[core-concept]]'
+  - "/meta/methodology/"
+  - "[[core-concept]]"
 ---
 
 > _A generative protocol for longform, structured, epistemically careful text
@@ -71,20 +71,20 @@ ventures.
 A compliant document follows a strict, sequential architecture. Each component
 is required.
 
-1.  **YAML Frontmatter**: The document must begin with the metadata block.
-2.  **Epigraph**: An introductory blockquote that frames the document's theme.
-3.  **Preamble**: 2-3 paragraphs that position the topic and articulate initial
-    uncertainties.
-4.  **Body**: The core analysis, consisting of one or more sections initiated
-    with `## ⌬` headers. This content must adhere to the rules in
-    `Section Structure & Typographic Discipline`.
-5.  **Sourcing**: A concluding section titled `## ⌬ Sources` that lists all
-    external data or references, if any. See the `Sourcing & Citations` section
-    for rules.
-6.  **Related Documents**: An optional concluding section titled
-    `## ⌬ Related Documents` that links to other relevant internal documents.
-7.  **Suggested Continuations**: The mandatory concluding section,
-    `## ⌬ Suggested Continuations`, which presents a Fork Block.
+1. **YAML Frontmatter**: The document must begin with the metadata block.
+2. **Epigraph**: An introductory blockquote that frames the document's theme.
+3. **Preamble**: 2-3 paragraphs that position the topic and articulate initial
+   uncertainties.
+4. **Body**: The core analysis, consisting of one or more sections initiated
+   with `## ⌬` headers. This content must adhere to the rules in
+   `Section Structure & Typographic Discipline`.
+5. **Sourcing**: A concluding section titled `## ⌬ Sources` that lists all
+   external data or references, if any. See the `Sourcing & Citations` section
+   for rules.
+6. **Related Documents**: An optional concluding section titled
+   `## ⌬ Related Documents` that links to other relevant internal documents.
+7. **Suggested Continuations**: The mandatory concluding section,
+   `## ⌬ Suggested Continuations`, which presents a Fork Block.
 
 ### ⸻ YAML Frontmatter (Required)
 
@@ -105,9 +105,9 @@ memory_ref: [internal links or anchors for recursive nodes]
 ### ⸻ Preamble
 
 Each node opens with 2–3 paragraphs that position the document within a problem
-space.  
+space.\
 Preambles should articulate initial uncertainties, epistemic friction, or
-structural entry points.  
+structural entry points.\
 Strong conclusions or central theses are discouraged. Ambiguity is treated as a
 valid object of analysis.
 

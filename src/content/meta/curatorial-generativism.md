@@ -1,6 +1,6 @@
 ---
-title: 'Curatorial Generativism: An Artistic Framework'
-layout: 'base.njk'
+title: "Curatorial Generativism: An Artistic Framework"
+layout: "base.njk"
 date: 2025-07-12
 status: complete
 certainty: declarative
@@ -19,12 +19,12 @@ analytic_lens:
   curator-operator-agency, responsive-medium, networked-artifact,
   protocol-as-aesthetic
 memory_ref:
-  - '[benjamin-author-as-producer]'
-  - '[burnham-systems-esthetics]'
-  - '[sol-lewitt-instruction-art]'
-  - '[duchamp-readymade]'
-  - '[rhizomatic-protocol]'
-  - '[institutional-critique]'
+  - "[benjamin-author-as-producer]"
+  - "[burnham-systems-esthetics]"
+  - "[sol-lewitt-instruction-art]"
+  - "[duchamp-readymade]"
+  - "[rhizomatic-protocol]"
+  - "[institutional-critique]"
 ---
 
 ### 1.0 A Formal Declaration of Practice
@@ -195,44 +195,44 @@ Effusion Labs system.
 
 **References**
 
-1.  **"The Work of Art in the Age of Mechanical Reproduction."** Benjamin, W.
-    (1936). _Epistemic Note: The foundational text for any discussion of how
-    technology alters the nature of art and authorship. Curatorial Generativism
-    is a framework for artistic practice in the age of algorithmic synthesis._
-2.  **"The Author as Producer."** Benjamin, W. (1934). _Epistemic Note:
-    Benjamin's call for artists to engage directly with the means of production
-    is the historical antecedent of the curator-operator, who architects the
-    very system of textual production._
-3.  **"Chance Operations" and the work of John Cage.** _Epistemic Note: Cage's
-    use of chance (like the I Ching) to compose music is a key precedent for an
-    artist ceding partial control to a non-human system. The LLM is a far more
-    complex "chance operator" than Cage had available._
-4.  **The practice of "remix culture," as theorized by Lawrence Lessig.**
-    _Epistemic Note: Curatorial Generativism can be seen as a high-art,
-    formalized version of remix culture, applying a rigorous, traceable protocol
-    to the act of synthesizing existing information into a new work._
-5.  **"Marcel Duchamp and the Readymade."** Various sources. _Epistemic Note:
-    Duchamp's principle—that the artist's choice and reframing constitutes the
-    artistic act—is the philosophical justification for the curator-operator's
-    ability to transform any topic, including market analysis, into a work of
-    art through its selection and processing._
-6.  **"Systems Esthetics."** Burnham, J. (1968). _Artforum_. _Epistemic Note:
-    The key theoretical text that allows for the evaluation of an entire
-    system—its components, relationships, and feedback loops—as the aesthetic
-    object._
-7.  **Sol LeWitt's instruction-based art.** _Epistemic Note: LeWitt's separation
-    of the idea (the instructions) from the execution is the most direct
-    art-historical parallel to the separation of the curator-operator's intent
-    from the LLM's generative act._
-8.  **"The Poetics of Open Work."** Eco, U. (1962). _Epistemic Note: The
-    rhizomatic, networked structure of the Effusion Labs project creates an
-    "open work" in Eco's sense, one that invites the reader to become a
-    co-navigator of its structure._
-9.  **The practice of "institutional critique" (e.g., Hans Haacke, Andrea
-    Fraser).** _Epistemic Note: This art practice involves exposing the
-    invisible systems (economic, social, political) that underpin the art world.
-    Curatorial Generativism performs a kind of internal institutional critique
-    by exposing its own hidden rules and production methods._
+1. **"The Work of Art in the Age of Mechanical Reproduction."** Benjamin, W.
+   (1936). _Epistemic Note: The foundational text for any discussion of how
+   technology alters the nature of art and authorship. Curatorial Generativism
+   is a framework for artistic practice in the age of algorithmic synthesis._
+2. **"The Author as Producer."** Benjamin, W. (1934). _Epistemic Note:
+   Benjamin's call for artists to engage directly with the means of production
+   is the historical antecedent of the curator-operator, who architects the
+   very system of textual production._
+3. **"Chance Operations" and the work of John Cage.** _Epistemic Note: Cage's
+   use of chance (like the I Ching) to compose music is a key precedent for an
+   artist ceding partial control to a non-human system. The LLM is a far more
+   complex "chance operator" than Cage had available._
+4. **The practice of "remix culture," as theorized by Lawrence Lessig.**
+   _Epistemic Note: Curatorial Generativism can be seen as a high-art,
+   formalized version of remix culture, applying a rigorous, traceable protocol
+   to the act of synthesizing existing information into a new work._
+5. **"Marcel Duchamp and the Readymade."** Various sources. _Epistemic Note:
+   Duchamp's principle—that the artist's choice and reframing constitutes the
+   artistic act—is the philosophical justification for the curator-operator's
+   ability to transform any topic, including market analysis, into a work of
+   art through its selection and processing._
+6. **"Systems Esthetics."** Burnham, J. (1968). _Artforum_. _Epistemic Note:
+   The key theoretical text that allows for the evaluation of an entire
+   system—its components, relationships, and feedback loops—as the aesthetic
+   object._
+7. **Sol LeWitt's instruction-based art.** _Epistemic Note: LeWitt's separation
+   of the idea (the instructions) from the execution is the most direct
+   art-historical parallel to the separation of the curator-operator's intent
+   from the LLM's generative act._
+8. **"The Poetics of Open Work."** Eco, U. (1962). _Epistemic Note: The
+   rhizomatic, networked structure of the Effusion Labs project creates an
+   "open work" in Eco's sense, one that invites the reader to become a
+   co-navigator of its structure._
+9. **The practice of "institutional critique" (e.g., Hans Haacke, Andrea
+   Fraser).** _Epistemic Note: This art practice involves exposing the
+   invisible systems (economic, social, political) that underpin the art world.
+   Curatorial Generativism performs a kind of internal institutional critique
+   by exposing its own hidden rules and production methods._
 10. **"The New Aesthetic."** A term by James Bridle. _Epistemic Note: Describes
     the aesthetic of the digital bleeding into the physical. Curatorial
     Generativism produces texts that are exemplars of this aesthetic—objects

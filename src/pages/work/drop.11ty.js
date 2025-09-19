@@ -10,7 +10,7 @@ export const data = {
       const drops = [...items]
         .filter(item => (item?.data?.type || '').toLowerCase() === 'drop')
         .sort(
-          (a, b) => (b?.date?.valueOf?.() ?? 0) - (a?.date?.valueOf?.() ?? 0)
+          (a, b) => (b?.date?.valueOf?.() ?? 0) - (a?.date?.valueOf?.() ?? 0),
         )
       return drops[0]?.url ?? '/work/'
     },
