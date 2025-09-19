@@ -1,42 +1,4 @@
 import fs from 'node:fs'
-import path from 'node:path'
-
-const ARCHIVES_BASE = path.join('src', 'content', 'archives')
-
-const toPosix = p => p.replaceAll('\\', '/')
-const exists = p => {
-  try {
-    return fs.existsSync(p)
-  } catch {
-    return false
-  }
-}
-
-function walkJsonl(dirAbs) {
-  const out = []
-  if (!exists(dirAbs)) return out
-  for (const ent of fs.readdirSync(dirAbs, { withFileTypes: true })) {
-    const p = path.join(dirAbs, ent.name)
-    if (ent.isDirectory()) out.push(...walkJsonl(p))
-    else if (ent.isFile() && p.endsWith('.jsonl')) out.push(p)
-  }
-  return out
-}
-
-function parseParts(absPath) {
-  const rel = toPosix(path.relative(ARCHIVES_BASE, absPath))
-  const parts = rel.split('/')
-  return {
-    rel,
-    industry: parts.at(0),
-    category: parts.at(1),
-    company: parts.at(2),
-    line: parts.at(3),
-    section: parts.at(4), // 'provenance'
-    file: parts.at(-1),
-    base: path.basename(absPath, '.jsonl'),
-  }
-}
 
 function normalizeSlug(base) {
   return String(base).replace(/--+/g, '-')

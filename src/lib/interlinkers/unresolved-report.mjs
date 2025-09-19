@@ -61,7 +61,6 @@ export function flushUnresolved() {
 export function summarize({ log = true } = {}) {
   const payload = flushUnresolved()
   if (log) {
-    // eslint-disable-next-line no-console
     console.log(`Interlinker: unresolved=${payload.count} → ${OUT_PATH}`)
   }
   return payload
@@ -92,7 +91,7 @@ export function summarizeAndGate() {
   const payload = flushUnresolved()
   const count = payload.count
   const action = shouldFail && count > maxUnresolved ? 'fail' : 'warn'
-  // eslint-disable-next-line no-console
+
   console.log(
     `Interlinker: unresolved=${count} threshold=${maxUnresolved} action=${action}`,
   )

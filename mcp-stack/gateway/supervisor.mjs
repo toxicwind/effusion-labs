@@ -66,7 +66,7 @@ export class Supervisor {
           const obj = JSON.parse(line)
           this.broadcast(name, 'message', obj)
           log('debug', 'server', 'stdout', { server: name, obj })
-        } catch (e) {
+        } catch {
           this.broadcast(name, 'raw', line)
           log('warn', 'server', 'non_json_line', { server: name, line })
         }
@@ -99,8 +99,9 @@ export class Supervisor {
       log('error', 'supervisor', 'exit', { server: name, code, sig, restarts })
       // Auto-restart if clients remain
       const hasClients = this.ensureClients(name).size > 0
-      if (hasClients)
+      if (hasClients) {
         setTimeout(() => this.spawn(name, spec).catch(() => {}), backoff)
+      }
     })
 
     return state
@@ -108,8 +109,9 @@ export class Supervisor {
 
   send(name, payload) {
     const s = this.procs.get(name)
-    if (!s?.child || s.status !== 'running')
+    if (!s?.child || s.status !== 'running') {
       throw new Error('server_not_running')
+    }
     s.child.stdin.write(JSON.stringify(payload) + '\n')
   }
 }

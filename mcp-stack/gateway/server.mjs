@@ -1,18 +1,18 @@
 #!/usr/bin/env node
 import http from 'node:http'
+import { dirname } from 'node:path'
 import { parse as parseUrl } from 'node:url'
 import { fileURLToPath } from 'node:url'
-import { dirname, resolve } from 'node:path'
+import { fetch } from 'undici'
+import { findServer, registry } from '../servers/registry.mjs'
+import { resolveSidecar } from '../sidecars/resolver.mjs'
 import { loadConfig } from './config.mjs'
+import { banner, log } from './logger.mjs'
 import { findPort } from './ports.mjs'
-import { log, banner } from './logger.mjs'
+import { WorkQueue } from './queue.mjs'
+import { readWeb, screenshotUrl } from './readers.mjs'
 import { startSSE } from './sse.mjs'
 import { Supervisor } from './supervisor.mjs'
-import { registry, findServer } from '../servers/registry.mjs'
-import { resolveSidecar } from '../sidecars/resolver.mjs'
-import { readWeb, screenshotUrl } from './readers.mjs'
-import { WorkQueue } from './queue.mjs'
-import { fetch } from 'undici'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
@@ -64,19 +64,17 @@ function manifest(port) {
         info: urlFor(`/servers/${encodeURIComponent(s.name)}/info`, port),
         send: urlFor(`/servers/${encodeURIComponent(s.name)}/send`, port),
       },
-      sidecars:
-        s.name === 'searxng'
-          ? sidecars.searxng
-          : s.name === 'curl'
-            ? sidecars.flaresolverr
-            : undefined,
+      sidecars: s.name === 'searxng'
+        ? sidecars.searxng
+        : s.name === 'curl'
+        ? sidecars.flaresolverr
+        : undefined,
     })),
   }
 }
 
 function urlFor(path, port) {
-  const host =
-    cfg.PROFILE === 'prod' ? cfg.INTERNAL_HOST : process.env.HOST || 'localhost'
+  const host = cfg.PROFILE === 'prod' ? cfg.INTERNAL_HOST : process.env.HOST || 'localhost'
   return `http://${host}:${port}${path}`
 }
 
@@ -92,22 +90,26 @@ async function main() {
     const method = req.method || 'GET'
     log('debug', 'http', 'req', { method, pathname })
 
-    if (pathname === '/healthz')
+    if (pathname === '/healthz') {
       return json(res, 200, { ok: true, ts: new Date().toISOString() })
-    if (pathname === '/readyz')
+    }
+    if (pathname === '/readyz') {
       return json(res, 200, { ready: true, ts: new Date().toISOString() })
+    }
     if (pathname === '/admin/queue') return json(res, 200, queue.snapshot())
-    if (pathname === '/admin/rate')
+    if (pathname === '/admin/rate') {
       return json(res, 200, {
         limitPerSec: cfg.RATE_LIMIT_PER_SEC,
         burst: cfg.RATE_BURST,
       })
-    if (pathname === '/admin/retry')
+    }
+    if (pathname === '/admin/retry') {
       return json(res, 200, {
         policy: 'exponential',
         baseMs: cfg.RETRY_BASE_MS,
         maxMs: cfg.RETRY_MAX_MS,
       })
+    }
     if (pathname === '/admin/sidecars') {
       const now = new Date().toISOString()
       const checks = await sidecarStatus(now).catch(e => [
@@ -132,10 +134,11 @@ async function main() {
         const rows = data
           .map(
             d =>
-              `<tr><td>${d.name}</td><td>${d.enabled}</td><td>${d.state}</td><td>${d.se}</td><td><a href=\"/servers/${d.name}/sse\">sse</a></td></tr>`
+              `<tr><td>${d.name}</td><td>${d.enabled}</td><td>${d.state}</td><td>${d.se}</td><td><a href="/servers/${d.name}/sse">sse</a></td></tr>`,
           )
           .join('')
-        const body = `<!doctype html><meta charset='utf-8'><title>mcp-stack servers</title><style>body{font-family:ui-sans-serif,system-ui}table{border-collapse:collapse}td,th{padding:6px 10px;border:1px solid #ddd}</style><h1>mcp-stack servers</h1><table><tr><th>name</th><th>enabled</th><th>state</th><th>clients</th><th>stream</th></tr>${rows}</table>`
+        const body =
+          `<!doctype html><meta charset='utf-8'><title>mcp-stack servers</title><style>body{font-family:ui-sans-serif,system-ui}table{border-collapse:collapse}td,th{padding:6px 10px;border:1px solid #ddd}</style><h1>mcp-stack servers</h1><table><tr><th>name</th><th>enabled</th><th>state</th><th>clients</th><th>stream</th></tr>${rows}</table>`
         return html(res, 200, body)
       }
       return json(res, 200, { servers: data })
@@ -167,7 +170,7 @@ async function main() {
               try {
                 if (name === 'readweb') {
                   const out = await readWeb(url || '')
-                  if (!out.ok)
+                  if (!out.ok) {
                     return {
                       status: 200,
                       body: {
@@ -177,6 +180,7 @@ async function main() {
                         mode: out.mode,
                       },
                     }
+                  }
                   return {
                     status: 200,
                     body: {
@@ -190,7 +194,7 @@ async function main() {
                 }
                 if (name === 'screenshot') {
                   const out = await screenshotUrl(url || '')
-                  if (!out.ok)
+                  if (!out.ok) {
                     return {
                       status: 200,
                       body: {
@@ -199,6 +203,7 @@ async function main() {
                         detail: out.error || out.mode,
                       },
                     }
+                  }
                   return {
                     status: 200,
                     body: {
@@ -250,8 +255,9 @@ async function main() {
         return // keep connection open
       }
       if (action === 'send') {
-        if (method !== 'POST')
+        if (method !== 'POST') {
           return json(res, 405, { error: 'method_not_allowed' })
+        }
         let body = ''
         req.on('data', c => (body += c))
         req.on('end', async () => {
@@ -274,9 +280,7 @@ async function main() {
     json(res, 404, { error: 'not_found' })
   })
 
-  await new Promise(resolveListen =>
-    server.listen(port, '0.0.0.0', resolveListen)
-  )
+  await new Promise(resolveListen => server.listen(port, '0.0.0.0', resolveListen))
   const actual = server.address().port
   const urls = [
     urlFor('/servers', actual),
@@ -489,8 +493,10 @@ function examplesDoc() {
   const port = process.env.PORT_HTTP || '3000'
   return {
     sse: `curl -N http://${host}:${port}/servers/filesystem/sse`,
-    readweb: `curl -s -X POST http://${host}:${port}/servers/readweb/info -H 'Content-Type: application/json' -d '{"url":"https://example.org"}' | jq .`,
-    cf_readweb: `curl -s -X POST http://${host}:${port}/servers/readweb/info -H 'Content-Type: application/json' -d '{"url":"https://www.popmart.com"}' | jq .`,
+    readweb:
+      `curl -s -X POST http://${host}:${port}/servers/readweb/info -H 'Content-Type: application/json' -d '{"url":"https://example.org"}' | jq .`,
+    cf_readweb:
+      `curl -s -X POST http://${host}:${port}/servers/readweb/info -H 'Content-Type: application/json' -d '{"url":"https://www.popmart.com"}' | jq .`,
     admin: {
       queue: `curl -s http://${host}:${port}/admin/queue | jq .`,
       rate: `curl -s http://${host}:${port}/admin/rate | jq .`,

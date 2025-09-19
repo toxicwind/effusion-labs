@@ -1,9 +1,4 @@
 import fs from 'node:fs'
-import path from 'node:path'
-
-const ARCHIVES_BASE = path.join('src', 'content', 'archives')
-
-const toPosix = p => p.replaceAll('\\', '/')
 
 export const data = () => ({
   eleventyExcludeFromCollections: true,

@@ -1,12 +1,12 @@
 // moved from utils/dev/eleventy-with-codeframes.mjs
+import { codeFrameColumns } from '@babel/code-frame'
 import { spawn } from 'node:child_process'
 import fs from 'node:fs'
 import path from 'node:path'
-import { codeFrameColumns } from '@babel/code-frame'
 import pc from 'picocolors'
 
 function extractNjkLocation(stderr) {
-  const re = /\(([^)]+\.njk)\)\s*\[Line\s+(\d+),\s*Column\s+(\d+)\]/g
+  const re = /\(([^)]+\.njk)\)\s*\[Line\s+(\d+),\s*Column\s+(\d+)]/g
   let match,
     last = null
   while ((match = re.exec(stderr))) last = match
@@ -23,7 +23,7 @@ function printCodeframe({ file, line, column }) {
   const frame = codeFrameColumns(
     src,
     { start: { line, column } },
-    { linesAbove: 3, linesBelow: 3, highlightCode: true }
+    { linesAbove: 3, linesBelow: 3, highlightCode: true },
   )
   const rel = path.relative(process.cwd(), file)
   console.error('\n' + pc.bold(pc.red('Nunjucks parse error')))
@@ -34,7 +34,7 @@ function runEleventy(argv = []) {
   const cp = spawn(
     process.platform === 'win32' ? 'npx.cmd' : 'npx',
     ['@11ty/eleventy', ...argv],
-    { stdio: ['inherit', 'pipe', 'pipe'] }
+    { stdio: ['inherit', 'pipe', 'pipe'] },
   )
   let errBuf = ''
   cp.stdout.on('data', d => process.stdout.write(d))

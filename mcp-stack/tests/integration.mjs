@@ -13,7 +13,7 @@ async function startServer() {
   const timeout = new Promise((_, reject) =>
     setTimeout(
       () => reject(new Error('Server start timed out after 5s')),
-      10000
+      10000,
     )
   )
 
@@ -93,7 +93,7 @@ async function main() {
 
     try {
       process.kill(childPid, 'SIGKILL')
-    } catch (e) {
+    } catch {
       /* Ignore error if already exited */
     }
 
@@ -102,26 +102,30 @@ async function main() {
     const manifestRes = await fetch(`${base}/.well-known/mcp-servers.json`)
     const manifest = await manifestRes.json()
     const fs = manifest.servers.find(s => s.name === 'filesystem')
-    if (fs?.health !== 'degraded')
+    if (fs?.health !== 'degraded') {
       throw new Error(`Health status was '${fs?.health}', expected 'degraded'`)
+    }
     console.log('    -> Pass')
 
     // ## Test 3: Admin helper endpoints
     console.log('  - Running Test 3: Admin endpoints...')
     const q = await (await fetch(`${base}/admin/queue`)).json()
     if (
-      typeof q.currentLength !== 'number' ||
-      typeof q.maxConcurrency !== 'number'
-    )
+      typeof q.currentLength !== 'number'
+      || typeof q.maxConcurrency !== 'number'
+    ) {
       throw new Error('admin_queue_shape')
+    }
     const rate = await (await fetch(`${base}/admin/rate`)).json()
-    if (typeof rate.limitPerSec !== 'number')
+    if (typeof rate.limitPerSec !== 'number') {
       throw new Error('admin_rate_shape')
+    }
     const retry = await (await fetch(`${base}/admin/retry`)).json()
     if (retry.policy !== 'exponential') throw new Error('admin_retry_shape')
     const sc = await (await fetch(`${base}/admin/sidecars`)).json()
-    if (!Array.isArray(sc) || !sc[0]?.lastChecked)
+    if (!Array.isArray(sc) || !sc[0]?.lastChecked) {
       throw new Error('admin_sidecars_shape')
+    }
     console.log('    -> Pass')
 
     // ## Test 4: CF auto-correction via FlareSolverr (CI, stubbed)
@@ -135,8 +139,9 @@ async function main() {
       })
       if (!r.ok) throw new Error(`readweb_http_${r.status}`)
       const j = await r.json()
-      if (!j?.ok || j?.mode !== 'flaresolverr')
+      if (!j?.ok || j?.mode !== 'flaresolverr') {
         throw new Error(`expected_flaresolverr_mode got ${JSON.stringify(j)}`)
+      }
       console.log('    -> Pass')
     }
 
@@ -148,8 +153,9 @@ async function main() {
         body: JSON.stringify({ url: 'https://example.org' }),
       })
       const readWebJson = await readWebRes.json()
-      if (!readWebJson?.ok || !readWebJson?.md)
+      if (!readWebJson?.ok || !readWebJson?.md) {
         throw new Error('readweb_example_failed')
+      }
       console.log('    -> Pass')
     }
   } finally {

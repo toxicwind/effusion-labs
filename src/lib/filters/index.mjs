@@ -5,6 +5,7 @@ import { DateTime } from 'luxon'
 import fs from 'node:fs'
 import path from 'node:path'
 import generateConceptMapJSONLD from '../build/concept-map.js'
+const iconRegistry = icons
 
 const fileCache = new Map()
 const toStr = v => String(v ?? '')
@@ -58,7 +59,7 @@ const defaultFilters = {
     String(str)
       .toLowerCase()
       .trim()
-      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/[^\da-z]+/g, '-')
       .replace(/(^-|-$)+/g, ''),
   limit: (arr = [], n = 5) => (Array.isArray(arr) ? arr.slice(0, n) : []),
   isNew: (d, days = 14) => {
@@ -228,7 +229,7 @@ export function registerFilters(eleventyConfig) {
     const json = JSON.stringify(value ?? null, null, spaces)
     return String(json)
       .replace(/</g, '\\u003C')
-      .replace(/--(?:!?)>/g, '\\u002D\\u002D>')
+      .replace(/--!?>/g, '\\u002D\\u002D>')
   }
   eleventyConfig.addFilter('json', toJson)
   eleventyConfig.addNunjucksFilter('json', toJson)
@@ -285,12 +286,12 @@ export function registerFilters(eleventyConfig) {
       if (!name || typeof name !== 'string') return ''
       const toPascal = s =>
         s
-          .split(/[:._\-\s]+/)
+          .split(/[\s.:_-]+/)
           .filter(Boolean)
           .map(p => p.charAt(0).toUpperCase() + p.slice(1))
           .join('')
       const key = toPascal(name)
-      const node = icons[key] || icons[name]
+      const node = iconRegistry[key] || iconRegistry[name]
       if (!node) return ''
       const attrsMerged = { ...defaultAttributes, ...attrs }
       const toAttrString = obj =>

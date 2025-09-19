@@ -32,13 +32,13 @@ function parseArgs(src) {
       continue
     }
     if (ch === ',' && depth === 0) {
-      out.push(cur.trim().replace(/^['"]|['"]$/g, ''))
+      out.push(cur.trim().replace(/^["']|["']$/g, ''))
       cur = ''
       continue
     }
     cur += ch
   }
-  if (cur) out.push(cur.trim().replace(/^['"]|['"]$/g, ''))
+  if (cur) out.push(cur.trim().replace(/^["']|["']$/g, ''))
   return out
 }
 

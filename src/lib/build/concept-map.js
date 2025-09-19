@@ -1,4 +1,4 @@
-const linkRegex = /\[\[([^|\]#]+)/g
+const linkRegex = /\[\[([^#\]|]+)/g
 const context = {
   '@vocab': 'https://schema.org/',
   source: { '@id': 'source', '@type': '@id' },

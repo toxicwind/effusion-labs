@@ -24,7 +24,7 @@
     || (typeof localStorage !== 'undefined'
       && localStorage.getItem('mschf:debug') === '1')
     || (typeof window !== 'undefined' && window.__MSCHF_DEBUG)
-    || /(^|[?&])mschfDebug=1(&|$)/.test(q)
+    || /(^|[&?])mschfDebug=1(&|$)/.test(q)
   )
   const SID = `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 7)}`
   const C = {
@@ -910,7 +910,7 @@
       function resize() {
         draw()
       }
-      function step(t) {
+      function step(_t) {
         if (State.reduceMotion) return
         if (Math.random() < 0.015 * State.tempo) draw()
       }
@@ -1569,7 +1569,7 @@
           }
         })
       },
-      update(t) {
+      update(_t) {
         if (!node) return
         const base = /(loud|storm|studio)/.test(State.mood) ? 0.74 : 0.66
         const o = lerp(base * 0.6, base, 1 - clamp(State.readingPressure, 0, 1))
@@ -2057,7 +2057,7 @@
       kind: 'edgeGlow',
       cost: 1,
       ...edgeMeta,
-      mount(p) {
+      mount(_parent) {
         nodes = ['top', 'right', 'bottom', 'left'].map(make)
       },
       update(t) {

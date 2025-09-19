@@ -1,42 +1,42 @@
 // Monolithic Eleventy config (ESM, Eleventy 3.x, Node 24+)
+import markdownIt from 'markdown-it'
+import markdownItAnchor from 'markdown-it-anchor'
 import fs from 'node:fs'
 import fsp from 'node:fs/promises'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
-import markdownIt from 'markdown-it'
-import markdownItAnchor from 'markdown-it-anchor'
 
 import EleventyVitePlugin from '@11ty/eleventy-plugin-vite'
 
+import { eleventyImageTransformPlugin } from '@11ty/eleventy-img'
 import EleventyPluginNavigation from '@11ty/eleventy-navigation'
 import EleventyPluginRss from '@11ty/eleventy-plugin-rss'
 import EleventyPluginSyntaxhighlight from '@11ty/eleventy-plugin-syntaxhighlight'
 import interlinker from '@photogabble/eleventy-plugin-interlinker'
-import sitemap from '@quasibit/eleventy-plugin-sitemap'
 import schema from '@quasibit/eleventy-plugin-schema'
-import { eleventyImageTransformPlugin } from '@11ty/eleventy-img'
-import rollupPluginCritical from 'rollup-plugin-critical'
+import sitemap from '@quasibit/eleventy-plugin-sitemap'
 import tailwindcss from '@tailwindcss/vite'
+import rollupPluginCritical from 'rollup-plugin-critical'
 
-import { dirs } from './src/lib/site.mjs'
-import { applyMarkdownExtensions } from './src/lib/markdown/index.mjs'
-import { registerFilters } from './src/lib/filters/index.mjs'
-import { registerShortcodes } from './src/lib/shortcodes/index.mjs'
-import { registerCollections } from './src/lib/collections/index.mjs'
 import registerArchive from './src/lib/archives/index.mjs'
-import { buildGlobals } from './src/lib/data/build.mjs'
-import { getBuildInfo } from './src/lib/data/build-info.mjs'
-import { buildNav } from './src/lib/data/nav.mjs'
 import { buildArchiveNav } from './src/lib/archives/nav.mjs'
-import htmlToMarkdownUnified from './src/lib/transforms/html-to-markdown.mjs'
+import { registerCollections } from './src/lib/collections/index.mjs'
+import { getBuildInfo } from './src/lib/data/build-info.mjs'
+import { buildGlobals } from './src/lib/data/build.mjs'
+import { eleventyComputed as computedGlobal } from './src/lib/data/computed.mjs'
+import { buildNav } from './src/lib/data/nav.mjs'
+import { registerFilters } from './src/lib/filters/index.mjs'
 import { createResolvers } from './src/lib/interlinkers/resolvers.mjs'
 import { flushUnresolved } from './src/lib/interlinkers/unresolved-report.mjs'
-import { eleventyComputed as computedGlobal } from './src/lib/data/computed.mjs'
+import { applyMarkdownExtensions } from './src/lib/markdown/index.mjs'
+import { registerShortcodes } from './src/lib/shortcodes/index.mjs'
+import { dirs } from './src/lib/site.mjs'
+import htmlToMarkdownUnified from './src/lib/transforms/html-to-markdown.mjs'
 
 const projectRoot = path.dirname(fileURLToPath(import.meta.url))
 const srcDir = path.join(projectRoot, 'src')
 
-export default function (eleventyConfig) {
+export default function(eleventyConfig) {
   // --- Start: Event Handlers ---
   eleventyConfig.on('eleventy.before', async () => {
     // Clean Vite temp to avoid stale-dir issues
@@ -103,29 +103,29 @@ export default function (eleventyConfig) {
           plugins: isTest
             ? []
             : [
-                rollupPluginCritical({
-                  criticalUrl: './_site/',
-                  criticalBase: './_site/',
-                  criticalPages: [{ uri: 'index.html' }, { uri: '404.html' }],
-                  criticalConfig: {
-                    inline: true,
-                    dimensions: [
-                      {
-                        height: 900,
-                        width: 375,
-                      },
-                      {
-                        height: 720,
-                        width: 1280,
-                      },
-                      {
-                        height: 1080,
-                        width: 1920,
-                      },
-                    ],
-                  },
-                }),
-              ],
+              rollupPluginCritical({
+                criticalUrl: './_site/',
+                criticalBase: './_site/',
+                criticalPages: [{ uri: 'index.html' }, { uri: '404.html' }],
+                criticalConfig: {
+                  inline: true,
+                  dimensions: [
+                    {
+                      height: 900,
+                      width: 375,
+                    },
+                    {
+                      height: 720,
+                      width: 1280,
+                    },
+                    {
+                      height: 1080,
+                      width: 1920,
+                    },
+                  ],
+                },
+              }),
+            ],
         },
       },
     },
@@ -142,8 +142,7 @@ export default function (eleventyConfig) {
   })
   eleventyConfig.addPlugin(schema)
 
-  const enableImagePlugin =
-    !isTest || process.env.ELEVENTY_TEST_ENABLE_IMAGES === '1'
+  const enableImagePlugin = !isTest || process.env.ELEVENTY_TEST_ENABLE_IMAGES === '1'
 
   if (enableImagePlugin) {
     eleventyConfig.addPlugin(eleventyImageTransformPlugin, {
@@ -155,7 +154,7 @@ export default function (eleventyConfig) {
         const { name } = path.parse(src)
         const s = String(name || '')
           .toLowerCase()
-          .replace(/[^a-z0-9]+/g, '-')
+          .replace(/[^\da-z]+/g, '-')
         return `${s}-${width}.${format}`
       },
     })

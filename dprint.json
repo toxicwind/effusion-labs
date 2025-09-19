@@ -21,17 +21,6 @@
     "printWidth": 100
   },
   "yaml": {},
-  "excludes": [
-    "node_modules",
-    "_site",
-    "dist",
-    ".11ty-vite",
-    "artifacts",
-    "coverage",
-    "src/content/docs/vendor",
-    "src/content/docs/vendor/**",
-    "src/pages/feed.njk"
-  ],
   "plugins": [
     "https://plugins.dprint.dev/typescript-0.95.11.wasm",
     "https://plugins.dprint.dev/json-0.20.0.wasm",
@@ -42,7 +31,26 @@
     "https://plugins.dprint.dev/g-plane/markup_fmt-v0.23.4.wasm",
     "https://plugins.dprint.dev/g-plane/pretty_yaml-v0.5.1.wasm"
   ],
+
   "includes": [
-    "src/**/*.{njk,html,js,mjs,ts,tsx,css,md,json}"
+    "src/**/*.{njk,html,js,mjs,ts,tsx,css,md,json,yml,yaml}",
+    "tools/**/*.{js,mjs,ts,md,json,yml,yaml}",
+    "mcp-stack/**/*.{mjs,js,ts,md,json,yml,yaml}",
+    "*.md",
+    "*.json",
+    "*.yml",
+    "*.yaml",
+    "eleventy.config.mjs"
+  ],
+  "excludes": [
+    "node_modules",
+    "_site",
+    "dist",
+    ".11ty-vite",
+    "artifacts",
+    "coverage",
+    "src/content/docs/vendor",
+    "src/content/docs/vendor/**",
+    "src/pages/feed.njk"
   ]
 }

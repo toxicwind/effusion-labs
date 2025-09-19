@@ -5,7 +5,7 @@ export function slugCanonicalProduct(prod = {}) {
     String(s)
       .toLowerCase()
       .trim()
-      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/[^\da-z]+/g, '-')
       .replace(/^-+|-+$/g, '') || 'item'
   const tokens = rawId.split('--').filter(Boolean)
   if (tokens.length < 4) return slug(rawId)

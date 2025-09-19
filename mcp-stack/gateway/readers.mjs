@@ -1,9 +1,8 @@
 import { fetch } from 'undici'
-import { loadConfig } from './config.mjs'
 // Prefer the local gateway implementation to keep container builds self-contained.
-import { htmlToMarkdown } from './lib/webToMd.js'
-import { assertAllowed } from './lib/host-allowlist.mjs'
 import { resolveSidecar } from '../sidecars/resolver.mjs'
+import { assertAllowed } from './lib/host-allowlist.mjs'
+import { htmlToMarkdown } from './lib/webToMd.js'
 
 function normUrl(u) {
   try {
@@ -20,16 +19,17 @@ function isCloudflare(headers, body, status) {
     Object.entries(headers || {}).map(([k, v]) => [
       String(k).toLowerCase(),
       String(v),
-    ])
+    ]),
   )
   if (h['server']?.toLowerCase() === 'cloudflare') return true
   const txt = typeof body === 'string' ? body : ''
   if (
-    /__cf_bm|Just a moment|cf-mitigated:\s*challenge|\/cdn-cgi\/challenge-platform\//i.test(
-      txt
+    /__cf_bm|just a moment|cf-mitigated:\s*challenge|\/cdn-cgi\/challenge-platform\//i.test(
+      txt,
     )
-  )
+  ) {
     return true
+  }
   if (status && [401, 403, 429].includes(Number(status))) return true
   return false
 }
@@ -143,7 +143,7 @@ export async function readWeb(inputUrl, opts = {}) {
   }
 }
 
-export async function screenshotUrl(inputUrl, opts = {}) {
+export async function screenshotUrl(inputUrl, _opts = {}) {
   const url = normUrl(inputUrl)
   assertAllowed(url)
   let chromium
@@ -179,8 +179,7 @@ export async function screenshotUrl(inputUrl, opts = {}) {
 }
 
 async function discoverFlareBase(candidate) {
-  const base =
-    candidate || process.env.FLARESOLVERR_URL || 'http://flaresolverr:8191'
+  const base = candidate || process.env.FLARESOLVERR_URL || 'http://flaresolverr:8191'
   // Try a very quick probe to see if something is listening; many containers respond 404 on '/'
   const url = new URL('/', base).toString()
   try {
@@ -201,17 +200,4 @@ async function discoverFlareBase(candidate) {
     if (res.status >= 200 && res.status < 500) return base
   } catch {}
   throw new Error('flaresolverr_unreachable')
-}
-
-// --- CI egress control ---
-function enforceAllowlist(inputUrl) {
-  const cfg = loadConfig()
-  if (!cfg.CI) return // Only enforced in CI
-  const host = new URL(inputUrl).hostname.toLowerCase()
-  if (!cfg.HOST_ALLOWLIST || cfg.HOST_ALLOWLIST.length === 0) return
-  if (!cfg.HOST_ALLOWLIST.includes(host)) {
-    const err = new Error(`host_not_allowed_in_ci:${host}`)
-    err.code = 'HOST_BLOCKED'
-    throw err
-  }
 }

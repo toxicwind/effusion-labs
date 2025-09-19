@@ -1,5 +1,4 @@
 // Simple FIFO work queue with max concurrency and basic metrics.
-import { log } from './logger.mjs'
 
 export class WorkQueue {
   constructor({ maxConcurrency = 20, limit = 10000 } = {}) {

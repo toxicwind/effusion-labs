@@ -58,7 +58,7 @@
       if (opts.storageKey && typeof opts.storageKey === 'string') {
         STORAGE_KEY = opts.storageKey
       }
-    } catch (_) {
+    } catch {
       /* noop */
     }
   }
@@ -71,7 +71,7 @@
       try {
         var s = normalize(localStorage.getItem(STORAGE_KEY))
         if (s && ALLOWED.indexOf(s) !== -1) t = s
-      } catch (_) {}
+      } catch {}
     }
     return ALLOWED.indexOf(t) !== -1 ? t : DEFAULT
   }
@@ -90,7 +90,7 @@
     if (persist) {
       try {
         localStorage.setItem(STORAGE_KEY, target)
-      } catch (_) {}
+      } catch {}
     }
     try {
       document.dispatchEvent(
@@ -98,7 +98,7 @@
           detail: { theme: target, source: source || 'user' },
         }),
       )
-    } catch (_) {}
+    } catch {}
   }
 
   function toggleTheme(persist) {
@@ -126,7 +126,7 @@
           return m
         })()
       meta.content = picked === DARK_NAME ? 'dark light' : 'light dark'
-    } catch (_) {
+    } catch {
       document.documentElement.setAttribute('data-theme', DEFAULT)
       document.documentElement.dataset.themeSource = 'fallback'
     }

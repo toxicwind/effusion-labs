@@ -1,3 +1,3 @@
-import { contentArea } from '../../../src/lib/content-area.mjs'
+import { contentArea } from '../../lib/content-area.mjs'
 
 export default contentArea('sparks')

@@ -7,7 +7,7 @@ import rehypeParse from 'rehype-parse'
 import rehypeRemark from 'rehype-remark'
 import remarkGfm from 'remark-gfm'
 import remarkMath from 'remark-math'
-import remarkSmartypants from 'remark-smartypants'
+import remarkSmartypants from 'remark-smartypants/dist/plugin.js'
 import remarkStringify from 'remark-stringify'
 import { unified } from 'unified'
 

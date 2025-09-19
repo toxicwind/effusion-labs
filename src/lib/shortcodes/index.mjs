@@ -11,7 +11,7 @@ const slug = s =>
   String(s ?? '')
     .normalize('NFKD')
     .toLowerCase()
-    .replace(/[^\w\s-]/g, '')
+    .replace(/[^\s\w-]/g, '')
     .trim()
     .replace(/\s+/g, '-')
     .replace(/-+/g, '-')
@@ -36,7 +36,6 @@ function createCalloutShortcode(eleventyConfig) {
       title = '',
       kicker = '',
       variant = 'neutral',
-      position = 'center',
       icon = '',
       headingLevel = 3,
     } = isObj ? opts : { title: opts }
@@ -46,9 +45,9 @@ function createCalloutShortcode(eleventyConfig) {
     return `<aside class="callout callout--${variant}" role="note" aria-labelledby="${id}">
       <div class="callout-head">
         <h${headingLevel} id="${id}" class="callout-title">
-          ${icon ? `<span class=\"callout-icon\">${icon}</span>` : ''}${safeTitle}
+          ${icon ? `<span class="callout-icon">${icon}</span>` : ''}${safeTitle}
         </h${headingLevel}>
-        ${kicker ? `<p class=\"callout-kicker\">${escapeHtml(kicker)}</p>` : ''}
+        ${kicker ? `<p class="callout-kicker">${escapeHtml(kicker)}</p>` : ''}
       </div>
       <div class="callout-body">${body}</div>
     </aside>`

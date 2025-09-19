@@ -8,7 +8,7 @@ const slugify = s =>
   toStr(s)
     .normalize('NFKD')
     .toLowerCase()
-    .replace(/[^\w\s-]/g, '')
+    .replace(/[^\s\w-]/g, '')
     .trim()
     .replace(/\s+/g, '-')
     .replace(/-+/g, '-')
@@ -111,7 +111,7 @@ function resolverFor(kind) {
       }
       link.href = href
       return `<a class="interlink interlink--${kind}" href="${href}">${label}</a>`
-    } catch (e) {
+    } catch {
       const wantSlug = slugify(link?.name)
       const href = guessHref(kind, wantSlug, currentPage)
       const label = escapeHtml(link?.title || link?.name)
