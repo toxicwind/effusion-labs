@@ -13,8 +13,9 @@ export default {
 
   // Load plugins; Tailwind **last** so class sorting runs after other transforms.
   plugins: [
+    './tools/dev/prettier-jinja-js-wrapper.cjs',
     'prettier-plugin-jinja-template',
-    'prettier-plugin-tailwindcss'
+    'prettier-plugin-tailwindcss',
   ],
 
   // Make plugin resolution robust in workspaces/CI runners.
@@ -31,8 +32,8 @@ export default {
       files: ['**/*.njk', '**/*.html'],
       options: {
         parser: 'jinja-template',
+        embeddedLanguageFormatting: 'off', // ensure scripts aren't parsed as JS
         printWidth: 100,
-        embeddedLanguageFormatting: 'off', // ⬅️ key line
       },
     },
     // Markdown — wrap prose to improve diffs
