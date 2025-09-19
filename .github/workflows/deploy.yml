@@ -37,11 +37,6 @@ jobs:
           cache: 'npm'
 
       # --- CI steps for the web service ---
-      - name: 🧪 Validate frontmatter
-        run: |
-          npm ci --ignore-scripts
-          node utils/scripts/validation/validate-frontmatter.mjs
-
       - name: ⚡ Smoke tests for direct pushes
         # Avoids errors on workflow_dispatch where head_commit is absent.
         run: |

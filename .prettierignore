@@ -2,42 +2,54 @@
 artifacts/
 _site/
 dist/
+public/vite/
+src/flower_reports_showcase/normalized/
+src/flower_reports_showcase/reports/*.html
 tmp/
 var/
 
 # Caches
+.11ty-vite/
+.cache/
 _cache/
 .ipynb_checkpoints/
-__pycache__/
+.tmp/
 
-# Logs
+# IDE/project noise
+.idea/
+.vscode/
+
+# Coverage
+coverage/
+
+# Logs & reports
 *.log
-logs/
 .hb-logs/
+.njk-fix-report.json
+.dead-links.json
+logs/
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
-# Dependencies & Tools
+# Dependencies & tools
 node_modules/
 .conda/
 .venv/
 bin/
 patches/
 .portainer/
+.portainer/**
 
 # Data & generated files
 *.jsonl
 lib_content.json
 package-lock.json
 
-# Git
+# Git (exclude from formatting)
 .git/
 .github/
 
-# Specific generated reports
-src/flower_reports_showcase/reports/*.html
-src/flower_reports_showcase/normalized/
-
 # Vendor docs (non-canonical HTML; exclude from Prettier)
 src/content/docs/vendor/
-
-# Nunjucks templates (unsupported by Prettier core)
-**/*.njk
