@@ -8,13 +8,25 @@ import unicorn from 'eslint-plugin-unicorn';
 import globals from 'globals';
 
 export default [
-    { ignores: ['node_modules/**', '_site/**', 'dist/**', '.11ty-vite/**', 'artifacts/**', 'coverage/**', 'public/vite/**'] },
+    {
+        ignores: [
+            'node_modules/**',
+            '_site/**',
+            'dist/**',
+            '.11ty-vite/**',
+            'artifacts/**',
+            'coverage/**',
+            'public/vite/**',
+            '.conda/**',
+            'src/content/docs/**'
+        ]
+    },
 
     js.configs.recommended,
     unicorn.configs['flat/recommended'],
 
     {
-        files: ['**/*.{js,mjs,ts,tsx}'],
+        files: ['src/**/*.{js,mjs,ts,tsx}', 'tools/**/*.mjs', 'mcp-stack/**/*.mjs', 'eleventy.config.mjs'],
         languageOptions: {
             ecmaVersion: 2024,
             sourceType: 'module',
@@ -40,7 +52,7 @@ export default [
 
     ...tseslint.configs.recommendedTypeChecked.map(cfg => ({
         ...cfg,
-        files: ['**/*.{ts,tsx}'],
+        files: ['src/**/*.{ts,tsx}'],
         languageOptions: {
             ...cfg.languageOptions,
             parserOptions: { ...cfg.languageOptions?.parserOptions, project: true, tsconfigRootDir: process.cwd() }
