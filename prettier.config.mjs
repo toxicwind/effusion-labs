@@ -31,9 +31,9 @@ export default {
       files: ['**/*.njk', '**/*.html'],
       options: {
         parser: 'jinja-template',
-        // Keep HTML attribute wrap sane for long class lists
-        printWidth: 100
-      }
+        printWidth: 100,
+        embeddedLanguageFormatting: 'off', // ⬅️ key line
+      },
     },
     // Markdown — wrap prose to improve diffs
     {
@@ -53,13 +53,6 @@ export default {
     // but we keep defaults and widen width slightly to reduce noisy diffs.
     {
       files: ['**/*.json'],
-      options: {
-        printWidth: 100
-      }
-    },
-    // Scripts/tooling often benefit from the wider column too.
-    {
-      files: ['tools/**/*.mjs', 'mcp-stack/**/*.mjs', 'eleventy.config.mjs'],
       options: {
         printWidth: 100
       }

@@ -1,4 +1,3 @@
-{# prettier-ignore #}
 ---
 title: "Effusion Labs: Concept Map"
 permalink: "map/index.html"
@@ -23,8 +22,7 @@ memory_ref:
   - "/content/meta/methodology/"
   - "[[core-concept]]"
 ---
-
-{# Intro prose, theme-aware colors #}
+<!-- prettier-ignore-start -->
 <div class="map-intro prose dark:prose-invert max-w-none">
   <p>
     This interactive map visualizes how
@@ -36,17 +34,13 @@ memory_ref:
     into ideas and converge into projects.
   </p>
 </div>
-{# Card wrapper for the visualization #}
 <section class="mt-6 card bg-base-100 border border-base-300 shadow">
   <div class="card-body p-4 sm:p-6">
     <div id="concept-map-container" class="h-[80vh] w-full rounded-box"></div>
   </div>
 </section>
-{# JSON-LD for SEO/graph data #}
 <script type="application/ld+json">{{ collections.nodes | conceptMapJSONLD | safe }}</script>
-{# vis-network bundle #}
 <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
-{# Graph renderer that reads daisyUI theme vars #}
 <script>
 (function () {
   function readVar(names, alpha) {
@@ -78,7 +72,6 @@ memory_ref:
   var edges = [];
   var linkRegex = /\[\[([^|\]#]+)/g;
   var connectionCount = Object.create(null);
-
   var categoryGlyphs = { Projects:"📁", Concepts:"📘", Sparks:"💡", Meta:"⚙️" };
 
   function getNodeVisualProps(url, tags) {
@@ -166,8 +159,8 @@ memory_ref:
     var catId =
       (url.includes("/projects")||tags.includes("projects"))?"category:projects":
       (url.includes("/concepts")||tags.includes("concepts"))?"category:concepts":
-      (url.includes("/sparks")||tags.includes("sparks"))  ?"category:sparks":
-      (url.includes("/meta")||tags.includes("meta"))      ?"category:meta":null;
+      (url.includes("/sparks")  ||tags.includes("sparks"))  ?"category:sparks":
+      (url.includes("/meta")    ||tags.includes("meta"))    ?"category:meta":null;
 
     if (catId) {
       edges.push({from:catId,to:page.url});
@@ -216,3 +209,4 @@ memory_ref:
   network.on("click",function(params){if(params.nodes.length>0){var id=params.nodes[0];if(!id.startsWith("category:"))window.location.href=id;}});
 })();
 </script>
+<!-- prettier-ignore-end -->

@@ -1,16 +1,39 @@
 ---
 layout: base.njk
+title: "Redirecting…"
 showTitle: false
 metaDisable: true
-eleventyComputed:
-  headExtra: |
-    <meta http-equiv="refresh" content="0; url={{ redirect }}">
-    <link rel="canonical" href="{{ redirect }}">
-    <meta name="robots" content="noindex">
-title: "Redirecting…"
+# Expect a 'redirect' value from data or front matter on the page using this layout.
+# e.g. in a content file:  redirect: "https://example.com/target"
 ---
 
+{# Normalize the URL we’ll use everywhere #}
+{% set redirectUrl = redirect | default('/') %}
+
+{# If your base.njk defines a "headExtra" block, we inject head tags here. #}
+{% block headExtra %}
+  <meta http-equiv="refresh" content="0; url={{ redirectUrl }}">
+  <link rel="canonical" href="{{ redirectUrl }}">
+  <meta name="robots" content="noindex">
+{% endblock headExtra %}
+
 <p>
-  Redirecting to <a class="link link-hover" href="{{ redirect }}">{{ redirect }}</a>…
+  Redirecting to
+  <a class="link link-hover" href="{{ redirectUrl }}">{{ redirectUrl }}</a>…
 </p>
-<script>try { location.replace({{ redirect | dump }}); } catch(_) {}</script>
+
+<script>
+(function () {
+  // Nunjucks emits a proper JS string literal here (or "" if missing)
+  var u = {{ redirectUrl | dump | default('""') }};
+  if (!u) return;
+  try { location.replace(u); }
+  catch (_) { location.href = u; }
+})();
+</script>
+
+
+
+<noscript>
+  <meta http-equiv="refresh" content="0; url={{ redirectUrl }}">
+</noscript>

@@ -1,16 +1,13 @@
-{# prettier-ignore #}
-{# src/pages/resume/index.njk #}
 ---
 permalink: "/resume/"
 title: "Resume"
 layout: "resume.njk"
 eleventyExcludeFromCollections: true
 ---
-{# Page content only; the HTML/head lives in resume.njk #}
+<!-- prettier-ignore-start -->
 {% from "components/neon-card.njk" import neonCard %}
 {% from "components/resume/expander.njk" import expander %}
 <a href="#main" class="skip-link btn btn-sm">Skip to main content</a>
-<!-- Top bar -->
 <div class="navbar bg-base-100 border-b-2 border-base-300 sticky top-0 z-40 bar-underline">
   <div class="flex-1">
     <a href="{{ '/' | url }}" class="btn btn-ghost text-base font-semibold">{{ resume and resume.name or 'Resume' }}</a>
@@ -27,9 +24,7 @@ eleventyExcludeFromCollections: true
             title="Print / Save PDF">Print</button>
   </div>
 </div>
-<!-- Main grid (layout already wraps with <main id="main">) -->
 <div class="hb-sheet grid grid-cols-12 gap-6 sm:gap-8 p-4 sm:p-6">
-  <!-- LEFT RAIL -->
   <aside class="col-span-12 lg:col-span-4">
     <div class="space-y-6 lg:sticky lg:top-6">
       {% call neonCard({ intensity: 'lite' }) %}
@@ -81,7 +76,6 @@ eleventyExcludeFromCollections: true
           <p class="mt-2 hb-ink-soft">{{ resume.summary }}</p>
         {% endcall %}
       {% endif %}
-      {# Highlights #}
       {% set _hc = resume and resume.highlights and (resume.highlights | length) or 0 %}
       {% if _hc %}
         {% call neonCard({ title: "Highlights", neon: false, frame: 'none', rail: false }) %}
@@ -135,7 +129,6 @@ eleventyExcludeFromCollections: true
       {% endif %}
     </div>
   </aside>
-  <!-- RIGHT COLUMN -->
   <section class="col-span-12 lg:col-span-8 space-y-6">
     {% if resume and resume.experience %}
       {% call neonCard({ title: "Experience", neon: false, frame: 'none', rail: false }) %}
@@ -242,9 +235,7 @@ eleventyExcludeFromCollections: true
     </footer>
   </section>
 </div>
-<!-- Toaster -->
 <div id="toaster" class="toast toast-end z-[100]"></div>
-{# JSON-LD (absolute URLs where possible) #}
 {% set canonicalPath = "/resume/" | url %}
 {% set canonicalHref = (site and site.url) | ternary((site.url + canonicalPath), canonicalPath) %}
 {% set homeHref = (site and site.url) | ternary((site.url + ('/' | url)), ('/' | url)) %}
@@ -261,18 +252,18 @@ eleventyExcludeFromCollections: true
   "url": canonicalHref
 } %}
 {% if ogImageHref %}
-  {% set person = person | setAttribute('image', ogImageHref) %}
+  {% set person = person | setAttribute("image", ogImageHref) %}
 {% endif %}
 {% if resume and resume.address %}
-  {% set person = person | setAttribute('address', resume.address) %}
+  {% set person = person | setAttribute("address", resume.address) %}
 {% elseif resume and resume.location %}
-  {% set person = person | setAttribute('address', { "@type":"PostalAddress", "addressLocality": resume.location }) %}
+  {% set person = person | setAttribute("address", { "@type":"PostalAddress", "addressLocality": resume.location }) %}
 {% endif %}
 {% if resume and resume.email %}
-  {% set person = person | setAttribute('email', 'mailto:' + resume.email) %}
+  {% set person = person | setAttribute("email", "mailto:" + resume.email) %}
 {% endif %}
 {% if sameAsLinks and (sameAsLinks | length) %}
-  {% set person = person | setAttribute('sameAs', sameAsLinks) %}
+  {% set person = person | setAttribute("sameAs", sameAsLinks) %}
 {% endif %}
 <script type="application/ld+json">{{ person | json | safe }}</script>
 <script type="application/ld+json">
@@ -285,18 +276,18 @@ eleventyExcludeFromCollections: true
   ]
 } | json | safe }}
 </script>
-<!-- Page-local helpers -->
 <script>
   function toast(msg){
-    var wrap=document.getElementById('toaster'); if(!wrap) return;
-    var el=document.createElement('div'); el.className='alert alert-info shadow'; el.innerHTML='<span>'+msg+'</span>';
-    wrap.appendChild(el); setTimeout(function(){el.style.opacity='0';},2200); setTimeout(function(){el.remove();},2600);
+    var wrap=document.getElementById("toaster"); if(!wrap) return;
+    var el=document.createElement("div"); el.className="alert alert-info shadow"; el.innerHTML="<span>"+msg+"</span>";
+    wrap.appendChild(el); setTimeout(function(){el.style.opacity="0";},2200); setTimeout(function(){el.remove();},2600);
   }
   function copyToClipboard(text){
-    try{navigator.clipboard.writeText(text).then(function(){toast('Copied: '+text);});}
+    try{navigator.clipboard.writeText(text).then(function(){toast("Copied: "+text);});}
     catch(e){
-      var t=document.createElement('textarea'); t.value=text; document.body.appendChild(t); t.select();
-      try{document.execCommand('copy'); toast('Copied: '+text);}catch(_){} t.remove();
+      var t=document.createElement("textarea"); t.value=text; document.body.appendChild(t); t.select();
+      try{document.execCommand("copy"); toast("Copied: "+text);}catch(_){} t.remove();
     }
   }
 </script>
+<!-- prettier-ignore-end -->
