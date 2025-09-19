@@ -12,8 +12,7 @@ showTitle: false
 {% set prodAll = collections.archiveProducts   | byCompany(companySlug) | byLocale('en') %}
 {% set charAll = collections.archiveCharacters | byCompany(companySlug) | byLocale('en') %}
 {% set seriesAll = collections.archiveSeries   | byCompany(companySlug) | byLocale('en') %}
-<nav class="breadcrumbs text-sm mb-2 overflow-x-auto whitespace-nowrap"
-     aria-label="Breadcrumb">
+<nav class="breadcrumbs text-sm mb-2 overflow-x-auto whitespace-nowrap" aria-label="Breadcrumb">
   <ul>
     <li>
       <a href="{{ '/archives/' | url }}">Archives</a>
@@ -58,9 +57,7 @@ showTitle: false
       <label class="label">
         <span class="label-text">Filter lines</span>
       </label>
-      <input id="lineFilter"
-             class="input input-bordered input-sm"
-             placeholder="type to filter…" />
+      <input id="lineFilter" class="input input-bordered input-sm" placeholder="type to filter…" />
     </div>
   </div>
   {% if lineSlugs.length %}
@@ -69,7 +66,9 @@ showTitle: false
         {% set prodLine = prodAll   | byLine(slug) %}
         {% set charLine = charAll   | byLine(slug) %}
         {% set seriesLine = seriesAll | byLine(slug) %}
-        {% set lineHref = ('/archives/collectables/designer-toys/' + companySlug + '/' + slug + '/') | url %}
+        {%
+          set lineHref = ('/archives/collectables/designer-toys/' + companySlug + '/' + slug + '/') | url
+        %}
         <li class="card bg-base-100 border hover:shadow-xl hover:border-primary/50 transition">
           <a class="card-body p-4 sm:p-5 block no-underline" href="{{ lineHref }}">
             <h3 class="card-title text-base m-0">{{ slug | replace('-', ' ') | title }}</h3>
@@ -89,15 +88,15 @@ showTitle: false
   {% endif %}
 </section>
 <script type="module">
-  const input = document.getElementById('lineFilter');
-  const list = document.getElementById('lineList');
-  if (input && list) {
-    input.addEventListener('input', () => {
-      const q = input.value.trim().toLowerCase();
-      for (const li of list.children) {
-        const name = li.querySelector('.card-title')?.textContent?.toLowerCase() || '';
-        li.style.display = (!q || name.includes(q)) ? '' : 'none';
-      }
-    });
-  }
+const input = document.getElementById('lineFilter')
+const list = document.getElementById('lineList')
+if (input && list) {
+  input.addEventListener('input', () => {
+    const q = input.value.trim().toLowerCase()
+    for (const li of list.children) {
+      const name = li.querySelector('.card-title')?.textContent?.toLowerCase() || ''
+      li.style.display = (!q || name.includes(q)) ? '' : 'none'
+    }
+  })
+}
 </script>

@@ -22,6 +22,7 @@ metaDisable: true
   <a class="link link-hover" href="{{ redirectUrl }}">{{ redirectUrl }}</a>…
 </p>
 
+<!-- markup-fmt-ignore -->
 <script>
 (function () {
   // Nunjucks emits a proper JS string literal here (or "" if missing)
@@ -31,8 +32,6 @@ metaDisable: true
   catch (_) { location.href = u; }
 })();
 </script>
-
-
 
 <noscript>
   <meta http-equiv="refresh" content="0; url={{ redirectUrl }}">

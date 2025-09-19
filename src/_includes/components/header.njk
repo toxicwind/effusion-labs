@@ -8,7 +8,10 @@
     <div class="navbar max-w-screen-xl mx-auto px-6">
       <!-- Brand -->
       <div class="flex-1">
-        <a href="{{ '/' | url }}" class="flex items-center gap-2 font-heading text-3xl text-primary no-underline">
+        <a
+          href="{{ '/' | url }}"
+          class="flex items-center gap-2 font-heading text-3xl text-primary no-underline"
+        >
           {{ icon('flask-conical', { class: 'w-6 h-6', 'aria-hidden': 'true' }) }}
           <span>{{ 'Effusion Labs' | shout }}</span>
         </a>
@@ -20,7 +23,9 @@
           <label tabindex="0" class="btn btn-ghost btn-square" aria-label="Open menu">
             {{ icon('menu', { class: 'w-6 h-6', 'aria-hidden': 'true' }) }}
           </label>
-          {{ navMenu(nav, page.url, 'menu-sm dropdown-content mt-3 z-[100] p-2 shadow bg-base-100 rounded-box w-56') }}
+          {{
+            navMenu(nav, page.url, 'menu-sm dropdown-content mt-3 z-[100] p-2 shadow bg-base-100 rounded-box w-56')
+          }}
         </nav>
       </div>
 
@@ -38,8 +43,12 @@
           aria-label="Switch theme"
           title="Toggle theme"
         >
-          <span class="lucide-sun">{{ icon('sun', { class: 'w-6 h-6', 'aria-hidden': 'true' }) }}</span>
-          <span class="lucide-moon hidden">{{ icon('moon', { class: 'w-6 h-6', 'aria-hidden': 'true' }) }}</span>
+          <span class="lucide-sun">{{
+            icon('sun', { class: 'w-6 h-6', 'aria-hidden': 'true' })
+          }}</span>
+          <span class="lucide-moon hidden">{{
+            icon('moon', { class: 'w-6 h-6', 'aria-hidden': 'true' })
+          }}</span>
         </button>
       </div>
     </div>

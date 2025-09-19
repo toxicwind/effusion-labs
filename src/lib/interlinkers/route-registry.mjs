@@ -145,7 +145,8 @@ function _mergeFromDiscovery(reg) {
             keyFields: Array.isArray(k.keyFields)
               ? k.keyFields
               : ['slug', 'fileSlug', 'title'],
-            canonicalFromData: d => `${`/${k.base?.replace(/^\//, '') || k.kind}`}/${d.slug || d.fileSlug || ''}/`,
+            canonicalFromData: d =>
+              `${`/${k.base?.replace(/^\//, '') || k.kind}`}/${d.slug || d.fileSlug || ''}/`,
             aliasesFromData: d => Array.isArray(d?.slugAliases) ? d.slugAliases : [],
           }
         }

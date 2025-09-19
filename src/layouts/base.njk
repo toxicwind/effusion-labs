@@ -6,63 +6,56 @@
 <html lang="en" class="scroll-pt-16" data-theme="dim">
   <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <meta name="color-scheme" content="dark light">
-    <meta name="theme-color"
-          media="(prefers-color-scheme: light)"
-          content="#f7f5f3">
-    <meta name="theme-color"
-          media="(prefers-color-scheme: dark)"
-          content="#2a303c">
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f7f5f3">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#2a303c">
     <meta name="msapplication-TileColor" content="#2a303c">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style"
-          content="black-translucent">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>{{ title or 'Untitled' }} | Effusion Labs</title>
     {# Canonical/OG #}
     {% set canon = canonicalUrl or page.canonicalUrl %}
     {% if canon %}
       <link rel="canonical" href="{{ canon }}">
       {% if metadata and metadata.site and metadata.site.url %}
-        <meta property="og:url"
-              content="{{ canon | absoluteUrl(metadata.site.url) }}">
+        <meta property="og:url" content="{{ canon | absoluteUrl(metadata.site.url) }}">
       {% endif %}
     {% elif metadata and metadata.site and metadata.site.url and page.url %}
-      <link rel="canonical"
-            href="{{ page.url | url | absoluteUrl(metadata.site.url) }}">
-      <meta property="og:url"
-            content="{{ page.url | url | absoluteUrl(metadata.site.url) }}">
+      <link rel="canonical" href="{{ page.url | url | absoluteUrl(metadata.site.url) }}">
+      <meta property="og:url" content="{{ page.url | url | absoluteUrl(metadata.site.url) }}">
     {% endif %}
     {{ headExtra | safe }}
     {# Early theme: zero-dep, prevents FART w/ daisyUI #}
     <script>
-      try {
-        const saved = localStorage.getItem('theme');
-        const prefersDark = window.matchMedia?.('(prefers-color-scheme: dark)').matches;
-        const theme = saved || (prefersDark ? 'dim' : 'light');
-        document.documentElement.setAttribute('data-theme', theme);
-      } catch {}
+    try {
+      const saved = localStorage.getItem('theme')
+      const prefersDark = window.matchMedia?.('(prefers-color-scheme: dark)').matches
+      const theme = saved || (prefersDark ? 'dim' : 'light')
+      document.documentElement.setAttribute('data-theme', theme)
+    } catch {}
     </script>
     {# Fonts #}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Rubik:wght@400..900&family=Space+Grotesk:wght@400..700&display=swap"
-          rel="stylesheet">
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Rubik:wght@400..900&family=Space+Grotesk:wght@400..700&display=swap"
+      rel="stylesheet"
+    >
     <script type="module" src="{{ '/assets/js/app.js' | url }}"></script>
     {# Favicons / PWA (all live in /public per audit) #}
     <link rel="icon" type="image/svg+xml" href="{{ '/favicon.svg' | url }}">
     <link rel="icon" href="{{ '/favicon.ico' | url }}">
-    <link rel="apple-touch-icon"
-          sizes="180x180"
-          href="{{ '/apple-touch-icon.png' | url }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ '/apple-touch-icon.png' | url }}">
     <meta name="apple-mobile-web-app-title" content="Effusion Labs">
     <link rel="manifest" href="{{ '/site.webmanifest' | url }}">
   </head>
   <body class="bg-base-100 text-base-content font-body antialiased">
     {{ header(nav, page) }}
     {% set metaOff = metaDisable == true or metaDisable == 'true' %}
-    {% set hasMeta = (status or certainty or importance or tags or memory_ref or date or page.date) and not metaOff %}
+    {%
+      set hasMeta = (status or certainty or importance or tags or memory_ref or date or page.date) and not metaOff
+    %}
     <main id="main" class="min-h-[60vh] max-w-screen-xl mx-auto px-6">
       <div class="{% if hasMeta %}xl:grid xl:grid-cols-[1fr_18rem] xl:gap-10{% endif %} {% if showTitle != false %}mt-8 lg:mt-10{% endif %}">
         <article class="prose dark:prose-invert max-w-none m-0 {% if hasMeta %}xl:col-span-1{% endif %}">

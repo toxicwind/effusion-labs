@@ -8,7 +8,10 @@ eleventyNavigation:
 ---
 
 {% from "components/list-item.njk" import listItem %}
-<p>This section contains information about the lab itself, its purpose, and related administrative details.</p>
+<p>
+  This section contains information about the lab itself, its purpose, and related administrative
+  details.
+</p>
 <div class="grid gap-6 sm:grid-cols-3">
   {% for item in collections.meta %}
     {% if item.url != page.url %}{{ listItem(item) }}{% endif %}

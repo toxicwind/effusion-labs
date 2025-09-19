@@ -4,5 +4,5 @@
 | ------------------------------------------------- | ------------ | --------- | ----------- | -------------- | -------------- |
 | _No misfit record Markdown files found in `src/`_ | —            | —         | —           | —              | —              |
 
-Search patterns: `type`, `product_id`, `brand`, `line`, `character`, `series`,
-`form`, `release_date`.
+Search patterns: `type`, `product_id`, `brand`, `line`, `character`, `series`, `form`,
+`release_date`.

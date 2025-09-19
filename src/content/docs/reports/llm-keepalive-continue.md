@@ -2,8 +2,8 @@
 
 ## Context Recap
 
-Implemented keepalive test harness with heartbeats, signal shielding, PATH
-shims, and workflow updates.
+Implemented keepalive test harness with heartbeats, signal shielding, PATH shims, and workflow
+updates.
 
 ## Outstanding Items
 

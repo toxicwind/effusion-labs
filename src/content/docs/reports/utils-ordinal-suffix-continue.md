@@ -2,13 +2,12 @@
 
 ## Recap
 
-Added targeted unit tests for utility helpers, fixed ordinalSuffix to handle
-negative numbers, refactored file cache logic, and synchronized documentation.
+Added targeted unit tests for utility helpers, fixed ordinalSuffix to handle negative numbers,
+refactored file cache logic, and synchronized documentation.
 
 ## Next Steps
 
-1. Expand utilities test coverage for caching behavior when files change or are
-   deleted.
+1. Expand utilities test coverage for caching behavior when files change or are deleted.
 2. Integrate utilities module into additional filters to reduce duplication.
 
 ## Trigger

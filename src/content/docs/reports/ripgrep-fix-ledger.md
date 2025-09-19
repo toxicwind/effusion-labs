@@ -10,8 +10,7 @@
 
 ## Proofs
 
-- `test/unit/ripgrep.test.mjs` checks absence of `@vscode/ripgrep` and script
-  content.
+- `test/unit/ripgrep.test.mjs` checks absence of `@vscode/ripgrep` and script content.
 - `docs/knowledge/ripgrep/test-success.log` shows passing tests.
 - `docs/knowledge/ripgrep/docs-validate.log` records successful docs validation.
 - package.json and package-lock.json omit `ripgrep-bin`.

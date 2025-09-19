@@ -15,8 +15,7 @@ eleventyComputed:
 {% from "components/products/MarketTable.njk"    import marketTable %}
 {% from "components/products/ProvenanceList.njk" import provenanceList %}
 {# Breadcrumbs #}
-<nav class="breadcrumbs text-sm mb-3 overflow-x-auto whitespace-nowrap"
-     aria-label="Breadcrumb">
+<nav class="breadcrumbs text-sm mb-3 overflow-x-auto whitespace-nowrap" aria-label="Breadcrumb">
   <ul>
     <li>
       <a href="{{ '/archives/' | url }}">Archives</a>
@@ -32,7 +31,9 @@ eleventyComputed:
     </li>
     <li>
       {% if series.data.companySlug and series.data.lineSlug %}
-        <a href="{{ '/archives/collectables/designer-toys/' | url }}{{ series.data.companySlug }}/{{ series.data.lineSlug }}/">
+        <a
+          href="{{ '/archives/collectables/designer-toys/' | url }}{{ series.data.companySlug }}/{{ series.data.lineSlug }}/"
+        >
           {{ series.data.lineTitle or series.data.lineSlug | title }}
         </a>
       {% else %}
@@ -44,14 +45,18 @@ eleventyComputed:
 </nav>
 <div class="mb-6">
   {% if series.data.companySlug and series.data.lineSlug %}
-    {{ backLink('Back', '/archives/collectables/designer-toys/' + series.data.companySlug + '/' + series.data.lineSlug + '/') }}
+    {{
+      backLink('Back', '/archives/collectables/designer-toys/' + series.data.companySlug + '/' + series.data.lineSlug + '/')
+    }}
   {% else %}
     {{ backLink('Back', '/archives/') }}
   {% endif %}
 </div>
 {# Header #}
 <section class="rounded-box border-2 border-black bg-base-200 p-5 sm:p-7 shadow-[6px_6px_0_rgba(0,0,0,0.85)]">
-  <h1 class="m-0 font-extrabold tracking-tight fluid-title">{{ series.data.title or series.data.seriesSlug }}</h1>
+  <h1 class="m-0 font-extrabold tracking-tight fluid-title">
+    {{ series.data.title or series.data.seriesSlug }}
+  </h1>
   <p class="opacity-85 mt-2">
     {{ series.data.companyTitle or series.data.companySlug | title }}
     {% if series.data.companyTitle or series.data.companySlug %}·{% endif %}
@@ -60,12 +65,16 @@ eleventyComputed:
   {% if series.data.notes %}<p class="mt-2 opacity-80">{{ series.data.notes }}</p>{% endif %}
 </section>
 {# Build product list for this series, within the same company+line #}
-{% set inLine = collections.archiveProducts
-  | byCompany(series.data.companySlug)
-| byLine(series.data.lineSlug) %}
+{%
+  set inLine = collections.archiveProducts
+    | byCompany(series.data.companySlug)
+  | byLine(series.data.lineSlug)
+%}
 {% set products = [] %}
 {% for p in inLine %}
-  {% if p.data.seriesSlug and series.data.seriesSlug and p.data.seriesSlug == series.data.seriesSlug %}
+  {%
+    if p.data.seriesSlug and series.data.seriesSlug and p.data.seriesSlug == series.data.seriesSlug
+  %}
     {% set products = products.concat([p]) %}
   {% endif %}
 {% endfor %}
@@ -75,15 +84,17 @@ eleventyComputed:
   {% if p.data.market_listings and (p.data.market_listings | length) %}
     {% for l in p.data.market_listings %}
       {% set label = p.data.product_id or p.data.title or p.data.productSlug %}
-      {% set listingsAgg = listingsAgg.concat([{
-              market: l.market,
-              url: l.url,
-              currency: l.currency,
-              price: l.price,
-              price_min: l.price_min,
-              price_max: l.price_max,
-              note: label
-            }]) %}
+      {%
+        set listingsAgg = listingsAgg.concat([{
+          market: l.market,
+          url: l.url,
+          currency: l.currency,
+          price: l.price,
+          price_min: l.price_min,
+          price_max: l.price_max,
+          note: label
+        }])
+      %}
     {% endfor %}
   {% endif %}
 {% endfor %}
@@ -92,7 +103,9 @@ eleventyComputed:
   <section class="card bg-base-100 border shadow-sm mt-6">
     <div class="card-body p-4 sm:p-6">
       <h2 class="text-lg font-semibold mb-3">Market snapshot</h2>
-      {{ marketTable(listingsAgg, { fx: (build and build.fx) or {}, base: (build and build.base_currency) or 'USD', asOf: (build and build.fx_asof) }) }}
+      {{
+        marketTable(listingsAgg, { fx: (build and build.fx) or {}, base: (build and build.base_currency) or 'USD', asOf: (build and build.fx_asof) })
+      }}
     </div>
   </section>
 {% endif %}
@@ -103,13 +116,14 @@ eleventyComputed:
     <section class="card bg-base-100 border shadow-sm mt-6">
       <div class="card-body p-4 sm:p-6">
         <h2 class="text-lg font-semibold mb-3">Provenance</h2>
-        {{ provenanceList(provSources, { limit: 10, fx: (build and build.fx) or {}, base: (build and build.base_currency) or 'USD' }) }}
+        {{
+          provenanceList(provSources, { limit: 10, fx: (build and build.fx) or {}, base: (build and build.base_currency) or 'USD' })
+        }}
         <div class="mt-2 text-xs opacity-90 space-x-3">
-          <a class="link link-hover"
-             href="{{ series.data.provenance_ref | provenanceViewerUrl }}">View .jsonl</a>
-          <a class="link"
-             href="{{ series.data.provenance_ref | provenanceDownloadUrl }}"
-             download>Download</a>
+          <a class="link link-hover" href="{{ series.data.provenance_ref | provenanceViewerUrl }}"
+          >View .jsonl</a>
+          <a class="link" href="{{ series.data.provenance_ref | provenanceDownloadUrl }}" download
+          >Download</a>
           {% if (provSources | length) > 10 %}
             <span class="opacity-60">· showing 10 of {{ provSources | length }}</span>
           {% endif %}

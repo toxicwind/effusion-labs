@@ -4,241 +4,295 @@
 {% from "components/products/MetaNotes.njk"      import metaNotes %}
 
 {% macro specSheet(product) %}
-{% set p = product and product.data or {} %}
+  {% set p = product and product.data or {} %}
 
-{# release + edition #}
-{% set releaseDate  = p.release_date or (p.release_info and p.release_info.release_date) %}
-{% set editionKind  = p.edition and p.edition.kind %}
-{% set editionSize  = (p.release_info and p.release_info.edition_size) or (p.availability and p.availability.unit_count) %}
-{% set msrpMap      = p.pricing and p.pricing.original_msrp %}
-{% set secRange     = p.pricing and p.pricing.secondary_market_range %}
-{% set availabilityIsLimited = p.availability and p.availability.limited %}
-{% set listings = p.market_listings or [] %}
-{% set primaryMarket = (listings | length) and listings[0] or null %}
+  {# release + edition #}
+  {% set releaseDate  = p.release_date or (p.release_info and p.release_info.release_date) %}
+  {% set editionKind  = p.edition and p.edition.kind %}
+  {%
+    set editionSize  = (p.release_info and p.release_info.edition_size) or (p.availability and p.availability.unit_count)
+  %}
+  {% set msrpMap      = p.pricing and p.pricing.original_msrp %}
+  {% set secRange     = p.pricing and p.pricing.secondary_market_range %}
+  {% set availabilityIsLimited = p.availability and p.availability.limited %}
+  {% set listings = p.market_listings or [] %}
+  {% set primaryMarket = (listings | length) and listings[0] or null %}
 
-{# FX context #}
-{% set baseCcy = (build and build.base_currency) or 'USD' %}
-{% set fx      = (build and build.fx) or {} %}
-{% set fxAsOf  = (build and build.fx_asof) %}
+  {# FX context #}
+  {% set baseCcy = (build and build.base_currency) or 'USD' %}
+  {% set fx      = (build and build.fx) or {} %}
+  {% set fxAsOf  = (build and build.fx_asof) %}
 
-{# MSRP choice #}
-{% set msrpCur = null %}
-{% set msrpAmt = null %}
-{% if primaryMarket and primaryMarket.price %}
-  {% set msrpCur = (primaryMarket.currency or baseCcy) | upper %}
-  {% set msrpAmt = primaryMarket.price * 1 %}
-{% elseif msrpMap %}
-  {% for ccy, amt in msrpMap %}
-    {% if loop.first %}{% set msrpCur = ccy | upper %}{% set msrpAmt = amt * 1 %}{% endif %}
-  {% endfor %}
-{% endif %}
-{% set msrpRate = null %}
-{% if msrpCur and (msrpCur == (baseCcy | upper)) %}
-  {% set msrpRate = 1 %}
-{% elseif msrpCur and fx and fx[msrpCur] %}
-  {% set msrpRate = fx[msrpCur] * 1 %}
-{% endif %}
-{% set msrpConverted = null %}
-{% if msrpAmt != null and msrpRate != null %}
-  {% set msrpConverted = msrpAmt * msrpRate %}
-{% endif %}
+  {# MSRP choice #}
+  {% set msrpCur = null %}
+  {% set msrpAmt = null %}
+  {% if primaryMarket and primaryMarket.price %}
+    {% set msrpCur = (primaryMarket.currency or baseCcy) | upper %}
+    {% set msrpAmt = primaryMarket.price * 1 %}
+  {% elseif msrpMap %}
+    {% for ccy, amt in msrpMap %}
+      {% if loop.first %}{% set msrpCur = ccy | upper %}{% set msrpAmt = amt * 1 %}{% endif %}
+    {% endfor %}
+  {% endif %}
+  {% set msrpRate = null %}
+  {% if msrpCur and (msrpCur == (baseCcy | upper)) %}
+    {% set msrpRate = 1 %}
+  {% elseif msrpCur and fx and fx[msrpCur] %}
+    {% set msrpRate = fx[msrpCur] * 1 %}
+  {% endif %}
+  {% set msrpConverted = null %}
+  {% if msrpAmt != null and msrpRate != null %}
+    {% set msrpConverted = msrpAmt * msrpRate %}
+  {% endif %}
 
-{# availability badge text/class #}
-{% set availBadge = 'badge-success' %}
-{% set availText  = 'Standard' %}
-{% if availabilityIsLimited %}
-  {% set availBadge = 'badge-error' %}
-  {% set availText  = 'Limited' %}
-{% endif %}
+  {# availability badge text/class #}
+  {% set availBadge = 'badge-success' %}
+  {% set availText  = 'Standard' %}
+  {% if availabilityIsLimited %}
+    {% set availBadge = 'badge-error' %}
+    {% set availText  = 'Limited' %}
+  {% endif %}
 
-<section class="relative card bg-base-100 border border-base-300/60 shadow-xl rounded-2xl overflow-hidden
-                before:content-[''] before:pointer-events-none before:block before:absolute before:inset-0
-                before:bg-[radial-gradient(1200px_600px_at_0%_-10%,hsl(var(--er)/.10),transparent_40%)]
-                after:content-[''] after:pointer-events-none after:block after:absolute after:inset-0
-                after:bg-[radial-gradient(900px_500px_at_110%_120%,hsl(var(--p)/.10),transparent_40%)]">
-  <div class="card-body gap-4">
-    <div class="flex items-start justify-between gap-3">
-      <div>
-        <h2 class="card-title text-2xl sm:text-3xl tracking-tight">
-          {{ p.product_title or (p.series and (p.series ~ ' • ' ~ (p.variant or ''))) or p.title or 'Untitled Product' }}
-        </h2>
-        <div class="mt-2 flex flex-wrap items-center gap-2">
-          {% if p.brand %}<span class="badge badge-outline">{{ p.brand | titleizeSlug }}</span>{% endif %}
-          {% if p.line %}<span class="badge badge-outline">{{ p.line | titleizeSlug }}</span>{% endif %}
-          {% if p.character %}
-            <a class="badge badge-ghost hover:badge-outline transition"
-               href="{{ '/archives/character/' | url }}{{ (p.character | slug) }}/">{{ p.character | titleizeSlug }}</a>
-          {% endif %}
-          {% if p.series %}<span class="badge badge-ghost">{{ p.series | titleizeSlug }}</span>{% endif %}
-          {% if p.form %}<span class="badge badge-ghost">{{ p.form | titleizeSlug }}</span>{% endif %}
-        </div>
-      </div>
-      <div class="tooltip tooltip-left" data-tip="Availability">
-        <span class="badge {{ availBadge }} badge-lg">{{ availText }}</span>
-      </div>
-    </div>
-
-    <div class="stats stats-vertical sm:stats-horizontal w-full bg-base-200/40 rounded-xl border border-base-300/50">
-      <div class="stat">
-        <div class="stat-title opacity-70">Release</div>
-        <div class="stat-value text-xl">
-          {% if releaseDate %}{{ releaseDate | humanDate | safe }}{% else %}TBD{% endif %}
-        </div>
-        {% if p.size and (p.size.h or p.size.w or p.size.d) %}
-          <div class="stat-desc">
-            {{ p.size.h }}{% if p.size.w %}×{{ p.size.w }}{% endif %}{% if p.size.d %}×{{ p.size.d }}{% endif %} {{ p.size.unit or 'cm' }}
+  <section
+    class="
+      relative card bg-base-100 border border-base-300/60 shadow-xl rounded-2xl overflow-hidden
+      before:content-[''] before:pointer-events-none before:block before:absolute before:inset-0
+      before:bg-[radial-gradient(1200px_600px_at_0%_-10%,hsl(var(--er)/.10),transparent_40%)]
+      after:content-[''] after:pointer-events-none after:block after:absolute after:inset-0
+      after:bg-[radial-gradient(900px_500px_at_110%_120%,hsl(var(--p)/.10),transparent_40%)]
+    "
+  >
+    <div class="card-body gap-4">
+      <div class="flex items-start justify-between gap-3">
+        <div>
+          <h2 class="card-title text-2xl sm:text-3xl tracking-tight">
+            {{
+              p.product_title or (p.series and (p.series ~ ' • ' ~ (p.variant or ''))) or p.title or 'Untitled Product'
+            }}
+          </h2>
+          <div class="mt-2 flex flex-wrap items-center gap-2">
+            {% if p.brand %}<span class="badge badge-outline">{{ p.brand | titleizeSlug }}</span>{%
+              endif
+            %}
+            {% if p.line %}<span class="badge badge-outline">{{ p.line | titleizeSlug }}</span>{%
+              endif
+            %}
+            {% if p.character %}
+              <a
+                class="badge badge-ghost hover:badge-outline transition"
+                href="{{ '/archives/character/' | url }}{{ (p.character | slug) }}/"
+              >{{ p.character | titleizeSlug }}</a>
+            {% endif %}
+            {% if p.series %}<span class="badge badge-ghost">{{ p.series | titleizeSlug }}</span>{%
+              endif
+            %}
+            {% if p.form %}<span class="badge badge-ghost">{{ p.form | titleizeSlug }}</span>{%
+              endif
+            %}
           </div>
-        {% endif %}
-      </div>
-
-      <div class="stat">
-        <div class="stat-title opacity-70">MSRP</div>
-        <div class="stat-value text-xl">
-          {% if msrpAmt != null and msrpCur %}{{ msrpAmt | money(msrpCur) }}{% else %}—{% endif %}
         </div>
-        {% if msrpConverted != null and (msrpCur|upper) != (baseCcy|upper) %}
-          <div class="stat-desc">≈ {{ msrpConverted | money(baseCcy) }}{% if fxAsOf %} <span class="opacity-70">(as of {{ fxAsOf }})</span>{% endif %}</div>
-        {% endif %}
-        {% if secRange %}
-          {% for ccy, rng in secRange %}
-            {% if loop.first %}<div class="stat-desc">Secondary: {{ ccy }} {{ rng }}</div>{% endif %}
-          {% endfor %}
-        {% endif %}
+        <div class="tooltip tooltip-left" data-tip="Availability">
+          <span class="badge {{ availBadge }} badge-lg">{{ availText }}</span>
+        </div>
       </div>
 
-      <div class="stat">
-        <div class="stat-title opacity-70">Region Lock</div>
-        <div class="stat-value text-xl">{{ (p.distribution and p.distribution.region_lock) | yesNo }}</div>
-        {% if p.distribution and p.distribution.markets and (p.distribution.markets | length) %}
-          <div class="stat-desc flex flex-wrap gap-1">
-            {% for m in p.distribution.markets %}<span class="badge badge-sm">{{ m }}</span>{% endfor %}
+      <div class="stats stats-vertical sm:stats-horizontal w-full bg-base-200/40 rounded-xl border border-base-300/50">
+        <div class="stat">
+          <div class="stat-title opacity-70">Release</div>
+          <div class="stat-value text-xl">
+            {% if releaseDate %}{{ releaseDate | humanDate | safe }}{% else %}TBD{% endif %}
           </div>
-        {% endif %}
-      </div>
-    </div>
-
-    <dl data-testid="spec-sheet" class="grid grid-cols-1 sm:grid-cols-12 gap-x-6 gap-y-3 mt-4 text-sm leading-relaxed">
-      {% if p.variant %}
-        <dt class="sm:col-span-3 text-base-content/70">Variant</dt>
-        <dd class="sm:col-span-9">{{ p.variant | titleizeSlug }}</dd>
-      {% endif %}
-
-      {% if editionKind %}
-        <dt class="sm:col-span-3 text-base-content/70">Edition</dt>
-        <dd class="sm:col-span-9">
-          <span class="badge badge-outline">{{ editionKind | titleizeSlug }}</span>
-          {% if editionSize %}<span class="badge badge-ghost ml-2">Size: {{ editionSize }}</span>{% endif %}
-        </dd>
-      {% endif %}
-
-      {% if p.colorway %}
-        <dt class="sm:col-span-3 text-base-content/70">Colorway</dt>
-        <dd class="sm:col-span-9">{{ p.colorway | safe }}</dd>
-      {% endif %}
-
-      {% if p.articulation %}
-        <dt class="sm:col-span-3 text-base-content/70">Articulation</dt>
-        <dd class="sm:col-span-9">{{ p.articulation | safe }}</dd>
-      {% endif %}
-
-      {% if p.materials and (p.materials.shell or p.materials.plush or p.materials.stuffing) %}
-        <dt class="sm:col-span-3 text-base-content/70">Materials</dt>
-        <dd class="sm:col-span-9">
-          <ul class="list-disc pl-5 space-y-1">
-            {% if p.materials.shell %}<li><span class="opacity-70">Shell:</span> {{ p.materials.shell | safe }}</li>{% endif %}
-            {% if p.materials.plush %}<li><span class="opacity-70">Plush:</span> {{ p.materials.plush | safe }}</li>{% endif %}
-            {% if p.materials.stuffing %}<li><span class="opacity-70">Stuffing:</span> {{ p.materials.stuffing | safe }}</li>{% endif %}
-          </ul>
-        </dd>
-      {% endif %}
-
-      {% if p.packaging and (p.packaging.type or p.packaging.dimensions_cm) %}
-        <dt class="sm:col-span-3 text-base-content/70">Packaging</dt>
-        <dd class="sm:col-span-9">
-          {% if p.packaging.type %}{{ p.packaging.type | safe }}{% endif %}
-          {% if p.packaging.dimensions_cm %}<span class="opacity-70"> — {{ p.packaging.dimensions_cm | safe }}</span>{% endif %}
-        </dd>
-      {% endif %}
-
-      {% if listings and (listings | length) %}
-        <dt class="sm:col-span-3 text-base-content/70">Market</dt>
-        <dd class="sm:col-span-9">
-          {{ marketTable(listings, { fx: fx, base: baseCcy, asOf: fxAsOf }) }}
-        </dd>
-      {% endif %}
-
-      {% if p.designer %}
-        <dt class="sm:col-span-3 text-base-content/70">Designer</dt>
-        <dd class="sm:col-span-9">{{ p.designer }}</dd>
-      {% endif %}
-
-      {% if p.accessories and (p.accessories | length) %}
-        <dt class="sm:col-span-3 text-base-content/70">Accessories</dt>
-        <dd class="sm:col-span-9">
-          <ul class="list-disc pl-5 space-y-1">
-            {% for a in p.accessories %}<li>{{ a | safe }}</li>{% endfor %}
-          </ul>
-        </dd>
-      {% endif %}
-
-      {% if p.provenance_ref %}
-        {% set prov = (p.provenance_ref | provenanceSources) %}
-        <dt class="sm:col-span-3 text-base-content/70">Provenance</dt>
-        <dd class="sm:col-span-9">
-          {% if prov and (prov | length) %}
-            {{ provenanceList(prov, { limit: 10, fx: fx, base: baseCcy }) }}
-            <div class="mt-2 text-xs opacity-90 space-x-3">
-              <a class="link link-hover" href="{{ p.provenance_ref | provenanceViewerUrl }}">View .jsonl</a>
-              <a class="link" href="{{ p.provenance_ref | provenanceDownloadUrl }}" download>Download</a>
-              {% if (prov | length) > 10 %}<span class="opacity-60"> · showing 10 of {{ prov | length }}</span>{% endif %}
+          {% if p.size and (p.size.h or p.size.w or p.size.d) %}
+            <div class="stat-desc">
+              {{ p.size.h }}{% if p.size.w %}×{{ p.size.w }}{% endif %}
+              {% if p.size.d %}×{{ p.size.d }}{% endif %}
+              {{ p.size.unit or 'cm' }}
             </div>
-          {% else %}
-            <a class="link link-primary" href="{{ p.provenance_ref | provenanceViewerUrl }}">View .jsonl</a>
-            <span class="opacity-60">·</span>
-            <a class="link" href="{{ p.provenance_ref | provenanceDownloadUrl }}" download>Download</a>
           {% endif %}
-        </dd>
-      {% endif %}
+        </div>
 
-      {% if p.confidence is defined %}
-        {% set confPct = (p.confidence * 100) | round(0, 'floor') %}
-        <dt class="sm:col-span-3 text-base-content/70">Confidence</dt>
-        <dd class="sm:col-span-9">
-          <progress class="progress progress-error w-56 align-middle mr-2" value="{{ confPct }}" max="100"></progress>
-          <span class="opacity-70">{{ confPct }}%</span>
-        </dd>
-      {% endif %}
-    </dl>
+        <div class="stat">
+          <div class="stat-title opacity-70">MSRP</div>
+          <div class="stat-value text-xl">
+            {% if msrpAmt != null and msrpCur %}{{ msrpAmt | money(msrpCur) }}{% else %}—{% endif %}
+          </div>
+          {% if msrpConverted != null and (msrpCur|upper) != (baseCcy|upper) %}
+            <div class="stat-desc">
+              ≈ {{ msrpConverted | money(baseCcy) }}{% if fxAsOf %}
+                <span class="opacity-70">(as of {{ fxAsOf }})</span>{% endif %}
+            </div>
+          {% endif %}
+          {% if secRange %}
+            {% for ccy, rng in secRange %}
+              {% if loop.first %}<div class="stat-desc">Secondary: {{ ccy }} {{ rng }}</div>{%
+                endif
+              %}
+            {% endfor %}
+          {% endif %}
+        </div>
 
-    {% if p.Deltas and (p.Deltas | length) %}
-      <div class="mt-4">
-        <div class="collapse collapse-arrow border border-base-300/60 bg-base-200/50 rounded-xl">
-          <input type="checkbox" />
-          <div class="collapse-title text-base font-medium">
-            {{ p.Deltas | length }} change{% if (p.Deltas | length) > 1 %}s{% endif %} in this record
+        <div class="stat">
+          <div class="stat-title opacity-70">Region Lock</div>
+          <div class="stat-value text-xl">
+            {{ (p.distribution and p.distribution.region_lock) | yesNo }}
           </div>
-          <div class="collapse-content">
-            <ul class="timeline timeline-vertical">
-              {% for d in p.Deltas %}
-                <li>
-                  <div class="timeline-start">{{ d.field }}</div>
-                  <div class="timeline-middle"><span class="badge badge-error badge-sm"></span></div>
-                  <div class="timeline-end timeline-box prose prose-sm max-w-none">
-                    <p class="m-0"><strong>{{ d.reason }}</strong></p>
-                    {% if d.from or d.to %}
-<pre class="m-0 mt-2 rounded-lg bg-base-300/60 p-3 overflow-x-auto"><code>from: {{ d.from | safe }}
-to:   {{ d.to   | safe }}</code></pre>
-                    {% endif %}
-                  </div>
-                </li>
-              {% endfor %}
-            </ul>
-          </div>
+          {% if p.distribution and p.distribution.markets and (p.distribution.markets | length) %}
+            <div class="stat-desc flex flex-wrap gap-1">
+              {% for m in p.distribution.markets %}<span class="badge badge-sm">{{ m }}</span>{%
+                endfor
+              %}
+            </div>
+          {% endif %}
         </div>
       </div>
-    {% endif %}
 
-    {{ metaNotes(p) }}
-  </div>
-</section>
+      <dl
+        data-testid="spec-sheet"
+        class="grid grid-cols-1 sm:grid-cols-12 gap-x-6 gap-y-3 mt-4 text-sm leading-relaxed"
+      >
+        {% if p.variant %}
+          <dt class="sm:col-span-3 text-base-content/70">Variant</dt>
+          <dd class="sm:col-span-9">{{ p.variant | titleizeSlug }}</dd>
+        {% endif %}
+
+        {% if editionKind %}
+          <dt class="sm:col-span-3 text-base-content/70">Edition</dt>
+          <dd class="sm:col-span-9">
+            <span class="badge badge-outline">{{ editionKind | titleizeSlug }}</span>
+            {% if editionSize %}<span class="badge badge-ghost ml-2">Size: {{
+                  editionSize
+                }}</span>{% endif %}
+          </dd>
+        {% endif %}
+
+        {% if p.colorway %}
+          <dt class="sm:col-span-3 text-base-content/70">Colorway</dt>
+          <dd class="sm:col-span-9">{{ p.colorway | safe }}</dd>
+        {% endif %}
+
+        {% if p.articulation %}
+          <dt class="sm:col-span-3 text-base-content/70">Articulation</dt>
+          <dd class="sm:col-span-9">{{ p.articulation | safe }}</dd>
+        {% endif %}
+
+        {% if p.materials and (p.materials.shell or p.materials.plush or p.materials.stuffing) %}
+          <dt class="sm:col-span-3 text-base-content/70">Materials</dt>
+          <dd class="sm:col-span-9">
+            <ul class="list-disc pl-5 space-y-1">
+              {% if p.materials.shell %}<li>
+                  <span class="opacity-70">Shell:</span> {{ p.materials.shell | safe }}
+                </li>{% endif %}
+              {% if p.materials.plush %}<li>
+                  <span class="opacity-70">Plush:</span> {{ p.materials.plush | safe }}
+                </li>{% endif %}
+              {% if p.materials.stuffing %}<li>
+                  <span class="opacity-70">Stuffing:</span> {{ p.materials.stuffing | safe }}
+                </li>{% endif %}
+            </ul>
+          </dd>
+        {% endif %}
+
+        {% if p.packaging and (p.packaging.type or p.packaging.dimensions_cm) %}
+          <dt class="sm:col-span-3 text-base-content/70">Packaging</dt>
+          <dd class="sm:col-span-9">
+            {% if p.packaging.type %}{{ p.packaging.type | safe }}{% endif %}
+            {% if p.packaging.dimensions_cm %}<span class="opacity-70">
+                — {{ p.packaging.dimensions_cm | safe }}</span>{% endif %}
+          </dd>
+        {% endif %}
+
+        {% if listings and (listings | length) %}
+          <dt class="sm:col-span-3 text-base-content/70">Market</dt>
+          <dd class="sm:col-span-9">
+            {{ marketTable(listings, { fx: fx, base: baseCcy, asOf: fxAsOf }) }}
+          </dd>
+        {% endif %}
+
+        {% if p.designer %}
+          <dt class="sm:col-span-3 text-base-content/70">Designer</dt>
+          <dd class="sm:col-span-9">{{ p.designer }}</dd>
+        {% endif %}
+
+        {% if p.accessories and (p.accessories | length) %}
+          <dt class="sm:col-span-3 text-base-content/70">Accessories</dt>
+          <dd class="sm:col-span-9">
+            <ul class="list-disc pl-5 space-y-1">
+              {% for a in p.accessories %}<li>{{ a | safe }}</li>{% endfor %}
+            </ul>
+          </dd>
+        {% endif %}
+
+        {% if p.provenance_ref %}
+          {% set prov = (p.provenance_ref | provenanceSources) %}
+          <dt class="sm:col-span-3 text-base-content/70">Provenance</dt>
+          <dd class="sm:col-span-9">
+            {% if prov and (prov | length) %}
+              {{ provenanceList(prov, { limit: 10, fx: fx, base: baseCcy }) }}
+              <div class="mt-2 text-xs opacity-90 space-x-3">
+                <a class="link link-hover" href="{{ p.provenance_ref | provenanceViewerUrl }}"
+                >View .jsonl</a>
+                <a class="link" href="{{ p.provenance_ref | provenanceDownloadUrl }}" download
+                >Download</a>
+                {% if (prov | length) > 10 %}<span class="opacity-60">
+                    · showing 10 of {{ prov | length }}</span>{% endif %}
+              </div>
+            {% else %}
+              <a class="link link-primary" href="{{ p.provenance_ref | provenanceViewerUrl }}"
+              >View .jsonl</a>
+              <span class="opacity-60">·</span>
+              <a class="link" href="{{ p.provenance_ref | provenanceDownloadUrl }}" download
+              >Download</a>
+            {% endif %}
+          </dd>
+        {% endif %}
+
+        {% if p.confidence is defined %}
+          {% set confPct = (p.confidence * 100) | round(0, 'floor') %}
+          <dt class="sm:col-span-3 text-base-content/70">Confidence</dt>
+          <dd class="sm:col-span-9">
+            <progress
+              class="progress progress-error w-56 align-middle mr-2"
+              value="{{ confPct }}"
+              max="100"
+            >
+            </progress>
+            <span class="opacity-70">{{ confPct }}%</span>
+          </dd>
+        {% endif %}
+      </dl>
+
+      {% if p.Deltas and (p.Deltas | length) %}
+        <div class="mt-4">
+          <div class="collapse collapse-arrow border border-base-300/60 bg-base-200/50 rounded-xl">
+            <input type="checkbox" />
+            <div class="collapse-title text-base font-medium">
+              {{ p.Deltas | length }} change{% if (p.Deltas | length) > 1 %}s{% endif %} in this
+              record
+            </div>
+            <div class="collapse-content">
+              <ul class="timeline timeline-vertical">
+                {% for d in p.Deltas %}
+                  <li>
+                    <div class="timeline-start">{{ d.field }}</div>
+                    <div class="timeline-middle">
+                      <span class="badge badge-error badge-sm"></span>
+                    </div>
+                    <div class="timeline-end timeline-box prose prose-sm max-w-none">
+                      <p class="m-0"><strong>{{ d.reason }}</strong></p>
+                      {% if d.from or d.to %}
+                        <pre class="m-0 mt-2 rounded-lg bg-base-300/60 p-3 overflow-x-auto"><code>from: {{ d.from | safe }}
+to:   {{ d.to   | safe }}</code></pre>
+                      {% endif %}
+                    </div>
+                  </li>
+                {% endfor %}
+              </ul>
+            </div>
+          </div>
+        </div>
+      {% endif %}
+
+      {{ metaNotes(p) }}
+    </div>
+  </section>
 {% endmacro %}

@@ -1,12 +1,11 @@
 # Continuation: prettier-guardrails
 
-- Recap: Added Prettier format script and config, pinned version; removed legacy
-  guardrail test artifacts; updated docs.
+- Recap: Added Prettier format script and config, pinned version; removed legacy guardrail test
+  artifacts; updated docs.
 - Next Steps:
   1. Extend Prettier configuration to cover markdown sources.
   2. Restore failing Eleventy integration tests.
-- Trigger:
-  `node --test test/unit/prettier-package.test.mjs test/unit/no-guardrails.test.mjs`
+- Trigger: `node --test test/unit/prettier-package.test.mjs test/unit/no-guardrails.test.mjs`
 - Env: none
 - Effort: R3
 - Reads: 8

@@ -6,7 +6,9 @@ showTitle: false
 
 <section class="rounded-box border-2 border-black bg-base-200 p-5 sm:p-7 shadow-[6px_6px_0_rgba(0,0,0,0.85)]">
   <h1 class="m-0 font-extrabold tracking-tight fluid-title text-primary">Provenance Explorer</h1>
-  <p class="mt-2 opacity-85">Browse all JSONL sources across hosts, markets, currencies, and products.</p>
+  <p class="mt-2 opacity-85">
+    Browse all JSONL sources across hosts, markets, currencies, and products.
+  </p>
 </section>
 {% set provenance = provenance or global.provenance or {} %}
 <section class="grid gap-4 md:grid-cols-3 mt-6">
@@ -35,9 +37,7 @@ showTitle: false
       <label class="label">
         <span class="label-text">Filter hosts</span>
       </label>
-      <input id="hostFilter"
-             class="input input-bordered"
-             placeholder="type to filter..." />
+      <input id="hostFilter" class="input input-bordered" placeholder="type to filter..." />
     </div>
     <ul id="hostList" class="mt-4 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
       {% for h in (provenance.hosts or []) | slice(0,60) %}
@@ -51,7 +51,9 @@ showTitle: false
             <div class="mt-2 flex flex-wrap gap-2">
               {% for slug in h.products | slice(0,6) %}
                 {% set p = provenance.byProduct[slug] %}
-                {% if p %}<a class="badge badge-ghost hover:badge-info" href="{{ p.url | url }}">{{ p.slug }}</a>{% endif %}
+                {% if p %}<a class="badge badge-ghost hover:badge-info" href="{{ p.url | url }}">{{
+                    p.slug
+                  }}</a>{% endif %}
               {% endfor %}
             </div>
           </div>
@@ -89,7 +91,9 @@ showTitle: false
           <a class="card-body p-4 block no-underline" href="{{ p.url | url }}">
             <h3 class="card-title text-base m-0">{{ p.title }}</h3>
             <div class="mt-2 flex flex-wrap gap-2">
-              {% for h in p.hosts | slice(0,6) %}<span class="badge badge-ghost">{{ h }}</span>{% endfor %}
+              {% for h in p.hosts | slice(0,6) %}<span class="badge badge-ghost">{{ h }}</span>{%
+                endfor
+              %}
             </div>
           </a>
         </li>
@@ -98,15 +102,15 @@ showTitle: false
   </div>
 </section>
 <script type="module">
-  const input = document.getElementById('hostFilter');
-  const list = document.getElementById('hostList');
-  if (input && list) {
-    input.addEventListener('input', () => {
-      const q = input.value.trim().toLowerCase();
-      for (const li of list.children) {
-        const name = li.querySelector('.card-title')?.textContent?.toLowerCase() || '';
-        li.style.display = (!q || name.includes(q)) ? '' : 'none';
-      }
-    });
-  }
+const input = document.getElementById('hostFilter')
+const list = document.getElementById('hostList')
+if (input && list) {
+  input.addEventListener('input', () => {
+    const q = input.value.trim().toLowerCase()
+    for (const li of list.children) {
+      const name = li.querySelector('.card-title')?.textContent?.toLowerCase() || ''
+      li.style.display = (!q || name.includes(q)) ? '' : 'none'
+    }
+  })
+}
 </script>

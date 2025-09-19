@@ -15,5 +15,4 @@ Extend integration tests and propagate branding data where needed.
 
 ## Trigger Command
 
-NODE_OPTIONS=--import=./test/setup/http.mjs node --test
-test/integration/homepage.spec.mjs
+NODE_OPTIONS=--import=./test/setup/http.mjs node --test test/integration/homepage.spec.mjs

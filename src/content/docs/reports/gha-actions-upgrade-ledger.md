@@ -9,10 +9,8 @@
 ## Proofs
 
 - `test/unit/workflow-actions.test.mjs` checks for legacy action versions.
-- `docs/knowledge/gha-actions-upgrade/test-success.log` shows passing targeted
-  tests.
-- `docs/knowledge/gha-actions-upgrade/docs-links.log` records successful docs
-  link validation.
+- `docs/knowledge/gha-actions-upgrade/test-success.log` shows passing targeted tests.
+- `docs/knowledge/gha-actions-upgrade/docs-links.log` records successful docs link validation.
 
 ## Index
 

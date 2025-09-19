@@ -13,12 +13,14 @@ showTitle: false
     {% set slug = p.data.companySlug %}
     {# Ensure bucket exists (use array; dedupe later) #}
     {% if not agg[slug] %}
-      {% set _ = agg | setAttribute(slug, {
-              slug: slug,
-              title: p.data.companyTitle or slug,
-              count: 0,
-              lines: []
-            }) %}
+      {%
+        set _ = agg | setAttribute(slug, {
+          slug: slug,
+          title: p.data.companyTitle or slug,
+          count: 0,
+          lines: []
+        })
+      %}
     {% endif %}
     {# bump count #}
     {% set _ = agg[slug] | setAttribute('count', (agg[slug].count + 1)) %}
@@ -34,7 +36,9 @@ showTitle: false
 {% for k, v in agg %}
   {% set uniqLines = (v.lines or []) | compactUnique %}
   {% set lc = uniqLines | length %}
-  {% set companies = companies | push({ slug: v.slug, title: v.title, count: v.count, lineCount: lc }) %}
+  {%
+    set companies = companies | push({ slug: v.slug, title: v.title, count: v.count, lineCount: lc })
+  %}
 {% endfor %}
 {% set companies = companies | sort(false, true, 'count') %}
 <section class="rounded-box border-2 border-black bg-base-200 p-5 sm:p-7 shadow-[6px_6px_0_rgba(0,0,0,0.85)]">
@@ -52,18 +56,23 @@ showTitle: false
         <label class="label">
           <span class="label-text">Filter companies</span>
         </label>
-        <input id="companyFilterDT"
-               class="input input-bordered input-sm"
-               placeholder="type to filter…" />
+        <input
+          id="companyFilterDT"
+          class="input input-bordered input-sm"
+          placeholder="type to filter…"
+        />
       </div>
     </div>
-    <ul id="companyListDT"
-        class="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    <ul id="companyListDT" class="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {% for c in companies %}
         <li class="card bg-base-100 border hover:shadow-xl hover:border-primary/50 transition">
-          <a class="card-body p-4 block no-underline"
-             href="{{ ('/archives/collectables/designer-toys/' + c.slug + '/') | url }}">
-            <h3 class="card-title text-base m-0">{{ c.title | replace('-', ' ') | titleizeSlug }}</h3>
+          <a
+            class="card-body p-4 block no-underline"
+            href="{{ ('/archives/collectables/designer-toys/' + c.slug + '/') | url }}"
+          >
+            <h3 class="card-title text-base m-0">
+              {{ c.title | replace('-', ' ') | titleizeSlug }}
+            </h3>
             <div class="mt-2 flex flex-wrap gap-2">
               <span class="badge badge-outline">Products: {{ c.count }}</span>
               <span class="badge badge-outline">Lines: {{ c.lineCount }}</span>
@@ -74,16 +83,16 @@ showTitle: false
     </ul>
   </section>
   <script type="module">
-  const input = document.getElementById('companyFilterDT');
-  const list  = document.getElementById('companyListDT');
-  if (input && list) {
-    input.addEventListener('input', () => {
-      const q = input.value.trim().toLowerCase();
-      for (const li of list.children) {
-        const name = li.querySelector('.card-title')?.textContent?.toLowerCase() || '';
-        li.style.display = (!q || name.includes(q)) ? '' : 'none';
-      }
-    });
-  }
+  const input = document.getElementById('companyFilterDT')
+const list = document.getElementById('companyListDT')
+if (input && list) {
+  input.addEventListener('input', () => {
+    const q = input.value.trim().toLowerCase()
+    for (const li of list.children) {
+      const name = li.querySelector('.card-title')?.textContent?.toLowerCase() || ''
+      li.style.display = (!q || name.includes(q)) ? '' : 'none'
+    }
+  })
+}
   </script>
 {% endif %}

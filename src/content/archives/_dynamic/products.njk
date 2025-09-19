@@ -15,15 +15,16 @@ eleventyComputed:
 {% from "components/products/MarketTable.njk"    import marketTable %}
 {% from "components/products/ProvenanceList.njk" import provenanceList %}
 {# Breadcrumbs #}
-<nav class="breadcrumbs text-sm mb-3 overflow-x-auto whitespace-nowrap"
-     aria-label="Breadcrumb">
+<nav class="breadcrumbs text-sm mb-3 overflow-x-auto whitespace-nowrap" aria-label="Breadcrumb">
   <ul>
     <li>
       <a href="{{ '/archives/' | url }}">Archives</a>
     </li>
     <li>
       {% if character.data.companySlug %}
-        <a href="{{ '/archives/collectables/designer-toys/' | url ~ character.data.companySlug ~ '/' }}">
+        <a
+          href="{{ '/archives/collectables/designer-toys/' | url ~ character.data.companySlug ~ '/' }}"
+        >
           {{ (character.data.companyTitle or character.data.companySlug) | title }}
         </a>
       {% else %}
@@ -32,7 +33,9 @@ eleventyComputed:
     </li>
     <li>
       {% if character.data.companySlug and character.data.lineSlug %}
-        <a href="{{ '/archives/collectables/designer-toys/' | url ~ character.data.companySlug ~ '/' ~ character.data.lineSlug ~ '/' }}">
+        <a
+          href="{{ '/archives/collectables/designer-toys/' | url ~ character.data.companySlug ~ '/' ~ character.data.lineSlug ~ '/' }}"
+        >
           {{ (character.data.lineTitle or character.data.lineSlug) | title }}
         </a>
       {% else %}
@@ -47,7 +50,9 @@ eleventyComputed:
     <li class="opacity-70">Snapshot</li>
   </ul>
 </nav>
-<div class="mb-6">{{ backLink('Back to character', '/archives/character/' ~ character.data.charSlug ~ '/') }}</div>
+<div class="mb-6">
+  {{ backLink('Back to character', '/archives/character/' ~ character.data.charSlug ~ '/') }}
+</div>
 {# Header #}
 <section class="rounded-box border-2 border-black bg-base-200 p-5 sm:p-7 shadow-[6px_6px_0_rgba(0,0,0,0.85)]">
   <h1 class="m-0 font-extrabold tracking-tight fluid-title">
@@ -61,12 +66,16 @@ eleventyComputed:
   {% if character.data.bio %}<p class="mt-2 opacity-80">{{ character.data.bio }}</p>{% endif %}
 </section>
 {# Select products in same company+line featuring this character #}
-{% set inLine = collections.archiveProducts
-  | byCompany(character.data.companySlug)
-| byLine(character.data.lineSlug) %}
+{%
+  set inLine = collections.archiveProducts
+    | byCompany(character.data.companySlug)
+  | byLine(character.data.lineSlug)
+%}
 {% set products = [] %}
 {% for p in inLine %}
-  {% if p.data.charSlug and character.data.charSlug and p.data.charSlug == character.data.charSlug %}
+  {%
+    if p.data.charSlug and character.data.charSlug and p.data.charSlug == character.data.charSlug
+  %}
     {% set products = products | push(p) %}
   {% endif %}
 {% endfor %}
@@ -76,15 +85,17 @@ eleventyComputed:
   {% if p.data.market_listings and (p.data.market_listings | length) %}
     {% for l in p.data.market_listings %}
       {% set label = p.data.product_id or p.data.title or p.data.productSlug %}
-      {% set listingsAgg = listingsAgg | push({
-              "market": l.market,
-              "url": l.url,
-              "currency": l.currency,
-              "price": l.price,
-              "price_min": l.price_min,
-              "price_max": l.price_max,
-              "note": label
-            }) %}
+      {%
+        set listingsAgg = listingsAgg | push({
+          "market": l.market,
+          "url": l.url,
+          "currency": l.currency,
+          "price": l.price,
+          "price_min": l.price_min,
+          "price_max": l.price_max,
+          "note": label
+        })
+      %}
     {% endfor %}
   {% endif %}
 {% endfor %}
@@ -93,11 +104,13 @@ eleventyComputed:
   <section class="card bg-base-100 border shadow-sm mt-6">
     <div class="card-body p-4 sm:p-6">
       <h2 class="text-lg font-semibold mb-3">Market snapshot</h2>
-      {{ marketTable(listingsAgg, {
-            fx:   (build and build.fx) or {},
-      base: (build and build.base_currency) or 'USD',
-      asOf: (build and build.fx_asof)
-      }) }}
+      {{
+        marketTable(listingsAgg, {
+              fx:   (build and build.fx) or {},
+        base: (build and build.base_currency) or 'USD',
+        asOf: (build and build.fx_asof)
+        })
+      }}
     </div>
   </section>
 {% endif %}
@@ -108,17 +121,23 @@ eleventyComputed:
     <section class="card bg-base-100 border shadow-sm mt-6">
       <div class="card-body p-4 sm:p-6">
         <h2 class="text-lg font-semibold mb-3">Provenance</h2>
-        {{ provenanceList(provSources, {
-                limit: 10,
-                fx:   (build and build.fx) or {},
-        base: (build and build.base_currency) or 'USD'
-        }) }}
+        {{
+          provenanceList(provSources, {
+                  limit: 10,
+                  fx:   (build and build.fx) or {},
+          base: (build and build.base_currency) or 'USD'
+          })
+        }}
         <div class="mt-2 text-xs opacity-90 space-x-3">
-          <a class="link link-hover"
-             href="{{ character.data.provenance_ref | provenanceViewerUrl }}">View .jsonl</a>
-          <a class="link"
-             href="{{ character.data.provenance_ref | provenanceDownloadUrl }}"
-             download>Download</a>
+          <a
+            class="link link-hover"
+            href="{{ character.data.provenance_ref | provenanceViewerUrl }}"
+          >View .jsonl</a>
+          <a
+            class="link"
+            href="{{ character.data.provenance_ref | provenanceDownloadUrl }}"
+            download
+          >Download</a>
           {% if (provSources | length) > 10 %}
             <span class="opacity-60">· showing 10 of {{ provSources | length }}</span>
           {% endif %}

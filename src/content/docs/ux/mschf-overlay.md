@@ -1,7 +1,7 @@
 # MSCHF Overlay
 
-The MSCHF overlay decorates pages with seeded decals and grid textures while
-keeping content accessible.
+The MSCHF overlay decorates pages with seeded decals and grid textures while keeping content
+accessible.
 
 ## Controls
 
@@ -18,11 +18,10 @@ Use `localStorage.setItem('mschf:off','1')` to opt out persistently.
 
 ## Aesthetic Strategies
 
-`data-mschf-style="auto"` (default) randomly selects an aesthetic strategy per
-page seed. If `data-mschf-intensity` is omitted, the overlay picks a random
-intensity so each visit feels fresh. `collage` fuses four groups: base scaffold,
-culture-coded ephemera, lab/blueprint motifs, and framing stickers. Other styles
-limit the mix:
+`data-mschf-style="auto"` (default) randomly selects an aesthetic strategy per page seed. If
+`data-mschf-intensity` is omitted, the overlay picks a random intensity so each visit feels fresh.
+`collage` fuses four groups: base scaffold, culture-coded ephemera, lab/blueprint motifs, and
+framing stickers. Other styles limit the mix:
 
 - **structural** – base + lab motifs only.
 - **playful** – base + culture-coded ephemera.
@@ -34,9 +33,8 @@ limit the mix:
 
 ## Seeds
 
-`?mschf-seed=<n>` freezes the composition. Without a forced seed, `page` mode
-generates a new value for each load; `session` mode stores the seed in
-`sessionStorage`.
+`?mschf-seed=<n>` freezes the composition. Without a forced seed, `page` mode generates a new value
+for each load; `session` mode stores the seed in `sessionStorage`.
 
 ## Contracts
 
@@ -46,5 +44,5 @@ generates a new value for each load; `session` mode stores the seed in
 
 ## Adding Zones
 
-Decorate sections by marking them with `data-mschf-zone`. Future modules can
-read these markers to inject decals near the zone.
+Decorate sections by marking them with `data-mschf-zone`. Future modules can read these markers to
+inject decals near the zone.

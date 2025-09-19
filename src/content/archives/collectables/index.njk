@@ -13,7 +13,9 @@ showTitle: false
   {% if p.data and p.data.companySlug %}
     {% set key = p.data.companySlug %}
     {% if not byCompany[key] %}
-      {% set _ = byCompany | setAttribute(key, { slug: key, title: p.data.companyTitle or key, count: 0 }) %}
+      {%
+        set _ = byCompany | setAttribute(key, { slug: key, title: p.data.companyTitle or key, count: 0 })
+      %}
     {% endif %}
     {% set _ = byCompany[key] | setAttribute('count', (byCompany[key].count + 1)) %}
   {% endif %}
@@ -38,17 +40,20 @@ showTitle: false
         <label class="label">
           <span class="label-text">Filter companies</span>
         </label>
-        <input id="companyFilter"
-               class="input input-bordered input-sm"
-               placeholder="type to filter…" />
+        <input
+          id="companyFilter"
+          class="input input-bordered input-sm"
+          placeholder="type to filter…"
+        />
       </div>
     </div>
-    <ul id="companyList"
-        class="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    <ul id="companyList" class="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {% for c in companies | slice(0,12) %}
         <li class="card bg-base-100 border hover:shadow-xl hover:border-primary/50 transition">
-          <a class="card-body p-4 block no-underline"
-             href="{{ ('/archives/collectables/designer-toys/' + c.slug + '/') | url }}">
+          <a
+            class="card-body p-4 block no-underline"
+            href="{{ ('/archives/collectables/designer-toys/' + c.slug + '/') | url }}"
+          >
             <h3 class="card-title text-base m-0">{{ c.title | replace('-', ' ') | title }}</h3>
             <div class="mt-2">
               <span class="badge badge-outline">Products: {{ c.count }}</span>
@@ -59,16 +64,16 @@ showTitle: false
     </ul>
   </section>
   <script type="module">
-  const input = document.getElementById('companyFilter');
-  const list = document.getElementById('companyList');
-  if (input && list) {
-    input.addEventListener('input', () => {
-      const q = input.value.trim().toLowerCase();
-      for (const li of list.children) {
-        const name = li.querySelector('.card-title')?.textContent?.toLowerCase() || '';
-        li.style.display = (!q || name.includes(q)) ? '' : 'none';
-      }
-    });
-  }
+  const input = document.getElementById('companyFilter')
+const list = document.getElementById('companyList')
+if (input && list) {
+  input.addEventListener('input', () => {
+    const q = input.value.trim().toLowerCase()
+    for (const li of list.children) {
+      const name = li.querySelector('.card-title')?.textContent?.toLowerCase() || ''
+      li.style.display = (!q || name.includes(q)) ? '' : 'none'
+    }
+  })
+}
   </script>
 {% endif %}

@@ -3,128 +3,138 @@
    {{ marketTable(product.data.market_listings, { fx: build.fx, base: build.base_currency, asOf: build.fx_asof }) }}
 #}
 {% macro marketTable(listings, opts = {}) %}
-{% if listings and (listings | length) %}
-  {# FX context #}
-  {% set base = (opts.base or (build and build.base_currency) or 'USD') | upper %}
-  {% set fx   = opts.fx or (build and build.fx) or {} %}
-  {% set asOf = opts.asOf or (build and build.fx_asof) %}
+  {% if listings and (listings | length) %}
+    {# FX context #}
+    {% set base = (opts.base or (build and build.base_currency) or 'USD') | upper %}
+    {% set fx   = opts.fx or (build and build.fx) or {} %}
+    {% set asOf = opts.asOf or (build and build.fx_asof) %}
 
-  {# Precompute stats #}
-  {% set convMin   = null %}
-  {% set convMax   = null %}
-  {% set convSum   = 0 %}
-  {% set convCount = 0 %}
+    {# Precompute stats #}
+    {% set convMin   = null %}
+    {% set convMax   = null %}
+    {% set convSum   = 0 %}
+    {% set convCount = 0 %}
 
-  {% for l in listings %}
-    {% set cur = (l.currency or base) | upper %}
-    {# pick a representative price #}
-    {% set price = null %}
-    {% if l.price is defined and l.price != null %}
-      {% set price = l.price * 1 %}
-    {% elseif l.price_min is defined and l.price_max is defined and l.price_min != null and l.price_max != null %}
-      {% set price = ((l.price_min * 1) + (l.price_max * 1)) / 2 %}
-    {% endif %}
-
-    {% set rate = null %}
-    {% if cur == base %}
-      {% set rate = 1 %}
-    {% elseif fx and fx[cur] %}
-      {% set rate = fx[cur] * 1 %}
-    {% endif %}
-
-    {% if price != null and rate != null %}
-      {% set conv = price * rate %}
-      {% if convMin == null or conv < convMin %}{% set convMin = conv %}{% endif %}
-      {% if convMax == null or conv > convMax %}{% set convMax = conv %}{% endif %}
-      {% set convSum   = convSum + conv %}
-      {% set convCount = convCount + 1 %}
-    {% endif %}
-  {% endfor %}
-
-  <div class="overflow-x-auto rounded-box border-2 border-black bg-base-100 shadow-[6px_6px_0_rgba(0,0,0,0.85)]">
-    <table data-testid="market-table" class="table table-sm">
-      <caption class="caption-top text-xs font-semibold tracking-wide uppercase text-base-content/80">
-        Market Listings
-        {% if convCount > 0 %}
-          <span class="opacity-70"> · Converted to {{ base }}</span>
-          {% if asOf %}<span class="opacity-60"> (as of {{ asOf }})</span>{% endif %}
-        {% elseif fx and (fx | length) == 0 %}
-          <span class="opacity-60"> · no FX available</span>
-        {% endif %}
-      </caption>
-      <thead class="sticky top-0 bg-base-200 z-10">
-        <tr>
-          <th scope="col" class="w-[40%]">Market</th>
-          <th scope="col" class="text-right w-[30%]">Listed</th>
-          <th scope="col" class="text-right w-[30%]">≈ {{ base }}</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for l in listings | sort(false,false,'market') %}
-          {% set cur = (l.currency or base) | upper %}
-          {% set price = null %}
-          {% if l.price is defined and l.price != null %}
-            {% set price = l.price * 1 %}
-          {% elseif l.price_min is defined and l.price_max is defined and l.price_min != null and l.price_max != null %}
-            {% set price = ((l.price_min * 1) + (l.price_max * 1)) / 2 %}
-          {% endif %}
-
-          {% set rate = null %}
-          {% if cur == base %}
-            {% set rate = 1 %}
-          {% elseif fx and fx[cur] %}
-            {% set rate = fx[cur] * 1 %}
-          {% endif %}
-
-          {% set converted = null %}
-          {% if price != null and rate != null %}
-            {% set converted = price * rate %}
-          {% endif %}
-
-          <tr>
-            <td class="align-top">
-              {% if l.url %}<a href="{{ l.url }}" class="link link-hover">{{ l.market or 'Market' }}</a>
-              {% else %}{{ l.market or 'Market' }}{% endif %}
-              {% if l.note %}<div class="text-xs opacity-70 mt-0.5">{{ l.note }}</div>{% endif %}
-            </td>
-            <td class="text-right align-top whitespace-nowrap">
-              {% if l.price is defined and l.price != null %}
-                {{ (l.price * 1) | money(cur) }}
-              {% elseif l.price_min is defined and l.price_max is defined and l.price_min != null and l.price_max != null %}
-                {{ (l.price_min * 1) | money(cur) }}–{{ (l.price_max * 1) | money(cur) }}
-              {% else %}
-                —
-              {% endif %}
-              {% if cur != base %}<span class="badge badge-ghost badge-xs ml-2">{{ cur }}</span>{% endif %}
-            </td>
-            <td class="text-right align-top whitespace-nowrap">
-              {% if converted != null %}
-                {{ converted | money(base) }}
-              {% else %}
-                <span class="opacity-50">n/a</span>
-              {% endif %}
-            </td>
-          </tr>
-        {% endfor %}
-      </tbody>
-
-      {% if convCount > 0 %}
-        {% set convAvg = convSum / convCount %}
-        <tfoot>
-          <tr>
-            <th scope="row" class="text-right">Min · Avg · Max</th>
-            <td></td>
-            <td class="text-right">
-              <span class="font-medium">{{ convMin | money(base) }}</span>
-              <span class="opacity-60"> · </span>
-              <span class="font-medium">{{ convAvg | money(base) }}</span>
-              <span class="opacity-60"> · </span>
-              <span class="font-medium">{{ convMax | money(base) }}</span>
-            </td>
-          </tr>
-        </tfoot>
+    {% for l in listings %}
+      {% set cur = (l.currency or base) | upper %}
+      {# pick a representative price #}
+      {% set price = null %}
+      {% if l.price is defined and l.price != null %}
+        {% set price = l.price * 1 %}
+      {%
+        elseif l.price_min is defined and l.price_max is defined and l.price_min != null and l.price_max != null
+      %}
+        {% set price = ((l.price_min * 1) + (l.price_max * 1)) / 2 %}
       {% endif %}
-    </table>
-  </div>
-{% endif %}
+
+      {% set rate = null %}
+      {% if cur == base %}
+        {% set rate = 1 %}
+      {% elseif fx and fx[cur] %}
+        {% set rate = fx[cur] * 1 %}
+      {% endif %}
+
+      {% if price != null and rate != null %}
+        {% set conv = price * rate %}
+        {% if convMin == null or conv < convMin %}{% set convMin = conv %}{% endif %}
+        {% if convMax == null or conv > convMax %}{% set convMax = conv %}{% endif %}
+        {% set convSum   = convSum + conv %}
+        {% set convCount = convCount + 1 %}
+      {% endif %}
+    {% endfor %}
+
+    <div class="overflow-x-auto rounded-box border-2 border-black bg-base-100 shadow-[6px_6px_0_rgba(0,0,0,0.85)]">
+      <table data-testid="market-table" class="table table-sm">
+        <caption class="caption-top text-xs font-semibold tracking-wide uppercase text-base-content/80">
+          Market Listings
+          {% if convCount > 0 %}
+            <span class="opacity-70"> · Converted to {{ base }}</span>
+            {% if asOf %}<span class="opacity-60"> (as of {{ asOf }})</span>{% endif %}
+          {% elseif fx and (fx | length) == 0 %}
+            <span class="opacity-60"> · no FX available</span>
+          {% endif %}
+        </caption>
+        <thead class="sticky top-0 bg-base-200 z-10">
+          <tr>
+            <th scope="col" class="w-[40%]">Market</th>
+            <th scope="col" class="text-right w-[30%]">Listed</th>
+            <th scope="col" class="text-right w-[30%]">≈ {{ base }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for l in listings | sort(false,false,'market') %}
+            {% set cur = (l.currency or base) | upper %}
+            {% set price = null %}
+            {% if l.price is defined and l.price != null %}
+              {% set price = l.price * 1 %}
+            {%
+              elseif l.price_min is defined and l.price_max is defined and l.price_min != null and l.price_max != null
+            %}
+              {% set price = ((l.price_min * 1) + (l.price_max * 1)) / 2 %}
+            {% endif %}
+
+            {% set rate = null %}
+            {% if cur == base %}
+              {% set rate = 1 %}
+            {% elseif fx and fx[cur] %}
+              {% set rate = fx[cur] * 1 %}
+            {% endif %}
+
+            {% set converted = null %}
+            {% if price != null and rate != null %}
+              {% set converted = price * rate %}
+            {% endif %}
+
+            <tr>
+              <td class="align-top">
+                {% if l.url %}<a href="{{ l.url }}" class="link link-hover">{{
+                    l.market or 'Market'
+                  }}</a>
+                {% else %}{{ l.market or 'Market' }}{% endif %}
+                {% if l.note %}<div class="text-xs opacity-70 mt-0.5">{{ l.note }}</div>{% endif %}
+              </td>
+              <td class="text-right align-top whitespace-nowrap">
+                {% if l.price is defined and l.price != null %}
+                  {{ (l.price * 1) | money(cur) }}
+                {%
+                  elseif l.price_min is defined and l.price_max is defined and l.price_min != null and l.price_max != null
+                %}
+                  {{ (l.price_min * 1) | money(cur) }}–{{ (l.price_max * 1) | money(cur) }}
+                {% else %}
+                  —
+                {% endif %}
+                {% if cur != base %}<span class="badge badge-ghost badge-xs ml-2">{{ cur }}</span>{%
+                  endif
+                %}
+              </td>
+              <td class="text-right align-top whitespace-nowrap">
+                {% if converted != null %}
+                  {{ converted | money(base) }}
+                {% else %}
+                  <span class="opacity-50">n/a</span>
+                {% endif %}
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+
+        {% if convCount > 0 %}
+          {% set convAvg = convSum / convCount %}
+          <tfoot>
+            <tr>
+              <th scope="row" class="text-right">Min · Avg · Max</th>
+              <td></td>
+              <td class="text-right">
+                <span class="font-medium">{{ convMin | money(base) }}</span>
+                <span class="opacity-60"> · </span>
+                <span class="font-medium">{{ convAvg | money(base) }}</span>
+                <span class="opacity-60"> · </span>
+                <span class="font-medium">{{ convMax | money(base) }}</span>
+              </td>
+            </tr>
+          </tfoot>
+        {% endif %}
+      </table>
+    </div>
+  {% endif %}
 {% endmacro %}

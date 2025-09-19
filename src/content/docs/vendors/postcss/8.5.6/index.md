@@ -11,8 +11,8 @@
 A tool for transforming CSS with JavaScript
 
 Add vendor prefixes to CSS rules using values from Can I Use.
-[Autoprefixer](https://github.com/postcss/autoprefixer) will use the data based
-on current browser popularity and property support to apply prefixes for you.
+[Autoprefixer](https://github.com/postcss/autoprefixer) will use the data based on current browser
+popularity and property support to apply prefixes for you.
 
 :fullscreen { }
 
@@ -22,10 +22,9 @@ CSS input
 
 CSS output
 
-[PostCSS Preset Env](https://preset-env.cssdb.org/), lets you convert modern CSS
-into something most browsers can understand, determining the polyfills you need
-based on your targeted browsers or runtime environments, using
-[cssdb](https://cssdb.org/).
+[PostCSS Preset Env](https://preset-env.cssdb.org/), lets you convert modern CSS into something most
+browsers can understand, determining the polyfills you need based on your targeted browsers or
+runtime environments, using [cssdb](https://cssdb.org/).
 
 body { color: oklch(61% 0.2 29); }
 
@@ -35,9 +34,8 @@ body { color: rgb(225, 65, 52); }
 
 CSS output
 
-[CSS Modules](https://github.com/css-modules/css-modules) means you never need
-to worry about your names being too generic, just use whatever makes the most
-sense.
+[CSS Modules](https://github.com/css-modules/css-modules) means you never need to worry about your
+names being too generic, just use whatever makes the most sense.
 
 .name { color: gray; }
 
@@ -48,8 +46,8 @@ CSS input
 CSS output
 
 Enforce consistent conventions and avoid errors in your stylesheets with
-[stylelint](https://stylelint.io/), a modern CSS linter. It supports the latest
-CSS syntax, as well as CSS-like syntaxes, such as SCSS.
+[stylelint](https://stylelint.io/), a modern CSS linter. It supports the latest CSS syntax, as well
+as CSS-like syntaxes, such as SCSS.
 
 a { color: #d3; }
 

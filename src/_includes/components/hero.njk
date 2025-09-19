@@ -10,16 +10,21 @@
 <header class="hero relative mx-auto w-full hb-neon hb-intensity-bold">
   <div class="container-fluid px-4 sm:px-6 lg:px-8 py-[clamp(3rem,8vh,9rem)]">
     <div class="hb-inlay mx-auto max-w-[min(100rem,92vw)] px-8 sm:px-12 py-10 text-center">
-
       {% if hasBrand %}
         {% set _logoSrc = (branding.logoSrc or '') | url %}
         {% set _logoAlt = branding.logoAlt or 'Logo' %}
         {% set _logoSizes = branding.logoSizes or '' %}
-        <img class="hero-logo mx-auto mb-6 w-28 md:w-40"
-             src="{{ _logoSrc }}"
-             alt="{{ _logoAlt }}"{% if _logoSizes %} sizes="{{ _logoSizes }}"{% endif %}
-             loading="eager" fetchpriority="high"
-             style="filter: drop-shadow(0 0 12px color-mix(in oklab, var(--neon-a) 30%, transparent));" />
+        <img
+          class="hero-logo mx-auto mb-6 w-28 md:w-40"
+          src="{{ _logoSrc }}"
+          alt="{{ _logoAlt }}"
+          {% if _logoSizes %}
+            sizes="{{ _logoSizes }}"
+          {% endif %}
+          loading="eager"
+          fetchpriority="high"
+          style="filter: drop-shadow(0 0 12px color-mix(in oklab, var(--neon-a) 30%, transparent))"
+        />
       {% endif %}
 
       {% if eyebrow %}
@@ -30,8 +35,12 @@
         {{ title or '' }}
       </h1>
 
-      {% if lede %}<p class="mx-auto mt-4 max-w-3xl font-body text-base md:text-lg hb-ink-soft">{{ lede }}</p>{% endif %}
-      {% if sublede %}<p class="mx-auto mt-2 max-w-3xl font-body text-base md:text-lg hb-ink-soft">{{ sublede }}</p>{% endif %}
+      {% if lede %}<p class="mx-auto mt-4 max-w-3xl font-body text-base md:text-lg hb-ink-soft">
+          {{ lede }}
+        </p>{% endif %}
+      {% if sublede %}<p class="mx-auto mt-2 max-w-3xl font-body text-base md:text-lg hb-ink-soft">
+          {{ sublede }}
+        </p>{% endif %}
 
       {% if hasCtas %}
         <div class="mt-6 flex flex-col items-center justify-center gap-4 sm:flex-row">
@@ -40,7 +49,9 @@
             {% set _href  = (c.href or '#') | url %}
             {% set _kind  = c.kind or 'primary' %}
             {% set _btn   = (_kind == 'primary') and 'btn btn-primary' or 'btn btn-outline' %}
-            <a href="{{ _href }}" class="{{ _btn }} px-7 py-3 font-heading font-bold">{{ _label }}</a>
+            <a href="{{ _href }}" class="{{ _btn }} px-7 py-3 font-heading font-bold">{{
+              _label
+            }}</a>
           {% endfor %}
         </div>
       {% endif %}

@@ -7,113 +7,115 @@ metaDescription: "Top-10 global AI safety specialist. We eliminate hallucination
 ---
 
 {# --- page data (kept in-template so it's easy to tweak) --- #}
-{% set DATA = {
-  brand: "EFFUSION LABS",
-  alt: "Effusion Labs",
-  url: "https://effusionlabs.com/consulting/",
-  email: "denverchrisortega@gmail.com",
-  slogan: "We Control AI. You Control Markets.",
-  desc: "Top-10 global AI safety specialist. We eliminate hallucinations, prevent data leaks, and install fail-safe systems for enterprise LLM deployments. Your AI becomes bulletproof or your liability disappears.",
-  hero: {
-    headline: "Your AI is an Active Liability.",
-    kicker: "We make it bulletproof instead.",
-    about: "Every Fortune 500 executive knows this truth: AI systems hallucinate, leak secrets, and crash under pressure. While your competitors scramble with generic solutions, we install military-grade control systems. Your AI becomes your unfair advantage, not your extinction event.",
-    code: [
-      "// Production Liability Scan: api.your-company.com/assistant",
-      "Executing Adversarial Protocol...",
-      "[P0 BREACH] Confidential data leaked via prompt injection. (Risk: $2.3M lawsuit)",
-      "[P0 BREACH] Hallucination rate: 34% on financial data. (Risk: Regulatory action)",
-      "[CRITICAL] Jailbreak successful in 3.2 seconds. (Risk: Brand destruction)",
-      "// Status: DEFCON 1. Immediate containment required.",
-      "// Next: Deploy Effusion Protocol. Threat neutralized in 72 hours."
+{%
+  set DATA = {
+    brand: "EFFUSION LABS",
+    alt: "Effusion Labs",
+    url: "https://effusionlabs.com/consulting/",
+    email: "denverchrisortega@gmail.com",
+    slogan: "We Control AI. You Control Markets.",
+    desc: "Top-10 global AI safety specialist. We eliminate hallucinations, prevent data leaks, and install fail-safe systems for enterprise LLM deployments. Your AI becomes bulletproof or your liability disappears.",
+    hero: {
+      headline: "Your AI is an Active Liability.",
+      kicker: "We make it bulletproof instead.",
+      about: "Every Fortune 500 executive knows this truth: AI systems hallucinate, leak secrets, and crash under pressure. While your competitors scramble with generic solutions, we install military-grade control systems. Your AI becomes your unfair advantage, not your extinction event.",
+      code: [
+        "// Production Liability Scan: api.your-company.com/assistant",
+        "Executing Adversarial Protocol...",
+        "[P0 BREACH] Confidential data leaked via prompt injection. (Risk: $2.3M lawsuit)",
+        "[P0 BREACH] Hallucination rate: 34% on financial data. (Risk: Regulatory action)",
+        "[CRITICAL] Jailbreak successful in 3.2 seconds. (Risk: Brand destruction)",
+        "// Status: DEFCON 1. Immediate containment required.",
+        "// Next: Deploy Effusion Protocol. Threat neutralized in 72 hours."
+      ],
+      actions: [
+        { label: "Deploy Containment", href: "#interventions", primary: true },
+        { label: "Engage Specialist",  href: "#contact",        primary: false }
+      ]
+    },
+    metrics: {
+      headline: "BULLETPROOF BY DESIGN",
+      sub: "We don't optimize. We guarantee.",
+      items: [
+        { name: "Hallucination Kill Rate", value: "99.7%", desc: "Every claim traces to verified source. Zero tolerance policy." },
+        { name: "Jailbreak Defense",       value: "100%",  desc: "Top-10 global adversarial champion. Your system becomes unhackable." },
+        { name: "Response Speed",          value: "2.4s", desc: "Faster than human thought. Users never wait." }
+      ]
+    },
+    offers: [
+      {
+        name: "Emergency Threat Neutralization",
+        dur: "48-Hour Blitz",
+        desc: "Your AI is leaking secrets right now. We identify every vulnerability and install permanent fixes before your next board meeting.",
+        features: [
+          "Live threat assessment on production traffic",
+          "Priority P0/P1 vulnerability patching within 48 hours",
+          "Executive briefing with liability quantification and solution roadmap"
+        ],
+        cta: "Deploy Containment",
+        href: "#contact",
+        primary: true
+      },
+      {
+        name: "Hallucination Elimination",
+        dur: "Fixed-Price Guarantee",
+        desc: "Your AI lies to customers. We make it tell the truth. Every response becomes auditable, accurate, and legally defensible.",
+        features: [
+          "Proprietary grounding system with 99.7% accuracy guarantee",
+          "Custom evaluation harness with 500+ domain-specific test cases",
+          "Citation-enforced responses: No source = No answer policy"
+        ],
+        cta: "Eliminate Hallucinations",
+        href: "#contact",
+        primary: false
+      },
+      {
+        name: "Unbreakable Release System",
+        dur: "Value-Based Implementation",
+        desc: "We install automated safeguards that make AI releases boring, predictable, and safe. Your deploys never fail.",
+        features: [
+          "Shadow traffic validation with automatic rollback triggers",
+          "Canary deployment system with real-time safety monitoring",
+          "SLA enforcement: 99.9% uptime guarantee with penalty clauses"
+        ],
+        cta: "Engage Specialist",
+        href: "#contact",
+        primary: false
+      },
+      {
+        name: "Advanced Adversarial Hardening",
+        dur: "Specialist Engagement",
+        desc: "Top-10 global adversarial expert installs unbreakable defenses. Your AI becomes immune to manipulation.",
+        features: [
+          "500+ attack vector simulation including novel 2025 exploits",
+          "Advanced prompt injection shielding with active monitoring",
+          "Real-time threat response system with automated countermeasures"
+        ],
+        cta: "Engage Specialist",
+        href: "#contact",
+        primary: false
+      }
     ],
-    actions: [
-      { label: "Deploy Containment", href: "#interventions", primary: true },
-      { label: "Engage Specialist",  href: "#contact",        primary: false }
-    ]
-  },
-  metrics: {
-    headline: "BULLETPROOF BY DESIGN",
-    sub: "We don't optimize. We guarantee.",
-    items: [
-      { name: "Hallucination Kill Rate", value: "99.7%", desc: "Every claim traces to verified source. Zero tolerance policy." },
-      { name: "Jailbreak Defense",       value: "100%",  desc: "Top-10 global adversarial champion. Your system becomes unhackable." },
-      { name: "Response Speed",          value: "2.4s", desc: "Faster than human thought. Users never wait." }
-    ]
-  },
-  offers: [
-    {
-      name: "Emergency Threat Neutralization",
-      dur: "48-Hour Blitz",
-      desc: "Your AI is leaking secrets right now. We identify every vulnerability and install permanent fixes before your next board meeting.",
-      features: [
-        "Live threat assessment on production traffic",
-        "Priority P0/P1 vulnerability patching within 48 hours",
-        "Executive briefing with liability quantification and solution roadmap"
+    methodology: {
+      headline: "THE EFFUSION PROTOCOL",
+      paras: [
+        "Standard AI development creates digital time bombs. We deploy surgical precision. The Effusion Protocol transforms unreliable AI into business-critical infrastructure through three decisive actions: Contain, Armor, and Command."
       ],
-      cta: "Deploy Containment",
-      href: "#contact",
-      primary: true
+      pillars: [
+        { name: "Contain", text: "Lock down all inputs. Block exfiltration. Strip attack surface to bone." },
+        { name: "Armor",   text: "Fuse cryptographic guarantees with adversarial training. Fail closed." },
+        { name: "Command", text: "Instrument every token. Prove compliance in real time." }
+      ],
+      conclusion: "When AI fails, markets hemorrhage. Our protocol stops the bleed."
     },
-    {
-      name: "Hallucination Elimination",
-      dur: "Fixed-Price Guarantee",
-      desc: "Your AI lies to customers. We make it tell the truth. Every response becomes auditable, accurate, and legally defensible.",
-      features: [
-        "Proprietary grounding system with 99.7% accuracy guarantee",
-        "Custom evaluation harness with 500+ domain-specific test cases",
-        "Citation-enforced responses: No source = No answer policy"
-      ],
-      cta: "Eliminate Hallucinations",
-      href: "#contact",
-      primary: false
-    },
-    {
-      name: "Unbreakable Release System",
-      dur: "Value-Based Implementation",
-      desc: "We install automated safeguards that make AI releases boring, predictable, and safe. Your deploys never fail.",
-      features: [
-        "Shadow traffic validation with automatic rollback triggers",
-        "Canary deployment system with real-time safety monitoring",
-        "SLA enforcement: 99.9% uptime guarantee with penalty clauses"
-      ],
-      cta: "Engage Specialist",
-      href: "#contact",
-      primary: false
-    },
-    {
-      name: "Advanced Adversarial Hardening",
-      dur: "Specialist Engagement",
-      desc: "Top-10 global adversarial expert installs unbreakable defenses. Your AI becomes immune to manipulation.",
-      features: [
-        "500+ attack vector simulation including novel 2025 exploits",
-        "Advanced prompt injection shielding with active monitoring",
-        "Real-time threat response system with automated countermeasures"
-      ],
-      cta: "Engage Specialist",
-      href: "#contact",
-      primary: false
+    cta: {
+      headline: "Book Emergency Triage Session",
+      text: "This is not a discovery call. This is immediate threat assessment. You will describe your AI's current behavior. I will identify the exact failure points putting your business at risk. If your situation requires emergency intervention, we will discuss deployment. If not, you leave with actionable intelligence that saves you months of internal confusion.",
+      btn: "Request Emergency Assessment",
+      href: "#contact"
     }
-  ],
-  methodology: {
-    headline: "THE EFFUSION PROTOCOL",
-    paras: [
-      "Standard AI development creates digital time bombs. We deploy surgical precision. The Effusion Protocol transforms unreliable AI into business-critical infrastructure through three decisive actions: Contain, Armor, and Command."
-    ],
-    pillars: [
-      { name: "Contain", text: "Lock down all inputs. Block exfiltration. Strip attack surface to bone." },
-      { name: "Armor",   text: "Fuse cryptographic guarantees with adversarial training. Fail closed." },
-      { name: "Command", text: "Instrument every token. Prove compliance in real time." }
-    ],
-    conclusion: "When AI fails, markets hemorrhage. Our protocol stops the bleed."
-  },
-  cta: {
-    headline: "Book Emergency Triage Session",
-    text: "This is not a discovery call. This is immediate threat assessment. You will describe your AI's current behavior. I will identify the exact failure points putting your business at risk. If your situation requires emergency intervention, we will discuss deployment. If not, you leave with actionable intelligence that saves you months of internal confusion.",
-    btn: "Request Emergency Assessment",
-    href: "#contact"
   }
-} %}
+%}
 
 {# --- tiny macro for the offer cards --- #}
 {% macro offerCard(o) %}
@@ -125,13 +127,25 @@ metaDescription: "Top-10 global AI safety specialist. We eliminate hallucination
       <ul class="mt-4 space-y-2">
         {% for feature in o.features %}
           <li class="flex items-start gap-2">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mt-1 flex-none" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="w-4 h-4 mt-1 flex-none"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="2"
+              stroke="currentColor"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+            </svg>
             <span>{{ feature }}</span>
           </li>
         {% endfor %}
       </ul>
       <div class="mt-auto pt-4">
-        <a href="{{ o.href }}" class="btn w-full {% if o.primary %}btn-primary{% else %}btn-outline{% endif %}">{{ o.cta }}</a>
+        <a
+          href="{{ o.href }}"
+          class="btn w-full {% if o.primary %}btn-primary{% else %}btn-outline{% endif %}"
+        >{{ o.cta }}</a>
       </div>
     </div>
   </div>
@@ -140,13 +154,15 @@ metaDescription: "Top-10 global AI safety specialist. We eliminate hallucination
 {# --- build OfferCatalog JSON-LD once --- #}
 {% set itemList = [] %}
 {% for o in DATA.offers %}
-  {% set offer = {
-    "@type": "Offer",
-    "name": o.name,
-    "description": o.desc,
-    "url": DATA.url ~ o.href,
-    "itemOffered": { "@type": "Service", "name": o.name, "description": o.desc }
-  } %}
+  {%
+    set offer = {
+      "@type": "Offer",
+      "name": o.name,
+      "description": o.desc,
+      "url": DATA.url ~ o.href,
+      "itemOffered": { "@type": "Service", "name": o.name, "description": o.desc }
+    }
+  %}
   {% set itemList = itemList + [offer] %}
 {% endfor %}
 
@@ -154,8 +170,16 @@ metaDescription: "Top-10 global AI safety specialist. We eliminate hallucination
 {% block headExtra %}
   {# meta description here in case your base doesn't read metaDescription #}
   <meta name="description" content="{{ DATA.desc }}">
-  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Inter:wght@400;700;900&display=swap" as="style">
-  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+  <link
+    rel="preload"
+    href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Inter:wght@400;700;900&display=swap"
+    as="style"
+  >
+  <link
+    href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Inter:wght@400;700;900&display=swap"
+    rel="stylesheet"
+  >
+  <!-- markup-fmt-ignore -->
   <script type="application/ld+json">
   {{ {
     "@context": "https://schema.org",
@@ -182,7 +206,9 @@ metaDescription: "Top-10 global AI safety specialist. We eliminate hallucination
     <div class="navbar max-w-[90rem] mx-auto px-4">
       <div class="navbar-start">
         <a href="#top" class="flex items-center gap-2" aria-label="{{ DATA.brand }} home">
-          <span class="w-8 h-8 rounded-full bg-primary flex items-center justify-center font-mono text-base-100 font-bold">E</span>
+          <span
+            class="w-8 h-8 rounded-full bg-primary flex items-center justify-center font-mono text-base-100 font-bold"
+          >E</span>
           <span class="font-mono text-xl">{{ DATA.brand }}</span>
         </a>
       </div>
@@ -196,12 +222,19 @@ metaDescription: "Top-10 global AI safety specialist. We eliminate hallucination
     <section class="hero py-24">
       <div class="hero-content w-full flex-col lg:flex-row gap-16">
         <div class="flex-1 space-y-6">
-          <p class="font-mono text-sm uppercase tracking-widest text-primary">{{ DATA.hero.kicker }}</p>
-          <h1 class="font-bold leading-tight text-[clamp(2.5rem,5vw,4.5rem)] max-w-[72ch]">{{ DATA.hero.headline }}</h1>
+          <p class="font-mono text-sm uppercase tracking-widest text-primary">
+            {{ DATA.hero.kicker }}
+          </p>
+          <h1 class="font-bold leading-tight text-[clamp(2.5rem,5vw,4.5rem)] max-w-[72ch]">
+            {{ DATA.hero.headline }}
+          </h1>
           <p class="max-w-prose">{{ DATA.hero.about }}</p>
           <div class="flex flex-col sm:flex-row gap-4">
             {% for action in DATA.hero.actions %}
-              <a href="{{ action.href }}" class="btn {% if action.primary %}btn-primary{% else %}btn-outline{% endif %}">{{ action.label }}</a>
+              <a
+                href="{{ action.href }}"
+                class="btn {% if action.primary %}btn-primary{% else %}btn-outline{% endif %}"
+              >{{ action.label }}</a>
             {% endfor %}
           </div>
         </div>
@@ -266,7 +299,14 @@ metaDescription: "Top-10 global AI safety specialist. We eliminate hallucination
     <section id="contact" class="py-24">
       <h2 class="text-3xl font-mono mb-4">{{ DATA.cta.headline }}</h2>
       <p class="mb-8 max-w-prose">{{ DATA.cta.text }}</p>
-      <form name="consulting-contact" method="post" data-netlify="true" netlify class="grid gap-6 max-w-xl" action="/success/">
+      <form
+        name="consulting-contact"
+        method="post"
+        data-netlify="true"
+        netlify
+        class="grid gap-6 max-w-xl"
+        action="/success/"
+      >
         <input type="hidden" name="form-name" value="consulting-contact">
         <div class="form-control">
           <label for="name" class="label font-mono">Your Name</label>
@@ -278,8 +318,14 @@ metaDescription: "Top-10 global AI safety specialist. We eliminate hallucination
         </div>
         <div class="form-control">
           <label for="context" class="label font-mono">Describe Current AI Failures</label>
-          <textarea id="context" name="context" class="textarea textarea-bordered h-32" aria-describedby="context-help"></textarea>
-          <span id="context-help" class="label-text-alt mt-1">Hallucinations, data leaks, prompt injections...</span>
+          <textarea
+            id="context"
+            name="context"
+            class="textarea textarea-bordered h-32"
+            aria-describedby="context-help"
+          ></textarea>
+          <span id="context-help" class="label-text-alt mt-1"
+          >Hallucinations, data leaks, prompt injections...</span>
         </div>
         <button type="submit" class="btn btn-primary w-full md:w-auto">{{ DATA.cta.btn }}</button>
       </form>
@@ -288,7 +334,9 @@ metaDescription: "Top-10 global AI safety specialist. We eliminate hallucination
 
   <footer class="footer p-6 border-t">
     <div class="items-center grid-flow-col">
-      <span class="w-8 h-8 rounded-full bg-primary flex items-center justify-center font-mono text-base-100 font-bold">E</span>
+      <span
+        class="w-8 h-8 rounded-full bg-primary flex items-center justify-center font-mono text-base-100 font-bold"
+      >E</span>
       <p class="font-mono">{{ DATA.slogan }}</p>
     </div>
     <div class="md:place-self-center md:justify-self-end font-mono">
@@ -302,10 +350,15 @@ metaDescription: "Top-10 global AI safety specialist. We eliminate hallucination
   <script type="module" src="{{ '/assets/js/app.js' | url }}"></script>
   <script type="module" src="{{ '/assets/js/theme-toggle.js' | url }}"></script>
   <script>
-    // if ThemeUtils is available globally, configure it
-    if (typeof ThemeUtils !== 'undefined') {
-      ThemeUtils.configure({ allowed: ['silk', 'dim'], defaultTheme: 'dim', lightTheme: 'silk', darkTheme: 'dim' });
-      ThemeUtils.initEarly();
-    }
+  // if ThemeUtils is available globally, configure it
+if (typeof ThemeUtils !== 'undefined') {
+  ThemeUtils.configure({
+    allowed: ['silk', 'dim'],
+    defaultTheme: 'dim',
+    lightTheme: 'silk',
+    darkTheme: 'dim',
+  })
+  ThemeUtils.initEarly()
+}
   </script>
 {% endblock scriptsEnd %}

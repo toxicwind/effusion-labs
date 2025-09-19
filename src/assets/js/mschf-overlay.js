@@ -1234,7 +1234,9 @@
       cost: 1,
       ...cornersMeta,
       mount(p) {
-        ;['tl', 'tr', 'bl', 'br'].forEach(pos => nodes.push(el('div', `mschf-corner mschf-corner-${pos}`, p)))
+        ;['tl', 'tr', 'bl', 'br'].forEach(pos =>
+          nodes.push(el('div', `mschf-corner mschf-corner-${pos}`, p))
+        )
       },
       node: {
         remove() {
@@ -1488,7 +1490,9 @@
         code = el('div', 'mschf-code', node)
         const tail = Math.random().toString(16).slice(-6).toUpperCase()
         const stamp = new Date().toISOString().slice(0, 10)
-        code.textContent = `SEED:${tail} • ${document.body.dataset.buildBranch || 'BR:main'} • ${stamp}`
+        code.textContent = `SEED:${tail} • ${
+          document.body.dataset.buildBranch || 'BR:main'
+        } • ${stamp}`
         css(node, { left: '18px', top: '18px' })
       },
       node,
@@ -2527,7 +2531,8 @@
       frame: State.families.frame.size,
     }
     const line1 = `bars:${C.bars} beats:${C.beats} mood:${State.mood} d:${State.density.toFixed(2)}`
-    const line2 = `scaf:${sizes.scaffold} eph:${sizes.ephemera} lab:${sizes.lab} frame:${sizes.frame}`
+    const line2 =
+      `scaf:${sizes.scaffold} eph:${sizes.ephemera} lab:${sizes.lab} frame:${sizes.frame}`
     const line3 = `actors:${State.actors.size} nodes:${State.nodeCount}`
     // brief legend of kinds by frame/ephemera
     const kinds = fam => {

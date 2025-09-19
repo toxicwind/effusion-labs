@@ -1,6 +1,7 @@
 // src/lib/markdown/parts/footnotes.js
 export function hybridFootnotes(md) {
-  md.renderer.rules.footnote_block_open = () => '<section class="footnotes-hybrid not-prose mt-8">\n'
+  md.renderer.rules.footnote_block_open = () =>
+    '<section class="footnotes-hybrid not-prose mt-8">\n'
   md.renderer.rules.footnote_block_close = () => '</section>\n'
   md.renderer.rules.footnote_open = (tokens, idx, options, env, slf) => {
     const id = slf.rules.footnote_anchor_name(tokens, idx, options, env, slf)

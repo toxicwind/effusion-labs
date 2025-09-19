@@ -13,15 +13,16 @@ eleventyComputed:
 {% from "components/back-link.njk" import backLink %}
 {% from "components/tile.njk" import tile %}
 {# Breadcrumbs #}
-<nav class="breadcrumbs text-sm mb-3 overflow-x-auto whitespace-nowrap"
-     aria-label="Breadcrumb">
+<nav class="breadcrumbs text-sm mb-3 overflow-x-auto whitespace-nowrap" aria-label="Breadcrumb">
   <ul>
     <li>
       <a href="{{ '/archives/' | url }}">Archives</a>
     </li>
     <li>
       {% if character.data.companySlug %}
-        <a href="{{ '/archives/collectables/designer-toys/' | url ~ character.data.companySlug ~ '/' }}">
+        <a
+          href="{{ '/archives/collectables/designer-toys/' | url ~ character.data.companySlug ~ '/' }}"
+        >
           {{ (character.data.companyTitle or character.data.companySlug) | title }}
         </a>
       {% else %}
@@ -30,7 +31,9 @@ eleventyComputed:
     </li>
     <li>
       {% if character.data.companySlug and character.data.lineSlug %}
-        <a href="{{ '/archives/collectables/designer-toys/' | url ~ character.data.companySlug ~ '/' ~ character.data.lineSlug ~ '/' }}">
+        <a
+          href="{{ '/archives/collectables/designer-toys/' | url ~ character.data.companySlug ~ '/' ~ character.data.lineSlug ~ '/' }}"
+        >
           {{ (character.data.lineTitle or character.data.lineSlug) | title }}
         </a>
       {% else %}
@@ -42,14 +45,18 @@ eleventyComputed:
 </nav>
 <div class="mb-6">
   {% if character.data.companySlug and character.data.lineSlug %}
-    {{ backLink('Back', '/archives/collectables/designer-toys/' ~ character.data.companySlug ~ '/' ~ character.data.lineSlug ~ '/') }}
+    {{
+      backLink('Back', '/archives/collectables/designer-toys/' ~ character.data.companySlug ~ '/' ~ character.data.lineSlug ~ '/')
+    }}
   {% else %}
     {{ backLink('Back', '/archives/') }}
   {% endif %}
 </div>
 {# Header #}
 <section class="rounded-box border-2 border-black bg-base-200 p-5 sm:p-7 shadow-[6px_6px_0_rgba(0,0,0,0.85)]">
-  <h1 class="m-0 font-extrabold tracking-tight fluid-title">{{ character.data.name or character.data.charSlug }}</h1>
+  <h1 class="m-0 font-extrabold tracking-tight fluid-title">
+    {{ character.data.name or character.data.charSlug }}
+  </h1>
   <p class="opacity-85 mt-2">
     {{ (character.data.companyTitle or character.data.companySlug) | title }}
     {% if character.data.companyTitle or character.data.companySlug %}·{% endif %}
@@ -58,9 +65,11 @@ eleventyComputed:
   {% if character.data.bio %}<p class="mt-2 opacity-80">{{ character.data.bio }}</p>{% endif %}
 </section>
 {# All products in the same company+line featuring this character #}
-{% set allInLine = collections.archiveProducts
-  | byCompany(character.data.companySlug)
-| byLine(character.data.lineSlug) %}
+{%
+  set allInLine = collections.archiveProducts
+    | byCompany(character.data.companySlug)
+  | byLine(character.data.lineSlug)
+%}
 {% set products = [] %}
 {% for p in allInLine %}
   {% if p.data.charSlug and p.data.charSlug == character.data.charSlug %}
@@ -73,8 +82,10 @@ eleventyComputed:
     {% for p in products %}<li>{{ tile(p) }}</li>{% endfor %}
   </ul>
   <div class="mt-6">
-    <a class="btn btn-outline btn-sm"
-       href="{{ '/archives/character/' | url ~ character.data.charSlug ~ '/snapshot/' }}">View market snapshot →</a>
+    <a
+      class="btn btn-outline btn-sm"
+      href="{{ '/archives/character/' | url ~ character.data.charSlug ~ '/snapshot/' }}"
+    >View market snapshot →</a>
   </div>
 {% else %}
   <p class="opacity-75 mt-6">No products indexed yet for this character.</p>

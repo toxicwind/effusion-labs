@@ -27,10 +27,14 @@
     {# Per-page head injections (redirects, robots, etc.) #}
     {{ headExtra | safe }}
 
-        <script type="module" src="{{ '/assets/js/app.js' | url }}"></script>
+    <script type="module" src="{{ '/assets/js/app.js' | url }}"></script>
 
     <script src="{{ '/js/theme-utils.js' | url }}"></script>
-    <script>try{ ThemeUtils && ThemeUtils.initEarly && ThemeUtils.initEarly(); }catch(_){}</script>
+    <script>
+    try {
+      ThemeUtils && ThemeUtils.initEarly && ThemeUtils.initEarly()
+    } catch (_) {}
+    </script>
 
     {# Fonts #}
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -56,6 +60,5 @@
 
     {# Theme toggle UI logic (button exists in the page) #}
     <script type="module" src="{{ '/assets/js/theme-toggle.js' | url }}"></script>
-
   </body>
 </html>

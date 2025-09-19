@@ -26,10 +26,9 @@ On this page
   - [Removed Features](#removed-features)
   - [Documentation Moved to Dedicated Pages](#documentation-moved-to-dedicated-pages)
 
-Configuration files are optional. Add an `eleventy.config.mjs` file to the root
-directory of your project (read more about
-[default configuration filenames](#default-filenames)) to configure Eleventy to
-your own project’s needs. It might look like this:
+Configuration files are optional. Add an `eleventy.config.mjs` file to the root directory of your
+project (read more about [default configuration filenames](#default-filenames)) to configure
+Eleventy to your own project’s needs. It might look like this:
 
 eleventy.config.mjs
 
@@ -38,8 +37,8 @@ eleventy.config.mjs
     module.exports = async function(eleventyConfig) {	// Configure Eleventy};
 
 There are a few different ways to
-[shape your configuration file](https://www.11ty.dev/docs/config-shapes/). Added
-in v3.0.0Eleventy v3 added support for both ESM and Asynchronous callbacks.
+[shape your configuration file](https://www.11ty.dev/docs/config-shapes/). Added in v3.0.0Eleventy
+v3 added support for both ESM and Asynchronous callbacks.
 
 - Add [Filters](https://www.11ty.dev/docs/filters/).
 - Add [Shortcodes](https://www.11ty.dev/docs/shortcodes/).
@@ -114,10 +113,9 @@ eleventy.config.mjs
 
 ### Directory for Includes
 
-The includes directory is meant for
-[Eleventy layouts](https://www.11ty.dev/docs/layouts/), include files, extends
-files, partials, or macros. These files will not be processed as full template
-files, but can be consumed by other templates.
+The includes directory is meant for [Eleventy layouts](https://www.11ty.dev/docs/layouts/), include
+files, extends files, partials, or macros. These files will not be processed as full template files,
+but can be consumed by other templates.
 
 Includes Directory
 
@@ -163,8 +161,8 @@ eleventy.config.mjs
 This configuration option is optional but useful if you want your
 [Eleventy layouts](https://www.11ty.dev/docs/layouts/) to live outside of the
 [Includes directory](#directory-for-includes). Just like the
-[Includes directory](#directory-for-includes), these files will not be processed
-as full template files, but can be consumed by other templates.
+[Includes directory](#directory-for-includes), these files will not be processed as full template
+files, but can be consumed by other templates.
 
 WARNING:
 
@@ -209,9 +207,8 @@ eleventy.config.mjs
 
 ### Directory for Global Data Files
 
-Controls the directory inside which the global data template files, available to
-all templates, can be found. Read more about
-[Global Data Files](https://www.11ty.dev/docs/data-global/).
+Controls the directory inside which the global data template files, available to all templates, can
+be found. Read more about [Global Data Files](https://www.11ty.dev/docs/data-global/).
 
 Data Files Directory
 
@@ -268,8 +265,7 @@ _Default_
 
 _Valid Options_
 
-Any string that will work as a directory name. Eleventy creates this if it
-doesn’t exist.
+Any string that will work as a directory name. Eleventy creates this if it doesn’t exist.
 
 _Configuration API_
 
@@ -318,8 +314,7 @@ _Default_
 
 _Valid Options_
 
-A valid [template engine short name](https://www.11ty.dev/docs/languages/) or
-`false`
+A valid [template engine short name](https://www.11ty.dev/docs/languages/) or `false`
 
 _Command Line Override_
 
@@ -331,13 +326,11 @@ eleventy.config.mjs
 
     module.exports.config = {  markdownTemplateEngine: "njk",};
 
-There are many
-[different shapes of configuration file](https://www.11ty.dev/docs/config-shapes/).
+There are many [different shapes of configuration file](https://www.11ty.dev/docs/config-shapes/).
 
 ### Default template engine for HTML files
 
-HTML templates run through this template engine before transforming to (better)
-HTML.
+HTML templates run through this template engine before transforming to (better) HTML.
 
 HTML Template Engine
 
@@ -351,8 +344,7 @@ _Default_
 
 _Valid Options_
 
-A valid [template engine short name](https://www.11ty.dev/docs/languages/) or
-`false`
+A valid [template engine short name](https://www.11ty.dev/docs/languages/) or `false`
 
 _Command Line Override_
 
@@ -364,8 +356,7 @@ eleventy.config.mjs
 
     module.exports.config = {  htmlTemplateEngine: "njk",};
 
-There are many
-[different shapes of configuration file](https://www.11ty.dev/docs/config-shapes/).
+There are many [different shapes of configuration file](https://www.11ty.dev/docs/config-shapes/).
 
 ### Template Formats
 
@@ -395,9 +386,9 @@ _Configuration API_
 
 INFO:
 
-**Case sensitivity**: File extensions should be considered case insensitive,
-cross-platform. While macOS already behaves this way (by default), other
-operating systems require additional Eleventy code to enable this behavior.
+**Case sensitivity**: File extensions should be considered case insensitive, cross-platform. While
+macOS already behaves this way (by default), other operating systems require additional Eleventy
+code to enable this behavior.
 
 #### Command Line
 
@@ -411,8 +402,7 @@ eleventy.config.mjs
 
     module.exports.config = {  templateFormats: ["html", "liquid", "njk"],};
 
-There are many
-[different shapes of configuration file](https://www.11ty.dev/docs/config-shapes/).
+There are many [different shapes of configuration file](https://www.11ty.dev/docs/config-shapes/).
 
 #### Configuration API
 
@@ -424,9 +414,8 @@ eleventy.config.mjs
 
 ### Enable Quiet Mode to Reduce Console Noise
 
-In order to maximize user-friendliness to beginners, Eleventy will show each
-file it processes and the output file. To disable this noisy console output, use
-quiet mode!
+In order to maximize user-friendliness to beginners, Eleventy will show each file it processes and
+the output file. To disable this noisy console output, use quiet mode!
 
 Quiet Mode
 
@@ -454,11 +443,11 @@ The command line will override any setting in configuration:
 
 ### Deploy to a subdirectory with a Path Prefix
 
-If your site lives in a different subdirectory (particularly useful with GitHub
-pages), use pathPrefix to specify this. When paired with the
-[HTML `<base>` plugin](https://www.11ty.dev/docs/plugins/html-base/) it will
-transform any absolute URLs in your HTML to include this folder name and does
-**not** affect where things go in the output folder.
+If your site lives in a different subdirectory (particularly useful with GitHub pages), use
+pathPrefix to specify this. When paired with the
+[HTML `<base>` plugin](https://www.11ty.dev/docs/plugins/html-base/) it will transform any absolute
+URLs in your HTML to include this folder name and does **not** affect where things go in the output
+folder.
 
 Path Prefix
 
@@ -484,9 +473,8 @@ eleventy.config.mjs
 
     module.exports = async function (eleventyConfig) {	const { HtmlBasePlugin } = await import("@11ty/eleventy");	eleventyConfig.addPlugin(HtmlBasePlugin);};module.exports.config = {	pathPrefix: "/eleventy-base-blog/",}
 
-Deploy to https://11ty.github.io/eleventy-base-blog/ on GitHub pages without
-modifying your config. This allows you to use the same code-base to deploy to
-either GitHub pages or Netlify, like the
+Deploy to https://11ty.github.io/eleventy-base-blog/ on GitHub pages without modifying your config.
+This allows you to use the same code-base to deploy to either GitHub pages or Netlify, like the
 [`eleventy-base-blog`](https://github.com/11ty/eleventy-base-blog) project does.
 
     npx @11ty/eleventy --pathprefix=eleventy-base-blog
@@ -494,9 +482,9 @@ either GitHub pages or Netlify, like the
 ### Change Base File Name for Data Files
 
 Added in v2.0.0 When using
-[Directory Specific Data Files](https://www.11ty.dev/docs/data-template-dir/),
-looks for data files that match the current folder name. You can override this
-behavior to a static string with the `setDataFileBaseName` method.
+[Directory Specific Data Files](https://www.11ty.dev/docs/data-template-dir/), looks for data files
+that match the current folder name. You can override this behavior to a static string with the
+`setDataFileBaseName` method.
 
 File Suffix
 
@@ -525,10 +513,10 @@ eleventy.config.mjs
 ### Change File Suffix for Data Files
 
 Added in v2.0.0 When using
-[Template and Directory Specific Data Files](https://www.11ty.dev/docs/data-template-dir/),
-to prevent file name conflicts with non-Eleventy files in the project directory,
-we scope these files with a unique-to-Eleventy suffix. This suffix is
-customizable using the `setDataFileSuffixes` configuration API method.
+[Template and Directory Specific Data Files](https://www.11ty.dev/docs/data-template-dir/), to
+prevent file name conflicts with non-Eleventy files in the project directory, we scope these files
+with a unique-to-Eleventy suffix. This suffix is customizable using the `setDataFileSuffixes`
+configuration API method.
 
 File Suffix
 
@@ -548,12 +536,12 @@ _Command Line Override_
 
 _None_
 
-For example, using `".11tydata"` will search for `*.11tydata.js` and
-`*.11tydata.json` data files. The empty string (`""`) here represents a file
-without a suffix—and this entry only applies to `*.json` data files.
+For example, using `".11tydata"` will search for `*.11tydata.js` and `*.11tydata.json` data files.
+The empty string (`""`) here represents a file without a suffix—and this entry only applies to
+`*.json` data files.
 
-This feature can also be used to disable Template and Directory Data Files
-altogether with an empty array (`[]`).
+This feature can also be used to disable Template and Directory Data Files altogether with an empty
+array (`[]`).
 
 Read more about
 [Template and Directory Specific Data Files](https://www.11ty.dev/docs/data-template-dir/).
@@ -566,10 +554,9 @@ eleventy.config.mjs
 
 _**Backwards Compatibility Note**_ (`v2.0.0`)
 
-Prior to v2.0.0 this feature was exposed using a `jsDataFileSuffix` property in
-the configuration return object. When the `setDataFileSuffixes` method has not
-been used, Eleventy maintains backwards compatibility for old projects by using
-this property as a fallback.
+Prior to v2.0.0 this feature was exposed using a `jsDataFileSuffix` property in the configuration
+return object. When the `setDataFileSuffixes` method has not been used, Eleventy maintains backwards
+compatibility for old projects by using this property as a fallback.
 
 eleventy.config.mjs
 
@@ -583,8 +570,7 @@ eleventy.config.mjs
 
 ### Linters
 
-Similar to Transforms, Linters are provided to analyze a template’s output
-without modifying it.
+Similar to Transforms, Linters are provided to analyze a template’s output without modifying it.
 
 Linters
 
@@ -614,8 +600,7 @@ eleventy.config.mjs
 
 Inspired by the
 [CSS Tricks post _Words to Avoid in Educational Writing_](https://css-tricks.com/words-avoid-educational-writing/),
-this linter will log a warning to the console when it finds a trigger word in a
-markdown file.
+this linter will log a warning to the console when it finds a trigger word in a markdown file.
 
 This example has been packaged as a plugin in
 [`eleventy-plugin-inclusive-language`](https://www.11ty.dev/docs/plugins/inclusive-language/).
@@ -626,9 +611,8 @@ This example has been packaged as a plugin in
 
 ### Data Filter Selectors
 
-A `Set` of [`lodash` selectors](https://lodash.com/docs/4.17.15#get) that allow
-you to include data from the data cascade in the output from `--to=json`,
-`--to=ndjson`.
+A `Set` of [`lodash` selectors](https://lodash.com/docs/4.17.15#get) that allow you to include data
+from the data cascade in the output from `--to=json`, `--to=ndjson`.
 
 eleventy.config.mjs
 
@@ -636,8 +620,8 @@ eleventy.config.mjs
 
     module.exports = function (eleventyConfig) {	eleventyConfig.dataFilterSelectors.add("page");	eleventyConfig.dataFilterSelectors.delete("page");};
 
-This will now include a `data` property in your JSON output that includes the
-`page` variable for each matching template.
+This will now include a `data` property in your JSON output that includes the `page` variable for
+each matching template.
 
 ### TypeScript Type Definitions
 
@@ -658,8 +642,7 @@ eleventy.config.mjs
 
 Feature Removal
 
-The `htmlOutputSuffix` feature was removed in Eleventy 3.0. You can read about
-the feature on the
+The `htmlOutputSuffix` feature was removed in Eleventy 3.0. You can read about the feature on the
 [v2 documentation](https://v2-0-1.11ty.dev/docs/config/#change-exception-case-suffix-for-html-files).
 Related: [GitHub #3327](https://github.com/11ty/eleventy/issues/3327).
 
@@ -667,9 +650,9 @@ Related: [GitHub #3327](https://github.com/11ty/eleventy/issues/3327).
 
 #### Copy Files to Output using Passthrough File Copy
 
-Files found (that don’t have a valid template engine) from opt-in file
-extensions in `templateFormats` will passthrough to the output directory. Read
-more about [Passthrough Copy](https://www.11ty.dev/docs/copy/).
+Files found (that don’t have a valid template engine) from opt-in file extensions in
+`templateFormats` will passthrough to the output directory. Read more about
+[Passthrough Copy](https://www.11ty.dev/docs/copy/).
 
 #### Data Deep Merge
 
@@ -684,18 +667,15 @@ more about [Passthrough Copy](https://www.11ty.dev/docs/copy/).
 
 #### Watch JavaScript Dependencies
 
-- Documented at
-  [Watch and Serve Configuration](https://www.11ty.dev/docs/watch-serve/).
+- Documented at [Watch and Serve Configuration](https://www.11ty.dev/docs/watch-serve/).
 
 #### Add Your Own Watch Targets
 
-- Documented at
-  [Watch and Serve Configuration](https://www.11ty.dev/docs/watch-serve/).
+- Documented at [Watch and Serve Configuration](https://www.11ty.dev/docs/watch-serve/).
 
 #### Override Browsersync Server Options
 
-- Documented at
-  [Watch and Serve Configuration](https://www.11ty.dev/docs/watch-serve/).
+- Documented at [Watch and Serve Configuration](https://www.11ty.dev/docs/watch-serve/).
 
 #### Transforms
 

@@ -2,30 +2,35 @@
   "typescript": {
     "quoteStyle": "preferSingle",
     "semiColons": "asi",
-    "indentWidth": 2
+    "indentWidth": 2,
+    "lineWidth": 100
   },
-  "json": {},
-  "markdown": {},
+  "json": {
+    "indentWidth": 2,
+    "lineWidth": 100
+  },
+  "markdown": {
+    "textWrap": "always",
+    "lineWidth": 100
+  },
   "toml": {},
   "dockerfile": {},
   "malva": {},
   "markup": {
-    "lineWidth": 100,
     "indentWidth": 2,
-    "nunjucks": {
-      "enabled": true
-    },
-    "scriptFormatter": "typescript",
-    "styleFormatter": "malva"
+    "printWidth": 100
   },
   "yaml": {},
   "excludes": [
-    "**/node_modules",
-    "**/*-lock.json",
     "node_modules",
     "_site",
     "dist",
-    ".11ty-vite"
+    ".11ty-vite",
+    "artifacts",
+    "coverage",
+    "src/content/docs/vendor",
+    "src/content/docs/vendor/**",
+    "src/pages/feed.njk"
   ],
   "plugins": [
     "https://plugins.dprint.dev/typescript-0.95.11.wasm",

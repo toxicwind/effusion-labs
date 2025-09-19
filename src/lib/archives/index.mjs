@@ -278,12 +278,18 @@ export default function registerArchive(eleventyConfig) {
   eleventyConfig.addCollection('archiveCharacters', () => archiveCharacters)
   eleventyConfig.addCollection('archiveSeries', () => archiveSeries)
 
-  eleventyConfig.addFilter('byLine', (arr, lineSlug) => (arr ?? []).filter(x => x.data.lineSlug === slugify(lineSlug)))
+  eleventyConfig.addFilter(
+    'byLine',
+    (arr, lineSlug) => (arr ?? []).filter(x => x.data.lineSlug === slugify(lineSlug)),
+  )
   eleventyConfig.addFilter(
     'byCompany',
     (arr, companySlug) => (arr ?? []).filter(x => x.data.companySlug === slugify(companySlug)),
   )
-  eleventyConfig.addFilter('byLocale', (arr, locale) => (arr ?? []).filter(x => x.data.locale === (locale || 'en')))
+  eleventyConfig.addFilter(
+    'byLocale',
+    (arr, locale) => (arr ?? []).filter(x => x.data.locale === (locale || 'en')),
+  )
   eleventyConfig.addFilter('uniqueBy', (arr, key) => {
     const seen = new Set()
     const out = []

@@ -2,8 +2,8 @@
 
 ## Context Recap
 
-Homepage hero now includes branded logo, restored concept map call-to-action,
-refactored lab seal, and a multi-column work feed with hover/focus affordance.
+Homepage hero now includes branded logo, restored concept map call-to-action, refactored lab seal,
+and a multi-column work feed with hover/focus affordance.
 
 ## Outstanding Items
 
@@ -12,10 +12,10 @@ refactored lab seal, and a multi-column work feed with hover/focus affordance.
 
 ## Execution Strategy
 
-Implement metadata extraction and showcase article, then apply typography and
-accessibility refinements.
+Implement metadata extraction and showcase article, then apply typography and accessibility
+refinements.
 
 ## Trigger Command
 
-NODE_OPTIONS=--import=./test/setup/http.mjs node --test
-test/integration/homepage.spec.mjs test/integration/homepage-latest.spec.mjs
+NODE_OPTIONS=--import=./test/setup/http.mjs node --test test/integration/homepage.spec.mjs
+test/integration/homepage-latest.spec.mjs

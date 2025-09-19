@@ -21,7 +21,8 @@ metaDisable: true
       <span aria-hidden="true">·</span>
       <span>{{ _read }} min read</span>
       {% if byline %}<span aria-hidden="true">·</span><span>by {{ byline }}</span>{% endif %}
-      {% if convertedFromHtml %}<span aria-hidden="true">·</span><span class="text-info">Auto-converted</span>{% endif %}
+      {% if convertedFromHtml %}<span aria-hidden="true">·</span><span class="text-info"
+        >Auto-converted</span>{% endif %}
     </div>
     {% if excerpt %}<p class="opacity-90 mt-2">{{ excerpt }}</p>{% endif %}
   </div>
@@ -31,8 +32,7 @@ metaDisable: true
     <div class="p-4 border border-dashed border-primary bg-base-200 rounded">
       <h2 class="font-bold text-primary uppercase text-xs mb-2">Contents</h2>
       <nav id="toc" class="max-h-[50vh] overflow-auto pr-1">
-        <ul id="toc-list" class="menu menu-sm">
-        </ul>
+        <ul id="toc-list" class="menu menu-sm"></ul>
       </nav>
       <div class="pt-2 flex gap-2">
         <button id="expand-toc" class="btn btn-xs btn-outline">Expand all</button>
@@ -58,8 +58,10 @@ metaDisable: true
       {% if _tags.length %}
         <div class="mt-3 flex flex-wrap gap-2">
           {% for t in _tags %}
-            <a href="{{ ('/tags/' + (t | slug) + '/') | url }}"
-               class="badge badge-primary badge-outline no-underline">#{{ t }}</a>
+            <a
+              href="{{ ('/tags/' + (t | slug) + '/') | url }}"
+              class="badge badge-primary badge-outline no-underline"
+            >#{{ t }}</a>
           {% endfor %}
         </div>
       {% endif %}
@@ -67,7 +69,9 @@ metaDisable: true
   </aside>
   <article class="lg:col-span-9">
     <div class="relative border-2 border-black bg-base-200 p-5 sm:p-8">
-      <div id="content-root" class="relative prose prose-neutral max-w-none">{{ content | safe }}</div>
+      <div id="content-root" class="relative prose prose-neutral max-w-none">
+        {{ content | safe }}
+      </div>
     </div>
     <div class="mt-10 flex items-center justify-between text-sm uppercase tracking-wide">
       {% if pagination and pagination.href and pagination.href.previous %}
@@ -85,60 +89,93 @@ metaDisable: true
   </article>
 </section>
 <script>
-  (function () {
-    const root = document.getElementById('content-root');
-    if (!root) return;
+;(function() {
+  const root = document.getElementById('content-root')
+  if (!root) return
 
-    // IDs + copy anchors on h2–h4
-    const headings = root.querySelectorAll('h2, h3, h4');
-    const slug = s => (s||'').toLowerCase().trim().replace(/[\s]+/g,'-').replace(/[^\w\-]+/g,'').replace(/\-+/g,'-');
-    headings.forEach(h => {
-      if (!h.id) {
-        const base = slug(h.textContent||'section') || 'section';
-        let id = base, i = 2; while (document.getElementById(id)) id = base + '-' + i++;
-        h.id = id;
+  // IDs + copy anchors on h2–h4
+  const headings = root.querySelectorAll('h2, h3, h4')
+  const slug = s =>
+    (s || '').toLowerCase().trim().replace(/[\s]+/g, '-').replace(/[^\w\-]+/g, '').replace(
+      /\-+/g,
+      '-',
+    )
+  headings.forEach(h => {
+    if (!h.id) {
+      const base = slug(h.textContent || 'section') || 'section'
+      let id = base, i = 2
+      while (document.getElementById(id)) id = base + '-' + i++
+      h.id = id
+    }
+    const a = document.createElement('a')
+    a.href = '#' + h.id
+    a.className = 'no-underline opacity-0 hover:opacity-60 ml-1'
+    a.textContent = '#'
+    a.addEventListener('click', (e) => {
+      e.preventDefault()
+      const url = location.origin + location.pathname + '#' + h.id
+      navigator.clipboard?.writeText(url)
+      history.replaceState({}, '', '#' + h.id)
+      a.style.opacity = 1
+      setTimeout(() => a.style.opacity = .6, 600)
+    })
+    h.appendChild(a)
+  })
+
+  // TOC
+  const tocList = document.getElementById('toc-list')
+  const items = []
+  headings.forEach(h =>
+    items.push({ id: h.id, text: h.textContent.trim(), level: +h.tagName.slice(1) })
+  )
+  const stack = [{ level: 1, ul: tocList }]
+  items.forEach(it => {
+    const lvl = Math.min(Math.max(it.level, 2), 4)
+    while (stack.length && stack[stack.length - 1].level >= lvl) stack.pop()
+    const parent = stack[stack.length - 1] || { level: 1, ul: tocList }
+    const ul = document.createElement('ul')
+    ul.className = lvl === 2 ? 'menu menu-sm pl-0' : 'menu menu-xs pl-4'
+    parent.ul.appendChild(ul)
+    const li = document.createElement('li')
+    const a = document.createElement('a')
+    a.className = 'link link-hover'
+    a.href = '#' + it.id
+    a.textContent = it.text.replace(/\s*#\s*$/, '')
+    li.appendChild(a)
+    ul.appendChild(li)
+    stack.push({ level: lvl, ul })
+  })
+
+  const expandBtn = document.getElementById('expand-toc'),
+    collapseBtn = document.getElementById('collapse-toc')
+  function setExpanded(expanded) {
+    tocList.querySelectorAll('ul').forEach((ul, idx) => {
+      if (idx === 0) return
+      ul.style.display = expanded ? '' : 'none'
+    })
+  }
+  setExpanded(false)
+  expandBtn?.addEventListener('click', () => setExpanded(true))
+  collapseBtn?.addEventListener('click', () => setExpanded(false))
+
+  document.getElementById('back-to-top')?.addEventListener(
+    'click',
+    () => window.scrollTo({ top: 0, behavior: 'smooth' }),
+  )
+
+  // scrollspy
+  const links = [...tocList.querySelectorAll('a[href^="#"]')]
+  const map = new Map(links.map(a => [a.getAttribute('href').slice(1), a]))
+  const io = new IntersectionObserver(es => {
+    es.forEach(e => {
+      const link = map.get(e.target.id)
+      if (!link) return
+      if (e.isIntersecting) {
+        links.forEach(l => l.classList.remove('text-primary'))
+        link.classList.add('text-primary')
       }
-      const a = document.createElement('a');
-      a.href = '#'+h.id;
-      a.className='no-underline opacity-0 hover:opacity-60 ml-1';
-      a.textContent='#';
-      a.addEventListener('click', (e)=>{
-        e.preventDefault();
-        const url=location.origin+location.pathname+'#'+h.id;
-        navigator.clipboard?.writeText(url);
-        history.replaceState({},'', '#'+h.id);
-        a.style.opacity=1; setTimeout(()=>a.style.opacity=.6,600);
-      });
-      h.appendChild(a);
-    });
-
-    // TOC
-    const tocList = document.getElementById('toc-list');
-    const items = []; headings.forEach(h => items.push({ id: h.id, text: h.textContent.trim(), level: +h.tagName.slice(1) }));
-    const stack=[{level:1, ul:tocList}];
-    items.forEach(it=>{
-      const lvl=Math.min(Math.max(it.level,2),4);
-      while(stack.length && stack[stack.length-1].level>=lvl) stack.pop();
-      const parent=stack[stack.length-1]||{level:1,ul:tocList};
-      const ul=document.createElement('ul'); ul.className=lvl===2?'menu menu-sm pl-0':'menu menu-xs pl-4'; parent.ul.appendChild(ul);
-      const li=document.createElement('li'); const a=document.createElement('a'); a.className='link link-hover'; a.href='#'+it.id; a.textContent=it.text.replace(/\s*#\s*$/,''); li.appendChild(a); ul.appendChild(li);
-      stack.push({level:lvl, ul});
-    });
-
-    const expandBtn=document.getElementById('expand-toc'), collapseBtn=document.getElementById('collapse-toc');
-    function setExpanded(expanded){ tocList.querySelectorAll('ul').forEach((ul,idx)=>{ if(idx===0)return; ul.style.display=expanded?'':'none'; }); }
-    setExpanded(false); expandBtn?.addEventListener('click',()=>setExpanded(true)); collapseBtn?.addEventListener('click',()=>setExpanded(false));
-
-    document.getElementById('back-to-top')?.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
-
-    // scrollspy
-    const links=[...tocList.querySelectorAll('a[href^="#"]')]; const map=new Map(links.map(a=>[a.getAttribute('href').slice(1),a]));
-    const io=new IntersectionObserver(es=>{
-      es.forEach(e=>{
-        const link=map.get(e.target.id); if(!link)return;
-        if(e.isIntersecting){ links.forEach(l=>l.classList.remove('text-primary')); link.classList.add('text-primary'); }
-      });
-    },{rootMargin:"-70px 0px -70% 0px",threshold:0.01});
-    headings.forEach(h=>io.observe(h));
-  })();
+    })
+  }, { rootMargin: '-70px 0px -70% 0px', threshold: 0.01 })
+  headings.forEach(h => io.observe(h))
+})()
 </script>

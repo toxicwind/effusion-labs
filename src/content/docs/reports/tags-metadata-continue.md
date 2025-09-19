@@ -2,8 +2,7 @@
 
 ## Context Recap
 
-Merged tag-like metadata into unified tags and categories and added schema
-support.
+Merged tag-like metadata into unified tags and categories and added schema support.
 
 ## Outstanding Items
 
@@ -12,8 +11,7 @@ support.
 
 ## Execution Strategy
 
-Build Eleventy collections for tags and categories, then expose navigation to
-browse them.
+Build Eleventy collections for tags and categories, then expose navigation to browse them.
 
 ## Trigger Command
 

@@ -9,16 +9,26 @@
     {% set _href = _href | url %}
   {% endif %}
 
-  {% set _cls = 'group block hb-tile transition p-6 text-left no-underline hover:-translate-y-0.5 focus:outline-none focus-visible:ring focus-visible:ring-primary/40 ' %}
+  {%
+    set _cls = 'group block hb-tile transition p-6 text-left no-underline hover:-translate-y-0.5 focus:outline-none focus-visible:ring focus-visible:ring-primary/40 '
+  %}
   {% if primary %}
-    {% set _cls = _cls ~ 'border-primary/60 ring-1 ring-primary/20 bg-gradient-to-br from-primary/5 to-transparent ' %}
+    {%
+      set _cls = _cls ~ 'border-primary/60 ring-1 ring-primary/20 bg-gradient-to-br from-primary/5 to-transparent '
+    %}
   {% else %}
     {% set _cls = _cls ~ 'border-base-content/15 ' %}
   {% endif %}
 
   <a href="{{ _href }}" class="{{ _cls }}">
-    {% if _type %}<span class="badge badge-ghost badge-xs uppercase tracking-wider">{{ _type | safe }}</span>{% endif %}
-    {% if _title %}<h3 class="mt-2 font-heading text-lg text-base-content group-hover:text-primary transition-colors">{{ _title | safe }}</h3>{% endif %}
+    {% if _type %}<span class="badge badge-ghost badge-xs uppercase tracking-wider">{{
+        _type | safe
+      }}</span>{% endif %}
+    {%
+      if _title
+    %}<h3 class="mt-2 font-heading text-lg text-base-content group-hover:text-primary transition-colors">
+        {{ _title | safe }}
+      </h3>{% endif %}
     {% if _desc %}<p class="text-sm text-base-content/90">{{ _desc | safe }}</p>{% endif %}
   </a>
 {% endmacro %}

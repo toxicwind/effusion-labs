@@ -20,22 +20,21 @@ prose: false
 {% set projectsAll = collections.projects or [] %}
 {% set conceptsAll = collections.concepts or [] %}
 {% set sparksAll = collections.sparks or [] %}
-<div id="page-shell"
-     data-mschf="auto"
-     data-mschf-intensity="calm"
-     data-mschf-style="structural">
+<div id="page-shell" data-mschf="auto" data-mschf-intensity="calm" data-mschf-style="structural">
   <!-- HERO -->
   <section class="hero min-h-[55vh] bg-base-200/40">
     <div class="hero-content text-center">
       <div class="max-w-3xl">
         {% if branding and branding.logoSrc %}
           {% set _sizes = branding.logoSizes or '(max-width: 640px) 112px, 160px' %}
-          <img src="{{ branding.logoSrc | url }}"
-               alt="{{ branding.logoAlt or 'Logo' }}"
-               sizes="{{ _sizes }}"
-               loading="eager"
-               fetchpriority="high"
-               class="hero-logo mx-auto mb-4 w-24 sm:w-28 md:w-32" />
+          <img
+            src="{{ branding.logoSrc | url }}"
+            alt="{{ branding.logoAlt or 'Logo' }}"
+            sizes="{{ _sizes }}"
+            loading="eager"
+            fetchpriority="high"
+            class="hero-logo mx-auto mb-4 w-24 sm:w-28 md:w-32"
+          />
         {% endif %}
         <h1 class="text-4xl md:text-6xl font-heading font-black tracking-[-0.02em] leading-tight">
           {{ title or 'Ideas, prototypes, and tools—shipped straight from the lab.' }}
@@ -60,8 +59,10 @@ prose: false
     </div>
   </section>
   <!-- STATS STRIP -->
-  <section aria-labelledby="stats-heading"
-           class="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 -mt-10">
+  <section
+    aria-labelledby="stats-heading"
+    class="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 -mt-10"
+  >
     <div class="stats glass-card w-full">
       <div class="stat">
         <div class="stat-title">Total entries</div>
@@ -124,12 +125,14 @@ prose: false
   {% set mList = (allWork | selectattr('data.type','equalto','meta') | list) | slice(0,5) %}
   <section class="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 mt-14">
     <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-      {% for col in [
+      {%
+        for col in [
         {title:'Projects', items:pList, tone:'primary'},
         {title:'Concepts', items:cList, tone:'secondary'},
         {title:'Sparks',   items:sList, tone:'accent'},
         {title:'Meta',     items:mList, tone:'info'}
-        ] %}
+        ]
+      %}
         <div class="card glass-card">
           <div class="card-body p-4">
             <h3 class="card-title text-base">
@@ -138,9 +141,13 @@ prose: false
             <ul class="mt-2 space-y-2">
               {% for item in col.items %}
                 <li>
-                  <a class="link no-underline hover:underline" href="{{ item.url | url }}">{{ item.data.title }}</a>
+                  <a class="link no-underline hover:underline" href="{{ item.url | url }}">{{
+                    item.data.title
+                  }}</a>
                   {% if item.data.description %}
-                    <div class="text-xs opacity-70 line-clamp-2">{{ item.data.description | truncate(120) }}</div>
+                    <div class="text-xs opacity-70 line-clamp-2">
+                      {{ item.data.description | truncate(120) }}
+                    </div>
                   {% endif %}
                 </li>
               {% else %}
@@ -166,13 +173,19 @@ prose: false
               <div class="flex items-start justify-between">
                 <span class="badge badge-outline">Project</span>
                 {% if p.date %}
-                  <time class="text-xs opacity-70" datetime="{{ p.date | htmlDateString }}">{{ p.date | readableDate }}</time>
+                  <time class="text-xs opacity-70" datetime="{{ p.date | htmlDateString }}">{{
+                    p.date | readableDate
+                  }}</time>
                 {% endif %}
               </div>
               <h3 class="card-title text-lg leading-tight">
-                <a class="no-underline hover:underline" href="{{ p.url | url }}">{{ p.data.title }}</a>
+                <a class="no-underline hover:underline" href="{{ p.url | url }}">{{
+                  p.data.title
+                }}</a>
               </h3>
-              {% if p.data.description %}<p class="opacity-90">{{ p.data.description | truncate(140) }}</p>{% endif %}
+              {% if p.data.description %}<p class="opacity-90">
+                  {{ p.data.description | truncate(140) }}
+                </p>{% endif %}
               <div class="card-actions justify-start mt-2">
                 <a class="btn btn-sm btn-primary" href="{{ p.url | url }}">Open</a>
               </div>
@@ -193,16 +206,23 @@ prose: false
             <article class="card glass-card h-full">
               <div class="card-body">
                 <div class="flex items-start justify-between">
-                  <span class="badge badge-ghost">{{ (item.type or item.data.type) | capitalize }}</span>
+                  <span class="badge badge-ghost">{{
+                    (item.type or item.data.type) | capitalize
+                  }}</span>
                   {% if item.date %}
-                    <time class="text-xs opacity-70"
-                          datetime="{{ item.date | htmlDateString }}">{{ item.date | readableDate }}</time>
+                    <time class="text-xs opacity-70" datetime="{{ item.date | htmlDateString }}">{{
+                      item.date | readableDate
+                    }}</time>
                   {% endif %}
                 </div>
                 <h3 class="card-title text-base leading-snug">
-                  <a class="no-underline hover:underline" href="{{ item.url | url }}">{{ item.data.title }}</a>
+                  <a class="no-underline hover:underline" href="{{ item.url | url }}">{{
+                    item.data.title
+                  }}</a>
                 </h3>
-                {% if item.data.description %}<p class="text-sm opacity-90">{{ item.data.description | truncate(140) }}</p>{% endif %}
+                {% if item.data.description %}<p class="text-sm opacity-90">
+                    {{ item.data.description | truncate(140) }}
+                  </p>{% endif %}
                 <div class="card-actions justify-start mt-2">
                   <a class="btn btn-xs btn-outline" href="{{ item.url | url }}">Read</a>
                 </div>
@@ -219,7 +239,9 @@ prose: false
       <div class="hero-content text-center">
         <div class="max-w-2xl">
           <h2 class="text-2xl md:text-3xl font-heading">Explore the Interactive Concept Map</h2>
-          <p class="mt-2 opacity-90">Navigate the living knowledge graph that links sparks, concepts, and projects.</p>
+          <p class="mt-2 opacity-90">
+            Navigate the living knowledge graph that links sparks, concepts, and projects.
+          </p>
           <a href="{{ '/map/' | url }}" class="btn btn-primary mt-4">Launch the map</a>
         </div>
       </div>
@@ -232,7 +254,10 @@ prose: false
         <input type="checkbox" />
         <div class="collapse-title text-md font-medium">What is Effusion Labs?</div>
         <div class="collapse-content">
-          <p>An exploration space for systems thinking, design, and code—shipping artifacts you can use.</p>
+          <p>
+            An exploration space for systems thinking, design, and code—shipping artifacts you can
+            use.
+          </p>
         </div>
       </div>
       <div class="collapse collapse-arrow glass-card">

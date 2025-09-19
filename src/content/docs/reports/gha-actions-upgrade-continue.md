@@ -2,8 +2,8 @@
 
 ## Context Recap
 
-Outdated GitHub actions (checkout, setup-node, upload-artifact) were upgraded to
-their latest major versions and caches enabled.
+Outdated GitHub actions (checkout, setup-node, upload-artifact) were upgraded to their latest major
+versions and caches enabled.
 
 ## Outstanding Items
 

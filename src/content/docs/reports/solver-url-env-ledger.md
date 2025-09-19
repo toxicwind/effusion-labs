@@ -15,8 +15,7 @@
 
 ## Hashes
 
-- `markdown_gateway/app.py` –
-  ff7e62c0d736fd853b2c87d74d55b48b995d452e41548bc40f320a9286c5e2c7
+- `markdown_gateway/app.py` – ff7e62c0d736fd853b2c87d74d55b48b995d452e41548bc40f320a9286c5e2c7
 - `test/unit/markdown-gateway-config.test.mjs` –
   eb274d2378195c462115a37eb7db29ef3656e388b5df40a9d106f36cf625a90e
 - `README.md` – 78d61a92450e7504859518edd14486403e7e8ce7e0abf7109a846c6dc75cf18d

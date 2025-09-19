@@ -1,98 +1,93 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
   <head>
     <meta charset="utf-8" />
     <style>
-      :root {
-        color-scheme: dark light;
-      }
-      body {
-        font-family:
-          ui-sans-serif,
-          system-ui,
-          -apple-system,
-          Segoe UI,
-          Roboto,
-          'Apple Color Emoji',
-          'Segoe UI Emoji';
-        background: #0b0d10;
-        color: #e6eaf2;
-        margin: 0;
-        padding: 28px;
-      }
-      .header {
-        display: flex;
-        align-items: baseline;
-        gap: 10px;
-        margin-bottom: 16px;
-      }
-      .h1 {
-        font-size: 20px;
-        font-weight: 700;
-      }
-      .sub {
-        opacity: 0.75;
-        font-size: 12px;
-      }
-      .grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-        gap: 14px;
-      }
+    :root {
+      color-scheme: dark light;
+    }
+    body {
+      font-family:
+        ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Apple Color Emoji",
+        "Segoe UI Emoji";
+      background: #0b0d10;
+      color: #e6eaf2;
+      margin: 0;
+      padding: 28px;
+    }
+    .header {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .h1 {
+      font-size: 20px;
+      font-weight: 700;
+    }
+    .sub {
+      opacity: 0.75;
+      font-size: 12px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 14px;
+    }
+    .card {
+      background: linear-gradient(
+        180deg,
+        rgba(255, 255, 255, 0.06),
+        rgba(255, 255, 255, 0.02)
+      );
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 14px;
+      padding: 14px;
+      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.25);
+    }
+    .head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .title {
+      font-weight: 700;
+      font-size: 16px;
+    }
+    .slug code {
+      opacity: 0.8;
+      font-size: 11px;
+    }
+    .kv {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 13px;
+      margin: 4px 0;
+    }
+    .k {
+      opacity: 0.75;
+      min-width: 140px;
+    }
+    hr {
+      border: none;
+      border-top: 1px dashed rgba(255, 255, 255, 0.12);
+      margin: 8px 0;
+    }
+    .footer {
+      opacity: 0.75;
+      font-size: 11px;
+      margin-top: 12px;
+    }
+    @media (prefers-reduced-motion: no-preference) {
       .card {
-        background: linear-gradient(
-          180deg,
-          rgba(255, 255, 255, 0.06),
-          rgba(255, 255, 255, 0.02)
-        );
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 14px;
-        padding: 14px;
-        box-shadow: 0 6px 24px rgba(0, 0, 0, 0.25);
+        transition: transform 0.15s ease;
       }
-      .head {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 8px;
+      .card:hover {
+        transform: translateY(-2px);
       }
-      .title {
-        font-weight: 700;
-        font-size: 16px;
-      }
-      .slug code {
-        opacity: 0.8;
-        font-size: 11px;
-      }
-      .kv {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        font-size: 13px;
-        margin: 4px 0;
-      }
-      .k {
-        opacity: 0.75;
-        min-width: 140px;
-      }
-      hr {
-        border: none;
-        border-top: 1px dashed rgba(255, 255, 255, 0.12);
-        margin: 8px 0;
-      }
-      .footer {
-        opacity: 0.75;
-        font-size: 11px;
-        margin-top: 12px;
-      }
-      @media (prefers-reduced-motion: no-preference) {
-        .card {
-          transition: transform 0.15s ease;
-        }
-        .card:hover {
-          transform: translateY(-2px);
-        }
-      }
+    }
     </style>
     <title>Nearby Value Leaderboard</title>
   </head>
@@ -100,8 +95,7 @@
     <div class="header">
       <div class="h1">Distance-Adjusted Value Leaderboard</div>
       <div class="sub">
-        Adjusted $/oz = best FLOWER $/oz × (1 + 0.02 × miles) • Generated
-        2025-08-26 20:16:47
+        Adjusted $/oz = best FLOWER $/oz × (1 + 0.02 × miles) • Generated 2025-08-26 20:16:47
       </div>
     </div>
     <div class="grid">
@@ -120,23 +114,19 @@
           <span class="k">Adjusted $/oz</span><span class="v">$34.26</span>
         </div>
         <div class="kv">
-          <span class="k">Median $/oz (FLOWER)</span
-          ><span class="v">$64.00</span>
+          <span class="k">Median $/oz (FLOWER)</span><span class="v">$64.00</span>
         </div>
         <div class="kv">
           <span class="k">Min $/oz (ANY)</span><span class="v">$12.50</span>
         </div>
         <div class="kv">
-          <span class="k">Best size/price</span
-          ><span class="v">1 g • $1.00</span>
+          <span class="k">Best size/price</span><span class="v">1 g • $1.00</span>
         </div>
         <div class="kv">
-          <span class="k">Best item</span
-          ><span
+          <span class="k">Best item</span><span
             class="v"
             title="MED - Generations Garden - Bubba Gum / Orange-Tier Buds"
-            >MED - Generations Garden - Bubba Gum / Orange-Tier Buds</span
-          >
+          >MED - Generations Garden - Bubba Gum / Orange-Tier Buds</span>
         </div>
         <div class="kv">
           <span class="k">Items</span><span class="v">249 valid</span>
@@ -163,7 +153,8 @@
             height="10"
             rx="5"
             fill="rgba(255,255,255,0.12)"
-          ></rect>
+          >
+          </rect>
           <rect
             x="0"
             y="0"
@@ -171,7 +162,8 @@
             height="10"
             rx="5"
             fill="hsl(138, 70%, 50%)"
-          ></rect>
+          >
+          </rect>
         </svg>
       </div>
 
@@ -190,21 +182,19 @@
           <span class="k">Adjusted $/oz</span><span class="v">$35.38</span>
         </div>
         <div class="kv">
-          <span class="k">Median $/oz (FLOWER)</span
-          ><span class="v">$64.00</span>
+          <span class="k">Median $/oz (FLOWER)</span><span class="v">$64.00</span>
         </div>
         <div class="kv">
           <span class="k">Min $/oz (ANY)</span><span class="v">$12.50</span>
         </div>
         <div class="kv">
-          <span class="k">Best size/price</span
-          ><span class="v">1/4 oz • $7.50</span>
+          <span class="k">Best size/price</span><span class="v">1/4 oz • $7.50</span>
         </div>
         <div class="kv">
-          <span class="k">Best item</span
-          ><span class="v" title="MED - Legacy Grown - Four Kings / Orange Tier"
-            >MED - Legacy Grown - Four Kings / Orange Tier</span
-          >
+          <span class="k">Best item</span><span
+            class="v"
+            title="MED - Legacy Grown - Four Kings / Orange Tier"
+          >MED - Legacy Grown - Four Kings / Orange Tier</span>
         </div>
         <div class="kv">
           <span class="k">Items</span><span class="v">103 valid</span>
@@ -231,7 +221,8 @@
             height="10"
             rx="5"
             fill="rgba(255,255,255,0.12)"
-          ></rect>
+          >
+          </rect>
           <rect
             x="0"
             y="0"
@@ -239,7 +230,8 @@
             height="10"
             rx="5"
             fill="hsl(138, 70%, 50%)"
-          ></rect>
+          >
+          </rect>
         </svg>
       </div>
 
@@ -258,21 +250,17 @@
           <span class="k">Adjusted $/oz</span><span class="v">$38.47</span>
         </div>
         <div class="kv">
-          <span class="k">Median $/oz (FLOWER)</span
-          ><span class="v">$62.52</span>
+          <span class="k">Median $/oz (FLOWER)</span><span class="v">$62.52</span>
         </div>
         <div class="kv">
           <span class="k">Min $/oz (ANY)</span><span class="v">$18.00</span>
         </div>
         <div class="kv">
-          <span class="k">Best size/price</span
-          ><span class="v">1/2 oz • $16.08</span>
+          <span class="k">Best size/price</span><span class="v">1/2 oz • $16.08</span>
         </div>
         <div class="kv">
-          <span class="k">Best item</span
-          ><span class="v" title="Buds/Orange Zittles"
-            >Buds/Orange Zittles</span
-          >
+          <span class="k">Best item</span><span class="v" title="Buds/Orange Zittles"
+          >Buds/Orange Zittles</span>
         </div>
         <div class="kv">
           <span class="k">Items</span><span class="v">96 valid</span>
@@ -299,7 +287,8 @@
             height="10"
             rx="5"
             fill="rgba(255,255,255,0.12)"
-          ></rect>
+          >
+          </rect>
           <rect
             x="0"
             y="0"
@@ -307,7 +296,8 @@
             height="10"
             rx="5"
             fill="hsl(136, 70%, 50%)"
-          ></rect>
+          >
+          </rect>
         </svg>
       </div>
 
@@ -326,21 +316,17 @@
           <span class="k">Adjusted $/oz</span><span class="v">$45.78</span>
         </div>
         <div class="kv">
-          <span class="k">Median $/oz (FLOWER)</span
-          ><span class="v">$73.56</span>
+          <span class="k">Median $/oz (FLOWER)</span><span class="v">$73.56</span>
         </div>
         <div class="kv">
           <span class="k">Min $/oz (ANY)</span><span class="v">$22.06</span>
         </div>
         <div class="kv">
-          <span class="k">Best size/price</span
-          ><span class="v">56 g • $74.00</span>
+          <span class="k">Best size/price</span><span class="v">56 g • $74.00</span>
         </div>
         <div class="kv">
-          <span class="k">Best item</span
-          ><span class="v" title="Golden Meds Grow - Snoop's Zauce"
-            >Golden Meds Grow - Snoop's Zauce</span
-          >
+          <span class="k">Best item</span><span class="v" title="Golden Meds Grow - Snoop's Zauce"
+          >Golden Meds Grow - Snoop's Zauce</span>
         </div>
         <div class="kv">
           <span class="k">Items</span><span class="v">39 valid</span>
@@ -367,7 +353,8 @@
             height="10"
             rx="5"
             fill="rgba(255,255,255,0.12)"
-          ></rect>
+          >
+          </rect>
           <rect
             x="0"
             y="0"
@@ -375,7 +362,8 @@
             height="10"
             rx="5"
             fill="hsl(128, 70%, 50%)"
-          ></rect>
+          >
+          </rect>
         </svg>
       </div>
 
@@ -396,21 +384,17 @@
           <span class="k">Adjusted $/oz</span><span class="v">$53.25</span>
         </div>
         <div class="kv">
-          <span class="k">Median $/oz (FLOWER)</span
-          ><span class="v">$147.12</span>
+          <span class="k">Median $/oz (FLOWER)</span><span class="v">$147.12</span>
         </div>
         <div class="kv">
           <span class="k">Min $/oz (ANY)</span><span class="v">$43.52</span>
         </div>
         <div class="kv">
-          <span class="k">Best size/price</span
-          ><span class="v">56 g • $87.04</span>
+          <span class="k">Best size/price</span><span class="v">56 g • $87.04</span>
         </div>
         <div class="kv">
-          <span class="k">Best item</span
-          ><span class="v" title="Animal Tsunami - CG"
-            >Animal Tsunami - CG</span
-          >
+          <span class="k">Best item</span><span class="v" title="Animal Tsunami - CG"
+          >Animal Tsunami - CG</span>
         </div>
         <div class="kv">
           <span class="k">Items</span><span class="v">150 valid</span>
@@ -437,7 +421,8 @@
             height="10"
             rx="5"
             fill="rgba(255,255,255,0.12)"
-          ></rect>
+          >
+          </rect>
           <rect
             x="0"
             y="0"
@@ -445,7 +430,8 @@
             height="10"
             rx="5"
             fill="hsl(120, 70%, 50%)"
-          ></rect>
+          >
+          </rect>
         </svg>
       </div>
 
@@ -464,21 +450,17 @@
           <span class="k">Adjusted $/oz</span><span class="v">$59.57</span>
         </div>
         <div class="kv">
-          <span class="k">Median $/oz (FLOWER)</span
-          ><span class="v">$120.00</span>
+          <span class="k">Median $/oz (FLOWER)</span><span class="v">$120.00</span>
         </div>
         <div class="kv">
           <span class="k">Min $/oz (ANY)</span><span class="v">$50.00</span>
         </div>
         <div class="kv">
-          <span class="k">Best size/price</span
-          ><span class="v">1 oz • $50.00</span>
+          <span class="k">Best size/price</span><span class="v">1 oz • $50.00</span>
         </div>
         <div class="kv">
-          <span class="k">Best item</span
-          ><span class="v" title="MED | GARY PAYTON RUNTZ"
-            >MED | GARY PAYTON RUNTZ</span
-          >
+          <span class="k">Best item</span><span class="v" title="MED | GARY PAYTON RUNTZ"
+          >MED | GARY PAYTON RUNTZ</span>
         </div>
         <div class="kv">
           <span class="k">Items</span><span class="v">111 valid</span>
@@ -505,7 +487,8 @@
             height="10"
             rx="5"
             fill="rgba(255,255,255,0.12)"
-          ></rect>
+          >
+          </rect>
           <rect
             x="0"
             y="0"
@@ -513,7 +496,8 @@
             height="10"
             rx="5"
             fill="hsl(113, 70%, 50%)"
-          ></rect>
+          >
+          </rect>
         </svg>
       </div>
 
@@ -532,21 +516,19 @@
           <span class="k">Adjusted $/oz</span><span class="v">$59.64</span>
         </div>
         <div class="kv">
-          <span class="k">Median $/oz (FLOWER)</span
-          ><span class="v">$92.50</span>
+          <span class="k">Median $/oz (FLOWER)</span><span class="v">$92.50</span>
         </div>
         <div class="kv">
           <span class="k">Min $/oz (ANY)</span><span class="v">$50.00</span>
         </div>
         <div class="kv">
-          <span class="k">Best size/price</span
-          ><span class="v">1 oz • $50.00</span>
+          <span class="k">Best size/price</span><span class="v">1 oz • $50.00</span>
         </div>
         <div class="kv">
-          <span class="k">Best item</span
-          ><span class="v" title="MED- Dante's Inferno #8 Full Bud oz"
-            >MED- Dante's Inferno #8 Full Bud oz</span
-          >
+          <span class="k">Best item</span><span
+            class="v"
+            title="MED- Dante's Inferno #8 Full Bud oz"
+          >MED- Dante's Inferno #8 Full Bud oz</span>
         </div>
         <div class="kv">
           <span class="k">Items</span><span class="v">26 valid</span>
@@ -573,7 +555,8 @@
             height="10"
             rx="5"
             fill="rgba(255,255,255,0.12)"
-          ></rect>
+          >
+          </rect>
           <rect
             x="0"
             y="0"
@@ -581,7 +564,8 @@
             height="10"
             rx="5"
             fill="hsl(113, 70%, 50%)"
-          ></rect>
+          >
+          </rect>
         </svg>
       </div>
 
@@ -600,19 +584,16 @@
           <span class="k">Adjusted $/oz</span><span class="v">$61.74</span>
         </div>
         <div class="kv">
-          <span class="k">Median $/oz (FLOWER)</span
-          ><span class="v">$179.40</span>
+          <span class="k">Median $/oz (FLOWER)</span><span class="v">$179.40</span>
         </div>
         <div class="kv">
           <span class="k">Min $/oz (ANY)</span><span class="v">$49.84</span>
         </div>
         <div class="kv">
-          <span class="k">Best size/price</span
-          ><span class="v">1 oz • $49.84</span>
+          <span class="k">Best size/price</span><span class="v">1 oz • $49.84</span>
         </div>
         <div class="kv">
-          <span class="k">Best item</span
-          ><span class="v" title="Bridge Burn">Bridge Burn</span>
+          <span class="k">Best item</span><span class="v" title="Bridge Burn">Bridge Burn</span>
         </div>
         <div class="kv">
           <span class="k">Items</span><span class="v">87 valid</span>
@@ -639,7 +620,8 @@
             height="10"
             rx="5"
             fill="rgba(255,255,255,0.12)"
-          ></rect>
+          >
+          </rect>
           <rect
             x="0"
             y="0"
@@ -647,7 +629,8 @@
             height="10"
             rx="5"
             fill="hsl(110, 70%, 50%)"
-          ></rect>
+          >
+          </rect>
         </svg>
       </div>
 
@@ -668,21 +651,17 @@
           <span class="k">Adjusted $/oz</span><span class="v">$64.74</span>
         </div>
         <div class="kv">
-          <span class="k">Median $/oz (FLOWER)</span
-          ><span class="v">$109.90</span>
+          <span class="k">Median $/oz (FLOWER)</span><span class="v">$109.90</span>
         </div>
         <div class="kv">
           <span class="k">Min $/oz (ANY)</span><span class="v">$54.05</span>
         </div>
         <div class="kv">
-          <span class="k">Best size/price</span
-          ><span class="v">1 oz • $54.05</span>
+          <span class="k">Best size/price</span><span class="v">1 oz • $54.05</span>
         </div>
         <div class="kv">
-          <span class="k">Best item</span
-          ><span class="v" title="$59/oz OTD Indoor Flower"
-            >$59/oz OTD Indoor Flower</span
-          >
+          <span class="k">Best item</span><span class="v" title="$59/oz OTD Indoor Flower"
+          >$59/oz OTD Indoor Flower</span>
         </div>
         <div class="kv">
           <span class="k">Items</span><span class="v">79 valid</span>
@@ -709,7 +688,8 @@
             height="10"
             rx="5"
             fill="rgba(255,255,255,0.12)"
-          ></rect>
+          >
+          </rect>
           <rect
             x="0"
             y="0"
@@ -717,7 +697,8 @@
             height="10"
             rx="5"
             fill="hsl(107, 70%, 50%)"
-          ></rect>
+          >
+          </rect>
         </svg>
       </div>
 
@@ -736,21 +717,17 @@
           <span class="k">Adjusted $/oz</span><span class="v">$65.22</span>
         </div>
         <div class="kv">
-          <span class="k">Median $/oz (FLOWER)</span
-          ><span class="v">$119.00</span>
+          <span class="k">Median $/oz (FLOWER)</span><span class="v">$119.00</span>
         </div>
         <div class="kv">
           <span class="k">Min $/oz (ANY)</span><span class="v">$20.20</span>
         </div>
         <div class="kv">
-          <span class="k">Best size/price</span
-          ><span class="v">1 oz • $55.44</span>
+          <span class="k">Best size/price</span><span class="v">1 oz • $55.44</span>
         </div>
         <div class="kv">
-          <span class="k">Best item</span
-          ><span class="v" title="Cutting Edge - Oreoz"
-            >Cutting Edge - Oreoz</span
-          >
+          <span class="k">Best item</span><span class="v" title="Cutting Edge - Oreoz"
+          >Cutting Edge - Oreoz</span>
         </div>
         <div class="kv">
           <span class="k">Items</span><span class="v">61 valid</span>
@@ -777,7 +754,8 @@
             height="10"
             rx="5"
             fill="rgba(255,255,255,0.12)"
-          ></rect>
+          >
+          </rect>
           <rect
             x="0"
             y="0"
@@ -785,7 +763,8 @@
             height="10"
             rx="5"
             fill="hsl(107, 70%, 50%)"
-          ></rect>
+          >
+          </rect>
         </svg>
       </div>
 
@@ -804,21 +783,17 @@
           <span class="k">Adjusted $/oz</span><span class="v">$66.30</span>
         </div>
         <div class="kv">
-          <span class="k">Median $/oz (FLOWER)</span
-          ><span class="v">$140.00</span>
+          <span class="k">Median $/oz (FLOWER)</span><span class="v">$140.00</span>
         </div>
         <div class="kv">
           <span class="k">Min $/oz (ANY)</span><span class="v">$56.00</span>
         </div>
         <div class="kv">
-          <span class="k">Best size/price</span
-          ><span class="v">1 g • $2.00</span>
+          <span class="k">Best size/price</span><span class="v">1 g • $2.00</span>
         </div>
         <div class="kv">
-          <span class="k">Best item</span
-          ><span class="v" title="MED Herbal Cure Black Ice"
-            >MED Herbal Cure Black Ice</span
-          >
+          <span class="k">Best item</span><span class="v" title="MED Herbal Cure Black Ice"
+          >MED Herbal Cure Black Ice</span>
         </div>
         <div class="kv">
           <span class="k">Items</span><span class="v">72 valid</span>
@@ -845,7 +820,8 @@
             height="10"
             rx="5"
             fill="rgba(255,255,255,0.12)"
-          ></rect>
+          >
+          </rect>
           <rect
             x="0"
             y="0"
@@ -853,7 +829,8 @@
             height="10"
             rx="5"
             fill="hsl(105, 70%, 50%)"
-          ></rect>
+          >
+          </rect>
         </svg>
       </div>
 
@@ -872,21 +849,19 @@
           <span class="k">Adjusted $/oz</span><span class="v">$69.04</span>
         </div>
         <div class="kv">
-          <span class="k">Median $/oz (FLOWER)</span
-          ><span class="v">$147.04</span>
+          <span class="k">Median $/oz (FLOWER)</span><span class="v">$147.04</span>
         </div>
         <div class="kv">
           <span class="k">Min $/oz (ANY)</span><span class="v">$63.41</span>
         </div>
         <div class="kv">
-          <span class="k">Best size/price</span
-          ><span class="v">1 oz • $63.41</span>
+          <span class="k">Best size/price</span><span class="v">1 oz • $63.41</span>
         </div>
         <div class="kv">
-          <span class="k">Best item</span
-          ><span class="v" title="Tropicana Cherries- Green Pharm- MED"
-            >Tropicana Cherries- Green Pharm- MED</span
-          >
+          <span class="k">Best item</span><span
+            class="v"
+            title="Tropicana Cherries- Green Pharm- MED"
+          >Tropicana Cherries- Green Pharm- MED</span>
         </div>
         <div class="kv">
           <span class="k">Items</span><span class="v">60 valid</span>
@@ -913,7 +888,8 @@
             height="10"
             rx="5"
             fill="rgba(255,255,255,0.12)"
-          ></rect>
+          >
+          </rect>
           <rect
             x="0"
             y="0"
@@ -921,7 +897,8 @@
             height="10"
             rx="5"
             fill="hsl(102, 70%, 50%)"
-          ></rect>
+          >
+          </rect>
         </svg>
       </div>
 
@@ -940,21 +917,17 @@
           <span class="k">Adjusted $/oz</span><span class="v">$69.57</span>
         </div>
         <div class="kv">
-          <span class="k">Median $/oz (FLOWER)</span
-          ><span class="v">$119.56</span>
+          <span class="k">Median $/oz (FLOWER)</span><span class="v">$119.56</span>
         </div>
         <div class="kv">
           <span class="k">Min $/oz (ANY)</span><span class="v">$57.40</span>
         </div>
         <div class="kv">
-          <span class="k">Best size/price</span
-          ><span class="v">448 g • $918.40</span>
+          <span class="k">Best size/price</span><span class="v">448 g • $918.40</span>
         </div>
         <div class="kv">
-          <span class="k">Best item</span
-          ><span class="v" title="Peanut Butter Mints I/H - PrePack"
-            >Peanut Butter Mints I/H - PrePack</span
-          >
+          <span class="k">Best item</span><span class="v" title="Peanut Butter Mints I/H - PrePack"
+          >Peanut Butter Mints I/H - PrePack</span>
         </div>
         <div class="kv">
           <span class="k">Items</span><span class="v">71 valid</span>
@@ -981,7 +954,8 @@
             height="10"
             rx="5"
             fill="rgba(255,255,255,0.12)"
-          ></rect>
+          >
+          </rect>
           <rect
             x="0"
             y="0"
@@ -989,7 +963,8 @@
             height="10"
             rx="5"
             fill="hsl(102, 70%, 50%)"
-          ></rect>
+          >
+          </rect>
         </svg>
       </div>
 
@@ -1008,23 +983,19 @@
           <span class="k">Adjusted $/oz</span><span class="v">$71.94</span>
         </div>
         <div class="kv">
-          <span class="k">Median $/oz (FLOWER)</span
-          ><span class="v">$120.36</span>
+          <span class="k">Median $/oz (FLOWER)</span><span class="v">$120.36</span>
         </div>
         <div class="kv">
           <span class="k">Min $/oz (ANY)</span><span class="v">$60.19</span>
         </div>
         <div class="kv">
-          <span class="k">Best size/price</span
-          ><span class="v">1 oz • $60.19</span>
+          <span class="k">Best size/price</span><span class="v">1 oz • $60.19</span>
         </div>
         <div class="kv">
-          <span class="k">Best item</span
-          ><span
+          <span class="k">Best item</span><span
             class="v"
             title="*Seeded* Blue Zlushies by Greenfields Special Bulk"
-            >*Seeded* Blue Zlushies by Greenfields Special Bulk</span
-          >
+          >*Seeded* Blue Zlushies by Greenfields Special Bulk</span>
         </div>
         <div class="kv">
           <span class="k">Items</span><span class="v">453 valid</span>
@@ -1051,7 +1022,8 @@
             height="10"
             rx="5"
             fill="rgba(255,255,255,0.12)"
-          ></rect>
+          >
+          </rect>
           <rect
             x="0"
             y="0"
@@ -1059,7 +1031,8 @@
             height="10"
             rx="5"
             fill="hsl(99, 70%, 50%)"
-          ></rect>
+          >
+          </rect>
         </svg>
       </div>
 
@@ -1078,21 +1051,17 @@
           <span class="k">Adjusted $/oz</span><span class="v">$82.41</span>
         </div>
         <div class="kv">
-          <span class="k">Median $/oz (FLOWER)</span
-          ><span class="v">$80.00</span>
+          <span class="k">Median $/oz (FLOWER)</span><span class="v">$80.00</span>
         </div>
         <div class="kv">
           <span class="k">Min $/oz (ANY)</span><span class="v">$70.00</span>
         </div>
         <div class="kv">
-          <span class="k">Best size/price</span
-          ><span class="v">28 g • $70.00</span>
+          <span class="k">Best size/price</span><span class="v">28 g • $70.00</span>
         </div>
         <div class="kv">
-          <span class="k">Best item</span
-          ><span class="v" title="Kept Secret Tier 1 Flower - I 7G"
-            >Kept Secret Tier 1 Flower - I 7G</span
-          >
+          <span class="k">Best item</span><span class="v" title="Kept Secret Tier 1 Flower - I 7G"
+          >Kept Secret Tier 1 Flower - I 7G</span>
         </div>
         <div class="kv">
           <span class="k">Items</span><span class="v">5 valid</span>
@@ -1119,7 +1088,8 @@
             height="10"
             rx="5"
             fill="rgba(255,255,255,0.12)"
-          ></rect>
+          >
+          </rect>
           <rect
             x="0"
             y="0"
@@ -1127,7 +1097,8 @@
             height="10"
             rx="5"
             fill="hsl(88, 70%, 50%)"
-          ></rect>
+          >
+          </rect>
         </svg>
       </div>
 
@@ -1146,23 +1117,19 @@
           <span class="k">Adjusted $/oz</span><span class="v">$95.71</span>
         </div>
         <div class="kv">
-          <span class="k">Median $/oz (FLOWER)</span
-          ><span class="v">$160.00</span>
+          <span class="k">Median $/oz (FLOWER)</span><span class="v">$160.00</span>
         </div>
         <div class="kv">
           <span class="k">Min $/oz (ANY)</span><span class="v">$80.00</span>
         </div>
         <div class="kv">
-          <span class="k">Best size/price</span
-          ><span class="v">1 oz • $80.00</span>
+          <span class="k">Best size/price</span><span class="v">1 oz • $80.00</span>
         </div>
         <div class="kv">
-          <span class="k">Best item</span
-          ><span
+          <span class="k">Best item</span><span
             class="v"
             title="Bud - (Top Shelf) Canna Tsu 5.77% THC/8.83% CBD"
-            >Bud - (Top Shelf) Canna Tsu 5.77% THC/8.83% CBD</span
-          >
+          >Bud - (Top Shelf) Canna Tsu 5.77% THC/8.83% CBD</span>
         </div>
         <div class="kv">
           <span class="k">Items</span><span class="v">46 valid</span>
@@ -1189,7 +1156,8 @@
             height="10"
             rx="5"
             fill="rgba(255,255,255,0.12)"
-          ></rect>
+          >
+          </rect>
           <rect
             x="0"
             y="0"
@@ -1197,7 +1165,8 @@
             height="10"
             rx="5"
             fill="hsl(73, 70%, 50%)"
-          ></rect>
+          >
+          </rect>
         </svg>
       </div>
 
@@ -1216,19 +1185,17 @@
           <span class="k">Adjusted $/oz</span><span class="v">$98.85</span>
         </div>
         <div class="kv">
-          <span class="k">Median $/oz (FLOWER)</span
-          ><span class="v">$119.48</span>
+          <span class="k">Median $/oz (FLOWER)</span><span class="v">$119.48</span>
         </div>
         <div class="kv">
           <span class="k">Min $/oz (ANY)</span><span class="v">$80.37</span>
         </div>
         <div class="kv">
-          <span class="k">Best size/price</span
-          ><span class="v">1 oz • $80.37</span>
+          <span class="k">Best size/price</span><span class="v">1 oz • $80.37</span>
         </div>
         <div class="kv">
-          <span class="k">Best item</span
-          ><span class="v" title="Banana Kush Flower">Banana Kush Flower</span>
+          <span class="k">Best item</span><span class="v" title="Banana Kush Flower"
+          >Banana Kush Flower</span>
         </div>
         <div class="kv">
           <span class="k">Items</span><span class="v">48 valid</span>
@@ -1255,7 +1222,8 @@
             height="10"
             rx="5"
             fill="rgba(255,255,255,0.12)"
-          ></rect>
+          >
+          </rect>
           <rect
             x="0"
             y="0"
@@ -1263,7 +1231,8 @@
             height="10"
             rx="5"
             fill="hsl(70, 70%, 50%)"
-          ></rect>
+          >
+          </rect>
         </svg>
       </div>
 
@@ -1284,19 +1253,16 @@
           <span class="k">Adjusted $/oz</span><span class="v">$102.81</span>
         </div>
         <div class="kv">
-          <span class="k">Median $/oz (FLOWER)</span
-          ><span class="v">$180.00</span>
+          <span class="k">Median $/oz (FLOWER)</span><span class="v">$180.00</span>
         </div>
         <div class="kv">
           <span class="k">Min $/oz (ANY)</span><span class="v">$90.00</span>
         </div>
         <div class="kv">
-          <span class="k">Best size/price</span
-          ><span class="v">1 oz • $90.00</span>
+          <span class="k">Best size/price</span><span class="v">1 oz • $90.00</span>
         </div>
         <div class="kv">
-          <span class="k">Best item</span
-          ><span class="v" title="Gasonade">Gasonade</span>
+          <span class="k">Best item</span><span class="v" title="Gasonade">Gasonade</span>
         </div>
         <div class="kv">
           <span class="k">Items</span><span class="v">154 valid</span>
@@ -1323,7 +1289,8 @@
             height="10"
             rx="5"
             fill="rgba(255,255,255,0.12)"
-          ></rect>
+          >
+          </rect>
           <rect
             x="0"
             y="0"
@@ -1331,7 +1298,8 @@
             height="10"
             rx="5"
             fill="hsl(65, 70%, 50%)"
-          ></rect>
+          >
+          </rect>
         </svg>
       </div>
 
@@ -1350,21 +1318,19 @@
           <span class="k">Adjusted $/oz</span><span class="v">$104.88</span>
         </div>
         <div class="kv">
-          <span class="k">Median $/oz (FLOWER)</span
-          ><span class="v">$105.00</span>
+          <span class="k">Median $/oz (FLOWER)</span><span class="v">$105.00</span>
         </div>
         <div class="kv">
           <span class="k">Min $/oz (ANY)</span><span class="v">$75.00</span>
         </div>
         <div class="kv">
-          <span class="k">Best size/price</span
-          ><span class="v">1 oz • $95.00</span>
+          <span class="k">Best size/price</span><span class="v">1 oz • $95.00</span>
         </div>
         <div class="kv">
-          <span class="k">Best item</span
-          ><span class="v" title="MED Equinox Divorce Cake Flower 3.5g"
-            >MED Equinox Divorce Cake Flower 3.5g</span
-          >
+          <span class="k">Best item</span><span
+            class="v"
+            title="MED Equinox Divorce Cake Flower 3.5g"
+          >MED Equinox Divorce Cake Flower 3.5g</span>
         </div>
         <div class="kv">
           <span class="k">Items</span><span class="v">18 valid</span>
@@ -1391,7 +1357,8 @@
             height="10"
             rx="5"
             fill="rgba(255,255,255,0.12)"
-          ></rect>
+          >
+          </rect>
           <rect
             x="0"
             y="0"
@@ -1399,7 +1366,8 @@
             height="10"
             rx="5"
             fill="hsl(63, 70%, 50%)"
-          ></rect>
+          >
+          </rect>
         </svg>
       </div>
 
@@ -1420,21 +1388,17 @@
           <span class="k">Adjusted $/oz</span><span class="v">$110.11</span>
         </div>
         <div class="kv">
-          <span class="k">Median $/oz (FLOWER)</span
-          ><span class="v">$221.60</span>
+          <span class="k">Median $/oz (FLOWER)</span><span class="v">$221.60</span>
         </div>
         <div class="kv">
           <span class="k">Min $/oz (ANY)</span><span class="v">$91.61</span>
         </div>
         <div class="kv">
-          <span class="k">Best size/price</span
-          ><span class="v">1 oz • $91.61</span>
+          <span class="k">Best size/price</span><span class="v">1 oz • $91.61</span>
         </div>
         <div class="kv">
-          <span class="k">Best item</span
-          ><span class="v" title="Cherry Kush Mints OZ SPECIAL"
-            >Cherry Kush Mints OZ SPECIAL</span
-          >
+          <span class="k">Best item</span><span class="v" title="Cherry Kush Mints OZ SPECIAL"
+          >Cherry Kush Mints OZ SPECIAL</span>
         </div>
         <div class="kv">
           <span class="k">Items</span><span class="v">97 valid</span>
@@ -1461,7 +1425,8 @@
             height="10"
             rx="5"
             fill="rgba(255,255,255,0.12)"
-          ></rect>
+          >
+          </rect>
           <rect
             x="0"
             y="0"
@@ -1469,7 +1434,8 @@
             height="10"
             rx="5"
             fill="hsl(57, 70%, 50%)"
-          ></rect>
+          >
+          </rect>
         </svg>
       </div>
 
@@ -1488,21 +1454,19 @@
           <span class="k">Adjusted $/oz</span><span class="v">$111.07</span>
         </div>
         <div class="kv">
-          <span class="k">Median $/oz (FLOWER)</span
-          ><span class="v">$115.00</span>
+          <span class="k">Median $/oz (FLOWER)</span><span class="v">$115.00</span>
         </div>
         <div class="kv">
           <span class="k">Min $/oz (ANY)</span><span class="v">$75.00</span>
         </div>
         <div class="kv">
-          <span class="k">Best size/price</span
-          ><span class="v">1/4 oz • $25.00</span>
+          <span class="k">Best size/price</span><span class="v">1/4 oz • $25.00</span>
         </div>
         <div class="kv">
-          <span class="k">Best item</span
-          ><span class="v" title="MED Equinox Divorce Cake Flower 3.5g"
-            >MED Equinox Divorce Cake Flower 3.5g</span
-          >
+          <span class="k">Best item</span><span
+            class="v"
+            title="MED Equinox Divorce Cake Flower 3.5g"
+          >MED Equinox Divorce Cake Flower 3.5g</span>
         </div>
         <div class="kv">
           <span class="k">Items</span><span class="v">10 valid</span>
@@ -1529,7 +1493,8 @@
             height="10"
             rx="5"
             fill="rgba(255,255,255,0.12)"
-          ></rect>
+          >
+          </rect>
           <rect
             x="0"
             y="0"
@@ -1537,7 +1502,8 @@
             height="10"
             rx="5"
             fill="hsl(56, 70%, 50%)"
-          ></rect>
+          >
+          </rect>
         </svg>
       </div>
 
@@ -1556,19 +1522,17 @@
           <span class="k">Adjusted $/oz</span><span class="v">$137.92</span>
         </div>
         <div class="kv">
-          <span class="k">Median $/oz (FLOWER)</span
-          ><span class="v">$146.32</span>
+          <span class="k">Median $/oz (FLOWER)</span><span class="v">$146.32</span>
         </div>
         <div class="kv">
           <span class="k">Min $/oz (ANY)</span><span class="v">$114.31</span>
         </div>
         <div class="kv">
-          <span class="k">Best size/price</span
-          ><span class="v">1 oz • $114.31</span>
+          <span class="k">Best size/price</span><span class="v">1 oz • $114.31</span>
         </div>
         <div class="kv">
-          <span class="k">Best item</span
-          ><span class="v" title="EMERGEN-C | MED">EMERGEN-C | MED</span>
+          <span class="k">Best item</span><span class="v" title="EMERGEN-C | MED"
+          >EMERGEN-C | MED</span>
         </div>
         <div class="kv">
           <span class="k">Items</span><span class="v">35 valid</span>
@@ -1595,7 +1559,8 @@
             height="10"
             rx="5"
             fill="rgba(255,255,255,0.12)"
-          ></rect>
+          >
+          </rect>
           <rect
             x="0"
             y="0"
@@ -1603,7 +1568,8 @@
             height="10"
             rx="5"
             fill="hsl(27, 70%, 50%)"
-          ></rect>
+          >
+          </rect>
         </svg>
       </div>
 
@@ -1622,21 +1588,17 @@
           <span class="k">Adjusted $/oz</span><span class="v">$143.55</span>
         </div>
         <div class="kv">
-          <span class="k">Median $/oz (FLOWER)</span
-          ><span class="v">$122.80</span>
+          <span class="k">Median $/oz (FLOWER)</span><span class="v">$122.80</span>
         </div>
         <div class="kv">
           <span class="k">Min $/oz (ANY)</span><span class="v">$24.92</span>
         </div>
         <div class="kv">
-          <span class="k">Best size/price</span
-          ><span class="v">1 oz • $113.49</span>
+          <span class="k">Best size/price</span><span class="v">1 oz • $113.49</span>
         </div>
         <div class="kv">
-          <span class="k">Best item</span
-          ><span class="v" title="M-Lunar Haze-(S)-Bulk-Natty Rems"
-            >M-Lunar Haze-(S)-Bulk-Natty Rems</span
-          >
+          <span class="k">Best item</span><span class="v" title="M-Lunar Haze-(S)-Bulk-Natty Rems"
+          >M-Lunar Haze-(S)-Bulk-Natty Rems</span>
         </div>
         <div class="kv">
           <span class="k">Items</span><span class="v">55 valid</span>
@@ -1663,7 +1625,8 @@
             height="10"
             rx="5"
             fill="rgba(255,255,255,0.12)"
-          ></rect>
+          >
+          </rect>
           <rect
             x="0"
             y="0"
@@ -1671,7 +1634,8 @@
             height="10"
             rx="5"
             fill="hsl(21, 70%, 50%)"
-          ></rect>
+          >
+          </rect>
         </svg>
       </div>
 
@@ -1690,21 +1654,17 @@
           <span class="k">Adjusted $/oz</span><span class="v">$143.91</span>
         </div>
         <div class="kv">
-          <span class="k">Median $/oz (FLOWER)</span
-          ><span class="v">$119.48</span>
+          <span class="k">Median $/oz (FLOWER)</span><span class="v">$119.48</span>
         </div>
         <div class="kv">
           <span class="k">Min $/oz (ANY)</span><span class="v">$119.48</span>
         </div>
         <div class="kv">
-          <span class="k">Best size/price</span
-          ><span class="v">1 oz • $119.48</span>
+          <span class="k">Best size/price</span><span class="v">1 oz • $119.48</span>
         </div>
         <div class="kv">
-          <span class="k">Best item</span
-          ><span class="v" title="Flower Pound - Furious George"
-            >Flower Pound - Furious George</span
-          >
+          <span class="k">Best item</span><span class="v" title="Flower Pound - Furious George"
+          >Flower Pound - Furious George</span>
         </div>
         <div class="kv">
           <span class="k">Items</span><span class="v">3 valid</span>
@@ -1731,7 +1691,8 @@
             height="10"
             rx="5"
             fill="rgba(255,255,255,0.12)"
-          ></rect>
+          >
+          </rect>
           <rect
             x="0"
             y="0"
@@ -1739,14 +1700,14 @@
             height="10"
             rx="5"
             fill="hsl(20, 70%, 50%)"
-          ></rect>
+          >
+          </rect>
         </svg>
       </div>
     </div>
     <div class="footer">
-      Lower adjusted price is better. Filters exclude shake/trim/popcorn and
-      bundle/mix-and-match items. Per-slug audit CSVs list the cheapest items by
-      $/oz for manual review.
+      Lower adjusted price is better. Filters exclude shake/trim/popcorn and bundle/mix-and-match
+      items. Per-slug audit CSVs list the cheapest items by $/oz for manual review.
     </div>
   </body>
 </html>

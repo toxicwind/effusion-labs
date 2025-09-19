@@ -1,8 +1,8 @@
 # Theming
 
-Effusion Labs now ships with DaisyUI's `dim` palette as the primary experience
-and promotes `silk` as the high-key fallback. Both modes are defined in
-`src/assets/css/app.css`, where CSS variables feed Tailwind's color tokens.
+Effusion Labs now ships with DaisyUI's `dim` palette as the primary experience and promotes `silk`
+as the high-key fallback. Both modes are defined in `src/assets/css/app.css`, where CSS variables
+feed Tailwind's color tokens.
 
 ## Tokens
 
@@ -25,18 +25,17 @@ html[data-theme="silk"] {
 }
 ```
 
-Tailwind utilities such as `bg-background`, `bg-surface` and `text-text` resolve
-to these values, so the same markup adapts across modes without duplicates.
+Tailwind utilities such as `bg-background`, `bg-surface` and `text-text` resolve to these values, so
+the same markup adapts across modes without duplicates.
 
 ## Toggle
 
-The site boots with `dim` regardless of system settings. The header button
-invokes `ThemeUtils.toggleTheme()` to swap between `dim` and `silk`, persists
-the selection to `localStorage`, and refreshes `meta[color-scheme]` so browsers
-draw widgets with the right contrast.
+The site boots with `dim` regardless of system settings. The header button invokes
+`ThemeUtils.toggleTheme()` to swap between `dim` and `silk`, persists the selection to
+`localStorage`, and refreshes `meta[color-scheme]` so browsers draw widgets with the right contrast.
 
 ## Extending
 
-Add new variables in `app.css`, update `tailwind.config.mjs` if you need
-additional semantic colors, and call `ThemeUtils.configure()` with a custom
-`allowed` array when introducing extra DaisyUI themes.
+Add new variables in `app.css`, update `tailwind.config.mjs` if you need additional semantic colors,
+and call `ThemeUtils.configure()` with a custom `allowed` array when introducing extra DaisyUI
+themes.

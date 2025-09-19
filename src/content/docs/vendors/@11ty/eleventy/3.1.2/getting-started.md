@@ -5,31 +5,27 @@ Breadcrumbs:
 
 ## Get Started
 
-Eleventy v3.1.2 requires a
-[JavaScript runtime](https://www.11ty.dev/docs/javascript-runtime/), usually
-**[Node.js](https://nodejs.org/)** — **version 18** or higher.
+Eleventy v3.1.2 requires a [JavaScript runtime](https://www.11ty.dev/docs/javascript-runtime/),
+usually **[Node.js](https://nodejs.org/)** — **version 18** or higher.
 
-You can check whether or not you have Node.js installed by running
-`node --version` in a terminal application.
-([_Well, wait—what is a Terminal?_](https://www.11ty.dev/docs/terminal-window/))
-If the command is not found or it reports a number lower than 18, you will need
-to [download and install Node.js](https://nodejs.org/en/download/) before moving
-on to the next step. We encourage folks to use
-[even numbered releases](https://www.11ty.dev/docs/javascript-runtime/#odd-versions-of-node-js)
-of Node.js.
+You can check whether or not you have Node.js installed by running `node --version` in a terminal
+application. ([_Well, wait—what is a Terminal?_](https://www.11ty.dev/docs/terminal-window/)) If the
+command is not found or it reports a number lower than 18, you will need to
+[download and install Node.js](https://nodejs.org/en/download/) before moving on to the next step.
+We encourage folks to use
+[even numbered releases](https://www.11ty.dev/docs/javascript-runtime/#odd-versions-of-node-js) of
+Node.js.
 
 Prefer to watch videos instead? Check out
 [**6 minutes to Build a Blog from Scratch**](https://www.youtube.com/watch?v=kzf9A9tkkl4).
 
 ## Step 1 Make a Project Directory
 
-Create a directory for your project using the `mkdir` command (short for _make
-directory_):
+Create a directory for your project using the `mkdir` command (short for _make directory_):
 
     mkdir eleventy-sample
 
-Now move into that directory with the `cd` command (short for _change
-directory_):
+Now move into that directory with the `cd` command (short for _change directory_):
 
     cd eleventy-sample
 
@@ -41,9 +37,9 @@ Installing Eleventy into a project requires a `package.json` file.
 
     npm init -y
 
-The `npm` command (included with Node.js) will create a `package.json` file for
-you with [`npm init -y`](https://docs.npmjs.com/cli/init). The `-y` flag tells
-`npm` to use default values and skips the questionnaire.
+The `npm` command (included with Node.js) will create a `package.json` file for you with
+[`npm init -y`](https://docs.npmjs.com/cli/init). The `-y` flag tells `npm` to use default values
+and skips the questionnaire.
 
 Use the following command if you want to use
 [ESM in your project and not CommonJS](https://www.11ty.dev/docs/cjs-esm/).
@@ -56,13 +52,12 @@ Learn more about [pnpm](https://pnpm.io/) (it requires separate installation).
 
     yarn init
 
-Learn more about [yarn](https://yarnpkg.com/) (it requires separate
-installation).
+Learn more about [yarn](https://yarnpkg.com/) (it requires separate installation).
 
 ### Install Eleventy
 
-[`@11ty/eleventy` is published on npm](https://www.npmjs.com/package/@11ty/eleventy)
-and we can install and save it into our project’s `package.json` by running:
+[`@11ty/eleventy` is published on npm](https://www.npmjs.com/package/@11ty/eleventy) and we can
+install and save it into our project’s `package.json` by running:
 
     npm install @11ty/eleventy
 
@@ -70,16 +65,15 @@ and we can install and save it into our project’s `package.json` by running:
 
     yarn add @11ty/eleventy
 
-_You may also
-[install Eleventy globally](https://www.11ty.dev/docs/global-installation/) but
-the `package.json` installation method above is recommended._
+_You may also [install Eleventy globally](https://www.11ty.dev/docs/global-installation/) but the
+`package.json` installation method above is recommended._
 
 ## Step 3 Run Eleventy
 
     npx @11ty/eleventy
 
-We can use the `npx` command (also provided by Node.js) to run our local
-project's version of Eleventy.
+We can use the `npx` command (also provided by Node.js) to run our local project's version of
+Eleventy.
 
     pnpm exec eleventy
 
@@ -89,9 +83,8 @@ Here’s what your command line might look like after you run Eleventy:
 
     [11ty] Wrote 0 files in 0.03 seconds (v3.1.2)
 
-If you see `(v3.1.2)` in your output you know you’re using the newest version.
-However, Eleventy didn’t process any files! This is expected—we have an empty
-folder with no templates inside.
+If you see `(v3.1.2)` in your output you know you’re using the newest version. However, Eleventy
+didn’t process any files! This is expected—we have an empty folder with no templates inside.
 
 ## Step 4 Create some templates
 
@@ -105,19 +98,18 @@ Let’s run two commands to create two new template files.
 
     echo '<!doctype html><title>Page title</title><p>Hi</p>' | out-file -encoding utf8 'index.html'echo '# Heading' | out-file -encoding utf8 'README.md'
 
-If the `out-file` command is not available in your Windows Terminal window (it’s
-PowerShell specific), use the Cross Platform method instead.
+If the `out-file` command is not available in your Windows Terminal window (it’s PowerShell
+specific), use the Cross Platform method instead.
 
     npx @11ty/create index.html "<!doctype html><title>Page title</title><p>Hi</p>"npx @11ty/create README.md "# Heading"
 
-Learn more about [`@11ty/create`](https://github.com/11ty/create) _(requires
-Node.js 18 or newer)_.
+Learn more about [`@11ty/create`](https://github.com/11ty/create) _(requires Node.js 18 or newer)_.
 
-Alternatively, you can create these using any text editor — make sure you save
-them into your project folder and they have the correct file extensions.
+Alternatively, you can create these using any text editor — make sure you save them into your
+project folder and they have the correct file extensions.
 
-After you’ve created an HTML template and a Markdown template, let’s run
-Eleventy again with the following command:
+After you’ve created an HTML template and a Markdown template, let’s run Eleventy again with the
+following command:
 
     npx @11ty/eleventy
 
@@ -129,13 +121,12 @@ The output might look like this:
 
     [11ty] Writing _site/README/index.html from ./README.md (liquid)[11ty] Writing _site/index.html from ./index.html (liquid)[11ty] Wrote 2 files in 0.04 seconds (v3.1.2)
 
-We’ve now compiled our two content templates in the current directory into the
-output folder (`_site` is the default).
+We’ve now compiled our two content templates in the current directory into the output folder
+(`_site` is the default).
 
 If you’d like to experiment further with
-[template file syntax](https://www.11ty.dev/docs/languages/), edit the following
-sample `README.md` file in your browser.
-[Front Matter](https://www.11ty.dev/docs/data-frontmatter/),
+[template file syntax](https://www.11ty.dev/docs/languages/), edit the following sample `README.md`
+file in your browser. [Front Matter](https://www.11ty.dev/docs/data-frontmatter/),
 [Liquid](https://www.11ty.dev/docs/languages/liquid/) and
 [Markdown](https://www.11ty.dev/docs/languages/markdown/) syntax are in use.
 
@@ -155,57 +146,50 @@ Your command line might look something like:
 
     [11ty] Writing _site/index.html from ./index.html (liquid)[11ty] Writing _site/README/index.html from ./README.md (liquid)[11ty] Wrote 2 files in 0.04 seconds (v3.1.2)[11ty] Watching…[11ty] Server at http://localhost:8080/
 
-Open `http://localhost:8080/` or `http://localhost:8080/README/` in your
-favorite web browser to see your Eleventy site live! When you save your template
-files—Eleventy will refresh the browser with your new changes automatically!
+Open `http://localhost:8080/` or `http://localhost:8080/README/` in your favorite web browser to see
+your Eleventy site live! When you save your template files—Eleventy will refresh the browser with
+your new changes automatically!
 
 ## Step 6 Put it online (optional)
 
-Your output folder (`_site`) now contains all of the statically built files for
-your new web site. You can upload this folder to any web host! Head over to our
-[deployment documentation](https://www.11ty.dev/docs/deployment/) to read more
-about putting your Eleventy project online for everyone to see.
+Your output folder (`_site`) now contains all of the statically built files for your new web site.
+You can upload this folder to any web host! Head over to our
+[deployment documentation](https://www.11ty.dev/docs/deployment/) to read more about putting your
+Eleventy project online for everyone to see.
 
 ## Step 7 Continue Learning…
 
 Congratulations—you made something with Eleventy! Now put it to work:
 
-1. Add more content! In the above tutorial we used
-   [HTML](https://www.11ty.dev/docs/languages/html/) and
-   [Markdown](https://www.11ty.dev/docs/languages/markdown/). Why not
+1. Add more content! In the above tutorial we used [HTML](https://www.11ty.dev/docs/languages/html/)
+   and [Markdown](https://www.11ty.dev/docs/languages/markdown/). Why not
    [JavaScript](https://www.11ty.dev/docs/languages/javascript/) or
    [WebC](https://www.11ty.dev/docs/languages/webc/) (for components) next?
    [Nunjucks](https://www.11ty.dev/docs/languages/nunjucks/) and
-   [Liquid](https://www.11ty.dev/docs/languages/liquid/) are also very popular.
-   Maybe you’re feeling super adventurous and want to
+   [Liquid](https://www.11ty.dev/docs/languages/liquid/) are also very popular. Maybe you’re feeling
+   super adventurous and want to
    [add your own custom type?](https://www.11ty.dev/docs/languages/custom/).
 2. Use
    [a layout file so that you don’t have to repeat boilerplate on every template](https://www.11ty.dev/docs/layouts/).
-3. Add a [configuration file](https://www.11ty.dev/docs/config/) to unlock
-   advanced Eleventy capabilities!
-4. Add [CSS, JavaScript, or Web Fonts](https://www.11ty.dev/docs/assets/) to
-   your project.
-5. It’s super easy to add automated
-   [Image optimization](https://www.11ty.dev/docs/plugins/image/) too!
-6. Learn more of the
-   [command line options for Eleventy](https://www.11ty.dev/docs/usage/).
-7. Perhaps you’d like to
-   [consume data from third party APIs](https://www.11ty.dev/docs/data-js/) in
+3. Add a [configuration file](https://www.11ty.dev/docs/config/) to unlock advanced Eleventy
+   capabilities!
+4. Add [CSS, JavaScript, or Web Fonts](https://www.11ty.dev/docs/assets/) to your project.
+5. It’s super easy to add automated [Image optimization](https://www.11ty.dev/docs/plugins/image/)
+   too!
+6. Learn more of the [command line options for Eleventy](https://www.11ty.dev/docs/usage/).
+7. Perhaps you’d like to [consume data from third party APIs](https://www.11ty.dev/docs/data-js/) in
    your project?
 
 ### Tutorials and Starter Projects
 
 For folks wanting to **build a blog**, you can learn how to
-[start from scratch](https://www.youtube.com/watch?v=kzf9A9tkkl4) _(learn how it
-works)_ or use our
-[official Blog starter project](https://github.com/11ty/eleventy-base-blog)
-_(get up and running faster)_:
+[start from scratch](https://www.youtube.com/watch?v=kzf9A9tkkl4) _(learn how it works)_ or use our
+[official Blog starter project](https://github.com/11ty/eleventy-base-blog) _(get up and running
+faster)_:
 
-You can also use one of the many
-[**Starter Projects**](https://www.11ty.dev/docs/starter/) or read some of our
-excellent Community-contributed
-[**Tutorials**](https://www.11ty.dev/docs/tutorials/) (a curated few of which
-are included below):
+You can also use one of the many [**Starter Projects**](https://www.11ty.dev/docs/starter/) or read
+some of our excellent Community-contributed [**Tutorials**](https://www.11ty.dev/docs/tutorials/) (a
+curated few of which are included below):
 
 ×99 resources via **[11tybundle.dev](https://11tybundle.dev/)** curated by
 [![IndieWeb Avatar for https://v1.indieweb-avatar.11ty.dev/https%3A%2F%2Fwww.bobmonsour.com%2F/](https://v1.indieweb-avatar.11ty.dev/https%3A%2F%2Fwww.bobmonsour.com%2F/)Bob Monsour](https://www.bobmonsour.com/).

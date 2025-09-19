@@ -47,8 +47,7 @@ Deno
 
 ## [](#framework-install-tutorials)Framework install tutorials
 
-See example setup of daisyUI and Tailwind CSS on different frameworks and build
-tools.
+See example setup of daisyUI and Tailwind CSS on different frameworks and build tools.
 
 ![daisyUI store](https://img.daisyui.com/images/store/nexus.webp)
 

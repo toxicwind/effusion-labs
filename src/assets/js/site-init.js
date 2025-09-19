@@ -17,7 +17,8 @@ export const onReady = cb => {
 }
 const qs = (sel, root = document) => root.querySelector(sel)
 const qsa = (sel, root = document) => Array.from(root.querySelectorAll(sel))
-const prefersReducedMotion = () => window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches ?? false
+const prefersReducedMotion = () =>
+  window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches ?? false
 const saveData = () => {
   try {
     const c = navigator.connection

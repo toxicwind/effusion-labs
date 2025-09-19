@@ -1,7 +1,7 @@
 # Context Recap
 
-Templated link warnings filtered with dedicated utility and test content
-excluded, producing clean builds.
+Templated link warnings filtered with dedicated utility and test content excluded, producing clean
+builds.
 
 # Outstanding Items
 

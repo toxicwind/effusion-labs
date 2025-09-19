@@ -5,16 +5,13 @@
 - Files: .prettierrc; README.md; package.json; package-lock.json;
   test/unit/prettier-package.test.mjs; test/unit/no-guardrails.test.mjs;
   logs/prettier-guardrails-red.log; logs/prettier-guardrails-green.log;
-  docs/knowledge/prettier-guardrails/test-red.log;
-  docs/knowledge/prettier-guardrails/test-green.log
+  docs/knowledge/prettier-guardrails/test-red.log; docs/knowledge/prettier-guardrails/test-green.log
 - Proofs:
   - Failing: logs/prettier-guardrails-red.log lines 544;1221
   - Passing: logs/prettier-guardrails-green.log lines 8-20
 - Acceptance Map:
-  - Prettier pinned version and format script ->
-    test/unit/prettier-package.test.mjs
-  - Repository contains no legacy test-with-guardrails script ->
-    test/unit/no-guardrails.test.mjs
+  - Prettier pinned version and format script -> test/unit/prettier-package.test.mjs
+  - Repository contains no legacy test-with-guardrails script -> test/unit/no-guardrails.test.mjs
 - Commit Graph:
   - 974889c docs:prettier-guardrails sync docs with repo state
   - 0a5c805 refactor:prettier-guardrails unify and modernize

@@ -2,21 +2,15 @@
 
 - Time: 2025-08-18T04:17:19Z
 - Diffstat: see `git diff --stat HEAD~5..HEAD`
-- Files changed: README.md, bin/node, bin/npm,
-  docs/knowledge/node-shim-prove.md, logs/node-shim-prove.log,
-  logs/node-shim-unit-prove.log, test/unit/node-shim.test.mjs,
+- Files changed: README.md, bin/node, bin/npm, docs/knowledge/node-shim-prove.md,
+  logs/node-shim-prove.log, logs/node-shim-unit-prove.log, test/unit/node-shim.test.mjs,
   logs/docs-links.log
-- Proofs: logs/node-shim-unit-prove.log (fail), logs/node-shim-prove.log (suite
-  fail)
-- Acceptance Map: node shim version matches system node; shim executable; lacks
-  llm-constants
+- Proofs: logs/node-shim-unit-prove.log (fail), logs/node-shim-prove.log (suite fail)
+- Acceptance Map: node shim version matches system node; shim executable; lacks llm-constants
 - Commit graph: `git log --oneline -n 5`
 - Capture hashes:
-  - logs/node-shim-prove.log:
-    40210d78629b0d461d8628aac06997dd72503387c2b88d0c5c67c03f5ed181ff
-  - logs/node-shim-unit-prove.log:
-    2bac8f48cd19cb830f9c15a320853cbbee7f1d861c73e15fa59a525fd081a080
-  - logs/docs-links.log:
-    f13671568040182d054b7dce248859d6174f9645b7896219305a2a1c76b4e3e3
+  - logs/node-shim-prove.log: 40210d78629b0d461d8628aac06997dd72503387c2b88d0c5c67c03f5ed181ff
+  - logs/node-shim-unit-prove.log: 2bac8f48cd19cb830f9c15a320853cbbee7f1d861c73e15fa59a525fd081a080
+  - logs/docs-links.log: f13671568040182d054b7dce248859d6174f9645b7896219305a2a1c76b4e3e3
 - Network: direct
 - Rollback: `git reset --hard ee613c1`

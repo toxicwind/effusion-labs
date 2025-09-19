@@ -8,11 +8,12 @@
 {%- endmacro %}
 
 {% macro buildPageDesc(resume) -%}
-  {%- set base = "Resume — " ~ (resume and resume.name or "—") ~ " — " ~ (resume and resume.title or "LLM Engineering, LLMOps, Data Platforms") -%}
+  {%-
+    set base = "Resume — " ~ (resume and resume.name or "—") ~ " — " ~ (resume and resume.title or "LLM Engineering, LLMOps, Data Platforms")
+  -%}
   {%- if resume and resume.location -%}
     {{ base ~ " (" ~ resume.location ~ ")" }}
   {%- else -%}
     {{ base }}
   {%- endif -%}
 {%- endmacro %}
-
