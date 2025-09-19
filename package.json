@@ -14,23 +14,30 @@
     "bench": "DEBUG=Eleventy:Benchmark* npx @11ty/eleventy",
     "build": "npx @11ty/eleventy",
     "clean": "del-cli _site",
-    "format:check": "dprint check",
-    "format": "dprint fmt",
+
+    "format:check": "dprint check -c dprint.json",
+    "format": "dprint fmt -c dprint.json",
+    "fmt:classes": "rustywind --write \"src/**/*.{njk,html,js,jsx,ts,tsx}\"",
+    "format:all": "npm run fmt:classes && npm run format",
+    "format:check:all": "npm run format:check",
+
+    "lint": "npm-run-all --parallel lint:*",
+    "lint:js": "eslint . --max-warnings=0 --report-unused-disable-directives",
+    "lint:fix": "eslint . --fix",
+    "lint:links": "markdown-link-check -c oneoff/link-check.config.json README.md",
+
     "test": "c8 node test/integration/runner.spec.mjs",
     "test:watch": "node --watch test/integration/runner.spec.mjs",
+
     "check": "npm run doctor && npm run format:check && npm run lint && npm run test",
     "doctor": "node tools/doctor.mjs",
-    "lint": "npm-run-all --parallel lint:*",
-    "lint:js": "eslint .",
-    "lint:links": "markdown-link-check -c oneoff/link-check.config.json README.md",
+
     "deps:playwright": "playwright install chromium || true",
     "mcp:dev": "node mcp-stack/gateway/server.mjs",
     "mcp:integration": "node mcp-stack/tests/integration.mjs",
     "mcp:test": "node mcp-stack/tests/smoke.mjs",
-    "postinstall": "node tools/dev/link-local-chrome-shims.mjs && if [ \"${PATCH_PACKAGE_RUN:-1}\" != \"0\" ] && [ -x node_modules/.bin/patch-package ]; then patch-package; fi",
-    "fmt:classes": "rustywind --write \"src/**/*.{njk,html,js,jsx,ts,tsx}\"",
-    "format:all": "npm run fmt:classes && npm run format",
-    "format:check:all": "npm run format:check"
+
+    "postinstall": "node tools/dev/link-local-chrome-shims.mjs && if [ \"${PATCH_PACKAGE_RUN:-1}\" != \"0\" ] && [ -x node_modules/.bin/patch-package ]; then patch-package; fi"
   },
   "devDependencies": {
     "@11ty/eleventy": "3.1.2",
@@ -40,6 +47,7 @@
     "@11ty/eleventy-plugin-syntaxhighlight": "^5.0.0",
     "@11ty/eleventy-plugin-vite": "7.0.0",
     "@babel/parser": "7.28.4",
+    "@eslint/js": "^9.35.0",
     "@mozilla/readability": "0.6.0",
     "@photogabble/eleventy-plugin-interlinker": "1.1.0",
     "@playwright/test": "1.55.0",
@@ -66,15 +74,16 @@
     "depcheck": "^1.4.7",
     "dprint": "^0.50.2",
     "eslint": "^9.35.0",
-    "eslint-config-prettier": "^10.1.8",
-    "eslint-config-standard": "^17.1.0",
+    "eslint-import-resolver-typescript": "^4.4.4",
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-n": "^17.23.1",
     "eslint-plugin-promise": "^7.2.1",
+    "eslint-plugin-unicorn": "^61.0.2",
     "fast-glob": "3.3.3",
     "fd-find": "1.2.0",
     "focus-visible": "^5.2.1",
     "fs-extra": "11.3.2",
+    "globals": "^16.4.0",
     "gray-matter": "4.0.3",
     "hast-util-select": "6.0.4",
     "jscodeshift": "^17.3.0",
@@ -106,12 +115,11 @@
     "postcss": "^8.5.6",
     "postcss-nesting": "^13.0.0",
     "proxy-chain": "2.5.9",
-    "puppeteer": "^23.11.1",
+    "puppeteer": "^24.22.0",
     "recast": "0.23.11",
     "rehype-parse": "9.0.1",
     "rehype-remark": "10.0.1",
     "rehype-sanitize": "6.0.0",
-    "remark-footnotes": "5.0.0",
     "remark-gfm": "4.0.1",
     "remark-math": "6.0.0",
     "remark-smartypants": "3.0.2",
@@ -123,6 +131,8 @@
     "slugify": "1.6.6",
     "tailwindcss": "4.1.13",
     "tree-cli": "0.6.7",
+    "typescript": "^5.9.2",
+    "typescript-eslint": "^8.44.0",
     "undici": "7.16.0",
     "unified": "11.0.5",
     "vite": "7.1.6",
@@ -130,6 +140,6 @@
     "yargs": "18.0.0"
   },
   "engines": {
-    "node": ">=v22.19.0"
+    "node": ">=22.19.0"
   }
 }
