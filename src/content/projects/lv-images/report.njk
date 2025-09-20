@@ -1,349 +1,493 @@
 ---
 title: LV Image Atlas — Report
 permalink: /lv/report/
+layout: base.njk
+fullBleed: true
+metaDisable: true
 ---
 
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>{{ title }}</title>
-<style>
-:root{ --bg:#0b0f14; --panel:#10161c; --muted:#9fb0c3; --text:#e6edf3; --brand:#6aa6ff;
-  --ok:#26c281; --warn:#ffb020; --bad:#ff5d5d; --border:#1a2330; }
-*{box-sizing:border-box}
-body{margin:0; background:var(--bg); color:var(--text);
-  font:14px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,'Helvetica Neue',Arial}
-a{color:var(--brand); text-decoration:none} a:hover{text-decoration:underline}
-.header{position:sticky; top:0; z-index:20; background:linear-gradient(180deg, rgba(11,15,20,.95), rgba(11,15,20,.75));
-  border-bottom:1px solid var(--border); backdrop-filter: blur(6px)}
-.wrap{max-width:1200px; margin:0 auto; padding:16px 20px}
-.hstack{display:flex; align-items:center; gap:12px; flex-wrap:wrap}
-.title{font-size:20px; font-weight:700}
-.badge{display:inline-block; padding:4px 8px; border-radius:999px; background:#0c1219; border:1px solid var(--border); color:#c9d6e2; font-size:12px}
-.badge.ok{background:rgba(38,194,129,.12); color:#8cf0c8; border-color:rgba(38,194,129,.45)}
-.badge.bad{background:rgba(255,93,93,.12); color:#ffb3b3; border-color:rgba(255,93,93,.45)}
-.section{margin:22px 0} .section h2{font-size:16px; margin:0 0 10px 0; color:#d6e2f0}
-.card{background:var(--panel); border:1px solid var(--border); border-radius:16px; padding:12px}
-.table{width:100%; border-collapse:separate; border-spacing:0}
-.table th,.table td{padding:10px 12px; text-align:left; border-bottom:1px solid var(--border)}
-.table thead th{position:sticky; top:64px; background:var(--panel); z-index:5; font-size:12px; color:#c9d6e2; text-transform:uppercase; letter-spacing:.03em}
-.table tbody tr:hover{background:#0f1720}
-.input{padding:9px 12px; background:#0c1219; border:1px solid var(--border); color:#fff; border-radius:10px; width:320px}
-.pill{padding:6px 10px; border:1px solid var(--border); background:#0c1219; color:#cfe3ff; border-radius:999px; cursor:pointer}
-.pill.active{background:#0f1620; border-color:#24405e}
-.grid{display:grid; grid-template-columns:repeat(6,1fr); gap:8px}
-.thumb{position:relative; border-radius:12px; overflow:hidden; background:#0c1219; border:1px solid var(--border); aspect-ratio:1/1}
-.thumb img{width:100%; height:100%; object-fit:cover; display:block}
-.small{font-size:12px; color:var(--muted)}
-.rule-list{display:flex; gap:6px; flex-wrap:wrap}
-.rule{display:inline-flex; align-items:center; gap:6px; font-size:12px; background:#0c1219; border:1px solid var(--border);
-  padding:4px 8px; border-radius:999px}
-.grid-robots{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px}
-@media (max-width: 1000px){ .grid-robots{grid-template-columns:1fr} }
-details summary{cursor:pointer; outline:none}
-pre.raw{max-height:320px; overflow:auto; background:#0b1218; border:1px solid var(--border); padding:10px; border-radius:10px; color:#b9cadd; white-space:pre-wrap}
-.typechip{display:inline-block; padding:4px 8px; border-radius:999px; background:#0c1219; border:1px solid var(--border); font-size:12px; color:#c9d6e2}
-</style>
-</head>
-<body>
-<header class="header">
-  <div class="wrap hstack">
-    <div class="title">LV Image Atlas — Report</div>
-    <div class="hstack">
-      <span class="badge">Generated: {{ lvreport.summary.generatedAt or "n/a" }}</span>
-      <span class="badge">Version: {{ lvreport.summary.version or "n/a" }}</span>
-      <span class="badge">Items: {{ lvreport.summary.totals.items or 0 }}</span>
-      <span class="badge">Pages: {{ lvreport.summary.totals.pages or 0 }}</span>
-    </div>
-  </div>
-</header>
+{% set lv = lvreport.lvreport or lvreport or {} %}
+{% set baseHref = lv.baseHref or '/content/projects/lv-images/generated/lv/' %}
+{% set summary = lv.summary or {} %}
+{% set totals = summary.totals or {} %}
+{% set sitemaps = lv.sitemaps or [] %}
+{% set docs = lv.docs or [] %}
+{% set robots = lv.robots or [] %}
+{% set sample = lv.sample or [] %}
 
-<main class="wrap">
-
-  <section class="section">
-    <h2>Hosts & Sitemaps</h2>
-    <div class="card">
-      <div class="hstack" style="gap:10px;margin-bottom:8px">
-        <input id="sitemapFilter" class="input" placeholder="Filter by host / URL…">
-        <div id="typeChips" class="hstack" style="gap:6px;flex-wrap:wrap"></div>
-        <button class="pill" id="exportSitemaps">Export CSV</button>
+<div class="max-w-screen-2xl mx-auto px-6 py-10 space-y-12">
+  <header class="space-y-6">
+    <div class="flex flex-wrap items-end justify-between gap-4">
+      <div>
+        <h1 class="text-3xl font-semibold tracking-tight">LV Image Atlas — Report</h1>
+        <p class="text-sm opacity-70">Sourced from <code>src/content/projects/lv-images/generated/lv/</code></p>
       </div>
-      <table class="table" id="sitemapsTable">
-        <thead><tr><th>Host</th><th>Type</th><th>Images</th><th>Status</th><th>Live URL</th><th>Cached</th></tr></thead>
-        <tbody>
-        {% for r in lvreport.sitemaps %}
-          <tr data-type="{{ r.type }}">
-            <td>{{ r.host }}</td>
-            <td><span class="typechip">{{ r.type }}</span></td>
-            <td>{{ r.imageCount }}</td>
-            <td>{{ r.status }}</td>
-            <td><a href="{{ r.url }}" target="_blank" rel="noreferrer">{{ r.url }}</a></td>
-            <td>
-              {% if r.savedPath %}
-                <a href="{{ lvreport.baseHref }}{{ r.savedPath }}" target="_blank" rel="noreferrer">open</a>
-              {% else %}—{% endif %}
-            </td>
-          </tr>
-        {% endfor %}
-        </tbody>
-      </table>
+      {% if baseHref %}
+        <a href="{{ baseHref }}" class="btn btn-sm btn-outline" target="_blank" rel="noreferrer">Open generated directory</a>
+      {% endif %}
     </div>
-  </section>
-
-  <section class="section">
-    <h2>Robots Explorer (full content)</h2>
-    <div class="card">
-      <div class="hstack" style="gap:10px;margin-bottom:8px">
-        <input id="robotsFilter" class="input" placeholder="Filter by host / content…">
-        <button class="pill" id="toggleBlacklisted">Toggle blacklisted</button>
-      </div>
-      <div id="robotsContainer">
-        {% for r in lvreport.robots %}
-        <div class="card robots-card" data-host="{{ r.host }}" data-blacklisted="{% if r.blacklisted %}1{% else %}0{% endif %}">
-          <div class="hstack" style="justify-content:space-between;gap:10px;margin-bottom:6px">
-            <div class="hstack" style="gap:8px">
-              <div style="font-weight:700">{{ r.host }}</div>
-              <div class="hstack" style="gap:6px;flex-wrap:wrap">
-                <span class="badge">{% if r.hasCached %}cached{% else %}no cache{% endif %}</span>
-                {% if r.blacklisted %}
-                  <span class="badge bad">blacklisted {{ r.blacklistReason or "" }}</span>
-                {% else %}
-                  <span class="badge ok">ok</span>
-                {% endif %}
-                {% if r.parsed.merged.crawlDelay is not none %}
-                  <span class="badge">delay {{ r.parsed.merged.crawlDelay }}</span>
-                {% endif %}
-                <span class="badge">lines {{ r.linesTotal }}</span>
-              </div>
-            </div>
-            <div class="hstack" style="gap:8px">
-              <a href="https://{{ r.host }}/robots.txt" target="_blank" rel="noreferrer">robots.txt (live)</a>
-              {% if r.robotsTxtPath %} · <a href="{{ lvreport.baseHref }}{{ r.robotsTxtPath }}" target="_blank" rel="noreferrer">cached</a>{% endif %}
-            </div>
-          </div>
-
-          {% if r.parsed.merged.disallow.length %}
-          <div style="margin:6px 0 10px 0">
-            <div class="small" style="margin-bottom:6px;opacity:.9">Disallow</div>
-            <div class="rule-list">
-              {% for p in r.parsed.merged.disallow %}
-                {% if '://' in p %}
-                  {% set link = p %}
-                {% else %}
-                  {% if p and p[0] == '/' %}
-                    {% set link = 'https://' ~ r.host ~ p %}
-                  {% else %}
-                    {% set link = 'https://' ~ r.host ~ '/' ~ p %}
-                  {% endif %}
-                {% endif %}
-                <span class="rule">disallow · <a href="{{ link }}" target="_blank" rel="noreferrer">{{ p }}</a></span>
-              {% endfor %}
-            </div>
-          </div>
-          {% endif %}
-
-          {% if r.parsed.merged.allow.length %}
-          <div style="margin:6px 0 10px 0">
-            <div class="small" style="margin-bottom:6px;opacity:.9">Allow</div>
-            <div class="rule-list">
-              {% for p in r.parsed.merged.allow %}
-                {% if '://' in p %}
-                  {% set link = p %}
-                {% else %}
-                  {% if p and p[0] == '/' %}
-                    {% set link = 'https://' ~ r.host ~ p %}
-                  {% else %}
-                    {% set link = 'https://' ~ r.host ~ '/' ~ p %}
-                  {% endif %}
-                {% endif %}
-                <span class="rule">allow · <a href="{{ link }}" target="_blank" rel="noreferrer">{{ p }}</a></span>
-              {% endfor %}
-            </div>
-          </div>
-          {% endif %}
-
-          {% if r.parsed.merged.noindex.length %}
-          <div style="margin:6px 0 10px 0">
-            <div class="small" style="margin-bottom:6px;opacity:.9">Noindex</div>
-            <div class="rule-list">
-              {% for p in r.parsed.merged.noindex %}
-                {% if '://' in p %}
-                  {% set link = p %}
-                {% else %}
-                  {% if p and p[0] == '/' %}
-                    {% set link = 'https://' ~ r.host ~ p %}
-                  {% else %}
-                    {% set link = 'https://' ~ r.host ~ '/' ~ p %}
-                  {% endif %}
-                {% endif %}
-                <span class="rule">noindex · <a href="{{ link }}" target="_blank" rel="noreferrer">{{ p }}</a></span>
-              {% endfor %}
-            </div>
-          </div>
-          {% endif %}
-
-          {% if r.parsed.merged.sitemaps.length %}
-          <div class="small" style="margin-top:6px">
-            Sitemaps declared:
-            {% for u in r.parsed.merged.sitemaps %}
-              <a href="{{ u }}" target="_blank" rel="noreferrer">{{ u }}</a>{% if not loop.last %} · {% endif %}
-            {% endfor %}
-          </div>
-          {% endif %}
-
-          {% if r.parsed.other and (r.parsed.other|length) %}
-          <div class="small" style="margin-top:6px">
-            Other directives:
-            {% for k, vals in r.parsed.other %}
-              <span class="badge" style="margin-right:6px">{{ k }}: {{ vals | join(' · ') }}</span>
-            {% endfor %}
-          </div>
-          {% endif %}
-
-          {% if r.hasCached %}
-          <details style="margin-top:8px">
-            <summary>Show raw robots.txt</summary>
-            <pre class="raw">{{ r.rawText }}</pre>
-          </details>
-          {% else %}
-          <div class="small" style="margin-top:6px;opacity:.8">No cached robots.txt. Use the live link above.</div>
-          {% endif %}
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div class="card border border-base-content/10 bg-base-200">
+        <div class="card-body py-4">
+          <p class="text-xs uppercase tracking-widest opacity-70">Generated</p>
+          <p class="text-lg font-medium break-all">{{ summary.generatedAt or '—' }}</p>
         </div>
+      </div>
+      <div class="card border border-base-content/10 bg-base-200">
+        <div class="card-body py-4">
+          <p class="text-xs uppercase tracking-widest opacity-70">Version</p>
+          <p class="text-lg font-medium">{{ summary.version or '—' }}</p>
+        </div>
+      </div>
+      <div class="card border border-base-content/10 bg-base-200">
+        <div class="card-body py-4">
+          <p class="text-xs uppercase tracking-widest opacity-70">Items</p>
+          <p class="text-lg font-medium">{{ totals.items or 0 }}</p>
+        </div>
+      </div>
+      <div class="card border border-base-content/10 bg-base-200">
+        <div class="card-body py-4">
+          <p class="text-xs uppercase tracking-widest opacity-70">Pages</p>
+          <p class="text-lg font-medium">{{ totals.pages or 0 }}</p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section class="space-y-4" id="sitemaps">
+    <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+      <div>
+        <h2 class="text-2xl font-semibold">Hosts &amp; Sitemaps</h2>
+        <p class="text-sm opacity-70">Every sitemap crawl attempt with cached artifacts.</p>
+      </div>
+      <div class="flex flex-wrap gap-3 items-center">
+        <label class="input input-bordered flex items-center gap-2 w-full sm:w-72">
+          <span class="opacity-60">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-3.5-3.5"></path></svg>
+          </span>
+          <input id="sitemapFilter" type="search" class="grow" placeholder="Filter host or URL…" autocomplete="off" />
+        </label>
+        <div id="typeChips" class="flex flex-wrap gap-2"></div>
+        <button class="btn btn-sm btn-outline" id="exportSitemaps" type="button">Export CSV</button>
+      </div>
+    </div>
+    {% if sitemaps | length %}
+      <div class="overflow-x-auto rounded-box border border-base-content/10">
+        <table class="table table-sm" id="sitemapsTable">
+          <thead>
+            <tr>
+              <th>Host</th>
+              <th>Type</th>
+              <th>Images</th>
+              <th>Status</th>
+              <th>Live URL</th>
+              <th>Cached</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for r in sitemaps %}
+              <tr data-type="{{ r.type }}">
+                <td class="font-medium">{{ r.host or '—' }}</td>
+                <td><span class="badge badge-outline capitalize">{{ r.type or 'other' }}</span></td>
+                <td>{{ r.imageCount or 0 }}</td>
+                <td>{{ r.status or '—' }}</td>
+                <td>
+                  {% if r.url %}
+                    <a href="{{ r.url }}" class="link link-primary" target="_blank" rel="noreferrer">{{ r.url }}</a>
+                  {% else %}
+                    —
+                  {% endif %}
+                </td>
+                <td>
+                  {% if r.savedPath %}
+                    <a href="{{ baseHref }}{{ r.savedPath }}" class="link" target="_blank" rel="noreferrer">open</a>
+                  {% else %}
+                    —
+                  {% endif %}
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <div class="alert alert-info">
+        <span>No sitemap activity yet. Run the crawler to populate this section.</span>
+      </div>
+    {% endif %}
+  </section>
+
+  <section class="space-y-4" id="robots">
+    <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+      <div>
+        <h2 class="text-2xl font-semibold">Robots Explorer</h2>
+        <p class="text-sm opacity-70">Inspect cached <code>robots.txt</code> responses, directives, and blacklist notes.</p>
+      </div>
+      <div class="flex flex-wrap gap-3 items-center">
+        <label class="input input-bordered flex items-center gap-2 w-full sm:w-72">
+          <span class="opacity-60">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-3.5-3.5"></path></svg>
+          </span>
+          <input id="robotsFilter" type="search" class="grow" placeholder="Filter host or directive…" autocomplete="off" />
+        </label>
+        <button class="btn btn-sm btn-outline" id="toggleBlacklisted" type="button">Hide blacklisted</button>
+      </div>
+    </div>
+    {% if robots | length %}
+      <div class="grid gap-4 md:gap-6 md:grid-cols-2" id="robotsContainer">
+        {% for r in robots %}
+          <div class="card bg-base-200 border border-base-content/10 robots-card" data-host="{{ r.host }}" data-blacklisted="{% if r.blacklisted %}1{% else %}0{% endif %}">
+            <div class="card-body space-y-5">
+              <div class="flex flex-col gap-2">
+                <div class="flex flex-wrap items-start justify-between gap-3">
+                  <div>
+                    <h3 class="text-lg font-semibold">{{ r.host }}</h3>
+                    <div class="flex flex-wrap gap-2 mt-2 text-xs sm:text-sm">
+                      <span class="badge badge-outline">{% if r.hasCached %}cached{% else %}no cache{% endif %}</span>
+                      {% if r.blacklisted %}
+                        <span class="badge badge-error">blacklisted{% if r.blacklistReason %}: {{ r.blacklistReason }}{% endif %}</span>
+                      {% else %}
+                        <span class="badge badge-success">ok</span>
+                      {% endif %}
+                      {% if r.parsed.merged.crawlDelay is not none %}
+                        <span class="badge badge-outline">crawl-delay {{ r.parsed.merged.crawlDelay }}</span>
+                      {% endif %}
+                      <span class="badge badge-outline">lines {{ r.linesTotal }}</span>
+                    </div>
+                  </div>
+                  <div class="flex flex-wrap items-center gap-2 text-sm">
+                    <a class="link link-primary" href="https://{{ r.host }}/robots.txt" target="_blank" rel="noreferrer">Live robots.txt</a>
+                    {% if r.robotsTxtPath %}
+                      <span class="opacity-50">·</span>
+                      <a class="link" href="{{ baseHref }}{{ r.robotsTxtPath }}" target="_blank" rel="noreferrer">Cached</a>
+                    {% endif %}
+                  </div>
+                </div>
+                {% if r.blacklisted and r.blacklistUntil %}
+                  <p class="text-xs opacity-70">Blacklist active until {{ r.blacklistUntil }}.</p>
+                {% endif %}
+              </div>
+
+              {% if r.parsed.merged.disallow.length %}
+                <div class="space-y-2">
+                  <p class="text-xs uppercase tracking-widest opacity-60">Disallow</p>
+                  <div class="flex flex-wrap gap-2">
+                    {% for p in r.parsed.merged.disallow %}
+                      {% set link = p %}
+                      {% if '://' not in p %}
+                        {% if p and p[0] == '/' %}
+                          {% set link = 'https://' ~ r.host ~ p %}
+                        {% else %}
+                          {% set link = 'https://' ~ r.host ~ '/' ~ p %}
+                        {% endif %}
+                      {% endif %}
+                      <a class="badge badge-outline" href="{{ link }}" target="_blank" rel="noreferrer">{{ p }}</a>
+                    {% endfor %}
+                  </div>
+                </div>
+              {% endif %}
+
+              {% if r.parsed.merged.allow.length %}
+                <div class="space-y-2">
+                  <p class="text-xs uppercase tracking-widest opacity-60">Allow</p>
+                  <div class="flex flex-wrap gap-2">
+                    {% for p in r.parsed.merged.allow %}
+                      {% set link = p %}
+                      {% if '://' not in p %}
+                        {% if p and p[0] == '/' %}
+                          {% set link = 'https://' ~ r.host ~ p %}
+                        {% else %}
+                          {% set link = 'https://' ~ r.host ~ '/' ~ p %}
+                        {% endif %}
+                      {% endif %}
+                      <a class="badge badge-outline" href="{{ link }}" target="_blank" rel="noreferrer">{{ p }}</a>
+                    {% endfor %}
+                  </div>
+                </div>
+              {% endif %}
+
+              {% if r.parsed.merged.noindex.length %}
+                <div class="space-y-2">
+                  <p class="text-xs uppercase tracking-widest opacity-60">Noindex</p>
+                  <div class="flex flex-wrap gap-2">
+                    {% for p in r.parsed.merged.noindex %}
+                      {% set link = p %}
+                      {% if '://' not in p %}
+                        {% if p and p[0] == '/' %}
+                          {% set link = 'https://' ~ r.host ~ p %}
+                        {% else %}
+                          {% set link = 'https://' ~ r.host ~ '/' ~ p %}
+                        {% endif %}
+                      {% endif %}
+                      <a class="badge badge-outline" href="{{ link }}" target="_blank" rel="noreferrer">{{ p }}</a>
+                    {% endfor %}
+                  </div>
+                </div>
+              {% endif %}
+
+              {% if r.parsed.merged.sitemaps.length %}
+                <div class="space-y-1">
+                  <p class="text-xs uppercase tracking-widest opacity-60">Sitemaps Declared</p>
+                  <ul class="list-disc list-inside text-sm space-y-1">
+                    {% for u in r.parsed.merged.sitemaps %}
+                      <li><a href="{{ u }}" class="link" target="_blank" rel="noreferrer">{{ u }}</a></li>
+                    {% endfor %}
+                  </ul>
+                </div>
+              {% endif %}
+
+              {% if r.parsed.other and (r.parsed.other | length) %}
+                <div class="space-y-2">
+                  <p class="text-xs uppercase tracking-widest opacity-60">Other directives</p>
+                  <div class="flex flex-wrap gap-2 text-xs sm:text-sm">
+                    {% for key, vals in r.parsed.other %}
+                      <span class="badge badge-outline">{{ key }}: {{ vals | join(' · ') }}</span>
+                    {% endfor %}
+                  </div>
+                </div>
+              {% endif %}
+
+              <details class="collapse collapse-arrow bg-base-100 border border-base-content/10">
+                <summary class="collapse-title text-sm font-medium">Raw robots.txt ({{ r.linesTotal }} lines)</summary>
+                <div class="collapse-content">
+                  {% if r.hasCached %}
+                    <pre class="bg-base-100 whitespace-pre-wrap text-xs leading-5 max-h-80 overflow-auto border border-base-content/10 rounded-box p-4">{{ r.rawText }}</pre>
+                  {% else %}
+                    <p class="text-sm opacity-70">No cached copy. Use the live link above.</p>
+                  {% endif %}
+                </div>
+              </details>
+            </div>
+          </div>
         {% endfor %}
       </div>
-    </div>
-  </section>
-
-  <section class="section">
-    <h2>All saved XML/TXT</h2>
-    <div class="card">
-      <div class="hstack" style="gap:10px;margin-bottom:8px">
-        <input id="docsFilter" class="input" placeholder="Filter host / URL / content-type…">
-        <button class="pill" id="exportDocs">Export CSV</button>
+    {% else %}
+      <div class="alert alert-info">
+        <span>No robots have been cached yet.</span>
       </div>
-      <table class="table" id="docsTable">
-        <thead><tr><th>Host</th><th>Kind</th><th>Status</th><th>Content-Type</th><th>Live URL</th><th>Cached</th></tr></thead>
-        <tbody>
-          {% for d in lvreport.docs %}
-          <tr>
-            <td>{{ d.host }}</td>
-            <td>{{ d.kind }}</td>
-            <td>{{ d.status }}</td>
-            <td>{{ d.contentType }}</td>
-            <td>{% if d.url %}<a href="{{ d.url }}" target="_blank" rel="noreferrer">{{ d.url }}</a>{% else %}—{% endif %}</td>
-            <td>{% if d.savedPath %}<a href="{{ lvreport.baseHref }}{{ d.savedPath }}" target="_blank" rel="noreferrer">open</a>{% else %}—{% endif %}</td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-      <div class="small" style="margin-top:8px">All cached docs under <code>generated/lv/cache/sitemaps/</code>.</div>
-    </div>
+    {% endif %}
   </section>
 
-  <section class="section">
-    <h2>Image sample</h2>
-    <div class="card">
-      <div class="grid">
-        {% for i in lvreport.sample %}
-          <a class="thumb" href="{{ i.src }}" target="_blank" title="{{ i.title or i.src }}">
-            <img loading="lazy" src="{{ i.src }}" alt="">
+  <section class="space-y-4" id="docs">
+    <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+      <div>
+        <h2 class="text-2xl font-semibold">Cached XML/TXT Documents</h2>
+        <p class="text-sm opacity-70">All stored sitemap and text payloads under <code>cache/sitemaps/</code>.</p>
+      </div>
+      <div class="flex flex-wrap gap-3 items-center">
+        <label class="input input-bordered flex items-center gap-2 w-full sm:w-72">
+          <span class="opacity-60">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-3.5-3.5"></path></svg>
+          </span>
+          <input id="docsFilter" type="search" class="grow" placeholder="Filter host, URL, or content type…" autocomplete="off" />
+        </label>
+        <button class="btn btn-sm btn-outline" id="exportDocs" type="button">Export CSV</button>
+      </div>
+    </div>
+    {% if docs | length %}
+      <div class="overflow-x-auto rounded-box border border-base-content/10">
+        <table class="table table-sm" id="docsTable">
+          <thead>
+            <tr>
+              <th>Host</th>
+              <th>Kind</th>
+              <th>Status</th>
+              <th>Content-Type</th>
+              <th>Live URL</th>
+              <th>Cached</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for d in docs %}
+              <tr>
+                <td class="font-medium">{{ d.host or '—' }}</td>
+                <td class="capitalize">{{ d.kind or '—' }}</td>
+                <td>{{ d.status or '—' }}</td>
+                <td>{{ d.contentType or '—' }}</td>
+                <td>
+                  {% if d.url %}
+                    <a href="{{ d.url }}" class="link link-primary" target="_blank" rel="noreferrer">{{ d.url }}</a>
+                  {% else %}
+                    —
+                  {% endif %}
+                </td>
+                <td>
+                  {% if d.savedPath %}
+                    <a href="{{ baseHref }}{{ d.savedPath }}" class="link" target="_blank" rel="noreferrer">open</a>
+                  {% else %}
+                    —
+                  {% endif %}
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <div class="alert alert-info">
+        <span>No cached documents on disk.</span>
+      </div>
+    {% endif %}
+  </section>
+
+  <section class="space-y-4" id="sample">
+    <div class="flex flex-col gap-1">
+      <h2 class="text-2xl font-semibold">Image Sample</h2>
+      <p class="text-sm opacity-70">Quick glance at NDJSON shards. Click any tile to open the source.</p>
+    </div>
+    {% if sample | length %}
+      <div class="grid gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
+        {% for i in sample %}
+          <a class="relative block aspect-square overflow-hidden rounded-box border border-base-content/10" href="{{ i.src }}" target="_blank" title="{{ i.title or i.src }}" rel="noreferrer">
+            <img loading="lazy" src="{{ i.src }}" alt="" class="h-full w-full object-cover" />
           </a>
         {% endfor %}
       </div>
-      <div class="small" style="margin-top:10px">Showing {{ lvreport.sample.length }} sample images from NDJSON shards.</div>
-    </div>
+      <p class="text-sm opacity-70">Showing {{ sample | length }} sample images from NDJSON shards.</p>
+    {% else %}
+      <div class="alert alert-info">
+        <span>No image samples were found in <code>items/*.ndjson</code>.</span>
+      </div>
+    {% endif %}
   </section>
-
-</main>
+</div>
 
 <script>
 (function(){
   const TYPES = ["image","product","content","catalog","index","other"];
-  const chips = document.getElementById('typeChips');
-  const active = new Set(TYPES);
-  TYPES.forEach(function(t){
-    const b = document.createElement('button');
-    b.className = 'pill active'; b.textContent = t; b.dataset.type = t;
-    b.addEventListener('click', function(){
-      if (active.has(t)) { active.delete(t); b.classList.remove('active'); }
-      else { active.add(t); b.classList.add('active'); }
-      filterSitemaps();
-    });
-    chips.appendChild(b);
-  });
+  const chipsRoot = document.getElementById('typeChips');
+  const sitemapFilter = document.getElementById('sitemapFilter');
+  const sitemapsTable = document.getElementById('sitemapsTable');
+  const exportSitemaps = document.getElementById('exportSitemaps');
 
-  function filterSitemaps() {
-    const q = (document.getElementById('sitemapFilter').value || '').toLowerCase();
-    document.querySelectorAll('#sitemapsTable tbody tr').forEach(function(tr){
-      const text = tr.innerText.toLowerCase();
-      const type = tr.getAttribute('data-type');
-      const okType = active.has(type);
-      const okText = !q || text.indexOf(q) !== -1;
-      tr.style.display = (okType && okText) ? '' : 'none';
-    });
-  }
-  document.getElementById('sitemapFilter').addEventListener('input', filterSitemaps);
+  const robotsFilter = document.getElementById('robotsFilter');
+  const robotsContainer = document.getElementById('robotsContainer');
+  const toggleBlacklisted = document.getElementById('toggleBlacklisted');
 
-  function toCSV(rows) {
-    function esc(v){ if (v==null) return ''; var s=String(v).replace(/"/g,'""'); return /[",\n]/.test(s) ? ('"' + s + '"') : s; }
-    return rows.map(function(r){ return r.map(esc).join(','); }).join('\n');
+  const docsFilter = document.getElementById('docsFilter');
+  const docsTable = document.getElementById('docsTable');
+  const exportDocs = document.getElementById('exportDocs');
+
+  function syncChipState(button, on) {
+    if (!button) return;
+    if (on) {
+      button.classList.add('btn-primary');
+      button.classList.remove('btn-ghost');
+    } else {
+      button.classList.remove('btn-primary');
+      button.classList.add('btn-ghost');
+    }
   }
 
-  document.getElementById('exportSitemaps').addEventListener('click', function(){
-    const rows = [["Host","Type","Images","Status","URL","Cached"]];
-    document.querySelectorAll('#sitemapsTable tbody tr').forEach(function(tr){
-      if (tr.style.display === 'none') return;
-      const tds = tr.querySelectorAll('td');
-      rows.push([tds[0].innerText, tds[1].innerText, tds[2].innerText, tds[3].innerText, tds[4].innerText, tds[5].innerText]);
-    });
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(new Blob([toCSV(rows)], {type:"text/csv"}));
-    a.download = "sitemaps.csv"; a.click();
-  });
+  if (chipsRoot && sitemapsTable) {
+    const active = new Set(TYPES);
+    const buttons = new Map();
 
-  // Robots filter + blacklist toggle
-  var showBL = true;
-  function filterRobots(){
-    const q = (document.getElementById('robotsFilter').value || '').toLowerCase();
-    document.querySelectorAll('.robots-card').forEach(function(card){
-      const bl = card.getAttribute('data-blacklisted') === '1';
-      const hay = card.innerText.toLowerCase();
-      const okText = !q || hay.indexOf(q) !== -1;
-      const okBL = showBL || !bl;
-      card.style.display = (okText && okBL) ? '' : 'none';
+    TYPES.forEach(type => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.textContent = type;
+      button.className = 'btn btn-xs btn-outline';
+      syncChipState(button, true);
+      button.addEventListener('click', () => {
+        if (active.has(type)) {
+          active.delete(type);
+          syncChipState(button, false);
+        } else {
+          active.add(type);
+          syncChipState(button, true);
+        }
+        filterSitemaps();
+      });
+      buttons.set(type, button);
+      chipsRoot.appendChild(button);
     });
+
+    function filterSitemaps() {
+      const query = (sitemapFilter && sitemapFilter.value || '').toLowerCase();
+      sitemapsTable.querySelectorAll('tbody tr').forEach(tr => {
+        const type = tr.getAttribute('data-type');
+        const text = tr.innerText.toLowerCase();
+        const okType = !type || active.has(type);
+        const okText = !query || text.includes(query);
+        tr.style.display = okType && okText ? '' : 'none';
+      });
+    }
+
+    if (sitemapFilter) sitemapFilter.addEventListener('input', filterSitemaps);
+    filterSitemaps();
+
+    if (exportSitemaps) {
+      exportSitemaps.addEventListener('click', () => {
+        const rows = [["Host","Type","Images","Status","URL","Cached"]];
+        sitemapsTable.querySelectorAll('tbody tr').forEach(tr => {
+          if (tr.style.display === 'none') return;
+          const cells = Array.from(tr.querySelectorAll('td')).map(td => td.innerText.trim());
+          rows.push(cells);
+        });
+        downloadCsv('sitemaps.csv', rows);
+      });
+    }
   }
-  document.getElementById('robotsFilter').addEventListener('input', filterRobots);
-  document.getElementById('toggleBlacklisted').addEventListener('click', function(){
-    showBL = !showBL; filterRobots();
-  });
 
-  // Docs filter and export
-  function filterDocs(){
-    const q = (document.getElementById('docsFilter').value || '').toLowerCase();
-    document.querySelectorAll('#docsTable tbody tr').forEach(function(tr){
-      const ok = !q || tr.innerText.toLowerCase().indexOf(q) !== -1;
-      tr.style.display = ok ? '' : 'none';
+  if (robotsContainer && toggleBlacklisted) {
+    let showBlacklisted = true;
+    function filterRobots() {
+      const query = (robotsFilter && robotsFilter.value || '').toLowerCase();
+      robotsContainer.querySelectorAll('.robots-card').forEach(card => {
+        const isBlacklisted = card.getAttribute('data-blacklisted') === '1';
+        const haystack = card.innerText.toLowerCase();
+        const matches = !query || haystack.includes(query);
+        const allowed = showBlacklisted || !isBlacklisted;
+        card.style.display = matches && allowed ? '' : 'none';
+      });
+      toggleBlacklisted.textContent = showBlacklisted ? 'Hide blacklisted' : 'Show blacklisted';
+    }
+    if (robotsFilter) robotsFilter.addEventListener('input', filterRobots);
+    toggleBlacklisted.addEventListener('click', () => {
+      showBlacklisted = !showBlacklisted;
+      filterRobots();
     });
+    filterRobots();
   }
-  document.getElementById('docsFilter').addEventListener('input', filterDocs);
-  document.getElementById('exportDocs').addEventListener('click', function(){
-    const rows = [["Host","Kind","Status","Content-Type","URL","Cached"]];
-    document.querySelectorAll('#docsTable tbody tr').forEach(function(tr){
-      if (tr.style.display === 'none') return;
-      const tds = tr.querySelectorAll('td');
-      rows.push([tds[0].innerText, tds[1].innerText, tds[2].innerText, tds[3].innerText, tds[4].innerText, tds[5].innerText]);
-    });
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(new Blob([toCSV(rows)], {type:"text/csv"}));
-    a.download = "docs.csv"; a.click();
-  });
 
-  // initial
-  filterSitemaps(); filterRobots(); filterDocs();
+  if (docsTable) {
+    function filterDocs() {
+      const query = (docsFilter && docsFilter.value || '').toLowerCase();
+      docsTable.querySelectorAll('tbody tr').forEach(tr => {
+        const text = tr.innerText.toLowerCase();
+        tr.style.display = !query || text.includes(query) ? '' : 'none';
+      });
+    }
+    if (docsFilter) docsFilter.addEventListener('input', filterDocs);
+    filterDocs();
+
+    if (exportDocs) {
+      exportDocs.addEventListener('click', () => {
+        const rows = [["Host","Kind","Status","Content-Type","URL","Cached"]];
+        docsTable.querySelectorAll('tbody tr').forEach(tr => {
+          if (tr.style.display === 'none') return;
+          const cells = Array.from(tr.querySelectorAll('td')).map(td => td.innerText.trim());
+          rows.push(cells);
+        });
+        downloadCsv('docs.csv', rows);
+      });
+    }
+  }
+
+  function downloadCsv(filename, rows) {
+    const csv = rows.map(row => row.map(cell => {
+      if (cell == null) return '';
+      const value = String(cell).replace(/"/g, '""');
+      return /[",\n]/.test(value) ? `"${value}"` : value;
+    }).join(',')).join('\n');
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = filename;
+    link.click();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  }
 })();
 </script>
-</body>
-</html>

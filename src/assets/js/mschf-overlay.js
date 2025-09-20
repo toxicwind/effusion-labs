@@ -205,8 +205,19 @@
       },
     },
   ]
-  const pickPalette = () => {
-    const base = { ...pick(HYPERBRUT_PALETTES) }
+  const pickPalette = prefer => {
+    let pool = HYPERBRUT_PALETTES
+    if (prefer) {
+      const wants = Array.isArray(prefer) ? prefer : [prefer]
+      const matches = wants
+        .map(name => HYPERBRUT_PALETTES.find(p => p.name === name))
+        .filter(Boolean)
+      if (matches.length) {
+        const keep = Math.random() < 0.85
+        pool = keep ? matches : HYPERBRUT_PALETTES
+      }
+    }
+    const base = { ...pick(pool) }
     const tokens = { ...(base.tokens || {}) }
     if (Math.random() < 0.35) {
       ;[tokens.pop, tokens['pop-alt']] = [tokens['pop-alt'], tokens.pop]
@@ -228,6 +239,166 @@
       if (value != null) root.style.setProperty(`--mschf-${key}`, value)
     }
   }
+
+  const SCENE_PROFILES = {
+    default: {
+      allowRare: true,
+      nodeBudget: 110,
+      capOverrides: null,
+      blockKinds: [],
+      allowKinds: null,
+      palette: null,
+    },
+    essay: {
+      allowRare: false,
+      nodeBudget: 72,
+      capOverrides: { ephemera: 3, lab: 2, frame: 3 },
+      blockKinds: [
+        'scan',
+        'graph',
+        'watermark',
+        'glitch',
+        'flowers',
+        'holo',
+        'rings',
+        'topo',
+        'halftone',
+        'perf',
+        'stars',
+      ],
+      allowKinds: null,
+      palette: ['proto-cyan', 'acid-lab'],
+      density: { max: 0.32, target: 0.26 },
+      style: 'structural-lite',
+    },
+  }
+
+  const syncRootSceneDataset = () => {
+    if (State?.root && State.scene) {
+      State.root.dataset.mschfProfile = State.scene.profile || 'default'
+    }
+  }
+
+  function applySceneProfile(name, { refresh = false } = {}) {
+    const profile = name && SCENE_PROFILES[name] ? name : 'default'
+    const rule = SCENE_PROFILES[profile] || SCENE_PROFILES.default
+    const prevProfile = State.scene?.profile
+    const changed = !State.scene || prevProfile !== profile || refresh
+    State.scene = {
+      profile,
+      allowRare: rule.allowRare !== false,
+      blockKinds: new Set(rule.blockKinds || []),
+      allowKinds: rule.allowKinds ? new Set(rule.allowKinds) : null,
+      capOverrides: rule.capOverrides || null,
+      nodeBudget: rule.nodeBudget || null,
+      paletteBias: rule.palette || null,
+      styleHint: rule.style || null,
+      density: rule.density || null,
+      blockFamilies: rule.blockFamilies ? new Set(rule.blockFamilies) : null,
+    }
+
+    if (State.scene.nodeBudget) {
+      State.nodeBudget = Math.min(State.nodeBudget, State.scene.nodeBudget)
+    }
+
+    if (State.scene.density?.max != null) {
+      State.density = Math.min(State.density, State.scene.density.max)
+    }
+    if (State.scene.density?.target != null) {
+      const target = State.scene.density.target
+      State.density = lerp(State.density, target, 0.55)
+    }
+
+    if (!State.scene.allowRare) {
+      State.config.rare = false
+    }
+    if (State.scene.blockKinds.has('rings') && scope.dataset.mschfRings == null) {
+      State.config.rings = false
+    }
+    if (State.scene.blockKinds.has('topo') && scope.dataset.mschfTopo == null) {
+      State.config.topo = false
+    }
+    if (State.scene.blockKinds.has('stars')) {
+      State.config.gpuStars = false
+    }
+    if (State.scene.blockKinds.has('rings')) {
+      State.config.gpuRings = false
+    }
+    if (State.scene.blockKinds.has('topo')) {
+      State.config.gpuTopo = false
+    }
+
+    if (State.scene.styleHint && State.style === 'auto') {
+      State.style = 'structural'
+    }
+
+    if (
+      State.scene.paletteBias
+      && (!State.palette || !Array.isArray(State.scene.paletteBias)
+        || !State.scene.paletteBias.includes(State.palette.name))
+    ) {
+      State.palette = pickPalette(State.scene.paletteBias)
+      if (State.root) applyPaletteTokens(State.root)
+    }
+
+    syncRootSceneDataset()
+    return changed
+  }
+
+  function detectSceneProfile() {
+    const forced = scope.dataset.mschfProfile
+      || document.documentElement.dataset.mschfProfile
+    if (forced) return forced.toLowerCase()
+
+    if (
+      document.querySelector(
+        '[data-overlay-profile="essay"],[data-mschf-profile="essay"],[data-longform="1"]',
+      )
+    ) {
+      return 'essay'
+    }
+
+    const textContainers = [
+      ...document.querySelectorAll(
+        'main .prose, article, [data-kind~="report"], [data-kind~="essay"], [data-scope="longform"]',
+      ),
+    ]
+    let words = 0
+    let paragraphs = 0
+    textContainers.forEach(node => {
+      if (words > 2200) return
+      const text = (node.textContent || '').trim().slice(0, 8000)
+      if (!text) return
+      paragraphs += node.querySelectorAll ? node.querySelectorAll('p').length : 0
+      words += text.split(/\s+/).filter(Boolean).length
+    })
+    const media = document.querySelectorAll(
+      'main .prose img, main .prose picture, main .prose video, article img, article picture, article video',
+    ).length
+    const mediaRatio = words ? media / words : 0
+    if (words >= 700 && paragraphs >= 8 && mediaRatio < 0.01) {
+      return 'essay'
+    }
+
+    return 'default'
+  }
+
+  function evaluateSceneProfile({ force = false } = {}) {
+    const profile = detectSceneProfile()
+    const changed = applySceneProfile(profile, { refresh: force })
+    return changed
+  }
+
+  function isKindAllowedByScene(kind, family) {
+    if (!State.scene || !kind) return true
+    if (State.scene.blockKinds?.has(kind)) return false
+    if (State.scene.allowKinds && !State.scene.allowKinds.has(kind)) return false
+    if (State.scene.blockFamilies?.has?.(family)) return false
+    return true
+  }
+
+  const filterAllowedFactories = (factories, family) =>
+    factories.filter(fn => fn && isKindAllowedByScene(fn.kind, family))
 
   // External dep loader (PixiJS v8)
   async function loadPixi() {
@@ -300,6 +471,7 @@
     visible: !document.hidden,
     nodeBudget: 120,
     nodeCount: 0,
+    scene: { profile: 'default', allowRare: true, blockKinds: new Set() },
     actors: new Set(),
     families: {
       scaffold: new Set(),
@@ -432,6 +604,7 @@
     root.setAttribute('aria-hidden', 'true')
     root.dataset.mschfSession = SID
     applyPaletteTokens(root)
+    syncRootSceneDataset()
     if (root.childElementCount) {
       DEBUG && warn('Root was not empty before mount; clearing')
     }
@@ -565,6 +738,7 @@
   function computeContext() {
     computeSafeZones()
     computeReadingPressure()
+    evaluateSceneProfile()
     computeCaps()
   }
 
@@ -592,6 +766,13 @@
         1,
         Math.floor(base.frame * pressureMod * motionMod * densityMod),
       ),
+    }
+    if (State.scene?.capOverrides) {
+      for (const key of ['ephemera', 'lab', 'frame']) {
+        if (State.scene.capOverrides[key] != null) {
+          State.caps[key] = Math.min(State.caps[key], State.scene.capOverrides[key])
+        }
+      }
     }
   }
   function rectOverlap(a, b) {
@@ -1102,6 +1283,16 @@
   function mount(actor, family) {
     if (!actor) return
     if (DEBUG) group(`mount try: ${actor.kind || 'unknown'} → ${family}`)
+
+    if (!isKindAllowedByScene(actor.kind, family)) {
+      DEBUG
+        && warn('bail: scene block', {
+          kind: actor.kind,
+          family,
+          profile: State.scene?.profile,
+        })
+      return void groupEnd()
+    }
 
     // honor budget
     const cost = actor.cost || 1
@@ -2263,6 +2454,39 @@
   }
   A.cornerPips.meta = pipsMeta
 
+  const ACTOR_KIND_MAP = {
+    grid: A.grid,
+    frame: A.frame,
+    corners: A.corners,
+    rulers: A.rulers,
+    scan: A.scanline,
+    tape: A.tape,
+    stamp: A.stamp,
+    quotes: A.quotes,
+    plate: A.plate,
+    specimen: A.specimen,
+    callout: A.callout,
+    graph: A.graph,
+    rings: A.ringsDOM,
+    topo: A.topoDOM,
+    halftone: A.halftone,
+    perf: A.perf,
+    stars: A.starfieldDOM,
+    brackets: A.brackets,
+    glitch: A.glitch,
+    watermark: A.watermark,
+    flowers: A.flowers,
+    holo: A.holo,
+    reg: A.reg,
+    dims: A.dims,
+    stickers: A.stickers,
+    edgeGlow: A.edgeGlow,
+    pips: A.cornerPips,
+  }
+  for (const [kind, factory] of Object.entries(ACTOR_KIND_MAP)) {
+    if (factory) factory.kind = kind
+  }
+
   // ————————————————————————————————————————
   // Orchestration
   // ————————————————————————————————————————
@@ -2278,11 +2502,17 @@
         caps: { ...State.caps },
       })
     // Scaffold (calm by default)
-    mount(A.grid(), 'scaffold')
-    mount(A.frame(), 'scaffold')
-    mount(A.corners(), 'scaffold')
-    mount(A.rulers(), 'scaffold')
-    // Removed moving scanline by default for readability
+    const scaffold =
+      State.scene?.profile === 'essay'
+        ? [A.grid, A.rulers, A.frame]
+        : [A.grid, A.frame, A.corners, A.rulers]
+    scaffold
+      .filter(Boolean)
+      .forEach(factory => {
+        if (!factory) return
+        if (!isKindAllowedByScene(factory.kind, 'scaffold')) return
+        mount(factory(), 'scaffold')
+      })
 
     const isArticle = !!document.querySelector('.prose,article,main .prose')
 
@@ -2301,8 +2531,13 @@
         spawnEphemera(2, 3)
         spawnFrame(1, 2)
       },
+      essay: () => {
+        spawnFrame(1, 1)
+        spawnEphemera(1, 2)
+      },
     }
-    ;(waves[State.style] || waves.structural)()
+    const waveKey = State.scene?.profile === 'essay' ? 'essay' : State.style
+    ;(waves[waveKey] || waves.structural)()
     const kindsSummary = fam => {
       const m = Object.create(null)
       for (const a of State.families[fam]) {
@@ -2327,14 +2562,20 @@
   }
 
   function spawnEphemera(min, max) {
-    const bag = [A.tape, A.stamp, A.quotes, A.plate, A.specimen]
-    const pool = State.readingPressure > 0.25
+    const baseBag = [A.tape, A.stamp, A.quotes, A.plate, A.specimen]
+    const bag = filterAllowedFactories(baseBag, 'ephemera')
+    if (!bag.length) return
+    const poolSource = State.readingPressure > 0.25
       ? bag.filter(f => (f.meta?.complexity || 1) <= 2)
       : bag
+    const pool = poolSource.length ? poolSource : bag
     const n = Math.floor(lerp(min, max, State.density))
     for (let i = 0; i < n; i++) {
-      const fn = pick(pool.length ? pool : bag)
-      mount(fn(), 'ephemera')
+      const factory = pick(pool.length ? pool : bag)
+      if (!factory) continue
+      const actor = factory()
+      if (!isKindAllowedByScene(actor.kind, 'ephemera')) continue
+      mount(actor, 'ephemera')
     }
   }
   function spawnLab(min, max) {
@@ -2346,19 +2587,25 @@
       A.halftone,
       A.starfieldDOM,
     ].filter(Boolean)
-    const bag = gpuOK ? base : base.concat(domExtras)
-    const pool = State.readingPressure > 0.25
+    const baseBag = gpuOK ? base : base.concat(domExtras)
+    const bag = filterAllowedFactories(baseBag, 'lab')
+    if (!bag.length) return
+    const poolSource = State.readingPressure > 0.25
       ? bag.filter(f => (f.meta?.complexity || 1) <= 3)
       : bag
+    const pool = poolSource.length ? poolSource : bag
     const n = Math.floor(lerp(min, max, State.density))
     for (let i = 0; i < n; i++) {
-      const fn = pick(pool.length ? pool : bag)
-      mount(fn(), 'lab')
+      const factory = pick(pool.length ? pool : bag)
+      if (!factory) continue
+      const actor = factory()
+      if (!isKindAllowedByScene(actor.kind, 'lab')) continue
+      mount(actor, 'lab')
     }
   }
   function spawnFrame(min, max) {
     // Calm set plus tasteful autonomous accents
-    const bag = [
+    const baseBag = [
       A.brackets,
       A.watermark,
       A.reg,
@@ -2367,9 +2614,12 @@
       A.edgeGlow,
       A.cornerPips,
     ]
-    const pool = State.readingPressure > 0.25
+    const bag = filterAllowedFactories(baseBag, 'frame')
+    if (!bag.length) return
+    const poolSource = State.readingPressure > 0.25
       ? bag.filter(f => (f.meta?.complexity || 1) <= 2)
       : bag
+    const pool = poolSource.length ? poolSource : bag
     const n = Math.floor(lerp(min, max, State.density))
     for (let i = 0; i < n; i++) {
       const candidates = (pool.length ? pool : bag).slice()
@@ -2377,7 +2627,10 @@
       for (let t = 0; t < candidates.length && !placed; t++) {
         const idx = Math.floor(Math.random() * candidates.length)
         const fn = candidates.splice(idx, 1)[0]
-        placed = !!mount(fn(), 'frame')
+        if (!fn) continue
+        const actor = fn()
+        if (!isKindAllowedByScene(actor.kind, 'frame')) continue
+        placed = !!mount(actor, 'frame')
       }
     }
   }
@@ -2387,8 +2640,9 @@
     C.recompose++
     resetOccupancy()
     computeContext()
-    if (Math.random() < 0.22) {
-      State.palette = pickPalette()
+    const paletteChance = State.scene?.profile === 'essay' ? 0.12 : 0.22
+    if (Math.random() < paletteChance) {
+      State.palette = pickPalette(State.scene?.paletteBias)
       applyPaletteTokens(State.root)
     }
     const kindsSummary = fam => {
@@ -2472,6 +2726,7 @@
   }
 
   function rareMoment() {
+    if (State.scene && State.scene.allowRare === false) return
     if (State.reduceMotion || State.tiers.xs) return
     C.rare++
     DEBUG && log('rareMoment')
@@ -2740,16 +2995,26 @@
               count: C.io,
             })
           if (hero && e.target === hero) {
-            if (State.config.rings) mount(A.ringsDOM(), 'lab')
-            mount(A.quotes(), 'ephemera')
+            if (State.config.rings && isKindAllowedByScene('rings', 'lab')) {
+              mount(A.ringsDOM(), 'lab')
+            }
+            if (isKindAllowedByScene('quotes', 'ephemera')) {
+              mount(A.quotes(), 'ephemera')
+            }
           }
           if (cta && e.target === cta) {
-            mount(A.plate(), 'ephemera')
+            if (isKindAllowedByScene('plate', 'ephemera')) {
+              mount(A.plate(), 'ephemera')
+            }
             if (State.config.rare) rareMoment()
           }
           if (feed && e.target === feed) {
-            mount(A.stickers(), 'frame')
-            mount(A.dims(), 'frame')
+            if (isKindAllowedByScene('stickers', 'frame')) {
+              mount(A.stickers(), 'frame')
+            }
+            if (isKindAllowedByScene('dims', 'frame')) {
+              mount(A.dims(), 'frame')
+            }
           }
 
           // Mark handled and stop observing to avoid duplicate mounts

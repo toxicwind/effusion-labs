@@ -198,13 +198,11 @@ export default async function () {
     const sample = await sampleItems(ITEMS_DIR, 60);
 
     return {
-        lvreport: {
-            baseHref: "/content/projects/lv-images/generated/lv/", // used for cached links
-            summary,
-            sitemaps,
-            docs,
-            robots,
-            sample
-        }
+        baseHref: "/content/projects/lv-images/generated/lv/", // used for cached links
+        summary,
+        sitemaps,
+        docs,
+        robots,
+        sample
     };
 }
