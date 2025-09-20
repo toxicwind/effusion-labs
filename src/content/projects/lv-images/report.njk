@@ -5,445 +5,430 @@ layout: base.njk
 fullBleed: true
 metaDisable: true
 ---
+{#
+  This template renders a comprehensive, data‑driven report for the LV image atlas
+  crawl.  It takes the summarized crawl information provided via the `lvreport`
+  data file and presents it with modern daisyUI v5 components.  The layout
+  emphasises key metrics using the Stats and Radial Progress components, while
+  retaining interactive filtering for each table.  Sections are clearly
+  delineated with headings and concise descriptions.  Feel free to adjust
+  colours via themes (see base.njk) or customise individual elements further.
+#}
 
-{% set lv = lvreport.lvreport or lvreport or {} %}
+{% set lv       = lvreport.lvreport or lvreport or {} %}
 {% set baseHref = lv.baseHref or '/content/projects/lv-images/generated/lv/' %}
-{% set summary = lv.summary or {} %}
-{% set totals = summary.totals or {} %}
+{% set summary  = lv.summary  or {} %}
+{% set totals   = summary.totals or {} %}
 {% set sitemaps = lv.sitemaps or [] %}
-{% set docs = lv.docs or [] %}
-{% set robots = lv.robots or [] %}
-{% set sample = lv.sample or [] %}
-{% set metrics = lv.metrics or {} %}
+{% set docs     = lv.docs     or [] %}
+{% set robots   = lv.robots   or [] %}
+{% set sample   = lv.sample   or [] %}
+{% set metrics  = lv.metrics  or {} %}
 {% set robotsMetrics = metrics.robots or {} %}
-{% set docsMetrics = metrics.docs or {} %}
+{% set docsMetrics   = metrics.docs   or {} %}
 {% set toneBadge = {
   'error': 'badge-error',
-  'warn': 'badge-warning',
-  'ok': 'badge-success',
-  'info': 'badge-info'
+  'warn' : 'badge-warning',
+  'ok'   : 'badge-success',
+  'info' : 'badge-info'
 } %}
 {% set toneChip = {
   'error': 'bg-error/15 text-error',
-  'warn': 'bg-warning/20 text-warning-content',
-  'ok': 'bg-success/15 text-success',
-  'info': 'bg-info/15 text-info'
+  'warn' : 'bg-warning/20 text-warning-content',
+  'ok'   : 'bg-success/15 text-success',
+  'info' : 'bg-info/15 text-info'
 } %}
 
-<div class="max-w-screen-2xl mx-auto px-6 py-10 space-y-12">
-  <header class="space-y-6">
-    <div class="flex flex-wrap items-end justify-between gap-4">
-      <div>
-        <h1 class="text-3xl font-semibold tracking-tight">LV Image Atlas — Report</h1>
-        <p class="text-sm opacity-70">Sourced from <code>src/content/projects/lv-images/generated/lv/</code></p>
-      </div>
-      {% if baseHref %}
-        <a href="{{ baseHref }}" class="btn btn-sm btn-outline" target="_blank" rel="noreferrer">Open generated directory</a>
-      {% endif %}
-    </div>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-      <div class="card border border-base-content/10 bg-base-200">
-        <div class="card-body py-4">
-          <p class="text-xs uppercase tracking-widest opacity-70">Generated</p>
-          <p class="text-lg font-medium break-all">{{ summary.generatedAt or '—' }}</p>
-        </div>
-      </div>
-      <div class="card border border-base-content/10 bg-base-200">
-        <div class="card-body py-4">
-          <p class="text-xs uppercase tracking-widest opacity-70">Version</p>
-          <p class="text-lg font-medium">{{ summary.version or '—' }}</p>
-        </div>
-      </div>
-      <div class="card border border-base-content/10 bg-base-200">
-        <div class="card-body py-4">
-          <p class="text-xs uppercase tracking-widest opacity-70">Items</p>
-          <p class="text-lg font-medium">{{ totals.items or 0 }}</p>
-        </div>
-      </div>
-      <div class="card border border-base-content/10 bg-base-200">
-        <div class="card-body py-4">
-          <p class="text-xs uppercase tracking-widest opacity-70">Pages</p>
-          <p class="text-lg font-medium">{{ totals.pages or 0 }}</p>
-        </div>
-      </div>
-    </div>
-  </header>
+{# Compute flagged percentages for radial progress indicators.  The logical
+   short‑circuit ensures we avoid division by zero when there are no items. #}
+{% set robotsPct = (robotsMetrics.total and robotsMetrics.total > 0) and ((robotsMetrics.issues * 100) / robotsMetrics.total) or 0 %}
+{% set docsPct   = (docsMetrics.total   and docsMetrics.total   > 0) and ((docsMetrics.issues   * 100) / docsMetrics.total)   or 0 %}
 
-  <section class="grid gap-4 md:grid-cols-2" aria-label="Cache health overview">
-    <div class="card border border-base-content/10 bg-base-200">
-      <div class="card-body space-y-3">
-        <div class="flex items-center justify-between gap-3">
-          <h2 class="text-lg font-semibold">Robots cache health</h2>
-          <span class="text-sm opacity-70">{{ robotsMetrics.total or 0 }} hosts</span>
-        </div>
-        <p class="text-sm opacity-70">{{ robotsMetrics.issues or 0 }} of {{ robotsMetrics.total or 0 }} hosts flagged</p>
-        <div class="flex flex-wrap gap-2">
-          {% set robotBreakdown = robotsMetrics.breakdown or [] %}
-          {% if robotBreakdown | length %}
-            {% for seg in robotBreakdown %}
-              {% set chipClass = toneChip[seg.tone] or 'bg-base-300/60 text-sm' %}
-              <span class="px-3 py-1 rounded-full text-xs font-medium {{ chipClass }}">
-                {{ seg.label }} · {{ seg.count }} ({{ seg.pct }}%)
-              </span>
-            {% endfor %}
-          {% else %}
-            <span class="text-sm opacity-60">No cached robots yet.</span>
-          {% endif %}
-        </div>
-      </div>
-    </div>
-    <div class="card border border-base-content/10 bg-base-200">
-      <div class="card-body space-y-3">
-        <div class="flex items-center justify-between gap-3">
-          <h2 class="text-lg font-semibold">XML/TXT cache health</h2>
-          <span class="text-sm opacity-70">{{ docsMetrics.total or 0 }} files</span>
-        </div>
-        <p class="text-sm opacity-70">{{ docsMetrics.issues or 0 }} of {{ docsMetrics.total or 0 }} files flagged</p>
-        <div class="flex flex-wrap gap-2">
-          {% set docBreakdown = docsMetrics.breakdown or [] %}
-          {% if docBreakdown | length %}
-            {% for seg in docBreakdown %}
-              {% set chipClass = toneChip[seg.tone] or 'bg-base-300/60 text-sm' %}
-              <span class="px-3 py-1 rounded-full text-xs font-medium {{ chipClass }}">
-                {{ seg.label }} · {{ seg.count }} ({{ seg.pct }}%)
-              </span>
-            {% endfor %}
-          {% else %}
-            <span class="text-sm opacity-60">No cached documents yet.</span>
-          {% endif %}
-        </div>
-      </div>
-    </div>
-  </section>
+<section class="hero rounded-box bg-gradient-to-br from-primary to-secondary p-8 text-primary-content shadow-lg">
+  <div class="max-w-xl">
+    <h1 class="text-4xl font-bold mb-2">{{ title }}</h1>
+    <p class="opacity-80 text-sm">A comprehensive report summarising your LV image crawl — hosts, sitemaps, robots directives, documents and sample images.</p>
+    {% if baseHref %}
+      <a href="{{ baseHref }}" class="btn btn-primary mt-4" target="_blank" rel="noreferrer">Open generated directory</a>
+    {% endif %}
+  </div>
+</section>
 
-  <section class="space-y-4" id="sitemaps">
-    <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-      <div>
-        <h2 class="text-2xl font-semibold">Hosts &amp; Sitemaps</h2>
-        <p class="text-sm opacity-70">Every sitemap crawl attempt with cached artifacts.</p>
+<section class="mt-10 space-y-8">
+  {#
+    Overview stats block: show key metrics using daisyUI's stats component.
+    Each stat item includes a title, a bold value and an optional description.
+  #}
+  <div class="stats stats-vertical lg:stats-horizontal shadow gap-6">
+    <div class="stat">
+      <div class="stat-title">Generated</div>
+      <div class="stat-value">{{ summary.generatedAt or '—' }}</div>
+      <div class="stat-desc">Version {{ summary.version or '—' }}</div>
+    </div>
+    <div class="stat">
+      <div class="stat-title">Hosts Crawled</div>
+      <div class="stat-value">{{ totals.hosts or 0 }}</div>
+      <div class="stat-desc">Sitemaps {{ totals.sitemapsProcessed or 0 }}</div>
+    </div>
+    <div class="stat">
+      <div class="stat-title">Items Found</div>
+      <div class="stat-value">{{ totals.itemsFound or 0 }}</div>
+      <div class="stat-desc">Pages {{ totals.pages or 0 }}</div>
+    </div>
+    <div class="stat">
+      <div class="stat-title">Sample Images</div>
+      <div class="stat-value">{{ sample | length }}</div>
+      <div class="stat-desc">NDJSON snapshots</div>
+    </div>
+  </div>
+
+  {# Health summary: display flagged hosts/files using radial progress charts. #}
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div class="card shadow bg-base-200">
+      <div class="card-body">
+        <h2 class="card-title">Robots Health</h2>
+        <p class="text-sm opacity-70">{{ robotsMetrics.total or 0 }} hosts analysed</p>
+        <div class="flex items-center gap-6 mt-4">
+          <div class="radial-progress text-error" style="--value: {{ robotsPct | round(1) }}; --size: 4rem; --thickness: 4px;">
+            {{ robotsPct | round(1) }}%
+          </div>
+          <div>
+            <p class="text-2xl font-bold">{{ robotsMetrics.issues or 0 }}</p>
+            <p class="text-sm opacity-70">Flagged</p>
+          </div>
+        </div>
+        <div class="mt-4 flex flex-wrap gap-2">
+          {% for seg in robotsMetrics.breakdown or [] %}
+            {% set c = toneChip[seg.tone] or 'bg-base-300/20 text-base-content' %}
+            <span class="badge {{ c }}">{{ seg.label }} • {{ seg.count }} ({{ seg.pct }}%)</span>
+          {% endfor %}
+        </div>
       </div>
-      <div class="flex flex-wrap gap-3 items-center">
-        <label class="input input-bordered flex items-center gap-2 w-full sm:w-72">
-          <span class="opacity-60">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-3.5-3.5"></path></svg>
-          </span>
-          <input id="sitemapFilter" type="search" class="grow" placeholder="Filter host or URL…" autocomplete="off" />
-        </label>
-        <div id="typeChips" class="flex flex-wrap gap-2"></div>
-        <button class="btn btn-sm btn-outline" id="exportSitemaps" type="button">Export CSV</button>
+    </div>
+    <div class="card shadow bg-base-200">
+      <div class="card-body">
+        <h2 class="card-title">Documents Health</h2>
+        <p class="text-sm opacity-70">{{ docsMetrics.total or 0 }} files analysed</p>
+        <div class="flex items-center gap-6 mt-4">
+          <div class="radial-progress text-error" style="--value: {{ docsPct | round(1) }}; --size: 4rem; --thickness: 4px;">
+            {{ docsPct | round(1) }}%
+          </div>
+          <div>
+            <p class="text-2xl font-bold">{{ docsMetrics.issues or 0 }}</p>
+            <p class="text-sm opacity-70">Flagged</p>
+          </div>
+        </div>
+        <div class="mt-4 flex flex-wrap gap-2">
+          {% for seg in docsMetrics.breakdown or [] %}
+            {% set c = toneChip[seg.tone] or 'bg-base-300/20 text-base-content' %}
+            <span class="badge {{ c }}">{{ seg.label }} • {{ seg.count }} ({{ seg.pct }}%)</span>
+          {% endfor %}
+        </div>
       </div>
+    </div>
+  </div>
+
+  {# Sitemaps Section #}
+  <section id="sitemaps" class="space-y-4 mt-12">
+    <h2 class="text-3xl font-semibold">Sitemaps</h2>
+    <p class="text-sm opacity-70">Every sitemap crawl attempt with cached artifacts.</p>
+    <div class="flex flex-wrap gap-3 items-center mt-4">
+      <label class="input input-bordered flex items-center gap-2 w-full sm:w-72">
+        <span class="opacity-60">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-3.5-3.5"></path></svg>
+        </span>
+        <input id="sitemapFilter" type="search" class="grow" placeholder="Filter host or URL…" autocomplete="off" />
+      </label>
+      <div id="typeChips" class="join"></div>
+      <button class="btn btn-sm btn-outline" id="exportSitemaps" type="button">Export CSV</button>
     </div>
     {% if sitemaps | length %}
-      <div class="overflow-x-auto rounded-box border border-base-content/10">
-        <table class="table table-sm" id="sitemapsTable">
-          <thead>
-            <tr>
-              <th>Host</th>
-              <th>Type</th>
-              <th>Images</th>
-              <th>Status</th>
-              <th>Live URL</th>
-              <th>Cached</th>
+    <div class="overflow-x-auto rounded-box border border-base-content/10 mt-4">
+      <table class="table table-zebra table-sm" id="sitemapsTable">
+        <thead>
+          <tr>
+            <th>Host</th>
+            <th>Type</th>
+            <th>Images</th>
+            <th>Status</th>
+            <th>Live</th>
+            <th>Cached</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for r in sitemaps %}
+            <tr data-type="{{ r.type }}">
+              <td class="font-medium">{{ r.host or '—' }}</td>
+              <td><span class="badge badge-outline capitalize">{{ r.type or 'other' }}</span></td>
+              <td>{{ r.imageCount or 0 }}</td>
+              <td>{{ r.status or '—' }}</td>
+              <td>
+                {% if r.url %}<a href="{{ r.url }}" class="link link-primary" target="_blank" rel="noreferrer">{{ r.url }}</a>{% else %}—{% endif %}
+              </td>
+              <td>
+                {% if r.savedPath %}<a href="{{ baseHref }}{{ r.savedPath }}" class="link" target="_blank" rel="noreferrer">open</a>{% else %}—{% endif %}
+              </td>
             </tr>
-          </thead>
-          <tbody>
-            {% for r in sitemaps %}
-              <tr data-type="{{ r.type }}">
-                <td class="font-medium">{{ r.host or '—' }}</td>
-                <td><span class="badge badge-outline capitalize">{{ r.type or 'other' }}</span></td>
-                <td>{{ r.imageCount or 0 }}</td>
-                <td>{{ r.status or '—' }}</td>
-                <td>
-                  {% if r.url %}
-                    <a href="{{ r.url }}" class="link link-primary" target="_blank" rel="noreferrer">{{ r.url }}</a>
-                  {% else %}
-                    —
-                  {% endif %}
-                </td>
-                <td>
-                  {% if r.savedPath %}
-                    <a href="{{ baseHref }}{{ r.savedPath }}" class="link" target="_blank" rel="noreferrer">open</a>
-                  {% else %}
-                    —
-                  {% endif %}
-                </td>
-              </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-      </div>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
     {% else %}
-      <div class="alert alert-info">
+      <div class="alert alert-info mt-4">
         <span>No sitemap activity yet. Run the crawler to populate this section.</span>
       </div>
     {% endif %}
   </section>
 
-  <section class="space-y-4" id="robots">
-    <div class="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
-      <div class="space-y-2">
-        <h2 class="text-2xl font-semibold">Robots Explorer</h2>
-        <p class="text-sm opacity-70">Classified view of cached <code>robots.txt</code> responses with live mirrors, cached filenames, and directive counts.</p>
+  {# Robots Section #}
+  <section id="robots" class="space-y-4 mt-12">
+    <h2 class="text-3xl font-semibold">Robots Explorer</h2>
+    <p class="text-sm opacity-70">Classified view of cached <code>robots.txt</code> responses with live mirrors, cached filenames, and directive counts.</p>
+    <div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:flex-wrap mt-4">
+      <label class="input input-bordered flex items-center gap-2 w-full sm:w-72">
+        <span class="opacity-60">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-3.5-3.5"></path></svg>
+        </span>
+        <input id="robotsFilter" type="search" class="grow" placeholder="Search host, directive, or status…" autocomplete="off" />
+      </label>
+      <div id="robotsStatusFilters" class="flex flex-wrap gap-2">
+        {% for seg in robotsMetrics.breakdown or [] %}
+          {% set badgeClass = toneBadge[seg.tone] or 'badge-outline' %}
+          <button type="button" class="btn btn-xs btn-ghost status-chip" data-status="{{ seg.key }}">
+            <span class="badge {{ badgeClass }} badge-xs">{{ seg.label }}</span>
+            <span class="text-xs opacity-60">{{ seg.count }}</span>
+          </button>
+        {% endfor %}
       </div>
-      <div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:flex-wrap">
-        <label class="input input-bordered flex items-center gap-2 w-full sm:w-72">
-          <span class="opacity-60">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-3.5-3.5"></path></svg>
-          </span>
-          <input id="robotsFilter" type="search" class="grow" placeholder="Search host, directive, or status…" autocomplete="off" />
-        </label>
-        <div id="robotsStatusFilters" class="flex flex-wrap gap-2">
-          {% for seg in robotsMetrics.breakdown or [] %}
-            {% set badgeClass = toneBadge[seg.tone] or 'badge-outline' %}
-            <button type="button" class="btn btn-xs btn-ghost status-chip" data-status="{{ seg.key }}">
-              <span class="badge {{ badgeClass }} badge-xs">{{ seg.label }}</span>
-              <span class="text-xs opacity-60">{{ seg.count }}</span>
-            </button>
-          {% endfor %}
-        </div>
-        <label class="flex items-center gap-2 text-sm">
-          <input id="robotsIssuesOnly" type="checkbox" class="checkbox checkbox-sm" />
-          <span>Show issues only</span>
-        </label>
-      </div>
+      <label class="flex items-center gap-2 text-sm mt-2 sm:mt-0">
+        <input id="robotsIssuesOnly" type="checkbox" class="checkbox checkbox-sm" />
+        <span>Show issues only</span>
+      </label>
     </div>
     {% if robots | length %}
-      <div class="overflow-x-auto rounded-box border border-base-content/10">
-        <table class="table table-xs" id="robotsTable">
-          <thead>
-            <tr>
-              <th class="min-w-[220px]">Host</th>
-              <th class="min-w-[160px]">Status</th>
-              <th class="min-w-[160px]">Cache</th>
-              <th class="min-w-[200px]">Directives</th>
-              <th class="min-w-[260px]">Preview</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for r in robots %}
-              <tr data-host="{{ r.host }}" data-status="{{ r.statusCategory }}" data-issue="{% if r.isIssue %}1{% else %}0{% endif %}">
-                <td class="align-top">
-                  <div class="flex flex-col gap-1">
-                    <span class="font-medium">{{ r.host }}</span>
-                    <div class="flex flex-wrap items-center gap-2 text-xs">
-                      <a class="link link-primary" href="https://{{ r.host }}/robots.txt" target="_blank" rel="noreferrer">Live robots.txt</a>
-                      {% if r.robotsTxtPath %}
-                        <span class="opacity-40">·</span>
-                        <a class="link" href="{{ baseHref }}{{ r.robotsTxtPath }}" target="_blank" rel="noreferrer">Cached</a>
-                      {% endif %}
-                      {% if r.blacklisted %}
-                        <span class="badge badge-error badge-outline">
-                          Blacklisted{% if r.blacklistReason %} · {{ r.blacklistReason }}{% endif %}
-                        </span>
-                      {% endif %}
-                    </div>
-                    {% if r.blacklisted and r.blacklistUntil %}
-                      <span class="text-[11px] opacity-60">Active until {{ r.blacklistUntil }}</span>
-                    {% endif %}
-                  </div>
-                </td>
-                <td class="align-top">
-                  <div class="flex flex-col gap-1">
-                    {% set badgeClass = toneBadge[r.statusTone] or 'badge-outline' %}
-                    <span class="badge {{ badgeClass }} badge-sm">{{ r.statusLabel }}</span>
-                    {% if r.httpLabel %}
-                      <span class="badge badge-outline badge-xs">{{ r.httpLabel }}</span>
-                    {% endif %}
-                    <span class="text-[11px] opacity-60">{{ r.linesTotal }} lines</span>
-                  </div>
-                </td>
-                <td class="align-top">
-                  {% if r.robotsTxtPath %}
-                    <div class="flex flex-col gap-1 text-xs">
-                      <a class="link link-hover" href="{{ baseHref }}{{ r.robotsTxtPath }}" target="_blank" rel="noreferrer">{{ r.fileName }}</a>
-                      <span class="opacity-60">{{ r.sizeLabel }} · cached</span>
-                    </div>
-                  {% else %}
-                    <span class="text-xs opacity-60">No cache</span>
-                  {% endif %}
-                </td>
-                <td class="align-top">
-                  {% set allowCount = r.parsed.merged.allow.length %}
-                  {% set disallowCount = r.parsed.merged.disallow.length %}
-                  {% set noindexCount = r.parsed.merged.noindex.length %}
-                  {% set sitemapCount = r.parsed.merged.sitemaps.length %}
-                  <div class="flex flex-wrap gap-1 text-[11px]">
-                    {% if allowCount %}<span class="badge badge-outline badge-xs">Allow {{ allowCount }}</span>{% endif %}
-                    {% if disallowCount %}<span class="badge badge-outline badge-xs">Disallow {{ disallowCount }}</span>{% endif %}
-                    {% if noindexCount %}<span class="badge badge-outline badge-xs">Noindex {{ noindexCount }}</span>{% endif %}
-                    {% if r.parsed.merged.crawlDelay is not none %}<span class="badge badge-outline badge-xs">Delay {{ r.parsed.merged.crawlDelay }}</span>{% endif %}
-                    {% if sitemapCount %}<span class="badge badge-outline badge-xs">Sitemaps {{ sitemapCount }}</span>{% endif %}
-                  </div>
-                  {% if sitemapCount %}
-                    <div class="mt-1 space-y-1 text-[11px]">
-                      {% for u in r.parsed.merged.sitemaps | slice(0, 3) %}
-                        <a class="link link-hover" href="{{ u }}" target="_blank" rel="noreferrer">{{ u }}</a>
-                      {% endfor %}
-                      {% if r.parsed.merged.sitemaps.length > 3 %}
-                        <span class="opacity-60">+{{ r.parsed.merged.sitemaps.length - 3 }} more…</span>
-                      {% endif %}
-                    </div>
-                  {% endif %}
-                  {% if r.parsed.other and (r.parsed.other | length) %}
-                    <div class="mt-1 flex flex-wrap gap-1 text-[11px]">
-                      {% for key, vals in r.parsed.other %}
-                        <span class="badge badge-outline badge-xs">{{ key }}: {{ vals | join(' · ') }}</span>
-                      {% endfor %}
-                    </div>
-                  {% endif %}
-                </td>
-                <td class="align-top w-80">
-                  {% if r.preview %}
-                    <pre class="bg-base-100 border border-base-content/10 rounded-box p-3 text-xs leading-5 whitespace-pre-wrap max-h-36 overflow-auto">{{ r.preview | escape }}</pre>
+    <div class="overflow-x-auto rounded-box border border-base-content/10 mt-4">
+      <table class="table table-zebra table-xs" id="robotsTable">
+        <thead>
+          <tr>
+            <th class="min-w-[220px]">Host</th>
+            <th class="min-w-[160px]">Status</th>
+            <th class="min-w-[160px]">Cache</th>
+            <th class="min-w-[200px]">Directives</th>
+            <th class="min-w-[260px]">Preview</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for r in robots %}
+            <tr data-host="{{ r.host }}" data-status="{{ r.statusCategory }}" data-issue="{% if r.isIssue %}1{% else %}0{% endif %}">
+              <td class="align-top">
+                <div class="flex flex-col gap-1">
+                  <span class="font-medium">{{ r.host }}</span>
+                  <div class="flex flex-wrap items-center gap-2 text-xs">
+                    <a class="link link-primary" href="https://{{ r.host }}/robots.txt" target="_blank" rel="noreferrer">Live robots.txt</a>
                     {% if r.robotsTxtPath %}
-                      <a class="link link-hover text-xs" href="{{ baseHref }}{{ r.robotsTxtPath }}" target="_blank" rel="noreferrer">Open full raw</a>
+                      <span class="opacity-40">·</span>
+                      <a class="link" href="{{ baseHref }}{{ r.robotsTxtPath }}" target="_blank" rel="noreferrer">Cached</a>
                     {% endif %}
-                  {% elif r.hasCached %}
-                    <a class="link link-hover text-xs" href="{{ baseHref }}{{ r.robotsTxtPath }}" target="_blank" rel="noreferrer">Open cached file</a>
-                  {% else %}
-                    <span class="text-xs opacity-60">No cache captured</span>
+                    {% if r.blacklisted %}
+                      <span class="badge badge-error badge-outline">Blacklisted{% if r.blacklistReason %} · {{ r.blacklistReason }}{% endif %}</span>
+                    {% endif %}
+                  </div>
+                  {% if r.blacklisted and r.blacklistUntil %}
+                    <span class="text-[11px] opacity-60">Active until {{ r.blacklistUntil }}</span>
                   {% endif %}
-                </td>
-              </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-      </div>
+                </div>
+              </td>
+              <td class="align-top">
+                <div class="flex flex-col gap-1">
+                  {% set badgeClass = toneBadge[r.statusTone] or 'badge-outline' %}
+                  <span class="badge {{ badgeClass }} badge-sm">{{ r.statusLabel }}</span>
+                  {% if r.httpLabel %}<span class="badge badge-outline badge-xs">{{ r.httpLabel }}</span>{% endif %}
+                  <span class="text-[11px] opacity-60">{{ r.linesTotal }} lines</span>
+                </div>
+              </td>
+              <td class="align-top">
+                {% if r.robotsTxtPath %}
+                  <div class="flex flex-col gap-1 text-xs">
+                    <a class="link link-hover" href="{{ baseHref }}{{ r.robotsTxtPath }}" target="_blank" rel="noreferrer">{{ r.fileName }}</a>
+                    <span class="opacity-60">{{ r.sizeLabel }} · cached</span>
+                  </div>
+                {% else %}
+                  <span class="text-xs opacity-60">No cache</span>
+                {% endif %}
+              </td>
+              <td class="align-top">
+                {% set allowCount   = r.parsed.merged.allow.length %}
+                {% set disallowCount= r.parsed.merged.disallow.length %}
+                {% set noindexCount = r.parsed.merged.noindex.length %}
+                {% set sitemapCount= r.parsed.merged.sitemaps.length %}
+                <div class="flex flex-wrap gap-1 text-[11px]">
+                  {% if allowCount %}<span class="badge badge-outline badge-xs">Allow {{ allowCount }}</span>{% endif %}
+                  {% if disallowCount %}<span class="badge badge-outline badge-xs">Disallow {{ disallowCount }}</span>{% endif %}
+                  {% if noindexCount %}<span class="badge badge-outline badge-xs">Noindex {{ noindexCount }}</span>{% endif %}
+                  {% if r.parsed.merged.crawlDelay is not none %}<span class="badge badge-outline badge-xs">Delay {{ r.parsed.merged.crawlDelay }}</span>{% endif %}
+                  {% if sitemapCount %}<span class="badge badge-outline badge-xs">Sitemaps {{ sitemapCount }}</span>{% endif %}
+                </div>
+                {% if sitemapCount %}
+                  <div class="mt-1 space-y-1 text-[11px]">
+                    {% for u in r.parsed.merged.sitemaps | slice(0, 3) %}
+                      <a class="link link-hover" href="{{ u }}" target="_blank" rel="noreferrer">{{ u }}</a>
+                    {% endfor %}
+                    {% if r.parsed.merged.sitemaps.length > 3 %}<span class="opacity-60">+{{ r.parsed.merged.sitemaps.length - 3 }} more…</span>{% endif %}
+                  </div>
+                {% endif %}
+                {% if r.parsed.other and (r.parsed.other | length) %}
+                  <div class="mt-1 flex flex-wrap gap-1 text-[11px]">
+                    {% for key, vals in r.parsed.other %}
+                      <span class="badge badge-outline badge-xs">{{ key }}: {{ vals | join(' · ') }}</span>
+                    {% endfor %}
+                  </div>
+                {% endif %}
+              </td>
+              <td class="align-top w-80">
+                {% if r.preview %}
+                  <pre class="bg-base-100 border border-base-content/10 rounded-box p-3 text-xs leading-5 whitespace-pre-wrap max-h-36 overflow-auto">{{ r.preview | escape }}</pre>
+                  {% if r.robotsTxtPath %}<a class="link link-hover text-xs" href="{{ baseHref }}{{ r.robotsTxtPath }}" target="_blank" rel="noreferrer">Open full raw</a>{% endif %}
+                {% elif r.hasCached %}
+                  <a class="link link-hover text-xs" href="{{ baseHref }}{{ r.robotsTxtPath }}" target="_blank" rel="noreferrer">Open cached file</a>
+                {% else %}
+                  <span class="text-xs opacity-60">No cache captured</span>
+                {% endif %}
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
     {% else %}
-      <div class="alert alert-info">
+      <div class="alert alert-info mt-4">
         <span>No robots have been cached yet.</span>
       </div>
     {% endif %}
   </section>
 
-  <section class="space-y-4" id="docs">
-    <div class="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
-      <div class="space-y-2">
-        <h2 class="text-2xl font-semibold">Cached XML/TXT Documents</h2>
-        <p class="text-sm opacity-70">Inventory of saved sitemap payloads and text resources under <code>cache/sitemaps/</code>.</p>
-        <p class="text-xs opacity-60">Use the status filters to surface 403/404 pages, HTML error payloads, and gzip archives that need cleanup.</p>
+  {# Docs Section #}
+  <section id="docs" class="space-y-4 mt-12">
+    <h2 class="text-3xl font-semibold">Cached Documents</h2>
+    <p class="text-sm opacity-70">Inventory of saved sitemap payloads and text resources.</p>
+    <p class="text-xs opacity-60">Use the status filters to surface errors, HTML payloads and gzip archives.</p>
+    <div class="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-end mt-4">
+      <label class="input input-bordered flex items-center gap-2 w-full sm:w-72">
+        <span class="opacity-60">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-3.5-3.5"></path></svg>
+        </span>
+        <input id="docsFilter" type="search" class="grow" placeholder="Search host, filename, or status…" autocomplete="off" />
+      </label>
+      <div id="docsStatusFilters" class="flex flex-wrap gap-2">
+        {% for seg in docsMetrics.breakdown or [] %}
+          {% set badgeClass = toneBadge[seg.tone] or 'badge-outline' %}
+          <button type="button" class="btn btn-xs btn-ghost status-chip" data-status="{{ seg.key }}">
+            <span class="badge {{ badgeClass }} badge-xs">{{ seg.label }}</span>
+            <span class="text-xs opacity-60">{{ seg.count }}</span>
+          </button>
+        {% endfor %}
       </div>
-      <div class="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-end">
-        <label class="input input-bordered flex items-center gap-2 w-full sm:w-72">
-          <span class="opacity-60">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-3.5-3.5"></path></svg>
-          </span>
-          <input id="docsFilter" type="search" class="grow" placeholder="Search host, filename, or status…" autocomplete="off" />
-        </label>
-        <div id="docsStatusFilters" class="flex flex-wrap gap-2">
-          {% for seg in docsMetrics.breakdown or [] %}
-            {% set badgeClass = toneBadge[seg.tone] or 'badge-outline' %}
-            <button type="button" class="btn btn-xs btn-ghost status-chip" data-status="{{ seg.key }}">
-              <span class="badge {{ badgeClass }} badge-xs">{{ seg.label }}</span>
-              <span class="text-xs opacity-60">{{ seg.count }}</span>
-            </button>
-          {% endfor %}
-        </div>
-        <label class="flex items-center gap-2 text-sm">
-          <input id="docsIssuesOnly" type="checkbox" class="checkbox checkbox-sm" />
-          <span>Show issues only</span>
-        </label>
-        <button class="btn btn-sm btn-outline" id="exportDocs" type="button">Export CSV</button>
-      </div>
+      <label class="flex items-center gap-2 text-sm mt-2 sm:mt-0">
+        <input id="docsIssuesOnly" type="checkbox" class="checkbox checkbox-sm" />
+        <span>Show issues only</span>
+      </label>
+      <button class="btn btn-sm btn-outline" id="exportDocs" type="button">Export CSV</button>
     </div>
     {% if docs | length %}
-      <div class="overflow-x-auto rounded-box border border-base-content/10">
-        <table class="table table-xs" id="docsTable">
-          <thead>
-            <tr>
-              <th class="min-w-[200px]">Host</th>
-              <th class="min-w-[220px]">File</th>
-              <th class="min-w-[160px]">Status</th>
-              <th class="min-w-[160px]">Meta</th>
-              <th class="min-w-[320px]">Preview</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for d in docs %}
-              <tr data-status="{{ d.statusCategory }}" data-issue="{% if d.isIssue %}1{% else %}0{% endif %}">
-                <td class="align-top">
-                  <div class="flex flex-col gap-1">
-                    <span class="font-medium">{{ d.host or '—' }}</span>
-                    {% if d.url %}
-                      <a class="link link-primary text-xs" href="{{ d.url }}" target="_blank" rel="noreferrer">Live document</a>
-                    {% endif %}
-                  </div>
-                </td>
-                <td class="align-top">
-                  <div class="flex flex-col gap-1 text-xs">
-                    {% if d.savedPath %}
-                      <a class="link link-hover" href="{{ baseHref }}{{ d.savedPath }}" target="_blank" rel="noreferrer">{{ d.fileName }}</a>
-                      <span class="opacity-60">{{ d.savedPath }}</span>
-                    {% endif %}
-                    <span class="badge badge-outline badge-xs capitalize">{{ d.kind or '—' }}</span>
-                  </div>
-                </td>
-                <td class="align-top">
-                  {% set badgeClass = toneBadge[d.statusTone] or 'badge-outline' %}
-                  <div class="flex flex-col gap-1">
-                    <span class="badge {{ badgeClass }} badge-sm">{{ d.statusLabel }}</span>
-                    {% if d.httpLabel %}
-                      <span class="badge badge-outline badge-xs">{{ d.httpLabel }}</span>
-                    {% endif %}
-                    {% if d.status %}
-                      <span class="text-[11px] opacity-60">Fetch status {{ d.status }}</span>
-                    {% endif %}
-                  </div>
-                </td>
-                <td class="align-top text-xs">
-                  <div class="space-y-1">
-                    <span class="opacity-70">{{ d.sizeLabel }}</span>
-                    {% if d.contentType %}
-                      <span class="opacity-60">{{ d.contentType }}</span>
-                    {% endif %}
-                    {% if d.statusCategory == 'gzip' %}
-                      <span class="opacity-60">Compressed (.gz)</span>
-                    {% endif %}
-                  </div>
-                </td>
-                <td class="align-top w-[360px]">
-                  {% if d.preview %}
-                    <pre class="bg-base-100 border border-base-content/10 rounded-box p-3 text-xs leading-5 whitespace-pre-wrap max-h-40 overflow-auto">{{ d.preview | escape }}</pre>
-                  {% elif d.statusCategory == 'gzip' %}
-                    <span class="text-xs opacity-60">Gzip archive — download to inspect.</span>
-                  {% else %}
-                    <span class="text-xs opacity-60">No preview available.</span>
+    <div class="overflow-x-auto rounded-box border border-base-content/10 mt-4">
+      <table class="table table-zebra table-xs" id="docsTable">
+        <thead>
+          <tr>
+            <th class="min-w-[200px]">Host</th>
+            <th class="min-w-[220px]">File</th>
+            <th class="min-w-[160px]">Status</th>
+            <th class="min-w-[160px]">Meta</th>
+            <th class="min-w-[320px]">Preview</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for d in docs %}
+            <tr data-status="{{ d.statusCategory }}" data-issue="{% if d.isIssue %}1{% else %}0{% endif %}">
+              <td class="align-top">
+                <div class="flex flex-col gap-1">
+                  <span class="font-medium">{{ d.host or '—' }}</span>
+                  {% if d.url %}<a class="link link-primary text-xs" href="{{ d.url }}" target="_blank" rel="noreferrer">Live document</a>{% endif %}
+                </div>
+              </td>
+              <td class="align-top">
+                <div class="flex flex-col gap-1 text-xs">
+                  {% if d.savedPath %}
+                    <a class="link link-hover" href="{{ baseHref }}{{ d.savedPath }}" target="_blank" rel="noreferrer">{{ d.fileName }}</a>
+                    <span class="opacity-60">{{ d.savedPath }}</span>
                   {% endif %}
-                </td>
-              </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-      </div>
+                  <span class="badge badge-outline badge-xs capitalize">{{ d.kind or '—' }}</span>
+                </div>
+              </td>
+              <td class="align-top">
+                {% set badgeClass = toneBadge[d.statusTone] or 'badge-outline' %}
+                <div class="flex flex-col gap-1">
+                  <span class="badge {{ badgeClass }} badge-sm">{{ d.statusLabel }}</span>
+                  {% if d.httpLabel %}<span class="badge badge-outline badge-xs">{{ d.httpLabel }}</span>{% endif %}
+                  {% if d.status %}<span class="text-[11px] opacity-60">Fetch status {{ d.status }}</span>{% endif %}
+                </div>
+              </td>
+              <td class="align-top text-xs">
+                <div class="space-y-1">
+                  <span class="opacity-70">{{ d.sizeLabel }}</span>
+                  {% if d.contentType %}<span class="opacity-60">{{ d.contentType }}</span>{% endif %}
+                  {% if d.statusCategory == 'gzip' %}<span class="opacity-60">Compressed (.gz)</span>{% endif %}
+                </div>
+              </td>
+              <td class="align-top w-[360px]">
+                {% if d.preview %}
+                  <pre class="bg-base-100 border border-base-content/10 rounded-box p-3 text-xs leading-5 whitespace-pre-wrap max-h-40 overflow-auto">{{ d.preview | escape }}</pre>
+                {% elif d.statusCategory == 'gzip' %}
+                  <span class="text-xs opacity-60">Gzip archive — download to inspect.</span>
+                {% else %}
+                  <span class="text-xs opacity-60">No preview available.</span>
+                {% endif %}
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
     {% else %}
-      <div class="alert alert-info">
+      <div class="alert alert-info mt-4">
         <span>No cached documents on disk.</span>
       </div>
     {% endif %}
   </section>
 
-  <section class="space-y-4" id="sample">
-    <div class="flex flex-col gap-1">
-      <h2 class="text-2xl font-semibold">Image Sample</h2>
-      <p class="text-sm opacity-70">Quick glance at NDJSON shards. Click any tile to open the source.</p>
-    </div>
+  {# Sample images grid #}
+  <section id="sample" class="space-y-4 mt-12">
+    <h2 class="text-3xl font-semibold">Image Sample</h2>
+    <p class="text-sm opacity-70">A quick glance at NDJSON shards. Click any tile to open the source.</p>
     {% if sample | length %}
-      <div class="grid gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
+      <div class="grid gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 mt-4">
         {% for i in sample %}
-          <a class="relative block aspect-square overflow-hidden rounded-box border border-base-content/10" href="{{ i.src }}" target="_blank" title="{{ i.title or i.src }}" rel="noreferrer">
+          <a class="relative block aspect-square overflow-hidden rounded-box border border-base-content/10 hover:shadow-md transition" href="{{ i.src }}" target="_blank" title="{{ i.title or i.src }}" rel="noreferrer">
             <img loading="lazy" src="{{ i.src }}" alt="" class="h-full w-full object-cover" />
           </a>
         {% endfor %}
       </div>
-      <p class="text-sm opacity-70">Showing {{ sample | length }} sample images from NDJSON shards.</p>
+      <p class="text-sm opacity-70 mt-2">Showing {{ sample | length }} sample images.</p>
     {% else %}
-      <div class="alert alert-info">
+      <div class="alert alert-info mt-4">
         <span>No image samples were found in <code>items/*.ndjson</code>.</span>
       </div>
     {% endif %}
   </section>
-</div>
 
+</section>
+
+{#
+  The interactive filtering and export code remains largely untouched from the
+  previous implementation, ensuring table search, status filtering and CSV
+  export continues to work seamlessly.  Feel free to extend or refactor the
+  JavaScript below to add new interactions, such as tabbed sections or
+  advanced analytics.  For now, we simply initialise the chips and attach
+  filters as before.
+#}
 <script>
 (function(){
   const TYPES = ["image","product","content","catalog","index","other"];
@@ -454,7 +439,6 @@ metaDisable: true
 
   if (chipsRoot && sitemapsTable) {
     const active = new Set(TYPES);
-
     TYPES.forEach(type => {
       const button = document.createElement('button');
       button.type = 'button';
@@ -473,7 +457,6 @@ metaDisable: true
       });
       chipsRoot.appendChild(button);
     });
-
     function filterSitemaps() {
       const query = (sitemapFilter && sitemapFilter.value || '').toLowerCase();
       sitemapsTable.querySelectorAll('tbody tr').forEach(tr => {
@@ -484,10 +467,8 @@ metaDisable: true
         tr.style.display = okType && okText ? '' : 'none';
       });
     }
-
     if (sitemapFilter) sitemapFilter.addEventListener('input', filterSitemaps);
     filterSitemaps();
-
     if (exportSitemaps) {
       exportSitemaps.addEventListener('click', () => {
         const rows = [["Host","Type","Images","Status","URL","Cached"]];
@@ -500,29 +481,16 @@ metaDisable: true
       });
     }
   }
-
   const robotsTable = document.getElementById('robotsTable');
   const robotsFilter = document.getElementById('robotsFilter');
   const robotsStatusButtons = Array.from(document.querySelectorAll('#robotsStatusFilters .status-chip'));
   const robotsIssuesOnly = document.getElementById('robotsIssuesOnly');
-  setupTableFilter({
-    table: robotsTable,
-    searchInput: robotsFilter,
-    statusButtons: robotsStatusButtons,
-    issuesToggle: robotsIssuesOnly
-  });
-
+  setupTableFilter({ table: robotsTable, searchInput: robotsFilter, statusButtons: robotsStatusButtons, issuesToggle: robotsIssuesOnly });
   const docsTable = document.getElementById('docsTable');
   const docsFilter = document.getElementById('docsFilter');
   const docsStatusButtons = Array.from(document.querySelectorAll('#docsStatusFilters .status-chip'));
   const docsIssuesOnly = document.getElementById('docsIssuesOnly');
-  setupTableFilter({
-    table: docsTable,
-    searchInput: docsFilter,
-    statusButtons: docsStatusButtons,
-    issuesToggle: docsIssuesOnly
-  });
-
+  setupTableFilter({ table: docsTable, searchInput: docsFilter, statusButtons: docsStatusButtons, issuesToggle: docsIssuesOnly });
   const exportDocs = document.getElementById('exportDocs');
   if (exportDocs && docsTable) {
     exportDocs.addEventListener('click', () => {
@@ -547,12 +515,10 @@ function syncChipState(button, on) {
     button.classList.add('btn-ghost');
   }
 }
-
 function setupTableFilter({ table, searchInput, statusButtons, issuesToggle }) {
   if (!table) return;
   const rows = Array.from(table.querySelectorAll('tbody tr'));
   const activeStatuses = new Set(statusButtons && statusButtons.length ? statusButtons.map(btn => btn.dataset.status) : []);
-
   if (statusButtons && statusButtons.length) {
     statusButtons.forEach(btn => {
       syncChipState(btn, true);
@@ -575,34 +541,27 @@ function setupTableFilter({ table, searchInput, statusButtons, issuesToggle }) {
       });
     });
   }
-
   if (searchInput) searchInput.addEventListener('input', applyFilters);
   if (issuesToggle) issuesToggle.addEventListener('change', applyFilters);
-
   applyFilters();
-
   function applyFilters() {
     const query = (searchInput && searchInput.value || '').toLowerCase().trim();
     const terms = query ? query.split(/\s+/).filter(Boolean) : [];
     const issuesOnly = !!(issuesToggle && issuesToggle.checked);
-
     rows.forEach(row => {
       const rowStatus = row.getAttribute('data-status');
       const rowIssue = row.getAttribute('data-issue') === '1';
       let visible = true;
-
       if (statusButtons && statusButtons.length && rowStatus && !activeStatuses.has(rowStatus)) visible = false;
       if (issuesOnly && !rowIssue) visible = false;
       if (visible && terms.length) {
         const haystack = row.innerText.toLowerCase();
         visible = terms.every(term => haystack.includes(term));
       }
-
       row.style.display = visible ? '' : 'none';
     });
   }
 }
-
 function downloadCsv(filename, rows) {
   const csv = rows.map(row => row.map(cell => {
     if (cell == null) return '';

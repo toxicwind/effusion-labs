@@ -1,0 +1,14 @@
+{
+  "host": "es.louisvuitton.com",
+  "discoveredAt": "2025-09-20T19:09:41.128Z",
+  "robotsInfo": {
+    "url": "https://es.louisvuitton.com/robots.txt",
+    "found": true
+  },
+  "sitemaps": [
+    "https://es.louisvuitton.com/content/louisvuitton/sitemap/esp_ES/sitemap-product.xml",
+    "https://es.louisvuitton.com/content/louisvuitton/sitemap/esp_ES/sitemap-content.xml",
+    "https://es.louisvuitton.com/content/louisvuitton/sitemap/esp_ES/sitemap-catalog.xml",
+    "https://es.louisvuitton.com/content/louisvuitton/sitemap/esp_ES/sitemap-image.xml"
+  ]
+}

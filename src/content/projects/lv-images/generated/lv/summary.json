@@ -1,0 +1,131 @@
+{
+  "generatedAt": "2025-09-20T19:09:45.556Z",
+  "version": "2025.09.20",
+  "totals": {
+    "hosts": 6,
+    "sitemapsProcessed": 24,
+    "itemsFound": 0
+  },
+  "sitemaps": [
+    {
+      "host": "us.louisvuitton.com",
+      "url": "https://us.louisvuitton.com/content/louisvuitton/sitemap/eng_US/sitemap-content.xml",
+      "itemCount": 0
+    },
+    {
+      "host": "us.louisvuitton.com",
+      "url": "https://us.louisvuitton.com/content/louisvuitton/sitemap/eng_US/sitemap-catalog.xml",
+      "itemCount": 0
+    },
+    {
+      "host": "en.louisvuitton.com",
+      "url": "https://en.louisvuitton.com/content/louisvuitton/sitemap/eng_NL/sitemap-content.xml",
+      "itemCount": 0
+    },
+    {
+      "host": "en.louisvuitton.com",
+      "url": "https://en.louisvuitton.com/content/louisvuitton/sitemap/eng_NL/sitemap-catalog.xml",
+      "itemCount": 0
+    },
+    {
+      "host": "fr.louisvuitton.com",
+      "url": "https://fr.louisvuitton.com/content/louisvuitton/sitemap/fra_FR/sitemap-catalog.xml",
+      "itemCount": 0
+    },
+    {
+      "host": "fr.louisvuitton.com",
+      "url": "https://fr.louisvuitton.com/content/louisvuitton/sitemap/fra_FR/sitemap-content.xml",
+      "itemCount": 0
+    },
+    {
+      "host": "de.louisvuitton.com",
+      "url": "https://de.louisvuitton.com/content/louisvuitton/sitemap/deu_DE/sitemap-content.xml",
+      "itemCount": 0
+    },
+    {
+      "host": "de.louisvuitton.com",
+      "url": "https://de.louisvuitton.com/content/louisvuitton/sitemap/deu_DE/sitemap-catalog.xml",
+      "itemCount": 0
+    },
+    {
+      "host": "us.louisvuitton.com",
+      "url": "https://us.louisvuitton.com/content/louisvuitton/sitemap/eng_US/sitemap-product.xml",
+      "itemCount": 0
+    },
+    {
+      "host": "en.louisvuitton.com",
+      "url": "https://en.louisvuitton.com/content/louisvuitton/sitemap/eng_NL/sitemap-product.xml",
+      "itemCount": 0
+    },
+    {
+      "host": "fr.louisvuitton.com",
+      "url": "https://fr.louisvuitton.com/content/louisvuitton/sitemap/fra_FR/sitemap-product.xml",
+      "itemCount": 0
+    },
+    {
+      "host": "de.louisvuitton.com",
+      "url": "https://de.louisvuitton.com/content/louisvuitton/sitemap/deu_DE/sitemap-product.xml",
+      "itemCount": 0
+    },
+    {
+      "host": "es.louisvuitton.com",
+      "url": "https://es.louisvuitton.com/content/louisvuitton/sitemap/esp_ES/sitemap-content.xml",
+      "itemCount": 0
+    },
+    {
+      "host": "es.louisvuitton.com",
+      "url": "https://es.louisvuitton.com/content/louisvuitton/sitemap/esp_ES/sitemap-catalog.xml",
+      "itemCount": 0
+    },
+    {
+      "host": "us.louisvuitton.com",
+      "url": "https://us.louisvuitton.com/content/louisvuitton/sitemap/eng_US/sitemap-image.xml",
+      "itemCount": 0
+    },
+    {
+      "host": "it.louisvuitton.com",
+      "url": "https://it.louisvuitton.com/content/louisvuitton/sitemap/ita_IT/sitemap-content.xml",
+      "itemCount": 0
+    },
+    {
+      "host": "it.louisvuitton.com",
+      "url": "https://it.louisvuitton.com/content/louisvuitton/sitemap/ita_IT/sitemap-catalog.xml",
+      "itemCount": 0
+    },
+    {
+      "host": "en.louisvuitton.com",
+      "url": "https://en.louisvuitton.com/content/louisvuitton/sitemap/eng_NL/sitemap-image.xml",
+      "itemCount": 0
+    },
+    {
+      "host": "es.louisvuitton.com",
+      "url": "https://es.louisvuitton.com/content/louisvuitton/sitemap/esp_ES/sitemap-product.xml",
+      "itemCount": 0
+    },
+    {
+      "host": "it.louisvuitton.com",
+      "url": "https://it.louisvuitton.com/content/louisvuitton/sitemap/ita_IT/sitemap-product.xml",
+      "itemCount": 0
+    },
+    {
+      "host": "fr.louisvuitton.com",
+      "url": "https://fr.louisvuitton.com/content/louisvuitton/sitemap/fra_FR/sitemap-image.xml",
+      "itemCount": 0
+    },
+    {
+      "host": "de.louisvuitton.com",
+      "url": "https://de.louisvuitton.com/content/louisvuitton/sitemap/deu_DE/sitemap-image.xml",
+      "itemCount": 0
+    },
+    {
+      "host": "es.louisvuitton.com",
+      "url": "https://es.louisvuitton.com/content/louisvuitton/sitemap/esp_ES/sitemap-image.xml",
+      "itemCount": 0
+    },
+    {
+      "host": "it.louisvuitton.com",
+      "url": "https://it.louisvuitton.com/content/louisvuitton/sitemap/ita_IT/sitemap-image.xml",
+      "itemCount": 0
+    }
+  ]
+}

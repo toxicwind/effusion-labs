@@ -1,40 +1,949 @@
 {
-  "byAgent": {
-    "*": {
-      "allow": [],
-      "disallow": [],
-      "noindex": [],
-      "crawlDelay": null,
-      "sitemaps": [],
-      "host": null,
-      "cleanParam": [],
-      "requestRate": null,
-      "visitTime": [],
-      "unknown": [
-        {
-          "k": "contact",
-          "v": "https://vdp.louisvuitton.com"
-        }
-      ]
-    }
-  },
-  "merged": {
-    "allow": [],
-    "disallow": [],
-    "noindex": [],
-    "crawlDelay": null,
-    "sitemaps": [],
-    "host": null,
-    "cleanParam": [],
-    "requestRate": null,
-    "visitTime": [],
-    "unknown": [
-      {
-        "k": "contact",
-        "v": "https://vdp.louisvuitton.com"
-      }
+  "meta": {
+    "origin": "https://fr.louisvuitton.com",
+    "parsedAt": "2025-09-20T19:09:41.042Z",
+    "notes": [
+      "Noindex inside robots.txt is non-standard; captured verbatim for analysis.",
+      "Regexes are heuristic translations of robots patterns; crawler behavior may differ by vendor."
     ]
   },
-  "lines": 3,
-  "_invalid": false
+  "lines": [
+    {
+      "n": 1,
+      "raw": "User-agent: Googlebot",
+      "type": "directive",
+      "directive": "user-agent",
+      "value": "Googlebot"
+    },
+    {
+      "n": 2,
+      "raw": "Disallow: /fra-fr/mylv/",
+      "type": "directive",
+      "directive": "disallow",
+      "value": "/fra-fr/mylv/"
+    },
+    {
+      "n": 3,
+      "raw": "Disallow: /fra-fr/rechercher*",
+      "type": "directive",
+      "directive": "disallow",
+      "value": "/fra-fr/rechercher*"
+    },
+    {
+      "n": 4,
+      "raw": "Disallow: /fra-fr/search*",
+      "type": "directive",
+      "directive": "disallow",
+      "value": "/fra-fr/search*"
+    },
+    {
+      "n": 5,
+      "raw": "Disallow: /*article_search_result?*",
+      "type": "directive",
+      "directive": "disallow",
+      "value": "/*article_search_result?*"
+    },
+    {
+      "n": 6,
+      "raw": "Disallow: /exclusive-access/",
+      "type": "directive",
+      "directive": "disallow",
+      "value": "/exclusive-access/"
+    },
+    {
+      "n": 7,
+      "raw": "Disallow: /*sort=",
+      "type": "directive",
+      "directive": "disallow",
+      "value": "/*sort="
+    },
+    {
+      "n": 8,
+      "raw": "Disallow: /*kitID=",
+      "type": "directive",
+      "directive": "disallow",
+      "value": "/*kitID="
+    },
+    {
+      "n": 9,
+      "raw": "Disallow: /*?search=",
+      "type": "directive",
+      "directive": "disallow",
+      "value": "/*?search="
+    },
+    {
+      "n": 10,
+      "raw": "Disallow: /*lvxmurakami",
+      "type": "directive",
+      "directive": "disallow",
+      "value": "/*lvxmurakami"
+    },
+    {
+      "n": 11,
+      "raw": "Disallow: */booking-appointments?storeId=",
+      "type": "directive",
+      "directive": "disallow",
+      "value": "*/booking-appointments?storeId="
+    },
+    {
+      "n": 12,
+      "raw": "Disallow: /*personalizationId=",
+      "type": "directive",
+      "directive": "disallow",
+      "value": "/*personalizationId="
+    },
+    {
+      "n": 13,
+      "raw": "",
+      "type": "blank"
+    },
+    {
+      "n": 14,
+      "raw": "User-agent: Googlebot-image",
+      "type": "directive",
+      "directive": "user-agent",
+      "value": "Googlebot-image"
+    },
+    {
+      "n": 15,
+      "raw": "Disallow: /fra-fr/mylv/",
+      "type": "directive",
+      "directive": "disallow",
+      "value": "/fra-fr/mylv/"
+    },
+    {
+      "n": 16,
+      "raw": "Disallow: /fra-fr/rechercher*",
+      "type": "directive",
+      "directive": "disallow",
+      "value": "/fra-fr/rechercher*"
+    },
+    {
+      "n": 17,
+      "raw": "Disallow: /fra-fr/search*",
+      "type": "directive",
+      "directive": "disallow",
+      "value": "/fra-fr/search*"
+    },
+    {
+      "n": 18,
+      "raw": "Disallow: /*article_search_result?*",
+      "type": "directive",
+      "directive": "disallow",
+      "value": "/*article_search_result?*"
+    },
+    {
+      "n": 19,
+      "raw": "Disallow: /exclusive-access/",
+      "type": "directive",
+      "directive": "disallow",
+      "value": "/exclusive-access/"
+    },
+    {
+      "n": 20,
+      "raw": "Disallow: /*sort=",
+      "type": "directive",
+      "directive": "disallow",
+      "value": "/*sort="
+    },
+    {
+      "n": 21,
+      "raw": "Disallow: /*kitID=",
+      "type": "directive",
+      "directive": "disallow",
+      "value": "/*kitID="
+    },
+    {
+      "n": 22,
+      "raw": "Disallow: /*?search=",
+      "type": "directive",
+      "directive": "disallow",
+      "value": "/*?search="
+    },
+    {
+      "n": 23,
+      "raw": "Disallow: /*lvxmurakami",
+      "type": "directive",
+      "directive": "disallow",
+      "value": "/*lvxmurakami"
+    },
+    {
+      "n": 24,
+      "raw": "",
+      "type": "blank"
+    },
+    {
+      "n": 25,
+      "raw": "User-Agent: Pinterestbot",
+      "type": "directive",
+      "directive": "user-agent",
+      "value": "Pinterestbot"
+    },
+    {
+      "n": 26,
+      "raw": "Crawl-delay: 1",
+      "type": "directive",
+      "directive": "crawl-delay",
+      "value": "1"
+    },
+    {
+      "n": 27,
+      "raw": "Disallow: /",
+      "type": "directive",
+      "directive": "disallow",
+      "value": "/"
+    },
+    {
+      "n": 28,
+      "raw": "Allow: /fra-fr/produits/",
+      "type": "directive",
+      "directive": "allow",
+      "value": "/fra-fr/produits/"
+    },
+    {
+      "n": 29,
+      "raw": "",
+      "type": "blank"
+    },
+    {
+      "n": 30,
+      "raw": "User-Agent: *",
+      "type": "directive",
+      "directive": "user-agent",
+      "value": "*"
+    },
+    {
+      "n": 31,
+      "raw": "Disallow: /fra-fr/mylv/",
+      "type": "directive",
+      "directive": "disallow",
+      "value": "/fra-fr/mylv/"
+    },
+    {
+      "n": 32,
+      "raw": "Disallow: /fra-fr/rechercher*",
+      "type": "directive",
+      "directive": "disallow",
+      "value": "/fra-fr/rechercher*"
+    },
+    {
+      "n": 33,
+      "raw": "Disallow: /fra-fr/search*",
+      "type": "directive",
+      "directive": "disallow",
+      "value": "/fra-fr/search*"
+    },
+    {
+      "n": 34,
+      "raw": "Disallow: /*article_search_result?*",
+      "type": "directive",
+      "directive": "disallow",
+      "value": "/*article_search_result?*"
+    },
+    {
+      "n": 35,
+      "raw": "Disallow: /exclusive-access/",
+      "type": "directive",
+      "directive": "disallow",
+      "value": "/exclusive-access/"
+    },
+    {
+      "n": 36,
+      "raw": "Disallow: /*sort=",
+      "type": "directive",
+      "directive": "disallow",
+      "value": "/*sort="
+    },
+    {
+      "n": 37,
+      "raw": "Disallow: /*kitID=",
+      "type": "directive",
+      "directive": "disallow",
+      "value": "/*kitID="
+    },
+    {
+      "n": 38,
+      "raw": "Disallow: /*?search=",
+      "type": "directive",
+      "directive": "disallow",
+      "value": "/*?search="
+    },
+    {
+      "n": 39,
+      "raw": "Disallow: /*lvxmurakami",
+      "type": "directive",
+      "directive": "disallow",
+      "value": "/*lvxmurakami"
+    },
+    {
+      "n": 40,
+      "raw": "Disallow: */booking-appointments?storeId=",
+      "type": "directive",
+      "directive": "disallow",
+      "value": "*/booking-appointments?storeId="
+    },
+    {
+      "n": 41,
+      "raw": "Disallow: /*personalizationId=",
+      "type": "directive",
+      "directive": "disallow",
+      "value": "/*personalizationId="
+    },
+    {
+      "n": 42,
+      "raw": "",
+      "type": "blank"
+    },
+    {
+      "n": 43,
+      "raw": "Allow: */mylv/prendre-rendez-vous",
+      "type": "directive",
+      "directive": "allow",
+      "value": "*/mylv/prendre-rendez-vous"
+    },
+    {
+      "n": 44,
+      "raw": "Allow: */mylv/newsletter",
+      "type": "directive",
+      "directive": "allow",
+      "value": "*/mylv/newsletter"
+    },
+    {
+      "n": 45,
+      "raw": "",
+      "type": "blank"
+    },
+    {
+      "n": 46,
+      "raw": "Sitemap: https://fr.louisvuitton.com/content/louisvuitton/sitemap/fra_FR/sitemap-product.xml",
+      "type": "directive",
+      "directive": "sitemap",
+      "value": "https://fr.louisvuitton.com/content/louisvuitton/sitemap/fra_FR/sitemap-product.xml"
+    },
+    {
+      "n": 47,
+      "raw": "Sitemap: https://fr.louisvuitton.com/content/louisvuitton/sitemap/fra_FR/sitemap-content.xml",
+      "type": "directive",
+      "directive": "sitemap",
+      "value": "https://fr.louisvuitton.com/content/louisvuitton/sitemap/fra_FR/sitemap-content.xml"
+    },
+    {
+      "n": 48,
+      "raw": "Sitemap: https://fr.louisvuitton.com/content/louisvuitton/sitemap/fra_FR/sitemap-catalog.xml",
+      "type": "directive",
+      "directive": "sitemap",
+      "value": "https://fr.louisvuitton.com/content/louisvuitton/sitemap/fra_FR/sitemap-catalog.xml"
+    },
+    {
+      "n": 49,
+      "raw": "Sitemap: https://fr.louisvuitton.com/content/louisvuitton/sitemap/fra_FR/sitemap-image.xml",
+      "type": "directive",
+      "directive": "sitemap",
+      "value": "https://fr.louisvuitton.com/content/louisvuitton/sitemap/fra_FR/sitemap-image.xml"
+    }
+  ],
+  "groups": [
+    {
+      "userAgents": [
+        "Googlebot"
+      ],
+      "rules": [
+        {
+          "type": "disallow",
+          "value": "/fra-fr/mylv/",
+          "info": {
+            "hasWildcard": false,
+            "hasQuery": false,
+            "pathLike": true,
+            "endsWithEquals": false,
+            "anchor": "site-root-or-below",
+            "scope": "absolute-path"
+          },
+          "regex": "^/fra-fr/mylv/",
+          "example": "https://fr.louisvuitton.com/fra-fr/mylv/"
+        },
+        {
+          "type": "disallow",
+          "value": "/fra-fr/rechercher*",
+          "info": {
+            "hasWildcard": true,
+            "hasQuery": false,
+            "pathLike": true,
+            "endsWithEquals": false,
+            "anchor": "site-root-or-below",
+            "scope": "absolute-path"
+          },
+          "regex": "^/fra-fr/rechercher.*",
+          "example": "https://fr.louisvuitton.com/fra-fr/rechercherx"
+        },
+        {
+          "type": "disallow",
+          "value": "/fra-fr/search*",
+          "info": {
+            "hasWildcard": true,
+            "hasQuery": false,
+            "pathLike": true,
+            "endsWithEquals": false,
+            "anchor": "site-root-or-below",
+            "scope": "absolute-path"
+          },
+          "regex": "^/fra-fr/search.*",
+          "example": "https://fr.louisvuitton.com/fra-fr/searchx"
+        },
+        {
+          "type": "disallow",
+          "value": "/*article_search_result?*",
+          "info": {
+            "hasWildcard": true,
+            "hasQuery": true,
+            "pathLike": true,
+            "endsWithEquals": false,
+            "queryKeys": [
+              "*"
+            ],
+            "anchor": "site-root-or-below",
+            "scope": "any-top-path"
+          },
+          "regex": "^/.*article_search_result\\?.*",
+          "example": "https://fr.louisvuitton.com/x?*=x"
+        },
+        {
+          "type": "disallow",
+          "value": "/exclusive-access/",
+          "info": {
+            "hasWildcard": false,
+            "hasQuery": false,
+            "pathLike": true,
+            "endsWithEquals": false,
+            "anchor": "site-root-or-below",
+            "scope": "absolute-path"
+          },
+          "regex": "^/exclusive-access/",
+          "example": "https://fr.louisvuitton.com/exclusive-access/"
+        },
+        {
+          "type": "disallow",
+          "value": "/*sort=",
+          "info": {
+            "hasWildcard": true,
+            "hasQuery": false,
+            "pathLike": true,
+            "endsWithEquals": true,
+            "anchor": "site-root-or-below",
+            "scope": "any-top-path"
+          },
+          "regex": "^/.*sort=",
+          "example": "https://fr.louisvuitton.com/xsort="
+        },
+        {
+          "type": "disallow",
+          "value": "/*kitID=",
+          "info": {
+            "hasWildcard": true,
+            "hasQuery": false,
+            "pathLike": true,
+            "endsWithEquals": true,
+            "anchor": "site-root-or-below",
+            "scope": "any-top-path"
+          },
+          "regex": "^/.*kitID=",
+          "example": "https://fr.louisvuitton.com/xkitID="
+        },
+        {
+          "type": "disallow",
+          "value": "/*?search=",
+          "info": {
+            "hasWildcard": true,
+            "hasQuery": true,
+            "pathLike": true,
+            "endsWithEquals": true,
+            "queryKeys": [
+              "search"
+            ],
+            "anchor": "site-root-or-below",
+            "scope": "any-top-path"
+          },
+          "regex": "^/.*\\?search=",
+          "example": "https://fr.louisvuitton.com/x?search=wallet"
+        },
+        {
+          "type": "disallow",
+          "value": "/*lvxmurakami",
+          "info": {
+            "hasWildcard": true,
+            "hasQuery": false,
+            "pathLike": true,
+            "endsWithEquals": false,
+            "anchor": "site-root-or-below",
+            "scope": "any-top-path"
+          },
+          "regex": "^/.*lvxmurakami",
+          "example": "https://fr.louisvuitton.com/collections/lvxmurakami"
+        },
+        {
+          "type": "disallow",
+          "value": "*/booking-appointments?storeId=",
+          "info": {
+            "hasWildcard": true,
+            "hasQuery": true,
+            "pathLike": true,
+            "endsWithEquals": true,
+            "queryKeys": [
+              "storeId"
+            ],
+            "anchor": "unknown",
+            "scope": "any-subpath"
+          },
+          "regex": "^/.*/booking-appointments\\?storeId=",
+          "example": "https://fr.louisvuitton.com/x/booking-appointments?storeId=1001"
+        },
+        {
+          "type": "disallow",
+          "value": "/*personalizationId=",
+          "info": {
+            "hasWildcard": true,
+            "hasQuery": false,
+            "pathLike": true,
+            "endsWithEquals": true,
+            "anchor": "site-root-or-below",
+            "scope": "any-top-path"
+          },
+          "regex": "^/.*personalizationId=",
+          "example": "https://fr.louisvuitton.com/xpersonalizationId="
+        }
+      ],
+      "sitemaps": []
+    },
+    {
+      "userAgents": [
+        "Googlebot-image"
+      ],
+      "rules": [
+        {
+          "type": "disallow",
+          "value": "/fra-fr/mylv/",
+          "info": {
+            "hasWildcard": false,
+            "hasQuery": false,
+            "pathLike": true,
+            "endsWithEquals": false,
+            "anchor": "site-root-or-below",
+            "scope": "absolute-path"
+          },
+          "regex": "^/fra-fr/mylv/",
+          "example": "https://fr.louisvuitton.com/fra-fr/mylv/"
+        },
+        {
+          "type": "disallow",
+          "value": "/fra-fr/rechercher*",
+          "info": {
+            "hasWildcard": true,
+            "hasQuery": false,
+            "pathLike": true,
+            "endsWithEquals": false,
+            "anchor": "site-root-or-below",
+            "scope": "absolute-path"
+          },
+          "regex": "^/fra-fr/rechercher.*",
+          "example": "https://fr.louisvuitton.com/fra-fr/rechercherx"
+        },
+        {
+          "type": "disallow",
+          "value": "/fra-fr/search*",
+          "info": {
+            "hasWildcard": true,
+            "hasQuery": false,
+            "pathLike": true,
+            "endsWithEquals": false,
+            "anchor": "site-root-or-below",
+            "scope": "absolute-path"
+          },
+          "regex": "^/fra-fr/search.*",
+          "example": "https://fr.louisvuitton.com/fra-fr/searchx"
+        },
+        {
+          "type": "disallow",
+          "value": "/*article_search_result?*",
+          "info": {
+            "hasWildcard": true,
+            "hasQuery": true,
+            "pathLike": true,
+            "endsWithEquals": false,
+            "queryKeys": [
+              "*"
+            ],
+            "anchor": "site-root-or-below",
+            "scope": "any-top-path"
+          },
+          "regex": "^/.*article_search_result\\?.*",
+          "example": "https://fr.louisvuitton.com/x?*=x"
+        },
+        {
+          "type": "disallow",
+          "value": "/exclusive-access/",
+          "info": {
+            "hasWildcard": false,
+            "hasQuery": false,
+            "pathLike": true,
+            "endsWithEquals": false,
+            "anchor": "site-root-or-below",
+            "scope": "absolute-path"
+          },
+          "regex": "^/exclusive-access/",
+          "example": "https://fr.louisvuitton.com/exclusive-access/"
+        },
+        {
+          "type": "disallow",
+          "value": "/*sort=",
+          "info": {
+            "hasWildcard": true,
+            "hasQuery": false,
+            "pathLike": true,
+            "endsWithEquals": true,
+            "anchor": "site-root-or-below",
+            "scope": "any-top-path"
+          },
+          "regex": "^/.*sort=",
+          "example": "https://fr.louisvuitton.com/xsort="
+        },
+        {
+          "type": "disallow",
+          "value": "/*kitID=",
+          "info": {
+            "hasWildcard": true,
+            "hasQuery": false,
+            "pathLike": true,
+            "endsWithEquals": true,
+            "anchor": "site-root-or-below",
+            "scope": "any-top-path"
+          },
+          "regex": "^/.*kitID=",
+          "example": "https://fr.louisvuitton.com/xkitID="
+        },
+        {
+          "type": "disallow",
+          "value": "/*?search=",
+          "info": {
+            "hasWildcard": true,
+            "hasQuery": true,
+            "pathLike": true,
+            "endsWithEquals": true,
+            "queryKeys": [
+              "search"
+            ],
+            "anchor": "site-root-or-below",
+            "scope": "any-top-path"
+          },
+          "regex": "^/.*\\?search=",
+          "example": "https://fr.louisvuitton.com/x?search=wallet"
+        },
+        {
+          "type": "disallow",
+          "value": "/*lvxmurakami",
+          "info": {
+            "hasWildcard": true,
+            "hasQuery": false,
+            "pathLike": true,
+            "endsWithEquals": false,
+            "anchor": "site-root-or-below",
+            "scope": "any-top-path"
+          },
+          "regex": "^/.*lvxmurakami",
+          "example": "https://fr.louisvuitton.com/collections/lvxmurakami"
+        }
+      ],
+      "sitemaps": []
+    },
+    {
+      "userAgents": [
+        "Pinterestbot"
+      ],
+      "rules": [
+        {
+          "type": "crawl-delay",
+          "value": "1",
+          "info": {
+            "hasWildcard": false,
+            "hasQuery": false,
+            "pathLike": true,
+            "endsWithEquals": false,
+            "anchor": "unknown"
+          }
+        },
+        {
+          "type": "disallow",
+          "value": "/",
+          "info": {
+            "hasWildcard": false,
+            "hasQuery": false,
+            "pathLike": true,
+            "endsWithEquals": false,
+            "anchor": "site-root-or-below",
+            "scope": "absolute-path"
+          },
+          "regex": "^/",
+          "example": "https://fr.louisvuitton.com/"
+        },
+        {
+          "type": "allow",
+          "value": "/fra-fr/produits/",
+          "info": {
+            "hasWildcard": false,
+            "hasQuery": false,
+            "pathLike": true,
+            "endsWithEquals": false,
+            "anchor": "site-root-or-below",
+            "scope": "absolute-path"
+          },
+          "regex": "^/fra-fr/produits/",
+          "example": "https://fr.louisvuitton.com/fra-fr/produits/"
+        }
+      ],
+      "sitemaps": []
+    },
+    {
+      "userAgents": [
+        "*"
+      ],
+      "rules": [
+        {
+          "type": "disallow",
+          "value": "/fra-fr/mylv/",
+          "info": {
+            "hasWildcard": false,
+            "hasQuery": false,
+            "pathLike": true,
+            "endsWithEquals": false,
+            "anchor": "site-root-or-below",
+            "scope": "absolute-path"
+          },
+          "regex": "^/fra-fr/mylv/",
+          "example": "https://fr.louisvuitton.com/fra-fr/mylv/"
+        },
+        {
+          "type": "disallow",
+          "value": "/fra-fr/rechercher*",
+          "info": {
+            "hasWildcard": true,
+            "hasQuery": false,
+            "pathLike": true,
+            "endsWithEquals": false,
+            "anchor": "site-root-or-below",
+            "scope": "absolute-path"
+          },
+          "regex": "^/fra-fr/rechercher.*",
+          "example": "https://fr.louisvuitton.com/fra-fr/rechercherx"
+        },
+        {
+          "type": "disallow",
+          "value": "/fra-fr/search*",
+          "info": {
+            "hasWildcard": true,
+            "hasQuery": false,
+            "pathLike": true,
+            "endsWithEquals": false,
+            "anchor": "site-root-or-below",
+            "scope": "absolute-path"
+          },
+          "regex": "^/fra-fr/search.*",
+          "example": "https://fr.louisvuitton.com/fra-fr/searchx"
+        },
+        {
+          "type": "disallow",
+          "value": "/*article_search_result?*",
+          "info": {
+            "hasWildcard": true,
+            "hasQuery": true,
+            "pathLike": true,
+            "endsWithEquals": false,
+            "queryKeys": [
+              "*"
+            ],
+            "anchor": "site-root-or-below",
+            "scope": "any-top-path"
+          },
+          "regex": "^/.*article_search_result\\?.*",
+          "example": "https://fr.louisvuitton.com/x?*=x"
+        },
+        {
+          "type": "disallow",
+          "value": "/exclusive-access/",
+          "info": {
+            "hasWildcard": false,
+            "hasQuery": false,
+            "pathLike": true,
+            "endsWithEquals": false,
+            "anchor": "site-root-or-below",
+            "scope": "absolute-path"
+          },
+          "regex": "^/exclusive-access/",
+          "example": "https://fr.louisvuitton.com/exclusive-access/"
+        },
+        {
+          "type": "disallow",
+          "value": "/*sort=",
+          "info": {
+            "hasWildcard": true,
+            "hasQuery": false,
+            "pathLike": true,
+            "endsWithEquals": true,
+            "anchor": "site-root-or-below",
+            "scope": "any-top-path"
+          },
+          "regex": "^/.*sort=",
+          "example": "https://fr.louisvuitton.com/xsort="
+        },
+        {
+          "type": "disallow",
+          "value": "/*kitID=",
+          "info": {
+            "hasWildcard": true,
+            "hasQuery": false,
+            "pathLike": true,
+            "endsWithEquals": true,
+            "anchor": "site-root-or-below",
+            "scope": "any-top-path"
+          },
+          "regex": "^/.*kitID=",
+          "example": "https://fr.louisvuitton.com/xkitID="
+        },
+        {
+          "type": "disallow",
+          "value": "/*?search=",
+          "info": {
+            "hasWildcard": true,
+            "hasQuery": true,
+            "pathLike": true,
+            "endsWithEquals": true,
+            "queryKeys": [
+              "search"
+            ],
+            "anchor": "site-root-or-below",
+            "scope": "any-top-path"
+          },
+          "regex": "^/.*\\?search=",
+          "example": "https://fr.louisvuitton.com/x?search=wallet"
+        },
+        {
+          "type": "disallow",
+          "value": "/*lvxmurakami",
+          "info": {
+            "hasWildcard": true,
+            "hasQuery": false,
+            "pathLike": true,
+            "endsWithEquals": false,
+            "anchor": "site-root-or-below",
+            "scope": "any-top-path"
+          },
+          "regex": "^/.*lvxmurakami",
+          "example": "https://fr.louisvuitton.com/collections/lvxmurakami"
+        },
+        {
+          "type": "disallow",
+          "value": "*/booking-appointments?storeId=",
+          "info": {
+            "hasWildcard": true,
+            "hasQuery": true,
+            "pathLike": true,
+            "endsWithEquals": true,
+            "queryKeys": [
+              "storeId"
+            ],
+            "anchor": "unknown",
+            "scope": "any-subpath"
+          },
+          "regex": "^/.*/booking-appointments\\?storeId=",
+          "example": "https://fr.louisvuitton.com/x/booking-appointments?storeId=1001"
+        },
+        {
+          "type": "disallow",
+          "value": "/*personalizationId=",
+          "info": {
+            "hasWildcard": true,
+            "hasQuery": false,
+            "pathLike": true,
+            "endsWithEquals": true,
+            "anchor": "site-root-or-below",
+            "scope": "any-top-path"
+          },
+          "regex": "^/.*personalizationId=",
+          "example": "https://fr.louisvuitton.com/xpersonalizationId="
+        },
+        {
+          "type": "allow",
+          "value": "*/mylv/prendre-rendez-vous",
+          "info": {
+            "hasWildcard": true,
+            "hasQuery": false,
+            "pathLike": true,
+            "endsWithEquals": false,
+            "anchor": "unknown",
+            "scope": "any-subpath"
+          },
+          "regex": "^/.*/mylv/prendre-rendez-vous",
+          "example": "https://fr.louisvuitton.com/x/mylv/prendre-rendez-vous"
+        },
+        {
+          "type": "allow",
+          "value": "*/mylv/newsletter",
+          "info": {
+            "hasWildcard": true,
+            "hasQuery": false,
+            "pathLike": true,
+            "endsWithEquals": false,
+            "anchor": "unknown",
+            "scope": "any-subpath"
+          },
+          "regex": "^/.*/mylv/newsletter",
+          "example": "https://fr.louisvuitton.com/mylv/newsletter"
+        }
+      ],
+      "sitemaps": [
+        "https://fr.louisvuitton.com/content/louisvuitton/sitemap/fra_FR/sitemap-product.xml",
+        "https://fr.louisvuitton.com/content/louisvuitton/sitemap/fra_FR/sitemap-content.xml",
+        "https://fr.louisvuitton.com/content/louisvuitton/sitemap/fra_FR/sitemap-catalog.xml",
+        "https://fr.louisvuitton.com/content/louisvuitton/sitemap/fra_FR/sitemap-image.xml"
+      ]
+    }
+  ],
+  "summary": {
+    "sitemaps": [
+      "https://fr.louisvuitton.com/content/louisvuitton/sitemap/fra_FR/sitemap-product.xml",
+      "https://fr.louisvuitton.com/content/louisvuitton/sitemap/fra_FR/sitemap-content.xml",
+      "https://fr.louisvuitton.com/content/louisvuitton/sitemap/fra_FR/sitemap-catalog.xml",
+      "https://fr.louisvuitton.com/content/louisvuitton/sitemap/fra_FR/sitemap-image.xml"
+    ],
+    "counts": {
+      "groups": 4,
+      "allows": 3,
+      "disallows": 32,
+      "noindexes": 0,
+      "sitemaps": 4,
+      "crawlDelay": 1
+    },
+    "crawlDelay": 1,
+    "overlaps": [
+      {
+        "allow_value": "/fra-fr/produits/",
+        "allow_example": "https://fr.louisvuitton.com/fra-fr/produits/",
+        "disallow_value": "/",
+        "disallow_regex": "^/",
+        "note": "Allow appears to carve an exception inside a broader Disallow"
+      },
+      {
+        "allow_value": "*/mylv/prendre-rendez-vous",
+        "allow_example": "https://fr.louisvuitton.com/x/mylv/prendre-rendez-vous",
+        "disallow_value": "/",
+        "disallow_regex": "^/",
+        "note": "Allow appears to carve an exception inside a broader Disallow"
+      },
+      {
+        "allow_value": "*/mylv/newsletter",
+        "allow_example": "https://fr.louisvuitton.com/mylv/newsletter",
+        "disallow_value": "/",
+        "disallow_regex": "^/",
+        "note": "Allow appears to carve an exception inside a broader Disallow"
+      }
+    ]
+  }
 }
