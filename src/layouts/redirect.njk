@@ -9,9 +9,11 @@ metaDisable: true
 
 {# Normalize the URL we’ll use everywhere #}
 {% set redirectUrl = redirect | default('/') %}
-{% set siteUrl = metadata and metadata.site and metadata.site.url %}
+{% set siteUrl =
+  (metadata and metadata.site and metadata.site.url) or 'https://effusionlabs.com'
+%}
 {% set canonicalHref = redirectUrl %}
-{% if siteUrl and canonicalHref and '://' not in canonicalHref %}
+{% if canonicalHref and '://' not in canonicalHref %}
   {% set canonicalHref = canonicalHref | absoluteUrl(siteUrl) %}
 {% endif %}
 
