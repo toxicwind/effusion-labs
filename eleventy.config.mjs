@@ -227,8 +227,9 @@ export default function(eleventyConfig) {
     dumpMarkdownTo: null,
     pageTitlePrefix: '',
     defaultLayout: 'converted-html.njk',
-    frontMatterExtra: { convertedFromHtml: true },
-  })
+    frontMatterExtra: { source: "html-import" },
+    smartTypography: false,           // keep MD diffs clean; flip to true if you want curly quotes baked in
+  });
 
   // --- End: Libraries & Custom Functions ---
   // Copy/pass-through files
