@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2025-09-20T19:09:45.556Z",
+  "generatedAt": "2025-09-20T19:15:38.166Z",
   "version": "2025.09.20",
   "totals": {
     "hosts": 6,
@@ -9,12 +9,12 @@
   "sitemaps": [
     {
       "host": "us.louisvuitton.com",
-      "url": "https://us.louisvuitton.com/content/louisvuitton/sitemap/eng_US/sitemap-content.xml",
+      "url": "https://us.louisvuitton.com/content/louisvuitton/sitemap/eng_US/sitemap-catalog.xml",
       "itemCount": 0
     },
     {
       "host": "us.louisvuitton.com",
-      "url": "https://us.louisvuitton.com/content/louisvuitton/sitemap/eng_US/sitemap-catalog.xml",
+      "url": "https://us.louisvuitton.com/content/louisvuitton/sitemap/eng_US/sitemap-content.xml",
       "itemCount": 0
     },
     {
@@ -29,12 +29,12 @@
     },
     {
       "host": "fr.louisvuitton.com",
-      "url": "https://fr.louisvuitton.com/content/louisvuitton/sitemap/fra_FR/sitemap-catalog.xml",
+      "url": "https://fr.louisvuitton.com/content/louisvuitton/sitemap/fra_FR/sitemap-content.xml",
       "itemCount": 0
     },
     {
       "host": "fr.louisvuitton.com",
-      "url": "https://fr.louisvuitton.com/content/louisvuitton/sitemap/fra_FR/sitemap-content.xml",
+      "url": "https://fr.louisvuitton.com/content/louisvuitton/sitemap/fra_FR/sitemap-catalog.xml",
       "itemCount": 0
     },
     {
@@ -127,5 +127,11 @@
       "url": "https://it.louisvuitton.com/content/louisvuitton/sitemap/ita_IT/sitemap-image.xml",
       "itemCount": 0
     }
-  ]
+  ],
+  "items": {
+    "added": 36203,
+    "removed": 0,
+    "active": 36203,
+    "total": 36203
+  }
 }

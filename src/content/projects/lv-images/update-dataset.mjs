@@ -1,4 +1,16 @@
-// update-dataset.mjs — 2025 final (uses 'bloom-filters', not the phantom package)
+// update-dataset.mjs — enhanced for timestamp tracking and item lifecycle
+//
+// This script crawls sitemaps for configured hosts, downloads robots.txt
+// files and XML payloads, and persists information about discovered items
+// into NDJSON shards.  It uses a ScalableBloomFilter to avoid emitting
+// duplicate items across runs.  Beyond the original functionality, the
+// script now records first discovery times, last seen times and removal
+// timestamps for each unique item.  A metadata file (`items-meta.json`)
+// stores lifecycle information keyed by a stable ID derived from the item
+// source URL.  Each run updates this metadata, marks items as removed
+// when they disappear from sitemaps, and exposes counts of added,
+// removed, active and total items in the summary.  URL metadata entries
+// also include the fetch timestamp.
 
 import { createHash } from "node:crypto";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
@@ -10,7 +22,7 @@ import { gunzipSync } from "node:zlib";
 
 import { XMLParser } from "fast-xml-parser";
 import pLimit from "p-limit";
-import pkg from 'bloom-filters';
+import pkg from "bloom-filters";
 const { ScalableBloomFilter } = pkg;
 
 import { decodeRobots } from "./robots_decode.mjs";
@@ -27,6 +39,12 @@ const itemsDir = path.join(genDir, "items");
 
 const robotsDir = path.join(cacheDir, "robots");
 const urlmetaPath = path.join(cacheDir, "urlmeta.json");
+
+// Persisted item metadata.  Each entry tracks when an item was first
+// discovered, when it was last seen in sitemaps and, if applicable,
+// when it was removed.  The metadata file lives alongside the NDJSON
+// shards and is updated on each run.
+const itemsMetaPath = path.join(genDir, "items-meta.json");
 
 // Adjust if your config lives elsewhere
 const hostsTxtPath = path.join(baseDir, "./config/hosts.txt");
@@ -158,7 +176,7 @@ class Crawler {
       const robotsJsonFile = path.join(robotsDir, `${host}.json`);
       await writeFile(robotsJsonFile, JSON.stringify(decoded, null, 2), "utf8");
 
-      // urlmeta for report
+      // urlmeta for report, include fetch timestamp
       this.config.recordUrlMeta?.(robotsUrl, robotsTxtFile, robotsRes.status, robotsRes.contentType);
     }
 
@@ -211,6 +229,17 @@ class Crawler {
     let itemCount = 0;
     for (const item of iterSitemapItems(text)) {
       const id = shortId(item.src);
+      // update per-item metadata regardless of Bloom membership
+      if (this.config.updateItemMeta) {
+        this.config.updateItemMeta(id, {
+          src: item.src,
+          pageUrl: item.pageUrl,
+          lastMod: item.lastMod || item.lastmod || "",
+          title: item.title || "",
+          host: hostOf(url),
+          sitemap: url
+        });
+      }
       if (!this.seenBloom.has(id)) {
         await writer.write({ ...item, id, host: hostOf(url), sitemap: url });
         this.seenBloom.add(id);
@@ -279,16 +308,62 @@ async function main() {
   await mkdir(itemsDir, { recursive: true });
   await mkdir(robotsDir, { recursive: true });
 
+  // Load existing URL metadata and define a recorder that also captures fetch timestamps
   const urlmeta = JSON.parse((await readFile(urlmetaPath, "utf8").catch(() => "{}")) || "{}");
   const recordUrlMeta = (url, absPath, status = "", contentType = "") => {
-    urlmeta[url] = { path: path.resolve(absPath), status, contentType };
+    urlmeta[url] = {
+      path: path.resolve(absPath),
+      status,
+      contentType,
+      fetchedAt: new Date().toISOString(),
+    };
   };
 
+  // Load hosts list
   const hosts = (await readFile(hostsTxtPath, "utf8"))
     .split(/\r?\n/).map((s) => s.trim()).filter(Boolean).slice(0, MAX_HOSTS);
 
+  // Load bloom filter state
   const bloomJSON = await readFile(bloomPath, "utf8").catch(() => null);
   const initialBloom = bloomJSON ? ScalableBloomFilter.fromJSON(JSON.parse(bloomJSON)) : undefined;
+
+  // Load persistent item metadata
+  const itemsMeta = JSON.parse((await readFile(itemsMetaPath, "utf8").catch(() => "{}")) || "{}");
+  // Set up structures to track items encountered this run
+  const seenIds = new Set();
+  let newItemsCount = 0;
+
+  // Define updateItemMeta closure for Crawler to call per item
+  const updateItemMeta = (id, info) => {
+    seenIds.add(id);
+    const now = new Date().toISOString();
+    if (!itemsMeta[id]) {
+      itemsMeta[id] = {
+        firstSeen: now,
+        lastSeen: now,
+        removedAt: null,
+        src: info.src,
+        pageUrl: info.pageUrl,
+        lastMod: info.lastMod || "",
+        title: info.title || "",
+        host: info.host || "",
+        sitemap: info.sitemap || "",
+      };
+      newItemsCount++;
+    } else {
+      itemsMeta[id].lastSeen = now;
+      itemsMeta[id].src = info.src;
+      itemsMeta[id].pageUrl = info.pageUrl;
+      itemsMeta[id].lastMod = info.lastMod || itemsMeta[id].lastMod;
+      itemsMeta[id].title = info.title || itemsMeta[id].title;
+      itemsMeta[id].host = info.host || itemsMeta[id].host;
+      itemsMeta[id].sitemap = info.sitemap || itemsMeta[id].sitemap;
+      if (itemsMeta[id].removedAt) {
+        // item reappeared; clear removal timestamp
+        itemsMeta[id].removedAt = null;
+      }
+    }
+  };
 
   const config = {
     concurrency: 16,
@@ -297,18 +372,44 @@ async function main() {
     itemsDir,
     initialBloom,
     recordUrlMeta,
+    updateItemMeta,
   };
 
   const crawler = new Crawler(config);
   const summary = await crawler.run(hosts);
 
+  // After crawling, detect removed items and compute lifecycle stats
+  const nowIso = new Date().toISOString();
+  let removedThisRun = 0;
+  let activeCount = 0;
+  for (const id of Object.keys(itemsMeta)) {
+    if (!seenIds.has(id)) {
+      if (!itemsMeta[id].removedAt) {
+        itemsMeta[id].removedAt = nowIso;
+        removedThisRun++;
+      }
+    } else {
+      activeCount++;
+    }
+  }
+  const totalCount = Object.keys(itemsMeta).length;
+  // Augment summary with item lifecycle statistics
+  summary.items = {
+    added: newItemsCount,
+    removed: removedThisRun,
+    active: activeCount,
+    total: totalCount,
+  };
+
   console.log("\n✅ Done. Finalizing state...");
   await saveJson(bloomPath, crawler.seenBloom.saveAsJSON());
   await saveJson(summaryPath, summary);
   await saveJson(urlmetaPath, urlmeta);
+  await saveJson(itemsMetaPath, itemsMeta);
 
   console.log(`\n📊 Summary saved to: ${path.relative(process.cwd(), summaryPath)}`);
-  console.log(`   Total Items Found: ${summary.totals.itemsFound.toLocaleString()}`);
+  console.log(`   Total Items Found (this run): ${summary.totals.itemsFound.toLocaleString()}`);
+  console.log(`   New items added: ${newItemsCount}, Removed items: ${removedThisRun}, Active items: ${activeCount}, Total historical items: ${totalCount}`);
 }
 
 main().catch((err) => {
