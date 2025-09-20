@@ -234,6 +234,8 @@ export default function(eleventyConfig) {
   // --- End: Libraries & Custom Functions ---
   // Copy/pass-through files
   eleventyConfig.addPassthroughCopy('src/assets/js')
+  eleventyConfig.addPassthroughCopy({ "src/content/projects/lv-images/generated": "content/projects/lv-images/generated" });
+
 
   return {
     templateFormats: ['md', 'njk', 'html', 'liquid', '11ty.js'],

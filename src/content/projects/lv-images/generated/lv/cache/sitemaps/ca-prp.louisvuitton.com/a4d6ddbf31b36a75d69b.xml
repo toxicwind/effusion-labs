@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<!--[if IE 7]><html lang="en" class="lt-ie10 lt-ie9 lt-ie8"><![endif]-->
+<!--[if IE 8]><html lang="en" class="lt-ie10 lt-ie9"> <![endif]-->
+<!--[if IE 9]><html lang="en" class="lt-ie10"><![endif]-->
+<!--[if gt IE 9]><html lang="en"><![endif]-->
+<!--[if !IE]><!--><html lang="en"><!--<![endif]-->
+<head>
+    <meta charset="UTF-8">
+
+    <script type="text/javascript" nonce="4tyjNIWr1PLKO4l4bExrkA">if (typeof module === 'object') {window.module = module; module = undefined;}</script><style type="text/css" nonce="4tyjNIWr1PLKO4l4bExrkA">
+        .bgStyle {
+          background-image: url('https://ok9static.oktacdn.com/fs/bco/7/fs0vausxajKEFnnh7416')
+        }
+        .bgStyleIE8 {
+          filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='https://ok9static.oktacdn.com/fs/bco/7/fs0vausxajKEFnnh7416', sizingMethod='scale')
+        }
+        .copyright a:focus-visible, 
+        .privacy-policy a:focus-visible {
+          border-radius: 6px;
+          outline: rgb(84, 107, 231) solid 1px;
+          outline-offset: 2px;
+          text-decoration: none !important;
+        }
+    </style><title>Louis Vuitton - Sign In</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex,nofollow" />
+
+    <script type="text/javascript" nonce="4tyjNIWr1PLKO4l4bExrkA">window.cspNonce = '4tyjNIWr1PLKO4l4bExrkA';</script><script src="https://ok9static.oktacdn.com/assets/js/sdk/okta-signin-widget/7.35.1/js/okta-sign-in.min.js" type="text/javascript" integrity="sha384-+V0tzUeVefBFE/NWJyCNvDFmHbwyXx6JNeIKWXc6jLwQsdSPvYVejAKEsxDkUm1+" crossorigin="anonymous"></script>
+    <link href="https://ok9static.oktacdn.com/assets/js/sdk/okta-signin-widget/7.35.1/css/okta-sign-in.min.css" type="text/css" rel="stylesheet" integrity="sha384-fxx+LDlIb08xQnHiuttLUvFQjDs5lrUHVoq4eWhpVlSteR2K2q21MbrOCkWfWqqs" crossorigin="anonymous"/>
+
+    <link rel="shortcut icon" href="https://ok9static.oktacdn.com/bc/image/fileStoreRecord?id=fs0cxip7jdAmFzZpq417" type="image/x-icon"/>
+<link href="https://ok9static.oktacdn.com/assets/loginpage/css/loginpage-theme.c8c15f6857642c257bcd94823d968bb1.css" rel="stylesheet" type="text/css"/><link href="/api/internal/brand/theme/style-sheet?touch-point=SIGN_IN_PAGE&v=abc4780733b2999dc5536ea4bf18a7237d32beafe91e2f7611b8af3ecb8ae0d0dfb208992a3b1ecefd0c0f9333f4b59d" rel="stylesheet" type="text/css">
+
+    <script type="text/javascript" nonce="4tyjNIWr1PLKO4l4bExrkA">
+        var okta = {
+            locale: 'en',
+            deployEnv: 'PROD'
+        };
+        </script><script nonce="4tyjNIWr1PLKO4l4bExrkA">window.okta || (window.okta = {}); okta.cdnUrlHostname = "//ok9static.oktacdn.com"; okta.cdnPerformCheck = false;</script><script type="text/javascript" nonce="4tyjNIWr1PLKO4l4bExrkA">
+        window.onerror = function (msg, _url, _lineNo, _colNo, error) {
+            if (window.console && window.console.error) {
+                if (error) {
+                    console.error(error);
+                } else {
+                    console.error(msg);
+                }
+            }
+
+            // Return true to suppress "Script Error" alerts in IE
+            return true;
+        };
+    </script><script type="text/javascript" nonce="4tyjNIWr1PLKO4l4bExrkA">
+    if (okta) {
+            okta.sentry = {
+                sentryDsn: 'https://728f6bd7e621314e88a26d7337d3fd61@o101443.ingest.sentry.io/4507506066849792',
+                orgId: '00odk223j3l2rK1ws416',
+                isCustomDomain: false,
+                deployEnv: window.okta && window.okta.deployEnv,
+                appName: 'okta-hosted-siw',
+                teamName: '951953394',
+                ignoreErrorTypes: '[]',
+                ignoreErrors: '[]',
+                filenamesAllowList: '["okta-sign-in.min.js","okta-sign-in.next.js"]',
+                tracesSampleRate: '0'
+            };
+        }
+    </script><script nonce="4tyjNIWr1PLKO4l4bExrkA" src="https://ok9static.oktacdn.com/assets/js/mvc/sentry-wrapper/sentry-wrapper.pack.ec4dcd4257cafb4f0f1a79ba02a0f0a4.js" crossorigin="anonymous" integrity="sha384-Y4sQ0+M5mfmtgOO3op6A1u7/ow/sHbVti7+nB89MJVENzfB9xmooyyIrDTSG0lpD" type="text/javascript"></script><script type="text/javascript" nonce="4tyjNIWr1PLKO4l4bExrkA">if (window.module) module = window.module;</script></head>
+<body class="auth okta-container">
+
+<!--[if gte IE 8]>
+<![if lte IE 10]>
+
+<style type="text/css" nonce="4tyjNIWr1PLKO4l4bExrkA">
+    .unsupported-browser-banner-wrap {
+    padding: 20px;
+    border: 1px solid #ddd;
+    background-color: #f3fbff;
+    }
+    .unsupported-browser-banner-inner {
+    position: relative;
+    width: 735px;
+    margin: 0 auto;
+    text-align: left;
+    }
+    .unsupported-browser-banner-inner .icon {
+    vertical-align: top;
+    margin-right: 20px;
+    display: inline-block;
+    position: static !important;
+    }
+    .unsupported-browser-banner-inner a {
+    text-decoration: underline;
+    }
+</style><div class="unsupported-browser-banner-wrap">
+<div class="unsupported-browser-banner-inner">
+<span class="icon icon-16 icon-only warning-16-yellow"></span>You are using an unsupported browser. For the best experience, update to <a href="//help.okta.com/okta_help.htm?type=oie&locale=en&id=csh-browser-support">a supported browser</a>.</div>
+</div>
+
+<![endif]>
+<![endif]-->
+<!--[if IE 8]> <div id="login-bg-image-ie8" class="login-bg-image tb--background bgStyleIE8" data-se="login-bg-image"></div> <![endif]-->
+<!--[if (gt IE 8)|!(IE)]><!--> <div id="login-bg-image" class="login-bg-image tb--background bgStyle" data-se="login-bg-image"></div> <!--<![endif]-->
+
+<!-- hidden form for reposting fromURI for X509 auth -->
+<form action="/login/cert" method="post" id="x509_login" name="x509_login" class="hide">
+    <input type="hidden" id="fromURI" name="fromURI" class="hidden" value="https&#x3a;&#x2f;&#x2f;louisvuitton.okta.com&#x2f;oauth2&#x2f;v1&#x2f;authorize&#x3f;client_id&#x3d;0oamqk3qjdZeFA2No417&amp;nonce&#x3d;uXSvJnzX&amp;state&#x3d;VRBjO1c1&amp;redirect_uri&#x3d;https&#x25;3A&#x25;2F&#x25;2Flvm-sso-nprod.louisvuitton.com&#x25;2Fcallback&amp;response_type&#x3d;code&amp;scope&#x3d;openid&#x2b;email"/>
+</form>
+
+<div class="content">
+  <div class="applogin-banner">
+          <div class="applogin-background"></div>
+          <div class="applogin-container">
+              <h1>
+                  <span class="applogin-app-title">
+                    Connecting to</span>
+                  <div class="applogin-app-logo">
+                      <img src="https://ok9static.oktacdn.com/assets/img/logos/default.6770228fb0dab49a1695ef440a5279bb.png" alt="LVM-DIGITAL-NON-PROD-FRONT" class="logo oidc_client"/></div>
+              </h1>
+              <p>Sign in with your account to access LVM-DIGITAL-NON-PROD-FRONT</p>
+              </div>
+      </div>
+  <style type="text/css" nonce="4tyjNIWr1PLKO4l4bExrkA">
+    .noscript-msg {
+        background-color: #fff;
+        border-color: #ddd #ddd #d8d8d8;
+        box-shadow:0 2px 0 rgba(175, 175, 175, 0.12);
+        text-align: center;
+        width: 398px;
+        min-width: 300px;
+        margin: 200px auto;
+        border-radius: 3px;
+        border-width: 1px;
+        border-style: solid;
+    }
+
+    .noscript-content {
+        padding: 42px;
+    }
+
+    .noscript-content h2 {
+        padding-bottom: 20px;
+    }
+
+    .noscript-content h1 {
+        padding-bottom: 25px;
+    }
+
+    .noscript-content a {
+        background: transparent;
+        box-shadow: none;
+        display: table-cell;
+        vertical-align: middle;
+        width: 314px;
+        height: 50px;
+        line-height: 36px;
+        color: #fff;
+        background: linear-gradient(#007dc1, #0073b2), #007dc1;
+        border: 1px solid;
+        border-color: #004b75;
+        border-bottom-color: #00456a;
+        box-shadow: rgba(0, 0, 0, 0.15) 0 1px 0, rgba(255, 255, 255, 0.1) 0 1px 0 0 inset;
+        -webkit-border-radius: 3px;
+        border-radius: 3px;
+    }
+
+    .noscript-content a:hover {
+        background: #007dc1;
+        cursor: hand;
+        text-decoration: none;
+    }
+ </style><noscript>
+    <div id="noscript-msg" class="noscript-msg">
+        <div class="noscript-content">
+            <h2>Javascript is required</h2>
+            <h1>Javascript is disabled on your browser.&nbspPlease enable Javascript and refresh this page.</h1>
+            <a href="." class="tb--button">Refresh</a>
+        </div>
+    </div>
+</noscript>
+<div id="signin-container"></div>
+  <div id="okta-sign-in" class="auth-container main-container hide">
+      <div id="unsupported-onedrive" class="unsupported-message hide">
+        <h2 class="o-form-head">Your OneDrive version is not supported</h2>
+        <p>Upgrade now by installing the OneDrive for Business Next Generation Sync Client to login to Okta</p>
+        <a class="button button-primary tb--button" target="_blank" href="https://support.okta.com/help/articles/Knowledge_Article/Upgrading-to-OneDrive-for-Business-Next-Generation-Sync-Client">
+          Learn how to upgrade</a>
+      </div>
+      <div id="unsupported-cookie" class="unsupported-message hide">
+          <h2 class="o-form-head">Cookies are required</h2>
+          <p>Cookies are disabled on your browser. Please enable Cookies and refresh this page.</p>
+          <a class="button button-primary tb--button" target="_blank" href=".">
+              Refresh</a>
+      </div>
+  </div>
+</div>
+
+<div class="footer">
+  <div class="footer-container clearfix">
+    <p class="copyright">Powered by <a href="https://www.okta.com/?internal_link=wic_login" class="inline-block notranslate">Okta</a></p>
+        <p class="privacy-policy"><a href="/privacy" target="_blank" class="inline-block margin-l-10">Privacy Policy</a></p>
+    </div>
+</div>
+
+<div id="inactive-tab-main-div" class="hide">
+    <div class="inactive-tab-container">
+    <div class="inactive-tab-header">
+        <img src="https://ok9static.oktacdn.com/fs/bco/1/fs0hnxvy2iLvqORgA416" alt="Louis&#x20;Vuitton" class="report-org-logo"/><div class="divider"></div>
+    </div>
+    <div class="inactive-tab-content">
+        <h2 class="inactive-tab-content-title">The page has timed out</h2>
+        <p class="inactive-tab-details">If this page does not reload automatically, please refresh your browser.</p>
+    </div>
+</div>
+</div>
+<script nonce="4tyjNIWr1PLKO4l4bExrkA" type="text/javascript">function runLoginPage (fn) {var mainScript = document.createElement('script');mainScript.src = 'https://ok9static.oktacdn.com/assets/js/mvc/loginpage/initLoginPage.pack.58de3be0c9b511a0fdfd7ea4f69b56fc.js';mainScript.crossOrigin = 'anonymous';mainScript.integrity = 'sha384-cJ4LGViZBmIttMPH+ao2RyPuN5BztKWYWIa4smbm56r1cUhkU/Dr6vTS3UoPbKTI';document.getElementsByTagName('head')[0].appendChild(mainScript);fn && mainScript.addEventListener('load', function () { setTimeout(fn, 1) });}</script><script type="text/javascript" nonce="4tyjNIWr1PLKO4l4bExrkA">
+(function(){
+  var baseUrl = 'https\x3A\x2F\x2Flouisvuitton.okta.com';
+  var suppliedRedirectUri = '';
+  var repost = false;
+  var stateToken = 'eyJ6aXAiOiJERUYiLCJhbGlhcyI6ImVuY3J5cHRpb25rZXkiLCJ2ZXIiOiIxIiwib2lkIjoiMDBvZGsyMjNqM2wycksxd3M0MTYiLCJlbmMiOiJBMjU2R0NNIiwiYWxnIjoiZGlyIn0..POqDndUkqigkZMRr.CKYCrxLuh_oagPVSm7DUX_7u74jTUYIRS_0M7KHv1cbSGhBBSSBuKV3vrAwPRd77u\x2DHU2ORffM\x2DDfqZLgmaIcGq42RduOhwnpTRGHtrERv9g_xMCk27oRBeZ2Hyltbn1cOubQJxuGGUjHSfbnkBsAgvcUwUeo541nSOePGommCB3je4XPaoEjYpoEx42jXTRVnMlHmTSOZNQvnZxaw\x2DVmfMZkSeCVSN0gtctwYk9fv7iGpCHJyE5twzLtHdjhpBLMAy6oBZ6sRyWbnGbTNWXggyA5Mmyzr9jaoIVxGGGOouL1wSycQxNMZBp8zCH\x2DfWkYqkqoTZLgtIfHvadErSqxsiZAIzWxeK2\x2DoBfBVyHkJd1tPBDLCM\x2DjpPXzdFwAYD1ilOurFPspRuJolcnqw5lPy__XV56Xc5f_xZNizJ_yZ\x2DK7SXxkEqAevqMjKNPfloKzCOYPiK8WH2pvKZNuYoWup\x2Dcf\x2DFfqigOLAWgOLTe_Gxe5XD4\x2DqKiaSb7EW1Jo2MO0l_uy0vnNRWR7vBcuR5iEFjXg_5xRa0n9rTg7oltE4KYbY23L1GIQPnfXzDH1jouMOqmOWrQHOcc2sjvR8WV0rjk3vFhbMoaW_1NPDEtLxkqomXd21\x2DEe0O9H5kMD08MIzFzQIAb5X1TUpLM3VAYC0EIRfSy4U1xD3HUm8MBL4q6rA9zIq0vP_p4jQ1WOzwBZy340NPz6GZqgiEbuaJE5pW7KqjKkgIzvB8v4_jW3T9JuqNIydrnfKKBDcKuwiIEnECkB8sN_d3RZLyCNEI\x2DP88N6JQQQLmfZ3G_9ivW_3\x2DtGCu65uRe44kzBH6MpZZscM1R\x2Dq01DsPvdsldjO0E71T6k\x2DAKW0MCQ6y3Zmdm1VYNTyMJDLZjnXZNL9eVJHBZGeOxsd0fnNTGidjRmn8HrfFTjfOvt2ZfXEQ3n61dAr7Hya8VP\x2D62GoH7ChAGolqQJlM9w0Ik0Sq\x2DzwKJ0p4XHOHD5iolBgU0WQzeHqXtmIiDJb7\x2DvQRLAUxuk2EtAuTEvKs58EzG9Bv2xMFUfr5LkqrH\x2DgzYxHnKUZnv4Hu\x2DWXLlaydV4O0Ooa3MhJaeIbroYCNbr4p5PfcsnFSguJN6jPJlVR_kUkqC9fGFPL\x2DDQ2Fs_gImF41ZwyITnHcEinwg8IfgMAPu7wtX7xf6\x2DfxyORgRBNqRC4tiKQS0LAkLz8xz6OWSi2CFyr_j3OuwngZHloIauruyMolUWwDVlpIeDoGhem0DQkbqslCEEXDf0Dhobnr15OxG5o2GtScvQF3\x2D\x2Dj15nTi4zlMb5HjJ1FDTGsjQfe\x2DeDcqCBeGwe9LkmRethOD5vCVea36fa9GG0BWzmU\x2DX\x2DIXHYgd5r\x2DhN4vF5Sus5ncPHRQRhDWCgq_EyoamgfnxoKRhO5gSdBnSC252Ia7Mh9QxU8HHclczrQFq1Ow5cRHNObUDomtnkCynIFpU0\x2DWEMc\x2DFk19Wt2p2pE\x2DnN2iNHbmsxzY9essoIadhfNSujQi\x2DxhbRfCQv7KdKW2Di7CjfPGYVqEhW0307Of\x2DGkv4jq450rNZMY4uiC71xvKBKAYsYQKXvicEm6FpeAho6Lp8GNmRXb24cFNwaMOX5Th\x2DEiAxEb81PCUXSVN08aU\x2D54yv\x2Dw25a5GK8rSI\x2DmnUPn0M774y041CPP2UNw9Xy8ffFXWCkCaTC3iwyU9xZFlqdHB9nAfYeN\x2D2EN\x2DP\x2DYwVztDdLw7rGSBGpjShBwvlMMWGu1SYX0LdzCN5aha9Ydn9xftjqi18drMu66SB3HqATNRAI3IixSIeNSg4pYS9Y3LgSwrzqD87IQzVZbBAYNLW8ivY3YSJTqyzL7GxrvUM8cij2p2QUUfHLKgyYqmOrvryEO2gh_zcnLQLgdc\x2DLe471tFMjZygpT9mFeRFAWetDH0emkAJ7vFfOqZDKA7MkTRJKnKfcUKx2dBrWURyWo9BsTahk2NA8UgbqpGdeTJbRR86zaPvMaC\x2D2dZ_bWq31cvTTyrJFTTD0e404eD8oBuPH3IOt22LxaNBCk5OfT0MjMGeXoxfSSjG18OdeN64wYEc3lfZ8GgVfPNzgqawn2IXHa3rRuDFXIYs61SW4f6byRAKzfmiAC9gdtQLMejp9bO3xoNaXA5\x2DRkxxBKJ\x2DJIhZHLjCCBZiRHa29iYxSS32YxUm0UI_Os1oyEDo_6U4qZyELsIXVaGrKUPrmRjli8YHhFp7zT9iN\x2DhuKcUmxE\x2DkVq7qL3y1WpFlRMm9E\x2DcsC8PcRLjbgVluj94nIB3JCOYriWk8ueAAsocD6\x2Dl_0hanMi73YE1W_4fcl6RZsOxghtFCj1CTjApMgr_ARlEVqtP7GIPwI4nXP0Xp4gdHyA\x2DZERCQ5jih9d8XTSztd4r5Vr1hqbdpN1wFEfI36ojA8PBEomJRlhTADg3XVNDlHG9kaYU9NlRqQlxUkIMCvy2GkuVMgjRdGZ3Ez5TYBgFVVJ7Uk\x2DZLhAiQCFkxK_n9VT7eX\x2DWvED9anV7Nz7WY2uTSVGSyPB8odEhnoyUnFOxtSd9Am7JacT7hIQRywBn_qdvhC_VRaO9Yz8jCE_oq487MNydTktxz1dKkWIhw9Mo1RY6whAGYJT32Ul3kH6CUNPCxnBjRzGf_New1PauebS4zioz6fTmlW72oUKxBsAoeSyGYhwg8S8O5VuP6VFbH6c3WCkSlqwYZGNRQEFz_TW0resa5F\x2DMbyV2arpC3ph7x\x2D2QAKfZNyu9L6DIGscJXQx7kb5zBUHaVwUa3jmEd6UoxP61\x2DnarD1iBD4MNNpSqxEB6xm3SRQGQ5ojbVJmskbl4rNsTGW2g\x2DcUMQJE_O_UI_WtosVCbZK_olCzbO77kvxyR3XSY7mtWIvqNZKPv_QRvr4K4LydS2b1LrhT8DJAJALRdi53L1bPVjWGr4GJzaovP8PZKhBkvuhlWH7AutGUtaXmd053K0C102bNLJ5XK9eWo0m\x2DrFCriPWtaoVMMnAbe_7OpLcIVYChp\x2DoXRpoUpkL20pa1Hi8W6wlBMJsNyQFY80oC0si0aSD_GtCYlUnvLWYLAe_AEhKZvZEzJC0\x2DTeM4rJLGw60268sq0BDi4EFbVMEq5Kgcmler2aBbftP8hu1NIWOygI9T0iIkPyJGgXoByqHVb6LJycXh2r3YzvZRk5E5uZrej_WrnCnHBKMaWw6x7i3kSzCf3qsfJIXH00ltDJdGdHRsStzp\x2DJKn8Wyy0N3kwt0bDmN\x2D9alR0PQSf8EGzJRJd05UtxG4cZU6_MoIOHQYEfy\x2DyNhSybuGBbEHDjpSJyUg4lEGVy8W6NtTI8sPFsvnoEBoZCkDMnHhU0GiOESbb\x2DUmUkrmhb1WB9w_b22BUtwkdmwRoDFQ_0Ize0rgJWCWAWMybAL6mhhiBw6PvSnieyBP8TXJ3EQKhGgvlqPKic4dd2Lz6_mY1N0GnYhSGkgUlTRL\x2Dp1Jyo3YqKSBSPrFOitxGTKahpV3jhc1MDxtaxQg5ILht64UhaPwCuJEQzU29mq_bc_invgbR80ExXNit15RKGq2l1VwIfpP\x2DZbUhTi4gJoZ0PElgcPOyR_He4jCq2VFtc0O0x4hKnz60US27xmKFrYLgYJ5OZ1P2RsVPIKHyMAOEOr1F919snQhRZ_fWca4sIJ2nVGZhtlPqyHjuZgtyQ.CYOqI2OVE5E_79fNxcE_6Q';
+  var fromUri = 'https\x3A\x2F\x2Flouisvuitton.okta.com\x2Foauth2\x2Fv1\x2Fauthorize\x3Fclient_id\x3D0oamqk3qjdZeFA2No417\x26nonce\x3DuXSvJnzX\x26state\x3DVRBjO1c1\x26redirect_uri\x3Dhttps\x253A\x252F\x252Flvm\x2Dsso\x2Dnprod.louisvuitton.com\x252Fcallback\x26response_type\x3Dcode\x26scope\x3Dopenid\x2Bemail';
+  var username = '';
+  var rememberMe = true;
+  var smsRecovery = true;
+  var callRecovery = true;
+  var emailRecovery = true;
+  var usernameLabel = 'Email';
+  var usernameInlineLabel = '';
+  var passwordLabel = 'Password';
+  var passwordInlineLabel = '';
+  var signinLabel = 'Sign\x20In';
+  var forgotpasswordLabel = 'Reset\x20my\x20password';
+  var unlockaccountLabel = 'Unlock\x20my\x20account';
+  var helpLabel = '\x20';
+  var orgSupportPhoneNumber = '';
+  var hideSignOutForMFA = false;
+  var hideBackToSignInForReset = false;
+  var footerHelpTitle = 'Need\x20help\x20signing\x20in\x3F';
+  var recoveryFlowPlaceholder = 'Email\x20or\x20Username';
+  var signOutUrl = '';
+  var authScheme = 'OAUTH2';
+  var hasPasswordlessPolicy = 'true';
+  var INVALID_TOKEN_ERROR_CODE = 'errors.E0000011';
+
+  var securityImage = true;
+  
+      securityImage = false;
+  
+    securityImage = false;
+  
+
+
+  var selfServiceUnlock = false;
+  
+    selfServiceUnlock = true;
+  
+
+  var redirectByFormSubmit = false;
+  
+
+  var showPasswordRequirementsAsHtmlList = true;
+
+  var autoPush = false;
+  
+    autoPush = true;
+  
+
+  var accountChooserDiscoveryUrl = 'https://login.okta.com/discovery/iframe.html';
+
+  // In case of custom app login, the uri is already absolute, so we must not attach baseUrl
+  var redirectUri;
+  if (isAbsoluteUri(fromUri)) {
+      redirectUri = fromUri;
+  } else {
+      redirectUri = baseUrl + fromUri;
+  }
+  
+
+  var backToSignInLink = '';
+  
+      backToSignInLink = '';
+  
+
+  var customButtons;
+  var pivProperties = {};
+
+  
+
+  var customLinks = [];
+  
+  var factorPageCustomLink = {};
+  
+
+  var linkParams;
+  
+
+  var proxyIdxResponse;
+  
+
+  var stateTokenAllFlows;
+  
+    stateTokenAllFlows = true;
+  
+
+  var idpDiscovery;
+  var idpDiscoveryRequestContext;
+  
+
+  var showPasswordToggleOnSignInPage = false;
+  var showIdentifier = false;
+  
+    showPasswordToggleOnSignInPage = true;
+    showIdentifier = true;
+  
+
+  var hasSkipIdpFactorVerificationButton = false;
+  
+
+  var hasOAuth2ConsentFeature = false;
+  var consentFunc;
+  
+
+  var hasMfaAttestationFeature = false;
+  
+    hasMfaAttestationFeature = true;
+  
+
+  var rememberMyUsernameOnOIE = false;
+  
+    rememberMyUsernameOnOIE = true;
+  
+
+  var engFastpassMultipleAccounts = true;
+
+  var registration = false;
+  
+
+  var webauthn = true;
+  
+
+    var overrideExistingStateToken = false;
+    
+
+  var isPersonalOktaOrg = false;
+  
+
+  var sameDeviceOVEnrollmentEnabled = false;
+  
+
+  var orgSyncToAccountChooserEnabled = true;
+  
+
+  var showSessionRevocation = false;
+  
+      showSessionRevocation = true;
+  
+
+  var hcaptcha;
+  
+
+  var loginPageConfig = {
+    fromUri: fromUri,
+    repost: repost,
+    redirectUri: redirectUri,
+    backToSignInLink: backToSignInLink,
+    isMobileClientLogin: false,
+    isMobileSSO: false,
+    disableiPadCheck: false,
+    enableiPadLoginReload: false,
+    linkParams: linkParams,
+    hasChromeOSFeature: false,
+    showLinkToAppStore: false,
+    accountChooserDiscoveryUrl: accountChooserDiscoveryUrl,
+    mfaAttestation: hasMfaAttestationFeature,
+    isPersonalOktaOrg: isPersonalOktaOrg,
+    enrollingFactor: '',
+    stateTokenExpiresAt: '2025\x2D09\x2D20T12\x3A31\x3A29.000Z',
+    stateTokenRefreshWindowMs: '7140000',
+    orgSyncToAccountChooserEnabled: orgSyncToAccountChooserEnabled,
+    inactiveTab: {
+      enabled: true,
+      elementId: 'inactive-tab-main-div',
+      avoidPageRefresh: true
+    },
+    signIn: {
+      el: '#signin-container',
+      baseUrl: baseUrl,
+      brandName: 'Okta',
+      logo: 'https://ok9static.oktacdn.com/fs/bco/1/fs0hnxvy2iLvqORgA416',
+      logoText: 'Louis\x20Vuitton logo',
+      helpSupportNumber: orgSupportPhoneNumber,
+      stateToken: stateToken,
+      username: username,
+      signOutLink: signOutUrl,
+      consent: consentFunc,
+      authScheme: authScheme,
+      relayState: fromUri,
+      proxyIdxResponse: proxyIdxResponse,
+      overrideExistingStateToken: overrideExistingStateToken,
+      interstitialBeforeLoginRedirect: 'DEFAULT',
+      
+      idpDiscovery: {
+        requestContext: idpDiscoveryRequestContext
+      },
+      features: {
+        router: true,
+        securityImage: securityImage,
+        rememberMe: rememberMe,
+        autoPush: autoPush,
+        webauthn: webauthn,
+        smsRecovery: smsRecovery,
+        callRecovery: callRecovery,
+        emailRecovery: emailRecovery,
+        selfServiceUnlock: selfServiceUnlock,
+        multiOptionalFactorEnroll: true,
+        sameDeviceOVEnrollmentEnabled: sameDeviceOVEnrollmentEnabled,
+        deviceFingerprinting: true,
+        useDeviceFingerprintForSecurityImage: true,
+        trackTypingPattern: false,
+        hideSignOutLinkInMFA: hideSignOutForMFA,
+        hideBackToSignInForReset: hideBackToSignInForReset,
+        rememberMyUsernameOnOIE: rememberMyUsernameOnOIE,
+        engFastpassMultipleAccounts: engFastpassMultipleAccounts,
+        customExpiredPassword: true,
+        idpDiscovery: idpDiscovery,
+        passwordlessAuth: hasPasswordlessPolicy,
+        consent: hasOAuth2ConsentFeature,
+        skipIdpFactorVerificationBtn: hasSkipIdpFactorVerificationButton,
+        showPasswordToggleOnSignInPage: showPasswordToggleOnSignInPage,
+        showIdentifier: showIdentifier,
+        registration: registration,
+        redirectByFormSubmit: redirectByFormSubmit,
+        showPasswordRequirementsAsHtmlList: showPasswordRequirementsAsHtmlList,
+        showSessionRevocation: showSessionRevocation
+      },
+
+      assets: {
+        baseUrl: "https\x3A\x2F\x2Fok9static.oktacdn.com\x2Fassets\x2Fjs\x2Fsdk\x2Fokta\x2Dsignin\x2Dwidget\x2F7.35.1"
+      },
+
+      language: okta.locale,
+      i18n: {},
+
+      customButtons: customButtons,
+
+      piv: pivProperties,
+
+      helpLinks: {
+        help: '',
+        forgotPassword: '',
+        unlock: '',
+        custom: customLinks,
+        factorPage: factorPageCustomLink
+      },
+
+      cspNonce: window.cspNonce,
+
+      hcaptcha: hcaptcha,
+    }
+  };
+  
+
+  loginPageConfig.signIn.i18n[okta.locale] = {
+    
+    'primaryauth.username.placeholder': usernameLabel,
+    'primaryauth.username.tooltip': usernameInlineLabel,
+    'primaryauth.password.placeholder': passwordLabel,
+    'primaryauth.password.tooltip': passwordInlineLabel,
+    'mfa.challenge.password.placeholder': passwordLabel,
+    'primaryauth.title': signinLabel,
+    'forgotpassword': forgotpasswordLabel,
+    'unlockaccount': unlockaccountLabel,
+    'help': helpLabel,
+    'needhelp': footerHelpTitle,
+    'password.forgot.email.or.username.placeholder': recoveryFlowPlaceholder,
+    'password.forgot.email.or.username.tooltip': recoveryFlowPlaceholder,
+    'account.unlock.email.or.username.placeholder': recoveryFlowPlaceholder,
+    'account.unlock.email.or.username.tooltip': recoveryFlowPlaceholder
+  };
+
+    
+            loginPageConfig.signIn.logoText = 'Louis\x20Vuitton logo';
+            loginPageConfig.signIn.brandName = 'Louis\x20Vuitton';
+        
+        loginPageConfig.signIn.i18n[okta.locale]['oie.kmsi.title'] = '';
+        loginPageConfig.signIn.i18n[okta.locale]['oie.kmsi.subtitle'] = '';
+        loginPageConfig.signIn.i18n[okta.locale]['oie.kmsi.accept'] = '';
+        loginPageConfig.signIn.i18n[okta.locale]['oie.kmsi.reject'] = '';
+    
+
+  function isOldWebBrowserControl() {
+    // We no longer support IE7. If we see the MSIE 7.0 browser mode, it's a good signal
+    // that we're in a windows embedded browser.
+    if (navigator.userAgent.indexOf('MSIE 7.0') === -1) {
+      return false;
+    }
+
+    // Because the userAgent is the same across embedded browsers, we use feature
+    // detection to see if we're running on older versions that do not support updating
+    // the documentMode via x-ua-compatible.
+    return document.all && !window.atob;
+  }
+
+  function isAbsoluteUri(uri) {
+    var pat = /^https?:\/\//i;
+    return pat.test(uri);
+  }
+
+  var unsupportedContainer = document.getElementById('okta-sign-in');
+
+  var failIfCookiesDisabled = true;
+  
+
+  // Old versions of WebBrowser Controls (specifically, OneDrive) render in IE7 browser
+  // mode, with no way to override the documentMode. In this case, inform the user they need
+  // to upgrade.
+  if (isOldWebBrowserControl()) {
+    document.getElementById('unsupported-onedrive').removeAttribute('style');
+    unsupportedContainer.removeAttribute('style');
+  }
+  else if (failIfCookiesDisabled && !navigator.cookieEnabled) {
+    document.getElementById('unsupported-cookie').removeAttribute('style');
+    unsupportedContainer.removeAttribute('style');
+  }
+  else {
+    unsupportedContainer.parentNode.removeChild(unsupportedContainer);
+    runLoginPage(function () {
+      var res = OktaLogin.initLoginPage(loginPageConfig);
+      
+    });
+  }
+}());
+</script><script type="text/javascript" nonce="4tyjNIWr1PLKO4l4bExrkA">
+  window.addEventListener('load', function(event) {
+    function applyStyle(id, styleDef) {
+      if (styleDef) {
+        var el = document.getElementById(id);
+        if (!el) {
+          return;
+        }
+        el.classList.add(styleDef);
+      }
+    }
+    applyStyle('login-bg-image', 'bgStyle');
+    applyStyle('login-bg-image-ie8', 'bgStyleIE8');
+  });
+</script></body>
+</html>

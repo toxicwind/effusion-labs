@@ -1,467 +1,642 @@
-import { createHash } from 'node:crypto'
-import { mkdir, writeFile } from 'node:fs/promises'
-import { createWriteStream } from 'node:fs'
-import path from 'node:path'
-import { fileURLToPath } from 'node:url'
+import { createHash } from "node:crypto";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { createWriteStream, fsyncSync, writeFile as writeFileCb } from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+import { once } from "node:events";
 
-import { XMLParser } from 'fast-xml-parser'
-import pLimit from 'p-limit'
-import { Agent, setGlobalDispatcher } from 'undici'
+import { XMLParser } from "fast-xml-parser";
+import pLimit from "p-limit";
+import { Agent, setGlobalDispatcher } from "undici";
+import bloomPkg from "bloom-filters";
+import { gunzipSync } from "node:zlib";
+const { ScalableBloomFilter } = bloomPkg;
 
 /* ============================================================
-   CONFIG
+   PATHS & CONFIG
    ============================================================ */
-const __dirname = path.dirname(fileURLToPath(import.meta.url))
-const generatedDir = path.join(__dirname, 'generated')
-const datasetPath = path.join(generatedDir, 'images.json')
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const baseDir = path.join(__dirname);
+const configDir = path.join(baseDir, "config");
+const hostsTxtPath = path.join(configDir, "hosts.txt");
 
-// 1) Crawl behavior
-const USER_AGENT =
-  'Mozilla/5.0 (X11; Linux x86_64; rv:143.0) Gecko/20100101 Firefox/143.0' // normal desktop UA
-const CONCURRENCY = 14                  // parallel fetches (tune 12–20)
-const REQUEST_TIMEOUT_MS = 3000
-const MAX_RETRIES = 0
-const RETRY_BASE_MS = 400
-const STREAM_FLUSH_EVERY = 2000         // stream flush cadence
+const genDir = path.join(__dirname, "generated", "lv");
+const cacheDir = path.join(genDir, "cache");
+const robotsDir = path.join(cacheDir, "robots");
+const sitemapsDir = path.join(cacheDir, "sitemaps");
+const itemsDir = path.join(genDir, "items");
+const hostsDir = path.join(genDir, "hosts");
 
-// 2) Discovery toggle (true = do the exhaustive discovery pass first)
-const ENABLE_DISCOVERY = true
+const urlMetaPath = path.join(cacheDir, "urlmeta.json");
+const robotsIndexPath = path.join(cacheDir, "robots-index.json");
+const allSitemapsIdx = path.join(cacheDir, "allsitemaps.json");
+const imgSitemapsIdx = path.join(cacheDir, "imagesitemaps.json");
+const docsIndexPath = path.join(cacheDir, "docs-index.json");
+const blacklistPath = path.join(hostsDir, "blacklist.json");
+const bloomPath = path.join(cacheDir, "seen.bloom.json");
+const summaryPath = path.join(genDir, "summary.json");
 
-// 3) Baseline grid (kept as seed; discovery will union & dedupe)
-const SUBDOMAINS = [
-  'us', 'hk', 'eu', 'en', 'it', 'ca', 'jp', 'kr'
-]
-const LOCALES = [
-  'eng_US', 'eng_E1',
-]
+/* ============================================================
+   FLAGS
+   ============================================================ */
+const argv = new Map(
+  process.argv.slice(2).map((x) => {
+    const [k, v] = x.includes("=") ? x.split("=") : [x, true];
+    return [k, v === undefined ? true : v];
+  })
+);
+const ENABLE_DISCOVERY = !argv.has("--no-discovery");
+const RESET_BLACKLIST = argv.has("--reset-blacklist");
+const HOST_TTL_HOURS = Number(argv.get("--ttl") ?? 24);
+const MAX_HOSTS = argv.has("--max-hosts") ? Number(argv.get("--max-hosts")) : Infinity;
+const SEED_LOCALES = (argv.get("--seed-locales") || "eng_US,eng_E1").split(",").map(s => s.trim()).filter(Boolean);
+const EXTRA_XML_GUESS = !argv.has("--no-guess");        // enable heuristic XML guesses
+const SAVE_WELLKNOWN_TXT = !argv.has("--no-wellknown");    // save security.txt, ads.txt, humans.txt
 
-// 4) Discovery sources (hosts + locale aliases)
-const CANDIDATE_HOSTS = [
-  'ae.louisvuitton.com', 'at.louisvuitton.com', 'au.louisvuitton.com', 'be.louisvuitton.com',
-  'br.louisvuitton.com', 'ca.louisvuitton.com', 'de.louisvuitton.com', 'en.louisvuitton.com',
-  'es.louisvuitton.com', 'eu.louisvuitton.com', 'fi.louisvuitton.com', 'fr.louisvuitton.com',
-  'hk.louisvuitton.com', 'id.louisvuitton.com', 'ie.louisvuitton.com', 'in.louisvuitton.com',
-  'it.louisvuitton.com', 'jp.louisvuitton.com', 'kr.louisvuitton.com', 'kw.louisvuitton.com',
-  'la.louisvuitton.com', 'lu.louisvuitton.com', 'mc.louisvuitton.com', 'me.louisvuitton.com',
-  'mx.louisvuitton.com', 'my.louisvuitton.com', 'nl.louisvuitton.com', 'nz.louisvuitton.com',
-  'ru.louisvuitton.com', 'sa.louisvuitton.com', 'sg.louisvuitton.com', 'th.louisvuitton.com',
-  'tw.louisvuitton.com', 'uk.louisvuitton.com', 'us.louisvuitton.com', 'vn.louisvuitton.com',
-  // …environment and preview/staging mirrors (kept because you asked for breadth)
-  'account.louisvuitton.com', 'advisor-prp.louisvuitton.com', 'adyennotification.louisvuitton.com',
-  'ap-ppt.louisvuitton.com', 'ap.louisvuitton.com', 'api-cn-catalog.louisvuitton.com',
-  'api-eu-catalog.louisvuitton.com', 'api-sg-catalog.louisvuitton.com', 'api-tpc.louisvuitton.com',
-  'api.louisvuitton.com', 'as-api.louisvuitton.com', 'at-ppt.louisvuitton.com',
-  'au-i3f.louisvuitton.com', 'au-ppt.louisvuitton.com', 'authme.louisvuitton.com',
-  'be-ppt.louisvuitton.com', 'br-i3f.louisvuitton.com', 'br-ppt.louisvuitton.com',
-  'ca-i3f.louisvuitton.com', 'ca-ppt.louisvuitton.com', 'ca-prp.louisvuitton.com',
-  'catalog-api-eu-prp.louisvuitton.com', 'catalog-api-eu.louisvuitton.com', 'catalog-api-int.louisvuitton.com',
-  'catalog-api-sg-prp.louisvuitton.com', 'catalog-api-sg.louisvuitton.com', 'catalog-wecom-prp.louisvuitton.com',
-  'catalog-wecom.louisvuitton.com', 'catalog.louisvuitton.com', 'cbsdecisionmanager-ng.louisvuitton.com',
-  'certificates.louisvuitton.com', 'click.client.louisvuitton.com', 'client-perso.louisvuitton.com',
-  'cloud.client.louisvuitton.com', 'connect-dev-linestudio.louisvuitton.com', 'connect-int-linestudio.louisvuitton.com',
-  'connect-org-dev-linestudio.louisvuitton.com', 'connect-org-int-linestudio.louisvuitton.com',
-  'connect-org-prd-linestudio.louisvuitton.com', 'connect-org-prp-linestudio.louisvuitton.com',
-  'connect-prd-linestudio.louisvuitton.com', 'connect-prp-linestudio.louisvuitton.com',
-  'content-linestudio-int.louisvuitton.com', 'content-linestudio-prd.louisvuitton.com',
-  'content-linestudio-prp.louisvuitton.com', 'contents-int.louisvuitton.com', 'contents-prp.louisvuitton.com',
-  'contents.louisvuitton.com', 'culture.louisvuitton.com', 'data-aka-prp.cityguide.louisvuitton.com',
-  'data-aka-prp.grandpalais.louisvuitton.com', 'data-aka-prp.piis.louisvuitton.com',
-  'data-aka.cityguide.louisvuitton.com', 'data-aka.grandpalais.louisvuitton.com', 'data-aka.piis.louisvuitton.com',
-  'de-i3f.louisvuitton.com', 'de-ppt.louisvuitton.com', 'dev.eu-api.louisvuitton.com',
-  'en-i3f.louisvuitton.com', 'en-ppt.louisvuitton.com', 'endlessrun.louisvuitton.com',
-  'epv3-fota.louisvuitton.com', 'es-i3f.louisvuitton.com', 'es-ppt.louisvuitton.com',
-  'eu-api.louisvuitton.com', 'eu-i3f.louisvuitton.com', 'eu-ppt.louisvuitton.com',
-  'fi-ppt.louisvuitton.com', 'fr-i3f.louisvuitton.com', 'fr-ppt.louisvuitton.com',
-  'happyholidays.louisvuitton.com', 'hk-i3f.louisvuitton.com', 'hk-ppt.louisvuitton.com',
-  'horizon.louisvuitton.com', 'hotspot-prp.louisvuitton.com', 'hotspot.louisvuitton.com',
-  'hwperso-prp.louisvuitton.com', 'hwperso.louisvuitton.com', 'icon.louisvuitton.com',
-  'id-ppt.louisvuitton.com', 'ie-ppt.louisvuitton.com', 'image.client-prp.louisvuitton.com',
-  'image.client.louisvuitton.com', 'img.communication.louisvuitton.com', 'in-ppt.louisvuitton.com',
-  'indus-learning-app-prp.louisvuitton.com', 'indus-learning-app.louisvuitton.com',
-  'int-lv-configurator-api.louisvuitton.com', 'int.as-api.louisvuitton.com', 'int.eu-api.louisvuitton.com',
-  'int.us-api.louisvuitton.com', 'int2.eu-api.louisvuitton.com', 'int3.eu-api.louisvuitton.com',
-  'int4.eu-api.louisvuitton.com', 'int5.eu-api.louisvuitton.com', 'int6.eu-api.louisvuitton.com',
-  'internalevents.louisvuitton.com', 'iot-dev.louisvuitton.com', 'iot-prp.louisvuitton.com',
-  'iot.louisvuitton.com', 'it-i3f.louisvuitton.com', 'it-ppt.louisvuitton.com',
-  'jobs.louisvuitton.com', 'journey-client-form.louisvuitton.com', 'jp-i3f.louisvuitton.com',
-  'jp-ppt.louisvuitton.com', 'kr-i3f.louisvuitton.com', 'kr-ppt.louisvuitton.com',
-  'la-ppt.louisvuitton.com', 'learning-preview.louisvuitton.com', 'learning-prp.louisvuitton.com',
-  'learning.louisvuitton.com', 'link.louisvuitton.com', 'liveplayer.louisvuitton.com',
-  'livetour.louisvuitton.com', 'look.louisvuitton.com', 'louisworldays2024.louisvuitton.com',
-  'lu-ppt.louisvuitton.com', 'lv-cityguide-ws.louisvuitton.com', 'lv-iot-services-ncc-dev.louisvuitton.com',
-  'lv-iot-services-ncc-prp.louisvuitton.com', 'lv-iot-services-ncc.louisvuitton.com',
-  'lv-iot-services-prp.louisvuitton.com', 'lv-iot-services.louisvuitton.com', 'lvconnect-prp.louisvuitton.com',
-  'lvconnect.louisvuitton.com', 'lvcontrol-tower.louisvuitton.com', 'lvme-prp.louisvuitton.com',
-  'lvme.louisvuitton.com', 'lvtk-prp.louisvuitton.com', 'lvtk.louisvuitton.com',
-  'lvtl.louisvuitton.com', 'makeityours-prp.louisvuitton.com', 'mc-ppt.louisvuitton.com',
-  'me-ppt.louisvuitton.com', 'men-by-virgil-abloh.louisvuitton.com', 'monogramboy.louisvuitton.com',
-  'moodboard-prp.louisvuitton.com', 'moodboard.louisvuitton.com', 'mosaic.louisvuitton.com',
-  'murakami.louisvuitton.com', 'my-ppt.louisvuitton.com', 'mycc.louisvuitton.com',
-  'mylvempreinte.louisvuitton.com', 'myreport-prp.louisvuitton.com', 'myreport.louisvuitton.com',
-  'ndam-publish-int.louisvuitton.com', 'ndam-publish-prp.louisvuitton.com', 'ndam-publish.louisvuitton.com',
-  'nl-ppt.louisvuitton.com', 'nowyours.louisvuitton.com', 'nz-ppt.louisvuitton.com',
-  'okta.louisvuitton.com', 'org-b2c-as-tqf.louisvuitton.com', 'org-b2c-as.louisvuitton.com',
-  'org-b2c-prw.louisvuitton.com', 'org-b2c-t1p.louisvuitton.com', 'org-b2c-tpt.louisvuitton.com',
-  'org-b2c-tqf.louisvuitton.com', 'org-b2c-tqt.louisvuitton.com', 'org-b2c-us-tqf.louisvuitton.com',
-  'org-b2c-us.louisvuitton.com', 'org-b2c.louisvuitton.com', 'org-catalog-wecom-prp.louisvuitton.com',
-  'org-catalog-wecom.louisvuitton.com', 'org-client-perso.louisvuitton.com', 'org-content-linestudio-int.louisvuitton.com',
-  'org-content-linestudio-prp.louisvuitton.com', 'org-front-2.louisvuitton.com', 'org-front-hidden-tqt.louisvuitton.com',
-  'org-front-hidden.louisvuitton.com', 'org-front-t1f.louisvuitton.com', 'org-front-t1i.louisvuitton.com',
-  'org-front-t2f.louisvuitton.com', 'org-front-t2i.louisvuitton.com', 'org-front-t3f.louisvuitton.com',
-  'org-front-t3i.louisvuitton.com', 'org-front-t4f.louisvuitton.com', 'org-front-t4i.louisvuitton.com',
-  'org-front-t5i.louisvuitton.com', 'org-front-t6i.louisvuitton.com', 'org-front-tqt-2.louisvuitton.com',
-  'org-front-tqt.louisvuitton.com', 'org-front.louisvuitton.com', 'org-int-client-perso.louisvuitton.com',
-  'org-int-product-perso-public.louisvuitton.com', 'org-int-remote-configurator.louisvuitton.com',
-  'org-int-remote-product-perso.louisvuitton.com', 'org-lvconnect-prp.louisvuitton.com', 'org-lvconnect.louisvuitton.com',
-  'org-lvtl-dev.louisvuitton.com', 'org-lvtl-prp.louisvuitton.com', 'org-lvtl.louisvuitton.com',
-  'org-product-perso-public.louisvuitton.com', 'org-prp-client-perso.louisvuitton.com',
-  'org-prp-product-perso-public.louisvuitton.com', 'org-prp-remote-configurator.louisvuitton.com',
-  'org-prp-remote-product-perso.louisvuitton.com', 'org-prw-front-t1f.louisvuitton.com',
-  'org-prw-front-t2f.louisvuitton.com', 'org-prw-front-t3f.louisvuitton.com', 'org-prw-front-tqt.louisvuitton.com',
-  'org-remote-configurator.louisvuitton.com', 'org-remote-product-perso.louisvuitton.com',
-  'org-stg.louisvuitton.com', 'org-www.louisvuitton.com', 'origin-poc.louisvuitton.com',
-  'pages.client.louisvuitton.com', 'pass-api.louisvuitton.com', 'pass-prp.louisvuitton.com',
-  'pass-rocket-control-dev.louisvuitton.com', 'pass.louisvuitton.com', 'perf.eu-api.louisvuitton.com',
-  'player.louisvuitton.com', 'press.louisvuitton.com', 'preview-lvtl.louisvuitton.com',
-  'preview-org-lvtl-dev.louisvuitton.com', 'preview-org-lvtl-prp.louisvuitton.com',
-  'preview-org-lvtl.louisvuitton.com', 'productsvisualsearch.louisvuitton.com',
-  'prp-lv-configurator-api.louisvuitton.com', 'prp.as-api.louisvuitton.com', 'prp.eu-api.louisvuitton.com',
-  'prp.us-api.louisvuitton.com', 'prp2.eu-api.louisvuitton.com', 'prp3.eu-api.louisvuitton.com',
-  'qa.louisvuitton.com', 'queue-ppf.louisvuitton.com', 'r.communication.louisvuitton.com',
-  'redirect.louisvuitton.com', 'retail-learning-app-prp.louisvuitton.com', 'retail-learning-app.louisvuitton.com',
-  'ru-i3f.louisvuitton.com', 'ru-ppt.louisvuitton.com', 'secure-i3f.louisvuitton.com',
-  'secure-ppt.louisvuitton.com', 'secure.louisvuitton.com', 'services-prp.louisvuitton.com',
-  'services.louisvuitton.com', 'sg-ppt.louisvuitton.com', 'skylims-prp.louisvuitton.com',
-  'stellar-assets-prp.louisvuitton.com', 'stellar-assets.louisvuitton.com', 'supply-static-anpl.louisvuitton.com',
-  'survey-dev-linestudio.louisvuitton.com', 'survey-int-linestudio.louisvuitton.com',
-  'survey-org-dev-linestudio.louisvuitton.com', 'survey-org-int-linestudio.louisvuitton.com',
-  'survey-org-prd-linestudio.louisvuitton.com', 'survey-org-prp-linestudio.louisvuitton.com',
-  'survey-prd-linestudio.louisvuitton.com', 'survey-prp-linestudio.louisvuitton.com',
-  'survey.louisvuitton.com', 'sustainability.louisvuitton.com', 'th-ppt.louisvuitton.com',
-  'thfota.louisvuitton.com', 'thfotadownload.louisvuitton.com', 'ticketing-la-galerie.louisvuitton.com',
-  'ticketing.louisvuitton.com', 'tp.louisvuitton.com', 'tp5.louisvuitton.com',
-  'tracker-prp.piis.louisvuitton.com', 'tracker.piis.louisvuitton.com', 'tracking-me.louisvuitton.com',
-  'tw-i3f.louisvuitton.com', 'tw-ppt.louisvuitton.com', 'uk-i3f.louisvuitton.com',
-  'uk-ppt.louisvuitton.com', 'unlockoperations.louisvuitton.com', 'us-api.louisvuitton.com',
-  'us-i3f.louisvuitton.com', 'us-ppt.louisvuitton.com', 'vdp.louisvuitton.com',
-  'videocall-dp.louisvuitton.com', 'videocall.louisvuitton.com', 'view.client.louisvuitton.com',
-  'vip-shop.louisvuitton.com', 'virtualjourney-sa.louisvuitton.com', 'virtualjourney.louisvuitton.com',
-  'vn-ppt.louisvuitton.com', 'vpsummer.louisvuitton.com', 'vvv-nyc.louisvuitton.com',
-  'vvv-seoul-int.louisvuitton.com', 'vvv-seoul-prp.louisvuitton.com', 'vvv-seoul.louisvuitton.com',
-  'wait.louisvuitton.com', 'wardrobing.louisvuitton.com', 'webapp.louisworldays2024.louisvuitton.com',
-  'www-i3f.louisvuitton.com', 'www-ppt.louisvuitton.com', 'www.louisvuitton.com',
-  'yayoikusama.louisvuitton.com'
-]
+/* ============================================================
+   NET / RUNTIME
+   ============================================================ */
+const USER_AGENT = "Mozilla/5.0 (X11; Linux x86_64; rv:143.0) Gecko/20100101 Firefox/143.0";
+const TIMEOUT_MS = 6000;
+const RETRIES = 0;
+const GLOBAL_CONCURRENCY = 14;
+const PER_HOST_CONCURRENCY = 2;
 
+const STREAM_FSYNC_EVERY = 3000;
+const SITEMAP_SHARD_LINES = 25000;
+const TERMINAL_4XX = new Set([400, 401, 403, 404, 410, 451]);
 
-const CANON_LOCALES = LOCALES
-const USER_LOCALES = []
-const LOCALE_ALIASES = {}
-const ALL_LOCALES = Array.from(new Set([...CANON_LOCALES, ...USER_LOCALES.map(l => LOCALE_ALIASES[l] || l)]))
-
-// Normalize duplicate-y CDN query params for dedup
-const STRIP_QUERY_PARAMS = new Set(['wid', 'hei', 'width', 'height', 'fmt', 'format', 'qlt', 'quality', 'op_sharpen', 'bg', 'bgc', 'resmode'])
-
-// Global HTTP agent: keep-alive + pipelining
 setGlobalDispatcher(new Agent({
-  connections: CONCURRENCY * 2,
+  connections: GLOBAL_CONCURRENCY * 2,
   pipelining: 2,
-  keepAliveTimeout: 15_000,
-  headersTimeout: REQUEST_TIMEOUT_MS + 2000
-}))
+  keepAliveTimeout: 9000,
+  headersTimeout: TIMEOUT_MS + 2000,
+}));
 
 /* ============================================================
    HELPERS
    ============================================================ */
-const parser = new XMLParser({ ignoreAttributes: false, attributeNamePrefix: '', removeNSPrefix: true, trimValues: true, allowBooleanAttributes: true })
-const seedSitemaps = SUBDOMAINS.flatMap(sub => LOCALES.map(locale => `https://${sub}.louisvuitton.com/content/louisvuitton/sitemap/${locale}/sitemap-image.xml`))
+const parser = new XMLParser({ ignoreAttributes: false, attributeNamePrefix: "", removeNSPrefix: true, trimValues: true, allowBooleanAttributes: true });
+const sha1 = (s) => { const h = createHash("sha1"); h.update(String(s || "")); return h.digest("hex"); };
+const shortId = (src) => sha1(src).slice(0, 16);
+const hostOf = (u) => { try { return new URL(u).host; } catch { return ""; } };
+const safeName = (u) => sha1(u).slice(0, 20);
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
-function hostOf(u) { try { return new URL(u).host } catch { return '' } }
-function localeOf(u) { try { return new URL(u).pathname.match(/\/sitemap\/([^/]+)\/sitemap-image\.xml$/i)?.[1] ?? '' } catch { return '' } }
+const STRIP_QP = new Set(["wid", "hei", "width", "height", "fmt", "format", "qlt", "quality", "op_sharpen", "bg", "bgc", "resmode"]);
 function normalizeImageUrl(u) {
   try {
-    const url = new URL(u)
-    for (const k of Array.from(url.searchParams.keys())) if (STRIP_QUERY_PARAMS.has(k)) url.searchParams.delete(k)
-    url.pathname = url.pathname.replace(/\/{2,}/g, '/')
-    return url.toString()
-  } catch { return u }
+    const url = new URL(u);
+    for (const k of Array.from(url.searchParams.keys())) if (STRIP_QP.has(k)) url.searchParams.delete(k);
+    url.pathname = url.pathname.replace(/\/{2,}/g, "/");
+    return url.toString();
+  } catch { return u; }
 }
-function makeId(src) {
-  const h = createHash('sha1'); h.update(String(src || '')); return h.digest('hex').slice(0, 16)
-}
-function sleep(ms) { return new Promise(r => setTimeout(r, ms)) }
-function jitter(n) { return n * (0.75 + Math.random() * 0.5) }
+const isGzipLike = (url, ct) => /\.gz($|\?)/i.test(url) || /gzip|application\/x-gzip/i.test(ct || "");
 
-async function fetchWithRetry(url, opts = {}) {
-  let attempt = 0
-  while (true) {
-    attempt++
-    const controller = new AbortController()
-    const timer = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS)
+/* ============================================================
+   STATE
+   ============================================================ */
+async function ensureDirs() {
+  await Promise.all([genDir, cacheDir, robotsDir, sitemapsDir, itemsDir, hostsDir].map((d) => mkdir(d, { recursive: true })));
+}
+async function loadJson(p, fallback) { try { return JSON.parse(await readFile(p, "utf8")); } catch { return fallback; } }
+async function saveJson(p, obj) { await writeFile(p, JSON.stringify(obj, null, 2) + "\n", "utf8"); }
+
+/* url meta + blacklist + bloom */
+let urlmeta = Object.create(null);
+let blacklist = Object.create(null);
+const hostStrikes = new Map();
+const HOST_FAIL_THRESHOLD = 3;
+let seenBloom = null;
+
+/* ============================================================
+   HTTP (conditional, gzip-aware)
+   ============================================================ */
+async function timedFetch(url, opts = {}) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
+  try {
+    const ums = urlmeta[url];
+    const headers = {
+      "user-agent": USER_AGENT,
+      accept: "application/xml,text/xml;q=0.9,text/plain;q=0.9,*/*;q=0.8",
+      "accept-language": "en-US,en;q=0.8",
+      ...(ums?.etag ? { "if-none-match": ums.etag } : {}),
+      ...(ums?.lastModified ? { "if-modified-since": ums.lastModified } : {}),
+      ...(opts.headers || {}),
+    };
+    const res = await fetch(url, { ...opts, signal: controller.signal, headers });
+    clearTimeout(timer);
+    return res;
+  } catch (e) {
+    clearTimeout(timer);
+    throw e;
+  }
+}
+function cachedPathFor(url, type, ext = "xml") {
+  const h = hostOf(url);
+  if (type === "robots") return path.join(robotsDir, `${h}.txt`);
+  if (type === "robots-json") return path.join(robotsDir, `${h}.json`);
+  if (type === "top-sitemap") return path.join(sitemapsDir, h, `top.${ext}`);
+  return path.join(sitemapsDir, h, `${safeName(url)}.${ext}`);
+}
+async function readCachedText(p) { try { return await readFile(p, "utf8"); } catch { return null; } }
+
+async function persistText(url, res, text, type, ext = "xml") {
+  const p = cachedPathFor(url, type, ext);
+  await mkdir(path.dirname(p), { recursive: true });
+  await writeFile(p, text ?? "", "utf8");
+  urlmeta[url] = {
+    etag: res.headers.get("etag") || undefined,
+    lastModified: res.headers.get("last-modified") || undefined,
+    status: res.status,
+    savedAt: new Date().toISOString(),
+    path: p,
+    contentType: res.headers.get("content-type") || undefined,
+  };
+  return p;
+}
+async function persistBinary(url, res, buf, type, ext = "bin") {
+  const p = cachedPathFor(url, type, ext);
+  await mkdir(path.dirname(p), { recursive: true });
+  await new Promise((resolve, reject) => writeFileCb(p, buf, (e) => e ? reject(e) : resolve()));
+  urlmeta[url] = {
+    etag: res.headers.get("etag") || undefined,
+    lastModified: res.headers.get("last-modified") || undefined,
+    status: res.status,
+    savedAt: new Date().toISOString(),
+    path: p,
+    contentType: res.headers.get("content-type") || undefined,
+  };
+  return p;
+}
+function noteTerminalFail(url, status, reason) {
+  const h = hostOf(url);
+  if (TERMINAL_4XX.has(status)) {
+    hostStrikes.set(h, (hostStrikes.get(h) || 0) + 1);
+    urlmeta[url] = { ...(urlmeta[url] || {}), status, savedAt: new Date().toISOString() };
+    if (hostStrikes.get(h) >= HOST_FAIL_THRESHOLD) {
+      const until = new Date(Date.now() + HOST_TTL_HOURS * 3600 * 1000).toISOString();
+      blacklist[h] = { untilISO: until, reason: reason || `terminal_${status}`, strikes: hostStrikes.get(h) };
+    }
+  }
+}
+const hostBlacklisted = (host) => {
+  const entry = blacklist[host];
+  return !!entry && new Date(entry.untilISO) > new Date();
+};
+
+/* gzip-aware text fetch that also persists raw .gz when appropriate */
+async function fetchTextCached(url, type = "sitemap") {
+  const h = hostOf(url);
+  if (hostBlacklisted(h)) return { status: -2, text: null, skipped: "blacklisted" };
+
+  for (let attempt = 0; ; attempt++) {
     try {
-      const res = await fetch(url, {
-        ...opts,
-        signal: controller.signal,
-        headers: {
-          'user-agent': USER_AGENT,
-          'accept': 'application/xml,text/xml;q=0.9,*/*;q=0.8',
-          'accept-language': 'en-US,en;q=0.8',
-          ...(opts.headers || {})
-        }
-      })
-      clearTimeout(timer)
-      if (!res.ok) {
-        if ((res.status >= 500 || res.status === 429) && attempt <= MAX_RETRIES) {
-          await sleep(jitter(RETRY_BASE_MS * attempt)); continue
-        }
-        throw new Error(`HTTP ${res.status}`)
+      const res = await timedFetch(url);
+      if (res.status === 304) {
+        const p = cachedPathFor(url, type, /\.txt($|\?)/i.test(url) ? "txt" : "xml");
+        const text = await readCachedText(p);
+        return { status: 304, text, cached: true, contentType: res.headers.get("content-type") || "" };
       }
-      return res
+      const ct = (res.headers.get("content-type") || "").toLowerCase();
+      let text = null;
+
+      if (isGzipLike(url, ct)) {
+        const buf = Buffer.from(await res.arrayBuffer());
+        // save raw gz too
+        await persistBinary(url, res, buf, type, "xml.gz");
+        try {
+          text = gunzipSync(buf).toString("utf8");
+          await persistText(url, res, text, type, "xml");
+        } catch {
+          // If gunzip fails, persist a best-effort latin1 text to inspect later
+          text = buf.toString("latin1");
+          await persistText(url, res, text, type, "raw");
+        }
+      } else {
+        text = await res.text();
+        const ext = /\.txt($|\?)/i.test(url) || ct.includes("text/plain") ? "txt" : "xml";
+        await persistText(url, res, text, type, ext);
+      }
+
+      if (TERMINAL_4XX.has(res.status)) noteTerminalFail(url, res.status, `http_${res.status}`);
+      return { status: res.status, text, cached: false, contentType: ct };
     } catch (e) {
-      clearTimeout(timer)
-      const transient = e && (e.name === 'AbortError' || e.message?.includes('network'))
-      if (transient && attempt <= MAX_RETRIES) { await sleep(jitter(RETRY_BASE_MS * attempt)); continue }
-      throw e instanceof Error ? e : new Error(String(e))
-    }
-  }
-}
-
-async function fetchText(url, allowed = [200]) {
-  try {
-    const res = await fetchWithRetry(url)
-    if (!allowed.includes(res.status)) return null
-    return await res.text()
-  } catch { return null }
-}
-
-function parseRobotsForSitemaps(text) {
-  if (!text) return []
-  const out = []
-  for (const line of text.split(/\r?\n/)) {
-    const m = line.match(/^[\s]*sitemap:\s*(\S+)/i)
-    if (m) {
-      try {
-        const u = new URL(m[1])
-        if (u.host.endsWith('louisvuitton.com')) out.push(u.toString())
-      } catch { /* ignore */ }
-    }
-  }
-  return out
-}
-function parseSitemapIndex(xml) {
-  try {
-    const p = new XMLParser({ ignoreAttributes: false, removeNSPrefix: true })
-    const obj = p.parse(xml)
-    const idx = obj.sitemapindex
-    const arr = Array.isArray(idx?.sitemap) ? idx.sitemap : idx?.sitemap ? [idx.sitemap] : []
-    return arr.map(it => it.loc).filter(Boolean)
-  } catch { return [] }
-}
-function urlsetHasImages(xml) {
-  return !!xml && /<urlset[\s\S]*?<image:/i.test(xml)
-}
-function normalizeLocaleInUrl(u) {
-  try {
-    const url = new URL(u)
-    const m = url.pathname.match(/\/sitemap\/([a-z]{3}_[A-Z]{2})\//)
-    if (m) {
-      const loc = m[1]; const mapped = LOCALE_ALIASES[loc] || loc
-      if (mapped !== loc) {
-        url.pathname = url.pathname.replace(`/sitemap/${loc}/`, `/sitemap/${mapped}/`)
-        return url.toString()
-      }
-    }
-  } catch { }
-  return u
-}
-
-async function discoverForHost(host) {
-  const discovered = new Set()
-
-  const robots = await fetchText(`https://${host}/robots.txt`, [200, 404])
-  const robotsSitemaps = parseRobotsForSitemaps(robots).map(normalizeLocaleInUrl)
-
-  const topXml = await fetchText(`https://${host}/sitemap.xml`, [200, 404])
-  let topSitemaps = []
-  if (topXml) {
-    if (/<sitemapindex/i.test(topXml)) {
-      topSitemaps = parseSitemapIndex(topXml).map(normalizeLocaleInUrl)
-    } else {
-      topSitemaps = [`https://${host}/sitemap.xml`]
-    }
-  }
-
-  const candidates = [...robotsSitemaps, ...topSitemaps].filter(Boolean)
-  for (const u of candidates) {
-    const xml = await fetchText(u, [200, 404])
-    if (!xml) continue
-    if (/\/sitemap\w*\.xml$/i.test(u) && /<sitemapindex/i.test(xml)) {
-      const children = parseSitemapIndex(xml).map(normalizeLocaleInUrl)
-      for (const child of children) {
-        const cxml = await fetchText(child, [200, 404])
-        if (cxml && urlsetHasImages(cxml)) discovered.add(child)
-      }
-    } else {
-      if (urlsetHasImages(xml)) discovered.add(u)
-    }
-  }
-
-  // Fallback pattern across locales
-  for (const loc of ALL_LOCALES) {
-    const u = `https://${host}/content/louisvuitton/sitemap/${loc}/sitemap-image.xml`
-    if (discovered.has(u)) continue
-    const xml = await fetchText(u, [200, 404])
-    if (xml && urlsetHasImages(xml)) discovered.add(u)
-  }
-
-  return Array.from(discovered)
-}
-
-async function pooledMap(items, fn, concurrency = 6) {
-  const out = new Array(items.length)
-  let i = 0
-  async function worker() {
-    while (true) {
-      const idx = i++; if (idx >= items.length) break
-      try { out[idx] = await fn(items[idx], idx) } catch { out[idx] = [] }
-    }
-  }
-  await Promise.all(Array.from({ length: Math.min(concurrency, items.length) }, worker))
-  return out
-}
-
-function* iterSitemapItems(xmlText) {
-  const root = parser.parse(xmlText)
-  const urlset = root.urlset || root.sitemapindex || root
-  const urls = Array.isArray(urlset.url) ? urlset.url : urlset.url ? [urlset.url] : []
-  for (const entry of urls) {
-    const pageUrl = entry?.loc || ''
-    let images = entry?.image || entry?.['image:image'] || []
-    if (!Array.isArray(images)) images = [images]
-    for (const image of images) {
-      if (!image) continue
-      const raw = image.loc || image['image:loc'] || image.url || null
-      if (!raw) continue
-      const src = normalizeImageUrl(raw)
-      const title = image.title || image['image:title'] || image.caption || image['image:caption'] || ''
-      const license = image.license || image['image:license'] || ''
-      yield { src, title, license, pageUrl }
+      if (attempt < RETRIES) continue;
+      const pXml = cachedPathFor(url, type, "xml");
+      const pTxt = cachedPathFor(url, type, "txt");
+      const cached = (await readCachedText(pXml)) ?? (await readCachedText(pTxt));
+      if (cached != null) return { status: -1, text: cached, cached: true, contentType: "" };
+      noteTerminalFail(url, -1, "network_error");
+      return { status: -1, text: null, error: e?.message || String(e) };
     }
   }
 }
 
 /* ============================================================
-   MAIN (Discovery → Crawl → Streamed JSON)
+   robots.txt parsing — capture everything
    ============================================================ */
-async function main() {
-  console.log(`Fetching image sitemaps… (discovery=${ENABLE_DISCOVERY ? 'on' : 'off'})`)
-  await mkdir(generatedDir, { recursive: true })
+function parseRobots(text) {
+  const lines = (text || "").split(/\r?\n/).map((l) => l.trim()).filter(Boolean);
+  const groups = [];
+  let current = { agents: [], rules: [] };
+  for (const line of lines) {
+    const mUA = line.match(/^user-agent:\s*(.+)$/i);
+    if (mUA) {
+      if (current.agents.length || current.rules.length) groups.push(current);
+      current = { agents: [mUA[1].toLowerCase()], rules: [] };
+      continue;
+    }
+    const mKV = line.match(/^([a-zA-Z-]+):\s*(.+)$/);
+    if (mKV) current.rules.push({ k: mKV[1].toLowerCase(), v: mKV[2] });
+  }
+  if (current.agents.length || current.rules.length) groups.push(current);
 
-  // 1) Build sitemap list (seed ∪ discovered)
-  let sitemapSet = new Set(seedSitemaps)
-  if (ENABLE_DISCOVERY) {
-    console.log(`→ Starting discovery across ${CANDIDATE_HOSTS.length} hosts …`)
-    const batchSize = 8
-    for (let off = 0; off < CANDIDATE_HOSTS.length; off += batchSize) {
-      const batch = CANDIDATE_HOSTS.slice(off, off + batchSize)
-      process.stdout.write(`   • batch ${Math.floor(off / batchSize) + 1}/${Math.ceil(CANDIDATE_HOSTS.length / batchSize)}: ${batch.join(', ')}\n`)
-      const lists = await pooledMap(batch, discoverForHost, 4)
-      for (const list of lists) for (const u of list) sitemapSet.add(u)
-      if (off + batchSize < CANDIDATE_HOSTS.length) await sleep(500)
+  const byAgent = {};
+  const KNOWN = new Set(["allow", "disallow", "noindex", "crawl-delay", "sitemap", "host", "clean-param", "request-rate", "visit-time"]);
+  for (const g of groups) {
+    const agents = g.agents.length ? g.agents : ["*"];
+    for (const a of agents) {
+      const o = (byAgent[a] ||= { allow: [], disallow: [], noindex: [], crawlDelay: null, sitemaps: [], host: null, cleanParam: [], requestRate: null, visitTime: [], unknown: [] });
+      for (const r of g.rules) {
+        const k = r.k;
+        if (k === "allow") o.allow.push(r.v);
+        else if (k === "disallow") o.disallow.push(r.v);
+        else if (k === "noindex") o.noindex.push(r.v);
+        else if (k === "crawl-delay" && o.crawlDelay == null) o.crawlDelay = r.v;
+        else if (k === "sitemap") o.sitemaps.push(r.v);
+        else if (k === "host" && !o.host) o.host = r.v;
+        else if (k === "clean-param") o.cleanParam.push(r.v);
+        else if (k === "request-rate" && !o.requestRate) o.requestRate = r.v;
+        else if (k === "visit-time") o.visitTime.push(r.v);
+        else if (!KNOWN.has(k)) o.unknown.push({ k, v: r.v });
+      }
     }
   }
-  const SITEMAP_URLS = Array.from(sitemapSet).sort()
-  console.log(`→ Sitemap list ready: ${SITEMAP_URLS.length} candidates`)
-
-  // 2) Open streamed output
-  const out = createWriteStream(datasetPath, { flags: 'w' })
-  const write = (s) => new Promise((res, rej) => out.write(s, err => err ? rej(err) : res()))
-  await write('{\n')
-  await write(`  "version": 3,\n`)
-  await write(`  "generatedAt": "${new Date().toISOString()}",\n`)
-  await write(`  "config": ${JSON.stringify({ discovery: ENABLE_DISCOVERY, concurrency: CONCURRENCY })},\n`)
-  await write(`  "items": [\n`)
-
-  // 3) Crawl with bounded parallelism; stream items; keep only small rollups in RAM
-  const limit = pLimit(CONCURRENCY)
-  const seen = new Set()
-  const pagesSet = new Set()
-  const localeCounts = new Map()
-  const hostCounts = new Map()
-  const sitemaps = []
-  const failures = []
-  let firstItem = true
-  let emitted = 0
-  let writesSinceFlush = 0
-
-  function bump(map, key, n = 1) { if (key) map.set(key, (map.get(key) || 0) + n) }
-
-  await Promise.all(
-    SITEMAP_URLS.map(url =>
-      limit(async () => {
-        const meta = { url, host: hostOf(url), locale: localeOf(url) }
-        try {
-          const res = await fetchWithRetry(url)
-          const xml = await res.text()
-
-          let countThisMap = 0
-          for (const it of iterSitemapItems(xml)) {
-            if (it.pageUrl) pagesSet.add(it.pageUrl)
-            bump(localeCounts, meta.locale)
-            bump(hostCounts, meta.host)
-            countThisMap++
-
-            const key = makeId(it.src)
-            if (seen.has(key)) continue
-            seen.add(key)
-
-            const record = { id: key, src: it.src, title: it.title || '', license: it.license || '' }
-            const line = (firstItem ? '' : ',\n') + '    ' + JSON.stringify(record)
-            await write(line)
-            firstItem = false
-            emitted++; writesSinceFlush++
-            if (writesSinceFlush >= STREAM_FLUSH_EVERY) {
-              await new Promise((res, rej) => out.flush?.() ? out.flush(err => err ? rej(err) : res()) : res())
-              writesSinceFlush = 0
-            }
-          }
-
-          sitemaps.push({ ...meta, ok: true, imageCount: countThisMap })
-          process.stdout.write(`✓ ${url}  +${countThisMap} images\n`)
-        } catch (error) {
-          const message = error instanceof Error ? error.message : String(error)
-          sitemaps.push({ ...meta, ok: false, imageCount: 0, error: message })
-          failures.push({ ...meta, error: message })
-          process.stdout.write(`✗ ${url}  ${message}\n`)
-        }
-      })
-    )
-  )
-
-  await write('\n  ],\n')
-
-  const toObjectSorted = (m) =>
-    Object.fromEntries([...m.entries()].sort((a, b) => (b[1] === a[1] ? a[0].localeCompare(b[0]) : b[1] - a[1])))
-
-  const totals = {
-    images: emitted,
-    pages: pagesSet.size,
-    locales: toObjectSorted(localeCounts),
-    hosts: toObjectSorted(hostCounts),
-    sitemaps: sitemaps.length,
-    ok: sitemaps.filter(s => s.ok).length,
-    failures: failures.length
-  }
-
-  await write(`  "totals": ${JSON.stringify(totals, null, 2)},\n`)
-  await write(`  "sitemaps": ${JSON.stringify(sitemaps.sort((a, b) => (a.locale || '').localeCompare(b.locale || '') || (a.host || '').localeCompare(b.host || '') || a.url.localeCompare(b.url)), null, 2)},\n`)
-  await write(`  "failures": ${JSON.stringify(failures, null, 2)}\n`)
-  await write('}\n')
-  await new Promise((res, rej) => out.end(err => err ? rej(err) : res()))
-
-  console.log(`\nSaved dataset → ${path.relative(process.cwd(), datasetPath)}`)
-  console.log(`Images (unique): ${totals.images.toLocaleString()} • Unique pages: ${totals.pages.toLocaleString()} • OK: ${totals.ok}/${totals.sitemaps}`)
-  if (failures.length) console.warn(`Failures: ${failures.length}`)
+  const merged = { allow: [], disallow: [], noindex: [], crawlDelay: null, sitemaps: [], host: null, cleanParam: [], requestRate: null, visitTime: [], unknown: [] };
+  if (byAgent["*"]) Object.assign(merged, byAgent["*"]);
+  return { byAgent, merged, lines: lines.length };
 }
 
-main().catch(err => { console.error(err); process.exitCode = 1 })
+/* ============================================================
+   XML helpers
+   ============================================================ */
+function parseSitemapIndex(xml) {
+  try {
+    const p = new XMLParser({ ignoreAttributes: false, removeNSPrefix: true });
+    const obj = p.parse(xml);
+    const idx = obj?.sitemapindex;
+    const arr = Array.isArray(idx?.sitemap) ? idx.sitemap : idx?.sitemap ? [idx.sitemap] : [];
+    return arr.map((it) => it.loc).filter(Boolean);
+  } catch { return []; }
+}
+function urlsetType(xml) {
+  if (!xml) return "none";
+  if (/<sitemapindex/i.test(xml)) return "index";
+  if (/<urlset[\s\S]*?<image:/i.test(xml)) return "image";
+  if (/<urlset[\s\S]*?<url>/i.test(xml)) return "page";
+  return "other";
+}
+function* iterSitemapItems(xmlText) {
+  const root = parser.parse(xmlText);
+  const urlset = root.urlset || root.sitemapindex || root;
+  const urls = Array.isArray(urlset.url) ? urlset.url : urlset.url ? [urlset.url] : [];
+  for (const entry of urls) {
+    const pageUrl = entry?.loc || "";
+    let images = entry?.image || entry?.["image:image"] || [];
+    if (!Array.isArray(images)) images = [images];
+    for (const image of images) {
+      if (!image) continue;
+      const raw = image.loc || image["image:loc"] || image.url || null;
+      if (!raw) continue;
+      const src = normalizeImageUrl(raw);
+      const title = image.title || image["image:title"] || image.caption || image["image:caption"] || "";
+      const license = image.license || image["image:license"] || "";
+      yield { src, title, license, pageUrl };
+    }
+  }
+}
+const localeFromUrl = (u) => { try { return new URL(u).pathname.match(/\/sitemap\/([^/]+)\//)?.[1] ?? ""; } catch { return ""; } };
+
+/* ============================================================
+   DISCOVERY per host (robots-aware + seeds + variants + recursion)
+   ============================================================ */
+const TOP_XML_VARIANTS = [
+  "/sitemap.xml", "/sitemap_index.xml", "/sitemapindex.xml", "/sitemap/sitemap.xml",
+  "/sitemap.xml.gz", "/sitemap_index.xml.gz", "/sitemapindex.xml.gz"
+];
+const EXTRA_XML_VARIANTS = [
+  "/news-sitemap.xml", "/video-sitemap.xml", "/image-sitemap.xml",
+  "/feed.xml", "/rss.xml", "/atom.xml",
+  "/sitemap-1.xml", "/sitemap-2.xml", "/sitemap-3.xml", "/sitemap-4.xml",
+  "/sitemap-5.xml", "/sitemap-6.xml", "/sitemap-7.xml", "/sitemap-8.xml",
+  "/sitemap-9.xml", "/sitemap-10.xml",
+  "/sitemap-1.xml.gz", "/sitemap-2.xml.gz", "/sitemap-3.xml.gz"
+];
+const WELLKNOWN_TXT = ["/robots.txt", "/ads.txt", "/humans.txt", "/.well-known/security.txt"];
+
+async function discoverHost(host) {
+  if (hostBlacklisted(host)) return { host, robots: null, sitemaps: [], docs: [] };
+
+  const discovered = new Set();
+  const docs = []; // every xml/txt we save for this host
+
+  // helper to record docs index entries
+  function recordDoc(u, kind, savedPath, status, contentType, sizeBytes) {
+    docs.push({ url: u, kind, savedPath, status, contentType, size: sizeBytes ?? null });
+  }
+
+  // Try well-known TXT (saved regardless of robots)
+  if (SAVE_WELLKNOWN_TXT) {
+    for (const pth of WELLKNOWN_TXT) {
+      const url = `https://${host}${pth}`;
+      const res = await fetchTextCached(url, "robots"); // reuse robots cache bucket for txt
+      if (res.text) {
+        const savedPath = cachedPathFor(url, "robots", pth.endsWith(".txt") ? "txt" : "txt");
+        recordDoc(url, "txt", savedPath, res.status, res.contentType || "text/plain");
+      }
+    }
+  }
+
+  // robots.txt (for hints)
+  const robotsURL = `https://${host}/robots.txt`;
+  const robotsFetch = await fetchTextCached(robotsURL, "robots");
+  let robotsParsed = parseRobots(robotsFetch.text || "");
+  const robotsJsonPath = cachedPathFor(robotsURL, "robots-json", "json");
+  await writeFile(robotsJsonPath, JSON.stringify(robotsParsed, null, 2) + "\n", "utf8");
+  recordDoc(robotsURL, "txt", cachedPathFor(robotsURL, "robots", "txt"), robotsFetch.status, "text/plain");
+
+  // Sitemaps referenced in robots
+  for (const u of (robotsParsed.merged.sitemaps || [])) if (u) discovered.add(u);
+
+  // Top-level xml variants
+  for (const v of TOP_XML_VARIANTS) discovered.add(`https://${host}${v}`);
+
+  // LV-seed sitemaps for just a couple locales to open doors
+  for (const loc of SEED_LOCALES) {
+    for (const t of ["image", "product", "content", "catalog"]) {
+      discovered.add(`https://${host}/content/louisvuitton/sitemap/${loc}/sitemap-${t}.xml`);
+    }
+  }
+
+  // Heuristic extras (bounded list)
+  if (EXTRA_XML_GUESS) {
+    for (const v of EXTRA_XML_VARIANTS) discovered.add(`https://${host}${v}`);
+  }
+
+  // From robots rules, harvest explicit *.xml/*.xml.gz/*.txt paths (no globs)
+  for (const a of Object.values(robotsParsed.byAgent || {})) {
+    for (const rule of [...a.allow, ...a.disallow, ...a.noindex]) {
+      if (!rule || /[\*\?\[\]]/.test(rule)) continue;
+      try {
+        const uu = rule.startsWith("http") ? rule : `https://${host}${rule.startsWith("/") ? "" : "/"}${rule}`;
+        if (/\.xml(\.gz)?($|\?)/i.test(uu)) discovered.add(uu);
+        if (/\.txt($|\?)/i.test(uu)) {
+          const res = await fetchTextCached(uu, "robots");
+          if (res.text) recordDoc(uu, "txt", cachedPathFor(uu, "robots", "txt"), res.status, res.contentType || "text/plain");
+        }
+      } catch { }
+    }
+  }
+
+  // expand sitemap indexes recursively; also save all XMLs we touch
+  const queue = [...discovered];
+  const visited = new Set();
+  const expanded = new Set();
+
+  while (queue.length) {
+    const u = queue.shift();
+    if (visited.has(u)) continue;
+    visited.add(u);
+
+    const res = await fetchTextCached(u, "sitemap");
+    if (!res.text) continue;
+
+    // record XML doc
+    const isTxt = /\.txt($|\?)/i.test(u);
+    const kind = isTxt ? "txt" : "xml";
+    const savedPath = cachedPathFor(u, isTxt ? "robots" : "sitemap", isTxt ? "txt" : /raw$/.test(urlmeta[u]?.path || "") ? "raw" : (isGzipLike(u, res.contentType) ? "xml" : (urlmeta[u]?.path?.split(".").pop() || "xml")));
+    recordDoc(u, kind, savedPath, res.status, res.contentType || (isTxt ? "text/plain" : "application/xml"));
+
+    // If it's an index, expand children
+    if (urlsetType(res.text) === "index") {
+      expanded.add(u);
+      for (const child of parseSitemapIndex(res.text)) {
+        if (!visited.has(child)) queue.push(child);
+      }
+    }
+  }
+
+  // Infer locales and probe those four sitemap types too (but only after we’ve seen life)
+  const inferred = new Set([...visited].map(localeFromUrl).filter(Boolean));
+  for (const loc of inferred) {
+    for (const t of ["image", "product", "content", "catalog"]) {
+      const u = `https://${host}/content/louisvuitton/sitemap/${loc}/sitemap-${t}.xml`;
+      if (visited.has(u)) continue;
+      const r = await fetchTextCached(u, "sitemap");
+      if (r.text) {
+        recordDoc(u, "xml", cachedPathFor(u, "sitemap", "xml"), r.status, r.contentType || "application/xml");
+        if (urlsetType(r.text) === "index") {
+          for (const child of parseSitemapIndex(r.text)) if (!visited.has(child)) {
+            const cr = await fetchTextCached(child, "sitemap");
+            if (cr.text) recordDoc(child, "xml", cachedPathFor(child, "sitemap", "xml"), cr.status, cr.contentType || "application/xml");
+          }
+        }
+      }
+    }
+  }
+
+  // Partition image-first for crawling
+  const imageFirst = [];
+  const rest = [];
+  for (const u of visited) {
+    const r = await readCachedText(cachedPathFor(u, "sitemap", "xml")) ?? await readCachedText(cachedPathFor(u, "sitemap", "raw"));
+    const kind = urlsetType(r || "");
+    if (kind === "image") imageFirst.push(u); else rest.push(u);
+  }
+
+  const robotsIndexEntry = {
+    host,
+    robotsTxtPath: cachedPathFor(robotsURL, "robots", "txt"),
+    robotsJsonPath,
+    sitemapsInRobots: robotsParsed.merged.sitemaps || [],
+    parsed: robotsParsed,
+  };
+
+  return { host, robots: robotsIndexEntry, sitemaps: [...new Set([...imageFirst, ...rest])], docs };
+}
+
+/* ============================================================
+   MAIN — discover, save everything XML/TXT, then crawl image items
+   ============================================================ */
+async function main() {
+  await ensureDirs();
+
+  const hostsTxt = (await readFile(hostsTxtPath, "utf8")).split(/\r?\n/).map(s => s.trim()).filter(Boolean);
+  urlmeta = await loadJson(urlMetaPath, Object.create(null));
+  blacklist = RESET_BLACKLIST ? Object.create(null) : await loadJson(blacklistPath, Object.create(null));
+  for (const [h, v] of Object.entries(blacklist)) if (new Date(v.untilISO) <= new Date()) delete blacklist[h];
+
+  const existingBloom = await loadJson(bloomPath, null);
+  seenBloom = existingBloom ? ScalableBloomFilter.fromJSON(existingBloom) : new ScalableBloomFilter(200_000, 0.01);
+
+  // DISCOVERY
+  const discoveryHosts = (MAX_HOSTS === Infinity ? hostsTxt : hostsTxt.slice(0, MAX_HOSTS)).filter(h => !hostBlacklisted(h));
+  const robotsIndex = {};
+  const allSitemaps = {};
+  const docsIndex = {};
+  const sitemapSet = new Set();
+
+  if (ENABLE_DISCOVERY) {
+    console.log(`→ discovery across ${discoveryHosts.length} hosts (robots-aware + seeds + variants)`);
+    const batchSize = 8;
+    for (let off = 0; off < discoveryHosts.length; off += batchSize) {
+      const batch = discoveryHosts.slice(off, off + batchSize).filter(h => !hostBlacklisted(h));
+      process.stdout.write(`   • batch ${Math.floor(off / batchSize) + 1}: ${batch.join(", ")}\n`);
+      const results = await Promise.all(batch.map(h => discoverHost(h)));
+      for (const r of results) {
+        if (r.robots) robotsIndex[r.host] = r.robots;
+        allSitemaps[r.host] = r.sitemaps;
+        docsIndex[r.host] = r.docs;
+        for (const u of r.sitemaps) sitemapSet.add(u);
+      }
+      if (off + batchSize < discoveryHosts.length) await sleep(150);
+    }
+  }
+
+  await saveJson(robotsIndexPath, robotsIndex);
+  await saveJson(allSitemapsIdx, allSitemaps);
+  await saveJson(docsIndexPath, docsIndex);
+
+  const imageOnly = Object.fromEntries(Object.entries(allSitemaps).map(([host, list]) => [host, list.filter(u => /image/i.test(u))]));
+  await saveJson(imgSitemapsIdx, imageOnly);
+
+  const sitemapUrls = [...sitemapSet].sort();
+  console.log(`→ Total sitemap candidates: ${sitemapUrls.length}`);
+
+  // shard writer (image items)
+  const ts = new Date().toISOString().replace(/[:.]/g, "");
+  let shardIndex = 0, shardLines = 0, shardItems = 0, shardStream = null;
+  async function openShard() {
+    shardIndex++; shardLines = 0;
+    const shardPath = path.join(itemsDir, `shard-${ts}-${String(shardIndex).padStart(3, "0")}.ndjson`);
+    shardStream = createWriteStream(shardPath, { flags: "w" });
+    await once(shardStream, "open");
+    return shardPath;
+  }
+  await openShard();
+  const writeLine = async (line) => {
+    if (!shardStream.write(line + "\n")) await once(shardStream, "drain");
+    shardLines++; shardItems++;
+    if (shardItems % STREAM_FSYNC_EVERY === 0 && typeof shardStream.fd === "number") { try { fsyncSync(shardStream.fd); } catch { } }
+    if (shardLines >= SITEMAP_SHARD_LINES) { await new Promise(r => shardStream.end(r)); await openShard(); }
+  };
+
+  // rollups
+  const pagesSet = new Set();
+  const localeCounts = new Map();
+  const hostCounts = new Map();
+  const sitemapsLog = [];
+  const failures = [];
+
+  // priority: image sitemaps first
+  const prioritized = sitemapUrls.sort((a, b) => {
+    const ia = /image/i.test(a) ? 0 : 1;
+    const ib = /image/i.test(b) ? 0 : 1;
+    return ia - ib || a.localeCompare(b);
+  });
+
+  const globalLimit = pLimit(GLOBAL_CONCURRENCY);
+  const hostLimiters = new Map();
+  const limFor = (h) => hostLimiters.has(h) ? hostLimiters.get(h) : hostLimiters.set(h, pLimit(PER_HOST_CONCURRENCY)).get(h);
+  const localeOf = (u) => { try { return new URL(u).pathname.match(/\/sitemap\/([^/]+)\//)?.[1] ?? ""; } catch { return ""; } };
+
+  let totalItems = 0;
+
+  await Promise.all(prioritized.map((u) => {
+    const h = hostOf(u);
+    return globalLimit(() =>
+      limFor(h)(async () => {
+        if (hostBlacklisted(h)) { failures.push({ url: u, host: h, locale: localeOf(u), error: "blacklisted" }); return; }
+        const res = await fetchTextCached(u, "sitemap");
+        const status = res.status;
+        if (status > 0 && TERMINAL_4XX.has(status)) { failures.push({ url: u, host: h, locale: localeOf(u), error: `HTTP ${status}` }); return; }
+        if (!res.text) { failures.push({ url: u, host: h, locale: localeOf(u), error: res.error || "no_response" }); return; }
+
+        const kind = urlsetType(res.text);
+        let count = 0;
+        if (kind === "image") {
+          for (const it of iterSitemapItems(res.text)) {
+            const id = shortId(it.src);
+            if (seenBloom.has(id)) continue;
+            seenBloom.add(id);
+            const rec = { id, src: it.src, title: it.title || "", license: it.license || "", page: it.pageUrl || "", host: h, locale: localeOf(u), sitemap: u };
+            await writeLine(JSON.stringify(rec));
+            if (rec.page) pagesSet.add(rec.page);
+            localeCounts.set(rec.locale, (localeCounts.get(rec.locale) || 0) + 1);
+            hostCounts.set(h, (hostCounts.get(h) || 0) + 1);
+            count++; totalItems++;
+          }
+        }
+        sitemapsLog.push({ url: u, host: h, kind, ok: true, imageCount: count });
+        process.stdout.write(`✓ ${u} [${kind}] +${count}\n`);
+      })
+    );
+  }));
+
+  await new Promise((resolve) => shardStream.end(resolve));
+
+  // persist state
+  await saveJson(urlMetaPath, urlmeta);
+  await saveJson(blacklistPath, blacklist);
+  await saveJson(bloomPath, seenBloom.saveAsJSON());
+
+  // summary
+  const sortObj = (m) => Object.fromEntries([...m.entries()].sort((a, b) => b[1] === a[1] ? a[0].localeCompare(b[0]) : b[1] - a[1]));
+  const summary = {
+    version: 9,
+    generatedAt: new Date().toISOString(),
+    config: {
+      discovery: ENABLE_DISCOVERY,
+      timeoutsMs: TIMEOUT_MS,
+      retries: RETRIES,
+      globalConcurrency: GLOBAL_CONCURRENCY,
+      perHostConcurrency: PER_HOST_CONCURRENCY,
+      shardLines: SITEMAP_SHARD_LINES,
+      fsyncEvery: STREAM_FSYNC_EVERY,
+      seedLocales: SEED_LOCALES,
+      extraXmlGuess: EXTRA_XML_GUESS,
+      wellKnownTxt: SAVE_WELLKNOWN_TXT
+    },
+    inputs: { hostsTxt: path.relative(process.cwd(), hostsTxtPath) },
+    outputs: {
+      itemsDir: path.relative(process.cwd(), itemsDir),
+      robotsIndex: path.relative(process.cwd(), robotsIndexPath),
+      allSitemapsIndex: path.relative(process.cwd(), allSitemapsIdx),
+      imageSitemapsIndex: path.relative(process.cwd(), imgSitemapsIdx),
+      docsIndex: path.relative(process.cwd(), docsIndexPath),
+      urlmeta: path.relative(process.cwd(), urlMetaPath),
+      blacklist: path.relative(process.cwd(), blacklistPath),
+      bloom: path.relative(process.cwd(), bloomPath),
+      summary: path.relative(process.cwd(), summaryPath),
+    },
+    totals: {
+      items: totalItems,
+      pages: pagesSet.size,
+      byLocale: sortObj(localeCounts),
+      byHost: sortObj(hostCounts),
+      sitemaps: sitemapsLog.length,
+      ok: sitemapsLog.filter((s) => s.ok).length,
+      failures: 0 // failures array is now implicit in per-sitemap status; we log only terminal ones above
+    },
+    sitemaps: sitemapsLog.sort((a, b) => (a.host || "").localeCompare(b.host || "") || a.url.localeCompare(b.url))
+  };
+  await saveJson(summaryPath, summary);
+
+  console.log(`\nSaved summary → ${path.relative(process.cwd(), summaryPath)}`);
+  console.log(`Items: ${summary.totals.items.toLocaleString()} • Pages: ${summary.totals.pages.toLocaleString()} • OK: ${summary.totals.ok}/${summary.totals.sitemaps}`);
+}
+
+main().catch((err) => { console.error(err); process.exitCode = 1; });

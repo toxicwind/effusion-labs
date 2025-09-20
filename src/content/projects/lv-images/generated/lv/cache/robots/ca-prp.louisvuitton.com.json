@@ -1,0 +1,1183 @@
+{
+  "byAgent": {
+    "*": {
+      "allow": [],
+      "disallow": [],
+      "noindex": [],
+      "crawlDelay": null,
+      "sitemaps": [],
+      "host": null,
+      "cleanParam": [],
+      "requestRate": null,
+      "visitTime": [],
+      "unknown": [
+        {
+          "k": "background-image",
+          "v": "url('https://ok9static.oktacdn.com/fs/bco/7/fs0vausxajKEFnnh7416')"
+        },
+        {
+          "k": "filter",
+          "v": "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='https://ok9static.oktacdn.com/fs/bco/7/fs0vausxajKEFnnh7416', sizingMethod='scale')"
+        },
+        {
+          "k": "border-radius",
+          "v": "6px;"
+        },
+        {
+          "k": "outline",
+          "v": "rgb(84, 107, 231) solid 1px;"
+        },
+        {
+          "k": "outline-offset",
+          "v": "2px;"
+        },
+        {
+          "k": "text-decoration",
+          "v": "none !important;"
+        },
+        {
+          "k": "locale",
+          "v": "'en',"
+        },
+        {
+          "k": "deployenv",
+          "v": "'PROD'"
+        },
+        {
+          "k": "sentrydsn",
+          "v": "'https://728f6bd7e621314e88a26d7337d3fd61@o101443.ingest.sentry.io/4507506066849792',"
+        },
+        {
+          "k": "orgid",
+          "v": "'00odk223j3l2rK1ws416',"
+        },
+        {
+          "k": "iscustomdomain",
+          "v": "false,"
+        },
+        {
+          "k": "deployenv",
+          "v": "window.okta && window.okta.deployEnv,"
+        },
+        {
+          "k": "appname",
+          "v": "'okta-hosted-siw',"
+        },
+        {
+          "k": "teamname",
+          "v": "'951953394',"
+        },
+        {
+          "k": "ignoreerrortypes",
+          "v": "'[]',"
+        },
+        {
+          "k": "ignoreerrors",
+          "v": "'[]',"
+        },
+        {
+          "k": "filenamesallowlist",
+          "v": "'[\"okta-sign-in.min.js\",\"okta-sign-in.next.js\"]',"
+        },
+        {
+          "k": "tracessamplerate",
+          "v": "'0'"
+        },
+        {
+          "k": "padding",
+          "v": "20px;"
+        },
+        {
+          "k": "border",
+          "v": "1px solid #ddd;"
+        },
+        {
+          "k": "background-color",
+          "v": "#f3fbff;"
+        },
+        {
+          "k": "position",
+          "v": "relative;"
+        },
+        {
+          "k": "width",
+          "v": "735px;"
+        },
+        {
+          "k": "margin",
+          "v": "0 auto;"
+        },
+        {
+          "k": "text-align",
+          "v": "left;"
+        },
+        {
+          "k": "vertical-align",
+          "v": "top;"
+        },
+        {
+          "k": "margin-right",
+          "v": "20px;"
+        },
+        {
+          "k": "display",
+          "v": "inline-block;"
+        },
+        {
+          "k": "position",
+          "v": "static !important;"
+        },
+        {
+          "k": "text-decoration",
+          "v": "underline;"
+        },
+        {
+          "k": "background-color",
+          "v": "#fff;"
+        },
+        {
+          "k": "border-color",
+          "v": "#ddd #ddd #d8d8d8;"
+        },
+        {
+          "k": "box-shadow",
+          "v": "0 2px 0 rgba(175, 175, 175, 0.12);"
+        },
+        {
+          "k": "text-align",
+          "v": "center;"
+        },
+        {
+          "k": "width",
+          "v": "398px;"
+        },
+        {
+          "k": "min-width",
+          "v": "300px;"
+        },
+        {
+          "k": "margin",
+          "v": "200px auto;"
+        },
+        {
+          "k": "border-radius",
+          "v": "3px;"
+        },
+        {
+          "k": "border-width",
+          "v": "1px;"
+        },
+        {
+          "k": "border-style",
+          "v": "solid;"
+        },
+        {
+          "k": "padding",
+          "v": "42px;"
+        },
+        {
+          "k": "padding-bottom",
+          "v": "20px;"
+        },
+        {
+          "k": "padding-bottom",
+          "v": "25px;"
+        },
+        {
+          "k": "background",
+          "v": "transparent;"
+        },
+        {
+          "k": "box-shadow",
+          "v": "none;"
+        },
+        {
+          "k": "display",
+          "v": "table-cell;"
+        },
+        {
+          "k": "vertical-align",
+          "v": "middle;"
+        },
+        {
+          "k": "width",
+          "v": "314px;"
+        },
+        {
+          "k": "height",
+          "v": "50px;"
+        },
+        {
+          "k": "line-height",
+          "v": "36px;"
+        },
+        {
+          "k": "color",
+          "v": "#fff;"
+        },
+        {
+          "k": "background",
+          "v": "linear-gradient(#007dc1, #0073b2), #007dc1;"
+        },
+        {
+          "k": "border",
+          "v": "1px solid;"
+        },
+        {
+          "k": "border-color",
+          "v": "#004b75;"
+        },
+        {
+          "k": "border-bottom-color",
+          "v": "#00456a;"
+        },
+        {
+          "k": "box-shadow",
+          "v": "rgba(0, 0, 0, 0.15) 0 1px 0, rgba(255, 255, 255, 0.1) 0 1px 0 0 inset;"
+        },
+        {
+          "k": "-webkit-border-radius",
+          "v": "3px;"
+        },
+        {
+          "k": "border-radius",
+          "v": "3px;"
+        },
+        {
+          "k": "background",
+          "v": "#007dc1;"
+        },
+        {
+          "k": "cursor",
+          "v": "hand;"
+        },
+        {
+          "k": "text-decoration",
+          "v": "none;"
+        },
+        {
+          "k": "fromuri",
+          "v": "fromUri,"
+        },
+        {
+          "k": "repost",
+          "v": "repost,"
+        },
+        {
+          "k": "redirecturi",
+          "v": "redirectUri,"
+        },
+        {
+          "k": "backtosigninlink",
+          "v": "backToSignInLink,"
+        },
+        {
+          "k": "ismobileclientlogin",
+          "v": "false,"
+        },
+        {
+          "k": "ismobilesso",
+          "v": "false,"
+        },
+        {
+          "k": "disableipadcheck",
+          "v": "false,"
+        },
+        {
+          "k": "enableipadloginreload",
+          "v": "false,"
+        },
+        {
+          "k": "linkparams",
+          "v": "linkParams,"
+        },
+        {
+          "k": "haschromeosfeature",
+          "v": "false,"
+        },
+        {
+          "k": "showlinktoappstore",
+          "v": "false,"
+        },
+        {
+          "k": "accountchooserdiscoveryurl",
+          "v": "accountChooserDiscoveryUrl,"
+        },
+        {
+          "k": "mfaattestation",
+          "v": "hasMfaAttestationFeature,"
+        },
+        {
+          "k": "ispersonaloktaorg",
+          "v": "isPersonalOktaOrg,"
+        },
+        {
+          "k": "enrollingfactor",
+          "v": "'',"
+        },
+        {
+          "k": "statetokenexpiresat",
+          "v": "'2025\\x2D09\\x2D20T12\\x3A31\\x3A26.000Z',"
+        },
+        {
+          "k": "statetokenrefreshwindowms",
+          "v": "'7140000',"
+        },
+        {
+          "k": "orgsynctoaccountchooserenabled",
+          "v": "orgSyncToAccountChooserEnabled,"
+        },
+        {
+          "k": "inactivetab",
+          "v": "{"
+        },
+        {
+          "k": "enabled",
+          "v": "true,"
+        },
+        {
+          "k": "elementid",
+          "v": "'inactive-tab-main-div',"
+        },
+        {
+          "k": "avoidpagerefresh",
+          "v": "true"
+        },
+        {
+          "k": "signin",
+          "v": "{"
+        },
+        {
+          "k": "el",
+          "v": "'#signin-container',"
+        },
+        {
+          "k": "baseurl",
+          "v": "baseUrl,"
+        },
+        {
+          "k": "brandname",
+          "v": "'Okta',"
+        },
+        {
+          "k": "logo",
+          "v": "'https://ok9static.oktacdn.com/fs/bco/1/fs0hnxvy2iLvqORgA416',"
+        },
+        {
+          "k": "logotext",
+          "v": "'Louis\\x20Vuitton logo',"
+        },
+        {
+          "k": "helpsupportnumber",
+          "v": "orgSupportPhoneNumber,"
+        },
+        {
+          "k": "statetoken",
+          "v": "stateToken,"
+        },
+        {
+          "k": "username",
+          "v": "username,"
+        },
+        {
+          "k": "signoutlink",
+          "v": "signOutUrl,"
+        },
+        {
+          "k": "consent",
+          "v": "consentFunc,"
+        },
+        {
+          "k": "authscheme",
+          "v": "authScheme,"
+        },
+        {
+          "k": "relaystate",
+          "v": "fromUri,"
+        },
+        {
+          "k": "proxyidxresponse",
+          "v": "proxyIdxResponse,"
+        },
+        {
+          "k": "overrideexistingstatetoken",
+          "v": "overrideExistingStateToken,"
+        },
+        {
+          "k": "interstitialbeforeloginredirect",
+          "v": "'DEFAULT',"
+        },
+        {
+          "k": "idpdiscovery",
+          "v": "{"
+        },
+        {
+          "k": "requestcontext",
+          "v": "idpDiscoveryRequestContext"
+        },
+        {
+          "k": "features",
+          "v": "{"
+        },
+        {
+          "k": "router",
+          "v": "true,"
+        },
+        {
+          "k": "securityimage",
+          "v": "securityImage,"
+        },
+        {
+          "k": "rememberme",
+          "v": "rememberMe,"
+        },
+        {
+          "k": "autopush",
+          "v": "autoPush,"
+        },
+        {
+          "k": "webauthn",
+          "v": "webauthn,"
+        },
+        {
+          "k": "smsrecovery",
+          "v": "smsRecovery,"
+        },
+        {
+          "k": "callrecovery",
+          "v": "callRecovery,"
+        },
+        {
+          "k": "emailrecovery",
+          "v": "emailRecovery,"
+        },
+        {
+          "k": "selfserviceunlock",
+          "v": "selfServiceUnlock,"
+        },
+        {
+          "k": "multioptionalfactorenroll",
+          "v": "true,"
+        },
+        {
+          "k": "samedeviceovenrollmentenabled",
+          "v": "sameDeviceOVEnrollmentEnabled,"
+        },
+        {
+          "k": "devicefingerprinting",
+          "v": "true,"
+        },
+        {
+          "k": "usedevicefingerprintforsecurityimage",
+          "v": "true,"
+        },
+        {
+          "k": "tracktypingpattern",
+          "v": "false,"
+        },
+        {
+          "k": "hidesignoutlinkinmfa",
+          "v": "hideSignOutForMFA,"
+        },
+        {
+          "k": "hidebacktosigninforreset",
+          "v": "hideBackToSignInForReset,"
+        },
+        {
+          "k": "remembermyusernameonoie",
+          "v": "rememberMyUsernameOnOIE,"
+        },
+        {
+          "k": "engfastpassmultipleaccounts",
+          "v": "engFastpassMultipleAccounts,"
+        },
+        {
+          "k": "customexpiredpassword",
+          "v": "true,"
+        },
+        {
+          "k": "idpdiscovery",
+          "v": "idpDiscovery,"
+        },
+        {
+          "k": "passwordlessauth",
+          "v": "hasPasswordlessPolicy,"
+        },
+        {
+          "k": "consent",
+          "v": "hasOAuth2ConsentFeature,"
+        },
+        {
+          "k": "skipidpfactorverificationbtn",
+          "v": "hasSkipIdpFactorVerificationButton,"
+        },
+        {
+          "k": "showpasswordtoggleonsigninpage",
+          "v": "showPasswordToggleOnSignInPage,"
+        },
+        {
+          "k": "showidentifier",
+          "v": "showIdentifier,"
+        },
+        {
+          "k": "registration",
+          "v": "registration,"
+        },
+        {
+          "k": "redirectbyformsubmit",
+          "v": "redirectByFormSubmit,"
+        },
+        {
+          "k": "showpasswordrequirementsashtmllist",
+          "v": "showPasswordRequirementsAsHtmlList,"
+        },
+        {
+          "k": "showsessionrevocation",
+          "v": "showSessionRevocation"
+        },
+        {
+          "k": "assets",
+          "v": "{"
+        },
+        {
+          "k": "baseurl",
+          "v": "\"https\\x3A\\x2F\\x2Fok9static.oktacdn.com\\x2Fassets\\x2Fjs\\x2Fsdk\\x2Fokta\\x2Dsignin\\x2Dwidget\\x2F7.35.1\""
+        },
+        {
+          "k": "language",
+          "v": "okta.locale,"
+        },
+        {
+          "k": "custombuttons",
+          "v": "customButtons,"
+        },
+        {
+          "k": "piv",
+          "v": "pivProperties,"
+        },
+        {
+          "k": "helplinks",
+          "v": "{"
+        },
+        {
+          "k": "help",
+          "v": "'',"
+        },
+        {
+          "k": "forgotpassword",
+          "v": "'',"
+        },
+        {
+          "k": "unlock",
+          "v": "'',"
+        },
+        {
+          "k": "custom",
+          "v": "customLinks,"
+        },
+        {
+          "k": "factorpage",
+          "v": "factorPageCustomLink"
+        },
+        {
+          "k": "cspnonce",
+          "v": "window.cspNonce,"
+        },
+        {
+          "k": "hcaptcha",
+          "v": "hcaptcha,"
+        }
+      ]
+    }
+  },
+  "merged": {
+    "allow": [],
+    "disallow": [],
+    "noindex": [],
+    "crawlDelay": null,
+    "sitemaps": [],
+    "host": null,
+    "cleanParam": [],
+    "requestRate": null,
+    "visitTime": [],
+    "unknown": [
+      {
+        "k": "background-image",
+        "v": "url('https://ok9static.oktacdn.com/fs/bco/7/fs0vausxajKEFnnh7416')"
+      },
+      {
+        "k": "filter",
+        "v": "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='https://ok9static.oktacdn.com/fs/bco/7/fs0vausxajKEFnnh7416', sizingMethod='scale')"
+      },
+      {
+        "k": "border-radius",
+        "v": "6px;"
+      },
+      {
+        "k": "outline",
+        "v": "rgb(84, 107, 231) solid 1px;"
+      },
+      {
+        "k": "outline-offset",
+        "v": "2px;"
+      },
+      {
+        "k": "text-decoration",
+        "v": "none !important;"
+      },
+      {
+        "k": "locale",
+        "v": "'en',"
+      },
+      {
+        "k": "deployenv",
+        "v": "'PROD'"
+      },
+      {
+        "k": "sentrydsn",
+        "v": "'https://728f6bd7e621314e88a26d7337d3fd61@o101443.ingest.sentry.io/4507506066849792',"
+      },
+      {
+        "k": "orgid",
+        "v": "'00odk223j3l2rK1ws416',"
+      },
+      {
+        "k": "iscustomdomain",
+        "v": "false,"
+      },
+      {
+        "k": "deployenv",
+        "v": "window.okta && window.okta.deployEnv,"
+      },
+      {
+        "k": "appname",
+        "v": "'okta-hosted-siw',"
+      },
+      {
+        "k": "teamname",
+        "v": "'951953394',"
+      },
+      {
+        "k": "ignoreerrortypes",
+        "v": "'[]',"
+      },
+      {
+        "k": "ignoreerrors",
+        "v": "'[]',"
+      },
+      {
+        "k": "filenamesallowlist",
+        "v": "'[\"okta-sign-in.min.js\",\"okta-sign-in.next.js\"]',"
+      },
+      {
+        "k": "tracessamplerate",
+        "v": "'0'"
+      },
+      {
+        "k": "padding",
+        "v": "20px;"
+      },
+      {
+        "k": "border",
+        "v": "1px solid #ddd;"
+      },
+      {
+        "k": "background-color",
+        "v": "#f3fbff;"
+      },
+      {
+        "k": "position",
+        "v": "relative;"
+      },
+      {
+        "k": "width",
+        "v": "735px;"
+      },
+      {
+        "k": "margin",
+        "v": "0 auto;"
+      },
+      {
+        "k": "text-align",
+        "v": "left;"
+      },
+      {
+        "k": "vertical-align",
+        "v": "top;"
+      },
+      {
+        "k": "margin-right",
+        "v": "20px;"
+      },
+      {
+        "k": "display",
+        "v": "inline-block;"
+      },
+      {
+        "k": "position",
+        "v": "static !important;"
+      },
+      {
+        "k": "text-decoration",
+        "v": "underline;"
+      },
+      {
+        "k": "background-color",
+        "v": "#fff;"
+      },
+      {
+        "k": "border-color",
+        "v": "#ddd #ddd #d8d8d8;"
+      },
+      {
+        "k": "box-shadow",
+        "v": "0 2px 0 rgba(175, 175, 175, 0.12);"
+      },
+      {
+        "k": "text-align",
+        "v": "center;"
+      },
+      {
+        "k": "width",
+        "v": "398px;"
+      },
+      {
+        "k": "min-width",
+        "v": "300px;"
+      },
+      {
+        "k": "margin",
+        "v": "200px auto;"
+      },
+      {
+        "k": "border-radius",
+        "v": "3px;"
+      },
+      {
+        "k": "border-width",
+        "v": "1px;"
+      },
+      {
+        "k": "border-style",
+        "v": "solid;"
+      },
+      {
+        "k": "padding",
+        "v": "42px;"
+      },
+      {
+        "k": "padding-bottom",
+        "v": "20px;"
+      },
+      {
+        "k": "padding-bottom",
+        "v": "25px;"
+      },
+      {
+        "k": "background",
+        "v": "transparent;"
+      },
+      {
+        "k": "box-shadow",
+        "v": "none;"
+      },
+      {
+        "k": "display",
+        "v": "table-cell;"
+      },
+      {
+        "k": "vertical-align",
+        "v": "middle;"
+      },
+      {
+        "k": "width",
+        "v": "314px;"
+      },
+      {
+        "k": "height",
+        "v": "50px;"
+      },
+      {
+        "k": "line-height",
+        "v": "36px;"
+      },
+      {
+        "k": "color",
+        "v": "#fff;"
+      },
+      {
+        "k": "background",
+        "v": "linear-gradient(#007dc1, #0073b2), #007dc1;"
+      },
+      {
+        "k": "border",
+        "v": "1px solid;"
+      },
+      {
+        "k": "border-color",
+        "v": "#004b75;"
+      },
+      {
+        "k": "border-bottom-color",
+        "v": "#00456a;"
+      },
+      {
+        "k": "box-shadow",
+        "v": "rgba(0, 0, 0, 0.15) 0 1px 0, rgba(255, 255, 255, 0.1) 0 1px 0 0 inset;"
+      },
+      {
+        "k": "-webkit-border-radius",
+        "v": "3px;"
+      },
+      {
+        "k": "border-radius",
+        "v": "3px;"
+      },
+      {
+        "k": "background",
+        "v": "#007dc1;"
+      },
+      {
+        "k": "cursor",
+        "v": "hand;"
+      },
+      {
+        "k": "text-decoration",
+        "v": "none;"
+      },
+      {
+        "k": "fromuri",
+        "v": "fromUri,"
+      },
+      {
+        "k": "repost",
+        "v": "repost,"
+      },
+      {
+        "k": "redirecturi",
+        "v": "redirectUri,"
+      },
+      {
+        "k": "backtosigninlink",
+        "v": "backToSignInLink,"
+      },
+      {
+        "k": "ismobileclientlogin",
+        "v": "false,"
+      },
+      {
+        "k": "ismobilesso",
+        "v": "false,"
+      },
+      {
+        "k": "disableipadcheck",
+        "v": "false,"
+      },
+      {
+        "k": "enableipadloginreload",
+        "v": "false,"
+      },
+      {
+        "k": "linkparams",
+        "v": "linkParams,"
+      },
+      {
+        "k": "haschromeosfeature",
+        "v": "false,"
+      },
+      {
+        "k": "showlinktoappstore",
+        "v": "false,"
+      },
+      {
+        "k": "accountchooserdiscoveryurl",
+        "v": "accountChooserDiscoveryUrl,"
+      },
+      {
+        "k": "mfaattestation",
+        "v": "hasMfaAttestationFeature,"
+      },
+      {
+        "k": "ispersonaloktaorg",
+        "v": "isPersonalOktaOrg,"
+      },
+      {
+        "k": "enrollingfactor",
+        "v": "'',"
+      },
+      {
+        "k": "statetokenexpiresat",
+        "v": "'2025\\x2D09\\x2D20T12\\x3A31\\x3A26.000Z',"
+      },
+      {
+        "k": "statetokenrefreshwindowms",
+        "v": "'7140000',"
+      },
+      {
+        "k": "orgsynctoaccountchooserenabled",
+        "v": "orgSyncToAccountChooserEnabled,"
+      },
+      {
+        "k": "inactivetab",
+        "v": "{"
+      },
+      {
+        "k": "enabled",
+        "v": "true,"
+      },
+      {
+        "k": "elementid",
+        "v": "'inactive-tab-main-div',"
+      },
+      {
+        "k": "avoidpagerefresh",
+        "v": "true"
+      },
+      {
+        "k": "signin",
+        "v": "{"
+      },
+      {
+        "k": "el",
+        "v": "'#signin-container',"
+      },
+      {
+        "k": "baseurl",
+        "v": "baseUrl,"
+      },
+      {
+        "k": "brandname",
+        "v": "'Okta',"
+      },
+      {
+        "k": "logo",
+        "v": "'https://ok9static.oktacdn.com/fs/bco/1/fs0hnxvy2iLvqORgA416',"
+      },
+      {
+        "k": "logotext",
+        "v": "'Louis\\x20Vuitton logo',"
+      },
+      {
+        "k": "helpsupportnumber",
+        "v": "orgSupportPhoneNumber,"
+      },
+      {
+        "k": "statetoken",
+        "v": "stateToken,"
+      },
+      {
+        "k": "username",
+        "v": "username,"
+      },
+      {
+        "k": "signoutlink",
+        "v": "signOutUrl,"
+      },
+      {
+        "k": "consent",
+        "v": "consentFunc,"
+      },
+      {
+        "k": "authscheme",
+        "v": "authScheme,"
+      },
+      {
+        "k": "relaystate",
+        "v": "fromUri,"
+      },
+      {
+        "k": "proxyidxresponse",
+        "v": "proxyIdxResponse,"
+      },
+      {
+        "k": "overrideexistingstatetoken",
+        "v": "overrideExistingStateToken,"
+      },
+      {
+        "k": "interstitialbeforeloginredirect",
+        "v": "'DEFAULT',"
+      },
+      {
+        "k": "idpdiscovery",
+        "v": "{"
+      },
+      {
+        "k": "requestcontext",
+        "v": "idpDiscoveryRequestContext"
+      },
+      {
+        "k": "features",
+        "v": "{"
+      },
+      {
+        "k": "router",
+        "v": "true,"
+      },
+      {
+        "k": "securityimage",
+        "v": "securityImage,"
+      },
+      {
+        "k": "rememberme",
+        "v": "rememberMe,"
+      },
+      {
+        "k": "autopush",
+        "v": "autoPush,"
+      },
+      {
+        "k": "webauthn",
+        "v": "webauthn,"
+      },
+      {
+        "k": "smsrecovery",
+        "v": "smsRecovery,"
+      },
+      {
+        "k": "callrecovery",
+        "v": "callRecovery,"
+      },
+      {
+        "k": "emailrecovery",
+        "v": "emailRecovery,"
+      },
+      {
+        "k": "selfserviceunlock",
+        "v": "selfServiceUnlock,"
+      },
+      {
+        "k": "multioptionalfactorenroll",
+        "v": "true,"
+      },
+      {
+        "k": "samedeviceovenrollmentenabled",
+        "v": "sameDeviceOVEnrollmentEnabled,"
+      },
+      {
+        "k": "devicefingerprinting",
+        "v": "true,"
+      },
+      {
+        "k": "usedevicefingerprintforsecurityimage",
+        "v": "true,"
+      },
+      {
+        "k": "tracktypingpattern",
+        "v": "false,"
+      },
+      {
+        "k": "hidesignoutlinkinmfa",
+        "v": "hideSignOutForMFA,"
+      },
+      {
+        "k": "hidebacktosigninforreset",
+        "v": "hideBackToSignInForReset,"
+      },
+      {
+        "k": "remembermyusernameonoie",
+        "v": "rememberMyUsernameOnOIE,"
+      },
+      {
+        "k": "engfastpassmultipleaccounts",
+        "v": "engFastpassMultipleAccounts,"
+      },
+      {
+        "k": "customexpiredpassword",
+        "v": "true,"
+      },
+      {
+        "k": "idpdiscovery",
+        "v": "idpDiscovery,"
+      },
+      {
+        "k": "passwordlessauth",
+        "v": "hasPasswordlessPolicy,"
+      },
+      {
+        "k": "consent",
+        "v": "hasOAuth2ConsentFeature,"
+      },
+      {
+        "k": "skipidpfactorverificationbtn",
+        "v": "hasSkipIdpFactorVerificationButton,"
+      },
+      {
+        "k": "showpasswordtoggleonsigninpage",
+        "v": "showPasswordToggleOnSignInPage,"
+      },
+      {
+        "k": "showidentifier",
+        "v": "showIdentifier,"
+      },
+      {
+        "k": "registration",
+        "v": "registration,"
+      },
+      {
+        "k": "redirectbyformsubmit",
+        "v": "redirectByFormSubmit,"
+      },
+      {
+        "k": "showpasswordrequirementsashtmllist",
+        "v": "showPasswordRequirementsAsHtmlList,"
+      },
+      {
+        "k": "showsessionrevocation",
+        "v": "showSessionRevocation"
+      },
+      {
+        "k": "assets",
+        "v": "{"
+      },
+      {
+        "k": "baseurl",
+        "v": "\"https\\x3A\\x2F\\x2Fok9static.oktacdn.com\\x2Fassets\\x2Fjs\\x2Fsdk\\x2Fokta\\x2Dsignin\\x2Dwidget\\x2F7.35.1\""
+      },
+      {
+        "k": "language",
+        "v": "okta.locale,"
+      },
+      {
+        "k": "custombuttons",
+        "v": "customButtons,"
+      },
+      {
+        "k": "piv",
+        "v": "pivProperties,"
+      },
+      {
+        "k": "helplinks",
+        "v": "{"
+      },
+      {
+        "k": "help",
+        "v": "'',"
+      },
+      {
+        "k": "forgotpassword",
+        "v": "'',"
+      },
+      {
+        "k": "unlock",
+        "v": "'',"
+      },
+      {
+        "k": "custom",
+        "v": "customLinks,"
+      },
+      {
+        "k": "factorpage",
+        "v": "factorPageCustomLink"
+      },
+      {
+        "k": "cspnonce",
+        "v": "window.cspNonce,"
+      },
+      {
+        "k": "hcaptcha",
+        "v": "hcaptcha,"
+      }
+    ]
+  },
+  "lines": 441
+}

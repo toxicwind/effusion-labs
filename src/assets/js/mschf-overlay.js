@@ -115,6 +115,119 @@
     } catch {}
     return n
   }
+  const HYPERBRUT_PALETTES = [
+    {
+      name: 'acid-lab',
+      tokens: {
+        ink: '#f6f8ff',
+        'ink-soft': 'rgba(246, 248, 255, 0.68)',
+        grid: 'rgba(246, 248, 255, 0.12)',
+        'grid-alt': 'rgba(12, 247, 254, 0.14)',
+        pop: '#ff2e63',
+        'pop-alt': '#12fce6',
+        'pop-bold': '#f9ff33',
+        wire: 'rgba(255, 255, 255, 0.38)',
+        glow: 'rgba(255, 46, 99, 0.6)',
+        halo: 'rgba(12, 247, 254, 0.45)',
+        paper: 'rgba(10, 9, 23, 0.82)',
+        noise: '0.06',
+        shadow: 'rgba(0, 0, 0, 0.42)',
+        scan: 'rgba(12, 247, 254, 0.45)',
+        'scan-tail': 'rgba(255, 46, 99, 0.2)',
+        plate: 'rgba(12, 14, 25, 0.88)',
+        tape: '#111318',
+      },
+    },
+    {
+      name: 'infra-mag',
+      tokens: {
+        ink: '#fefcf8',
+        'ink-soft': 'rgba(254, 252, 248, 0.68)',
+        grid: 'rgba(254, 252, 248, 0.12)',
+        'grid-alt': 'rgba(255, 95, 163, 0.15)',
+        pop: '#ff4d5a',
+        'pop-alt': '#8c54ff',
+        'pop-bold': '#00f6ff',
+        wire: 'rgba(255, 200, 200, 0.42)',
+        glow: 'rgba(255, 77, 90, 0.62)',
+        halo: 'rgba(140, 84, 255, 0.55)',
+        paper: 'rgba(22, 6, 24, 0.82)',
+        noise: '0.05',
+        shadow: 'rgba(0, 0, 0, 0.5)',
+        scan: 'rgba(255, 77, 90, 0.45)',
+        'scan-tail': 'rgba(140, 84, 255, 0.2)',
+        plate: 'rgba(28, 10, 47, 0.9)',
+        tape: '#1a0f26',
+      },
+    },
+    {
+      name: 'proto-cyan',
+      tokens: {
+        ink: '#f5fffb',
+        'ink-soft': 'rgba(245, 255, 251, 0.7)',
+        grid: 'rgba(245, 255, 251, 0.11)',
+        'grid-alt': 'rgba(0, 255, 188, 0.18)',
+        pop: '#00ffbc',
+        'pop-alt': '#ff6ad5',
+        'pop-bold': '#f9ff6a',
+        wire: 'rgba(150, 255, 230, 0.4)',
+        glow: 'rgba(0, 255, 188, 0.52)',
+        halo: 'rgba(255, 106, 213, 0.38)',
+        paper: 'rgba(5, 14, 12, 0.85)',
+        noise: '0.045',
+        shadow: 'rgba(0, 0, 0, 0.4)',
+        scan: 'rgba(0, 255, 188, 0.45)',
+        'scan-tail': 'rgba(255, 106, 213, 0.25)',
+        plate: 'rgba(8, 24, 24, 0.88)',
+        tape: '#041814',
+      },
+    },
+    {
+      name: 'hazard-sonar',
+      tokens: {
+        ink: '#fcf7ff',
+        'ink-soft': 'rgba(252, 247, 255, 0.7)',
+        grid: 'rgba(252, 247, 255, 0.1)',
+        'grid-alt': 'rgba(255, 195, 0, 0.22)',
+        pop: '#ffc300',
+        'pop-alt': '#ff005c',
+        'pop-bold': '#6efff0',
+        wire: 'rgba(255, 195, 0, 0.5)',
+        glow: 'rgba(255, 0, 92, 0.55)',
+        halo: 'rgba(255, 195, 0, 0.45)',
+        paper: 'rgba(20, 6, 6, 0.82)',
+        noise: '0.05',
+        shadow: 'rgba(0, 0, 0, 0.55)',
+        scan: 'rgba(255, 195, 0, 0.42)',
+        'scan-tail': 'rgba(255, 0, 92, 0.22)',
+        plate: 'rgba(32, 12, 12, 0.88)',
+        tape: '#1a0909',
+      },
+    },
+  ]
+  const pickPalette = () => {
+    const base = { ...pick(HYPERBRUT_PALETTES) }
+    const tokens = { ...(base.tokens || {}) }
+    if (Math.random() < 0.35) {
+      ;[tokens.pop, tokens['pop-alt']] = [tokens['pop-alt'], tokens.pop]
+    }
+    if (Math.random() < 0.25) {
+      tokens['pop-bold'] = tokens['pop-alt'] || tokens.pop
+    }
+    return {
+      name: base.name,
+      tokens,
+      seed: Math.random().toString(16).slice(2, 6),
+    }
+  }
+  const applyPaletteTokens = root => {
+    if (!root || !State || !State.palette) return
+    root.dataset.mschfPalette = State.palette.name || ''
+    root.dataset.mschfPaletteSeed = State.palette.seed || ''
+    for (const [key, value] of Object.entries(State.palette.tokens || {})) {
+      if (value != null) root.style.setProperty(`--mschf-${key}`, value)
+    }
+  }
 
   // External dep loader (PixiJS v8)
   async function loadPixi() {
@@ -172,6 +285,7 @@
     root: null,
     domLayer: null,
     app: null,
+    palette: pickPalette(),
     style: scope.dataset.mschfStyle || 'auto',
     densityToken: scope.dataset.mschfDensity || 'calm',
     density: 0.38, // gentler default
@@ -299,6 +413,7 @@
       DEBUG
         && log('Reusing overlay root', { childCount: root.childElementCount })
     }
+    if (!State.palette) State.palette = pickPalette()
     css(root, {
       pointerEvents: 'none',
       userSelect: 'none',
@@ -316,6 +431,7 @@
     })
     root.setAttribute('aria-hidden', 'true')
     root.dataset.mschfSession = SID
+    applyPaletteTokens(root)
     if (root.childElementCount) {
       DEBUG && warn('Root was not empty before mount; clearing')
     }
@@ -358,6 +474,7 @@
     State.domLayer = domLayer
     State.labelLayer = labelLayer
     State.hud = hud
+    applyPaletteTokens(State.root)
     if (DEBUG && 'MutationObserver' in window) {
       const mo = new MutationObserver(muts => {
         let added = 0,
@@ -1589,64 +1706,100 @@
 
   const graphMeta = { affinity: 'gutters', complexity: 5 }
   A.graph = () => {
-    let cluster,
-      nodes = [],
-      edges = []
+    let cluster
+    const nodes = []
+    const edges = []
+
+    const jitterNode = (node, scale = 1) => {
+      if (!node || !node.el) return
+      const amp = 22 + Math.random() * 42
+      node.x = clamp(
+        node.x + (Math.random() - 0.5) * amp * 0.06 * scale,
+        12,
+        innerWidth - 12,
+      )
+      node.y = clamp(
+        node.y + (Math.random() - 0.5) * amp * 0.06 * scale,
+        12,
+        innerHeight - 12,
+      )
+      node.el.style.left = `${node.x}px`
+      node.el.style.top = `${node.y}px`
+    }
+
+    const syncEdge = edge => {
+      if (!edge || !edge.el || !edge.from || !edge.to) return
+      const dx = edge.to.x - edge.from.x
+      const dy = edge.to.y - edge.from.y
+      const len = Math.hypot(dx, dy)
+      const angle = Math.atan2(dy, dx) * (180 / Math.PI)
+      edge.el.style.left = `${edge.from.x}px`
+      edge.el.style.top = `${edge.from.y}px`
+      edge.el.style.width = `${Math.max(1, len)}px`
+      edge.el.style.transform = `translate3d(0,0,0) rotate(${angle}deg)`
+    }
+
+    const spawnNode = () => {
+      if (!cluster) return null
+      const nodeEl = el('span', 'mschf-graph-node', cluster)
+      const x = clamp(Math.random() * innerWidth, 24, innerWidth - 24)
+      const y = clamp(Math.random() * innerHeight, 24, innerHeight - 24)
+      nodeEl.style.left = `${x}px`
+      nodeEl.style.top = `${y}px`
+      nodeEl.dataset.variant = pick(['solid', 'ring', 'pulse'])
+      nodeEl.style.setProperty('--scale', (0.85 + Math.random() * 0.5).toFixed(2))
+      const node = { el: nodeEl, x, y }
+      nodes.push(node)
+      return node
+    }
+
+    const spawnEdge = () => {
+      if (!cluster || nodes.length < 2) return null
+      const edgeEl = el('i', 'mschf-graph-edge', cluster)
+      const from = pick(nodes)
+      let to = pick(nodes)
+      if (to === from) {
+        to = nodes[(nodes.indexOf(from) + 1) % nodes.length]
+      }
+      edgeEl.style.setProperty('--pulse', (0.4 + Math.random() * 0.5).toFixed(2))
+      const edge = { el: edgeEl, from, to }
+      edges.push(edge)
+      syncEdge(edge)
+      return edge
+    }
+
     return {
       kind: 'graph',
       cost: 2,
       ...graphMeta,
       mount(p) {
         cluster = el('div', 'mschf-graph', p)
-        const n = 4
-          + Math.floor(Math.random() * (/(loud|storm)/.test(State.mood) ? 8 : 6))
-        for (let i = 0; i < n; i++) {
-          const s = el('span', 'mschf-graph-node', cluster)
-          s.style.setProperty('--x', `${Math.random() * 100}vw`)
-          s.style.setProperty('--y', `${Math.random() * 100}vh`)
-          nodes.push(s)
-        }
-        const m = 2 + Math.floor(Math.random() * 4)
-        for (let i = 0; i < m; i++) {
-          const e = el('i', 'mschf-graph-edge', cluster)
-          e.style.setProperty('--x1', `${Math.random() * 100}vw`)
-          e.style.setProperty('--y1', `${Math.random() * 100}vh`)
-          e.style.setProperty('--x2', `${Math.random() * 100}vw`)
-          e.style.setProperty('--y2', `${Math.random() * 100}vh`)
-          edges.push(e)
-        }
+        const nodeCount = 4
+          + Math.floor(Math.random() * (/(loud|storm)/.test(State.mood) ? 8 : 5))
+        for (let i = 0; i < nodeCount; i++) spawnNode()
+        const edgeCount = Math.min(nodes.length, 3 + Math.floor(Math.random() * 4))
+        for (let i = 0; i < edgeCount; i++) spawnEdge()
       },
-      update() {
+      update(t, dt = 16) {
         if (State.reduceMotion) return
-        for (const s of nodes) {
-          const x = parseFloat(s.style.getPropertyValue('--x') || '0vw')
-            || Math.random() * 100
-          const y = parseFloat(s.style.getPropertyValue('--y') || '0vh')
-            || Math.random() * 100
-          const nx = clamp(
-            x + (Math.random() - 0.5) * 0.5 * State.tempo,
-            0,
-            100,
-          )
-          const ny = clamp(
-            y + (Math.random() - 0.5) * 0.5 * State.tempo,
-            0,
-            100,
-          )
-          s.style.setProperty('--x', `${nx}vw`)
-          s.style.setProperty('--y', `${ny}vh`)
-        }
-        if (Math.random() < 0.015 * State.tempo) {
-          const e = pick(edges)
-          if (e) {
-            e.style.setProperty('--x2', `${Math.random() * 100}vw`)
-            e.style.setProperty('--y2', `${Math.random() * 100}vh`)
+        const scale = clamp(dt / 16, 0.25, 3) * (State.tempo || 1)
+        for (const node of nodes) jitterNode(node, scale)
+        if (Math.random() < 0.12 * State.tempo) {
+          const edge = pick(edges)
+          if (edge && nodes.length > 1) {
+            edge.to = pick(nodes)
+            if (edge.to === edge.from) {
+              edge.to = nodes[(nodes.indexOf(edge.from) + 1) % nodes.length]
+            }
           }
         }
+        for (const edge of edges) syncEdge(edge)
       },
       node: {
         remove() {
-          cluster.remove()
+          cluster?.remove()
+          nodes.length = 0
+          edges.length = 0
         },
       },
     }
@@ -2234,6 +2387,10 @@
     C.recompose++
     resetOccupancy()
     computeContext()
+    if (Math.random() < 0.22) {
+      State.palette = pickPalette()
+      applyPaletteTokens(State.root)
+    }
     const kindsSummary = fam => {
       const m = Object.create(null)
       for (const a of State.families[fam]) {
@@ -2731,6 +2888,22 @@
   window.__mschfDensity = x => {
     State.density = clamp(+x || State.density, 0.1, 0.9)
     recompose()
+  }
+  window.__mschfPalette = name => {
+    let target = null
+    if (name) {
+      const key = String(name).toLowerCase()
+      target = HYPERBRUT_PALETTES.find(p => p.name === key) || null
+    }
+    State.palette = target
+      ? {
+        name: target.name,
+        tokens: { ...(target.tokens || {}) },
+        seed: Math.random().toString(16).slice(2, 6),
+      }
+      : pickPalette()
+    if (State.root) applyPaletteTokens(State.root)
+    return State.palette
   }
   window.__mschfMask = (on = 1) => {
     State.gpu.maskOn = !!+on

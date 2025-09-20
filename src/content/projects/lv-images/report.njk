@@ -1,0 +1,349 @@
+---
+title: LV Image Atlas — Report
+permalink: /lv/report/
+---
+
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>{{ title }}</title>
+<style>
+:root{ --bg:#0b0f14; --panel:#10161c; --muted:#9fb0c3; --text:#e6edf3; --brand:#6aa6ff;
+  --ok:#26c281; --warn:#ffb020; --bad:#ff5d5d; --border:#1a2330; }
+*{box-sizing:border-box}
+body{margin:0; background:var(--bg); color:var(--text);
+  font:14px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,'Helvetica Neue',Arial}
+a{color:var(--brand); text-decoration:none} a:hover{text-decoration:underline}
+.header{position:sticky; top:0; z-index:20; background:linear-gradient(180deg, rgba(11,15,20,.95), rgba(11,15,20,.75));
+  border-bottom:1px solid var(--border); backdrop-filter: blur(6px)}
+.wrap{max-width:1200px; margin:0 auto; padding:16px 20px}
+.hstack{display:flex; align-items:center; gap:12px; flex-wrap:wrap}
+.title{font-size:20px; font-weight:700}
+.badge{display:inline-block; padding:4px 8px; border-radius:999px; background:#0c1219; border:1px solid var(--border); color:#c9d6e2; font-size:12px}
+.badge.ok{background:rgba(38,194,129,.12); color:#8cf0c8; border-color:rgba(38,194,129,.45)}
+.badge.bad{background:rgba(255,93,93,.12); color:#ffb3b3; border-color:rgba(255,93,93,.45)}
+.section{margin:22px 0} .section h2{font-size:16px; margin:0 0 10px 0; color:#d6e2f0}
+.card{background:var(--panel); border:1px solid var(--border); border-radius:16px; padding:12px}
+.table{width:100%; border-collapse:separate; border-spacing:0}
+.table th,.table td{padding:10px 12px; text-align:left; border-bottom:1px solid var(--border)}
+.table thead th{position:sticky; top:64px; background:var(--panel); z-index:5; font-size:12px; color:#c9d6e2; text-transform:uppercase; letter-spacing:.03em}
+.table tbody tr:hover{background:#0f1720}
+.input{padding:9px 12px; background:#0c1219; border:1px solid var(--border); color:#fff; border-radius:10px; width:320px}
+.pill{padding:6px 10px; border:1px solid var(--border); background:#0c1219; color:#cfe3ff; border-radius:999px; cursor:pointer}
+.pill.active{background:#0f1620; border-color:#24405e}
+.grid{display:grid; grid-template-columns:repeat(6,1fr); gap:8px}
+.thumb{position:relative; border-radius:12px; overflow:hidden; background:#0c1219; border:1px solid var(--border); aspect-ratio:1/1}
+.thumb img{width:100%; height:100%; object-fit:cover; display:block}
+.small{font-size:12px; color:var(--muted)}
+.rule-list{display:flex; gap:6px; flex-wrap:wrap}
+.rule{display:inline-flex; align-items:center; gap:6px; font-size:12px; background:#0c1219; border:1px solid var(--border);
+  padding:4px 8px; border-radius:999px}
+.grid-robots{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px}
+@media (max-width: 1000px){ .grid-robots{grid-template-columns:1fr} }
+details summary{cursor:pointer; outline:none}
+pre.raw{max-height:320px; overflow:auto; background:#0b1218; border:1px solid var(--border); padding:10px; border-radius:10px; color:#b9cadd; white-space:pre-wrap}
+.typechip{display:inline-block; padding:4px 8px; border-radius:999px; background:#0c1219; border:1px solid var(--border); font-size:12px; color:#c9d6e2}
+</style>
+</head>
+<body>
+<header class="header">
+  <div class="wrap hstack">
+    <div class="title">LV Image Atlas — Report</div>
+    <div class="hstack">
+      <span class="badge">Generated: {{ lvreport.summary.generatedAt or "n/a" }}</span>
+      <span class="badge">Version: {{ lvreport.summary.version or "n/a" }}</span>
+      <span class="badge">Items: {{ lvreport.summary.totals.items or 0 }}</span>
+      <span class="badge">Pages: {{ lvreport.summary.totals.pages or 0 }}</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="section">
+    <h2>Hosts & Sitemaps</h2>
+    <div class="card">
+      <div class="hstack" style="gap:10px;margin-bottom:8px">
+        <input id="sitemapFilter" class="input" placeholder="Filter by host / URL…">
+        <div id="typeChips" class="hstack" style="gap:6px;flex-wrap:wrap"></div>
+        <button class="pill" id="exportSitemaps">Export CSV</button>
+      </div>
+      <table class="table" id="sitemapsTable">
+        <thead><tr><th>Host</th><th>Type</th><th>Images</th><th>Status</th><th>Live URL</th><th>Cached</th></tr></thead>
+        <tbody>
+        {% for r in lvreport.sitemaps %}
+          <tr data-type="{{ r.type }}">
+            <td>{{ r.host }}</td>
+            <td><span class="typechip">{{ r.type }}</span></td>
+            <td>{{ r.imageCount }}</td>
+            <td>{{ r.status }}</td>
+            <td><a href="{{ r.url }}" target="_blank" rel="noreferrer">{{ r.url }}</a></td>
+            <td>
+              {% if r.savedPath %}
+                <a href="{{ lvreport.baseHref }}{{ r.savedPath }}" target="_blank" rel="noreferrer">open</a>
+              {% else %}—{% endif %}
+            </td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>Robots Explorer (full content)</h2>
+    <div class="card">
+      <div class="hstack" style="gap:10px;margin-bottom:8px">
+        <input id="robotsFilter" class="input" placeholder="Filter by host / content…">
+        <button class="pill" id="toggleBlacklisted">Toggle blacklisted</button>
+      </div>
+      <div id="robotsContainer">
+        {% for r in lvreport.robots %}
+        <div class="card robots-card" data-host="{{ r.host }}" data-blacklisted="{% if r.blacklisted %}1{% else %}0{% endif %}">
+          <div class="hstack" style="justify-content:space-between;gap:10px;margin-bottom:6px">
+            <div class="hstack" style="gap:8px">
+              <div style="font-weight:700">{{ r.host }}</div>
+              <div class="hstack" style="gap:6px;flex-wrap:wrap">
+                <span class="badge">{% if r.hasCached %}cached{% else %}no cache{% endif %}</span>
+                {% if r.blacklisted %}
+                  <span class="badge bad">blacklisted {{ r.blacklistReason or "" }}</span>
+                {% else %}
+                  <span class="badge ok">ok</span>
+                {% endif %}
+                {% if r.parsed.merged.crawlDelay is not none %}
+                  <span class="badge">delay {{ r.parsed.merged.crawlDelay }}</span>
+                {% endif %}
+                <span class="badge">lines {{ r.linesTotal }}</span>
+              </div>
+            </div>
+            <div class="hstack" style="gap:8px">
+              <a href="https://{{ r.host }}/robots.txt" target="_blank" rel="noreferrer">robots.txt (live)</a>
+              {% if r.robotsTxtPath %} · <a href="{{ lvreport.baseHref }}{{ r.robotsTxtPath }}" target="_blank" rel="noreferrer">cached</a>{% endif %}
+            </div>
+          </div>
+
+          {% if r.parsed.merged.disallow.length %}
+          <div style="margin:6px 0 10px 0">
+            <div class="small" style="margin-bottom:6px;opacity:.9">Disallow</div>
+            <div class="rule-list">
+              {% for p in r.parsed.merged.disallow %}
+                {% if '://' in p %}
+                  {% set link = p %}
+                {% else %}
+                  {% if p and p[0] == '/' %}
+                    {% set link = 'https://' ~ r.host ~ p %}
+                  {% else %}
+                    {% set link = 'https://' ~ r.host ~ '/' ~ p %}
+                  {% endif %}
+                {% endif %}
+                <span class="rule">disallow · <a href="{{ link }}" target="_blank" rel="noreferrer">{{ p }}</a></span>
+              {% endfor %}
+            </div>
+          </div>
+          {% endif %}
+
+          {% if r.parsed.merged.allow.length %}
+          <div style="margin:6px 0 10px 0">
+            <div class="small" style="margin-bottom:6px;opacity:.9">Allow</div>
+            <div class="rule-list">
+              {% for p in r.parsed.merged.allow %}
+                {% if '://' in p %}
+                  {% set link = p %}
+                {% else %}
+                  {% if p and p[0] == '/' %}
+                    {% set link = 'https://' ~ r.host ~ p %}
+                  {% else %}
+                    {% set link = 'https://' ~ r.host ~ '/' ~ p %}
+                  {% endif %}
+                {% endif %}
+                <span class="rule">allow · <a href="{{ link }}" target="_blank" rel="noreferrer">{{ p }}</a></span>
+              {% endfor %}
+            </div>
+          </div>
+          {% endif %}
+
+          {% if r.parsed.merged.noindex.length %}
+          <div style="margin:6px 0 10px 0">
+            <div class="small" style="margin-bottom:6px;opacity:.9">Noindex</div>
+            <div class="rule-list">
+              {% for p in r.parsed.merged.noindex %}
+                {% if '://' in p %}
+                  {% set link = p %}
+                {% else %}
+                  {% if p and p[0] == '/' %}
+                    {% set link = 'https://' ~ r.host ~ p %}
+                  {% else %}
+                    {% set link = 'https://' ~ r.host ~ '/' ~ p %}
+                  {% endif %}
+                {% endif %}
+                <span class="rule">noindex · <a href="{{ link }}" target="_blank" rel="noreferrer">{{ p }}</a></span>
+              {% endfor %}
+            </div>
+          </div>
+          {% endif %}
+
+          {% if r.parsed.merged.sitemaps.length %}
+          <div class="small" style="margin-top:6px">
+            Sitemaps declared:
+            {% for u in r.parsed.merged.sitemaps %}
+              <a href="{{ u }}" target="_blank" rel="noreferrer">{{ u }}</a>{% if not loop.last %} · {% endif %}
+            {% endfor %}
+          </div>
+          {% endif %}
+
+          {% if r.parsed.other and (r.parsed.other|length) %}
+          <div class="small" style="margin-top:6px">
+            Other directives:
+            {% for k, vals in r.parsed.other %}
+              <span class="badge" style="margin-right:6px">{{ k }}: {{ vals | join(' · ') }}</span>
+            {% endfor %}
+          </div>
+          {% endif %}
+
+          {% if r.hasCached %}
+          <details style="margin-top:8px">
+            <summary>Show raw robots.txt</summary>
+            <pre class="raw">{{ r.rawText }}</pre>
+          </details>
+          {% else %}
+          <div class="small" style="margin-top:6px;opacity:.8">No cached robots.txt. Use the live link above.</div>
+          {% endif %}
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>All saved XML/TXT</h2>
+    <div class="card">
+      <div class="hstack" style="gap:10px;margin-bottom:8px">
+        <input id="docsFilter" class="input" placeholder="Filter host / URL / content-type…">
+        <button class="pill" id="exportDocs">Export CSV</button>
+      </div>
+      <table class="table" id="docsTable">
+        <thead><tr><th>Host</th><th>Kind</th><th>Status</th><th>Content-Type</th><th>Live URL</th><th>Cached</th></tr></thead>
+        <tbody>
+          {% for d in lvreport.docs %}
+          <tr>
+            <td>{{ d.host }}</td>
+            <td>{{ d.kind }}</td>
+            <td>{{ d.status }}</td>
+            <td>{{ d.contentType }}</td>
+            <td>{% if d.url %}<a href="{{ d.url }}" target="_blank" rel="noreferrer">{{ d.url }}</a>{% else %}—{% endif %}</td>
+            <td>{% if d.savedPath %}<a href="{{ lvreport.baseHref }}{{ d.savedPath }}" target="_blank" rel="noreferrer">open</a>{% else %}—{% endif %}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <div class="small" style="margin-top:8px">All cached docs under <code>generated/lv/cache/sitemaps/</code>.</div>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>Image sample</h2>
+    <div class="card">
+      <div class="grid">
+        {% for i in lvreport.sample %}
+          <a class="thumb" href="{{ i.src }}" target="_blank" title="{{ i.title or i.src }}">
+            <img loading="lazy" src="{{ i.src }}" alt="">
+          </a>
+        {% endfor %}
+      </div>
+      <div class="small" style="margin-top:10px">Showing {{ lvreport.sample.length }} sample images from NDJSON shards.</div>
+    </div>
+  </section>
+
+</main>
+
+<script>
+(function(){
+  const TYPES = ["image","product","content","catalog","index","other"];
+  const chips = document.getElementById('typeChips');
+  const active = new Set(TYPES);
+  TYPES.forEach(function(t){
+    const b = document.createElement('button');
+    b.className = 'pill active'; b.textContent = t; b.dataset.type = t;
+    b.addEventListener('click', function(){
+      if (active.has(t)) { active.delete(t); b.classList.remove('active'); }
+      else { active.add(t); b.classList.add('active'); }
+      filterSitemaps();
+    });
+    chips.appendChild(b);
+  });
+
+  function filterSitemaps() {
+    const q = (document.getElementById('sitemapFilter').value || '').toLowerCase();
+    document.querySelectorAll('#sitemapsTable tbody tr').forEach(function(tr){
+      const text = tr.innerText.toLowerCase();
+      const type = tr.getAttribute('data-type');
+      const okType = active.has(type);
+      const okText = !q || text.indexOf(q) !== -1;
+      tr.style.display = (okType && okText) ? '' : 'none';
+    });
+  }
+  document.getElementById('sitemapFilter').addEventListener('input', filterSitemaps);
+
+  function toCSV(rows) {
+    function esc(v){ if (v==null) return ''; var s=String(v).replace(/"/g,'""'); return /[",\n]/.test(s) ? ('"' + s + '"') : s; }
+    return rows.map(function(r){ return r.map(esc).join(','); }).join('\n');
+  }
+
+  document.getElementById('exportSitemaps').addEventListener('click', function(){
+    const rows = [["Host","Type","Images","Status","URL","Cached"]];
+    document.querySelectorAll('#sitemapsTable tbody tr').forEach(function(tr){
+      if (tr.style.display === 'none') return;
+      const tds = tr.querySelectorAll('td');
+      rows.push([tds[0].innerText, tds[1].innerText, tds[2].innerText, tds[3].innerText, tds[4].innerText, tds[5].innerText]);
+    });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([toCSV(rows)], {type:"text/csv"}));
+    a.download = "sitemaps.csv"; a.click();
+  });
+
+  // Robots filter + blacklist toggle
+  var showBL = true;
+  function filterRobots(){
+    const q = (document.getElementById('robotsFilter').value || '').toLowerCase();
+    document.querySelectorAll('.robots-card').forEach(function(card){
+      const bl = card.getAttribute('data-blacklisted') === '1';
+      const hay = card.innerText.toLowerCase();
+      const okText = !q || hay.indexOf(q) !== -1;
+      const okBL = showBL || !bl;
+      card.style.display = (okText && okBL) ? '' : 'none';
+    });
+  }
+  document.getElementById('robotsFilter').addEventListener('input', filterRobots);
+  document.getElementById('toggleBlacklisted').addEventListener('click', function(){
+    showBL = !showBL; filterRobots();
+  });
+
+  // Docs filter and export
+  function filterDocs(){
+    const q = (document.getElementById('docsFilter').value || '').toLowerCase();
+    document.querySelectorAll('#docsTable tbody tr').forEach(function(tr){
+      const ok = !q || tr.innerText.toLowerCase().indexOf(q) !== -1;
+      tr.style.display = ok ? '' : 'none';
+    });
+  }
+  document.getElementById('docsFilter').addEventListener('input', filterDocs);
+  document.getElementById('exportDocs').addEventListener('click', function(){
+    const rows = [["Host","Kind","Status","Content-Type","URL","Cached"]];
+    document.querySelectorAll('#docsTable tbody tr').forEach(function(tr){
+      if (tr.style.display === 'none') return;
+      const tds = tr.querySelectorAll('td');
+      rows.push([tds[0].innerText, tds[1].innerText, tds[2].innerText, tds[3].innerText, tds[4].innerText, tds[5].innerText]);
+    });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([toCSV(rows)], {type:"text/csv"}));
+    a.download = "docs.csv"; a.click();
+  });
+
+  // initial
+  filterSitemaps(); filterRobots(); filterDocs();
+})();
+</script>
+</body>
+</html>
