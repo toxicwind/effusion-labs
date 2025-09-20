@@ -16,25 +16,21 @@
 
     {# Canonical/OG (ensure absolute so Vite doesn't treat /resume/ like an asset) #}
     {% set canon = canonicalUrl or page.canonicalUrl or (page and page.url) %}
-    {% if canon and metadata and metadata.site and metadata.site.url %}
-      <link rel="canonical" href="{{ canon | url | absoluteUrl(metadata.site.url) }}" />
-      <meta property="og:url" content="{{ canon | url | absoluteUrl(metadata.site.url) }}" />
-    {% elif canon %}
-      <link rel="canonical" href="{{ canon | url }}" />
-      <meta property="og:url" content="{{ canon | url }}" />
+    {% set siteUrl = metadata and metadata.site and metadata.site.url %}
+    {% set canonicalHref = canon %}
+    {% if siteUrl and canonicalHref %}
+      {% set canonicalHref = canonicalHref | url | absoluteUrl(siteUrl) %}
+    {% endif %}
+    {% set canonicalIsAbsolute = canonicalHref and '://' in canonicalHref %}
+    {% if canonicalIsAbsolute %}
+      <link rel="canonical" href="{{ canonicalHref }}" data-vite-ignore />
+      <meta property="og:url" content="{{ canonicalHref }}" data-vite-ignore />
     {% endif %}
 
     {# Per-page head injections (redirects, robots, etc.) #}
     {{ headExtra | safe }}
 
     <script type="module" src="{{ '/assets/js/app.js' | url }}"></script>
-
-    <script src="{{ '/js/theme-utils.js' | url }}"></script>
-    <script>
-    try {
-      ThemeUtils && ThemeUtils.initEarly && ThemeUtils.initEarly()
-    } catch (_) {}
-    </script>
 
     {# Fonts #}
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -58,7 +54,5 @@
       {{ content | safe }}
     </main>
 
-    {# Theme toggle UI logic (button exists in the page) #}
-    <script type="module" src="{{ '/assets/js/theme-toggle.js' | url }}"></script>
   </body>
 </html>

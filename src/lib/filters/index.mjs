@@ -293,17 +293,48 @@ export function registerFilters(eleventyConfig) {
       const key = toPascal(name)
       const node = iconRegistry[key] || iconRegistry[name]
       if (!node) return ''
-      const attrsMerged = { ...defaultAttributes, ...attrs }
+
       const toAttrString = obj =>
         Object.entries(obj)
+          .filter(([, value]) => value !== undefined && value !== null && value !== false)
           .map(([k, v]) => `${k}="${escapeHtml(v)}"`)
           .join(' ')
-      const children = Array.isArray(node[2])
-        ? node[2]
-          .map(([tag, attr]) => `<${tag} ${toAttrString(attr)} />`)
+
+      const renderChildren = childNodes =>
+        (Array.isArray(childNodes) ? childNodes : [])
+          .map(entry => {
+            if (!Array.isArray(entry) || entry.length === 0) return ''
+            const [tag, attr = {}, nested] = entry
+            const rendered = renderChildren(nested)
+            const attrsHtml = toAttrString(attr)
+            const openTag = attrsHtml ? `<${tag} ${attrsHtml}` : `<${tag}`
+            if (rendered) {
+              return `${openTag}>${rendered}</${tag}>`
+            }
+            return `${openTag} />`
+          })
           .join('')
-        : ''
-      return `<svg ${toAttrString(attrsMerged)}>${children}</svg>`
+
+      let svgAttrs = { ...defaultAttributes, ...attrs }
+      let childEntries = []
+
+      if (Array.isArray(node) && node[0] === 'svg') {
+        // Legacy lucide signature: ['svg', attrs, children]
+        const [, iconAttrs, children] = node
+        svgAttrs = { ...defaultAttributes, ...(iconAttrs || {}), ...attrs }
+        childEntries = Array.isArray(children) ? children : []
+      } else if (Array.isArray(node)) {
+        // Modern lucide signature: array of child tuples
+        childEntries = node
+      } else if (Array.isArray(node?.iconNode)) {
+        // Catch-all for other shapes ({ iconNode: [...] })
+        childEntries = node.iconNode
+        if (node.attrs && typeof node.attrs === 'object') {
+          svgAttrs = { ...defaultAttributes, ...node.attrs, ...attrs }
+        }
+      }
+
+      return `<svg ${toAttrString(svgAttrs)}>${renderChildren(childEntries)}</svg>`
     } catch {
       return ''
     }

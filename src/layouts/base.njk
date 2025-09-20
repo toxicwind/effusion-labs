@@ -16,14 +16,18 @@
     <title>{{ title or 'Untitled' }} | Effusion Labs</title>
     {# Canonical/OG #}
     {% set canon = canonicalUrl or page.canonicalUrl %}
-    {% if canon %}
-      <link rel="canonical" href="{{ canon }}">
-      {% if metadata and metadata.site and metadata.site.url %}
-        <meta property="og:url" content="{{ canon | absoluteUrl(metadata.site.url) }}">
-      {% endif %}
-    {% elif metadata and metadata.site and metadata.site.url and page.url %}
-      <link rel="canonical" href="{{ page.url | url | absoluteUrl(metadata.site.url) }}">
-      <meta property="og:url" content="{{ page.url | url | absoluteUrl(metadata.site.url) }}">
+    {% set siteUrl = metadata and metadata.site and metadata.site.url %}
+    {% set canonicalHref = canon %}
+    {% if siteUrl and canonicalHref %}
+      {% set canonicalHref = canonicalHref | absoluteUrl(siteUrl) %}
+    {% endif %}
+    {% set canonicalIsAbsolute = canonicalHref and '://' in canonicalHref %}
+    {% if canonicalIsAbsolute %}
+      <link rel="canonical" href="{{ canonicalHref }}" data-vite-ignore>
+      <meta property="og:url" content="{{ canonicalHref }}" data-vite-ignore>
+    {% elif siteUrl and page.url %}
+      <link rel="canonical" href="{{ page.url | url | absoluteUrl(siteUrl) }}" data-vite-ignore>
+      <meta property="og:url" content="{{ page.url | url | absoluteUrl(siteUrl) }}" data-vite-ignore>
     {% endif %}
     {{ headExtra | safe }}
     {# Early theme: zero-dep, prevents FART w/ daisyUI #}

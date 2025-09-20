@@ -12,8 +12,8 @@ metaDisable: true
 
 {# If your base.njk defines a "headExtra" block, we inject head tags here. #}
 {% block headExtra %}
-  <meta http-equiv="refresh" content="0; url={{ redirectUrl }}">
-  <link rel="canonical" href="{{ redirectUrl }}">
+  <meta http-equiv="refresh" content="0; url={{ redirectUrl }}" data-vite-ignore>
+  <link rel="canonical" href="{{ redirectUrl }}" data-vite-ignore>
   <meta name="robots" content="noindex">
 {% endblock headExtra %}
 

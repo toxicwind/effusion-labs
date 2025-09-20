@@ -38,6 +38,7 @@
     "dead:ci:soft": "knip --production --reporter compact --no-exit-code",
     "test": "c8 node test/integration/runner.spec.mjs",
     "test:watch": "node --watch test/integration/runner.spec.mjs",
+    "test:playwright": "playwright test",
     "check": "npm run doctor && npm run format:check && npm run lint && npm run test",
     "doctor": "node tools/doctor.mjs",
     "lv-images:update": "node src/content/projects/lv-images/update-dataset.mjs",
