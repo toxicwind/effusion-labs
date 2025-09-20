@@ -32,9 +32,21 @@ fullBleed: true
   <div class="relative z-[1] space-y-24">
     <section class="pt-16">
       <div class="mx-auto w-full max-w-[110rem] px-6 sm:px-8 lg:px-12">
-        <div class="grid gap-12 lg:grid-cols-[minmax(0,1fr)_24rem] xl:gap-16">
+        {% if branding and branding.logoSrc %}
+          <div class="hb-hero-logo-stage">
+            <img
+              src="{{ branding.logoSrc | url }}"
+              alt="{{ branding.logoAlt or 'Effusion Labs logo' }}"
+              width="420"
+              height="420"
+              decoding="async"
+              class="hb-hero-logo"
+            >
+          </div>
+        {% endif %}
+        <div class="mt-12 grid gap-12 lg:grid-cols-[minmax(0,1fr)_24rem] xl:gap-16">
           <div class="space-y-8">
-            <p class="text-xs font-semibold uppercase tracking-[0.5em] text-base-content/60">
+            <p class="text-xs font-semibold uppercase tracking-[0.28em] text-base-content/60">
               Data Garden
             </p>
             <h1 class="hb-fluid-h1 font-heading font-black leading-none tracking-tight text-base-content">
@@ -48,18 +60,18 @@ fullBleed: true
                 {% set _href = (c.href or '/work/') | url %}
                 {% set _label = c.label or 'Explore work' %}
                 {% set _variant = (c.variant or 'primary') %}
-                {% set _btn = 'btn btn-primary hb-plasma uppercase tracking-[0.35em]' %}
+                {% set _btn = 'btn btn-primary hb-plasma uppercase tracking-[0.2em]' %}
                 {% if _variant == 'ghost' %}
                   {%
-                    set _btn = 'btn btn-ghost border-2 border-base-content/30 uppercase tracking-[0.35em]'
+                    set _btn = 'btn btn-ghost border-2 border-base-content/30 uppercase tracking-[0.2em]'
                   %}
                 {% elif _variant == 'outline' %}
-                  {% set _btn = 'btn btn-outline uppercase tracking-[0.35em]' %}
+                  {% set _btn = 'btn btn-outline uppercase tracking-[0.2em]' %}
                 {% endif %}
                 <a class="{{ _btn }} px-6" href="{{ _href }}">{{ _label }}</a>
               {% endfor %}
               <a
-                class="btn btn-outline btn-secondary uppercase tracking-[0.35em]"
+                class="btn btn-outline btn-secondary uppercase tracking-[0.2em]"
                 href="{{ '/map/' | url }}"
               >
                 Concept Map
@@ -70,25 +82,25 @@ fullBleed: true
             <div class="overflow-hidden rounded-[1.75rem] border-2 border-black/70 bg-base-200/70 p-6 shadow-[12px_12px_0_rgba(0,0,0,0.55)] backdrop-blur-xl">
               <div class="flex items-center justify-between">
                 <span
-                  class="text-[0.65rem] font-semibold uppercase tracking-[0.4em] text-base-content/65"
+                  class="text-[0.65rem] font-semibold uppercase tracking-[0.22em] text-base-content/65"
                 >Lab index</span>
                 <span class="hb-scanbar w-24"></span>
               </div>
               <div class="mt-6 space-y-1">
-                <p class="text-xs uppercase tracking-[0.35em] text-base-content/60">
+                <p class="text-xs uppercase tracking-[0.2em] text-base-content/60">
                   Total entries
                 </p>
                 <p class="text-5xl font-black leading-none text-base-content">
                   {{ inventory.total or 0 }}
                 </p>
-                <p class="text-xs uppercase tracking-[0.3em] text-base-content/50">
+                <p class="text-xs uppercase tracking-[0.16em] text-base-content/50">
                   Projects • Concepts • Sparks • Meta
                 </p>
               </div>
               <dl class="mt-6 grid grid-cols-2 gap-3 text-sm text-base-content/75">
                 {% for stat in heroStats %}
                   <div class="rounded-xl border border-base-content/10 bg-base-100/40 p-3 shadow-inner">
-                    <dt class="text-[0.55rem] uppercase tracking-[0.45em] text-base-content/60">
+                    <dt class="text-[0.55rem] uppercase tracking-[0.24em] text-base-content/60">
                       {{ stat.label }}
                     </dt>
                     <dd class="mt-1 text-xl font-semibold text-base-content">{{ stat.value }}</dd>
@@ -105,7 +117,7 @@ fullBleed: true
       <div class="mx-auto w-full max-w-[110rem] px-6 sm:px-8 lg:px-12">
         <div class="flex flex-wrap items-baseline justify-between gap-4">
           <div>
-            <p class="text-xs font-semibold uppercase tracking-[0.4em] text-base-content/60">
+            <p class="text-xs font-semibold uppercase tracking-[0.22em] text-base-content/60">
               Core surfaces
             </p>
             <h2 class="hb-fluid-h2 font-heading font-black leading-none text-base-content">
@@ -125,7 +137,7 @@ fullBleed: true
               <div class="relative flex h-full flex-col gap-5">
                 <div class="flex items-center justify-between">
                   <span
-                    class="flex items-center gap-2 text-[0.7rem] font-semibold uppercase tracking-[0.35em] text-base-content/70"
+                    class="flex items-center gap-2 text-[0.7rem] font-semibold uppercase tracking-[0.2em] text-base-content/70"
                   >
                     {{ icon(lane.icon, { class: 'size-5 text-primary', 'aria-hidden':'true' }) }}
                     {{ lane.label }}
@@ -147,7 +159,7 @@ fullBleed: true
                         }}</span>
                         {% if item.date %}
                           <time
-                            class="text-xs uppercase tracking-[0.3em] text-base-content/55"
+                            class="text-xs uppercase tracking-[0.16em] text-base-content/55"
                             datetime="{{ item.date | htmlDateString }}"
                           >{{ item.date | readableDate }}</time>
                         {% endif %}
@@ -164,7 +176,7 @@ fullBleed: true
                 </ul>
                 <div class="mt-auto">
                   <a
-                    class="inline-flex items-center gap-2 text-[0.7rem] font-semibold uppercase tracking-[0.4em] text-primary transition hover:text-secondary"
+                    class="inline-flex items-center gap-2 text-[0.7rem] font-semibold uppercase tracking-[0.22em] text-primary transition hover:text-secondary"
                     href="{{ lane.href | url }}"
                   >
                     View all
@@ -182,7 +194,7 @@ fullBleed: true
       <div class="mx-auto w-full max-w-[110rem] px-6 sm:px-8 lg:px-12">
         <div class="flex flex-wrap items-center justify-between gap-4">
           <div>
-            <p class="text-xs font-semibold uppercase tracking-[0.4em] text-base-content/60">
+            <p class="text-xs font-semibold uppercase tracking-[0.22em] text-base-content/60">
               Live feed
             </p>
             <h2 class="hb-fluid-h2 font-heading font-black leading-none text-base-content">
@@ -190,7 +202,7 @@ fullBleed: true
             </h2>
           </div>
           <a
-            class="btn btn-outline btn-primary uppercase tracking-[0.35em]"
+            class="btn btn-outline btn-primary uppercase tracking-[0.2em]"
             href="{{ '/work/' | url }}"
           >Open work index</a>
         </div>
@@ -200,7 +212,7 @@ fullBleed: true
               <div class="pointer-events-none absolute inset-0 bg-gradient-to-br from-base-200/40 via-transparent to-base-200/60 opacity-80 mix-blend-screen">
               </div>
               <div class="relative flex h-full flex-col gap-4">
-                <div class="flex items-center justify-between text-[0.65rem] font-semibold uppercase tracking-[0.35em] text-base-content/60">
+                <div class="flex items-center justify-between text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-base-content/60">
                   <span>{{ (item.type or item.data.type or 'Entry') | capitalize }}</span>
                   {% if item.date %}
                     <time datetime="{{ item.date | htmlDateString }}">{{
@@ -221,7 +233,7 @@ fullBleed: true
                 {% endif %}
                 <div class="mt-auto">
                   <a
-                    class="inline-flex items-center gap-2 text-[0.7rem] font-semibold uppercase tracking-[0.35em] text-primary transition hover:text-secondary"
+                    class="inline-flex items-center gap-2 text-[0.7rem] font-semibold uppercase tracking-[0.2em] text-primary transition hover:text-secondary"
                     href="{{ item.url | url }}"
                   >
                     Open
@@ -239,7 +251,7 @@ fullBleed: true
       <div class="mx-auto w-full max-w-[110rem] px-6 sm:px-8 lg:px-12">
         <div class="flex flex-wrap items-baseline justify-between gap-4">
           <div>
-            <p class="text-xs font-semibold uppercase tracking-[0.4em] text-base-content/60">
+            <p class="text-xs font-semibold uppercase tracking-[0.22em] text-base-content/60">
               Satellite archives
             </p>
             <h2 class="hb-fluid-h2 font-heading font-black leading-none text-base-content">
@@ -259,7 +271,7 @@ fullBleed: true
               <div class="relative flex h-full flex-col gap-5">
                 <div class="flex items-center justify-between">
                   <span
-                    class="flex items-center gap-2 text-[0.7rem] font-semibold uppercase tracking-[0.35em] text-base-content/70"
+                    class="flex items-center gap-2 text-[0.7rem] font-semibold uppercase tracking-[0.2em] text-base-content/70"
                   >
                     {{ icon(lane.icon, { class: 'size-5 text-accent', 'aria-hidden':'true' }) }}
                     {{ lane.label }}
@@ -285,7 +297,7 @@ fullBleed: true
                 </ul>
                 <div class="mt-auto">
                   <a
-                    class="inline-flex items-center gap-2 text-[0.7rem] font-semibold uppercase tracking-[0.4em] text-primary transition hover:text-secondary"
+                    class="inline-flex items-center gap-2 text-[0.7rem] font-semibold uppercase tracking-[0.22em] text-primary transition hover:text-secondary"
                     href="{{ lane.href | url }}"
                   >
                     Visit surface
@@ -305,7 +317,7 @@ fullBleed: true
           <div class="pointer-events-none absolute inset-0 bg-gradient-to-r from-sky-500/20 via-transparent to-emerald-400/25 opacity-90 mix-blend-screen">
           </div>
           <div class="relative mx-auto flex max-w-3xl flex-col gap-5">
-            <p class="text-xs font-semibold uppercase tracking-[0.45em] text-base-content/60">
+            <p class="text-xs font-semibold uppercase tracking-[0.24em] text-base-content/60">
               Interactive atlas
             </p>
             <h2 class="hb-fluid-h2 font-heading font-black leading-none text-base-content">
@@ -317,11 +329,11 @@ fullBleed: true
             </p>
             <div class="flex flex-wrap justify-center gap-3">
               <a
-                class="btn btn-primary btn-lg hb-plasma uppercase tracking-[0.4em]"
+                class="btn btn-primary btn-lg hb-plasma uppercase tracking-[0.22em]"
                 href="{{ '/map/' | url }}"
               >Launch concept map</a>
               <a
-                class="btn btn-outline btn-secondary uppercase tracking-[0.35em]"
+                class="btn btn-outline btn-secondary uppercase tracking-[0.2em]"
                 href="{{ '/work/' | url }}"
               >Browse all work</a>
             </div>

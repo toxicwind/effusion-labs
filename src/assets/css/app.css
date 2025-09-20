@@ -23,6 +23,12 @@
   --color-border: 32 37 46;
   --color-code-bg: 36 41 51;
   --color-code-text: 178 204 214;
+  --font-body: "Manrope", "Plus Jakarta Sans", "Inter", "Segoe UI", system-ui, sans-serif;
+  --font-heading: "Plus Jakarta Sans", "Manrope", "Inter", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  --font-sans: var(--font-body);
+  --default-font-family: var(--font-body);
+  --default-mono-font-family: var(--font-mono);
 }
 html[data-theme="dim"] {
   color-scheme: dark;
@@ -109,8 +115,29 @@ html {
     margin: 0;
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
+    font-family: var(--font-body);
     /* Ensure base colors follow the active daisyUI theme */
     @apply bg-base-100 text-base-content;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  .font-heading {
+    font-family: var(--font-heading);
+    font-feature-settings: 'case' 1;
+  }
+
+  .font-body {
+    font-family: var(--font-body);
+  }
+
+  code,
+  pre {
+    font-family: var(--font-mono);
   }
 
   code {
@@ -419,32 +446,95 @@ html {
   }
 
   .hb-logo {
-    width: 2.5rem;
-    height: 2.5rem;
-    padding: 2px;
+    width: 3rem;
+    height: 3rem;
+    padding: 0.35rem;
     border-radius: 9999px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(0, 0, 0, 0.55);
     background: conic-gradient(
-      from 120deg,
-      var(--spec-a),
-      var(--spec-c),
-      var(--spec-d)
+      from 140deg,
+      color-mix(in oklab, hsl(var(--p)) 75%, transparent) 0%,
+      color-mix(in oklab, hsl(var(--a)) 60%, transparent) 32%,
+      color-mix(in oklab, hsl(var(--s)) 70%, transparent) 70%,
+      color-mix(in oklab, hsl(var(--n)) 65%, transparent) 100%
     );
-    box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.7);
+    box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.6);
+  }
+  .hb-logo::after {
+    content: "";
+    position: absolute;
+    inset: 18%;
+    border-radius: inherit;
+    background: radial-gradient(
+      circle at 60% 40%,
+      rgba(255, 255, 255, 0.45),
+      transparent 60%
+    );
+    opacity: 0.35;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    transform: scale(0.92);
+    pointer-events: none;
+  }
+  .group:hover .hb-logo::after,
+  .group:focus-visible .hb-logo::after {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  .hb-logo-img {
+    width: 100%;
+    height: 100%;
+    border-radius: inherit;
+    object-fit: cover;
+    mix-blend-mode: normal;
+    filter:
+      contrast(1.05)
+      saturate(1.05);
   }
   .hb-logo-core {
     width: 100%;
     height: 100%;
-    border-radius: 9999px;
+    border-radius: inherit;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    background: hsl(var(--p));
+    background: linear-gradient(135deg, hsl(var(--p)) 30%, hsl(var(--s)) 85%);
     color: #000;
     font-weight: 800;
+    font-size: 0.95rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
     font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
+  }
+
+  .hb-hero-logo {
+    --hero-logo-size: clamp(11rem, 26vw, 18rem);
+    width: var(--hero-logo-size);
+    height: var(--hero-logo-size);
+    object-fit: contain;
+    filter:
+      drop-shadow(0 30px 65px rgba(13, 148, 136, 0.22))
+      drop-shadow(0 18px 38px rgba(59, 130, 246, 0.28));
+    transition: transform 0.35s ease, filter 0.35s ease;
+  }
+  .hb-hero-logo-stage:hover .hb-hero-logo,
+  .hb-hero-logo-stage:focus-visible .hb-hero-logo {
+    transform: translateY(-6px) scale(1.015);
+    filter:
+      drop-shadow(0 38px 90px rgba(59, 130, 246, 0.35))
+      drop-shadow(0 20px 48px rgba(129, 140, 248, 0.24));
+  }
+  .hb-hero-logo-stage {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-inline: auto;
+    padding: clamp(1.5rem, 5vw, 4rem) 0;
+    max-width: min(32rem, 92vw);
   }
 
   .hb-blobs {

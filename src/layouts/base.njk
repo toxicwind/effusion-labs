@@ -39,7 +39,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Rubik:wght@400..900&family=Space+Grotesk:wght@400..700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Manrope:wght@300..800&family=Plus+Jakarta+Sans:wght@400..800&display=swap"
       rel="stylesheet"
     >
     <script type="module" src="{{ '/assets/js/app.js' | url }}"></script>
@@ -51,7 +51,7 @@
     <link rel="manifest" href="{{ '/site.webmanifest' | url }}">
   </head>
   <body class="bg-base-100 text-base-content font-body antialiased">
-    {{ header(nav, page) }}
+    {{ header(nav, page, branding) }}
     {% set fullBleed = fullBleed == true or fullBleed == 'true' %}
     {% set metaOff = metaDisable == true or metaDisable == 'true' %}
     {%

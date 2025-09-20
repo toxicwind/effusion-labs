@@ -2,18 +2,51 @@
 {% from "components/nav.njk" import nav as navMenu %}
 {% from "components/icons.njk" import icon %}
 
-{% macro header(nav, page) %}
+{% macro header(nav, page, branding = {}) %}
   {% set navLabel = 'Primary navigation' %}
+  {% set logoSrc = branding.logoSrc or '/images/logo.png' %}
+  {% set logoAlt = branding.logoAlt or 'Effusion Labs logo' %}
+  {% set logoSizes = branding.logoSizes or '(max-width: 640px) 96px, 128px' %}
+  {% set hasLogo = logoSrc is not none %}
   <header data-site-header class="relative w-full bg-base-100 border-b border-base-content/10">
     <div class="navbar max-w-screen-xl mx-auto px-6">
       <!-- Brand -->
       <div class="flex-1">
         <a
           href="{{ '/' | url }}"
-          class="flex items-center gap-2 font-heading text-3xl text-primary no-underline"
+          class="group flex items-center gap-4 no-underline"
+          aria-label="Effusion Labs — home"
         >
-          {{ icon('flask-conical', { class: 'w-6 h-6', 'aria-hidden': 'true' }) }}
-          <span>{{ 'Effusion Labs' | shout }}</span>
+          <span class="hb-logo">
+            {% if hasLogo %}
+              <img
+                src="{{ logoSrc | url }}"
+                alt="{{ logoAlt }}"
+                width="64"
+                height="64"
+                sizes="{{ logoSizes }}"
+                decoding="async"
+                class="hb-logo-img"
+              >
+            {% else %}
+              <span class="hb-logo-core">EL</span>
+            {% endif %}
+          </span>
+          <span class="flex flex-col leading-tight text-base-content">
+            <span class="text-[0.55rem] uppercase tracking-[0.28em] text-base-content/60">
+              Effusion Labs
+            </span>
+            <span class="flex items-center gap-3">
+              <span class="font-heading text-2xl font-black tracking-tight transition-colors duration-150 group-hover:text-primary">
+                Effusion
+                <span class="text-secondary/80">Labs</span>
+              </span>
+              <span class="hb-scanbar hidden h-[6px] w-16 opacity-90 sm:inline-flex"></span>
+            </span>
+            <span class="text-[0.55rem] uppercase tracking-[0.24em] text-secondary/70">
+              Data Garden
+            </span>
+          </span>
         </a>
       </div>
 

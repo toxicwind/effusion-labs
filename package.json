@@ -171,5 +171,8 @@
   },
   "engines": {
     "node": ">=22.19.0"
+  },
+  "dependencies": {
+    "iconify-icon": "3.0.1"
   }
 }
