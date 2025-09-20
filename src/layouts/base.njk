@@ -52,25 +52,38 @@
   </head>
   <body class="bg-base-100 text-base-content font-body antialiased">
     {{ header(nav, page) }}
+    {% set fullBleed = fullBleed == true or fullBleed == 'true' %}
     {% set metaOff = metaDisable == true or metaDisable == 'true' %}
     {%
-      set hasMeta = (status or certainty or importance or tags or memory_ref or date or page.date) and not metaOff
+      set metaEligible =
+      (status or certainty or importance or tags or memory_ref or date or page.date)
     %}
-    <main id="main" class="min-h-[60vh] max-w-screen-xl mx-auto px-6">
-      <div class="{% if hasMeta %}xl:grid xl:grid-cols-[1fr_18rem] xl:gap-10{% endif %} {% if showTitle != false %}mt-8 lg:mt-10{% endif %}">
-        <article class="prose dark:prose-invert max-w-none m-0 {% if hasMeta %}xl:col-span-1{% endif %}">
-          {% if showTitle != false %}
-            <header class="mb-6 lg:mb-8">
-              <h1 class="font-heading fluid-title tracking-wide">{{ title }}</h1>
-            </header>
+    {% set hasMeta = not fullBleed and metaEligible and not metaOff %}
+    {% set mainClass = 'min-h-[60vh]' %}
+    {% if fullBleed %}
+      {% set mainClass = mainClass + ' w-full px-0' %}
+    {% else %}
+      {% set mainClass = mainClass + ' max-w-screen-xl mx-auto px-6' %}
+    {% endif %}
+    <main id="main" class="{{ mainClass }}">
+      {% if fullBleed %}
+        {{ content | safe }}
+      {% else %}
+        <div class="{% if hasMeta %}xl:grid xl:grid-cols-[1fr_18rem] xl:gap-10{% endif %} {% if showTitle != false %}mt-8 lg:mt-10{% endif %}">
+          <article class="prose dark:prose-invert max-w-none m-0 {% if hasMeta %}xl:col-span-1{% endif %}">
+            {% if showTitle != false %}
+              <header class="mb-6 lg:mb-8">
+                <h1 class="font-heading fluid-title tracking-wide">{{ title }}</h1>
+              </header>
+            {% endif %}
+            {{ content | safe }}
+          </article>
+          {% if hasMeta %}
+            {% set d = date or page.date %}
+            {{ metaAside(status, d, certainty, importance, tags, memory_ref) }}
           {% endif %}
-          {{ content | safe }}
-        </article>
-        {% if hasMeta %}
-          {% set d = date or page.date %}
-          {{ metaAside(status, d, certainty, importance, tags, memory_ref) }}
-        {% endif %}
-      </div>
+        </div>
+      {% endif %}
     </main>
     {{ footer(buildTime) }}
   </body>

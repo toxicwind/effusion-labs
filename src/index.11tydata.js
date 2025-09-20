@@ -1,20 +1,161 @@
+const CORE_AREAS = [
+  {
+    key: 'projects',
+    totalKey: 'projects',
+    label: 'Projects',
+    summary: 'Interfaces, prototypes, and builds you can touch.',
+    accent: 'from-sky-500/30 via-fuchsia-500/25 to-emerald-400/30',
+    icon: 'rocket',
+  },
+  {
+    key: 'concepts',
+    totalKey: 'concepts',
+    label: 'Concepts',
+    summary: 'Frameworks, schemas, and structural thinking.',
+    accent: 'from-violet-500/30 via-blue-500/25 to-cyan-400/30',
+    icon: 'brain',
+  },
+  {
+    key: 'sparks',
+    totalKey: 'sparks',
+    label: 'Sparks',
+    summary: 'Quick hits, hunches, and early research glimmers.',
+    accent: 'from-amber-400/35 via-rose-400/30 to-purple-500/30',
+    icon: 'zap',
+  },
+  {
+    key: 'meta',
+    totalKey: 'meta',
+    label: 'Meta',
+    summary: 'Methods, protocol, and how the lab keeps score.',
+    accent: 'from-emerald-400/30 via-sky-400/25 to-amber-300/25',
+    icon: 'settings-2',
+  },
+]
+
+const SATELLITE_AREAS = [
+  {
+    key: 'archives',
+    totalKey: 'archives',
+    label: 'Archives',
+    summary: 'Provenance, collectables, and longitudinal indices.',
+    accent: 'from-amber-500/35 via-rose-500/25 to-purple-500/30',
+    icon: 'archive',
+  },
+  {
+    key: 'docs',
+    totalKey: 'docs',
+    label: 'Docs',
+    summary: 'Working documentation, theming notes, and logs.',
+    accent: 'from-cyan-400/35 via-blue-400/25 to-emerald-400/30',
+    icon: 'file-text',
+  },
+  {
+    key: 'flower_reports_showcase',
+    totalKey: 'flowers',
+    label: 'Flower Reports',
+    summary: 'Retail audits, normalized menus, and data slices.',
+    accent: 'from-lime-400/35 via-emerald-400/30 to-sky-400/25',
+    icon: 'sprout',
+    hrefFallback: '/flower-reports/',
+  },
+]
+
+const asTime = value => {
+  if (!value) return 0
+  if (value instanceof Date) return value.getTime()
+  const date = new Date(value)
+  return Number.isFinite(date?.getTime?.()) ? date.getTime() : 0
+}
+
+const itemTime = item => asTime(item?.date || item?.data?.date)
+
+const sortByFresh = (items = []) =>
+  items
+    .filter(Boolean)
+    .slice()
+    .sort((a, b) => itemTime(b) - itemTime(a))
+
+const isIndexEntry = item => {
+  if (!item) return false
+  const slug = item?.data?.page?.fileSlug
+  if (slug === 'index' || slug === '_index') return true
+  const stem = item?.data?.page?.filePathStem
+  if (stem && /\/index$/u.test(stem)) return true
+  const input = item?.inputPath || ''
+  return /\/index\.(?:md|njk|11ty\.js|html)$/iu.test(input)
+}
+
+const filterByFolder = (all = [], folder) =>
+  all.filter(
+    item => typeof item?.inputPath === 'string' && item.inputPath.includes(`/content/${folder}/`),
+  )
+
+const gatherArea = (all, folder) => {
+  const matches = filterByFolder(all, folder)
+  const indexEntry = matches.find(isIndexEntry)
+  const entries = matches.filter(item => item?.url && !isIndexEntry(item))
+  return { indexEntry, entries }
+}
+
+const buildGarden = data => {
+  const all = data.collections?.all || []
+  const work = data.collections?.work || []
+  const totals = { total: work.length }
+
+  const core = CORE_AREAS.map(def => {
+    const area = gatherArea(all, def.key)
+    const collection = sortByFresh(data.collections?.[def.key] || area.entries)
+    const fallbackHref = def.hrefFallback || collection[0]?.url
+      || `/${def.key.replace(/_/gu, '-')}/`
+    const href = area.indexEntry?.url || fallbackHref
+    const entries = collection.filter(item => item?.url && item.url !== href)
+    const count = entries.length
+    totals[def.totalKey] = count
+    return {
+      ...def,
+      href,
+      count,
+      entries: entries.slice(0, 4),
+    }
+  })
+
+  const satellites = SATELLITE_AREAS.map(def => {
+    const area = gatherArea(all, def.key)
+    const collection = sortByFresh(area.entries)
+    const fallbackHref = def.hrefFallback || collection[0]?.url
+      || `/${def.key.replace(/_/gu, '-')}/`
+    const href = area.indexEntry?.url || fallbackHref
+    const count = collection.length
+    totals[def.totalKey] = count
+    return {
+      ...def,
+      href,
+      count,
+      entries: collection.slice(0, 3),
+    }
+  })
+
+  const latest = sortByFresh(work.length ? work : all).slice(0, 9)
+
+  return { totals, core, satellites, latest }
+}
+
 export default {
-  // Hero copy
   title: 'Ideas, prototypes, and tools—shipped straight from the lab.',
   lede:
     'Effusion Labs explores concepts until they become working systems. Browse projects in progress, sparks of inspiration, and the models that tie them together.',
 
   eleventyComputed: {
-    // Hero CTAs
     ctas: data => {
-      const projects = (data.collections.projects || []).sort(
-        (a, b) => b.date - a.date,
+      const projects = (data.collections.projects || []).slice().sort((a, b) =>
+        itemTime(b) - itemTime(a)
       )
-      const latestProject = projects[0]
+      const latestProject = projects.find(entry => entry?.url)
       return [
         {
           href: latestProject ? latestProject.url : '/work/',
-          label: 'Try the latest build',
+          label: latestProject ? 'Open the latest build' : 'Explore the lab',
         },
         {
           href: '/work/',
@@ -23,65 +164,9 @@ export default {
         },
       ]
     },
-
-    // Hero tiles: newest item of each type
-    tiles: data => {
-      const all = data.collections.work || []
-      const categories = [
-        {
-          k: 'project',
-          h: 'Latest Project',
-          s: 'The newest prototype you can test',
-        },
-        {
-          k: 'concept',
-          h: 'Core Concepts',
-          s: 'Frameworks and structural notes',
-        },
-        { k: 'spark', h: 'Fresh Sparks', s: 'Quick ideas and early sketches' },
-        { k: 'meta', h: 'Meta Notes', s: 'Process and methodology context' },
-      ]
-      return categories.map(cat => {
-        const item = all.find(i => i?.data?.type === cat.k)
-        return {
-          ...cat,
-          h: item?.data?.title ?? cat.h,
-          s: item?.data?.description ?? cat.s,
-          url: item?.url ?? '/work/',
-          featured: cat.k === 'project',
-        }
-      })
-    },
-
-    // Grid of up to 9: diverse + recent
-    work: data => {
-      const col = data.collections.work || []
-      const required = ['project', 'concept', 'spark', 'meta']
-      const result = []
-      const seen = new Set()
-
-      for (const type of required) {
-        const match = col.find(i => i?.data?.type === type)
-        if (match) {
-          result.push(match)
-          seen.add(match.url)
-        }
-      }
-
-      for (const item of col) {
-        if (result.length >= 9) break
-        if (!seen.has(item.url)) {
-          result.push(item)
-          seen.add(item.url)
-        }
-      }
-      return result
-    },
-
-    // Latest 3 projects
-    projects: data =>
-      (data.collections.projects || [])
-        .sort((a, b) => b.date - a.date)
-        .slice(0, 3),
+    inventory: data => buildGarden(data).totals,
+    coreLanes: data => buildGarden(data).core,
+    satelliteLanes: data => buildGarden(data).satellites,
+    latest: data => buildGarden(data).latest,
   },
 }

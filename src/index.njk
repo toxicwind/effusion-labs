@@ -3,277 +3,331 @@ layout: "base.njk"
 metaDisable: true
 showTitle: false
 prose: false
+fullBleed: true
 ---
 
-{#
-  Home (daisyUI-first)
-  - Clean hero with CTA
-  - Quick stats
-  - Feature cards
-  - Featured projects
-  - Latest across the lab
-  - Concept map CTA
-#}
 {% from "components/icons.njk" import icon %}
-{# Safeguards for counts #}
-{% set allWork = collections.work or [] %}
-{% set projectsAll = collections.projects or [] %}
-{% set conceptsAll = collections.concepts or [] %}
-{% set sparksAll = collections.sparks or [] %}
-<div id="page-shell" data-mschf="auto" data-mschf-intensity="calm" data-mschf-style="structural">
-  <!-- HERO -->
-  <section class="hero min-h-[55vh] bg-base-200/40">
-    <div class="hero-content text-center">
-      <div class="max-w-3xl">
-        {% if branding and branding.logoSrc %}
-          {% set _sizes = branding.logoSizes or '(max-width: 640px) 112px, 160px' %}
-          <img
-            src="{{ branding.logoSrc | url }}"
-            alt="{{ branding.logoAlt or 'Logo' }}"
-            sizes="{{ _sizes }}"
-            loading="eager"
-            fetchpriority="high"
-            class="hero-logo mx-auto mb-4 w-24 sm:w-28 md:w-32"
-          />
-        {% endif %}
-        <h1 class="text-4xl md:text-6xl font-heading font-black tracking-[-0.02em] leading-tight">
-          {{ title or 'Ideas, prototypes, and tools—shipped straight from the lab.' }}
-        </h1>
-        {% if lede %}<p class="mt-4 text-base md:text-lg opacity-90">{{ lede }}</p>{% endif %}
-        <div class="mt-6 flex items-center justify-center gap-3">
-          {% for c in (ctas or []) %}
-            {% set _href = (c.href or '/work/') | url %}
-            {% set _label = c.label or 'Explore work' %}
-            {% set _variant = (c.variant or 'primary') %}
-            {% set _btn = "btn btn-primary" %}
-            {% if _variant == 'ghost' %}
-              {% set _btn = "btn btn-ghost" %}
-            {% elif _variant == 'outline' %}
-              {% set _btn = "btn btn-outline" %}
+{%
+  set heroStats = [
+    { label: 'Projects', value: inventory.projects or 0 },
+    { label: 'Concepts', value: inventory.concepts or 0 },
+    { label: 'Sparks', value: inventory.sparks or 0 },
+    { label: 'Meta', value: inventory.meta or 0 },
+    { label: 'Archives', value: inventory.archives or 0 },
+    { label: 'Docs', value: inventory.docs or 0 },
+    { label: 'Flower Reports', value: inventory.flowers or 0 }
+  ]
+%}
+
+<div id="home-shell" class="relative overflow-hidden pb-24">
+  <div class="pointer-events-none absolute inset-0 -z-[1]">
+    <div class="absolute inset-0 opacity-30 mix-blend-soft-light hb-grid"></div>
+    <div class="absolute -left-32 top-[-20%] h-[28rem] w-[28rem] rounded-full bg-gradient-to-br from-sky-500/30 via-transparent to-transparent blur-3xl">
+    </div>
+    <div class="absolute right-[-10%] top-1/3 h-[26rem] w-[30rem] rounded-full bg-gradient-to-bl from-fuchsia-500/25 via-transparent to-transparent blur-3xl">
+    </div>
+    <div class="absolute bottom-[-25%] left-1/3 h-[32rem] w-[36rem] rounded-full bg-gradient-to-tr from-emerald-400/25 via-transparent to-transparent blur-3xl">
+    </div>
+  </div>
+  <div class="relative z-[1] space-y-24">
+    <section class="pt-16">
+      <div class="mx-auto w-full max-w-[110rem] px-6 sm:px-8 lg:px-12">
+        <div class="grid gap-12 lg:grid-cols-[minmax(0,1fr)_24rem] xl:gap-16">
+          <div class="space-y-8">
+            <p class="text-xs font-semibold uppercase tracking-[0.5em] text-base-content/60">
+              Data Garden
+            </p>
+            <h1 class="hb-fluid-h1 font-heading font-black leading-none tracking-tight text-base-content">
+              {{ title or 'Ideas, prototypes, and tools—shipped straight from the lab.' }}
+            </h1>
+            {% if lede %}
+              <p class="max-w-3xl text-lg text-base-content/80">{{ lede }}</p>
             {% endif %}
-            <a class="{{ _btn }} px-6" href="{{ _href }}">{{ _label }}</a>
-          {% endfor %}
-          <a class="btn btn-outline" href="{{ '/map/' | url }}">Open Concept Map</a>
-        </div>
-      </div>
-    </div>
-  </section>
-  <!-- STATS STRIP -->
-  <section
-    aria-labelledby="stats-heading"
-    class="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 -mt-10"
-  >
-    <div class="stats glass-card w-full">
-      <div class="stat">
-        <div class="stat-title">Total entries</div>
-        <div class="stat-value text-primary">{{ allWork | length }}</div>
-        <div class="stat-desc">Projects · Concepts · Sparks · Meta</div>
-      </div>
-      <div class="stat">
-        <div class="stat-title">Projects</div>
-        <div class="stat-value">{{ projectsAll | length }}</div>
-        <div class="stat-desc">Builds and prototypes</div>
-      </div>
-      <div class="stat">
-        <div class="stat-title">Concepts</div>
-        <div class="stat-value">{{ conceptsAll | length }}</div>
-        <div class="stat-desc">Frameworks and structures</div>
-      </div>
-      <div class="stat">
-        <div class="stat-title">Sparks</div>
-        <div class="stat-value">{{ sparksAll | length }}</div>
-        <div class="stat-desc">Notes and quick ideas</div>
-      </div>
-    </div>
-  </section>
-  <!-- FEATURES -->
-  <section class="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 mt-12">
-    <div class="grid gap-4 md:grid-cols-3">
-      <div class="card glass-card">
-        <div class="card-body">
-          <div class="flex items-center gap-2">
-            {{ icon('sparkles', { class: 'size-6 text-primary', 'aria-hidden':'true' }) }}
-            <h3 class="card-title">Design Systems</h3>
-          </div>
-          <p>Strong foundations for UI: tokens, components, and motion that scale.</p>
-        </div>
-      </div>
-      <div class="card glass-card">
-        <div class="card-body">
-          <div class="flex items-center gap-2">
-            {{ icon('cpu', { class: 'size-6 text-primary', 'aria-hidden':'true' }) }}
-            <h3 class="card-title">Eleventy + Vite</h3>
-          </div>
-          <p>Fast builds, clean authoring, and modern tooling with Tailwind v4 + daisyUI.</p>
-        </div>
-      </div>
-      <div class="card glass-card">
-        <div class="card-body">
-          <div class="flex items-center gap-2">
-            {{ icon('bot', { class: 'size-6 text-primary', 'aria-hidden':'true' }) }}
-            <h3 class="card-title">Data & AI</h3>
-          </div>
-          <p>Meaningful integrations and evaluable interactions, not just demos.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-  <!-- BY TYPE (4 columns) -->
-  {% set pList = (collections.projects or []) | slice(0,5) %}
-  {% set cList = (collections.concepts or []) | slice(0,5) %}
-  {% set sList = (collections.sparks or []) | slice(0,5) %}
-  {% set mList = (allWork | selectattr('data.type','equalto','meta') | list) | slice(0,5) %}
-  <section class="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 mt-14">
-    <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-      {%
-        for col in [
-        {title:'Projects', items:pList, tone:'primary'},
-        {title:'Concepts', items:cList, tone:'secondary'},
-        {title:'Sparks',   items:sList, tone:'accent'},
-        {title:'Meta',     items:mList, tone:'info'}
-        ]
-      %}
-        <div class="card glass-card">
-          <div class="card-body p-4">
-            <h3 class="card-title text-base">
-              <span class="badge badge-{{ col.tone }} badge-sm">{{ col.title }}</span>
-            </h3>
-            <ul class="mt-2 space-y-2">
-              {% for item in col.items %}
-                <li>
-                  <a class="link no-underline hover:underline" href="{{ item.url | url }}">{{
-                    item.data.title
-                  }}</a>
-                  {% if item.data.description %}
-                    <div class="text-xs opacity-70 line-clamp-2">
-                      {{ item.data.description | truncate(120) }}
-                    </div>
-                  {% endif %}
-                </li>
-              {% else %}
-                <li class="opacity-70 text-sm">No entries yet.</li>
-              {% endfor %}
-            </ul>
-          </div>
-        </div>
-      {% endfor %}
-    </div>
-  </section>
-  <!-- FEATURED PROJECTS -->
-  {% if projects and (projects | length) %}
-    <section class="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 mt-14 space-y-4">
-      <div class="flex items-center justify-between">
-        <h2 class="text-2xl font-heading">Featured projects</h2>
-        <a href="{{ '/work/' | url }}" class="link link-primary">Browse all</a>
-      </div>
-      <div class="grid gap-4 md:grid-cols-3">
-        {% for p in projects %}
-          <article class="card glass-card">
-            <div class="card-body">
-              <div class="flex items-start justify-between">
-                <span class="badge badge-outline">Project</span>
-                {% if p.date %}
-                  <time class="text-xs opacity-70" datetime="{{ p.date | htmlDateString }}">{{
-                    p.date | readableDate
-                  }}</time>
+            <div class="flex flex-wrap items-center gap-3">
+              {% for c in (ctas or []) %}
+                {% set _href = (c.href or '/work/') | url %}
+                {% set _label = c.label or 'Explore work' %}
+                {% set _variant = (c.variant or 'primary') %}
+                {% set _btn = 'btn btn-primary hb-plasma uppercase tracking-[0.35em]' %}
+                {% if _variant == 'ghost' %}
+                  {%
+                    set _btn = 'btn btn-ghost border-2 border-base-content/30 uppercase tracking-[0.35em]'
+                  %}
+                {% elif _variant == 'outline' %}
+                  {% set _btn = 'btn btn-outline uppercase tracking-[0.35em]' %}
                 {% endif %}
-              </div>
-              <h3 class="card-title text-lg leading-tight">
-                <a class="no-underline hover:underline" href="{{ p.url | url }}">{{
-                  p.data.title
-                }}</a>
-              </h3>
-              {% if p.data.description %}<p class="opacity-90">
-                  {{ p.data.description | truncate(140) }}
-                </p>{% endif %}
-              <div class="card-actions justify-start mt-2">
-                <a class="btn btn-sm btn-primary" href="{{ p.url | url }}">Open</a>
-              </div>
+                <a class="{{ _btn }} px-6" href="{{ _href }}">{{ _label }}</a>
+              {% endfor %}
+              <a
+                class="btn btn-outline btn-secondary uppercase tracking-[0.35em]"
+                href="{{ '/map/' | url }}"
+              >
+                Concept Map
+              </a>
             </div>
-          </article>
-        {% endfor %}
+          </div>
+          <aside class="relative">
+            <div class="overflow-hidden rounded-[1.75rem] border-2 border-black/70 bg-base-200/70 p-6 shadow-[12px_12px_0_rgba(0,0,0,0.55)] backdrop-blur-xl">
+              <div class="flex items-center justify-between">
+                <span
+                  class="text-[0.65rem] font-semibold uppercase tracking-[0.4em] text-base-content/65"
+                >Lab index</span>
+                <span class="hb-scanbar w-24"></span>
+              </div>
+              <div class="mt-6 space-y-1">
+                <p class="text-xs uppercase tracking-[0.35em] text-base-content/60">
+                  Total entries
+                </p>
+                <p class="text-5xl font-black leading-none text-base-content">
+                  {{ inventory.total or 0 }}
+                </p>
+                <p class="text-xs uppercase tracking-[0.3em] text-base-content/50">
+                  Projects • Concepts • Sparks • Meta
+                </p>
+              </div>
+              <dl class="mt-6 grid grid-cols-2 gap-3 text-sm text-base-content/75">
+                {% for stat in heroStats %}
+                  <div class="rounded-xl border border-base-content/10 bg-base-100/40 p-3 shadow-inner">
+                    <dt class="text-[0.55rem] uppercase tracking-[0.45em] text-base-content/60">
+                      {{ stat.label }}
+                    </dt>
+                    <dd class="mt-1 text-xl font-semibold text-base-content">{{ stat.value }}</dd>
+                  </div>
+                {% endfor %}
+              </dl>
+            </div>
+          </aside>
+        </div>
       </div>
     </section>
-  {% endif %}
-  <!-- LATEST ACROSS THE LAB -->
-  {% set latest = work or allWork | slice(0,9) %}
-  {% if latest and (latest | length) %}
-    <section class="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 mt-14 space-y-4">
-      <h2 class="text-2xl font-heading">Latest across the lab</h2>
-      <ul class="grid gap-4 md:gap-6 grid-cols-[repeat(auto-fit,minmax(18rem,1fr))] list-none p-0 m-0">
-        {% for item in latest %}
-          <li>
-            <article class="card glass-card h-full">
-              <div class="card-body">
-                <div class="flex items-start justify-between">
-                  <span class="badge badge-ghost">{{
-                    (item.type or item.data.type) | capitalize
+
+    <section>
+      <div class="mx-auto w-full max-w-[110rem] px-6 sm:px-8 lg:px-12">
+        <div class="flex flex-wrap items-baseline justify-between gap-4">
+          <div>
+            <p class="text-xs font-semibold uppercase tracking-[0.4em] text-base-content/60">
+              Core surfaces
+            </p>
+            <h2 class="hb-fluid-h2 font-heading font-black leading-none text-base-content">
+              Catalogued currents
+            </h2>
+          </div>
+          <p class="max-w-2xl text-sm text-base-content/70">
+            Each lane keeps the information exposed—no drawers, no dropdowns. Follow the threads
+            across projects, conceptual frameworks, quick sparks, and meta-process notes.
+          </p>
+        </div>
+        <div class="mt-12 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+          {% for lane in coreLanes %}
+            <article class="group relative overflow-hidden rounded-[1.75rem] border-2 border-black/65 bg-base-200/70 p-6 shadow-[10px_10px_0_rgba(0,0,0,0.45)] transition-transform duration-200 hover:-translate-y-1">
+              <div class="pointer-events-none absolute inset-0 bg-gradient-to-br {{ lane.accent }} opacity-80 mix-blend-screen">
+              </div>
+              <div class="relative flex h-full flex-col gap-5">
+                <div class="flex items-center justify-between">
+                  <span
+                    class="flex items-center gap-2 text-[0.7rem] font-semibold uppercase tracking-[0.35em] text-base-content/70"
+                  >
+                    {{ icon(lane.icon, { class: 'size-5 text-primary', 'aria-hidden':'true' }) }}
+                    {{ lane.label }}
+                  </span>
+                  <span class="hb-num-outline text-3xl font-black text-base-content">{{
+                    lane.count
                   }}</span>
+                </div>
+                <p class="text-sm text-base-content/75">{{ lane.summary }}</p>
+                <ul class="flex flex-col gap-3 text-sm">
+                  {% for item in lane.entries %}
+                    <li class="border-l-2 border-base-content/25 pl-3">
+                      <a
+                        class="flex flex-col gap-1 no-underline text-base-content transition hover:text-primary"
+                        href="{{ item.url | url }}"
+                      >
+                        <span class="font-semibold">{{
+                          item.data.title or item.data.page.fileSlug
+                        }}</span>
+                        {% if item.date %}
+                          <time
+                            class="text-xs uppercase tracking-[0.3em] text-base-content/55"
+                            datetime="{{ item.date | htmlDateString }}"
+                          >{{ item.date | readableDate }}</time>
+                        {% endif %}
+                        {% if item.data.description %}
+                          <span class="text-xs text-base-content/60">{{
+                            item.data.description | truncate(140)
+                          }}</span>
+                        {% endif %}
+                      </a>
+                    </li>
+                  {% else %}
+                    <li class="text-sm text-base-content/60">Entries will bloom soon.</li>
+                  {% endfor %}
+                </ul>
+                <div class="mt-auto">
+                  <a
+                    class="inline-flex items-center gap-2 text-[0.7rem] font-semibold uppercase tracking-[0.4em] text-primary transition hover:text-secondary"
+                    href="{{ lane.href | url }}"
+                  >
+                    View all
+                    {{ icon('arrow-up-right', { class: 'size-4', 'aria-hidden':'true' }) }}
+                  </a>
+                </div>
+              </div>
+            </article>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="mx-auto w-full max-w-[110rem] px-6 sm:px-8 lg:px-12">
+        <div class="flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <p class="text-xs font-semibold uppercase tracking-[0.4em] text-base-content/60">
+              Live feed
+            </p>
+            <h2 class="hb-fluid-h2 font-heading font-black leading-none text-base-content">
+              Latest across the lab
+            </h2>
+          </div>
+          <a
+            class="btn btn-outline btn-primary uppercase tracking-[0.35em]"
+            href="{{ '/work/' | url }}"
+          >Open work index</a>
+        </div>
+        <div class="mt-10 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+          {% for item in latest %}
+            <article class="relative overflow-hidden rounded-[1.5rem] border-2 border-black/55 bg-base-100/85 p-6 shadow-[10px_10px_0_rgba(0,0,0,0.4)] transition-transform duration-200 hover:-translate-y-1">
+              <div class="pointer-events-none absolute inset-0 bg-gradient-to-br from-base-200/40 via-transparent to-base-200/60 opacity-80 mix-blend-screen">
+              </div>
+              <div class="relative flex h-full flex-col gap-4">
+                <div class="flex items-center justify-between text-[0.65rem] font-semibold uppercase tracking-[0.35em] text-base-content/60">
+                  <span>{{ (item.type or item.data.type or 'Entry') | capitalize }}</span>
                   {% if item.date %}
-                    <time class="text-xs opacity-70" datetime="{{ item.date | htmlDateString }}">{{
+                    <time datetime="{{ item.date | htmlDateString }}">{{
                       item.date | readableDate
                     }}</time>
                   {% endif %}
                 </div>
-                <h3 class="card-title text-base leading-snug">
-                  <a class="no-underline hover:underline" href="{{ item.url | url }}">{{
-                    item.data.title
-                  }}</a>
+                <h3 class="text-lg font-semibold leading-snug text-base-content">
+                  <a
+                    class="no-underline transition hover:text-primary"
+                    href="{{ item.url | url }}"
+                  >{{ item.data.title or item.data.page.fileSlug }}</a>
                 </h3>
-                {% if item.data.description %}<p class="text-sm opacity-90">
-                    {{ item.data.description | truncate(140) }}
-                  </p>{% endif %}
-                <div class="card-actions justify-start mt-2">
-                  <a class="btn btn-xs btn-outline" href="{{ item.url | url }}">Read</a>
+                {% if item.data.description %}
+                  <p class="text-sm text-base-content/70">
+                    {{ item.data.description | truncate(160) }}
+                  </p>
+                {% endif %}
+                <div class="mt-auto">
+                  <a
+                    class="inline-flex items-center gap-2 text-[0.7rem] font-semibold uppercase tracking-[0.35em] text-primary transition hover:text-secondary"
+                    href="{{ item.url | url }}"
+                  >
+                    Open
+                    {{ icon('arrow-up-right', { class: 'size-4', 'aria-hidden':'true' }) }}
+                  </a>
                 </div>
               </div>
             </article>
-          </li>
-        {% endfor %}
-      </ul>
+          {% endfor %}
+        </div>
+      </div>
     </section>
-  {% endif %}
-  <!-- CONCEPT MAP CTA -->
-  <section class="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 mt-16">
-    <div class="hero rounded-box glass-card">
-      <div class="hero-content text-center">
-        <div class="max-w-2xl">
-          <h2 class="text-2xl md:text-3xl font-heading">Explore the Interactive Concept Map</h2>
-          <p class="mt-2 opacity-90">
-            Navigate the living knowledge graph that links sparks, concepts, and projects.
-          </p>
-          <a href="{{ '/map/' | url }}" class="btn btn-primary mt-4">Launch the map</a>
-        </div>
-      </div>
-    </div>
-  </section>
-  <!-- FAQ (optional quick clarity) -->
-  <section class="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 mb-16">
-    <div class="grid gap-3 md:grid-cols-3">
-      <div class="collapse collapse-arrow glass-card">
-        <input type="checkbox" />
-        <div class="collapse-title text-md font-medium">What is Effusion Labs?</div>
-        <div class="collapse-content">
-          <p>
-            An exploration space for systems thinking, design, and code—shipping artifacts you can
-            use.
+
+    <section>
+      <div class="mx-auto w-full max-w-[110rem] px-6 sm:px-8 lg:px-12">
+        <div class="flex flex-wrap items-baseline justify-between gap-4">
+          <div>
+            <p class="text-xs font-semibold uppercase tracking-[0.4em] text-base-content/60">
+              Satellite archives
+            </p>
+            <h2 class="hb-fluid-h2 font-heading font-black leading-none text-base-content">
+              Every folder surfaces
+            </h2>
+          </div>
+          <p class="max-w-2xl text-sm text-base-content/70">
+            Archives, documentation, and retail field reports live beside the primary work. Nothing
+            is hidden—each collection streams straight to the surface.
           </p>
         </div>
-      </div>
-      <div class="collapse collapse-arrow glass-card">
-        <input type="checkbox" />
-        <div class="collapse-title text-md font-medium">How often is this updated?</div>
-        <div class="collapse-content">
-          <p>Work is added continuously; the lists above always reflect the latest entries.</p>
+        <div class="mt-12 grid gap-6 lg:grid-cols-3">
+          {% for lane in satelliteLanes %}
+            <article class="group relative overflow-hidden rounded-[1.75rem] border-2 border-black/65 bg-base-200/70 p-6 shadow-[10px_10px_0_rgba(0,0,0,0.45)] transition-transform duration-200 hover:-translate-y-1">
+              <div class="pointer-events-none absolute inset-0 bg-gradient-to-br {{ lane.accent }} opacity-90 mix-blend-screen">
+              </div>
+              <div class="relative flex h-full flex-col gap-5">
+                <div class="flex items-center justify-between">
+                  <span
+                    class="flex items-center gap-2 text-[0.7rem] font-semibold uppercase tracking-[0.35em] text-base-content/70"
+                  >
+                    {{ icon(lane.icon, { class: 'size-5 text-accent', 'aria-hidden':'true' }) }}
+                    {{ lane.label }}
+                  </span>
+                  <span class="hb-num-outline text-2xl font-black text-base-content">{{
+                    lane.count
+                  }}</span>
+                </div>
+                <p class="text-sm text-base-content/75">{{ lane.summary }}</p>
+                <ul class="flex flex-col gap-3 text-sm">
+                  {% for item in lane.entries %}
+                    <li class="border-l-2 border-base-content/25 pl-3">
+                      <a
+                        class="no-underline text-base-content transition hover:text-secondary"
+                        href="{{ item.url | url }}"
+                      >
+                        {{ item.data.title or item.data.page.fileSlug }}
+                      </a>
+                    </li>
+                  {% else %}
+                    <li class="text-sm text-base-content/60">Awaiting first drop.</li>
+                  {% endfor %}
+                </ul>
+                <div class="mt-auto">
+                  <a
+                    class="inline-flex items-center gap-2 text-[0.7rem] font-semibold uppercase tracking-[0.4em] text-primary transition hover:text-secondary"
+                    href="{{ lane.href | url }}"
+                  >
+                    Visit surface
+                    {{ icon('arrow-up-right', { class: 'size-4', 'aria-hidden':'true' }) }}
+                  </a>
+                </div>
+              </div>
+            </article>
+          {% endfor %}
         </div>
       </div>
-      <div class="collapse collapse-arrow glass-card">
-        <input type="checkbox" />
-        <div class="collapse-title text-md font-medium">Can I contribute?</div>
-        <div class="collapse-content">
-          <p>Yes—join the group discussions on GitHub or open issues with ideas and fixes.</p>
+    </section>
+
+    <section class="pb-10">
+      <div class="mx-auto w-full max-w-[110rem] px-6 sm:px-8 lg:px-12">
+        <div class="relative overflow-hidden rounded-[2.5rem] border-2 border-black/70 bg-base-200/75 p-10 text-center shadow-[14px_14px_0_rgba(0,0,0,0.5)]">
+          <div class="pointer-events-none absolute inset-0 bg-gradient-to-r from-sky-500/20 via-transparent to-emerald-400/25 opacity-90 mix-blend-screen">
+          </div>
+          <div class="relative mx-auto flex max-w-3xl flex-col gap-5">
+            <p class="text-xs font-semibold uppercase tracking-[0.45em] text-base-content/60">
+              Interactive atlas
+            </p>
+            <h2 class="hb-fluid-h2 font-heading font-black leading-none text-base-content">
+              Navigate the concept map
+            </h2>
+            <p class="text-lg text-base-content/75">
+              Traverse the living knowledge graph that links sparks, conceptual structures, and
+              running prototypes. Every point stays in view—no hidden nodes, just connective tissue.
+            </p>
+            <div class="flex flex-wrap justify-center gap-3">
+              <a
+                class="btn btn-primary btn-lg hb-plasma uppercase tracking-[0.4em]"
+                href="{{ '/map/' | url }}"
+              >Launch concept map</a>
+              <a
+                class="btn btn-outline btn-secondary uppercase tracking-[0.35em]"
+                href="{{ '/work/' | url }}"
+              >Browse all work</a>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
+  </div>
 </div>
