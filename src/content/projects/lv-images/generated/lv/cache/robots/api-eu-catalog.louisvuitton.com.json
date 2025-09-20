@@ -1,0 +1,17 @@
+{
+  "byAgent": {},
+  "merged": {
+    "allow": [],
+    "disallow": [],
+    "noindex": [],
+    "crawlDelay": null,
+    "sitemaps": [],
+    "host": null,
+    "cleanParam": [],
+    "requestRate": null,
+    "visitTime": [],
+    "unknown": []
+  },
+  "lines": 0,
+  "_invalid": true
+}

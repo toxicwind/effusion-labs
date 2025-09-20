@@ -52,6 +52,8 @@ const MAX_HOSTS = argv.has("--max-hosts") ? Number(argv.get("--max-hosts")) : In
 const SEED_LOCALES = (argv.get("--seed-locales") || "eng_US,eng_E1").split(",").map((s) => s.trim()).filter(Boolean);
 const EXTRA_XML_GUESS = !argv.has("--no-guess"); // enable heuristic XML guesses
 const SAVE_WELLKNOWN_TXT = !argv.has("--no-wellknown"); // save security.txt, ads.txt, humans.txt
+const EXCLUDE_LOWER_ENVS = !argv.has("--include-lower-envs");
+const LOWER_ENV_PATTERN = /(^|\.)-?ppt\./i;
 
 /* ============================================================
    NET / RUNTIME
@@ -128,6 +130,17 @@ function detectFormat(text, ct = "") {
   if (isXmlLike(text, ct)) return "xml";
   if (/text\/plain/.test(ct)) return "txt";
   return "bin";
+}
+function isAccessDeniedHtml(text = "") {
+  const t = (text || "").toLowerCase();
+  return (
+    /unauthorized/.test(t) ||
+    /access(?:\s|-)denied/.test(t) ||
+    /forbidden/.test(t) ||
+    (/sign\s*in|login/.test(t) && /saml|okta|adfs|oauth|auth/.test(t)) ||
+    /akamai(?:ghost|error)/.test(t) ||
+    /reference\s*#\w{6,}/.test(t)
+  );
 }
 async function readCachedTextAny(url, type) {
   for (const ext of ["xml", "txt", "html", "raw"]) {
@@ -406,10 +419,7 @@ const TOP_XML_VARIANTS = [
   "/sitemap.xml",
   "/sitemap_index.xml",
   "/sitemapindex.xml",
-  "/sitemap/sitemap.xml",
-  "/sitemap.xml.gz",
-  "/sitemap_index.xml.gz",
-  "/sitemapindex.xml.gz",
+  "/sitemap/sitemap.xml"
 ];
 const EXTRA_XML_VARIANTS = [
   "/news-sitemap.xml",
@@ -418,19 +428,7 @@ const EXTRA_XML_VARIANTS = [
   "/feed.xml",
   "/rss.xml",
   "/atom.xml",
-  "/sitemap-1.xml",
-  "/sitemap-2.xml",
-  "/sitemap-3.xml",
-  "/sitemap-4.xml",
-  "/sitemap-5.xml",
-  "/sitemap-6.xml",
-  "/sitemap-7.xml",
-  "/sitemap-8.xml",
-  "/sitemap-9.xml",
-  "/sitemap-10.xml",
-  "/sitemap-1.xml.gz",
-  "/sitemap-2.xml.gz",
-  "/sitemap-3.xml.gz",
+  "/sitemap-1.xml"
 ];
 const WELLKNOWN_TXT = ["/robots.txt", "/ads.txt", "/humans.txt", "/.well-known/security.txt"];
 
@@ -462,10 +460,49 @@ async function discoverHost(host) {
   // robots.txt (for hints)
   const robotsURL = `https://${host}/robots.txt`;
   const robotsFetch = await fetchTextCached(robotsURL, "robots");
+  const robotsFmt = robotsFetch.format || detectFormat(robotsFetch.text, robotsFetch.contentType);
   let robotsParsed = parseRobots(robotsFetch.text || "");
   const robotsJsonPath = cachedPathFor(robotsURL, "robots-json", "json");
-  await writeFile(robotsJsonPath, JSON.stringify(robotsParsed, null, 2) + "\n", "utf8");
-  recordDoc(robotsURL, urlmeta[robotsURL]?.path?.endsWith(".html") ? "html" : "txt", urlmeta[robotsURL]?.path || cachedPathFor(robotsURL, "robots", "txt"), robotsFetch.status, robotsFetch.contentType || "text/plain", undefined, robotsFetch.format || null);
+
+  // record as doc (txt or html)
+  recordDoc(
+    robotsURL,
+    urlmeta[robotsURL]?.path?.endsWith(".html") ? "html" : "txt",
+    urlmeta[robotsURL]?.path || cachedPathFor(robotsURL, "robots", robotsFmt === "html" ? "html" : "txt"),
+    robotsFetch.status,
+    robotsFetch.contentType || (robotsFmt === "html" ? "text/html" : "text/plain"),
+    undefined,
+    robotsFetch.format || null
+  );
+
+  // (1-3) New: mark invalid robots if HTML or denied-like body; strike & maybe blacklist; then abort discovery
+  let robotsInvalid = false;
+  if (robotsFmt !== "txt") robotsInvalid = true;
+  if (robotsFmt === "html" && isAccessDeniedHtml(robotsFetch.text)) {
+    robotsInvalid = true;
+    hostStrikes.set(host, (hostStrikes.get(host) || 0) + 1);
+    if (hostStrikes.get(host) >= HOST_FAIL_THRESHOLD) {
+      const until = new Date(Date.now() + HOST_TTL_HOURS * 3600 * 1000).toISOString();
+      blacklist[host] = { untilISO: until, reason: "robots_html_denied", strikes: hostStrikes.get(host) };
+    }
+  }
+
+  // write robots parsed JSON with invalid flag
+  await writeFile(robotsJsonPath, JSON.stringify({ ...robotsParsed, _invalid: robotsInvalid }, null, 2) + "\n", "utf8");
+
+  // If robots invalid, abort discovery for this host (return docs only)
+  if (robotsInvalid) {
+    const robotsIndexEntry = {
+      host,
+      robotsTxtPath: urlmeta[robotsURL]?.path || cachedPathFor(robotsURL, "robots", robotsFmt === "html" ? "html" : "txt"),
+      robotsJsonPath,
+      sitemapsInRobots: [],
+      parsed: robotsParsed,
+      challenges,
+      invalid: true,
+    };
+    return { host, robots: robotsIndexEntry, sitemaps: [], docs };
+  }
 
   // Sitemaps referenced in robots
   for (const u of robotsParsed.merged.sitemaps || []) if (u) discovered.add(u);
@@ -499,7 +536,7 @@ async function discoverHost(host) {
             recordDoc(uu, ext === "html" ? "html" : "txt", urlmeta[uu]?.path || cachedPathFor(uu, "robots", ext), res.status, res.contentType || "", undefined, res.format || null);
           }
         }
-      } catch {}
+      } catch { }
     }
   }
 
@@ -568,11 +605,12 @@ async function discoverHost(host) {
 
   const robotsIndexEntry = {
     host,
-    robotsTxtPath: urlmeta[robotsURL]?.path || cachedPathFor(robotsURL, "robots", "txt"),
+    robotsTxtPath: urlmeta[robotsURL]?.path || cachedPathFor(robotsURL, "robots", robotsFmt === "html" ? "html" : "txt"),
     robotsJsonPath,
     sitemapsInRobots: robotsParsed.merged.sitemaps || [],
     parsed: robotsParsed,
     challenges,
+    invalid: false,
   };
 
   return { host, robots: robotsIndexEntry, sitemaps: [...new Set([...imageFirst, ...rest])], docs };
@@ -584,7 +622,9 @@ async function discoverHost(host) {
 async function main() {
   await ensureDirs();
 
-  const hostsTxt = (await readFile(hostsTxtPath, "utf8")).split(/\r?\n/).map((s) => s.trim()).filter(Boolean);
+  const hostsTxtRaw = (await readFile(hostsTxtPath, "utf8")).split(/\r?\n/).map((s) => s.trim()).filter(Boolean);
+  const hostsTxt = EXCLUDE_LOWER_ENVS ? hostsTxtRaw.filter((h) => !LOWER_ENV_PATTERN.test(h)) : hostsTxtRaw;
+
   urlmeta = await loadJson(urlMetaPath, Object.create(null));
   blacklist = RESET_BLACKLIST ? Object.create(null) : await loadJson(blacklistPath, Object.create(null));
   for (const [h, v] of Object.entries(blacklist)) if (new Date(v.untilISO) <= new Date()) delete blacklist[h];
@@ -648,7 +688,7 @@ async function main() {
     if (shardItems % STREAM_FSYNC_EVERY === 0 && typeof shardStream.fd === "number") {
       try {
         fsyncSync(shardStream.fd);
-      } catch {}
+      } catch { }
     }
     if (shardLines >= SITEMAP_SHARD_LINES) {
       await new Promise((r) => shardStream.end(r));
@@ -741,7 +781,7 @@ async function main() {
   // summary
   const sortObj = (m) => Object.fromEntries([...m.entries()].sort((a, b) => (b[1] === a[1] ? a[0].localeCompare(b[0]) : b[1] - a[1])));
   const summary = {
-    version: 10,
+    version: 11,
     generatedAt: new Date().toISOString(),
     config: {
       discovery: ENABLE_DISCOVERY,
@@ -754,6 +794,7 @@ async function main() {
       seedLocales: SEED_LOCALES,
       extraXmlGuess: EXTRA_XML_GUESS,
       wellKnownTxt: SAVE_WELLKNOWN_TXT,
+      excludeLowerEnvs: EXCLUDE_LOWER_ENVS,
     },
     inputs: { hostsTxt: path.relative(process.cwd(), hostsTxtPath) },
     outputs: {
