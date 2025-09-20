@@ -60,3 +60,8 @@ eleventyComputed:
     </div>
   </article>
 </section>
+{% if content | trim %}
+  <section class="mt-8 space-y-8">
+    {{ content | safe }}
+  </section>
+{% endif %}

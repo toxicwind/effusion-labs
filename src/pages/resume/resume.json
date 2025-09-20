@@ -311,6 +311,24 @@
         "PyTorch"
       ],
       "status": "Private client work; demo available upon request."
+    },
+    "lv-images": {
+      "title": "Louis Vuitton Image Atlas",
+      "badge": "lab",
+      "blurb": "Aggregates Louis Vuitton multi-locale image sitemaps into a browsable atlas with filters and dedupe controls.",
+      "highlights": [
+        "Fetches 240 locale sitemaps into a reproducible JSON dataset.",
+        "Faceted explorer with dedupe, search, and lazy grid rendering.",
+        "Updatable via npm run lv-images:update for repeatable snapshots."
+      ],
+      "stack": [
+        "Eleventy",
+        "Vite",
+        "Tailwind CSS",
+        "Node fetch",
+        "fast-xml-parser"
+      ],
+      "status": "Refresh the dataset with npm run lv-images:update before publishing new snapshots."
     }
   }
 }
