@@ -9,11 +9,18 @@ metaDisable: true
 
 {# Normalize the URL we’ll use everywhere #}
 {% set redirectUrl = redirect | default('/') %}
+{% set siteUrl = metadata and metadata.site and metadata.site.url %}
+{% set canonicalHref = redirectUrl %}
+{% if siteUrl and canonicalHref and '://' not in canonicalHref %}
+  {% set canonicalHref = canonicalHref | absoluteUrl(siteUrl) %}
+{% endif %}
 
 {# If your base.njk defines a "headExtra" block, we inject head tags here. #}
 {% block headExtra %}
-  <meta http-equiv="refresh" content="0; url={{ redirectUrl }}" data-vite-ignore>
-  <link rel="canonical" href="{{ redirectUrl }}" data-vite-ignore>
+  <meta http-equiv="refresh" content="0; url={{ canonicalHref or redirectUrl }}" data-vite-ignore>
+  {% if canonicalHref %}
+    <link rel="canonical" href="{{ canonicalHref }}" data-vite-ignore>
+  {% endif %}
   <meta name="robots" content="noindex">
 {% endblock headExtra %}
 
