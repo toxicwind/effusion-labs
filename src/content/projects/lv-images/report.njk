@@ -14,6 +14,21 @@ metaDisable: true
 {% set docs = lv.docs or [] %}
 {% set robots = lv.robots or [] %}
 {% set sample = lv.sample or [] %}
+{% set metrics = lv.metrics or {} %}
+{% set robotsMetrics = metrics.robots or {} %}
+{% set docsMetrics = metrics.docs or {} %}
+{% set toneBadge = {
+  'error': 'badge-error',
+  'warn': 'badge-warning',
+  'ok': 'badge-success',
+  'info': 'badge-info'
+} %}
+{% set toneChip = {
+  'error': 'bg-error/15 text-error',
+  'warn': 'bg-warning/20 text-warning-content',
+  'ok': 'bg-success/15 text-success',
+  'info': 'bg-info/15 text-info'
+} %}
 
 <div class="max-w-screen-2xl mx-auto px-6 py-10 space-y-12">
   <header class="space-y-6">
@@ -53,6 +68,53 @@ metaDisable: true
       </div>
     </div>
   </header>
+
+  <section class="grid gap-4 md:grid-cols-2" aria-label="Cache health overview">
+    <div class="card border border-base-content/10 bg-base-200">
+      <div class="card-body space-y-3">
+        <div class="flex items-center justify-between gap-3">
+          <h2 class="text-lg font-semibold">Robots cache health</h2>
+          <span class="text-sm opacity-70">{{ robotsMetrics.total or 0 }} hosts</span>
+        </div>
+        <p class="text-sm opacity-70">{{ robotsMetrics.issues or 0 }} of {{ robotsMetrics.total or 0 }} hosts flagged</p>
+        <div class="flex flex-wrap gap-2">
+          {% set robotBreakdown = robotsMetrics.breakdown or [] %}
+          {% if robotBreakdown | length %}
+            {% for seg in robotBreakdown %}
+              {% set chipClass = toneChip[seg.tone] or 'bg-base-300/60 text-sm' %}
+              <span class="px-3 py-1 rounded-full text-xs font-medium {{ chipClass }}">
+                {{ seg.label }} · {{ seg.count }} ({{ seg.pct }}%)
+              </span>
+            {% endfor %}
+          {% else %}
+            <span class="text-sm opacity-60">No cached robots yet.</span>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    <div class="card border border-base-content/10 bg-base-200">
+      <div class="card-body space-y-3">
+        <div class="flex items-center justify-between gap-3">
+          <h2 class="text-lg font-semibold">XML/TXT cache health</h2>
+          <span class="text-sm opacity-70">{{ docsMetrics.total or 0 }} files</span>
+        </div>
+        <p class="text-sm opacity-70">{{ docsMetrics.issues or 0 }} of {{ docsMetrics.total or 0 }} files flagged</p>
+        <div class="flex flex-wrap gap-2">
+          {% set docBreakdown = docsMetrics.breakdown or [] %}
+          {% if docBreakdown | length %}
+            {% for seg in docBreakdown %}
+              {% set chipClass = toneChip[seg.tone] or 'bg-base-300/60 text-sm' %}
+              <span class="px-3 py-1 rounded-full text-xs font-medium {{ chipClass }}">
+                {{ seg.label }} · {{ seg.count }} ({{ seg.pct }}%)
+              </span>
+            {% endfor %}
+          {% else %}
+            <span class="text-sm opacity-60">No cached documents yet.</span>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </section>
 
   <section class="space-y-4" id="sitemaps">
     <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
@@ -118,148 +180,134 @@ metaDisable: true
   </section>
 
   <section class="space-y-4" id="robots">
-    <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-      <div>
+    <div class="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
+      <div class="space-y-2">
         <h2 class="text-2xl font-semibold">Robots Explorer</h2>
-        <p class="text-sm opacity-70">Inspect cached <code>robots.txt</code> responses, directives, and blacklist notes.</p>
+        <p class="text-sm opacity-70">Classified view of cached <code>robots.txt</code> responses with live mirrors, cached filenames, and directive counts.</p>
       </div>
-      <div class="flex flex-wrap gap-3 items-center">
+      <div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:flex-wrap">
         <label class="input input-bordered flex items-center gap-2 w-full sm:w-72">
           <span class="opacity-60">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-3.5-3.5"></path></svg>
           </span>
-          <input id="robotsFilter" type="search" class="grow" placeholder="Filter host or directive…" autocomplete="off" />
+          <input id="robotsFilter" type="search" class="grow" placeholder="Search host, directive, or status…" autocomplete="off" />
         </label>
-        <button class="btn btn-sm btn-outline" id="toggleBlacklisted" type="button">Hide blacklisted</button>
+        <div id="robotsStatusFilters" class="flex flex-wrap gap-2">
+          {% for seg in robotsMetrics.breakdown or [] %}
+            {% set badgeClass = toneBadge[seg.tone] or 'badge-outline' %}
+            <button type="button" class="btn btn-xs btn-ghost status-chip" data-status="{{ seg.key }}">
+              <span class="badge {{ badgeClass }} badge-xs">{{ seg.label }}</span>
+              <span class="text-xs opacity-60">{{ seg.count }}</span>
+            </button>
+          {% endfor %}
+        </div>
+        <label class="flex items-center gap-2 text-sm">
+          <input id="robotsIssuesOnly" type="checkbox" class="checkbox checkbox-sm" />
+          <span>Show issues only</span>
+        </label>
       </div>
     </div>
     {% if robots | length %}
-      <div class="grid gap-4 md:gap-6 md:grid-cols-2" id="robotsContainer">
-        {% for r in robots %}
-          <div class="card bg-base-200 border border-base-content/10 robots-card" data-host="{{ r.host }}" data-blacklisted="{% if r.blacklisted %}1{% else %}0{% endif %}">
-            <div class="card-body space-y-5">
-              <div class="flex flex-col gap-2">
-                <div class="flex flex-wrap items-start justify-between gap-3">
-                  <div>
-                    <h3 class="text-lg font-semibold">{{ r.host }}</h3>
-                    <div class="flex flex-wrap gap-2 mt-2 text-xs sm:text-sm">
-                      <span class="badge badge-outline">{% if r.hasCached %}cached{% else %}no cache{% endif %}</span>
+      <div class="overflow-x-auto rounded-box border border-base-content/10">
+        <table class="table table-xs" id="robotsTable">
+          <thead>
+            <tr>
+              <th class="min-w-[220px]">Host</th>
+              <th class="min-w-[160px]">Status</th>
+              <th class="min-w-[160px]">Cache</th>
+              <th class="min-w-[200px]">Directives</th>
+              <th class="min-w-[260px]">Preview</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for r in robots %}
+              <tr data-host="{{ r.host }}" data-status="{{ r.statusCategory }}" data-issue="{% if r.isIssue %}1{% else %}0{% endif %}">
+                <td class="align-top">
+                  <div class="flex flex-col gap-1">
+                    <span class="font-medium">{{ r.host }}</span>
+                    <div class="flex flex-wrap items-center gap-2 text-xs">
+                      <a class="link link-primary" href="https://{{ r.host }}/robots.txt" target="_blank" rel="noreferrer">Live robots.txt</a>
+                      {% if r.robotsTxtPath %}
+                        <span class="opacity-40">·</span>
+                        <a class="link" href="{{ baseHref }}{{ r.robotsTxtPath }}" target="_blank" rel="noreferrer">Cached</a>
+                      {% endif %}
                       {% if r.blacklisted %}
-                        <span class="badge badge-error">blacklisted{% if r.blacklistReason %}: {{ r.blacklistReason }}{% endif %}</span>
-                      {% else %}
-                        <span class="badge badge-success">ok</span>
+                        <span class="badge badge-error badge-outline">
+                          Blacklisted{% if r.blacklistReason %} · {{ r.blacklistReason }}{% endif %}
+                        </span>
                       {% endif %}
-                      {% if r.parsed.merged.crawlDelay is not none %}
-                        <span class="badge badge-outline">crawl-delay {{ r.parsed.merged.crawlDelay }}</span>
-                      {% endif %}
-                      <span class="badge badge-outline">lines {{ r.linesTotal }}</span>
                     </div>
-                  </div>
-                  <div class="flex flex-wrap items-center gap-2 text-sm">
-                    <a class="link link-primary" href="https://{{ r.host }}/robots.txt" target="_blank" rel="noreferrer">Live robots.txt</a>
-                    {% if r.robotsTxtPath %}
-                      <span class="opacity-50">·</span>
-                      <a class="link" href="{{ baseHref }}{{ r.robotsTxtPath }}" target="_blank" rel="noreferrer">Cached</a>
+                    {% if r.blacklisted and r.blacklistUntil %}
+                      <span class="text-[11px] opacity-60">Active until {{ r.blacklistUntil }}</span>
                     {% endif %}
                   </div>
-                </div>
-                {% if r.blacklisted and r.blacklistUntil %}
-                  <p class="text-xs opacity-70">Blacklist active until {{ r.blacklistUntil }}.</p>
-                {% endif %}
-              </div>
-
-              {% if r.parsed.merged.disallow.length %}
-                <div class="space-y-2">
-                  <p class="text-xs uppercase tracking-widest opacity-60">Disallow</p>
-                  <div class="flex flex-wrap gap-2">
-                    {% for p in r.parsed.merged.disallow %}
-                      {% set link = p %}
-                      {% if '://' not in p %}
-                        {% if p and p[0] == '/' %}
-                          {% set link = 'https://' ~ r.host ~ p %}
-                        {% else %}
-                          {% set link = 'https://' ~ r.host ~ '/' ~ p %}
-                        {% endif %}
-                      {% endif %}
-                      <a class="badge badge-outline" href="{{ link }}" target="_blank" rel="noreferrer">{{ p }}</a>
-                    {% endfor %}
+                </td>
+                <td class="align-top">
+                  <div class="flex flex-col gap-1">
+                    {% set badgeClass = toneBadge[r.statusTone] or 'badge-outline' %}
+                    <span class="badge {{ badgeClass }} badge-sm">{{ r.statusLabel }}</span>
+                    {% if r.httpLabel %}
+                      <span class="badge badge-outline badge-xs">{{ r.httpLabel }}</span>
+                    {% endif %}
+                    <span class="text-[11px] opacity-60">{{ r.linesTotal }} lines</span>
                   </div>
-                </div>
-              {% endif %}
-
-              {% if r.parsed.merged.allow.length %}
-                <div class="space-y-2">
-                  <p class="text-xs uppercase tracking-widest opacity-60">Allow</p>
-                  <div class="flex flex-wrap gap-2">
-                    {% for p in r.parsed.merged.allow %}
-                      {% set link = p %}
-                      {% if '://' not in p %}
-                        {% if p and p[0] == '/' %}
-                          {% set link = 'https://' ~ r.host ~ p %}
-                        {% else %}
-                          {% set link = 'https://' ~ r.host ~ '/' ~ p %}
-                        {% endif %}
-                      {% endif %}
-                      <a class="badge badge-outline" href="{{ link }}" target="_blank" rel="noreferrer">{{ p }}</a>
-                    {% endfor %}
-                  </div>
-                </div>
-              {% endif %}
-
-              {% if r.parsed.merged.noindex.length %}
-                <div class="space-y-2">
-                  <p class="text-xs uppercase tracking-widest opacity-60">Noindex</p>
-                  <div class="flex flex-wrap gap-2">
-                    {% for p in r.parsed.merged.noindex %}
-                      {% set link = p %}
-                      {% if '://' not in p %}
-                        {% if p and p[0] == '/' %}
-                          {% set link = 'https://' ~ r.host ~ p %}
-                        {% else %}
-                          {% set link = 'https://' ~ r.host ~ '/' ~ p %}
-                        {% endif %}
-                      {% endif %}
-                      <a class="badge badge-outline" href="{{ link }}" target="_blank" rel="noreferrer">{{ p }}</a>
-                    {% endfor %}
-                  </div>
-                </div>
-              {% endif %}
-
-              {% if r.parsed.merged.sitemaps.length %}
-                <div class="space-y-1">
-                  <p class="text-xs uppercase tracking-widest opacity-60">Sitemaps Declared</p>
-                  <ul class="list-disc list-inside text-sm space-y-1">
-                    {% for u in r.parsed.merged.sitemaps %}
-                      <li><a href="{{ u }}" class="link" target="_blank" rel="noreferrer">{{ u }}</a></li>
-                    {% endfor %}
-                  </ul>
-                </div>
-              {% endif %}
-
-              {% if r.parsed.other and (r.parsed.other | length) %}
-                <div class="space-y-2">
-                  <p class="text-xs uppercase tracking-widest opacity-60">Other directives</p>
-                  <div class="flex flex-wrap gap-2 text-xs sm:text-sm">
-                    {% for key, vals in r.parsed.other %}
-                      <span class="badge badge-outline">{{ key }}: {{ vals | join(' · ') }}</span>
-                    {% endfor %}
-                  </div>
-                </div>
-              {% endif %}
-
-              <details class="collapse collapse-arrow bg-base-100 border border-base-content/10">
-                <summary class="collapse-title text-sm font-medium">Raw robots.txt ({{ r.linesTotal }} lines)</summary>
-                <div class="collapse-content">
-                  {% if r.hasCached %}
-                    <pre class="bg-base-100 whitespace-pre-wrap text-xs leading-5 max-h-80 overflow-auto border border-base-content/10 rounded-box p-4">{{ r.rawText }}</pre>
+                </td>
+                <td class="align-top">
+                  {% if r.robotsTxtPath %}
+                    <div class="flex flex-col gap-1 text-xs">
+                      <a class="link link-hover" href="{{ baseHref }}{{ r.robotsTxtPath }}" target="_blank" rel="noreferrer">{{ r.fileName }}</a>
+                      <span class="opacity-60">{{ r.sizeLabel }} · cached</span>
+                    </div>
                   {% else %}
-                    <p class="text-sm opacity-70">No cached copy. Use the live link above.</p>
+                    <span class="text-xs opacity-60">No cache</span>
                   {% endif %}
-                </div>
-              </details>
-            </div>
-          </div>
-        {% endfor %}
+                </td>
+                <td class="align-top">
+                  {% set allowCount = r.parsed.merged.allow.length %}
+                  {% set disallowCount = r.parsed.merged.disallow.length %}
+                  {% set noindexCount = r.parsed.merged.noindex.length %}
+                  {% set sitemapCount = r.parsed.merged.sitemaps.length %}
+                  <div class="flex flex-wrap gap-1 text-[11px]">
+                    {% if allowCount %}<span class="badge badge-outline badge-xs">Allow {{ allowCount }}</span>{% endif %}
+                    {% if disallowCount %}<span class="badge badge-outline badge-xs">Disallow {{ disallowCount }}</span>{% endif %}
+                    {% if noindexCount %}<span class="badge badge-outline badge-xs">Noindex {{ noindexCount }}</span>{% endif %}
+                    {% if r.parsed.merged.crawlDelay is not none %}<span class="badge badge-outline badge-xs">Delay {{ r.parsed.merged.crawlDelay }}</span>{% endif %}
+                    {% if sitemapCount %}<span class="badge badge-outline badge-xs">Sitemaps {{ sitemapCount }}</span>{% endif %}
+                  </div>
+                  {% if sitemapCount %}
+                    <div class="mt-1 space-y-1 text-[11px]">
+                      {% for u in r.parsed.merged.sitemaps | slice(0, 3) %}
+                        <a class="link link-hover" href="{{ u }}" target="_blank" rel="noreferrer">{{ u }}</a>
+                      {% endfor %}
+                      {% if r.parsed.merged.sitemaps.length > 3 %}
+                        <span class="opacity-60">+{{ r.parsed.merged.sitemaps.length - 3 }} more…</span>
+                      {% endif %}
+                    </div>
+                  {% endif %}
+                  {% if r.parsed.other and (r.parsed.other | length) %}
+                    <div class="mt-1 flex flex-wrap gap-1 text-[11px]">
+                      {% for key, vals in r.parsed.other %}
+                        <span class="badge badge-outline badge-xs">{{ key }}: {{ vals | join(' · ') }}</span>
+                      {% endfor %}
+                    </div>
+                  {% endif %}
+                </td>
+                <td class="align-top w-80">
+                  {% if r.preview %}
+                    <pre class="bg-base-100 border border-base-content/10 rounded-box p-3 text-xs leading-5 whitespace-pre-wrap max-h-36 overflow-auto">{{ r.preview | escape }}</pre>
+                    {% if r.robotsTxtPath %}
+                      <a class="link link-hover text-xs" href="{{ baseHref }}{{ r.robotsTxtPath }}" target="_blank" rel="noreferrer">Open full raw</a>
+                    {% endif %}
+                  {% elif r.hasCached %}
+                    <a class="link link-hover text-xs" href="{{ baseHref }}{{ r.robotsTxtPath }}" target="_blank" rel="noreferrer">Open cached file</a>
+                  {% else %}
+                    <span class="text-xs opacity-60">No cache captured</span>
+                  {% endif %}
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
       </div>
     {% else %}
       <div class="alert alert-info">
@@ -269,53 +317,97 @@ metaDisable: true
   </section>
 
   <section class="space-y-4" id="docs">
-    <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-      <div>
+    <div class="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
+      <div class="space-y-2">
         <h2 class="text-2xl font-semibold">Cached XML/TXT Documents</h2>
-        <p class="text-sm opacity-70">All stored sitemap and text payloads under <code>cache/sitemaps/</code>.</p>
+        <p class="text-sm opacity-70">Inventory of saved sitemap payloads and text resources under <code>cache/sitemaps/</code>.</p>
+        <p class="text-xs opacity-60">Use the status filters to surface 403/404 pages, HTML error payloads, and gzip archives that need cleanup.</p>
       </div>
-      <div class="flex flex-wrap gap-3 items-center">
+      <div class="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-end">
         <label class="input input-bordered flex items-center gap-2 w-full sm:w-72">
           <span class="opacity-60">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-3.5-3.5"></path></svg>
           </span>
-          <input id="docsFilter" type="search" class="grow" placeholder="Filter host, URL, or content type…" autocomplete="off" />
+          <input id="docsFilter" type="search" class="grow" placeholder="Search host, filename, or status…" autocomplete="off" />
+        </label>
+        <div id="docsStatusFilters" class="flex flex-wrap gap-2">
+          {% for seg in docsMetrics.breakdown or [] %}
+            {% set badgeClass = toneBadge[seg.tone] or 'badge-outline' %}
+            <button type="button" class="btn btn-xs btn-ghost status-chip" data-status="{{ seg.key }}">
+              <span class="badge {{ badgeClass }} badge-xs">{{ seg.label }}</span>
+              <span class="text-xs opacity-60">{{ seg.count }}</span>
+            </button>
+          {% endfor %}
+        </div>
+        <label class="flex items-center gap-2 text-sm">
+          <input id="docsIssuesOnly" type="checkbox" class="checkbox checkbox-sm" />
+          <span>Show issues only</span>
         </label>
         <button class="btn btn-sm btn-outline" id="exportDocs" type="button">Export CSV</button>
       </div>
     </div>
     {% if docs | length %}
       <div class="overflow-x-auto rounded-box border border-base-content/10">
-        <table class="table table-sm" id="docsTable">
+        <table class="table table-xs" id="docsTable">
           <thead>
             <tr>
-              <th>Host</th>
-              <th>Kind</th>
-              <th>Status</th>
-              <th>Content-Type</th>
-              <th>Live URL</th>
-              <th>Cached</th>
+              <th class="min-w-[200px]">Host</th>
+              <th class="min-w-[220px]">File</th>
+              <th class="min-w-[160px]">Status</th>
+              <th class="min-w-[160px]">Meta</th>
+              <th class="min-w-[320px]">Preview</th>
             </tr>
           </thead>
           <tbody>
             {% for d in docs %}
-              <tr>
-                <td class="font-medium">{{ d.host or '—' }}</td>
-                <td class="capitalize">{{ d.kind or '—' }}</td>
-                <td>{{ d.status or '—' }}</td>
-                <td>{{ d.contentType or '—' }}</td>
-                <td>
-                  {% if d.url %}
-                    <a href="{{ d.url }}" class="link link-primary" target="_blank" rel="noreferrer">{{ d.url }}</a>
-                  {% else %}
-                    —
-                  {% endif %}
+              <tr data-status="{{ d.statusCategory }}" data-issue="{% if d.isIssue %}1{% else %}0{% endif %}">
+                <td class="align-top">
+                  <div class="flex flex-col gap-1">
+                    <span class="font-medium">{{ d.host or '—' }}</span>
+                    {% if d.url %}
+                      <a class="link link-primary text-xs" href="{{ d.url }}" target="_blank" rel="noreferrer">Live document</a>
+                    {% endif %}
+                  </div>
                 </td>
-                <td>
-                  {% if d.savedPath %}
-                    <a href="{{ baseHref }}{{ d.savedPath }}" class="link" target="_blank" rel="noreferrer">open</a>
+                <td class="align-top">
+                  <div class="flex flex-col gap-1 text-xs">
+                    {% if d.savedPath %}
+                      <a class="link link-hover" href="{{ baseHref }}{{ d.savedPath }}" target="_blank" rel="noreferrer">{{ d.fileName }}</a>
+                      <span class="opacity-60">{{ d.savedPath }}</span>
+                    {% endif %}
+                    <span class="badge badge-outline badge-xs capitalize">{{ d.kind or '—' }}</span>
+                  </div>
+                </td>
+                <td class="align-top">
+                  {% set badgeClass = toneBadge[d.statusTone] or 'badge-outline' %}
+                  <div class="flex flex-col gap-1">
+                    <span class="badge {{ badgeClass }} badge-sm">{{ d.statusLabel }}</span>
+                    {% if d.httpLabel %}
+                      <span class="badge badge-outline badge-xs">{{ d.httpLabel }}</span>
+                    {% endif %}
+                    {% if d.status %}
+                      <span class="text-[11px] opacity-60">Fetch status {{ d.status }}</span>
+                    {% endif %}
+                  </div>
+                </td>
+                <td class="align-top text-xs">
+                  <div class="space-y-1">
+                    <span class="opacity-70">{{ d.sizeLabel }}</span>
+                    {% if d.contentType %}
+                      <span class="opacity-60">{{ d.contentType }}</span>
+                    {% endif %}
+                    {% if d.statusCategory == 'gzip' %}
+                      <span class="opacity-60">Compressed (.gz)</span>
+                    {% endif %}
+                  </div>
+                </td>
+                <td class="align-top w-[360px]">
+                  {% if d.preview %}
+                    <pre class="bg-base-100 border border-base-content/10 rounded-box p-3 text-xs leading-5 whitespace-pre-wrap max-h-40 overflow-auto">{{ d.preview | escape }}</pre>
+                  {% elif d.statusCategory == 'gzip' %}
+                    <span class="text-xs opacity-60">Gzip archive — download to inspect.</span>
                   {% else %}
-                    —
+                    <span class="text-xs opacity-60">No preview available.</span>
                   {% endif %}
                 </td>
               </tr>
@@ -360,28 +452,8 @@ metaDisable: true
   const sitemapsTable = document.getElementById('sitemapsTable');
   const exportSitemaps = document.getElementById('exportSitemaps');
 
-  const robotsFilter = document.getElementById('robotsFilter');
-  const robotsContainer = document.getElementById('robotsContainer');
-  const toggleBlacklisted = document.getElementById('toggleBlacklisted');
-
-  const docsFilter = document.getElementById('docsFilter');
-  const docsTable = document.getElementById('docsTable');
-  const exportDocs = document.getElementById('exportDocs');
-
-  function syncChipState(button, on) {
-    if (!button) return;
-    if (on) {
-      button.classList.add('btn-primary');
-      button.classList.remove('btn-ghost');
-    } else {
-      button.classList.remove('btn-primary');
-      button.classList.add('btn-ghost');
-    }
-  }
-
   if (chipsRoot && sitemapsTable) {
     const active = new Set(TYPES);
-    const buttons = new Map();
 
     TYPES.forEach(type => {
       const button = document.createElement('button');
@@ -399,7 +471,6 @@ metaDisable: true
         }
         filterSitemaps();
       });
-      buttons.set(type, button);
       chipsRoot.appendChild(button);
     });
 
@@ -430,64 +501,120 @@ metaDisable: true
     }
   }
 
-  if (robotsContainer && toggleBlacklisted) {
-    let showBlacklisted = true;
-    function filterRobots() {
-      const query = (robotsFilter && robotsFilter.value || '').toLowerCase();
-      robotsContainer.querySelectorAll('.robots-card').forEach(card => {
-        const isBlacklisted = card.getAttribute('data-blacklisted') === '1';
-        const haystack = card.innerText.toLowerCase();
-        const matches = !query || haystack.includes(query);
-        const allowed = showBlacklisted || !isBlacklisted;
-        card.style.display = matches && allowed ? '' : 'none';
-      });
-      toggleBlacklisted.textContent = showBlacklisted ? 'Hide blacklisted' : 'Show blacklisted';
-    }
-    if (robotsFilter) robotsFilter.addEventListener('input', filterRobots);
-    toggleBlacklisted.addEventListener('click', () => {
-      showBlacklisted = !showBlacklisted;
-      filterRobots();
-    });
-    filterRobots();
-  }
+  const robotsTable = document.getElementById('robotsTable');
+  const robotsFilter = document.getElementById('robotsFilter');
+  const robotsStatusButtons = Array.from(document.querySelectorAll('#robotsStatusFilters .status-chip'));
+  const robotsIssuesOnly = document.getElementById('robotsIssuesOnly');
+  setupTableFilter({
+    table: robotsTable,
+    searchInput: robotsFilter,
+    statusButtons: robotsStatusButtons,
+    issuesToggle: robotsIssuesOnly
+  });
 
-  if (docsTable) {
-    function filterDocs() {
-      const query = (docsFilter && docsFilter.value || '').toLowerCase();
+  const docsTable = document.getElementById('docsTable');
+  const docsFilter = document.getElementById('docsFilter');
+  const docsStatusButtons = Array.from(document.querySelectorAll('#docsStatusFilters .status-chip'));
+  const docsIssuesOnly = document.getElementById('docsIssuesOnly');
+  setupTableFilter({
+    table: docsTable,
+    searchInput: docsFilter,
+    statusButtons: docsStatusButtons,
+    issuesToggle: docsIssuesOnly
+  });
+
+  const exportDocs = document.getElementById('exportDocs');
+  if (exportDocs && docsTable) {
+    exportDocs.addEventListener('click', () => {
+      const rows = [["Host","File","Status","Meta","Preview"]];
       docsTable.querySelectorAll('tbody tr').forEach(tr => {
-        const text = tr.innerText.toLowerCase();
-        tr.style.display = !query || text.includes(query) ? '' : 'none';
+        if (tr.style.display === 'none') return;
+        const cells = Array.from(tr.querySelectorAll('td')).map(td => td.innerText.trim());
+        rows.push(cells);
       });
-    }
-    if (docsFilter) docsFilter.addEventListener('input', filterDocs);
-    filterDocs();
-
-    if (exportDocs) {
-      exportDocs.addEventListener('click', () => {
-        const rows = [["Host","Kind","Status","Content-Type","URL","Cached"]];
-        docsTable.querySelectorAll('tbody tr').forEach(tr => {
-          if (tr.style.display === 'none') return;
-          const cells = Array.from(tr.querySelectorAll('td')).map(td => td.innerText.trim());
-          rows.push(cells);
-        });
-        downloadCsv('docs.csv', rows);
-      });
-    }
-  }
-
-  function downloadCsv(filename, rows) {
-    const csv = rows.map(row => row.map(cell => {
-      if (cell == null) return '';
-      const value = String(cell).replace(/"/g, '""');
-      return /[",\n]/.test(value) ? `"${value}"` : value;
-    }).join(',')).join('\n');
-    const blob = new Blob([csv], { type: 'text/csv' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = filename;
-    link.click();
-    setTimeout(() => URL.revokeObjectURL(url), 1000);
+      downloadCsv('lv-docs.csv', rows);
+    });
   }
 })();
+
+function syncChipState(button, on) {
+  if (!button) return;
+  if (on) {
+    button.classList.add('btn-primary');
+    button.classList.remove('btn-ghost');
+  } else {
+    button.classList.remove('btn-primary');
+    button.classList.add('btn-ghost');
+  }
+}
+
+function setupTableFilter({ table, searchInput, statusButtons, issuesToggle }) {
+  if (!table) return;
+  const rows = Array.from(table.querySelectorAll('tbody tr'));
+  const activeStatuses = new Set(statusButtons && statusButtons.length ? statusButtons.map(btn => btn.dataset.status) : []);
+
+  if (statusButtons && statusButtons.length) {
+    statusButtons.forEach(btn => {
+      syncChipState(btn, true);
+      btn.addEventListener('click', () => {
+        const status = btn.dataset.status;
+        if (activeStatuses.has(status)) {
+          activeStatuses.delete(status);
+          syncChipState(btn, false);
+        } else {
+          activeStatuses.add(status);
+          syncChipState(btn, true);
+        }
+        if (activeStatuses.size === 0) {
+          statusButtons.forEach(other => {
+            activeStatuses.add(other.dataset.status);
+            syncChipState(other, true);
+          });
+        }
+        applyFilters();
+      });
+    });
+  }
+
+  if (searchInput) searchInput.addEventListener('input', applyFilters);
+  if (issuesToggle) issuesToggle.addEventListener('change', applyFilters);
+
+  applyFilters();
+
+  function applyFilters() {
+    const query = (searchInput && searchInput.value || '').toLowerCase().trim();
+    const terms = query ? query.split(/\s+/).filter(Boolean) : [];
+    const issuesOnly = !!(issuesToggle && issuesToggle.checked);
+
+    rows.forEach(row => {
+      const rowStatus = row.getAttribute('data-status');
+      const rowIssue = row.getAttribute('data-issue') === '1';
+      let visible = true;
+
+      if (statusButtons && statusButtons.length && rowStatus && !activeStatuses.has(rowStatus)) visible = false;
+      if (issuesOnly && !rowIssue) visible = false;
+      if (visible && terms.length) {
+        const haystack = row.innerText.toLowerCase();
+        visible = terms.every(term => haystack.includes(term));
+      }
+
+      row.style.display = visible ? '' : 'none';
+    });
+  }
+}
+
+function downloadCsv(filename, rows) {
+  const csv = rows.map(row => row.map(cell => {
+    if (cell == null) return '';
+    const value = String(cell).replace(/"/g, '""');
+    return /[",\n]/.test(value) ? `"${value}"` : value;
+  }).join(',')).join('\n');
+  const blob = new Blob([csv], { type: 'text/csv' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = filename;
+  link.click();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
 </script>

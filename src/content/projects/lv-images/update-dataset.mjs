@@ -49,9 +49,9 @@ const ENABLE_DISCOVERY = !argv.has("--no-discovery");
 const RESET_BLACKLIST = argv.has("--reset-blacklist");
 const HOST_TTL_HOURS = Number(argv.get("--ttl") ?? 24);
 const MAX_HOSTS = argv.has("--max-hosts") ? Number(argv.get("--max-hosts")) : Infinity;
-const SEED_LOCALES = (argv.get("--seed-locales") || "eng_US,eng_E1").split(",").map(s => s.trim()).filter(Boolean);
-const EXTRA_XML_GUESS = !argv.has("--no-guess");        // enable heuristic XML guesses
-const SAVE_WELLKNOWN_TXT = !argv.has("--no-wellknown");    // save security.txt, ads.txt, humans.txt
+const SEED_LOCALES = (argv.get("--seed-locales") || "eng_US,eng_E1").split(",").map((s) => s.trim()).filter(Boolean);
+const EXTRA_XML_GUESS = !argv.has("--no-guess"); // enable heuristic XML guesses
+const SAVE_WELLKNOWN_TXT = !argv.has("--no-wellknown"); // save security.txt, ads.txt, humans.txt
 
 /* ============================================================
    NET / RUNTIME
@@ -66,20 +66,38 @@ const STREAM_FSYNC_EVERY = 3000;
 const SITEMAP_SHARD_LINES = 25000;
 const TERMINAL_4XX = new Set([400, 401, 403, 404, 410, 451]);
 
-setGlobalDispatcher(new Agent({
-  connections: GLOBAL_CONCURRENCY * 2,
-  pipelining: 2,
-  keepAliveTimeout: 9000,
-  headersTimeout: TIMEOUT_MS + 2000,
-}));
+setGlobalDispatcher(
+  new Agent({
+    connections: GLOBAL_CONCURRENCY * 2,
+    pipelining: 2,
+    keepAliveTimeout: 9000,
+    headersTimeout: TIMEOUT_MS + 2000,
+  })
+);
 
 /* ============================================================
    HELPERS
    ============================================================ */
-const parser = new XMLParser({ ignoreAttributes: false, attributeNamePrefix: "", removeNSPrefix: true, trimValues: true, allowBooleanAttributes: true });
-const sha1 = (s) => { const h = createHash("sha1"); h.update(String(s || "")); return h.digest("hex"); };
+const parser = new XMLParser({
+  ignoreAttributes: false,
+  attributeNamePrefix: "",
+  removeNSPrefix: true,
+  trimValues: true,
+  allowBooleanAttributes: true,
+});
+const sha1 = (s) => {
+  const h = createHash("sha1");
+  h.update(String(s || ""));
+  return h.digest("hex");
+};
 const shortId = (src) => sha1(src).slice(0, 16);
-const hostOf = (u) => { try { return new URL(u).host; } catch { return ""; } };
+const hostOf = (u) => {
+  try {
+    return new URL(u).host;
+  } catch {
+    return "";
+  }
+};
 const safeName = (u) => sha1(u).slice(0, 20);
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
@@ -90,9 +108,34 @@ function normalizeImageUrl(u) {
     for (const k of Array.from(url.searchParams.keys())) if (STRIP_QP.has(k)) url.searchParams.delete(k);
     url.pathname = url.pathname.replace(/\/{2,}/g, "/");
     return url.toString();
-  } catch { return u; }
+  } catch {
+    return u;
+  }
 }
-const isGzipLike = (url, ct) => /\.gz($|\?)/i.test(url) || /gzip|application\/x-gzip/i.test(ct || "");
+
+// New: robust content handling & sniffing
+const isGzipUrl = (url) => /\.gz($|\?)/i.test(url);
+const getHeader = (res, name) => (res.headers.get(name) || "").toLowerCase();
+function isHtmlLike(text, ct = "") {
+  return /html/.test(ct) || /^<!doctype html/i.test(text || "") || /<html[\s>]/i.test(text || "");
+}
+function isXmlLike(text, ct = "") {
+  const t = (text || "").trimStart();
+  return /xml/.test(ct) || t.startsWith("<?xml") || /<(?:urlset|sitemapindex)\b/i.test(t);
+}
+function detectFormat(text, ct = "") {
+  if (isHtmlLike(text, ct)) return "html";
+  if (isXmlLike(text, ct)) return "xml";
+  if (/text\/plain/.test(ct)) return "txt";
+  return "bin";
+}
+async function readCachedTextAny(url, type) {
+  for (const ext of ["xml", "txt", "html", "raw"]) {
+    const t = await readCachedText(cachedPathFor(url, type, ext));
+    if (t != null) return t;
+  }
+  return null;
+}
 
 /* ============================================================
    STATE
@@ -100,8 +143,16 @@ const isGzipLike = (url, ct) => /\.gz($|\?)/i.test(url) || /gzip|application\/x-
 async function ensureDirs() {
   await Promise.all([genDir, cacheDir, robotsDir, sitemapsDir, itemsDir, hostsDir].map((d) => mkdir(d, { recursive: true })));
 }
-async function loadJson(p, fallback) { try { return JSON.parse(await readFile(p, "utf8")); } catch { return fallback; } }
-async function saveJson(p, obj) { await writeFile(p, JSON.stringify(obj, null, 2) + "\n", "utf8"); }
+async function loadJson(p, fallback) {
+  try {
+    return JSON.parse(await readFile(p, "utf8"));
+  } catch {
+    return fallback;
+  }
+}
+async function saveJson(p, obj) {
+  await writeFile(p, JSON.stringify(obj, null, 2) + "\n", "utf8");
+}
 
 /* url meta + blacklist + bloom */
 let urlmeta = Object.create(null);
@@ -111,7 +162,7 @@ const HOST_FAIL_THRESHOLD = 3;
 let seenBloom = null;
 
 /* ============================================================
-   HTTP (conditional, gzip-aware)
+   HTTP (conditional, gzip-aware, format-aware)
    ============================================================ */
 async function timedFetch(url, opts = {}) {
   const controller = new AbortController();
@@ -141,7 +192,13 @@ function cachedPathFor(url, type, ext = "xml") {
   if (type === "top-sitemap") return path.join(sitemapsDir, h, `top.${ext}`);
   return path.join(sitemapsDir, h, `${safeName(url)}.${ext}`);
 }
-async function readCachedText(p) { try { return await readFile(p, "utf8"); } catch { return null; } }
+async function readCachedText(p) {
+  try {
+    return await readFile(p, "utf8");
+  } catch {
+    return null;
+  }
+}
 
 async function persistText(url, res, text, type, ext = "xml") {
   const p = cachedPathFor(url, type, ext);
@@ -160,7 +217,7 @@ async function persistText(url, res, text, type, ext = "xml") {
 async function persistBinary(url, res, buf, type, ext = "bin") {
   const p = cachedPathFor(url, type, ext);
   await mkdir(path.dirname(p), { recursive: true });
-  await new Promise((resolve, reject) => writeFileCb(p, buf, (e) => e ? reject(e) : resolve()));
+  await new Promise((resolve, reject) => writeFileCb(p, buf, (e) => (e ? reject(e) : resolve())));
   urlmeta[url] = {
     etag: res.headers.get("etag") || undefined,
     lastModified: res.headers.get("last-modified") || undefined,
@@ -187,7 +244,7 @@ const hostBlacklisted = (host) => {
   return !!entry && new Date(entry.untilISO) > new Date();
 };
 
-/* gzip-aware text fetch that also persists raw .gz when appropriate */
+// gzip-aware text fetch that persists with correct extensions and format
 async function fetchTextCached(url, type = "sitemap") {
   const h = hostOf(url);
   if (hostBlacklisted(h)) return { status: -2, text: null, skipped: "blacklisted" };
@@ -196,38 +253,41 @@ async function fetchTextCached(url, type = "sitemap") {
     try {
       const res = await timedFetch(url);
       if (res.status === 304) {
-        const p = cachedPathFor(url, type, /\.txt($|\?)/i.test(url) ? "txt" : "xml");
-        const text = await readCachedText(p);
+        const text = await readCachedTextAny(url, type);
         return { status: 304, text, cached: true, contentType: res.headers.get("content-type") || "" };
       }
-      const ct = (res.headers.get("content-type") || "").toLowerCase();
-      let text = null;
 
-      if (isGzipLike(url, ct)) {
-        const buf = Buffer.from(await res.arrayBuffer());
-        // save raw gz too
-        await persistBinary(url, res, buf, type, "xml.gz");
+      const ct = getHeader(res, "content-type");
+      const ce = getHeader(res, "content-encoding");
+
+      let buf = Buffer.from(await res.arrayBuffer());
+      let text;
+
+      // decide whether to gunzip based on content-encoding or URL
+      const shouldGunzip = /\bgzip\b/.test(ce) || isGzipUrl(url) || /application\/x-gzip/.test(ct);
+      if (shouldGunzip) {
         try {
-          text = gunzipSync(buf).toString("utf8");
-          await persistText(url, res, text, type, "xml");
+          // Save original gzip for forensics as .gz (not xml.gz)
+          await persistBinary(url, res, buf, type, "gz");
+          buf = gunzipSync(buf);
         } catch {
-          // If gunzip fails, persist a best-effort latin1 text to inspect later
-          text = buf.toString("latin1");
-          await persistText(url, res, text, type, "raw");
+          // keep a latin1 peek to see what it was
+          const fallback = buf.toString("latin1");
+          await persistText(url, res, fallback, type, "raw");
+          text = fallback;
         }
-      } else {
-        text = await res.text();
-        const ext = /\.txt($|\?)/i.test(url) || ct.includes("text/plain") ? "txt" : "xml";
-        await persistText(url, res, text, type, ext);
       }
+      if (text == null) text = buf.toString("utf8");
+
+      const fmt = detectFormat(text, ct);
+      const ext = fmt === "html" ? "html" : fmt === "txt" ? "txt" : fmt === "xml" ? "xml" : "raw";
+      await persistText(url, res, text, type, ext);
 
       if (TERMINAL_4XX.has(res.status)) noteTerminalFail(url, res.status, `http_${res.status}`);
-      return { status: res.status, text, cached: false, contentType: ct };
+      return { status: res.status, text, cached: false, contentType: ct, format: fmt };
     } catch (e) {
       if (attempt < RETRIES) continue;
-      const pXml = cachedPathFor(url, type, "xml");
-      const pTxt = cachedPathFor(url, type, "txt");
-      const cached = (await readCachedText(pXml)) ?? (await readCachedText(pTxt));
+      const cached = await readCachedTextAny(url, type);
       if (cached != null) return { status: -1, text: cached, cached: true, contentType: "" };
       noteTerminalFail(url, -1, "network_error");
       return { status: -1, text: null, error: e?.message || String(e) };
@@ -259,7 +319,18 @@ function parseRobots(text) {
   for (const g of groups) {
     const agents = g.agents.length ? g.agents : ["*"];
     for (const a of agents) {
-      const o = (byAgent[a] ||= { allow: [], disallow: [], noindex: [], crawlDelay: null, sitemaps: [], host: null, cleanParam: [], requestRate: null, visitTime: [], unknown: [] });
+      const o = (byAgent[a] ||= {
+        allow: [],
+        disallow: [],
+        noindex: [],
+        crawlDelay: null,
+        sitemaps: [],
+        host: null,
+        cleanParam: [],
+        requestRate: null,
+        visitTime: [],
+        unknown: [],
+      });
       for (const r of g.rules) {
         const k = r.k;
         if (k === "allow") o.allow.push(r.v);
@@ -290,7 +361,9 @@ function parseSitemapIndex(xml) {
     const idx = obj?.sitemapindex;
     const arr = Array.isArray(idx?.sitemap) ? idx.sitemap : idx?.sitemap ? [idx.sitemap] : [];
     return arr.map((it) => it.loc).filter(Boolean);
-  } catch { return []; }
+  } catch {
+    return [];
+  }
 }
 function urlsetType(xml) {
   if (!xml) return "none";
@@ -318,22 +391,46 @@ function* iterSitemapItems(xmlText) {
     }
   }
 }
-const localeFromUrl = (u) => { try { return new URL(u).pathname.match(/\/sitemap\/([^/]+)\//)?.[1] ?? ""; } catch { return ""; } };
+const localeFromUrl = (u) => {
+  try {
+    return new URL(u).pathname.match(/\/sitemap\/([^\/]+)\//)?.[1] ?? "";
+  } catch {
+    return "";
+  }
+};
 
 /* ============================================================
    DISCOVERY per host (robots-aware + seeds + variants + recursion)
    ============================================================ */
 const TOP_XML_VARIANTS = [
-  "/sitemap.xml", "/sitemap_index.xml", "/sitemapindex.xml", "/sitemap/sitemap.xml",
-  "/sitemap.xml.gz", "/sitemap_index.xml.gz", "/sitemapindex.xml.gz"
+  "/sitemap.xml",
+  "/sitemap_index.xml",
+  "/sitemapindex.xml",
+  "/sitemap/sitemap.xml",
+  "/sitemap.xml.gz",
+  "/sitemap_index.xml.gz",
+  "/sitemapindex.xml.gz",
 ];
 const EXTRA_XML_VARIANTS = [
-  "/news-sitemap.xml", "/video-sitemap.xml", "/image-sitemap.xml",
-  "/feed.xml", "/rss.xml", "/atom.xml",
-  "/sitemap-1.xml", "/sitemap-2.xml", "/sitemap-3.xml", "/sitemap-4.xml",
-  "/sitemap-5.xml", "/sitemap-6.xml", "/sitemap-7.xml", "/sitemap-8.xml",
-  "/sitemap-9.xml", "/sitemap-10.xml",
-  "/sitemap-1.xml.gz", "/sitemap-2.xml.gz", "/sitemap-3.xml.gz"
+  "/news-sitemap.xml",
+  "/video-sitemap.xml",
+  "/image-sitemap.xml",
+  "/feed.xml",
+  "/rss.xml",
+  "/atom.xml",
+  "/sitemap-1.xml",
+  "/sitemap-2.xml",
+  "/sitemap-3.xml",
+  "/sitemap-4.xml",
+  "/sitemap-5.xml",
+  "/sitemap-6.xml",
+  "/sitemap-7.xml",
+  "/sitemap-8.xml",
+  "/sitemap-9.xml",
+  "/sitemap-10.xml",
+  "/sitemap-1.xml.gz",
+  "/sitemap-2.xml.gz",
+  "/sitemap-3.xml.gz",
 ];
 const WELLKNOWN_TXT = ["/robots.txt", "/ads.txt", "/humans.txt", "/.well-known/security.txt"];
 
@@ -341,21 +438,23 @@ async function discoverHost(host) {
   if (hostBlacklisted(host)) return { host, robots: null, sitemaps: [], docs: [] };
 
   const discovered = new Set();
-  const docs = []; // every xml/txt we save for this host
+  const docs = []; // every xml/txt/html we save for this host
+  const challenges = { html: 0 };
 
   // helper to record docs index entries
-  function recordDoc(u, kind, savedPath, status, contentType, sizeBytes) {
-    docs.push({ url: u, kind, savedPath, status, contentType, size: sizeBytes ?? null });
+  function recordDoc(u, kind, savedPath, status, contentType, sizeBytes, format) {
+    if (kind === "html") challenges.html++;
+    docs.push({ url: u, kind, savedPath, status, contentType, format: format || null, size: sizeBytes ?? null });
   }
 
   // Try well-known TXT (saved regardless of robots)
   if (SAVE_WELLKNOWN_TXT) {
     for (const pth of WELLKNOWN_TXT) {
       const url = `https://${host}${pth}`;
-      const res = await fetchTextCached(url, "robots"); // reuse robots cache bucket for txt
+      const res = await fetchTextCached(url, "robots"); // reuse robots cache bucket for txt/html
       if (res.text) {
-        const savedPath = cachedPathFor(url, "robots", pth.endsWith(".txt") ? "txt" : "txt");
-        recordDoc(url, "txt", savedPath, res.status, res.contentType || "text/plain");
+        const ext = urlmeta[url]?.path?.split(".").pop() || (pth.endsWith(".txt") ? "txt" : "txt");
+        recordDoc(url, ext === "html" ? "html" : "txt", urlmeta[url]?.path || cachedPathFor(url, "robots", ext), res.status, res.contentType || "", undefined, res.format || null);
       }
     }
   }
@@ -366,10 +465,10 @@ async function discoverHost(host) {
   let robotsParsed = parseRobots(robotsFetch.text || "");
   const robotsJsonPath = cachedPathFor(robotsURL, "robots-json", "json");
   await writeFile(robotsJsonPath, JSON.stringify(robotsParsed, null, 2) + "\n", "utf8");
-  recordDoc(robotsURL, "txt", cachedPathFor(robotsURL, "robots", "txt"), robotsFetch.status, "text/plain");
+  recordDoc(robotsURL, urlmeta[robotsURL]?.path?.endsWith(".html") ? "html" : "txt", urlmeta[robotsURL]?.path || cachedPathFor(robotsURL, "robots", "txt"), robotsFetch.status, robotsFetch.contentType || "text/plain", undefined, robotsFetch.format || null);
 
   // Sitemaps referenced in robots
-  for (const u of (robotsParsed.merged.sitemaps || [])) if (u) discovered.add(u);
+  for (const u of robotsParsed.merged.sitemaps || []) if (u) discovered.add(u);
 
   // Top-level xml variants
   for (const v of TOP_XML_VARIANTS) discovered.add(`https://${host}${v}`);
@@ -386,18 +485,21 @@ async function discoverHost(host) {
     for (const v of EXTRA_XML_VARIANTS) discovered.add(`https://${host}${v}`);
   }
 
-  // From robots rules, harvest explicit *.xml/*.xml.gz/*.txt paths (no globs)
+  // From robots rules, harvest explicit *.xml under /sitemap paths only (reduce noise)
   for (const a of Object.values(robotsParsed.byAgent || {})) {
     for (const rule of [...a.allow, ...a.disallow, ...a.noindex]) {
       if (!rule || /[\*\?\[\]]/.test(rule)) continue;
       try {
         const uu = rule.startsWith("http") ? rule : `https://${host}${rule.startsWith("/") ? "" : "/"}${rule}`;
-        if (/\.xml(\.gz)?($|\?)/i.test(uu)) discovered.add(uu);
+        if (/\/sitemap/i.test(uu) && /\.xml(\.gz)?($|\?)/i.test(uu)) discovered.add(uu);
         if (/\.txt($|\?)/i.test(uu)) {
           const res = await fetchTextCached(uu, "robots");
-          if (res.text) recordDoc(uu, "txt", cachedPathFor(uu, "robots", "txt"), res.status, res.contentType || "text/plain");
+          if (res.text) {
+            const ext = urlmeta[uu]?.path?.split(".").pop() || "txt";
+            recordDoc(uu, ext === "html" ? "html" : "txt", urlmeta[uu]?.path || cachedPathFor(uu, "robots", ext), res.status, res.contentType || "", undefined, res.format || null);
+          }
         }
-      } catch { }
+      } catch {}
     }
   }
 
@@ -414,14 +516,14 @@ async function discoverHost(host) {
     const res = await fetchTextCached(u, "sitemap");
     if (!res.text) continue;
 
-    // record XML doc
-    const isTxt = /\.txt($|\?)/i.test(u);
-    const kind = isTxt ? "txt" : "xml";
-    const savedPath = cachedPathFor(u, isTxt ? "robots" : "sitemap", isTxt ? "txt" : /raw$/.test(urlmeta[u]?.path || "") ? "raw" : (isGzipLike(u, res.contentType) ? "xml" : (urlmeta[u]?.path?.split(".").pop() || "xml")));
-    recordDoc(u, kind, savedPath, res.status, res.contentType || (isTxt ? "text/plain" : "application/xml"));
+    // record document with detected format
+    const ext = urlmeta[u]?.path?.split(".").pop() || "xml";
+    const kind = ext === "html" ? "html" : ext === "txt" ? "txt" : "xml";
+    const savedPath = urlmeta[u]?.path || cachedPathFor(u, kind === "xml" ? "sitemap" : "robots", ext);
+    recordDoc(u, kind, savedPath, res.status, res.contentType || (kind === "txt" ? "text/plain" : ""), undefined, res.format || null);
 
-    // If it's an index, expand children
-    if (urlsetType(res.text) === "index") {
+    // Only expand XML sitemap indexes
+    if ((res.format || detectFormat(res.text, res.contentType)) === "xml" && urlsetType(res.text) === "index") {
       expanded.add(u);
       for (const child of parseSitemapIndex(res.text)) {
         if (!visited.has(child)) queue.push(child);
@@ -429,7 +531,7 @@ async function discoverHost(host) {
     }
   }
 
-  // Infer locales and probe those four sitemap types too (but only after we’ve seen life)
+  // Infer locales and probe those sitemap types too (only if we saw life)
   const inferred = new Set([...visited].map(localeFromUrl).filter(Boolean));
   for (const loc of inferred) {
     for (const t of ["image", "product", "content", "catalog"]) {
@@ -437,44 +539,52 @@ async function discoverHost(host) {
       if (visited.has(u)) continue;
       const r = await fetchTextCached(u, "sitemap");
       if (r.text) {
-        recordDoc(u, "xml", cachedPathFor(u, "sitemap", "xml"), r.status, r.contentType || "application/xml");
-        if (urlsetType(r.text) === "index") {
-          for (const child of parseSitemapIndex(r.text)) if (!visited.has(child)) {
-            const cr = await fetchTextCached(child, "sitemap");
-            if (cr.text) recordDoc(child, "xml", cachedPathFor(child, "sitemap", "xml"), cr.status, cr.contentType || "application/xml");
-          }
+        const ext = urlmeta[u]?.path?.split(".").pop() || "xml";
+        recordDoc(u, ext === "html" ? "html" : "xml", urlmeta[u]?.path || cachedPathFor(u, "sitemap", ext), r.status, r.contentType || "application/xml", undefined, r.format || null);
+        if ((r.format || detectFormat(r.text, r.contentType)) === "xml" && urlsetType(r.text) === "index") {
+          for (const child of parseSitemapIndex(r.text))
+            if (!visited.has(child)) {
+              const cr = await fetchTextCached(child, "sitemap");
+              if (cr.text) {
+                const cext = urlmeta[child]?.path?.split(".").pop() || "xml";
+                recordDoc(child, cext === "html" ? "html" : "xml", urlmeta[child]?.path || cachedPathFor(child, "sitemap", cext), cr.status, cr.contentType || "application/xml", undefined, cr.format || null);
+              }
+            }
         }
       }
     }
   }
 
-  // Partition image-first for crawling
+  // Partition image-first for crawling (XML only)
   const imageFirst = [];
   const rest = [];
   for (const u of visited) {
-    const r = await readCachedText(cachedPathFor(u, "sitemap", "xml")) ?? await readCachedText(cachedPathFor(u, "sitemap", "raw"));
-    const kind = urlsetType(r || "");
-    if (kind === "image") imageFirst.push(u); else rest.push(u);
+    const r = await readCachedTextAny(u, "sitemap");
+    const fmt = detectFormat(r || "", "");
+    const kind = fmt === "xml" ? urlsetType(r || "") : "other";
+    if (kind === "image") imageFirst.push(u);
+    else rest.push(u);
   }
 
   const robotsIndexEntry = {
     host,
-    robotsTxtPath: cachedPathFor(robotsURL, "robots", "txt"),
+    robotsTxtPath: urlmeta[robotsURL]?.path || cachedPathFor(robotsURL, "robots", "txt"),
     robotsJsonPath,
     sitemapsInRobots: robotsParsed.merged.sitemaps || [],
     parsed: robotsParsed,
+    challenges,
   };
 
   return { host, robots: robotsIndexEntry, sitemaps: [...new Set([...imageFirst, ...rest])], docs };
 }
 
 /* ============================================================
-   MAIN — discover, save everything XML/TXT, then crawl image items
+   MAIN — discover, save everything XML/TXT/HTML, then crawl image items
    ============================================================ */
 async function main() {
   await ensureDirs();
 
-  const hostsTxt = (await readFile(hostsTxtPath, "utf8")).split(/\r?\n/).map(s => s.trim()).filter(Boolean);
+  const hostsTxt = (await readFile(hostsTxtPath, "utf8")).split(/\r?\n/).map((s) => s.trim()).filter(Boolean);
   urlmeta = await loadJson(urlMetaPath, Object.create(null));
   blacklist = RESET_BLACKLIST ? Object.create(null) : await loadJson(blacklistPath, Object.create(null));
   for (const [h, v] of Object.entries(blacklist)) if (new Date(v.untilISO) <= new Date()) delete blacklist[h];
@@ -483,7 +593,7 @@ async function main() {
   seenBloom = existingBloom ? ScalableBloomFilter.fromJSON(existingBloom) : new ScalableBloomFilter(200_000, 0.01);
 
   // DISCOVERY
-  const discoveryHosts = (MAX_HOSTS === Infinity ? hostsTxt : hostsTxt.slice(0, MAX_HOSTS)).filter(h => !hostBlacklisted(h));
+  const discoveryHosts = (MAX_HOSTS === Infinity ? hostsTxt : hostsTxt.slice(0, MAX_HOSTS)).filter((h) => !hostBlacklisted(h));
   const robotsIndex = {};
   const allSitemaps = {};
   const docsIndex = {};
@@ -493,9 +603,9 @@ async function main() {
     console.log(`→ discovery across ${discoveryHosts.length} hosts (robots-aware + seeds + variants)`);
     const batchSize = 8;
     for (let off = 0; off < discoveryHosts.length; off += batchSize) {
-      const batch = discoveryHosts.slice(off, off + batchSize).filter(h => !hostBlacklisted(h));
+      const batch = discoveryHosts.slice(off, off + batchSize).filter((h) => !hostBlacklisted(h));
       process.stdout.write(`   • batch ${Math.floor(off / batchSize) + 1}: ${batch.join(", ")}\n`);
-      const results = await Promise.all(batch.map(h => discoverHost(h)));
+      const results = await Promise.all(batch.map((h) => discoverHost(h)));
       for (const r of results) {
         if (r.robots) robotsIndex[r.host] = r.robots;
         allSitemaps[r.host] = r.sitemaps;
@@ -510,7 +620,7 @@ async function main() {
   await saveJson(allSitemapsIdx, allSitemaps);
   await saveJson(docsIndexPath, docsIndex);
 
-  const imageOnly = Object.fromEntries(Object.entries(allSitemaps).map(([host, list]) => [host, list.filter(u => /image/i.test(u))]));
+  const imageOnly = Object.fromEntries(Object.entries(allSitemaps).map(([host, list]) => [host, list.filter((u) => /image/i.test(u))]));
   await saveJson(imgSitemapsIdx, imageOnly);
 
   const sitemapUrls = [...sitemapSet].sort();
@@ -518,9 +628,13 @@ async function main() {
 
   // shard writer (image items)
   const ts = new Date().toISOString().replace(/[:.]/g, "");
-  let shardIndex = 0, shardLines = 0, shardItems = 0, shardStream = null;
+  let shardIndex = 0,
+    shardLines = 0,
+    shardItems = 0,
+    shardStream = null;
   async function openShard() {
-    shardIndex++; shardLines = 0;
+    shardIndex++;
+    shardLines = 0;
     const shardPath = path.join(itemsDir, `shard-${ts}-${String(shardIndex).padStart(3, "0")}.ndjson`);
     shardStream = createWriteStream(shardPath, { flags: "w" });
     await once(shardStream, "open");
@@ -529,9 +643,17 @@ async function main() {
   await openShard();
   const writeLine = async (line) => {
     if (!shardStream.write(line + "\n")) await once(shardStream, "drain");
-    shardLines++; shardItems++;
-    if (shardItems % STREAM_FSYNC_EVERY === 0 && typeof shardStream.fd === "number") { try { fsyncSync(shardStream.fd); } catch { } }
-    if (shardLines >= SITEMAP_SHARD_LINES) { await new Promise(r => shardStream.end(r)); await openShard(); }
+    shardLines++;
+    shardItems++;
+    if (shardItems % STREAM_FSYNC_EVERY === 0 && typeof shardStream.fd === "number") {
+      try {
+        fsyncSync(shardStream.fd);
+      } catch {}
+    }
+    if (shardLines >= SITEMAP_SHARD_LINES) {
+      await new Promise((r) => shardStream.end(r));
+      await openShard();
+    }
   };
 
   // rollups
@@ -550,41 +672,64 @@ async function main() {
 
   const globalLimit = pLimit(GLOBAL_CONCURRENCY);
   const hostLimiters = new Map();
-  const limFor = (h) => hostLimiters.has(h) ? hostLimiters.get(h) : hostLimiters.set(h, pLimit(PER_HOST_CONCURRENCY)).get(h);
-  const localeOf = (u) => { try { return new URL(u).pathname.match(/\/sitemap\/([^/]+)\//)?.[1] ?? ""; } catch { return ""; } };
+  const limFor = (h) => (hostLimiters.has(h) ? hostLimiters.get(h) : hostLimiters.set(h, pLimit(PER_HOST_CONCURRENCY)).get(h));
+  const localeOf = (u) => {
+    try {
+      return new URL(u).pathname.match(/\/sitemap\/([^\/]+)\//)?.[1] ?? "";
+    } catch {
+      return "";
+    }
+  };
 
   let totalItems = 0;
 
-  await Promise.all(prioritized.map((u) => {
-    const h = hostOf(u);
-    return globalLimit(() =>
-      limFor(h)(async () => {
-        if (hostBlacklisted(h)) { failures.push({ url: u, host: h, locale: localeOf(u), error: "blacklisted" }); return; }
-        const res = await fetchTextCached(u, "sitemap");
-        const status = res.status;
-        if (status > 0 && TERMINAL_4XX.has(status)) { failures.push({ url: u, host: h, locale: localeOf(u), error: `HTTP ${status}` }); return; }
-        if (!res.text) { failures.push({ url: u, host: h, locale: localeOf(u), error: res.error || "no_response" }); return; }
-
-        const kind = urlsetType(res.text);
-        let count = 0;
-        if (kind === "image") {
-          for (const it of iterSitemapItems(res.text)) {
-            const id = shortId(it.src);
-            if (seenBloom.has(id)) continue;
-            seenBloom.add(id);
-            const rec = { id, src: it.src, title: it.title || "", license: it.license || "", page: it.pageUrl || "", host: h, locale: localeOf(u), sitemap: u };
-            await writeLine(JSON.stringify(rec));
-            if (rec.page) pagesSet.add(rec.page);
-            localeCounts.set(rec.locale, (localeCounts.get(rec.locale) || 0) + 1);
-            hostCounts.set(h, (hostCounts.get(h) || 0) + 1);
-            count++; totalItems++;
+  await Promise.all(
+    prioritized.map((u) => {
+      const h = hostOf(u);
+      return globalLimit(() =>
+        limFor(h)(async () => {
+          if (hostBlacklisted(h)) {
+            failures.push({ url: u, host: h, locale: localeOf(u), error: "blacklisted" });
+            return;
           }
-        }
-        sitemapsLog.push({ url: u, host: h, kind, ok: true, imageCount: count });
-        process.stdout.write(`✓ ${u} [${kind}] +${count}\n`);
-      })
-    );
-  }));
+          const res = await fetchTextCached(u, "sitemap");
+          const status = res.status;
+          if (status > 0 && TERMINAL_4XX.has(status)) {
+            failures.push({ url: u, host: h, locale: localeOf(u), error: `HTTP ${status}` });
+            return;
+          }
+          if (!res.text) {
+            failures.push({ url: u, host: h, locale: localeOf(u), error: res.error || "no_response" });
+            return;
+          }
+
+          const format = res.format || detectFormat(res.text, res.contentType);
+          if (format !== "xml") {
+            sitemapsLog.push({ url: u, host: h, kind: "non-xml", ok: false, imageCount: 0 });
+            return;
+          }
+
+          const kind = urlsetType(res.text);
+          let count = 0;
+          if (kind === "image") {
+            for (const it of iterSitemapItems(res.text)) {
+              const id = shortId(it.src);
+              if (seenBloom.has(id)) continue;
+              seenBloom.add(id);
+              const rec = { id, src: it.src, title: it.title || "", license: it.license || "", page: it.pageUrl || "", host: h, locale: localeOf(u), sitemap: u };
+              await writeLine(JSON.stringify(rec));
+              if (rec.page) pagesSet.add(rec.page);
+              localeCounts.set(rec.locale, (localeCounts.get(rec.locale) || 0) + 1);
+              hostCounts.set(h, (hostCounts.get(h) || 0) + 1);
+              count++;
+              totalItems++;
+            }
+          }
+          sitemapsLog.push({ url: u, host: h, kind, ok: kind === "image" || kind === "page" || kind === "index", imageCount: count });
+        })
+      );
+    })
+  );
 
   await new Promise((resolve) => shardStream.end(resolve));
 
@@ -594,9 +739,9 @@ async function main() {
   await saveJson(bloomPath, seenBloom.saveAsJSON());
 
   // summary
-  const sortObj = (m) => Object.fromEntries([...m.entries()].sort((a, b) => b[1] === a[1] ? a[0].localeCompare(b[0]) : b[1] - a[1]));
+  const sortObj = (m) => Object.fromEntries([...m.entries()].sort((a, b) => (b[1] === a[1] ? a[0].localeCompare(b[0]) : b[1] - a[1])));
   const summary = {
-    version: 9,
+    version: 10,
     generatedAt: new Date().toISOString(),
     config: {
       discovery: ENABLE_DISCOVERY,
@@ -608,7 +753,7 @@ async function main() {
       fsyncEvery: STREAM_FSYNC_EVERY,
       seedLocales: SEED_LOCALES,
       extraXmlGuess: EXTRA_XML_GUESS,
-      wellKnownTxt: SAVE_WELLKNOWN_TXT
+      wellKnownTxt: SAVE_WELLKNOWN_TXT,
     },
     inputs: { hostsTxt: path.relative(process.cwd(), hostsTxtPath) },
     outputs: {
@@ -629,14 +774,19 @@ async function main() {
       byHost: sortObj(hostCounts),
       sitemaps: sitemapsLog.length,
       ok: sitemapsLog.filter((s) => s.ok).length,
-      failures: 0 // failures array is now implicit in per-sitemap status; we log only terminal ones above
+      failures: failures.length + sitemapsLog.filter((s) => s.ok === false).length,
     },
-    sitemaps: sitemapsLog.sort((a, b) => (a.host || "").localeCompare(b.host || "") || a.url.localeCompare(b.url))
+    sitemaps: sitemapsLog.sort((a, b) => (a.host || "").localeCompare(b.host || "") || a.url.localeCompare(b.url)),
   };
   await saveJson(summaryPath, summary);
 
   console.log(`\nSaved summary → ${path.relative(process.cwd(), summaryPath)}`);
-  console.log(`Items: ${summary.totals.items.toLocaleString()} • Pages: ${summary.totals.pages.toLocaleString()} • OK: ${summary.totals.ok}/${summary.totals.sitemaps}`);
+  console.log(
+    `Items: ${summary.totals.items.toLocaleString()} • Pages: ${summary.totals.pages.toLocaleString()} • OK: ${summary.totals.ok}/${summary.totals.sitemaps} • Failures: ${summary.totals.failures}`
+  );
 }
 
-main().catch((err) => { console.error(err); process.exitCode = 1; });
+main().catch((err) => {
+  console.error(err);
+  process.exitCode = 1;
+});

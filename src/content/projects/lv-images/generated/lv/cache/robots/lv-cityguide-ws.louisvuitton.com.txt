@@ -1,1 +1,0 @@
-HttpException: E_ROUTE_NOT_FOUND: Route not found GET /humans.txt

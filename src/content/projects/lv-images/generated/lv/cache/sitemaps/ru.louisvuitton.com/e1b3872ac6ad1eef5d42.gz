@@ -1,0 +1,333 @@
+<html>
+
+<head>
+  <title>LOUIS VUITTON</title>
+  <meta charset='utf-8' />
+  <meta content='width=device-width, initial-scale=1, maximum-scale=2, user-scalable=1' name='viewport' />
+  <link rel='apple-touch-icon' href='https://fr.louisvuitton.com/static/generic/assets/favicons/apple-touch-icon.png' />
+  <link rel='icon' type='image/png' sizes='32x32'
+    href='https://fr.louisvuitton.com/static/generic/assets/favicons/favicon-32x32.png' />
+  <link rel='icon' type='image/png' sizes='16x16'
+    href='https://fr.louisvuitton.com/static/generic/assets/favicons/favicon-16x16.png' />
+  <link rel='manifest' href='https://fr.louisvuitton.com/static/generic/assets/favicons/site.webmanifest' />
+  <link rel='mask-icon' href='https://fr.louisvuitton.com/static/generic/assets/favicons/safari-pinned-tab.svg'
+    color='#19110b' />
+  <link rel='shortcut icon' href='https://fr.louisvuitton.com/static/generic/assets/favicons/favicon.ico' />
+  <style>
+    @font-face {
+      font-family: 'Louis Vuitton Web';
+      font-weight: 400;
+      font-style: normal;
+      src: url('//tp.louisvuitton.com/fonts/bin/LouisVuitton-Regular.woff2') format('woff2'),
+        url('//tp.louisvuitton.com/fonts/bin/LouisVuitton-Regular.woff') format('woff');
+    }
+
+    @font-face {
+      font-family: 'Louis Vuitton Cyrillic';
+      font-weight: 400;
+      font-style: normal;
+      src: url('//tp.louisvuitton.com/fonts/bin/LouisVuitton-Cyrillic.woff2') format('woff2'),
+        url('//tp.louisvuitton.com/fonts/bin/LouisVuitton-Cyrillic.woff') format('woff');
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      font-size: 16px;
+      line-height: 24px;
+      color: #000;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4 {
+      font-weight: normal;
+      margin: 0 0 0.5rem;
+    }
+
+    a {
+      color: #000;
+    }
+
+    p {
+      margin: 0 0 0.5rem;
+    }
+
+    body {
+      font-family: 'Louis Vuitton Web', 'Louis Vuitton', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-style: normal;
+      font-weight: 400;
+    }
+
+    body:lang(ja) {
+      font-family: 'Louis Vuitton Web', 'Louis Vuitton', 'Hiragino Kaku Gothic Pro W3', Motoya, Meiryo,
+        'MS PGothic', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    }
+
+    body:lang(ko) {
+      font-family: 'Louis Vuitton Web', 'Louis Vuitton', 'Droid Sans Fallback', 'Malgun Gothic', Dotum,
+        'MS Gothic', Georgia, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    }
+
+    body:lang(ru) {
+      font-family: 'Louis Vuitton Cyrillic', Arial, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    }
+
+    body:lang(zh-Hans) {
+      font-family: 'Louis Vuitton Web', 'STHeiti Light', 'STHeitiTC-Light', 'Droid Sans Fallback',
+        'Microsoft YaHei', SimHei, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    }
+
+    body:lang(zh-Hant) {
+      font-family: 'Louis Vuitton Web', 'HeitiTC-Light', 'STHeitiTC-Light', 'Droid Sans Fallback',
+        'Microsoft Jhenghei', 'Arial Unicode MS', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    }
+
+    [class^='heading'] {
+      font-style: normal;
+      font-weight: normal;
+    }
+
+    .heading-m {
+      font-size: 1.5rem;
+      line-height: 28px;
+      letter-spacing: 0.4px;
+    }
+
+    .heading-s {
+      font-size: 1.125rem;
+      line-height: 24px;
+      letter-spacing: 0.4px;
+    }
+
+    .lv-gutters {
+      box-sizing: border-box;
+    }
+
+    .lv-gutters {
+      padding-left: 6.4vw;
+      padding-right: 6.4vw;
+    }
+
+    @media screen and (min-width: 48rem) {
+      .lv-gutters {
+        padding-left: 3.125vw;
+        padding-right: 3.125vw;
+      }
+    }
+
+    @media screen and (min-width: 64rem) {
+      .lv-gutters {
+        padding-left: 4.6875vw;
+        padding-right: 4.6875vw;
+      }
+    }
+
+    @media screen and (min-width: 90rem) {
+      .lv-gutters {
+        padding-left: 8.3333333333vw;
+        padding-right: 8.3333333333vw;
+      }
+    }
+
+    .lv-list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    /** SPECIFIC STYLES */
+
+    .lv-waiting__header {
+      position: absolute;
+      left: 0;
+      right: 0;
+      z-index: 9;
+      padding: 2rem 0 0;
+    }
+
+    .lv-waiting__logo {
+      width: 9.625rem;
+      height: 1rem;
+      margin: 0 auto;
+      display: block;
+    }
+
+    .lv-waiting__titles {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      margin: auto;
+      color: #fff;
+      text-align: center;
+      transform: translate(0, -50%);
+    }
+
+    .lv-waiting__title-container {
+      margin-bottom: 40px;
+    }
+
+    .lv-waiting__titles a {
+      color: #fff;
+    }
+
+    .lv-waiting__top-title {
+      padding: 0 1.25rem;
+      font-size: 1.125rem;
+      line-height: 24px;
+    }
+
+    .lv-waiting__title {
+      padding: 0 1.25rem;
+      font-size: 0.875rem;
+      line-height: 20px;
+    }
+
+    .lv-waiting__masthead {
+      aspect-ratio: 4/5;
+      position: relative;
+      width: 100%;
+      max-height: 90vh;
+      overflow: hidden;
+    }
+
+    .lv-waiting__masthead picture:after {
+      content: '';
+      display: block;
+      background-color: #000000;
+      opacity: 0.2;
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .lv-waiting__masthead img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .lv-waiting__primary {
+      display: grid;
+      grid-template-columns: repeat(1, 1fr);
+      grid-gap: 1rem;
+      margin-top: 3rem;
+    }
+
+    .lv-waiting__secondary {
+      border-top: 1px solid #e1e1e1;
+      margin-top: 5rem;
+      padding-top: 5rem;
+      padding-bottom: 5rem;
+    }
+
+    .lv-waiting__contacts {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      grid-gap: 2rem;
+    }
+
+    .lv-waiting__zone:not(:first-child) {
+      margin-top: 5rem;
+    }
+
+    .lv-waiting__zone>* {
+      margin-bottom: 1.5rem;
+    }
+
+    @media screen and (min-width: 48rem) {
+      .lv-waiting__masthead {
+        aspect-ratio: 16/9;
+      }
+
+      .lv-waiting__header {
+        padding: 2rem 0 1rem;
+      }
+
+      .lv-waiting__logo {
+        width: 14.1875rem;
+        height: 2.6875rem;
+      }
+
+      .lv-waiting__primary {
+        grid-template-columns: repeat(4, 1fr);
+        grid-gap: 2rem;
+        margin-top: 5rem;
+      }
+
+      .lv-waiting__contacts {
+        grid-template-columns: repeat(6, 1fr);
+        grid-gap: 2rem;
+      }
+
+      .lv-waiting__titles {
+        max-width: 70%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .lv-waiting__title-container {
+        max-width: 45%;
+      }
+
+      .lv-waiting__title {
+        font-size: 1.125rem;
+        line-height: 32px;
+      }
+
+      .lv-waiting__top-title {
+        font-size: 1.5rem;
+        line-height: 32px;
+      }
+    }
+  </style>
+
+<script>(window.BOOMR_mq=window.BOOMR_mq||[]).push(["addVar",{"rua.upush":"false","rua.cpush":"false","rua.upre":"false","rua.cpre":"false","rua.uprl":"false","rua.cprl":"false","rua.cprf":"false","rua.trans":"","rua.cook":"false","rua.ims":"false","rua.ufprl":"false","rua.cfprl":"false","rua.isuxp":"false","rua.texp":"norulematch","rua.ceh":"false","rua.ueh":"false","rua.ieh.st":"0"}]);</script>
+<script>!function(){function o(n,i){if(n&&i)for(var r in i)i.hasOwnProperty(r)&&(void 0===n[r]?n[r]=i[r]:n[r].constructor===Object&&i[r].constructor===Object?o(n[r],i[r]):n[r]=i[r])}try{var n=decodeURIComponent("%7B%0A%20%20%20%20%20%20%20%20%22ResourceTiming%22%3A%20%7B%0A%20%20%20%20%20%20%20%20%20%20%22clearOnBeacon%22%3A%20true%0A%20%20%20%20%20%20%20%20%7D%2C%0A%20%20%20%20%20%20%20%20%22PageParams%22%3A%20%7B%0A%20%20%20%20%20%20%20%20%20%20%22spaXhr%22%3A%20%22all%22%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20");if(n.length>0&&window.JSON&&"function"==typeof window.JSON.parse){var i=JSON.parse(n);void 0!==window.BOOMR_config?o(window.BOOMR_config,i):window.BOOMR_config=i}}catch(r){window.console&&"function"==typeof window.console.error&&console.error("mPulse: Could not parse configuration",r)}}();</script>
+                              <script>!function(e){var n="https://s.go-mpulse.net/boomerang/";if("True"=="True")e.BOOMR_config=e.BOOMR_config||{},e.BOOMR_config.PageParams=e.BOOMR_config.PageParams||{},e.BOOMR_config.PageParams.pci=!0,n="https://s2.go-mpulse.net/boomerang/";if(window.BOOMR_API_key="CVL58-4ZYPF-DMB69-4VLEJ-XA4C2",function(){function e(){if(!o){var e=document.createElement("script");e.id="boomr-scr-as",e.src=window.BOOMR.url,e.async=!0,i.parentNode.appendChild(e),o=!0}}function t(e){o=!0;var n,t,a,r,d=document,O=window;if(window.BOOMR.snippetMethod=e?"if":"i",t=function(e,n){var t=d.createElement("script");t.id=n||"boomr-if-as",t.src=window.BOOMR.url,BOOMR_lstart=(new Date).getTime(),e=e||d.body,e.appendChild(t)},!window.addEventListener&&window.attachEvent&&navigator.userAgent.match(/MSIE [67]\./))return window.BOOMR.snippetMethod="s",void t(i.parentNode,"boomr-async");a=document.createElement("IFRAME"),a.src="about:blank",a.title="",a.role="presentation",a.loading="eager",r=(a.frameElement||a).style,r.width=0,r.height=0,r.border=0,r.display="none",i.parentNode.appendChild(a);try{O=a.contentWindow,d=O.document.open()}catch(_){n=document.domain,a.src="javascript:var d=document.open();d.domain='"+n+"';void(0);",O=a.contentWindow,d=O.document.open()}if(n)d._boomrl=function(){this.domain=n,t()},d.write("<bo"+"dy onload='document._boomrl();'>");else if(O._boomrl=function(){t()},O.addEventListener)O.addEventListener("load",O._boomrl,!1);else if(O.attachEvent)O.attachEvent("onload",O._boomrl);d.close()}function a(e){window.BOOMR_onload=e&&e.timeStamp||(new Date).getTime()}if(!window.BOOMR||!window.BOOMR.version&&!window.BOOMR.snippetExecuted){window.BOOMR=window.BOOMR||{},window.BOOMR.snippetStart=(new Date).getTime(),window.BOOMR.snippetExecuted=!0,window.BOOMR.snippetVersion=12,window.BOOMR.url=n+"CVL58-4ZYPF-DMB69-4VLEJ-XA4C2";var i=document.currentScript||document.getElementsByTagName("script")[0],o=!1,r=document.createElement("link");if(r.relList&&"function"==typeof r.relList.supports&&r.relList.supports("preload")&&"as"in r)window.BOOMR.snippetMethod="p",r.href=window.BOOMR.url,r.rel="preload",r.as="script",r.addEventListener("load",e),r.addEventListener("error",function(){t(!0)}),setTimeout(function(){if(!o)t(!0)},3e3),BOOMR_lstart=(new Date).getTime(),i.parentNode.appendChild(r);else t(!1);if(window.addEventListener)window.addEventListener("load",a,!1);else if(window.attachEvent)window.attachEvent("onload",a)}}(),"".length>0)if(e&&"performance"in e&&e.performance&&"function"==typeof e.performance.setResourceTimingBufferSize)e.performance.setResourceTimingBufferSize();!function(){if(BOOMR=e.BOOMR||{},BOOMR.plugins=BOOMR.plugins||{},!BOOMR.plugins.AK){var n=""=="true"?1:0,t="",a="eyaqfagoql4xajqacqcxiaacr5um5dzh-f-e793e28b7-clienttons-s.akamaihd.net",i="false"=="true"?2:1,o={"ak.v":"39","ak.cp":"295807","ak.ai":parseInt("721548",10),"ak.ol":"0","ak.cr":19,"ak.ipv":6,"ak.proto":"http/1.1","ak.rid":"fcfa5e2","ak.r":46007,"ak.a2":n,"ak.m":"dscx","ak.n":"essl","ak.bpcip":"2601:280:ce82:f970::","ak.cport":43846,"ak.gh":"23.33.141.56","ak.quicv":"","ak.tlsv":"tls1.3","ak.0rtt":"","ak.0rtt.ed":"","ak.csrc":"-","ak.acc":"bbr","ak.t":"1758367527","ak.ak":"hOBiQwZUYzCg5VSAfCLimQ==U5U4Q063CO8jT1sTdiFopqhYRSiMOtsP8lYz/jEzgGJf8YOgWTiRtO39QuJUIfBLG/kZI0HZCm/4oEt5UWzcG81fLWBMCpjWcL4SNsP/b68xvzm3um7fBJ7TVwnv+zOAcdElAJierCPTz7nDvYCR6wBrXu0DH13mIgCQq+Yz7WP4D7p4OBa+XibsU7HNWeXnKuLfI52JcxeYgI6F+g1edN1vxnGQCl8Ae4LwHWNSqSNVqhY+HgtPuVgGYQoUUc02sQahBGOya2AaZa5tini2fjW2MT7o6l3eJlqRJta240sSHgmTDdZpWFeZuc/IeKcYd4YLnBPg9zkoYkOle5NVhEyW2dpypJ3yhRat2poReu7qzSW8E6H9XOZI3tqUZ9v+SI5Y/k0A651Kj3Rn9pfE2cDIFqrD/ngvds2tzVcNvMk=","ak.pv":"840","ak.dpoabenc":"","ak.tf":i};if(""!==t)o["ak.ruds"]=t;var r={i:!1,av:function(n){var t="http.initiator";if(n&&(!n[t]||"spa_hard"===n[t]))o["ak.feo"]=void 0!==e.aFeoApplied?1:0,BOOMR.addVar(o)},rv:function(){var e=["ak.bpcip","ak.cport","ak.cr","ak.csrc","ak.gh","ak.ipv","ak.m","ak.n","ak.ol","ak.proto","ak.quicv","ak.tlsv","ak.0rtt","ak.0rtt.ed","ak.r","ak.acc","ak.t","ak.tf"];BOOMR.removeVar(e)}};BOOMR.plugins.AK={akVars:o,akDNSPreFetchDomain:a,init:function(){if(!r.i){var e=BOOMR.subscribe;e("before_beacon",r.av,null,null),e("onbeacon",r.rv,null,null),r.i=!0}return this},is_complete:function(){return!0}}}}()}(window);</script><script >bazadebezolkohpepadr="1634512888"</script><script type="text/javascript" src="https://ru.louisvuitton.com/akam/13/616cae62"  defer></script></head>
+
+<body class='lv-waiting'>
+  <header class='lv-waiting__header'>
+    <div class='lv-waiting__logo'>
+      <svg fill='#FFF' aria-label='Louis Vuitton' viewBox='0 0 432 45' preserveAspectRatio='xMinYMid'>
+        <path
+          d='M428.858.793h-5.451l-.793.892V27.85L394.764 0l-.794.793v42.222l.793.793h5.452l.892-.793V16.453l27.355 27.355h1.288V1.685zm-137.568.892v6.343h7.136v35.78h7.137V8.027h6.343l.892-.892V.793h-20.715zm26.265 0v6.343h7.136v35.78h7.136V8.027h6.343l.793-.892V.793h-20.615zM7.136.793H.793L0 1.685v42.123h21.507v-7.136H7.137zm40.636 0A21.507 21.507 0 1 0 69.28 22.3 21.507 21.507 0 0 0 47.772.793zm0 35.78A14.371 14.371 0 1 1 62.044 22.3a14.272 14.272 0 0 1-14.272 14.272zM365.327.792A21.507 21.507 0 1 0 386.735 22.3 21.507 21.507 0 0 0 365.327.793zm0 35.78A14.371 14.371 0 1 1 379.599 22.3a14.272 14.272 0 0 1-14.272 14.272zM101.094.792l-.793.793v27.85a7.136 7.136 0 0 1-7.136 7.136 7.235 7.235 0 0 1-7.235-7.136V1.586l-.793-.793h-5.55l-.793.793v27.85a14.371 14.371 0 1 0 28.644 0V1.586l-.793-.793zm20.616.892v42.123h6.343l.892-.793V.793h-6.343zM251.547.793l-.893.793v27.85a7.136 7.136 0 0 1-14.272 0V1.586l-.892-.793h-5.45l-.794.793v27.85a14.371 14.371 0 1 0 28.644 0V1.586l-.892-.793zm20.615.892v42.123h6.343l.793-.793V.793h-6.343zM155.804 19.03a54.016 54.016 0 0 1-4.757-2.875c-1.586-1.09-2.478-2.28-2.379-4.162a4.956 4.956 0 0 1 4.857-4.659 5.451 5.451 0 0 1 4.856 2.974h1.289l4.162-4.163A12.786 12.786 0 0 0 153.525.793a12.488 12.488 0 0 0-8.623 3.072 12.19 12.19 0 0 0-3.965 8.822c0 4.559 2.478 8.325 4.857 9.613l7.631 4.361a5.253 5.253 0 0 1 3.073 5.947 5.55 5.55 0 0 1-6.343 4.163c-1.784-.198-3.568-1.586-4.46-2.18l-1.883-1.587-5.352 5.55a15.065 15.065 0 0 0 8.523 5.254 22.498 22.498 0 0 0 4.163.396 13.876 13.876 0 0 0 13.677-13.776c0-7.236-6.442-10.01-9.019-11.398zm47.574 8.028L192.575.793h-7.83l17.84 43.015.793.792.892-.792L222.011.793h-7.73z'>
+        </path>
+      </svg>
+    </div>
+  </header>
+  <main class='lv-waiting__main'>
+    <div class='lv-waiting__masthead'>
+      <picture>
+        <source media='(min-width: 48rem)' sizes='(min-width: 0rem) 100vw'
+          srcset='https://www.louisvuitton.com/images/is/image/content/dam/lv/editorial-content/maintenance_page/maintenance-page-desktop.jpg?wid=490 490w, https://www.louisvuitton.com/images/is/image/content/dam/lv/editorial-content/maintenance_page/maintenance-page-desktop.jpg?wid=600 600w, https://www.louisvuitton.com/images/is/image/content/dam/lv/editorial-content/maintenance_page/maintenance-page-desktop.jpg?wid=730 730w, https://www.louisvuitton.com/images/is/image/content/dam/lv/editorial-content/maintenance_page/maintenance-page-desktop.jpg?wid=1090 1090w, https://www.louisvuitton.com/images/is/image/content/dam/lv/editorial-content/maintenance_page/maintenance-page-desktop.jpg?wid=1180 1180w, https://www.louisvuitton.com/images/is/image/content/dam/lv/editorial-content/maintenance_page/maintenance-page-desktop.jpg?wid=1300 1300w, https://www.louisvuitton.com/images/is/image/content/dam/lv/editorial-content/maintenance_page/maintenance-page-desktop.jpg?wid=1440 1440w, https://www.louisvuitton.com/images/is/image/content/dam/lv/editorial-content/maintenance_page/maintenance-page-desktop.jpg?wid=2400 2400w, https://www.louisvuitton.com/images/is/image/content/dam/lv/editorial-content/maintenance_page/maintenance-page-desktop.jpg?wid=4096 4096w' />
+        <img sizes='(min-width: 0rem) 100vw' alt=''
+          srcset='https://www.louisvuitton.com/images/is/image/content/dam/lv/editorial-content/maintenance_page/maintenance-page-mobile.jpg?wid=490 490w, https://www.louisvuitton.com/images/is/image/content/dam/lv/editorial-content/maintenance_page/maintenance-page-mobile.jpg?wid=600 600w, https://www.louisvuitton.com/images/is/image/content/dam/lv/editorial-content/maintenance_page/maintenance-page-mobile.jpg?wid=730 730w, https://www.louisvuitton.com/images/is/image/content/dam/lv/editorial-content/maintenance_page/maintenance-page-mobile.jpg?wid=1090 1090w, https://www.louisvuitton.com/images/is/image/content/dam/lv/editorial-content/maintenance_page/maintenance-page-mobile.jpg?wid=1180 1180w, https://www.louisvuitton.com/images/is/image/content/dam/lv/editorial-content/maintenance_page/maintenance-page-mobile.jpg?wid=1300 1300w, https://www.louisvuitton.com/images/is/image/content/dam/lv/editorial-content/maintenance_page/maintenance-page-mobile.jpg?wid=1440 1440w, https://www.louisvuitton.com/images/is/image/content/dam/lv/editorial-content/maintenance_page/maintenance-page-mobile.jpg?wid=2400 2400w, https://www.louisvuitton.com/images/is/image/content/dam/lv/editorial-content/maintenance_page/maintenance-page-mobile.jpg?wid=4096 4096w'
+          src='data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==' />
+      </picture>
+      <div class='lv-waiting__titles'>
+        <div class='lv-waiting__title-container'>
+          <h1 class='lv-waiting__top-title heading-m'>На данный момент LV.com находится на техническом обслуживании и поэтому временно недоступен.</h1>
+        </div>
+        <div class='lv-waiting__title-container'>
+          <h1 class='lv-waiting__top-title heading-m'>LV.com is currently under maintenance and therefore temporarily unavailable.
+          </h1>
+        </div>
+      </div>
+    </div>
+    <script type="text/javascript" src="https://js-cdn.dynatrace.com/jstag/1623d230d17/bf87812ugi/cd4b81bc366868c3_complete.js" crossorigin="anonymous" defer></script>
+  </main>
+<script type="text/javascript"  src="/ngqp_/BtIWl/zuasa1/Km35/zO3cJG5bb5wQcr/fXI2UUA/HSMWO/mVwNig"></script><noscript><img src="https://ru.louisvuitton.com/akam/13/pixel_616cae62?a=dD04Zjg1NzI4Y2UxM2NhNmNmYmFkMDkwZmI5ZjExMTdhMGI5ZjA2MmRiJmpzPW9mZg==" style="visibility: hidden; position: absolute; left: -999px; top: -999px;" /></noscript></body>
+
+</html>
