@@ -1,3 +1,5 @@
+import { isIndexEntry } from './lib/collections/utils.mjs'
+
 const CORE_AREAS = [
   {
     key: 'projects',
@@ -75,16 +77,6 @@ const sortByFresh = (items = []) =>
     .filter(Boolean)
     .slice()
     .sort((a, b) => itemTime(b) - itemTime(a))
-
-const isIndexEntry = item => {
-  if (!item) return false
-  const slug = item?.data?.page?.fileSlug
-  if (slug === 'index' || slug === '_index') return true
-  const stem = item?.data?.page?.filePathStem
-  if (stem && /\/index$/u.test(stem)) return true
-  const input = item?.inputPath || ''
-  return /\/index\.(?:md|njk|11ty\.js|html)$/iu.test(input)
-}
 
 const filterByFolder = (all = [], folder) =>
   all.filter(

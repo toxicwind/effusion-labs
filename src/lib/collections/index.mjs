@@ -1,4 +1,6 @@
 // src/lib/collections/index.mjs
+import { isIndexEntry } from './utils.mjs'
+
 export function registerCollections(eleventyConfig) {
   eleventyConfig.addCollection('featured', api =>
     api
@@ -18,6 +20,8 @@ export function registerCollections(eleventyConfig) {
   eleventyConfig.addCollection('work', api =>
     ['projects', 'concepts', 'sparks', 'meta']
       .flatMap(tag => api.getFilteredByTag(tag))
+      .filter(item => item && !isIndexEntry(item))
+      .filter((item, index, items) => items.indexOf(item) === index)
       .sort((a, b) => b.date - a.date))
 
   eleventyConfig.addCollection('recentAll', api => {
