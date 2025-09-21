@@ -1,0 +1,1812 @@
+.
+├── AGENTS.md
+├── archive.zip
+├── artifacts
+│   └── reports
+│       └── interlinker-unresolved.json
+├── bin
+│   ├── bat
+│   ├── fd
+│   ├── jq
+│   ├── _lib.sh
+│   ├── mtemp
+│   ├── node
+│   ├── npm
+│   ├── prettier
+│   ├── rg
+│   ├── sd
+│   ├── shtap
+│   ├── tree
+│   └── yq
+├── bin.zip
+├── broken_files.json
+├── commitlint.config.js
+├── .dead-links.json
+├── docker-compose.yml
+├── .dockerignore
+├── dprint.json
+├── eleventy.config.mjs
+├── eslint.config.js
+├── .eslintrc.json
+├── .github
+│   ├── CODEOWNERS
+│   ├── dependabot.yml
+│   └── workflows
+│       ├── dependabot-auto-merge.yml
+│       └── deploy.yml
+├── .gitignore
+├── .husky
+│   └── _
+│       ├── applypatch-msg
+│       ├── commit-msg
+│       ├── .gitignore
+│       ├── h
+│       ├── husky.sh
+│       ├── post-applypatch
+│       ├── post-checkout
+│       ├── post-commit
+│       ├── post-merge
+│       ├── post-rewrite
+│       ├── pre-applypatch
+│       ├── pre-auto-gc
+│       ├── pre-commit
+│       ├── pre-merge-commit
+│       ├── prepare-commit-msg
+│       ├── pre-push
+│       └── pre-rebase
+├── intelligent_lskindv2.sh
+├── knip.json
+├── lib_content.json
+├── LICENSE
+├── markdown_gateway
+│   ├── app.py
+│   ├── docker-compose.yml
+│   ├── Dockerfile
+│   ├── .env.example
+│   ├── .github
+│   │   └── workflows
+│   │       └── build.yml
+│   ├── __pycache__
+│   └── requirements.txt
+├── mcp-stack
+│   ├── ci
+│   │   ├── compose.ci.yml
+│   │   ├── compose.dev.yml
+│   │   ├── compose.prod.yml
+│   │   ├── README.md
+│   │   ├── smoke.sh
+│   │   └── stubs
+│   │       ├── curl-proxy.js
+│   │       ├── data
+│   │       │   ├── curl.json
+│   │       │   ├── flaresolverr.json
+│   │       │   ├── screenshot.json
+│   │       │   └── searxng.json
+│   │       ├── flaresolverr.js
+│   │       ├── screenshot.js
+│   │       ├── searxng
+│   │       │   └── mappings
+│   │       │       └── cf.json
+│   │       ├── searxng.js
+│   │       └── start-stubs.sh
+│   ├── docs
+│   │   ├── README.md
+│   │   └── RESEARCH-TRACE.md
+│   ├── gateway
+│   │   ├── config.mjs
+│   │   ├── Dockerfile
+│   │   ├── lib
+│   │   │   ├── host-allowlist.mjs
+│   │   │   └── webToMd.js
+│   │   ├── logger.mjs
+│   │   ├── package.json
+│   │   ├── ports.mjs
+│   │   ├── queue.mjs
+│   │   ├── readers.mjs
+│   │   ├── server.mjs
+│   │   ├── sse.mjs
+│   │   └── supervisor.mjs
+│   ├── profiles
+│   │   ├── dev.env
+│   │   └── prod.env
+│   ├── README.md
+│   ├── scripts
+│   │   ├── check-health.sh
+│   │   ├── engine-detect.sh
+│   │   └── run.sh
+│   ├── servers
+│   │   ├── registry.mjs
+│   │   └── templates
+│   │       └── stdio-demo.mjs
+│   ├── sidecars
+│   │   └── resolver.mjs
+│   ├── test
+│   │   └── engine-aware.test.mjs
+│   └── tests
+│       ├── integration.mjs
+│       └── smoke.mjs
+├── netlify.toml
+├── .nvmrc
+├── oneoff
+│   ├── aestheticyearbroken.txt
+│   ├── aestheticyear.js
+│   ├── cell.py
+│   ├── link-check.config.json
+│   ├── popmart.py
+│   ├── Untitled-1-1.ipynb
+│   ├── Untitled-1.html
+│   ├── Untitled-1.ipynb
+│   ├── Untitled-2-Copy1.ipynb
+│   ├── Untitled-2-Copy2.ipynb
+│   ├── Untitled-2.html
+│   ├── Untitled-2.ipynb
+│   └── Untitled-2.pdf
+├── out.json
+├── package.json
+├── package-lock.json
+├── patches
+│   ├── @photogabble+eleventy-plugin-interlinker+1.1.0.patch
+│   └── tree-cli+0.6.7.patch
+├── playwright.config.mjs
+├── .portainer
+│   ├── Dockerfile
+│   └── nginx.conf
+├── postcss.config.js
+├── public
+│   ├── apple-touch-icon.png
+│   ├── favicon.ico
+│   ├── favicon.svg
+│   ├── icons
+│   │   ├── 96x96.png
+│   │   ├── icon-192.png
+│   │   └── icon-512.png
+│   └── site.webmanifest
+├── README.md
+├── schema
+│   ├── character.schema.json
+│   ├── completed-seeds.schema.json
+│   ├── product.schema.json
+│   └── series.schema.json
+├── src
+│   ├── assets
+│   │   ├── css
+│   │   │   └── app.css
+│   │   └── js
+│   │       ├── app.js
+│   │       ├── mschf-overlay.js
+│   │       ├── site-init.js
+│   │       ├── theme-toggle.js
+│   │       ├── theme-utils.js
+│   │       └── work-filters.js
+│   ├── content
+│   │   ├── archives
+│   │   │   ├── collectables
+│   │   │   │   ├── designer-toys
+│   │   │   │   │   ├── index.njk
+│   │   │   │   │   └── pop-mart
+│   │   │   │   │       ├── index.njk
+│   │   │   │   │       └── the-monsters
+│   │   │   │   │           ├── characters
+│   │   │   │   │           │   ├── labubu.json
+│   │   │   │   │           │   ├── mokoko.json
+│   │   │   │   │           │   └── zimomo.json
+│   │   │   │   │           ├── i18n
+│   │   │   │   │           │   └── zh
+│   │   │   │   │           │       ├── characters
+│   │   │   │   │           │       │   └── labubu.json
+│   │   │   │   │           │       ├── products
+│   │   │   │   │           │       │   └── pop-mart--the-monsters--labubu--fall-in-wild--plush-doll--std--40cm--20240712.json
+│   │   │   │   │           │       └── series
+│   │   │   │   │           │           └── fall-in-wild.json
+│   │   │   │   │           ├── index.njk
+│   │   │   │   │           ├── products
+│   │   │   │   │           │   ├── pop-mart-coca-cola--the-monsters-coca-cola--labubu-zimomo--coca-cola.json
+│   │   │   │   │           │   ├── pop-mart-pronounce--the-monsters--labubu--wings-of-fantasy.json
+│   │   │   │   │           │   ├── pop-mart-pronounce--the-monsters--labubu--wings-of-fortune.json
+│   │   │   │   │           │   ├── pop-mart-pronounce--the-monsters-pronounce--labubu--be-fancy-now.json
+│   │   │   │   │           │   ├── pop-mart-pronounce--the-monsters-pronounce--labubu--wings-of-fortune.json
+│   │   │   │   │           │   ├── pop-mart--the-monsters--labubu--best-of-luck.json
+│   │   │   │   │           │   ├── pop-mart--the-monsters--labubu--big-into-energy--blind-box-set--sealed.json
+│   │   │   │   │           │   ├── pop-mart--the-monsters--labubu--big-into-energy--blind-box--single.json
+│   │   │   │   │           │   ├── pop-mart--the-monsters--labubu--coca-cola--blind-box-set--sealed.json
+│   │   │   │   │           │   ├── pop-mart--the-monsters--labubu--coca-cola--blind-box--single.json
+│   │   │   │   │           │   ├── pop-mart--the-monsters--labubu--dress-be-latte.json
+│   │   │   │   │           │   ├── pop-mart--the-monsters--labubu--exciting-macaron--blind-box-set--sealed.json
+│   │   │   │   │           │   ├── pop-mart--the-monsters--labubu--exciting-macaron--blind-box--single.json
+│   │   │   │   │           │   ├── pop-mart--the-monsters--labubu--exciting-macaron-v1--vinyl-face-blind-box-pendant.json
+│   │   │   │   │           │   ├── pop-mart--the-monsters--labubu--fall-in-wild.json
+│   │   │   │   │           │   ├── pop-mart--the-monsters--labubu--fall-in-wild--pendant--std--17cm.json
+│   │   │   │   │           │   ├── pop-mart--the-monsters--labubu--flip-with-me.json
+│   │   │   │   │           │   ├── pop-mart--the-monsters--labubu--forest-fairy-tale-china--figure--std--20250526--reg-cn.json
+│   │   │   │   │           │   ├── pop-mart--the-monsters--labubu--good-lucky-to-you-thailand.json
+│   │   │   │   │           │   ├── pop-mart--the-monsters--labubu--happy-halloween-party-sitting-pumpkin--pendant--sitting-pumpkin.json
+│   │   │   │   │           │   ├── pop-mart--the-monsters--labubu--have-a-seat--blind-box-set--sealed--15cm.json
+│   │   │   │   │           │   ├── pop-mart--the-monsters--labubu--have-a-seat--blind-box--single--15cm.json
+│   │   │   │   │           │   ├── pop-mart--the-monsters--labubu--hide-and-seek-in-singapore.json
+│   │   │   │   │           │   ├── pop-mart--the-monsters--labubu--jump-for-joy.json
+│   │   │   │   │           │   ├── pop-mart--the-monsters--labubu--lets-checkmate--pendant--std--17cm.json
+│   │   │   │   │           │   ├── pop-mart--the-monsters--labubu--lets-checkmate--plush-doll--std--37cm.json
+│   │   │   │   │           │   ├── pop-mart--the-monsters--labubu--pronounce-be-fancy-now--plush--std.json
+│   │   │   │   │           │   ├── pop-mart--the-monsters--labubu--pronounce-wings-of-fantasy--plush--std.json
+│   │   │   │   │           │   ├── pop-mart--the-monsters--labubu--pronounce-wings-of-fortune--pendant--std.json
+│   │   │   │   │           │   ├── pop-mart--the-monsters--labubu--time-to-chill.json
+│   │   │   │   │           │   ├── pop-mart--the-monsters--labubu--wacky-mart-china--figure--std--20250612--reg-cn.json
+│   │   │   │   │           │   ├── pop-mart--the-monsters--labubu--walk-by-fortune.json
+│   │   │   │   │           │   ├── pop-mart--the-monsters--mokoko--blue-diamond.json
+│   │   │   │   │           │   ├── pop-mart--the-monsters--mokoko--close-to-sweet-v1.json
+│   │   │   │   │           │   ├── pop-mart--the-monsters--mokoko--close-to-sweet-v1--pendant--std--17cm.json
+│   │   │   │   │           │   ├── pop-mart--the-monsters--mokoko--fall-into-spring.json
+│   │   │   │   │           │   ├── pop-mart--the-monsters--mokoko--fall-into-spring--pendant--std--17cm.json
+│   │   │   │   │           │   ├── pop-mart--the-monsters--mokoko--magic-of-pumpkin--pendant--std--17cm.json
+│   │   │   │   │           │   ├── pop-mart--the-monsters--mokoko--twinkly-fairy-tale.json
+│   │   │   │   │           │   ├── pop-mart--the-monsters-pronounce--labubu--be-fancy-now.json
+│   │   │   │   │           │   ├── pop-mart--the-monsters-x-coca-cola--labubu-zimomo--coca-cola.json
+│   │   │   │   │           │   ├── pop-mart--the-monsters--zimomo--angel-in-clouds-v2.json
+│   │   │   │   │           │   └── pop-mart--the-monsters--zimomo--i-found-you-v1.json
+│   │   │   │   │           ├── provenance
+│   │   │   │   │           │   ├── pop-mart--the-monsters--labubu--best-of-luck--plush--std--20231230--reg-cn.jsonl
+│   │   │   │   │           │   ├── pop-mart--the-monsters--labubu--big-into-energy--blind-box-set--sealed--20250425.jsonl
+│   │   │   │   │           │   ├── pop-mart--the-monsters--labubu--big-into-energy--blind-box--single--20250425.jsonl
+│   │   │   │   │           │   ├── pop-mart--the-monsters--labubu--coca-cola--blind-box-set--sealed--20250124.jsonl
+│   │   │   │   │           │   ├── pop-mart--the-monsters--labubu--coca-cola--blind-box--single--20250124.jsonl
+│   │   │   │   │           │   ├── pop-mart--the-monsters--labubu--dress-be-latte--plush--std--20231026.jsonl
+│   │   │   │   │           │   ├── pop-mart--the-monsters--labubu--exciting-macaron--blind-box-set--sealed--20241027.jsonl
+│   │   │   │   │           │   ├── pop-mart--the-monsters--labubu--exciting-macaron--blind-box--single--20241027.jsonl
+│   │   │   │   │           │   ├── pop-mart--the-monsters--labubu--fall-in-wild--pendant--std--17cm--20240712.jsonl
+│   │   │   │   │           │   ├── pop-mart--the-monsters--labubu--fall-in-wild--plush-doll--std--40cm--20240712.jsonl
+│   │   │   │   │           │   ├── pop-mart--the-monsters--labubu--flip-with-me--plush--std--40cm--20240712.jsonl
+│   │   │   │   │           │   ├── pop-mart--the-monsters--labubu--forest-fairy-tale-china--figure--std--20250526--reg-cn.jsonl
+│   │   │   │   │           │   ├── pop-mart--the-monsters--labubu--good-lucky-to-you-thailand--figure--std--20241220--reg-th.jsonl
+│   │   │   │   │           │   ├── pop-mart--the-monsters--labubu--happy-halloween-party-sitting-pumpkin--pendant--sitting-pumpkin--20241025.jsonl
+│   │   │   │   │           │   ├── pop-mart--the-monsters--labubu--have-a-seat--blind-box-set--sealed--15cm--20240712.jsonl
+│   │   │   │   │           │   ├── pop-mart--the-monsters--labubu--have-a-seat--blind-box--single--15cm--20240712.jsonl
+│   │   │   │   │           │   ├── pop-mart--the-monsters--labubu--hide-and-seek-in-singapore--figure--std--17.5cm--reg-sg.jsonl
+│   │   │   │   │           │   ├── pop-mart--the-monsters--labubu--jump-for-joy--plush--std--20230525.jsonl
+│   │   │   │   │           │   ├── pop-mart--the-monsters--labubu--lets-checkmate--pendant--std--17cm--20250207.jsonl
+│   │   │   │   │           │   ├── pop-mart--the-monsters--labubu--lets-checkmate--plush-doll--std--37cm--20250207.jsonl
+│   │   │   │   │           │   ├── pop-mart--the-monsters--labubu--pronounce-be-fancy-now--plush--std--20240315.jsonl
+│   │   │   │   │           │   ├── pop-mart--the-monsters--labubu--pronounce-wings-of-fantasy--plush--std--20241004.jsonl
+│   │   │   │   │           │   ├── pop-mart--the-monsters--labubu--pronounce-wings-of-fortune--pendant--std--20241004.jsonl
+│   │   │   │   │           │   ├── pop-mart--the-monsters--labubu--time-to-chill--plush--std--20221031.jsonl
+│   │   │   │   │           │   ├── pop-mart--the-monsters--labubu--wacky-mart-china--figure--std--20250612--reg-cn.jsonl
+│   │   │   │   │           │   ├── pop-mart--the-monsters--labubu--walk-by-fortune--plush--std--20231229.jsonl
+│   │   │   │   │           │   ├── pop-mart--the-monsters--mokoko--blue-diamond--pendant--std--17cm--20240618.jsonl
+│   │   │   │   │           │   ├── pop-mart--the-monsters--mokoko--close-to-sweet-v1--pendant--std--17cm.jsonl
+│   │   │   │   │           │   ├── pop-mart--the-monsters--mokoko--close-to-sweet-v1--plush--std.jsonl
+│   │   │   │   │           │   ├── pop-mart--the-monsters--mokoko--fall-into-spring--pendant--std--17cm--20240308.jsonl
+│   │   │   │   │           │   ├── pop-mart--the-monsters--mokoko--fall-into-spring--plush--std--20240308.jsonl
+│   │   │   │   │           │   ├── pop-mart--the-monsters--mokoko--magic-of-pumpkin--pendant--std--17cm--20241027.jsonl
+│   │   │   │   │           │   ├── pop-mart--the-monsters--mokoko--twinkly-fairy-tale--pendant--std--17cm--20241128.jsonl
+│   │   │   │   │           │   ├── pop-mart--the-monsters--zimomo--angel-in-clouds-v2--plush--std--58cm--20241025.jsonl
+│   │   │   │   │           │   └── pop-mart--the-monsters--zimomo--i-found-you-v1--plush--std--58cm--20231215.jsonl
+│   │   │   │   │           └── series
+│   │   │   │   │               ├── angel-in-clouds-v2.json
+│   │   │   │   │               ├── best-of-luck.json
+│   │   │   │   │               ├── big-into-energy.json
+│   │   │   │   │               ├── blue-diamond.json
+│   │   │   │   │               ├── close-to-sweet-v1.json
+│   │   │   │   │               ├── coca-cola.json
+│   │   │   │   │               ├── dress-be-latte.json
+│   │   │   │   │               ├── exciting-macaron.json
+│   │   │   │   │               ├── fall-into-spring.json
+│   │   │   │   │               ├── fall-in-wild.json
+│   │   │   │   │               ├── flip-with-me.json
+│   │   │   │   │               ├── forest-fairy-tale-china.json
+│   │   │   │   │               ├── good-lucky-to-you-thailand.json
+│   │   │   │   │               ├── happy-halloween-party-sitting-pumpkin.json
+│   │   │   │   │               ├── have-a-seat.json
+│   │   │   │   │               ├── hide-and-seek-in-singapore.json
+│   │   │   │   │               ├── i-found-you-v1.json
+│   │   │   │   │               ├── jump-for-joy.json
+│   │   │   │   │               ├── lets-checkmate.json
+│   │   │   │   │               ├── magic-of-pumpkin.json
+│   │   │   │   │               ├── pop-mart--the-monsters--labubu--best-of-luck-overseas-exclusive.json
+│   │   │   │   │               ├── pop-mart--the-monsters--labubu--dress-be-latte.json
+│   │   │   │   │               ├── pop-mart--the-monsters--labubu--exciting-macaron-v1.json
+│   │   │   │   │               ├── pop-mart--the-monsters--labubu--fall-in-wild.json
+│   │   │   │   │               ├── pop-mart--the-monsters--labubu--flip-with-me.json
+│   │   │   │   │               ├── pop-mart--the-monsters--labubu--forest-fairy-tale.json
+│   │   │   │   │               ├── pop-mart--the-monsters--labubu--happy-halloween-party.json
+│   │   │   │   │               ├── pop-mart--the-monsters--labubu--jump-for-joy.json
+│   │   │   │   │               ├── pop-mart--the-monsters--labubu--let-s-checkmate.json
+│   │   │   │   │               ├── pop-mart--the-monsters--labubu--wacky-mart.json
+│   │   │   │   │               ├── pop-mart--the-monsters--labubu--walk-by-fortune.json
+│   │   │   │   │               ├── pop-mart--the-monsters--mokoko--magic-of-pumpkin-halloween.json
+│   │   │   │   │               ├── pronounce-be-fancy-now.json
+│   │   │   │   │               ├── pronounce-wings-of-fantasy.json
+│   │   │   │   │               ├── pronounce-wings-of-fortune.json
+│   │   │   │   │               ├── time-to-chill.json
+│   │   │   │   │               ├── twinkly-fairy-tale.json
+│   │   │   │   │               ├── wacky-mart-china.json
+│   │   │   │   │               └── walk-by-fortune.json
+│   │   │   │   └── index.njk
+│   │   │   ├── _dynamic
+│   │   │   │   ├── characters.njk
+│   │   │   │   ├── jsonl-download.11ty.js
+│   │   │   │   ├── jsonl-index.11ty.js
+│   │   │   │   ├── jsonl-viewer.11ty.js
+│   │   │   │   ├── product-redirect-stubs.11ty.js
+│   │   │   │   ├── products.njk
+│   │   │   │   ├── provenance.11ty.js
+│   │   │   │   └── series.njk
+│   │   │   ├── golden_record_20250819T081755Z.json
+│   │   │   ├── golden_record_test.json
+│   │   │   ├── index.njk
+│   │   │   └── provenance
+│   │   │       └── index.njk
+│   │   ├── concepts
+│   │   │   ├── aesthetic-inquiry.md
+│   │   │   ├── atlas-process.md
+│   │   │   ├── autocatalytic-system.md
+│   │   │   ├── block-ledger.md
+│   │   │   ├── compliant-spire.md
+│   │   │   ├── concepts.11tydata.js
+│   │   │   ├── ghost-byline.md
+│   │   │   ├── ghost-engine.md
+│   │   │   ├── index.njk
+│   │   │   ├── parroting-mimicry.md
+│   │   │   ├── readers-journey.md
+│   │   │   ├── rhizomatic-protocol.md
+│   │   │   ├── three-studies-sensory.md
+│   │   │   ├── verification-is-an-ecology.md
+│   │   │   └── workshop-weather.md
+│   │   ├── docs
+│   │   │   ├── adr
+│   │   │   │   ├── 20250813-hero-image-perf.md
+│   │   │   │   ├── 20250813-truncate-filter.md
+│   │   │   │   ├── 20250814-code-copy.md
+│   │   │   │   ├── 20250814-feed-build-metadata.md
+│   │   │   │   ├── 20250814-footnote-highlight.md
+│   │   │   │   ├── 20250814-monsters-hub.md
+│   │   │   │   ├── 20250814-nav-ledger.md
+│   │   │   │   ├── 20250814-spark-status.md
+│   │   │   │   ├── 20250816-carbon-handshake.md
+│   │   │   │   └── 20250829-unified-collection-layout.md
+│   │   │   ├── cassettes
+│   │   │   │   └── .gitkeep
+│   │   │   ├── docs.json
+│   │   │   ├── knowledge
+│   │   │   │   ├── branch-policy.md
+│   │   │   │   ├── daisyui-fetch-error-20250911T174939Z.log
+│   │   │   │   ├── deploy-workflow-green.log
+│   │   │   │   ├── deploy-workflow-red.log
+│   │   │   │   ├── eleventy-collections-20250911T175345Z.html
+│   │   │   │   ├── eleventy-data-cascade-20250911T175348Z.html
+│   │   │   │   ├── eleventy-data-computed-20250911T175414Z.html
+│   │   │   │   ├── eleventy-data-template-dir-20250911T175432Z.html
+│   │   │   │   ├── eleventy-vite-20250913T180254Z.html.raw
+│   │   │   │   ├── eleventy-vite-20250913T180254Z.txt
+│   │   │   │   ├── gha-actions-upgrade
+│   │   │   │   │   ├── hashes.txt
+│   │   │   │   │   ├── test-fail.log
+│   │   │   │   │   └── test-success.log
+│   │   │   │   ├── golden_record_20250819T062726Z.json
+│   │   │   │   ├── golden_record_20250819T081736Z.json
+│   │   │   │   ├── golden_record_20250819T081755Z.json
+│   │   │   │   ├── homepage-feed-green.log
+│   │   │   │   ├── homepage-feed-red.log
+│   │   │   │   ├── homepage-hero-green.log
+│   │   │   │   ├── homepage-hero-map-green.log
+│   │   │   │   ├── homepage-hero-map-red.log
+│   │   │   │   ├── homepage-logo-green.log
+│   │   │   │   ├── homepage-logo-red.log
+│   │   │   │   ├── image-filename-seo-green.log
+│   │   │   │   ├── image-filename-seo-install.log
+│   │   │   │   ├── image-filename-seo-red.log
+│   │   │   │   ├── interlinker-unresolved-20250911T175224Z.log
+│   │   │   │   ├── logo-image-transform-green.log
+│   │   │   │   ├── logo-image-transform-red.log
+│   │   │   │   ├── monsters-product-metadata-green.log
+│   │   │   │   ├── node-shim-prove.md
+│   │   │   │   ├── no-silent-ops-green.log
+│   │   │   │   ├── no-silent-ops-red.log
+│   │   │   │   ├── prettier-guardrails
+│   │   │   │   │   ├── test-green.log
+│   │   │   │   │   └── test-red.log
+│   │   │   │   ├── product-template-fail.md
+│   │   │   │   ├── responsive-logo-green.log
+│   │   │   │   ├── responsive-logo-red.log
+│   │   │   │   ├── ripgrep
+│   │   │   │   │   ├── docs-validate.log
+│   │   │   │   │   └── test-success.log
+│   │   │   │   ├── stabilize-ci-tests-green.log
+│   │   │   │   ├── stabilize-ci-tests-install.log
+│   │   │   │   ├── stabilize-ci-tests-red.log
+│   │   │   │   ├── synthesized_archive-20250818-202538.json
+│   │   │   │   ├── synthesized_archive-20250818-202551.json
+│   │   │   │   ├── synthesized_archive-20250818-202612.json
+│   │   │   │   ├── synthesized_archive-20250818-202854.json
+│   │   │   │   ├── synthesized_archive_20250818T202820Z.json
+│   │   │   │   ├── synthesized_archive_20250818T202825Z.json
+│   │   │   │   ├── synthesized_archive_20250818T202833Z.json
+│   │   │   │   ├── synthesized_archive_20250818T203403Z.json
+│   │   │   │   ├── synthesized_archive_20250818T203415Z.json
+│   │   │   │   ├── synthesized_archive_20250818T203419Z.json
+│   │   │   │   ├── synthesized_archive_20250818T203545Z.json
+│   │   │   │   ├── synthesized_archive_20250818T203603Z.json
+│   │   │   │   ├── synthesized_archive_20250818T203640Z.json
+│   │   │   │   ├── synthesized_archive_20250818T203805Z.json
+│   │   │   │   ├── synthesized_archive_20250818T204046Z.json
+│   │   │   │   ├── synthesized_archive_20250818T204119Z.json
+│   │   │   │   ├── synthesized_archive_20250818T204212Z.json
+│   │   │   │   ├── synthesized_archive_20250818T204244Z.json
+│   │   │   │   ├── synthesized_archive_20250819T081707Z.json
+│   │   │   │   ├── synthesized_archive_20250819T081750Z.json
+│   │   │   │   ├── tailwind-fetch-error-20250911T174938Z.log
+│   │   │   │   ├── tailwind-v4-20250913T180254Z.html.raw
+│   │   │   │   ├── tailwind-v4-20250913T180254Z.txt
+│   │   │   │   ├── test-failures.txt
+│   │   │   │   ├── time-to-chill-size-green.log
+│   │   │   │   ├── utils-test-green.md
+│   │   │   │   ├── utils-test-red.md
+│   │   │   │   ├── wikilink-filter-build-green.log
+│   │   │   │   └── wikilink-filter-green.log
+│   │   │   ├── migration
+│   │   │   │   ├── class-map.json
+│   │   │   │   └── path-map.json
+│   │   │   ├── reports
+│   │   │   │   ├── 2025-08-20-shiki-migration.md
+│   │   │   │   ├── 20250911T175310Z.md
+│   │   │   │   ├── 20250911T175533Z.md
+│   │   │   │   ├── 20250913T180936Z.md
+│   │   │   │   ├── archive-normalization-audit.md
+│   │   │   │   ├── archive-normalization-continue.md
+│   │   │   │   ├── archive-normalization-ledger.md
+│   │   │   │   ├── continuous-output-continue.md
+│   │   │   │   ├── continuous-output-ledger.md
+│   │   │   │   ├── deploy-workflow-continue.md
+│   │   │   │   ├── deploy-workflow-ledger.md
+│   │   │   │   ├── eleventy-runner-continue.md
+│   │   │   │   ├── eleventy-runner-ledger.md
+│   │   │   │   ├── esm-audit-20250820T215642Z.md
+│   │   │   │   ├── exec-surface.md
+│   │   │   │   ├── external-arrow-continue.md
+│   │   │   │   ├── external-arrow-ledger.md
+│   │   │   │   ├── gha-actions-upgrade-continue.md
+│   │   │   │   ├── gha-actions-upgrade-ledger.md
+│   │   │   │   ├── homepage-hero-continue.md
+│   │   │   │   ├── homepage-hero-ledger.md
+│   │   │   │   ├── homepage-latest-entries-continue.md
+│   │   │   │   ├── homepage-latest-entries-ledger.md
+│   │   │   │   ├── homepage-logo-continue.md
+│   │   │   │   ├── homepage-logo-ledger.md
+│   │   │   │   ├── image-filename-seo-continue.md
+│   │   │   │   ├── image-filename-seo-ledger.md
+│   │   │   │   ├── link-hygiene-r3-continue.md
+│   │   │   │   ├── link-hygiene-r3-ledger.md
+│   │   │   │   ├── llm-keepalive-continue.md
+│   │   │   │   ├── llm-keepalive-ledger.md
+│   │   │   │   ├── logo-image-transform-continue.md
+│   │   │   │   ├── logo-image-transform-ledger.md
+│   │   │   │   ├── monsters-product-metadata-continue.md
+│   │   │   │   ├── monsters-product-metadata-ledger.md
+│   │   │   │   ├── mschf-overlay-continue.md
+│   │   │   │   ├── mschf-overlay-ledger.md
+│   │   │   │   ├── node-shim-continue.md
+│   │   │   │   ├── node-shim-ledger.md
+│   │   │   │   ├── pop-mart-provenance-continue.md
+│   │   │   │   ├── pop-mart-provenance-ledger.md
+│   │   │   │   ├── prettier-guardrails-continue.md
+│   │   │   │   ├── prettier-guardrails-ledger.md
+│   │   │   │   ├── products-template-continue.md
+│   │   │   │   ├── products-template-ledger.md
+│   │   │   │   ├── research-ingest-continue.md
+│   │   │   │   ├── research-ingest-ledger.md
+│   │   │   │   ├── responsive-logo-continue.md
+│   │   │   │   ├── responsive-logo-ledger.md
+│   │   │   │   ├── ripgrep-fix-continue.md
+│   │   │   │   ├── ripgrep-fix-ledger.md
+│   │   │   │   ├── site-redesign-r3-continue.md
+│   │   │   │   ├── site-redesign-r3-ledger.md
+│   │   │   │   ├── solver-url-env-continue.md
+│   │   │   │   ├── solver-url-env-ledger.md
+│   │   │   │   ├── stabilize-ci-tests-continue.md
+│   │   │   │   ├── stabilize-ci-tests-ledger.md
+│   │   │   │   ├── tags-metadata-continue.md
+│   │   │   │   ├── tags-metadata-ledger.md
+│   │   │   │   ├── tests-green-continue.md
+│   │   │   │   ├── tests-green-ledger.md
+│   │   │   │   ├── typography-colors-continue.md
+│   │   │   │   ├── typography-colors-ledger.md
+│   │   │   │   ├── utils-ordinal-suffix-continue.md
+│   │   │   │   ├── utils-ordinal-suffix-ledger.md
+│   │   │   │   ├── work-pages-continue.md
+│   │   │   │   └── work-pages-ledger.md
+│   │   │   ├── stream-guard-3500.md
+│   │   │   ├── theming.md
+│   │   │   ├── ux
+│   │   │   │   └── mschf-overlay.md
+│   │   │   ├── vendor
+│   │   │   │   ├── daisyui
+│   │   │   │   │   ├── base.html
+│   │   │   │   │   ├── colors.html
+│   │   │   │   │   ├── components.html
+│   │   │   │   │   ├── config.html
+│   │   │   │   │   ├── configuration.html
+│   │   │   │   │   ├── install.html
+│   │   │   │   │   ├── README.md
+│   │   │   │   │   ├── themes.html
+│   │   │   │   │   ├── upgrade.html
+│   │   │   │   │   └── v5.html
+│   │   │   │   └── tailwind
+│   │   │   │       ├── configuration.html
+│   │   │   │       ├── content-configuration.html
+│   │   │   │       ├── content-configuration.html.bak
+│   │   │   │       ├── detecting-classes.html
+│   │   │   │       ├── detecting-classes.html.bak
+│   │   │   │       ├── functions-and-directives.html
+│   │   │   │       ├── plugins.html
+│   │   │   │       ├── README.md
+│   │   │   │       ├── tailwindcss-v4-blog.html
+│   │   │   │       ├── upgrade-guide.html
+│   │   │   │       └── v4-blog.html
+│   │   │   ├── vendors
+│   │   │   │   ├── @11ty
+│   │   │   │   │   └── eleventy
+│   │   │   │   │       └── 3.1.2
+│   │   │   │   │           ├── configuration.md
+│   │   │   │   │           ├── getting-started.md
+│   │   │   │   │           └── manifest.json
+│   │   │   │   ├── daisyui
+│   │   │   │   │   └── 5.0.50
+│   │   │   │   │       ├── install.md
+│   │   │   │   │       └── manifest.json
+│   │   │   │   ├── index.md
+│   │   │   │   ├── _inventory.json
+│   │   │   │   ├── _manifest.json
+│   │   │   │   ├── markdown-it
+│   │   │   │   │   └── 14.1.0
+│   │   │   │   │       ├── index.md
+│   │   │   │   │       └── manifest.json
+│   │   │   │   ├── nunjucks
+│   │   │   │   │   └── 3.2.4
+│   │   │   │   │       ├── manifest.json
+│   │   │   │   │       └── templating.md
+│   │   │   │   ├── postcss
+│   │   │   │   │   └── 8.5.6
+│   │   │   │   │       ├── index.md
+│   │   │   │   │       └── manifest.json
+│   │   │   │   └── tailwindcss
+│   │   │   │       └── 4.1.11
+│   │   │   │           ├── manifest.json
+│   │   │   │           └── readme.md
+│   │   │   └── worklogs
+│   │   │       ├── 20250911T175310Z.md
+│   │   │       ├── 20250911T175533Z.md
+│   │   │       ├── 20250913T180936Z.md
+│   │   │       └── 20250914T025746Z-exec-surface.md
+│   │   ├── flower_reports_showcase
+│   │   │   ├── normalized
+│   │   │   │   ├── listings.csv
+│   │   │   │   └── menus
+│   │   │   │       ├── a-cut-above-denver.csv
+│   │   │   │       ├── a-cut-off-the-top-2059-w-9th-ave-80204.csv
+│   │   │   │       ├── affinity-dispensary.csv
+│   │   │   │       ├── alternative-medicine-on-capitol-hill.csv
+│   │   │   │       ├── amch-adult-use.csv
+│   │   │   │       ├── apothecary-farms-denver.csv
+│   │   │   │       ├── dank.csv
+│   │   │   │       ├── denco-adult-use.csv
+│   │   │   │       ├── denco-alternative-medicine-recreational.csv
+│   │   │   │       ├── den-rec-medical.csv
+│   │   │   │       ├── denver-kush-club-more-than-a-club-adult-use.csv
+│   │   │   │       ├── doctors-orders-3.csv
+│   │   │   │       ├── everbloom-on-jackson.csv
+│   │   │   │       ├── family-grown.csv
+│   │   │   │       ├── green-cross-of-cherry-creek-2.csv
+│   │   │   │       ├── greenfields-4.csv
+│   │   │   │       ├── greenfields-5.csv
+│   │   │   │       ├── house-of-dankness-3.csv
+│   │   │   │       ├── kinds-meds.csv
+│   │   │   │       ├── lemonnade-denver-1.csv
+│   │   │   │       ├── life-flower-dispensary.csv
+│   │   │   │       ├── life-flower-dispensary-recreational.csv
+│   │   │   │       ├── lightshade-peoria-2.csv
+│   │   │   │       ├── little-brown-house.csv
+│   │   │   │       ├── lova-downtown.csv
+│   │   │   │       ├── lova-sheridan.csv
+│   │   │   │       ├── magic-city-cannabis-colorado.csv
+│   │   │   │       ├── mecca-federal.csv
+│   │   │   │       ├── medicine-man-denver.csv
+│   │   │   │       ├── native-roots-apothecary-medical.csv
+│   │   │   │       ├── native-roots-denver-highlands-med.csv
+│   │   │   │       ├── native-roots-south.csv
+│   │   │   │       ├── nuvue-pharma-denver.csv
+│   │   │   │       ├── potco-2.csv
+│   │   │   │       ├── reefer-madness.csv
+│   │   │   │       ├── rino-supply-co-rec.csv
+│   │   │   │       ├── riverrock-south-recreational.csv
+│   │   │   │       ├── sacred-seed-recreational.csv
+│   │   │   │       ├── seed-smith-cannabis.csv
+│   │   │   │       ├── snaxland-bryant.csv
+│   │   │   │       ├── spark-3.csv
+│   │   │   │       ├── standing-akimbo-denver.csv
+│   │   │   │       ├── starbuds-du.csv
+│   │   │   │       ├── strawberry-fields-denver.csv
+│   │   │   │       ├── the-center-3.csv
+│   │   │   │       ├── the-grove-29.csv
+│   │   │   │       ├── the-herbal-cure-recreational.csv
+│   │   │   │       ├── three-rivers-dispensary-broadway-med.csv
+│   │   │   │       ├── three-rivers-dispensary-broadway-rec.csv
+│   │   │   │       └── xclusive-smith.csv
+│   │   │   └── reports
+│   │   │       ├── audits
+│   │   │       │   ├── audit_alternative-medicine-on-capitol-hill.csv
+│   │   │       │   ├── audit_apothecary-farms-denver.csv
+│   │   │       │   ├── audit_dank.csv
+│   │   │       │   ├── audit_denver-kush-club-more-than-a-club-adult-use.csv
+│   │   │       │   ├── audit_green-cross-of-cherry-creek-2.csv
+│   │   │       │   ├── audit_greenfields-5.csv
+│   │   │       │   ├── audit_house-of-dankness-3.csv
+│   │   │       │   ├── audit_kinds-meds.csv
+│   │   │       │   ├── audit_life-flower-dispensary.csv
+│   │   │       │   ├── audit_life-flower-dispensary-recreational.csv
+│   │   │       │   ├── audit_lightshade-peoria-2.csv
+│   │   │       │   ├── audit_little-brown-house.csv
+│   │   │       │   ├── audit_lova-downtown.csv
+│   │   │       │   ├── audit_lova-sheridan.csv
+│   │   │       │   ├── audit_magic-city-cannabis-colorado.csv
+│   │   │       │   ├── audit_mecca-federal.csv
+│   │   │       │   ├── audit_medicine-man-denver.csv
+│   │   │       │   ├── audit_reefer-madness.csv
+│   │   │       │   ├── audit_sacred-seed-recreational.csv
+│   │   │       │   ├── audit_seed-smith-cannabis.csv
+│   │   │       │   ├── audit_the-center-3.csv
+│   │   │       │   ├── audit_the-herbal-cure-recreational.csv
+│   │   │       │   ├── audit_three-rivers-dispensary-broadway-med.csv
+│   │   │       │   └── audit_xclusive-smith.csv
+│   │   │       ├── Magic_City_Cannabis___Colorado_20250810_report.html
+│   │   │       ├── nearby_value_cache_status.html
+│   │   │       ├── nearby_value_leaderboard.html
+│   │   │       ├── Reefer_Madness_20250810_report.html
+│   │   │       ├── Reefer_Madness_20250825_report.html
+│   │   │       ├── Reefer_Madness_20250826_report.html
+│   │   │       └── Reefer_Madness_20250830_report.html
+│   │   ├── meta
+│   │   │   ├── a-b-curatorial-protocolist.md
+│   │   │   ├── core-concept.md
+│   │   │   ├── curatorial-generativism.md
+│   │   │   ├── index.njk
+│   │   │   ├── meta.11tydata.js
+│   │   │   ├── methodology.md
+│   │   │   ├── protocolist.md
+│   │   │   ├── style-guide.md
+│   │   │   └── unified-referencing-syntax.md
+│   │   ├── projects
+│   │   │   ├── index.njk
+│   │   │   ├── llm-release-watcher.njk
+│   │   │   ├── lv-images
+│   │   │   │   ├── config
+│   │   │   │   │   ├── hosts.txt
+│   │   │   │   │   ├── hosts.txt-old
+│   │   │   │   │   ├── locales.json
+│   │   │   │   │   └── subdomains.json
+│   │   │   │   ├── generated
+│   │   │   │   │   └── lv
+│   │   │   │   │       ├── all-images.json
+│   │   │   │   │       ├── all-products.json
+│   │   │   │   │       ├── cache
+│   │   │   │   │       │   ├── de.louisvuitton.com
+│   │   │   │   │       │   │   ├── 100ea266a990e3d7c5c2a5d8f8ee2098b701be08.xml
+│   │   │   │   │       │   │   ├── 40a87d105914438feb9997041ff27a20e6308def.html
+│   │   │   │   │       │   │   ├── 60171d64c280528018ae1fbe81093c9f5e274b7c.txt
+│   │   │   │   │       │   │   ├── 9aab666603372740aeeb6d2c428889e1108945a0.xml
+│   │   │   │   │       │   │   ├── a72eb8a9c9909e7954712428627c162e5c4e99e6.xml
+│   │   │   │   │       │   │   ├── b22709e6130ba5b141592e17997c46737eb875cf.xml
+│   │   │   │   │       │   │   ├── c1de4761c3b91d031d030c417a2ce016aad7746d.html
+│   │   │   │   │       │   │   └── _index.json
+│   │   │   │   │       │   ├── en.louisvuitton.com
+│   │   │   │   │       │   │   ├── 3a9b102c91a525914e1a5c51d5d8b1785b7e17b0.html
+│   │   │   │   │       │   │   ├── 8bc31a1beb3d7faaa7545984e19a64b802f7d804.html
+│   │   │   │   │       │   │   ├── 9794e392412d0bdf760f35e78b13948e9a0e7944.xml
+│   │   │   │   │       │   │   ├── a3ceaafbe8e17b338a020aa1af1dda10cf4dba52.txt
+│   │   │   │   │       │   │   ├── bd8664c9fcd629f894d72092a4559e7f7ad050bc.xml
+│   │   │   │   │       │   │   ├── c7b3ce26d5bc28b1c5263cb6eb4a2bf39b10f3b8.xml
+│   │   │   │   │       │   │   ├── ef275a8f52d7c4360d25b95add9e1de7f0036007.xml
+│   │   │   │   │       │   │   └── _index.json
+│   │   │   │   │       │   ├── es.louisvuitton.com
+│   │   │   │   │       │   │   ├── 21db2dbfc893f865f1ad5302e3fd1b77583e35f6.xml
+│   │   │   │   │       │   │   ├── 8536c40475ed11aec1d1675ecfbc6a90c1254770.txt
+│   │   │   │   │       │   │   ├── 98c9a4a9948c302df9107c5fe382fd844dda1a13.html
+│   │   │   │   │       │   │   ├── 9c04f3db7166199f773a65489e34026afa0c6d71.html
+│   │   │   │   │       │   │   ├── ed89dc0449406969e5129ff335e73892c434106f.xml
+│   │   │   │   │       │   │   ├── ee4ed33003162f673981bce0b347eded2741eb8e.xml
+│   │   │   │   │       │   │   ├── ffe94f0981ac9b3a5c0757cd7dfc9accad7d6c0b.xml
+│   │   │   │   │       │   │   └── _index.json
+│   │   │   │   │       │   ├── fr.louisvuitton.com
+│   │   │   │   │       │   │   ├── 269a1e38c208dbab6d17a269ecd8cd6357d6bccd.xml
+│   │   │   │   │       │   │   ├── 651ea982b208766b803ba208cc47aa37284bd33f.txt
+│   │   │   │   │       │   │   ├── 7247f525109e01569244ef871cf2bbb54747f9e1.xml
+│   │   │   │   │       │   │   ├── b6d53a82951ff41b188bf7e7a1bec3718a944c13.xml
+│   │   │   │   │       │   │   ├── c3c7db387ad4a2aaa19e8726268dd6031f31dc12.xml
+│   │   │   │   │       │   │   ├── c848b122d65a59d3c181478c86f6f3944450d9e6.html
+│   │   │   │   │       │   │   ├── f3b563f7c6248a67a831856ebc6103ac9dc84111.html
+│   │   │   │   │       │   │   └── _index.json
+│   │   │   │   │       │   ├── it.louisvuitton.com
+│   │   │   │   │       │   │   ├── 0ff27763bc0856a217c8db4b111714922c0cb23c.html
+│   │   │   │   │       │   │   ├── 1fc2d211cb83a3915b52badfaed3438a21d637e6.html
+│   │   │   │   │       │   │   ├── 850c26a45e467c8f269421f6ba858bfb145827c9.xml
+│   │   │   │   │       │   │   ├── 9cb7533bfddd66dbf28d5e396a19ec77cf715251.xml
+│   │   │   │   │       │   │   ├── 9e8696d58165140a41df9369b1b9c9daa5c325f5.xml
+│   │   │   │   │       │   │   ├── d1e8ca83a02ce0bc3efff8a55fb674c115fbcd4e.xml
+│   │   │   │   │       │   │   ├── fd16e4d5b76af4a38604e7acae0d0030da40bc68.txt
+│   │   │   │   │       │   │   └── _index.json
+│   │   │   │   │       │   ├── robots
+│   │   │   │   │       │   │   ├── de.louisvuitton.com.json
+│   │   │   │   │       │   │   ├── de.louisvuitton.com.txt
+│   │   │   │   │       │   │   ├── en.louisvuitton.com.json
+│   │   │   │   │       │   │   ├── en.louisvuitton.com.txt
+│   │   │   │   │       │   │   ├── es.louisvuitton.com.json
+│   │   │   │   │       │   │   ├── es.louisvuitton.com.txt
+│   │   │   │   │       │   │   ├── fr.louisvuitton.com.json
+│   │   │   │   │       │   │   ├── fr.louisvuitton.com.txt
+│   │   │   │   │       │   │   ├── it.louisvuitton.com.json
+│   │   │   │   │       │   │   ├── it.louisvuitton.com.txt
+│   │   │   │   │       │   │   ├── us.louisvuitton.com.json
+│   │   │   │   │       │   │   └── us.louisvuitton.com.txt
+│   │   │   │   │       │   ├── seen.bloom.json
+│   │   │   │   │       │   ├── urlmeta.json
+│   │   │   │   │       │   └── us.louisvuitton.com
+│   │   │   │   │       │       ├── 095dafc1111beeeb71ac9b5b67ed57c3bb3a4edf.html
+│   │   │   │   │       │       ├── 6d5baa86387dc2e8510d3bae2ef9a3731f4c5675.xml
+│   │   │   │   │       │       ├── 9d7143aa1905463f8a57ad3117f4d7b58712dd74.txt
+│   │   │   │   │       │       ├── c8432b4aa687eeba6c341ac5144ff71bd22d1b67.html
+│   │   │   │   │       │       ├── ccedb1a9ce8d5b42532fd024219ac131bbaab69f.xml
+│   │   │   │   │       │       ├── d1cbfad69ac26b3e043efed18165e3d5976ea4b5.xml
+│   │   │   │   │       │       ├── f6e4ca6f448073dbdd9fd0cd59b59d01b3e5d8f2.xml
+│   │   │   │   │       │       └── _index.json
+│   │   │   │   │       ├── items
+│   │   │   │   │       │   ├── shard-2025-09-20T200316022Z-001.ndjson
+│   │   │   │   │       │   ├── shard-2025-09-20T200325962Z-002.ndjson
+│   │   │   │   │       │   ├── shard-2025-09-20T200325962Z-003.ndjson
+│   │   │   │   │       │   ├── shard-2025-09-20T200325962Z-004.ndjson
+│   │   │   │   │       │   └── shard-2025-09-20T200325962Z-005.ndjson
+│   │   │   │   │       ├── items-meta.json
+│   │   │   │   │       ├── runs-history.json
+│   │   │   │   │       └── summary.json
+│   │   │   │   ├── report.njk
+│   │   │   │   ├── robots_decode.mjs
+│   │   │   │   ├── test-robot.mjs
+│   │   │   │   └── update-dataset.mjs
+│   │   │   ├── patent-intelligence-agent.njk
+│   │   │   ├── project-dandelion.md
+│   │   │   └── projects.11tydata.js
+│   │   ├── sparks
+│   │   │   ├── academic-blindness.md
+│   │   │   ├── breakfast-eggs.md
+│   │   │   ├── george-eastman-obscure.md
+│   │   │   ├── illusion-japan-nicotine.md
+│   │   │   ├── index.njk
+│   │   │   ├── murakami-market-analysis-2025.md
+│   │   │   ├── paulin-paulin-paulin-marketing.md
+│   │   │   ├── smoker-sysadmin.md
+│   │   │   ├── sparks.11tydata.js
+│   │   │   └── vapor-linked-governance.md
+│   │   └── work
+│   │       └── work.11tydata.js
+│   ├── _data
+│   │   ├── branding.js
+│   │   ├── lvreport.js
+│   │   ├── resume.js
+│   │   ├── sections.js
+│   │   └── site.js
+│   ├── favicon.ico
+│   ├── images
+│   │   └── logo.png
+│   ├── _includes
+│   │   ├── components
+│   │   │   ├── archive-nav.njk
+│   │   │   ├── back-link.njk
+│   │   │   ├── badge.njk
+│   │   │   ├── embed.njk
+│   │   │   ├── ext-link.njk
+│   │   │   ├── feed-entry.njk
+│   │   │   ├── feed-section.njk
+│   │   │   ├── footer.njk
+│   │   │   ├── header.njk
+│   │   │   ├── hero.njk
+│   │   │   ├── hero-tile.njk
+│   │   │   ├── icons.njk
+│   │   │   ├── kpis.njk
+│   │   │   ├── list-item.njk
+│   │   │   ├── map-cta.njk
+│   │   │   ├── meta-aside.njk
+│   │   │   ├── nav-items.njk
+│   │   │   ├── nav.njk
+│   │   │   ├── neon-card.njk
+│   │   │   ├── pagination.njk
+│   │   │   ├── pathway.njk
+│   │   │   ├── products
+│   │   │   │   ├── MarketTable.njk
+│   │   │   │   ├── MetaNotes.njk
+│   │   │   │   ├── ProvenanceList.njk
+│   │   │   │   └── SpecSheet.njk
+│   │   │   ├── resume
+│   │   │   │   └── expander.njk
+│   │   │   ├── resume-entry.njk
+│   │   │   ├── section.njk
+│   │   │   ├── tile.njk
+│   │   │   └── work-feed.njk
+│   │   └── macros
+│   │       └── meta.njk
+│   ├── index.11tydata.js
+│   ├── index.njk
+│   ├── layouts
+│   │   ├── base.njk
+│   │   ├── collection.njk
+│   │   ├── converted-html.njk
+│   │   ├── embed.njk
+│   │   ├── project.njk
+│   │   ├── redirect.njk
+│   │   └── resume.njk
+│   ├── lib
+│   │   ├── archives
+│   │   │   ├── index.mjs
+│   │   │   ├── naming-canon.mjs
+│   │   │   └── nav.mjs
+│   │   ├── collections
+│   │   │   ├── index.mjs
+│   │   │   └── utils.mjs
+│   │   ├── content-area.mjs
+│   │   ├── data
+│   │   │   ├── build-info.mjs
+│   │   │   ├── build.mjs
+│   │   │   ├── computed.mjs
+│   │   │   └── nav.mjs
+│   │   ├── filters
+│   │   │   └── index.mjs
+│   │   ├── interlinkers
+│   │   │   ├── resolvers.mjs
+│   │   │   ├── route-registry.mjs
+│   │   │   └── unresolved-report.mjs
+│   │   ├── markdown
+│   │   │   ├── index.mjs
+│   │   │   └── parts
+│   │   │       ├── footnotes.js
+│   │   │       ├── inlineMacros.js
+│   │   │       └── links.js
+│   │   ├── net
+│   │   │   └── webpageToMarkdown.mjs
+│   │   ├── shortcodes
+│   │   │   └── index.mjs
+│   │   ├── site.mjs
+│   │   └── transforms
+│   │       └── html-to-markdown.mjs
+│   ├── pages
+│   │   ├── 404.njk
+│   │   ├── concept-map.json.njk
+│   │   ├── consulting.njk
+│   │   ├── feed.njk
+│   │   ├── map.njk
+│   │   ├── resume
+│   │   │   ├── index.njk
+│   │   │   ├── index.njk.bak
+│   │   │   └── resume.json
+│   │   └── work
+│   │       ├── drop.11ty.js
+│   │       ├── index.njk
+│   │       ├── latest.11ty.js
+│   │       └── work-list.njk
+│   ├── _redirects
+│   └── redirects.11ty.js
+├── summary.log
+├── SYSTEM.md
+├── test
+│   └── integration
+│       └── runner.spec.mjs
+├── tests
+│   └── playwright
+│       ├── icons-fonts.spec.mjs
+│       └── lv-report.spec.mjs
+├── tmp
+│   ├── daisyui-css
+│   │   ├── 404.html
+│   │   ├── apple-touch-icon.png
+│   │   ├── archives
+│   │   │   ├── character
+│   │   │   │   ├── labubu
+│   │   │   │   │   ├── index.html
+│   │   │   │   │   └── snapshot
+│   │   │   │   │       └── index.html
+│   │   │   │   ├── mokoko
+│   │   │   │   │   ├── index.html
+│   │   │   │   │   └── snapshot
+│   │   │   │   │       └── index.html
+│   │   │   │   └── zimomo
+│   │   │   │       ├── index.html
+│   │   │   │       └── snapshot
+│   │   │   │           └── index.html
+│   │   │   ├── collectables
+│   │   │   │   └── designer-toys
+│   │   │   │       └── pop-mart
+│   │   │   │           └── the-monsters
+│   │   │   │               └── products
+│   │   │   │                   ├── lab006
+│   │   │   │                   │   └── index.html
+│   │   │   │                   ├── lab011
+│   │   │   │                   │   └── index.html
+│   │   │   │                   ├── lab014
+│   │   │   │                   │   └── index.html
+│   │   │   │                   ├── pop-mart-the-monsters-labubu-best-of-luck-plush-std-20231230-reg-cn
+│   │   │   │                   │   └── index.html
+│   │   │   │                   ├── pop-mart-the-monsters-labubu-big-into-energy-blind-box-set-sealed-20250425
+│   │   │   │                   │   └── index.html
+│   │   │   │                   ├── pop-mart-the-monsters-labubu-big-into-energy-blind-box-single-20250425
+│   │   │   │                   │   └── index.html
+│   │   │   │                   ├── pop-mart-the-monsters-labubu-coca-cola-blind-box-set-sealed-20250124
+│   │   │   │                   │   └── index.html
+│   │   │   │                   ├── pop-mart-the-monsters-labubu-coca-cola-blind-box-single-20250124
+│   │   │   │                   │   └── index.html
+│   │   │   │                   ├── pop-mart-the-monsters-labubu-dress-be-latte-plush-std-20231026
+│   │   │   │                   │   └── index.html
+│   │   │   │                   ├── pop-mart-the-monsters-labubu-exciting-macaron-blind-box-set-sealed-20241027
+│   │   │   │                   │   └── index.html
+│   │   │   │                   ├── pop-mart-the-monsters-labubu-exciting-macaron-blind-box-single-20241027
+│   │   │   │                   │   └── index.html
+│   │   │   │                   ├── pop-mart-the-monsters-labubu-exciting-macaron-v1-vinyl-face-blind-box-pendant
+│   │   │   │                   │   └── index.html
+│   │   │   │                   ├── pop-mart-the-monsters-labubu-fall-in-wild-pendant-std-17cm-20240712
+│   │   │   │                   │   └── index.html
+│   │   │   │                   ├── pop-mart-the-monsters-labubu-fall-in-wild-plush-doll-std-40cm-20240712
+│   │   │   │                   │   └── index.html
+│   │   │   │                   ├── pop-mart-the-monsters-labubu-flip-with-me-plush-std-40cm-20240712
+│   │   │   │                   │   └── index.html
+│   │   │   │                   ├── pop-mart-the-monsters-labubu-forest-fairy-tale-china-figure-std-20250526-reg-cn
+│   │   │   │                   │   └── index.html
+│   │   │   │                   ├── pop-mart-the-monsters-labubu-good-lucky-to-you-thailand-figure-std-20241220-reg-th
+│   │   │   │                   │   └── index.html
+│   │   │   │                   ├── pop-mart-the-monsters-labubu-happy-halloween-party-sitting-pumpkin-pendant-sitting-pumpkin-20241025
+│   │   │   │                   │   └── index.html
+│   │   │   │                   ├── pop-mart-the-monsters-labubu-have-a-seat-blind-box-set-sealed-15cm-20240712
+│   │   │   │                   │   └── index.html
+│   │   │   │                   ├── pop-mart-the-monsters-labubu-have-a-seat-blind-box-single-15cm-20240712
+│   │   │   │                   │   └── index.html
+│   │   │   │                   ├── pop-mart-the-monsters-labubu-hide-and-seek-in-singapore-figure-std-175cm-reg-sg
+│   │   │   │                   │   └── index.html
+│   │   │   │                   ├── pop-mart-the-monsters-labubu-jump-for-joy-plush-std-20230525
+│   │   │   │                   │   └── index.html
+│   │   │   │                   ├── pop-mart-the-monsters-labubu-lets-checkmate-pendant-std-17cm-20250207
+│   │   │   │                   │   └── index.html
+│   │   │   │                   ├── pop-mart-the-monsters-labubu-lets-checkmate-plush-doll-std-37cm-20250207
+│   │   │   │                   │   └── index.html
+│   │   │   │                   ├── pop-mart-the-monsters-labubu-pronounce-be-fancy-now-plush-std-20240315
+│   │   │   │                   │   └── index.html
+│   │   │   │                   ├── pop-mart-the-monsters-labubu-pronounce-wings-of-fantasy-plush-std-20241004
+│   │   │   │                   │   └── index.html
+│   │   │   │                   ├── pop-mart-the-monsters-labubu-pronounce-wings-of-fortune-pendant-std-20241004
+│   │   │   │                   │   └── index.html
+│   │   │   │                   ├── pop-mart-the-monsters-labubu-time-to-chill-plush-std-20221031
+│   │   │   │                   │   └── index.html
+│   │   │   │                   ├── pop-mart-the-monsters-labubu-wacky-mart-china-figure-std-20250612-reg-cn
+│   │   │   │                   │   └── index.html
+│   │   │   │                   ├── pop-mart-the-monsters-labubu-walk-by-fortune-plush-std-20231229
+│   │   │   │                   │   └── index.html
+│   │   │   │                   ├── pop-mart-the-monsters-mokoko-blue-diamond-pendant-std-17cm-20240618
+│   │   │   │                   │   └── index.html
+│   │   │   │                   ├── pop-mart-the-monsters-mokoko-close-to-sweet-v1-pendant-std-17cm
+│   │   │   │                   │   └── index.html
+│   │   │   │                   ├── pop-mart-the-monsters-mokoko-close-to-sweet-v1-plush-std
+│   │   │   │                   │   └── index.html
+│   │   │   │                   ├── pop-mart-the-monsters-mokoko-fall-into-spring-pendant-std-17cm-20240308
+│   │   │   │                   │   └── index.html
+│   │   │   │                   ├── pop-mart-the-monsters-mokoko-fall-into-spring-plush-std-20240308
+│   │   │   │                   │   └── index.html
+│   │   │   │                   ├── pop-mart-the-monsters-mokoko-magic-of-pumpkin-pendant-std-17cm-20241027
+│   │   │   │                   │   └── index.html
+│   │   │   │                   ├── pop-mart-the-monsters-mokoko-twinkly-fairy-tale-pendant-std-17cm-20241128
+│   │   │   │                   │   └── index.html
+│   │   │   │                   ├── pop-mart-the-monsters-pronounce-labubu-be-fancy-now
+│   │   │   │                   │   └── index.html
+│   │   │   │                   ├── pop-mart-the-monsters-x-coca-cola-labubu-zimomo-coca-cola
+│   │   │   │                   │   └── index.html
+│   │   │   │                   ├── pop-mart-the-monsters-zimomo-angel-in-clouds-v2-plush-std-58cm-20241025
+│   │   │   │                   │   └── index.html
+│   │   │   │                   ├── pop-mart-the-monsters-zimomo-i-found-you-v1-plush-std-58cm-20231215
+│   │   │   │                   │   └── index.html
+│   │   │   │                   ├── sku-1580
+│   │   │   │                   │   └── index.html
+│   │   │   │                   └── sku-675-us-sku-1789-alternate
+│   │   │   │                       └── index.html
+│   │   │   └── series
+│   │   │       ├── angel-in-clouds-v2
+│   │   │       │   └── index.html
+│   │   │       ├── best-of-luck
+│   │   │       │   └── index.html
+│   │   │       ├── big-into-energy
+│   │   │       │   └── index.html
+│   │   │       ├── blue-diamond
+│   │   │       │   └── index.html
+│   │   │       ├── close-to-sweet-v1
+│   │   │       │   └── index.html
+│   │   │       ├── coca-cola
+│   │   │       │   └── index.html
+│   │   │       ├── dress-be-latte
+│   │   │       │   └── index.html
+│   │   │       ├── exciting-macaron
+│   │   │       │   └── index.html
+│   │   │       ├── fall-into-spring
+│   │   │       │   └── index.html
+│   │   │       ├── fall-in-wild
+│   │   │       │   └── index.html
+│   │   │       ├── flip-with-me
+│   │   │       │   └── index.html
+│   │   │       ├── forest-fairy-tale-china
+│   │   │       │   └── index.html
+│   │   │       ├── good-lucky-to-you-thailand
+│   │   │       │   └── index.html
+│   │   │       ├── happy-halloween-party
+│   │   │       │   └── index.html
+│   │   │       ├── happy-halloween-party-sitting-pumpkin
+│   │   │       │   └── index.html
+│   │   │       ├── have-a-seat
+│   │   │       │   └── index.html
+│   │   │       ├── hide-and-seek-in-singapore
+│   │   │       │   └── index.html
+│   │   │       ├── i-found-you-v1
+│   │   │       │   └── index.html
+│   │   │       ├── jump-for-joy
+│   │   │       │   └── index.html
+│   │   │       ├── lets-checkmate
+│   │   │       │   └── index.html
+│   │   │       ├── lets-checkmate-doll
+│   │   │       │   └── index.html
+│   │   │       ├── magic-of-pumpkin
+│   │   │       │   └── index.html
+│   │   │       ├── pop-mart-the-monsters-labubu-exciting-macaron-v1
+│   │   │       │   └── index.html
+│   │   │       ├── pop-mart-the-monsters-labubu-forest-fairy-tale
+│   │   │       │   └── index.html
+│   │   │       ├── pop-mart-the-monsters-labubu-wacky-mart
+│   │   │       │   └── index.html
+│   │   │       ├── pop-mart-the-monsters-mokoko-magic-of-pumpkin-halloween
+│   │   │       │   └── index.html
+│   │   │       ├── pronounce-be-fancy-now
+│   │   │       │   └── index.html
+│   │   │       ├── pronounce-wings-of-fantasy
+│   │   │       │   └── index.html
+│   │   │       ├── pronounce-wings-of-fortune
+│   │   │       │   └── index.html
+│   │   │       ├── time-to-chill
+│   │   │       │   └── index.html
+│   │   │       ├── twinkly-fairy-tale
+│   │   │       │   └── index.html
+│   │   │       ├── wacky-mart-china
+│   │   │       │   └── index.html
+│   │   │       ├── walk-by-fortune
+│   │   │       │   └── index.html
+│   │   │       └── walk-by-fortune-cny
+│   │   │           └── index.html
+│   │   ├── assets
+│   │   │   ├── 404.REWJz8OL.js.map
+│   │   │   ├── app.D1OxVzhZ.js
+│   │   │   ├── app.D1OxVzhZ.js.map
+│   │   │   ├── app.DIhS3AlD.css
+│   │   │   ├── index.05Lbmsvj.js.map
+│   │   │   ├── index.0WWxzP0O.js.map
+│   │   │   ├── index.1W9bXZmB.js.map
+│   │   │   ├── index.3d6B941r.js.map
+│   │   │   ├── index.9JAFAI2E.js.map
+│   │   │   ├── index.9ZOx64ST.js.map
+│   │   │   ├── index.B1nKwCyE.js.map
+│   │   │   ├── index.B3Af9iiw.js
+│   │   │   ├── index.B3Af9iiw.js.map
+│   │   │   ├── index.B5PnMN3-.js.map
+│   │   │   ├── index.B6Iz6Zjr.js.map
+│   │   │   ├── index.BavB2W1n.js.map
+│   │   │   ├── index.BBo8bq8n.js.map
+│   │   │   ├── index.BBP1Y-YC.js.map
+│   │   │   ├── index.Bc4jRlmC.js.map
+│   │   │   ├── index.B_d7sQzw.js.map
+│   │   │   ├── index.BdK5n5nn.js
+│   │   │   ├── index.BdK5n5nn.js.map
+│   │   │   ├── index.BE2Drwpo.js.map
+│   │   │   ├── index.B-gX3lwN.js
+│   │   │   ├── index.B-gX3lwN.js.map
+│   │   │   ├── index.BIY7Uitu.js.map
+│   │   │   ├── index.BJKviMvM.js.map
+│   │   │   ├── index.BJMq7DVz.js.map
+│   │   │   ├── index.Bjpfq_qU.js.map
+│   │   │   ├── index.BJpLcso6.js.map
+│   │   │   ├── index.BKA3EXub.js.map
+│   │   │   ├── index.Bk_xI0Up.js.map
+│   │   │   ├── index.BLqfCVP5.js.map
+│   │   │   ├── index.BLsn2Ebu.js.map
+│   │   │   ├── index.Bmxc1hK6.js.map
+│   │   │   ├── index.Bn93hIAl.js.map
+│   │   │   ├── index.Bqqnk6ab.js.map
+│   │   │   ├── index.BrTj0zoB.js.map
+│   │   │   ├── index.BT8mmJ1S.js.map
+│   │   │   ├── index.BU1nneGr.js.map
+│   │   │   ├── index.B-UESIDf.js.map
+│   │   │   ├── index.BvIFjELz.js.map
+│   │   │   ├── index.BVW5_klz.js.map
+│   │   │   ├── index.BXLhEbdx.js.map
+│   │   │   ├── index.BypcvX1v.js.map
+│   │   │   ├── index.ByZ36mJT.js.map
+│   │   │   ├── index.C2fN5srI.js.map
+│   │   │   ├── index.C2Mr46Cz.js.map
+│   │   │   ├── index.C5aYav6M.js.map
+│   │   │   ├── index.CaktpL70.js.map
+│   │   │   ├── index.CBJWOMB3.js.map
+│   │   │   ├── index.CCAcuHad.js.map
+│   │   │   ├── index.CCU1EgP5.js.map
+│   │   │   ├── index.CD2w5P6t.js.map
+│   │   │   ├── index.CELSRXnM.js.map
+│   │   │   ├── index.CfBVPEqT.js.map
+│   │   │   ├── index.CFfDTI76.js.map
+│   │   │   ├── index.CFLFeY5V.js.map
+│   │   │   ├── index.CFLmQ1X9.js.map
+│   │   │   ├── index.CHPuaHFk.js.map
+│   │   │   ├── index.CivyFZZs.js.map
+│   │   │   ├── index.CJ6VXZ_u.js.map
+│   │   │   ├── index.CKHp6zMg.js.map
+│   │   │   ├── index.CKmPCsM9.js.map
+│   │   │   ├── index.Cksy1FYx.js.map
+│   │   │   ├── index.Cku48tDN.js.map
+│   │   │   ├── index.ClkIj0kE.js.map
+│   │   │   ├── index.CLQu6a9y.js.map
+│   │   │   ├── index.CNqDbEvG.js.map
+│   │   │   ├── index.Co4oRr-B.js.map
+│   │   │   ├── index.Cod7miP2.js.map
+│   │   │   ├── index.COy0WsjY.js.map
+│   │   │   ├── index.CpLWUSyz.js.map
+│   │   │   ├── index.CRecO3B7.js.map
+│   │   │   ├── index.CrmwNfRY.js.map
+│   │   │   ├── index.CsUnWJad.js.map
+│   │   │   ├── index.CVE3QotY.js.map
+│   │   │   ├── index.CYHgIgTf.js.map
+│   │   │   ├── index.CY_T12-s.js.map
+│   │   │   ├── index.Czim-Cqt.js.map
+│   │   │   ├── index.D1zULvYr.js.map
+│   │   │   ├── index.D2NoUKJy.js.map
+│   │   │   ├── index.D2SRLOXR.js.map
+│   │   │   ├── index.D7VcTlwY.js.map
+│   │   │   ├── index.D9sZ0EDa.js.map
+│   │   │   ├── index.Dbj0GvjN.js.map
+│   │   │   ├── index.DbwbTYlf.js.map
+│   │   │   ├── index.DC1xJRpM.js.map
+│   │   │   ├── index.DChMO9Gt.js.map
+│   │   │   ├── index.DcnRWw1G.js.map
+│   │   │   ├── index.Ddsmg3Bu.js.map
+│   │   │   ├── index.DEacluAf.js.map
+│   │   │   ├── index.DFQJJoFj.js.map
+│   │   │   ├── index.DHDAydBk.js.map
+│   │   │   ├── index.Djl32tMQ.js.map
+│   │   │   ├── index.Dlmc8yTY.js.map
+│   │   │   ├── index.DLOJ5DDU.js.map
+│   │   │   ├── index.DNA9ByJ3.js.map
+│   │   │   ├── index.DP2rzg_V.js.map
+│   │   │   ├── index.DpWtl1x9.js.map
+│   │   │   ├── index.D-q0Rzu7.js.map
+│   │   │   ├── index.Dq7vEUnL.js.map
+│   │   │   ├── index.Dsf08Zj2.js.map
+│   │   │   ├── index.DsHoY9On.js.map
+│   │   │   ├── index.DSQCOLTT.js.map
+│   │   │   ├── index.DT4K1muU.js.map
+│   │   │   ├── index.Du275gqU.js
+│   │   │   ├── index.Du275gqU.js.map
+│   │   │   ├── index.DvVUzUZi.js.map
+│   │   │   ├── index.DxcrBWdN.js.map
+│   │   │   ├── index.DyKDNEyR.js.map
+│   │   │   ├── index.DyvY9DTT.js.map
+│   │   │   ├── index.EJmlxK_k.js
+│   │   │   ├── index.EJmlxK_k.js.map
+│   │   │   ├── index.Fiz4oIl9.js.map
+│   │   │   ├── index.Fv-fByQg.js.map
+│   │   │   ├── index.guy54giM.js.map
+│   │   │   ├── index.HdFpRoD0.js.map
+│   │   │   ├── index.hfwpu8AO.js.map
+│   │   │   ├── index._HrpyBb9.js.map
+│   │   │   ├── index.IufBAgoa.js.map
+│   │   │   ├── index.iY6NdwTY.js.map
+│   │   │   ├── index.IzEBb00E.js.map
+│   │   │   ├── index.jXS2oyrD.js.map
+│   │   │   ├── index.K6Dvbx-E.js.map
+│   │   │   ├── index.k6_ErhUm.js.map
+│   │   │   ├── index.KlbgNtrW.js.map
+│   │   │   ├── index.l0sNRNKZ.js.map
+│   │   │   ├── index.l7lfrks8.js.map
+│   │   │   ├── index.MvZG--xt.js.map
+│   │   │   ├── index.N_OfauVw.js.map
+│   │   │   ├── index.oaqayX8-.js.map
+│   │   │   ├── index.O_iDw1ww.js.map
+│   │   │   ├── index.Qg5z_Vsc.js.map
+│   │   │   ├── index.qQaBgSp-.js.map
+│   │   │   ├── index.REWJz8OL.js.map
+│   │   │   ├── index.sdDrWxCl.js.map
+│   │   │   ├── index.tujld8Z2.js.map
+│   │   │   ├── index.uEXBp-mU.js.map
+│   │   │   ├── index.Vhp2xqgg.js.map
+│   │   │   ├── index.vwI_I5Mh.js.map
+│   │   │   ├── index.whqoZPBR.js.map
+│   │   │   ├── index.Y2VSvkNX.js
+│   │   │   ├── index.Y2VSvkNX.js.map
+│   │   │   ├── index.zRqYne_2.js.map
+│   │   │   ├── mschf-overlay.CJ97MSoW.js
+│   │   │   └── mschf-overlay.CJ97MSoW.js.map
+│   │   ├── concepts
+│   │   │   ├── aesthetic-inquiry
+│   │   │   │   └── index.html
+│   │   │   ├── atlas-process
+│   │   │   │   └── index.html
+│   │   │   ├── autocatalytic-system
+│   │   │   │   └── index.html
+│   │   │   ├── compliant-spire
+│   │   │   │   └── index.html
+│   │   │   ├── ghost-byline
+│   │   │   │   └── index.html
+│   │   │   ├── ghost-engine
+│   │   │   │   └── index.html
+│   │   │   ├── index.html
+│   │   │   ├── parroting-mimicry
+│   │   │   │   └── index.html
+│   │   │   ├── readers-journey
+│   │   │   │   └── index.html
+│   │   │   ├── rhizomatic-protocol
+│   │   │   │   └── index.html
+│   │   │   ├── three-studies-sensory
+│   │   │   │   └── index.html
+│   │   │   ├── verification-is-an-ecology
+│   │   │   │   └── index.html
+│   │   │   └── workshop-weather
+│   │   │       └── index.html
+│   │   ├── consulting
+│   │   │   └── index.html
+│   │   ├── content
+│   │   │   └── archives
+│   │   │       ├── collectables
+│   │   │       │   ├── designer-toys
+│   │   │       │   │   ├── index.html
+│   │   │       │   │   └── pop-mart
+│   │   │       │   │       ├── index.html
+│   │   │       │   │       └── the-monsters
+│   │   │       │   │           └── index.html
+│   │   │       │   └── index.html
+│   │   │       ├── _dynamic
+│   │   │       │   └── provenance
+│   │   │       │       └── index.html
+│   │   │       ├── index.html
+│   │   │       └── provenance
+│   │   │           └── index.html
+│   │   ├── favicon.ico
+│   │   ├── favicon.svg
+│   │   ├── icons
+│   │   │   ├── 96x96.png
+│   │   │   ├── icon-192.png
+│   │   │   └── icon-512.png
+│   │   ├── index.html
+│   │   ├── meta
+│   │   │   ├── a-b-curatorial-protocolist
+│   │   │   │   └── index.html
+│   │   │   ├── core-concept
+│   │   │   │   └── index.html
+│   │   │   ├── curatorial-generativism
+│   │   │   │   └── index.html
+│   │   │   ├── index.html
+│   │   │   ├── methodology
+│   │   │   │   └── index.html
+│   │   │   ├── protocolist
+│   │   │   │   └── index.html
+│   │   │   ├── style-guide
+│   │   │   │   └── index.html
+│   │   │   └── unified-referencing-syntax
+│   │   │       └── index.html
+│   │   ├── pages
+│   │   │   ├── map
+│   │   │   │   └── index.html
+│   │   │   └── resume
+│   │   │       └── index.html
+│   │   ├── projects
+│   │   │   ├── index.html
+│   │   │   ├── llm-release-watcher
+│   │   │   │   └── index.html
+│   │   │   ├── patent-intelligence-agent
+│   │   │   │   └── index.html
+│   │   │   └── project-dandelion
+│   │   │       └── index.html
+│   │   ├── site.webmanifest
+│   │   ├── sparks
+│   │   │   ├── academic-blindness
+│   │   │   │   └── index.html
+│   │   │   ├── breakfast-eggs
+│   │   │   │   └── index.html
+│   │   │   ├── george-eastman-obscure
+│   │   │   │   └── index.html
+│   │   │   ├── illusion-japan-nicotine
+│   │   │   │   └── index.html
+│   │   │   ├── index.html
+│   │   │   ├── murakami-market-analysis-2025
+│   │   │   │   └── index.html
+│   │   │   ├── paulin-paulin-paulin-marketing
+│   │   │   │   └── index.html
+│   │   │   ├── smoker-sysadmin
+│   │   │   │   └── index.html
+│   │   │   └── vapor-linked-governance
+│   │   │       └── index.html
+│   │   ├── test
+│   │   │   └── dynamic-archives
+│   │   │       └── index.html
+│   │   ├── .vite
+│   │   │   └── manifest.json
+│   │   └── work
+│   │       ├── 1
+│   │       │   └── index.html
+│   │       ├── 2
+│   │       │   └── index.html
+│   │       ├── block-ledger
+│   │       │   └── index.html
+│   │       ├── drop
+│   │       │   └── index.html
+│   │       ├── index.html
+│   │       └── latest
+│   │           └── index.html
+│   └── runner-spec
+│       ├── 404.html
+│       ├── apple-touch-icon.png
+│       ├── archives
+│       │   ├── character
+│       │   │   ├── labubu
+│       │   │   │   ├── index.html
+│       │   │   │   └── snapshot
+│       │   │   │       └── index.html
+│       │   │   ├── mokoko
+│       │   │   │   ├── index.html
+│       │   │   │   └── snapshot
+│       │   │   │       └── index.html
+│       │   │   └── zimomo
+│       │   │       ├── index.html
+│       │   │       └── snapshot
+│       │   │           └── index.html
+│       │   ├── collectables
+│       │   │   └── designer-toys
+│       │   │       └── pop-mart
+│       │   │           └── the-monsters
+│       │   │               └── products
+│       │   │                   ├── lab006
+│       │   │                   │   └── index.html
+│       │   │                   ├── lab011
+│       │   │                   │   └── index.html
+│       │   │                   ├── lab014
+│       │   │                   │   └── index.html
+│       │   │                   ├── pop-mart-the-monsters-labubu-best-of-luck-plush-std-20231230-reg-cn
+│       │   │                   │   └── index.html
+│       │   │                   ├── pop-mart-the-monsters-labubu-big-into-energy-blind-box-set-sealed-20250425
+│       │   │                   │   └── index.html
+│       │   │                   ├── pop-mart-the-monsters-labubu-big-into-energy-blind-box-single-20250425
+│       │   │                   │   └── index.html
+│       │   │                   ├── pop-mart-the-monsters-labubu-coca-cola-blind-box-set-sealed-20250124
+│       │   │                   │   └── index.html
+│       │   │                   ├── pop-mart-the-monsters-labubu-coca-cola-blind-box-single-20250124
+│       │   │                   │   └── index.html
+│       │   │                   ├── pop-mart-the-monsters-labubu-dress-be-latte-plush-std-20231026
+│       │   │                   │   └── index.html
+│       │   │                   ├── pop-mart-the-monsters-labubu-exciting-macaron-blind-box-set-sealed-20241027
+│       │   │                   │   └── index.html
+│       │   │                   ├── pop-mart-the-monsters-labubu-exciting-macaron-blind-box-single-20241027
+│       │   │                   │   └── index.html
+│       │   │                   ├── pop-mart-the-monsters-labubu-exciting-macaron-v1-vinyl-face-blind-box-pendant
+│       │   │                   │   └── index.html
+│       │   │                   ├── pop-mart-the-monsters-labubu-fall-in-wild-pendant-std-17cm-20240712
+│       │   │                   │   └── index.html
+│       │   │                   ├── pop-mart-the-monsters-labubu-fall-in-wild-plush-doll-std-40cm-20240712
+│       │   │                   │   └── index.html
+│       │   │                   ├── pop-mart-the-monsters-labubu-flip-with-me-plush-std-40cm-20240712
+│       │   │                   │   └── index.html
+│       │   │                   ├── pop-mart-the-monsters-labubu-forest-fairy-tale-china-figure-std-20250526-reg-cn
+│       │   │                   │   └── index.html
+│       │   │                   ├── pop-mart-the-monsters-labubu-good-lucky-to-you-thailand-figure-std-20241220-reg-th
+│       │   │                   │   └── index.html
+│       │   │                   ├── pop-mart-the-monsters-labubu-happy-halloween-party-sitting-pumpkin-pendant-sitting-pumpkin-20241025
+│       │   │                   │   └── index.html
+│       │   │                   ├── pop-mart-the-monsters-labubu-have-a-seat-blind-box-set-sealed-15cm-20240712
+│       │   │                   │   └── index.html
+│       │   │                   ├── pop-mart-the-monsters-labubu-have-a-seat-blind-box-single-15cm-20240712
+│       │   │                   │   └── index.html
+│       │   │                   ├── pop-mart-the-monsters-labubu-hide-and-seek-in-singapore-figure-std-175cm-reg-sg
+│       │   │                   │   └── index.html
+│       │   │                   ├── pop-mart-the-monsters-labubu-jump-for-joy-plush-std-20230525
+│       │   │                   │   └── index.html
+│       │   │                   ├── pop-mart-the-monsters-labubu-lets-checkmate-pendant-std-17cm-20250207
+│       │   │                   │   └── index.html
+│       │   │                   ├── pop-mart-the-monsters-labubu-lets-checkmate-plush-doll-std-37cm-20250207
+│       │   │                   │   └── index.html
+│       │   │                   ├── pop-mart-the-monsters-labubu-pronounce-be-fancy-now-plush-std-20240315
+│       │   │                   │   └── index.html
+│       │   │                   ├── pop-mart-the-monsters-labubu-pronounce-wings-of-fantasy-plush-std-20241004
+│       │   │                   │   └── index.html
+│       │   │                   ├── pop-mart-the-monsters-labubu-pronounce-wings-of-fortune-pendant-std-20241004
+│       │   │                   │   └── index.html
+│       │   │                   ├── pop-mart-the-monsters-labubu-time-to-chill-plush-std-20221031
+│       │   │                   │   └── index.html
+│       │   │                   ├── pop-mart-the-monsters-labubu-wacky-mart-china-figure-std-20250612-reg-cn
+│       │   │                   │   └── index.html
+│       │   │                   ├── pop-mart-the-monsters-labubu-walk-by-fortune-plush-std-20231229
+│       │   │                   │   └── index.html
+│       │   │                   ├── pop-mart-the-monsters-mokoko-blue-diamond-pendant-std-17cm-20240618
+│       │   │                   │   └── index.html
+│       │   │                   ├── pop-mart-the-monsters-mokoko-close-to-sweet-v1-pendant-std-17cm
+│       │   │                   │   └── index.html
+│       │   │                   ├── pop-mart-the-monsters-mokoko-close-to-sweet-v1-plush-std
+│       │   │                   │   └── index.html
+│       │   │                   ├── pop-mart-the-monsters-mokoko-fall-into-spring-pendant-std-17cm-20240308
+│       │   │                   │   └── index.html
+│       │   │                   ├── pop-mart-the-monsters-mokoko-fall-into-spring-plush-std-20240308
+│       │   │                   │   └── index.html
+│       │   │                   ├── pop-mart-the-monsters-mokoko-magic-of-pumpkin-pendant-std-17cm-20241027
+│       │   │                   │   └── index.html
+│       │   │                   ├── pop-mart-the-monsters-mokoko-twinkly-fairy-tale-pendant-std-17cm-20241128
+│       │   │                   │   └── index.html
+│       │   │                   ├── pop-mart-the-monsters-pronounce-labubu-be-fancy-now
+│       │   │                   │   └── index.html
+│       │   │                   ├── pop-mart-the-monsters-x-coca-cola-labubu-zimomo-coca-cola
+│       │   │                   │   └── index.html
+│       │   │                   ├── pop-mart-the-monsters-zimomo-angel-in-clouds-v2-plush-std-58cm-20241025
+│       │   │                   │   └── index.html
+│       │   │                   ├── pop-mart-the-monsters-zimomo-i-found-you-v1-plush-std-58cm-20231215
+│       │   │                   │   └── index.html
+│       │   │                   ├── sku-1580
+│       │   │                   │   └── index.html
+│       │   │                   └── sku-675-us-sku-1789-alternate
+│       │   │                       └── index.html
+│       │   └── series
+│       │       ├── angel-in-clouds-v2
+│       │       │   └── index.html
+│       │       ├── best-of-luck
+│       │       │   └── index.html
+│       │       ├── big-into-energy
+│       │       │   └── index.html
+│       │       ├── blue-diamond
+│       │       │   └── index.html
+│       │       ├── close-to-sweet-v1
+│       │       │   └── index.html
+│       │       ├── coca-cola
+│       │       │   └── index.html
+│       │       ├── dress-be-latte
+│       │       │   └── index.html
+│       │       ├── exciting-macaron
+│       │       │   └── index.html
+│       │       ├── fall-into-spring
+│       │       │   └── index.html
+│       │       ├── fall-in-wild
+│       │       │   └── index.html
+│       │       ├── flip-with-me
+│       │       │   └── index.html
+│       │       ├── forest-fairy-tale-china
+│       │       │   └── index.html
+│       │       ├── good-lucky-to-you-thailand
+│       │       │   └── index.html
+│       │       ├── happy-halloween-party
+│       │       │   └── index.html
+│       │       ├── happy-halloween-party-sitting-pumpkin
+│       │       │   └── index.html
+│       │       ├── have-a-seat
+│       │       │   └── index.html
+│       │       ├── hide-and-seek-in-singapore
+│       │       │   └── index.html
+│       │       ├── i-found-you-v1
+│       │       │   └── index.html
+│       │       ├── jump-for-joy
+│       │       │   └── index.html
+│       │       ├── lets-checkmate
+│       │       │   └── index.html
+│       │       ├── lets-checkmate-doll
+│       │       │   └── index.html
+│       │       ├── magic-of-pumpkin
+│       │       │   └── index.html
+│       │       ├── pop-mart-the-monsters-labubu-exciting-macaron-v1
+│       │       │   └── index.html
+│       │       ├── pop-mart-the-monsters-labubu-forest-fairy-tale
+│       │       │   └── index.html
+│       │       ├── pop-mart-the-monsters-labubu-wacky-mart
+│       │       │   └── index.html
+│       │       ├── pop-mart-the-monsters-mokoko-magic-of-pumpkin-halloween
+│       │       │   └── index.html
+│       │       ├── pronounce-be-fancy-now
+│       │       │   └── index.html
+│       │       ├── pronounce-wings-of-fantasy
+│       │       │   └── index.html
+│       │       ├── pronounce-wings-of-fortune
+│       │       │   └── index.html
+│       │       ├── time-to-chill
+│       │       │   └── index.html
+│       │       ├── twinkly-fairy-tale
+│       │       │   └── index.html
+│       │       ├── wacky-mart-china
+│       │       │   └── index.html
+│       │       ├── walk-by-fortune
+│       │       │   └── index.html
+│       │       └── walk-by-fortune-cny
+│       │           └── index.html
+│       ├── assets
+│       │   ├── 404.REWJz8OL.js.map
+│       │   ├── app.D1OxVzhZ.js
+│       │   ├── app.D1OxVzhZ.js.map
+│       │   ├── app.DIhS3AlD.css
+│       │   ├── index.05Lbmsvj.js.map
+│       │   ├── index.0WWxzP0O.js.map
+│       │   ├── index.1W9bXZmB.js.map
+│       │   ├── index.3d6B941r.js.map
+│       │   ├── index.9JAFAI2E.js.map
+│       │   ├── index.9ZOx64ST.js.map
+│       │   ├── index.B1nKwCyE.js.map
+│       │   ├── index.B3Af9iiw.js
+│       │   ├── index.B3Af9iiw.js.map
+│       │   ├── index.B5PnMN3-.js.map
+│       │   ├── index.B6Iz6Zjr.js.map
+│       │   ├── index.BavB2W1n.js.map
+│       │   ├── index.BBo8bq8n.js.map
+│       │   ├── index.BBP1Y-YC.js.map
+│       │   ├── index.Bc4jRlmC.js.map
+│       │   ├── index.B_d7sQzw.js.map
+│       │   ├── index.BdK5n5nn.js
+│       │   ├── index.BdK5n5nn.js.map
+│       │   ├── index.BE2Drwpo.js.map
+│       │   ├── index.B-gX3lwN.js
+│       │   ├── index.B-gX3lwN.js.map
+│       │   ├── index.BIY7Uitu.js.map
+│       │   ├── index.BJKviMvM.js.map
+│       │   ├── index.BJMq7DVz.js.map
+│       │   ├── index.Bjpfq_qU.js.map
+│       │   ├── index.BJpLcso6.js.map
+│       │   ├── index.BKA3EXub.js.map
+│       │   ├── index.Bk_xI0Up.js.map
+│       │   ├── index.BLqfCVP5.js.map
+│       │   ├── index.BLsn2Ebu.js.map
+│       │   ├── index.Bmxc1hK6.js.map
+│       │   ├── index.Bn93hIAl.js.map
+│       │   ├── index.Bqqnk6ab.js.map
+│       │   ├── index.BrTj0zoB.js.map
+│       │   ├── index.BT8mmJ1S.js.map
+│       │   ├── index.BU1nneGr.js.map
+│       │   ├── index.B-UESIDf.js.map
+│       │   ├── index.BvIFjELz.js.map
+│       │   ├── index.BVW5_klz.js.map
+│       │   ├── index.BXLhEbdx.js.map
+│       │   ├── index.BypcvX1v.js.map
+│       │   ├── index.ByZ36mJT.js.map
+│       │   ├── index.C2fN5srI.js.map
+│       │   ├── index.C2Mr46Cz.js.map
+│       │   ├── index.C5aYav6M.js.map
+│       │   ├── index.CaktpL70.js.map
+│       │   ├── index.CBJWOMB3.js.map
+│       │   ├── index.CCAcuHad.js.map
+│       │   ├── index.CCU1EgP5.js.map
+│       │   ├── index.CD2w5P6t.js.map
+│       │   ├── index.CELSRXnM.js.map
+│       │   ├── index.CfBVPEqT.js.map
+│       │   ├── index.CFfDTI76.js.map
+│       │   ├── index.CFLFeY5V.js.map
+│       │   ├── index.CFLmQ1X9.js.map
+│       │   ├── index.CHPuaHFk.js.map
+│       │   ├── index.CivyFZZs.js.map
+│       │   ├── index.CJ6VXZ_u.js.map
+│       │   ├── index.CKHp6zMg.js.map
+│       │   ├── index.CKmPCsM9.js.map
+│       │   ├── index.Cksy1FYx.js.map
+│       │   ├── index.Cku48tDN.js.map
+│       │   ├── index.ClkIj0kE.js.map
+│       │   ├── index.CLQu6a9y.js.map
+│       │   ├── index.CNqDbEvG.js.map
+│       │   ├── index.Co4oRr-B.js.map
+│       │   ├── index.Cod7miP2.js.map
+│       │   ├── index.COy0WsjY.js.map
+│       │   ├── index.CpLWUSyz.js.map
+│       │   ├── index.CRecO3B7.js.map
+│       │   ├── index.CrmwNfRY.js.map
+│       │   ├── index.CsUnWJad.js.map
+│       │   ├── index.CVE3QotY.js.map
+│       │   ├── index.CYHgIgTf.js.map
+│       │   ├── index.CY_T12-s.js.map
+│       │   ├── index.Czim-Cqt.js.map
+│       │   ├── index.D1zULvYr.js.map
+│       │   ├── index.D2NoUKJy.js.map
+│       │   ├── index.D2SRLOXR.js.map
+│       │   ├── index.D7VcTlwY.js.map
+│       │   ├── index.D9sZ0EDa.js.map
+│       │   ├── index.Dbj0GvjN.js.map
+│       │   ├── index.DbwbTYlf.js.map
+│       │   ├── index.DC1xJRpM.js.map
+│       │   ├── index.DChMO9Gt.js.map
+│       │   ├── index.DcnRWw1G.js.map
+│       │   ├── index.Ddsmg3Bu.js.map
+│       │   ├── index.DEacluAf.js.map
+│       │   ├── index.DFQJJoFj.js.map
+│       │   ├── index.DHDAydBk.js.map
+│       │   ├── index.Djl32tMQ.js.map
+│       │   ├── index.Dlmc8yTY.js.map
+│       │   ├── index.DLOJ5DDU.js.map
+│       │   ├── index.DNA9ByJ3.js.map
+│       │   ├── index.DP2rzg_V.js.map
+│       │   ├── index.DpWtl1x9.js.map
+│       │   ├── index.D-q0Rzu7.js.map
+│       │   ├── index.Dq7vEUnL.js.map
+│       │   ├── index.Dsf08Zj2.js.map
+│       │   ├── index.DsHoY9On.js.map
+│       │   ├── index.DSQCOLTT.js.map
+│       │   ├── index.DT4K1muU.js.map
+│       │   ├── index.Du275gqU.js
+│       │   ├── index.Du275gqU.js.map
+│       │   ├── index.DvVUzUZi.js.map
+│       │   ├── index.DxcrBWdN.js.map
+│       │   ├── index.DyKDNEyR.js.map
+│       │   ├── index.DyvY9DTT.js.map
+│       │   ├── index.EJmlxK_k.js
+│       │   ├── index.EJmlxK_k.js.map
+│       │   ├── index.Fiz4oIl9.js.map
+│       │   ├── index.Fv-fByQg.js.map
+│       │   ├── index.guy54giM.js.map
+│       │   ├── index.HdFpRoD0.js.map
+│       │   ├── index.hfwpu8AO.js.map
+│       │   ├── index._HrpyBb9.js.map
+│       │   ├── index.IufBAgoa.js.map
+│       │   ├── index.iY6NdwTY.js.map
+│       │   ├── index.IzEBb00E.js.map
+│       │   ├── index.jXS2oyrD.js.map
+│       │   ├── index.K6Dvbx-E.js.map
+│       │   ├── index.k6_ErhUm.js.map
+│       │   ├── index.KlbgNtrW.js.map
+│       │   ├── index.l0sNRNKZ.js.map
+│       │   ├── index.l7lfrks8.js.map
+│       │   ├── index.MvZG--xt.js.map
+│       │   ├── index.N_OfauVw.js.map
+│       │   ├── index.oaqayX8-.js.map
+│       │   ├── index.O_iDw1ww.js.map
+│       │   ├── index.Qg5z_Vsc.js.map
+│       │   ├── index.qQaBgSp-.js.map
+│       │   ├── index.REWJz8OL.js.map
+│       │   ├── index.sdDrWxCl.js.map
+│       │   ├── index.tujld8Z2.js.map
+│       │   ├── index.uEXBp-mU.js.map
+│       │   ├── index.Vhp2xqgg.js.map
+│       │   ├── index.vwI_I5Mh.js.map
+│       │   ├── index.whqoZPBR.js.map
+│       │   ├── index.Y2VSvkNX.js
+│       │   ├── index.Y2VSvkNX.js.map
+│       │   ├── index.zRqYne_2.js.map
+│       │   ├── mschf-overlay.CJ97MSoW.js
+│       │   └── mschf-overlay.CJ97MSoW.js.map
+│       ├── concepts
+│       │   ├── aesthetic-inquiry
+│       │   │   └── index.html
+│       │   ├── atlas-process
+│       │   │   └── index.html
+│       │   ├── autocatalytic-system
+│       │   │   └── index.html
+│       │   ├── compliant-spire
+│       │   │   └── index.html
+│       │   ├── ghost-byline
+│       │   │   └── index.html
+│       │   ├── ghost-engine
+│       │   │   └── index.html
+│       │   ├── index.html
+│       │   ├── parroting-mimicry
+│       │   │   └── index.html
+│       │   ├── readers-journey
+│       │   │   └── index.html
+│       │   ├── rhizomatic-protocol
+│       │   │   └── index.html
+│       │   ├── three-studies-sensory
+│       │   │   └── index.html
+│       │   ├── verification-is-an-ecology
+│       │   │   └── index.html
+│       │   └── workshop-weather
+│       │       └── index.html
+│       ├── consulting
+│       │   └── index.html
+│       ├── content
+│       │   └── archives
+│       │       ├── collectables
+│       │       │   ├── designer-toys
+│       │       │   │   ├── index.html
+│       │       │   │   └── pop-mart
+│       │       │   │       ├── index.html
+│       │       │   │       └── the-monsters
+│       │       │   │           └── index.html
+│       │       │   └── index.html
+│       │       ├── _dynamic
+│       │       │   └── provenance
+│       │       │       └── index.html
+│       │       ├── index.html
+│       │       └── provenance
+│       │           └── index.html
+│       ├── favicon.ico
+│       ├── favicon.svg
+│       ├── icons
+│       │   ├── 96x96.png
+│       │   ├── icon-192.png
+│       │   └── icon-512.png
+│       ├── index.html
+│       ├── meta
+│       │   ├── a-b-curatorial-protocolist
+│       │   │   └── index.html
+│       │   ├── core-concept
+│       │   │   └── index.html
+│       │   ├── curatorial-generativism
+│       │   │   └── index.html
+│       │   ├── index.html
+│       │   ├── methodology
+│       │   │   └── index.html
+│       │   ├── protocolist
+│       │   │   └── index.html
+│       │   ├── style-guide
+│       │   │   └── index.html
+│       │   └── unified-referencing-syntax
+│       │       └── index.html
+│       ├── pages
+│       │   ├── map
+│       │   │   └── index.html
+│       │   └── resume
+│       │       └── index.html
+│       ├── projects
+│       │   ├── index.html
+│       │   ├── llm-release-watcher
+│       │   │   └── index.html
+│       │   ├── patent-intelligence-agent
+│       │   │   └── index.html
+│       │   └── project-dandelion
+│       │       └── index.html
+│       ├── site.webmanifest
+│       ├── sparks
+│       │   ├── academic-blindness
+│       │   │   └── index.html
+│       │   ├── breakfast-eggs
+│       │   │   └── index.html
+│       │   ├── george-eastman-obscure
+│       │   │   └── index.html
+│       │   ├── illusion-japan-nicotine
+│       │   │   └── index.html
+│       │   ├── index.html
+│       │   ├── murakami-market-analysis-2025
+│       │   │   └── index.html
+│       │   ├── paulin-paulin-paulin-marketing
+│       │   │   └── index.html
+│       │   ├── smoker-sysadmin
+│       │   │   └── index.html
+│       │   └── vapor-linked-governance
+│       │       └── index.html
+│       ├── test
+│       │   └── dynamic-archives
+│       │       └── index.html
+│       ├── .vite
+│       │   └── manifest.json
+│       └── work
+│           ├── 1
+│           │   └── index.html
+│           ├── 2
+│           │   └── index.html
+│           ├── block-ledger
+│           │   └── index.html
+│           ├── drop
+│           │   └── index.html
+│           ├── index.html
+│           └── latest
+│               └── index.html
+├── .tmp.dprint.resolved.json
+├── .tools
+│   └── sd
+│       ├── sd -> /home/toxic/effusion_labs_final/.tools/sd/sd-v1.0.0-x86_64-unknown-linux-gnu/sd
+│       └── sd-v1.0.0-x86_64-unknown-linux-gnu
+│           ├── CHANGELOG.md
+│           ├── completions
+│           │   ├── _sd
+│           │   ├── sd.bash
+│           │   ├── sd.elv
+│           │   ├── sd.fish
+│           │   └── _sd.ps1
+│           ├── LICENSE
+│           ├── README.md
+│           ├── sd
+│           └── sd.1
+├── tools
+│   ├── dev
+│   │   ├── dir-to-json.mjs
+│   │   ├── eleventy-with-codeframes.mjs
+│   │   └── link-local-chrome-shims.mjs
+│   ├── doctor.mjs
+│   ├── filters
+│   │   └── hb_filter.cjs
+│   └── npm-utils.js
+├── TREE.txt
+└── vite.config.mjs
+
+440 directories, 1370 files

@@ -46,8 +46,7 @@
     "mcp:dev": "node mcp-stack/gateway/server.mjs",
     "mcp:integration": "node mcp-stack/tests/integration.mjs",
     "mcp:test": "node mcp-stack/tests/smoke.mjs",
-    "postinstall": "node tools/dev/link-local-chrome-shims.mjs && if [ \"${PATCH_PACKAGE_RUN:-1}\" != \"0\" ] && [ -x node_modules/.bin/patch-package ]; then patch-package; fi",
-    "prepare": "husky"
+    "postinstall": "if [ \"${PATCH_PACKAGE_RUN:-1}\" != \"0\" ] && [ -x node_modules/.bin/patch-package ]; then patch-package; fi"
   },
   "lint-staged": {
     "package.json": [

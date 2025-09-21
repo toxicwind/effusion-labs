@@ -46,6 +46,23 @@ const urlmetaPath = path.join(cacheDir, "urlmeta.json");
 // shards and is updated on each run.
 const itemsMetaPath = path.join(genDir, "items-meta.json");
 
+// Track the last N run timestamps so we can evict old items.  We only
+// retain metadata for items seen in the most recent 5 runs.  When a
+// new run completes, its timestamp is appended to this array and
+// older entries are discarded.  Items whose `lastSeen` falls before
+// the earliest timestamp in this history will be purged from
+// items-meta on the next update.
+const runsHistoryPath = path.join(genDir, "runs-history.json");
+
+// Aggregated lists of all images and products.  These files are
+// regenerated on each run from the items-meta cache.  `all-images.json`
+// contains one entry per image (unique id), including duplicate links;
+// `all-products.json` contains one entry per pageUrl with a list of
+// associated image ids.  Both lists exclude items that fall outside
+// the retained history window.
+const allImagesPath = path.join(genDir, "all-images.json");
+const allProductsPath = path.join(genDir, "all-products.json");
+
 // Adjust if your config lives elsewhere
 const hostsTxtPath = path.join(baseDir, "./config/hosts.txt");
 
@@ -71,17 +88,83 @@ const parseRobotsForSitemaps = (text) =>
 const isSitemapIndex = (xml) => /<sitemapindex\b/i.test(xml);
 
 function* iterSitemapItems(xmlText) {
+  /*
+   * Robustly iterate over sitemap entries.
+   *
+   * Different sitemap flavours may encode images and loc values in
+   * slightly different shapes.  Some entries only contain a single
+   * `<loc>` tag (page URL) and no images, while others include one
+   * or more `<image:image>` blocks with nested `<image:loc>` and
+   * `<image:title>` elements.  A few edge cases: the `loc` field may
+   * be an array if multiple `<loc>` tags appear (rare but possible);
+   * image collections may appear under both `image` (namespace
+   * stripped) and `image:image` keys; individual image objects may
+   * contain `loc` or namespaced `image:loc` keys; and titles may be
+   * stored in `title`, `caption`, or namespaced variants.  This
+   * iterator normalises all of these cases and yields one entry per
+   * image.  When a page has no images, a `page` item is emitted so
+   * product/category pages without images are still captured.
+   */
   const parser = new XMLParser({ ignoreAttributes: false, removeNSPrefix: true, trimValues: true });
-  const root = parser.parse(xmlText);
-  const urls = root?.urlset?.url ?? [];
-  for (const entry of Array.isArray(urls) ? urls : [urls]) {
-    const pageUrl = entry?.loc || "";
+  let root;
+  try {
+    root = parser.parse(xmlText);
+  } catch {
+    root = {};
+  }
+  let entries = [];
+  if (root?.urlset?.url) {
+    entries = Array.isArray(root.urlset.url) ? root.urlset.url : [root.urlset.url];
+  } else if (root?.urlset) {
+    // Single url entry
+    entries = [root.urlset];
+  } else {
+    // Fallback: attempt to extract <loc> elements via regex when XML
+    // structure is not as expected.  This covers rare cases where the
+    // sitemap isn’t parsed into an object.  We yield only page
+    // entries for these.
+    const locRegex = /<loc>(.*?)<\/loc>/gi;
+    let match;
+    while ((match = locRegex.exec(xmlText))) {
+      const url = match[1].trim();
+      if (url) {
+        yield { src: url, pageUrl: url, lastMod: "", title: "", itemType: "page" };
+      }
+    }
+    return;
+  }
+  for (const entry of entries) {
+    // normalise page URLs into an array
+    let locField = entry?.loc;
+    let pageUrls = [];
+    if (Array.isArray(locField)) {
+      pageUrls = locField.filter((u) => typeof u === "string" && u.trim()).map((u) => u.trim());
+    } else if (typeof locField === "string" && locField.trim()) {
+      pageUrls = [locField.trim()];
+    } else if (locField && typeof locField === "object" && locField['#text']) {
+      // handle cases where the parser wraps values under #text
+      pageUrls = [String(locField['#text']).trim()];
+    }
     const lastMod = entry?.lastmod || "";
-    let images = entry?.image || entry?.["image:image"] || [];
-    for (const image of Array.isArray(images) ? images : [images]) {
-      const src = image?.loc || image?.["image:loc"] || "";
-      const title = image?.title || image?.caption || "";
-      if (src) yield { src, pageUrl, lastMod, title };
+    // normalise image collections
+    let rawImages = entry?.image || entry?.["image:image"] || entry?.["image"];
+    const images = rawImages ? (Array.isArray(rawImages) ? rawImages : [rawImages]) : [];
+    if (images.length > 0) {
+      const pageUrl = pageUrls.length > 0 ? pageUrls[0] : "";
+      for (const img of images) {
+        let src = img?.loc || img?.["image:loc"] || "";
+        if (src && typeof src === "object" && src['#text']) src = String(src['#text']).trim();
+        let title = img?.title || img?.caption || img?.["image:title"] || img?.["image:caption"] || "";
+        if (title && typeof title === "object" && title['#text']) title = String(title['#text']).trim();
+        if (src) {
+          yield { src, pageUrl, lastMod, title, itemType: "image" };
+        }
+      }
+    } else {
+      // emit a page item for each page URL when no images exist
+      for (const url of pageUrls) {
+        yield { src: url, pageUrl: url, lastMod, title: "", itemType: "page" };
+      }
     }
   }
 }
@@ -230,17 +313,23 @@ class Crawler {
     for (const item of iterSitemapItems(text)) {
       const id = shortId(item.src);
       // update per-item metadata regardless of Bloom membership
+      let isDuplicate = false;
       if (this.config.updateItemMeta) {
-        this.config.updateItemMeta(id, {
+        const dupId = this.config.updateItemMeta(id, {
           src: item.src,
           pageUrl: item.pageUrl,
           lastMod: item.lastMod || item.lastmod || "",
           title: item.title || "",
           host: hostOf(url),
-          sitemap: url
+          sitemap: url,
+          itemType: item.itemType || "image",
         });
+        isDuplicate = !!dupId;
       }
-      if (!this.seenBloom.has(id)) {
+      // Skip writing duplicates to NDJSON to avoid bloating shards.  We
+      // still update the Bloom filter for canonical items, but do not
+      // insert duplicate ids since they are not emitted.
+      if (!isDuplicate && !this.seenBloom.has(id)) {
         await writer.write({ ...item, id, host: hostOf(url), sitemap: url });
         this.seenBloom.add(id);
         itemCount++;
@@ -327,17 +416,62 @@ async function main() {
   const bloomJSON = await readFile(bloomPath, "utf8").catch(() => null);
   const initialBloom = bloomJSON ? ScalableBloomFilter.fromJSON(JSON.parse(bloomJSON)) : undefined;
 
-  // Load persistent item metadata
+  // Load persistent item metadata (id -> metadata record).  Each record
+  // tracks lifecycle fields and duplicate relationships.  If the file
+  // does not exist, start with an empty object.
   const itemsMeta = JSON.parse((await readFile(itemsMetaPath, "utf8").catch(() => "{}")) || "{}");
-  // Set up structures to track items encountered this run
+  // Load the run history which records timestamps of the most recent
+  // runs.  Used to evict stale items after we reach the retention
+  // limit.  If absent, start with an empty array.
+  const runsHistory = JSON.parse((await readFile(runsHistoryPath, "utf8").catch(() => "[]")) || "[]");
+
+  // Rebuild a lookup from image basenames to canonical IDs.  A
+  // canonical ID is an id whose record either has no duplicateOf
+  // field or where duplicateOf is null.  When new items arrive
+  // whose basename matches an existing one, they will be marked
+  // duplicates of the canonical entry.  We also gather ids seen in
+  // this run and count new items.
+  const basenameIndex = {};
+  for (const [id, meta] of Object.entries(itemsMeta)) {
+    if (!meta.duplicateOf) {
+      const basename = path.basename((meta.src || "").split("?")[0]);
+      if (basename) {
+        basenameIndex[basename] = id;
+      }
+    }
+  }
+
   const seenIds = new Set();
   let newItemsCount = 0;
+  let duplicateItemsCount = 0;
 
-  // Define updateItemMeta closure for Crawler to call per item
+  // Define updateItemMeta closure for Crawler to call per item.  This
+  // function updates the itemsMeta object, performs duplicate
+  // detection based on filename, and returns the canonical id if
+  // duplicate or null otherwise.  It also records ids seen in this
+  // run and counts newly added and duplicate items.
   const updateItemMeta = (id, info) => {
     seenIds.add(id);
     const now = new Date().toISOString();
+    // Compute duplicate information only for images.  We strip any
+    // querystring from the src to derive a basename used to detect
+    // identical filenames across different URLs.  Pages (itemType
+    // 'page') are never deduplicated because multiple entries can
+    // legitimately share the same slug across categories.
+    const itemType = info.itemType || "image";
+    const rawSrc = info.src || "";
+    const basename = path.basename((rawSrc.split("?")[0]) || "");
+    let duplicateOf = null;
     if (!itemsMeta[id]) {
+      if (itemType === "image") {
+        // Determine canonical id for this basename (if any)
+        if (basename && basenameIndex[basename]) {
+          duplicateOf = basenameIndex[basename];
+          duplicateItemsCount++;
+        } else if (basename) {
+          basenameIndex[basename] = id;
+        }
+      }
       itemsMeta[id] = {
         firstSeen: now,
         lastSeen: now,
@@ -348,9 +482,13 @@ async function main() {
         title: info.title || "",
         host: info.host || "",
         sitemap: info.sitemap || "",
+        duplicateOf: duplicateOf,
+        itemType: itemType,
       };
       newItemsCount++;
     } else {
+      // Existing item: update lifecycle fields and respect duplicate
+      // status.  Note that we do not change duplicateOf once set.
       itemsMeta[id].lastSeen = now;
       itemsMeta[id].src = info.src;
       itemsMeta[id].pageUrl = info.pageUrl;
@@ -358,11 +496,19 @@ async function main() {
       itemsMeta[id].title = info.title || itemsMeta[id].title;
       itemsMeta[id].host = info.host || itemsMeta[id].host;
       itemsMeta[id].sitemap = info.sitemap || itemsMeta[id].sitemap;
+      itemsMeta[id].itemType = itemType;
       if (itemsMeta[id].removedAt) {
-        // item reappeared; clear removal timestamp
         itemsMeta[id].removedAt = null;
       }
+      duplicateOf = itemsMeta[id].duplicateOf || null;
+      // If this is an image that became canonical earlier and the
+      // basename was unknown, populate the index now.  We only
+      // register image basenames to avoid colliding page URLs.
+      if (!duplicateOf && itemType === "image" && basename && !basenameIndex[basename]) {
+        basenameIndex[basename] = id;
+      }
     }
+    return duplicateOf;
   };
 
   const config = {
@@ -378,14 +524,41 @@ async function main() {
   const crawler = new Crawler(config);
   const summary = await crawler.run(hosts);
 
-  // After crawling, detect removed items and compute lifecycle stats
+  // We no longer push the run timestamp here.  Runs history entries are
+  // appended later once we know how many unique images/pages exist.  The
+  // runsHistory array may contain either strings (legacy) or objects
+  // with detailed metrics.  We leave it untouched here so that
+  // removal detection can still use the prior retention window.
+
+  // After crawling, detect removed items, purge stale ones based on
+  // history retention, and compute lifecycle stats.  Anything not
+  // encountered in this run is marked removed, and any item whose
+  // lastSeen predates the earliest retained run is evicted from
+  // metadata entirely.
   const nowIso = new Date().toISOString();
+  // Determine earliest run timestamp to retain.  Runs history may
+  // contain strings (timestamps) or objects { timestamp: ..., ... }.
+  let earliestRun;
+  if (runsHistory.length > 0) {
+    const first = runsHistory[0];
+    earliestRun = typeof first === "string" ? first : first.timestamp;
+  } else {
+    earliestRun = nowIso;
+  }
   let removedThisRun = 0;
+  let purgedCount = 0;
   let activeCount = 0;
   for (const id of Object.keys(itemsMeta)) {
+    const meta = itemsMeta[id];
+    // purge items whose lastSeen is older than earliest run (not within retention)
+    if (meta.lastSeen < earliestRun) {
+      delete itemsMeta[id];
+      purgedCount++;
+      continue;
+    }
     if (!seenIds.has(id)) {
-      if (!itemsMeta[id].removedAt) {
-        itemsMeta[id].removedAt = nowIso;
+      if (!meta.removedAt) {
+        meta.removedAt = nowIso;
         removedThisRun++;
       }
     } else {
@@ -393,23 +566,113 @@ async function main() {
     }
   }
   const totalCount = Object.keys(itemsMeta).length;
-  // Augment summary with item lifecycle statistics
+  // Augment summary with item lifecycle statistics, including duplicates
   summary.items = {
     added: newItemsCount,
+    duplicates: duplicateItemsCount,
     removed: removedThisRun,
+    purged: purgedCount,
     active: activeCount,
     total: totalCount,
   };
+
+  // Build aggregated lists of all images and all products within
+  // retention window.  We exclude any items whose lastSeen is older
+  // than the earliest run we retain.  Each image entry includes
+  // duplicateOf if applicable.  Each product entry groups images by
+  // their pageUrl and tracks earliest and latest sightings.
+  const allImages = [];
+  const allProductsMap = {};
+  for (const [id, meta] of Object.entries(itemsMeta)) {
+    // Only include active (non-purged) items
+    if (meta.lastSeen < earliestRun) continue;
+    const basename = path.basename((meta.src || "").split("?")[0]);
+    allImages.push({
+      id,
+      src: meta.src,
+      basename,
+      firstSeen: meta.firstSeen,
+      lastSeen: meta.lastSeen,
+      duplicateOf: meta.duplicateOf || null,
+      pageUrl: meta.pageUrl,
+      title: meta.title,
+      host: meta.host,
+    });
+    const productKey = meta.pageUrl || "";
+    if (!allProductsMap[productKey]) {
+      allProductsMap[productKey] = {
+        pageUrl: productKey,
+        title: meta.title || "",
+        images: [],
+        firstSeen: meta.firstSeen,
+        lastSeen: meta.lastSeen,
+      };
+    }
+    const prod = allProductsMap[productKey];
+    prod.images.push({ id, src: meta.src, duplicateOf: meta.duplicateOf || null });
+    if (!prod.title && meta.title) prod.title = meta.title;
+    if (meta.firstSeen < prod.firstSeen) prod.firstSeen = meta.firstSeen;
+    if (meta.lastSeen > prod.lastSeen) prod.lastSeen = meta.lastSeen;
+  }
+  const allProducts = Object.values(allProductsMap);
+
+  // Compute counts of unique page entries (products).  Each product
+  // corresponds to a unique pageUrl.  This count is added to the
+  // summary totals as `pages` so the report can display how many
+  // product/category pages were discovered across all sitemaps.
+  const pageCount = allProducts.length;
+  // Populate pages count into summary totals.  The existing
+  // `itemsFound` already tracks the number of unique image entries
+  // emitted in the NDJSON writer.
+  summary.totals = summary.totals || {};
+  summary.totals.pages = pageCount;
+
+  // Compute unique image count (non-duplicate) for this run.  This
+  // includes all active images within the retention window.  We set
+  // this on the summary so the report can show how many distinct
+  // images exist across all runs.  Note: duplicates are still
+  // reflected via the `duplicates` metric in summary.items.
+  const uniqueImagesCount = allImages.length;
+  summary.totals.images = uniqueImagesCount;
+
+  // -----------------------------------------------------------------
+  // Append the current run into the runs history.  We store a
+  // structured record containing timestamp, item lifecycle metrics
+  // and total counts of images and pages.  Only the most recent
+  // N runs (default 5) are retained.  If runsHistory contains
+  // strings (legacy), they are preserved but we push objects from
+  // now on.  Eviction of old metadata occurs based on earliest
+  // retained timestamp earlier in this script.
+  const runRecord = {
+    timestamp: nowIso,
+    metrics: { ...summary.items },
+    totals: {
+      images: uniqueImagesCount,
+      pages: pageCount,
+    },
+  };
+  // Push the new run record and prune to last 5
+  runsHistory.push(runRecord);
+  const MAX_RUNS = 5;
+  // Keep only the last MAX_RUNS entries
+  if (runsHistory.length > MAX_RUNS) {
+    // Remove oldest entries
+    runsHistory.splice(0, runsHistory.length - MAX_RUNS);
+  }
 
   console.log("\n✅ Done. Finalizing state...");
   await saveJson(bloomPath, crawler.seenBloom.saveAsJSON());
   await saveJson(summaryPath, summary);
   await saveJson(urlmetaPath, urlmeta);
   await saveJson(itemsMetaPath, itemsMeta);
+  await saveJson(runsHistoryPath, runsHistory);
+  await saveJson(allImagesPath, allImages);
+  await saveJson(allProductsPath, allProducts);
 
   console.log(`\n📊 Summary saved to: ${path.relative(process.cwd(), summaryPath)}`);
   console.log(`   Total Items Found (this run): ${summary.totals.itemsFound.toLocaleString()}`);
   console.log(`   New items added: ${newItemsCount}, Removed items: ${removedThisRun}, Active items: ${activeCount}, Total historical items: ${totalCount}`);
+  console.log(`   Duplicate items detected: ${duplicateItemsCount}, Purged items: ${purgedCount}`);
 }
 
 main().catch((err) => {

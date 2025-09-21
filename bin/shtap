@@ -1,6 +1,0 @@
-#!/usr/bin/env bash
-set -Eeuo pipefail
-plan(){ echo "1..$1"; }
-ok(){ local c="$1"; shift; echo "ok $c - $*"; }
-not_ok(){ local c="$1"; shift; echo "not ok $c - $*"; }
-expect(){ local idx="$1"; shift; eval "$@" && ok "$idx" "$*" || { not_ok "$idx" "$*"; exit 1; }; }

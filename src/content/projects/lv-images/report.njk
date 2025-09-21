@@ -18,7 +18,8 @@ metaDisable: true
 {% set lv       = lvreport.lvreport or lvreport or {} %}
 {% set baseHref = lv.baseHref or '/content/projects/lv-images/generated/lv/' %}
 {% set summary  = lv.summary  or {} %}
-{% set totals   = summary.totals or {} %}
+{# Pull global totals from the top level (lv.totals) first, falling back to summary.totals if not present.  The crawler exposes unique image and page counts via lv.totals. #}
+{% set totals   = lv.totals or summary.totals or {} %}
 {% set sitemaps = lv.sitemaps or [] %}
 {% set docs     = lv.docs     or [] %}
 {% set robots   = lv.robots   or [] %}
@@ -57,28 +58,64 @@ metaDisable: true
 <section class="mt-10 space-y-8">
   {#
     Overview stats block: show key metrics using daisyUI's stats component.
-    Each stat item includes a title, a bold value and an optional description.
+    We separate metrics into two rows: the first row highlights global
+    counts (unique images/pages across all runs, hosts and generated
+    information) while the second row focuses on the current run’s
+    lifecycle counts (added, removed, active, total and duplicates).
   #}
-  <div class="stats stats-vertical lg:stats-horizontal shadow gap-6">
+  <div class="stats stats-vertical lg:stats-horizontal shadow gap-6 flex-wrap">
     <div class="stat">
       <div class="stat-title">Generated</div>
       <div class="stat-value">{{ summary.generatedAt or '—' }}</div>
       <div class="stat-desc">Version {{ summary.version or '—' }}</div>
     </div>
     <div class="stat">
-      <div class="stat-title">Hosts Crawled</div>
+      <div class="stat-title">Hosts</div>
       <div class="stat-value">{{ totals.hosts or 0 }}</div>
       <div class="stat-desc">Sitemaps {{ totals.sitemapsProcessed or 0 }}</div>
     </div>
     <div class="stat">
-      <div class="stat-title">Items Found</div>
-      <div class="stat-value">{{ totals.itemsFound or 0 }}</div>
-      <div class="stat-desc">Pages {{ totals.pages or 0 }}</div>
+      <div class="stat-title">Unique Images</div>
+      <div class="stat-value">{{ totals.images or 0 }}</div>
+      <div class="stat-desc">across all runs</div>
+    </div>
+    <div class="stat">
+      <div class="stat-title">Unique Pages</div>
+      <div class="stat-value">{{ totals.pages or 0 }}</div>
+      <div class="stat-desc">across all runs</div>
     </div>
     <div class="stat">
       <div class="stat-title">Sample Images</div>
       <div class="stat-value">{{ sample | length }}</div>
       <div class="stat-desc">NDJSON snapshots</div>
+    </div>
+  </div>
+
+  <div class="stats stats-vertical lg:stats-horizontal shadow gap-6 flex-wrap mt-6">
+    <div class="stat">
+      <div class="stat-title">New Items</div>
+      <div class="stat-value">{{ summary.items and summary.items.added or 0 }}</div>
+      <div class="stat-desc">in this run</div>
+    </div>
+    <div class="stat">
+      <div class="stat-title">Removed Items</div>
+      <div class="stat-value">{{ summary.items and summary.items.removed or 0 }}</div>
+      <div class="stat-desc">this run</div>
+    </div>
+    <div class="stat">
+      <div class="stat-title">Active Items</div>
+      <div class="stat-value">{{ summary.items and summary.items.active or 0 }}</div>
+      <div class="stat-desc">currently tracked</div>
+    </div>
+    <div class="stat">
+      <div class="stat-title">Total Items</div>
+      <div class="stat-value">{{ summary.items and summary.items.total or 0 }}</div>
+      <div class="stat-desc">across all runs</div>
+    </div>
+    <div class="stat">
+      <div class="stat-title">Duplicates</div>
+      <div class="stat-value">{{ summary.items and summary.items.duplicates or 0 }}</div>
+      <div class="stat-desc">{{ summary.items and summary.items.purged or 0 }} purged</div>
     </div>
   </div>
 
@@ -177,6 +214,179 @@ metaDisable: true
       <div class="alert alert-info mt-4">
         <span>No sitemap activity yet. Run the crawler to populate this section.</span>
       </div>
+    {% endif %}
+  </section>
+
+  {# Runs history timeline #}
+  <section id="history" class="space-y-4 mt-12">
+    <h2 class="text-3xl font-semibold">Runs History</h2>
+    <p class="text-sm opacity-70">Overview of the last {{ lv.runsHistory and lv.runsHistory | length or 0 }} runs with lifecycle metrics.</p>
+    {% if lv.runsHistory and (lv.runsHistory | length) %}
+      <div class="overflow-x-auto rounded-box border border-base-content/10 mt-4">
+        <table class="table table-zebra table-xs" id="historyTable">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Added</th>
+              <th>Removed</th>
+              <th>Active</th>
+              <th>Total</th>
+              <th>Duplicates</th>
+              <th>Purged</th>
+              <th>Images</th>
+              <th>Pages</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for run in lv.runsHistory | reverse %}
+              <tr>
+                <td>{{ run.timestamp }}</td>
+                <td>{{ run.metrics.added or 0 }}</td>
+                <td>{{ run.metrics.removed or 0 }}</td>
+                <td>{{ run.metrics.active or 0 }}</td>
+                <td>{{ run.metrics.total or 0 }}</td>
+                <td>{{ run.metrics.duplicates or 0 }}</td>
+                <td>{{ run.metrics.purged or 0 }}</td>
+                <td>{{ run.totals.images or 0 }}</td>
+                <td>{{ run.totals.pages or 0 }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <div class="alert alert-info mt-4"><span>No run history available.</span></div>
+    {% endif %}
+  </section>
+
+  {# Duplicate images section #}
+  <section id="duplicates-section" class="space-y-4 mt-12">
+    <h2 class="text-3xl font-semibold">Duplicate Images</h2>
+    <p class="text-sm opacity-70">Canonical images with one or more duplicates. The count reflects duplicate occurrences beyond the canonical image.</p>
+    <div class="flex flex-wrap gap-3 items-end mt-4">
+      <label class="input input-bordered flex items-center gap-2 w-full sm:w-72">
+        <span class="opacity-60">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-3.5-3.5"></path></svg>
+        </span>
+        <input id="duplicatesFilter" type="search" class="grow" placeholder="Search basename, title or page…" autocomplete="off" />
+      </label>
+      <button class="btn btn-sm btn-outline" id="exportDuplicates" type="button">Export CSV</button>
+    </div>
+    {% if lv.duplicates and (lv.duplicates | length) %}
+      <div class="overflow-x-auto rounded-box border border-base-content/10 mt-4">
+        <table class="table table-zebra table-xs" id="duplicatesTable">
+          <thead>
+            <tr>
+              <th class="min-w-[80px]">Image</th>
+              <th class="min-w-[80px]">Dupes</th>
+              <th>Basename</th>
+              <th class="min-w-[260px]">Page</th>
+              <th>First Seen</th>
+              <th>Last Seen</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for d in lv.duplicates %}
+              <tr>
+                <td><a href="{{ d.src }}" target="_blank" rel="noreferrer"><img src="{{ d.src }}" alt="" class="w-12 h-12 object-cover rounded-box border border-base-content/10" /></a></td>
+                <td>{{ d.count - 1 }}</td>
+                <td>{{ d.basename or '' }}</td>
+                <td>{% if d.pageUrl %}<a class="link link-primary" href="{{ d.pageUrl }}" target="_blank" rel="noreferrer">{{ d.pageUrl }}</a>{% else %}—{% endif %}</td>
+                <td>{{ d.firstSeen }}</td>
+                <td>{{ d.lastSeen }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <div class="alert alert-info mt-4"><span>No duplicates found.</span></div>
+    {% endif %}
+  </section>
+
+  {# Top products section #}
+  <section id="products-section" class="space-y-4 mt-12">
+    <h2 class="text-3xl font-semibold">Top Products</h2>
+    <p class="text-sm opacity-70">Pages with the most images (showing top {{ lv.topProducts and lv.topProducts | length or 0 }} results).</p>
+    <div class="flex flex-wrap gap-3 items-end mt-4">
+      <label class="input input-bordered flex items-center gap-2 w-full sm:w-72">
+        <span class="opacity-60">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-3.5-3.5"></path></svg>
+        </span>
+        <input id="productsFilter" type="search" class="grow" placeholder="Search page or title…" autocomplete="off" />
+      </label>
+      <button class="btn btn-sm btn-outline" id="exportProducts" type="button">Export CSV</button>
+    </div>
+    {% if lv.topProducts and (lv.topProducts | length) %}
+      <div class="overflow-x-auto rounded-box border border-base-content/10 mt-4">
+        <table class="table table-zebra table-xs" id="productsTable">
+          <thead>
+            <tr>
+              <th class="min-w-[240px]">Page</th>
+              <th>Total Images</th>
+              <th>Unique Images</th>
+              <th>First Seen</th>
+              <th>Last Seen</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for p in lv.topProducts %}
+              <tr>
+                <td>{% if p.pageUrl %}<a href="{{ p.pageUrl }}" class="link link-primary" target="_blank" rel="noreferrer">{{ p.title }}</a>{% else %}{{ p.title }}{% endif %}</td>
+                <td>{{ p.totalImages }}</td>
+                <td>{{ p.uniqueImages }}</td>
+                <td>{{ p.firstSeen }}</td>
+                <td>{{ p.lastSeen }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <div class="alert alert-info mt-4"><span>No products found.</span></div>
+    {% endif %}
+  </section>
+
+  {# Hosts overview section #}
+  <section id="hosts-section" class="space-y-4 mt-12">
+    <h2 class="text-3xl font-semibold">Hosts Overview</h2>
+    <p class="text-sm opacity-70">Summary of total and unique images, duplicates and pages per host.</p>
+    <div class="flex flex-wrap gap-3 items-end mt-4">
+      <label class="input input-bordered flex items-center gap-2 w-full sm:w-72">
+        <span class="opacity-60">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-3.5-3.5"></path></svg>
+        </span>
+        <input id="hostsFilter" type="search" class="grow" placeholder="Search host…" autocomplete="off" />
+      </label>
+      <button class="btn btn-sm btn-outline" id="exportHosts" type="button">Export CSV</button>
+    </div>
+    {% if lv.hostStats and (lv.hostStats | length) %}
+      <div class="overflow-x-auto rounded-box border border-base-content/10 mt-4">
+        <table class="table table-zebra table-xs" id="hostsTable">
+          <thead>
+            <tr>
+              <th class="min-w-[200px]">Host</th>
+              <th>Total Images</th>
+              <th>Unique Images</th>
+              <th>Duplicates</th>
+              <th>Pages</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for h in lv.hostStats %}
+              <tr>
+                <td>{{ h.host or '—' }}</td>
+                <td>{{ h.images }}</td>
+                <td>{{ h.uniqueImages }}</td>
+                <td>{{ h.duplicates }}</td>
+                <td>{{ h.pages }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <div class="alert alert-info mt-4"><span>No host data available.</span></div>
     {% endif %}
   </section>
 
@@ -501,6 +711,27 @@ metaDisable: true
         rows.push(cells);
       });
       downloadCsv('lv-docs.csv', rows);
+    });
+  }
+
+  // Hosts table: simple text search and CSV export.  We reuse setupTableFilter
+  // without status or issues filters.  The host overview exposes
+  // hostStats via lv.hostStats.
+  const hostsTable = document.getElementById('hostsTable');
+  const hostsFilter = document.getElementById('hostsFilter');
+  if (hostsTable) {
+    setupTableFilter({ table: hostsTable, searchInput: hostsFilter, statusButtons: null, issuesToggle: null });
+  }
+  const exportHosts = document.getElementById('exportHosts');
+  if (exportHosts && hostsTable) {
+    exportHosts.addEventListener('click', () => {
+      const rows = [["Host","Images","Unique","Duplicates","Pages"]];
+      hostsTable.querySelectorAll('tbody tr').forEach(tr => {
+        if (tr.style.display === 'none') return;
+        const cells = Array.from(tr.querySelectorAll('td')).map(td => td.innerText.trim());
+        rows.push(cells);
+      });
+      downloadCsv('hosts.csv', rows);
     });
   }
 })();

@@ -1,77 +1,125 @@
-// src/_data/lvreport.js — prefers decoded robots JSON, falls back to text parser
-
 import fs from "node:fs/promises";
+import fss from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
+// This file is a data helper for Eleventy. It reads the summary and
+// cache data produced by the crawler (update‑dataset.mjs) and exposes
+// derived structures that the report template can consume. It has
+// been updated to surface new lifecycle metrics (added, removed,
+// active, total, duplicates, purged) introduced by the enhanced
+// crawler, along with aggregated lists of unique images and products.
+// If additional JSON files (all-images.json, all-products.json) are
+// unavailable, it falls back gracefully.
+
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+// Paths into the generated LV image atlas structure. Adjust these if
+// your project layout differs.
 const LV_BASE = path.resolve(__dirname, "../content/projects/lv-images/generated/lv");
 const CACHE_DIR = path.join(LV_BASE, "cache");
 const ROBOTS_DIR = path.join(CACHE_DIR, "robots");
 const SITEMAPS_DIR = path.join(CACHE_DIR, "sitemaps");
 const ITEMS_DIR = path.join(LV_BASE, "items");
-
 const SUMMARY_JSON = path.join(LV_BASE, "summary.json");
 const URLMETA_JSON = path.join(CACHE_DIR, "urlmeta.json");
 const BLACKLIST_JSON = path.join(LV_BASE, "hosts", "blacklist.json");
+const ALL_IMAGES_JSON = path.join(LV_BASE, "all-images.json");
+const ALL_PRODUCTS_JSON = path.join(LV_BASE, "all-products.json");
+// Runs history file captures recent run records with metrics.  Each
+// entry is an object { timestamp, metrics, totals }.  Only the last
+// 5 runs are retained in update‑dataset.  This path mirrors the
+// location used by the crawler.
+const RUNS_HISTORY_JSON = path.join(LV_BASE, "runs-history.json");
 
-async function loadJSON(p, fb) { try { return JSON.parse(await fs.readFile(p, "utf8")); } catch { return fb; } }
-async function loadDecodedRobots(host) {
-    const decodedPath = path.join(ROBOTS_DIR, `${host}.json`);
-    try { return JSON.parse(await fs.readFile(decodedPath, "utf8")); } catch { return null; }
+// Helper to load JSON files with a fallback.
+async function loadJSON(p, fallback) {
+    try {
+        const data = await fs.readFile(p, "utf8");
+        return JSON.parse(data);
+    } catch {
+        return fallback;
+    }
 }
 
+// Build a reverse lookup mapping absolute paths to URL metadata. The
+// urlmeta.json file maps a URL to { path, status, contentType }. We
+// need the reverse so we can decorate cached files with their source
+// URL and fetch status.
 function buildReverseUrlmeta(urlmeta) {
     const m = new Map();
-    for (const [u, v] of Object.entries(urlmeta || {})) {
-        if (v?.path) m.set(path.resolve(v.path), { url: u, status: v.status ?? "", contentType: v.contentType || "" });
+    for (const [url, meta] of Object.entries(urlmeta || {})) {
+        if (meta && meta.path) {
+            m.set(path.resolve(meta.path), { url, status: meta.status ?? "", contentType: meta.contentType || "" });
+        }
     }
     return m;
 }
 
+// Recursively walk a directory tree and yield file paths. Used for
+// enumerating cached sitemap documents.
 async function* walk(dir) {
     try {
         const entries = await fs.readdir(dir, { withFileTypes: true });
         for (const e of entries) {
             const p = path.join(dir, e.name);
-            if (e.isDirectory()) yield* walk(p);
-            else yield p;
+            if (e.isDirectory()) {
+                yield* walk(p);
+            } else {
+                yield p;
+            }
         }
-    } catch { }
+    } catch {
+        // silently ignore missing dirs
+    }
 }
 
+// Sample a handful of image items from the NDJSON shards for the
+// report’s visual sampler. Reads at most `max` entries across all
+// shards and stops early once the quota is reached.
 async function sampleItems(dir, max = 60) {
     const out = [];
     try {
-        const names = (await fs.readdir(dir)).filter((n) => n.endsWith(".ndjson")).sort();
+        const names = (await fs.readdir(dir))
+            .filter((n) => n.endsWith(".ndjson"))
+            .sort();
         for (const name of names) {
             const full = path.join(dir, name);
-            const fd = await fs.open(full, "r");
-            const stat = await fd.stat();
+            const fh = await fs.open(full, "r");
+            const stat = await fh.stat();
+            // Only read the first ~1.5MB of a shard; plenty for random sampling
             const len = Math.min(stat.size, 1_500_000);
             const buf = Buffer.alloc(len);
-            await fd.read(buf, 0, len, 0);
-            await fd.close();
+            await fh.read(buf, 0, len, 0);
+            await fh.close();
             const lines = buf.toString("utf8").split(/\r?\n/).filter(Boolean);
             for (const line of lines) {
                 try {
                     const obj = JSON.parse(line);
-                    if (obj?.src) out.push(obj);
-                    if (out.length >= max) return out;
-                } catch { }
+                    // Only images have a src field pointing to an image URL
+                    if (obj && obj.src) {
+                        out.push(obj);
+                        if (out.length >= max) return out;
+                    }
+                } catch {
+                    // ignore parse errors
+                }
             }
         }
-    } catch { }
+    } catch {
+        // ignore sampling errors
+    }
     return out;
 }
 
-// Fallback minimal parser for robots.txt (used only if no decoded JSON exists)
+// A minimal robots.txt parser. Parses into groups of user-agent
+// directives and collects allow/disallow/noindex/sitemap/crawl-delay
+// fields. Unknown directives are collected into an `other` map.
 function parseRobots(text) {
     const groups = [];
     const other = {};
     let cur = null;
     let ruleCount = 0;
-
     const lines = (text || "").split(/\r?\n/);
     for (const raw of lines) {
         const line = raw.trim();
@@ -80,14 +128,15 @@ function parseRobots(text) {
         if (!m) continue;
         const key = m[1].toLowerCase();
         const val = m[2].trim();
-
         if (key === "user-agent") {
             cur = { agents: new Set([val.toLowerCase()]), rules: [] };
             groups.push(cur);
             continue;
         }
-        if (!cur) { cur = { agents: new Set(["*"]), rules: [] }; groups.push(cur); }
-
+        if (!cur) {
+            cur = { agents: new Set(["*"]), rules: [] };
+            groups.push(cur);
+        }
         if (["allow", "disallow", "noindex", "crawl-delay", "sitemap"].includes(key)) {
             cur.rules.push({ type: key, path: val });
             ruleCount++;
@@ -96,7 +145,6 @@ function parseRobots(text) {
             (other[nk] ||= []).push(val);
         }
     }
-
     const merged = { allow: [], disallow: [], noindex: [], crawlDelay: null, sitemaps: [] };
     for (const g of groups) {
         for (const r of g.rules) {
@@ -105,7 +153,9 @@ function parseRobots(text) {
             if (r.type === "noindex") merged.noindex.push(r.path);
             if (r.type === "crawl-delay") {
                 const n = Number(r.path);
-                if (!Number.isNaN(n)) merged.crawlDelay = merged.crawlDelay == null ? n : Math.min(merged.crawlDelay, n);
+                if (!Number.isNaN(n)) {
+                    merged.crawlDelay = merged.crawlDelay == null ? n : Math.min(merged.crawlDelay, n);
+                }
             }
             if (r.type === "sitemap") merged.sitemaps.push(r.path);
         }
@@ -113,6 +163,8 @@ function parseRobots(text) {
     return { groups, merged, other, hasRules: ruleCount > 0 };
 }
 
+// Classify sitemap URLs by content type. The crawler sets a
+// human‑friendly `type` per sitemap to help filter by image/product/etc.
 function classifySitemap(url) {
     const u = String(url).toLowerCase();
     if (u.includes("sitemap-image")) return "image";
@@ -123,12 +175,24 @@ function classifySitemap(url) {
     return "other";
 }
 
+// Standard HTTP status names used when parsing HTML or JSON error pages.
 const STATUS_NAME = {
-    301: "Moved Permanently", 302: "Found", 307: "Temporary Redirect", 308: "Permanent Redirect",
-    400: "Bad Request", 401: "Unauthorized", 403: "Forbidden", 404: "Not Found", 410: "Gone",
-    429: "Too Many Requests", 500: "Internal Server Error", 503: "Service Unavailable"
+    301: "Moved Permanently",
+    302: "Found",
+    307: "Temporary Redirect",
+    308: "Permanent Redirect",
+    400: "Bad Request",
+    401: "Unauthorized",
+    403: "Forbidden",
+    404: "Not Found",
+    410: "Gone",
+    429: "Too Many Requests",
+    500: "Internal Server Error",
+    503: "Service Unavailable",
 };
 
+// Categories for robots.txt responses. Each category maps to a tone
+// (error, warn, ok, info) and a flag whether it’s an issue.
 const ROBOTS_CATEGORY_META = {
     ok: { label: "Valid robots.txt", tone: "ok", issue: false },
     "html-error": { label: "HTML error page", tone: "error", issue: true },
@@ -136,9 +200,12 @@ const ROBOTS_CATEGORY_META = {
     json: { label: "JSON payload", tone: "info", issue: false },
     text: { label: "Plain text (no directives)", tone: "warn", issue: true },
     empty: { label: "Empty response", tone: "error", issue: true },
-    "no-cache": { label: "No cached copy", tone: "warn", issue: true }
+    "no-cache": { label: "No cached copy", tone: "warn", issue: true },
 };
 
+// Categories for cached documents (XML/TXT). Each maps to a tone and
+// an issue flag. Note: "robots-txt" refers to a robots.txt file cached
+// under SITEMAPS_DIR.
 const DOC_CATEGORY_META = {
     xml: { label: "XML document", tone: "ok", issue: false },
     "html-error": { label: "HTML error page", tone: "error", issue: true },
@@ -148,23 +215,56 @@ const DOC_CATEGORY_META = {
     text: { label: "Plain text", tone: "info", issue: false },
     gzip: { label: "Compressed (.gz)", tone: "warn", issue: true },
     empty: { label: "Empty response", tone: "error", issue: true },
-    unknown: { label: "Unclassified", tone: "warn", issue: true }
+    unknown: { label: "Unclassified", tone: "warn", issue: true },
 };
 
+// Human‑friendly byte formatter.
+function formatBytes(bytes) {
+    if (!bytes) return "0 B";
+    const units = ["B", "KB", "MB", "GB", "TB"];
+    let value = bytes;
+    let idx = 0;
+    while (value >= 1024 && idx < units.length - 1) {
+        value /= 1024;
+        idx++;
+    }
+    const decimals = value >= 100 ? 0 : value >= 10 ? 1 : 2;
+    return `${value.toFixed(decimals)} ${units[idx]}`;
+}
+
+// Extract a snippet (first N characters) from a large string. Used
+// when storing previews of cached documents. Ensures trailing ellipsis
+// if truncated.
+function truncatePreview(text, max = 320) {
+    if (!text) return "";
+    const trimmed = text.trim();
+    if (trimmed.length <= max) return trimmed;
+    return `${trimmed.slice(0, max).trim()}…`;
+}
+
+// Normalize an HTML title or error reason by stripping tags and
+// compressing whitespace.
 function normalizeReason(reason) {
     if (!reason) return "";
     return reason.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
 }
+
+// Format a status code and reason into a single string. If code
+// isn't present, returns just the reason. Used when labeling
+// error pages.
 function formatHttpStatus(code, reason) {
     if (!code) return normalizeReason(reason);
     const label = normalizeReason(reason) || STATUS_NAME[code] || "";
     return label ? `${code} ${label}` : String(code);
 }
+
+// Attempt to extract a status code and reason from an error page.
+// Works with JSON payloads as well as HTML title/h1 elements.
 function extractHttpStatus(text) {
     if (!text) return null;
     const trimmed = text.trim();
     if (!trimmed) return null;
-
+    // Check JSON first
     if (trimmed.startsWith("{") || trimmed.startsWith("[")) {
         try {
             const obj = JSON.parse(trimmed);
@@ -173,16 +273,23 @@ function extractHttpStatus(text) {
                 const reason = obj.error || obj.message || STATUS_NAME[code] || "";
                 return { code, reason: normalizeReason(reason) };
             }
-        } catch { }
+        } catch {
+            // ignore JSON parse errors
+        }
     }
+    // Check HTML <title>
     const titleMatch = trimmed.match(/<title>\s*(\d{3})\s*([^<]*)/i);
-    if (titleMatch) return { code: Number(titleMatch[1]), reason: normalizeReason(titleMatch[2]) };
+    if (titleMatch) {
+        return { code: Number(titleMatch[1]), reason: normalizeReason(titleMatch[2]) };
+    }
+    // Check HTML <h1>
     const h1Match = trimmed.match(/<h1>\s*(\d{3})\s*([^<]*)/i);
-    if (h1Match) return { code: Number(h1Match[1]), reason: normalizeReason(h1Match[2]) };
-
+    if (h1Match) {
+        return { code: Number(h1Match[1]), reason: normalizeReason(h1Match[2]) };
+    }
+    // Fallback: search for status code numbers and keywords
     const statusCodeMatch = trimmed.match(/\b(301|302|307|308|400|401|403|404|410|429|500|503)\b/);
     let code = statusCodeMatch ? Number(statusCodeMatch[1]) : null;
-
     let reason = null;
     if (/Forbidden/i.test(trimmed)) reason = "Forbidden";
     else if (/Unauthorized/i.test(trimmed)) reason = "Unauthorized";
@@ -191,24 +298,45 @@ function extractHttpStatus(text) {
     else if (/Service Unavailable|Unavailable/i.test(trimmed)) reason = "Service Unavailable";
     else if (/Access Denied/i.test(trimmed)) reason = "Access Denied";
     else if (/Bad Request/i.test(trimmed)) reason = "Bad Request";
-
     if (!code && reason) {
-        const map = { Forbidden: 403, Unauthorized: 401, "Not Found": 404, "Too Many Requests": 429, "Service Unavailable": 503, "Access Denied": 403, "Bad Request": 400 };
+        const map = {
+            Forbidden: 403,
+            Unauthorized: 401,
+            "Not Found": 404,
+            "Too Many Requests": 429,
+            "Service Unavailable": 503,
+            "Access Denied": 403,
+            "Bad Request": 400,
+        };
         code = map[reason] || null;
     }
-    if (code) return { code, reason: reason || STATUS_NAME[code] || "" };
-    if (reason) return { code: null, reason };
+    if (code) {
+        return { code, reason: reason || STATUS_NAME[code] || "" };
+    }
+    if (reason) {
+        return { code: null, reason };
+    }
     return null;
 }
 
+// Classify the robots.txt payload into categories defined in
+// ROBOTS_CATEGORY_META. Returns an object with category, label,
+// tone, issue flag and optional HTTP status + label.
 function classifyRobotsResponse(rawText, hasCached) {
-    if (!hasCached) return { category: "no-cache", label: ROBOTS_CATEGORY_META["no-cache"].label, tone: ROBOTS_CATEGORY_META["no-cache"].tone, isIssue: true, httpStatus: null, httpLabel: "" };
+    if (!hasCached) {
+        const meta = ROBOTS_CATEGORY_META["no-cache"];
+        return { category: "no-cache", label: meta.label, tone: meta.tone, isIssue: meta.issue, httpStatus: null, httpLabel: "" };
+    }
     const trimmed = (rawText || "").trim();
-    if (!trimmed) return { category: "empty", label: ROBOTS_CATEGORY_META.empty.label, tone: ROBOTS_CATEGORY_META.empty.tone, isIssue: true, httpStatus: null, httpLabel: "" };
+    if (!trimmed) {
+        const meta = ROBOTS_CATEGORY_META.empty;
+        return { category: "empty", label: meta.label, tone: meta.tone, isIssue: meta.issue, httpStatus: null, httpLabel: "" };
+    }
     if (/<!DOCTYPE html|<html/i.test(trimmed.substring(0, 200))) {
         const status = extractHttpStatus(trimmed);
-        const httpLabel = status ? formatHttpStatus(status.code, status.reason) : "HTML response";
-        return { category: "html-error", label: httpLabel, tone: ROBOTS_CATEGORY_META["html-error"].tone, isIssue: true, httpStatus: status?.code ?? null, httpLabel };
+        const meta = ROBOTS_CATEGORY_META["html-error"];
+        const httpLabel = status ? formatHttpStatus(status.code, status.reason) : meta.label;
+        return { category: "html-error", label: httpLabel, tone: meta.tone, isIssue: true, httpStatus: status?.code ?? null, httpLabel };
     }
     if (trimmed.startsWith("{") || trimmed.startsWith("[")) {
         const status = extractHttpStatus(trimmed);
@@ -226,66 +354,93 @@ function classifyRobotsResponse(rawText, hasCached) {
     return { category: "ok", label: meta.label, tone: meta.tone, isIssue: meta.issue, httpStatus: null, httpLabel: "" };
 }
 
-function formatBytes(bytes) {
-    if (!bytes) return "0 B";
-    const units = ["B", "KB", "MB", "GB", "TB"];
-    let value = bytes; let idx = 0;
-    while (value >= 1024 && idx < units.length - 1) { value /= 1024; idx++; }
-    const decimals = value >= 100 ? 0 : value >= 10 ? 1 : 2;
-    return `${value.toFixed(decimals)} ${units[idx]}`;
-}
-
-function truncatePreview(text, max = 320) {
-    if (!text) return "";
-    const trimmed = text.trim();
-    if (trimmed.length <= max) return trimmed;
-    return `${trimmed.slice(0, max).trim()}…`;
-}
-
-function makeBreakdown(counts, meta, total) {
-    return Object.entries(counts).map(([key, count]) => {
-        const m = meta[key] || { label: key, tone: "info", issue: false };
-        const pct = total ? (count / total) * 100 : 0;
-        return { key, label: m.label, tone: m.tone, issue: m.issue, count, pct: Math.round(pct * 10) / 10 };
-    }).sort((a, b) => {
-        const toneRank = { error: 0, warn: 1, info: 2, ok: 3 };
-        const td = (toneRank[a.tone] ?? 4) - (toneRank[b.tone] ?? 4);
-        if (td !== 0) return td;
-        return b.count - a.count;
-    });
-}
-
+// Classify a cached document (XML/TXT) into categories defined in
+// DOC_CATEGORY_META. Looks at file extension and contents. Returns
+// category, label, tone, issue flag, and optional HTTP status.
 function classifyDocContent(filePath, previewText) {
     const ext = path.extname(filePath).toLowerCase();
-    if (ext === ".gz") return { category: "gzip", label: "Compressed (.gz)", tone: "warn", isIssue: true, httpStatus: null, httpLabel: "" };
+    if (ext === ".gz") {
+        const meta = DOC_CATEGORY_META.gzip;
+        return { category: "gzip", label: meta.label, tone: meta.tone, isIssue: meta.issue, httpStatus: null, httpLabel: "" };
+    }
     const text = (previewText || "").trim();
-    if (!text) return { category: "empty", label: "Empty response", tone: "error", isIssue: true, httpStatus: null, httpLabel: "" };
+    if (!text) {
+        const meta = DOC_CATEGORY_META.empty;
+        return { category: "empty", label: meta.label, tone: meta.tone, isIssue: meta.issue, httpStatus: null, httpLabel: "" };
+    }
     if (/<!DOCTYPE html|<html/i.test(text.substring(0, 200))) {
         const status = extractHttpStatus(text);
-        return { category: "html-error", label: status ? `${status.code ?? ""} ${status.reason ?? ""}`.trim() : "HTML error page", tone: "error", isIssue: true, httpStatus: status?.code ?? null, httpLabel: status ? `${status.code ?? ""} ${status.reason ?? ""}`.trim() : "HTML error page" };
+        const meta = DOC_CATEGORY_META["html-error"];
+        const label = status ? formatHttpStatus(status.code, status.reason) : meta.label;
+        return { category: "html-error", label, tone: meta.tone, isIssue: true, httpStatus: status?.code ?? null, httpLabel: label };
     }
     if (text.startsWith("{") || text.startsWith("[")) {
         const status = extractHttpStatus(text);
         const isError = !!status && typeof status.code === "number" && status.code >= 400;
-        const label = status ? `${status.code ?? ""} ${status.reason ?? ""}`.trim() : "JSON payload";
-        return { category: isError ? "json-error" : "json", label, tone: isError ? "error" : "info", isIssue: !!isError, httpStatus: status?.code ?? null, httpLabel: label };
+        const category = isError ? "json-error" : "json";
+        const meta = DOC_CATEGORY_META[category] || DOC_CATEGORY_META.json;
+        const label = status ? formatHttpStatus(status.code, status.reason) : meta.label;
+        return { category, label, tone: meta.tone, isIssue: meta.issue || isError, httpStatus: status?.code ?? null, httpLabel: label };
     }
-    if (/^<\?xml/i.test(text) || /^<(urlset|sitemapindex|feed|rss)\b/i.test(text)) return { category: "xml", label: "XML document", tone: "ok", isIssue: false, httpStatus: null, httpLabel: "" };
-    if (/User-agent|Disallow|Allow/i.test(text)) return { category: "robots-txt", label: "Robots/text directives", tone: "info", isIssue: false, httpStatus: null, httpLabel: "" };
-    if (/[a-z]/i.test(text)) return { category: "text", label: "Plain text", tone: "info", isIssue: false, httpStatus: null, httpLabel: "" };
-    return { category: "unknown", label: "Unclassified", tone: "warn", isIssue: true, httpStatus: null, httpLabel: "" };
+    if (/^<?xml/i.test(text) || /^<(urlset|sitemapindex|feed|rss)\b/i.test(text)) {
+        const meta = DOC_CATEGORY_META.xml;
+        return { category: "xml", label: meta.label, tone: meta.tone, isIssue: meta.issue, httpStatus: null, httpLabel: "" };
+    }
+    if (/User-agent|Disallow|Allow/i.test(text)) {
+        const meta = DOC_CATEGORY_META["robots-txt"];
+        return { category: "robots-txt", label: meta.label, tone: meta.tone, isIssue: meta.issue, httpStatus: null, httpLabel: "" };
+    }
+    if (/[a-z]/i.test(text)) {
+        const meta = DOC_CATEGORY_META.text;
+        return { category: "text", label: meta.label, tone: meta.tone, isIssue: meta.issue, httpStatus: null, httpLabel: "" };
+    }
+    const meta = DOC_CATEGORY_META.unknown;
+    return { category: "unknown", label: meta.label, tone: meta.tone, isIssue: meta.issue, httpStatus: null, httpLabel: "" };
 }
 
+// Compute a breakdown of categories with percentage contributions. Sorts
+// error tones first, then warn, info, ok. Used for robots/doc metrics.
+function makeBreakdown(counts, meta, total) {
+    const list = Object.entries(counts).map(([key, count]) => {
+        const m = meta[key] || { label: key, tone: "info", issue: false };
+        const pct = total ? (count / total) * 100 : 0;
+        return {
+            key,
+            label: m.label,
+            tone: m.tone,
+            issue: m.issue,
+            count,
+            pct: Math.round(pct * 10) / 10,
+        };
+    });
+    const toneRank = { error: 0, warn: 1, info: 2, ok: 3 };
+    return list.sort((a, b) => {
+        const diff = (toneRank[a.tone] ?? 4) - (toneRank[b.tone] ?? 4);
+        if (diff !== 0) return diff;
+        return b.count - a.count;
+    });
+}
+
+// The main data loader. Returns an object with all the data needed
+// for the report template. See report.njk for details on how these
+// values are consumed.
 export default async function () {
-    const [summary, urlmeta, blacklist] = await Promise.all([
+    // Load primary data files. Missing files are tolerated.
+    const [summary, urlmeta, blacklist, allImages, allProducts, runsHistory] = await Promise.all([
         loadJSON(SUMMARY_JSON, {}),
         loadJSON(URLMETA_JSON, {}),
-        loadJSON(BLACKLIST_JSON, {})
+        loadJSON(BLACKLIST_JSON, {}),
+        loadJSON(ALL_IMAGES_JSON, []),
+        loadJSON(ALL_PRODUCTS_JSON, {}),
+        loadJSON(RUNS_HISTORY_JSON, []),
     ]);
 
     const rev = buildReverseUrlmeta(urlmeta);
 
-    // Sitemaps table rows (summary.sitemaps now contains {host,url,itemCount})
+    // Build sitemap table rows from summary.sitemaps. Each entry
+    // includes host, url, type (image/product/catalog/content/index/other),
+    // imageCount (number of items parsed), fetch status and path to
+    // cached file, if available.
     const sitemapsLog = Array.isArray(summary?.sitemaps) ? summary.sitemaps : [];
     const sitemaps = sitemapsLog.map((s) => {
         const um = urlmeta[s.url] || {};
@@ -293,26 +448,37 @@ export default async function () {
             host: s.host || "",
             url: s.url,
             type: classifySitemap(s.url),
-            imageCount: s.itemCount || 0,
+            imageCount: s.itemCount ?? s.imageCount ?? 0,
             status: um.status ?? "",
-            savedPath: um.path ? path.relative(LV_BASE, path.resolve(um.path)).split(path.sep).join("/") : ""
+            savedPath: um.path ? path.relative(LV_BASE, path.resolve(um.path)).split(path.sep).join("/") : "",
         };
     });
 
-    // All cached XML/TXT docs under cache/sitemaps/
+    // Enumerate all cached XML/TXT documents for the docs explorer. For
+    // each file, classify its contents (XML vs HTML error vs JSON etc.),
+    // attach fetch status from urlmeta, and build a preview snippet.
     const docs = [];
     const docCounts = Object.create(null);
     for await (const absPath of walk(SITEMAPS_DIR)) {
         if (!/\.(xml|txt|gz)$/i.test(absPath)) continue;
         const meta = rev.get(path.resolve(absPath)) || {};
         const url = meta.url || "";
-        const host = (() => { try { return new URL(url).host; } catch { return path.basename(path.dirname(absPath)); } })();
+        const host = (() => {
+            try {
+                return new URL(url).host;
+            } catch {
+                return path.basename(path.dirname(absPath));
+            }
+        })();
         const relPath = path.relative(LV_BASE, path.resolve(absPath)).split(path.sep).join("/");
         const kind = /\.xml(\.gz)?$/i.test(absPath) ? "xml" : /\.txt$/i.test(absPath) ? "txt" : "bin";
-
-        let sizeBytes = 0, previewSource = "";
+        let sizeBytes = 0;
+        let previewSource = "";
         if (relPath.endsWith(".gz")) {
-            try { const stat = await fs.stat(absPath); sizeBytes = stat.size; } catch { }
+            try {
+                const stat = await fs.stat(absPath);
+                sizeBytes = stat.size;
+            } catch { }
         } else {
             try {
                 const fh = await fs.open(absPath, "r");
@@ -324,19 +490,15 @@ export default async function () {
                 previewSource = buf.toString("utf8");
                 sizeBytes = stat.size;
             } catch {
-                try { const statFallback = await fs.stat(absPath); sizeBytes = statFallback.size; } catch { }
+                try {
+                    const statFallback = await fs.stat(absPath);
+                    sizeBytes = statFallback.size;
+                } catch { }
             }
         }
-
         const classification = classifyDocContent(relPath, previewSource);
         docCounts[classification.category] = (docCounts[classification.category] || 0) + 1;
-
-        const preview = ((t, m = 360) => {
-            const trimmed = (t || "").trim();
-            if (trimmed.length <= m) return trimmed;
-            return `${trimmed.slice(0, m).trim()}…`;
-        })(previewSource, 360);
-
+        const preview = truncatePreview(previewSource, 360);
         docs.push({
             host,
             kind,
@@ -353,16 +515,21 @@ export default async function () {
             httpStatus: classification.httpStatus ?? null,
             httpLabel: classification.httpLabel || "",
             isIssue: classification.isIssue,
-            preview
+            preview,
         });
     }
     docs.sort((a, b) => a.host.localeCompare(b.host) || a.savedPath.localeCompare(b.savedPath));
 
-    // Robots explorer: union of hosts we know about
+    // Build the robots explorer table. Join hosts from robots cache,
+    // sitemap hosts and docs hosts. Read cached robots.txt files if
+    // available and fallback to minimal parser if not. Decorate each
+    // entry with status, counts of directives and unknown fields.
     const robotsHosts = new Set();
     try {
         const files = await fs.readdir(ROBOTS_DIR);
-        for (const n of files) if (n.endsWith(".txt")) robotsHosts.add(n.replace(/\.txt$/i, ""));
+        for (const n of files) {
+            if (n.endsWith(".txt")) robotsHosts.add(n.replace(/\.txt$/i, ""));
+        }
     } catch { }
     for (const r of sitemaps) robotsHosts.add(r.host);
     for (const d of docs) robotsHosts.add(d.host);
@@ -373,16 +540,22 @@ export default async function () {
     for (const host of allHosts) {
         const robotsPath = path.join(ROBOTS_DIR, `${host}.txt`);
         let rawText = null;
-        try { rawText = await fs.readFile(robotsPath, "utf8"); } catch { }
-
-        const decoded = await loadDecodedRobots(host);
-
-        let parsed;
-        if (decoded) {
-            const allow = [], disallow = [], noindex = [];
-            const sitemaps = decoded.summary?.sitemaps || [];
+        try {
+            rawText = await fs.readFile(robotsPath, "utf8");
+        } catch { }
+        const hasCached = !!rawText;
+        // parse robots: attempt to use decoded JSON if available
+        let parsed = null;
+        // Attempt to load decoded JSON if it exists alongside the txt
+        try {
+            const decodedPath = path.join(ROBOTS_DIR, `${host}.json`);
+            const decoded = JSON.parse(await fs.readFile(decodedPath, "utf8"));
+            // flatten into merged fields for the template
+            const allow = [];
+            const disallow = [];
+            const noindex = [];
+            const sitemapsList = decoded.summary?.sitemaps || [];
             let crawlDelay = decoded.summary?.crawlDelay ?? null;
-
             for (const g of decoded.groups || []) {
                 for (const r of g.rules || []) {
                     if (r.type === "allow") allow.push(r.value);
@@ -390,12 +563,12 @@ export default async function () {
                     else if (r.type === "noindex") noindex.push(r.value);
                     else if (r.type === "crawl-delay") {
                         const n = Number(r.value);
-                        if (!Number.isNaN(n)) crawlDelay = crawlDelay == null ? n : Math.min(crawlDelay, n);
+                        if (!Number.isNaN(n)) {
+                            crawlDelay = crawlDelay == null ? n : Math.min(crawlDelay, n);
+                        }
                     }
                 }
             }
-
-            // unknown directives
             const other = {};
             for (const line of decoded.lines || []) {
                 if (line.type !== "directive") continue;
@@ -403,68 +576,30 @@ export default async function () {
                 if (!k || ["user-agent", "allow", "disallow", "noindex", "sitemap", "crawl-delay"].includes(k)) continue;
                 (other[k] ||= []).push(line.value || "");
             }
-
             parsed = {
                 groups: decoded.groups || [],
-                merged: { allow, disallow, noindex, crawlDelay, sitemaps },
+                merged: { allow, disallow, noindex, crawlDelay, sitemaps: sitemapsList },
                 other,
-                hasRules: (allow.length + disallow.length + noindex.length + sitemaps.length) > 0
+                hasRules: (allow.length + disallow.length + noindex.length + sitemapsList.length) > 0,
             };
-        } else {
-            parsed = rawText ? parseRobots(rawText)
-                : { groups: [], merged: { allow: [], disallow: [], noindex: [], crawlDelay: null, sitemaps: [] }, other: {}, hasRules: false };
+        } catch {
+            // fallback to minimal parser
+            if (rawText) parsed = parseRobots(rawText);
+            else parsed = { groups: [], merged: { allow: [], disallow: [], noindex: [], crawlDelay: null, sitemaps: [] }, other: {}, hasRules: false };
         }
-
-        const trimmed = rawText || "";
-        const classification = (() => {
-            const cat = (() => {
-                if (!rawText) return "no-cache";
-                const t = trimmed.trim();
-                if (!t) return "empty";
-                if (/<!DOCTYPE html|<html/i.test(t.substring(0, 200))) return "html-error";
-                if (t.startsWith("{") || t.startsWith("[")) {
-                    const status = (() => {
-                        // tiny reuse: parse the status like earlier
-                        try {
-                            const obj = JSON.parse(t);
-                            if (typeof obj?.statusCode === "number") return { code: obj.statusCode, reason: obj.error || obj.message || "" };
-                        } catch { }
-                        return null;
-                    })();
-                    return status && status.code >= 400 ? "json-error" : "json";
-                }
-                if (!/user-agent/i.test(t)) return "text";
-                return "ok";
-            })();
-            const meta = ROBOTS_CATEGORY_META[cat] || ROBOTS_CATEGORY_META.ok;
-            let httpStatus = null, httpLabel = "";
-            if (cat === "html-error" || cat === "json-error") {
-                const status = (() => {
-                    const titleMatch = trimmed.match(/<title>\s*(\d{3})\s*([^<]*)/i);
-                    if (titleMatch) return { code: Number(titleMatch[1]), reason: titleMatch[2].trim() };
-                    const h1Match = trimmed.match(/<h1>\s*(\d{3})\s*([^<]*)/i);
-                    if (h1Match) return { code: Number(h1Match[1]), reason: h1Match[2].trim() };
-                    return null;
-                })();
-                httpStatus = status?.code ?? null;
-                httpLabel = status ? `${status.code ?? ""} ${status.reason ?? ""}`.trim() : meta.label;
-            }
-            return { category: cat, label: meta.label, tone: meta.tone, isIssue: meta.issue, httpStatus, httpLabel };
-        })();
-
+        const classification = classifyRobotsResponse(rawText || "", hasCached);
         robotsCounts[classification.category] = (robotsCounts[classification.category] || 0) + 1;
-
         const sizeBytes = rawText ? Buffer.byteLength(rawText, "utf8") : 0;
         robots.push({
             host,
-            hasCached: !!rawText,
+            hasCached,
             robotsTxtPath: rawText ? path.relative(LV_BASE, robotsPath).split(path.sep).join("/") : "",
             rawText: rawText || "",
-            linesTotal: decoded ? (decoded.lines?.length || 0) : (rawText ? rawText.split(/\r?\n/).length : 0),
+            linesTotal: parsed && parsed.groups ? parsed.groups.reduce((sum, g) => sum + g.rules.length, 0) : (rawText ? rawText.split(/\r?\n/).length : 0),
             parsed,
-            blacklisted: !!(summary?.blacklist?.[host]),
-            blacklistUntil: summary?.blacklist?.[host]?.untilISO || "",
-            blacklistReason: summary?.blacklist?.[host]?.reason || "",
+            blacklisted: !!blacklist[host],
+            blacklistUntil: blacklist[host]?.untilISO || "",
+            blacklistReason: blacklist[host]?.reason || "",
             fileName: rawText ? path.basename(robotsPath) : "",
             sizeBytes,
             sizeLabel: formatBytes(sizeBytes),
@@ -474,33 +609,221 @@ export default async function () {
             httpStatus: classification.httpStatus ?? null,
             httpLabel: classification.httpLabel || "",
             isIssue: classification.isIssue,
-            preview: truncatePreview(rawText, 360)
+            preview: truncatePreview(rawText, 360),
         });
     }
 
+    // Build breakdown metrics for robots and docs.
     const robotsMetrics = {
         total: robots.length,
         issues: robots.filter((r) => r.isIssue).length,
-        breakdown: makeBreakdown(robotsCounts, ROBOTS_CATEGORY_META, robots.length)
+        breakdown: makeBreakdown(robotsCounts, ROBOTS_CATEGORY_META, robots.length),
     };
-
     const docsMetrics = {
         total: docs.length,
         issues: docs.filter((d) => d.isIssue).length,
-        breakdown: makeBreakdown((() => {
-            const counts = Object.create(null);
-            for (const d of docs) counts[d.statusCategory] = (counts[d.statusCategory] || 0) + 1;
-            return counts;
-        })(), DOC_CATEGORY_META, docs.length)
+        breakdown: makeBreakdown(docCounts, DOC_CATEGORY_META, docs.length),
     };
 
+    // Derive items metrics from summary.items. The crawler persists
+    // these counts: added, removed, duplicates (images only), purged
+    // (items dropped due to history limit), active, total. If the
+    // fields are missing, default to zero.
+    const itemsMetrics = (() => {
+        const items = summary?.items || {};
+        return {
+            added: items.added ?? 0,
+            removed: items.removed ?? 0,
+            duplicates: items.duplicates ?? 0,
+            purged: items.purged ?? 0,
+            active: items.active ?? 0,
+            total: items.total ?? 0,
+        };
+    })();
+
+    // Unique counts of images and pages. Fallback to aggregated lists if
+    // summary.totals is missing these fields. Note: allImages is an
+    // array, allProducts is an object keyed by page URL.
+    const uniqueImagesCount = (() => {
+        if (summary?.totals && typeof summary.totals.images === "number") return summary.totals.images;
+        return Array.isArray(allImages) ? allImages.length : 0;
+    })();
+    const uniquePagesCount = (() => {
+        if (summary?.totals && typeof summary.totals.pages === "number") return summary.totals.pages;
+        if (allProducts && typeof allProducts === "object") return Object.keys(allProducts).length;
+        return 0;
+    })();
+
+    // Construct a list of duplicate images grouped by their canonical id.
+    // Each entry in duplicatesList represents a canonical image with one
+    // or more duplicates.  We expose the canonical image's id, src,
+    // basename, firstSeen, lastSeen, title, pageUrl, and a list of
+    // duplicate images (ids).  The `count` field represents the total
+    // number of images (canonical + duplicates).  Results are sorted by
+    // descending count.
+    const duplicatesList = (() => {
+        const canonicalMap = {};
+        if (Array.isArray(allImages)) {
+            for (const img of allImages) {
+                // Determine canonical id for this image.  Images with duplicateOf
+                // set refer to a canonical record; otherwise the image itself
+                // is canonical.  Pages are not included in allImages.
+                const canonicalId = img.duplicateOf || img.id;
+                if (!canonicalMap[canonicalId]) {
+                    canonicalMap[canonicalId] = {
+                        id: canonicalId,
+                        count: 0,
+                        images: [],
+                        canonical: null,
+                    };
+                }
+                canonicalMap[canonicalId].count++;
+                canonicalMap[canonicalId].images.push(img);
+                // Mark canonical image when encountering it
+                if (!img.duplicateOf) {
+                    canonicalMap[canonicalId].canonical = img;
+                }
+            }
+        }
+        const list = [];
+        for (const [cid, group] of Object.entries(canonicalMap)) {
+            if (group.count > 1 && group.canonical) {
+                list.push({
+                    id: cid,
+                    src: group.canonical.src,
+                    basename: group.canonical.basename,
+                    title: group.canonical.title,
+                    pageUrl: group.canonical.pageUrl,
+                    firstSeen: group.canonical.firstSeen,
+                    lastSeen: group.canonical.lastSeen,
+                    duplicates: group.images.filter((i) => i.id !== cid).map((i) => i.id),
+                    count: group.count,
+                });
+            }
+        }
+        return list.sort((a, b) => b.count - a.count);
+    })();
+
+    // Construct a list of top products sorted by total number of images.
+    // Each product entry contains pageUrl, title, total image count,
+    // unique image count (non-duplicate), firstSeen, lastSeen and
+    // associated images.  We sort by total image count descending and
+    // limit the list to a reasonable number for display (e.g. 50).
+    const topProducts = (() => {
+        const prods = [];
+        if (allProducts && typeof allProducts === "object") {
+            for (const [key, prod] of Object.entries(allProducts)) {
+                const total = Array.isArray(prod.images) ? prod.images.length : 0;
+                const unique = Array.isArray(prod.images)
+                    ? prod.images.filter((img) => !img.duplicateOf).length
+                    : 0;
+                prods.push({
+                    pageUrl: prod.pageUrl,
+                    title: prod.title || prod.pageUrl,
+                    totalImages: total,
+                    uniqueImages: unique,
+                    firstSeen: prod.firstSeen,
+                    lastSeen: prod.lastSeen,
+                    images: prod.images || [],
+                });
+            }
+        }
+        prods.sort((a, b) => b.totalImages - a.totalImages);
+        // limit to top 50 products for display to avoid overwhelming the report
+        return prods.slice(0, 50);
+    })();
+
+    // Construct an overview of images, unique images, duplicates and pages per host.  Each
+    // entry aggregates counts by top‑level domain.  Duplicates are counted per
+    // host based on the duplicates list; pages are counted by grouping
+    // aggregated products by their pageUrl host.  Hosts with no images
+    // or pages will not appear.  Results are sorted by descending image
+    // count.
+    const hostStats = (() => {
+        const stats = {};
+        // Count images and unique images per host
+        if (Array.isArray(allImages)) {
+            for (const img of allImages) {
+                const h = img.host || "";
+                if (!stats[h]) {
+                    stats[h] = { host: h, images: 0, uniqueImages: 0, duplicates: 0, pages: 0 };
+                }
+                stats[h].images++;
+                if (!img.duplicateOf) {
+                    stats[h].uniqueImages++;
+                }
+            }
+        }
+        // Count pages per host
+        if (allProducts && typeof allProducts === "object") {
+            for (const [pageUrl, prod] of Object.entries(allProducts)) {
+                let host;
+                try {
+                    host = new URL(pageUrl).host;
+                } catch {
+                    host = "";
+                }
+                if (!stats[host]) {
+                    stats[host] = { host, images: 0, uniqueImages: 0, duplicates: 0, pages: 0 };
+                }
+                stats[host].pages++;
+            }
+        }
+        // Count duplicates per host based on the duplicates list
+        if (Array.isArray(duplicatesList)) {
+            for (const dup of duplicatesList) {
+                let host;
+                try {
+                    host = new URL(dup.pageUrl).host;
+                } catch {
+                    host = "";
+                }
+                if (!stats[host]) {
+                    stats[host] = { host, images: 0, uniqueImages: 0, duplicates: 0, pages: 0 };
+                }
+                // duplicatesList.count includes the canonical image; subtract 1 to count only duplicate entries
+                stats[host].duplicates += Math.max(0, dup.count - 1);
+            }
+        }
+        return Object.values(stats).sort((a, b) => b.images - a.images);
+    })();
+
+    // Sample a few image items from NDJSON shards for the UI.
+    const sample = await sampleItems(ITEMS_DIR, 60);
+
     return {
+        // Base HREF used by the report to link into cached files
         baseHref: "/content/projects/lv-images/generated/lv/",
-        summary: summary || {},
+        summary,
         sitemaps,
         docs,
         robots,
-        sample: await sampleItems(ITEMS_DIR, 60),
-        metrics: { robots: robotsMetrics, docs: docsMetrics }
+        sample,
+        // Expose aggregated lists for possible future use
+        allImages,
+        allProducts,
+        // Expose runs history so the report can surface a timeline of
+        // previous crawls.  Each entry is { timestamp, metrics, totals }.
+        runsHistory,
+        // Expose duplicate images grouped by canonical id.  Each entry
+        // describes a canonical image and its duplicate set.
+        duplicates: duplicatesList,
+        // Expose a list of top products sorted by number of images.
+        topProducts,
+        // Expose host statistics so the report can surface per‑host image,
+        // unique image, duplicate and page counts.  Hosts with no data are
+        // omitted.  Sorted by image count descending.
+        hostStats,
+        // Expose derived metrics. robots/docs remain under metrics.
+        metrics: {
+            robots: robotsMetrics,
+            docs: docsMetrics,
+            items: itemsMetrics,
+        },
+        // Expose global totals for quick display
+        totals: {
+            images: uniqueImagesCount,
+            pages: uniquePagesCount,
+        },
     };
 }
