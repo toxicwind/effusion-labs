@@ -1,176 +1,151 @@
-#!/usr/bin/env bash --login
-set -euo pipefail
+#!/usr/bin/env bash
+# Codex-friendly setup: no nvm auto-loops, no sudo, proxy/CA persisted, Puppeteer no-download
+set -Eeuo pipefail
 
-# Runtime version overrides (optional)
-CODEX_ENV_PYTHON_VERSION=${CODEX_ENV_PYTHON_VERSION:-}
-CODEX_ENV_NODE_VERSION=${CODEX_ENV_NODE_VERSION:-}
-CODEX_ENV_RUBY_VERSION=${CODEX_ENV_RUBY_VERSION:-}
-CODEX_ENV_RUST_VERSION=${CODEX_ENV_RUST_VERSION:-}
-CODEX_ENV_GO_VERSION=${CODEX_ENV_GO_VERSION:-}
-CODEX_ENV_SWIFT_VERSION=${CODEX_ENV_SWIFT_VERSION:-}
-CODEX_ENV_PHP_VERSION=${CODEX_ENV_PHP_VERSION:-}
+say() { printf '==> %s\n' "$*"; }
+ok()  { printf '✔ %s\n' "$*"; }
+warn(){ printf '⚠ %s\n' "$*" >&2; }
+die() { printf '✖ %s\n' "$*" >&2; exit 1; }
 
-# Helper prints
-print_status()  { echo "📦 $1"; }
-print_success() { echo "✅ $1"; }
-print_warning() { echo "⚠️ $1"; }
-print_error()   { echo "❌ $1"; }
+REPO_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
+cd "$REPO_ROOT"
 
-echo "🚀 Hybrid Codex Setup Starting"
+BRC="$HOME/.bashrc"
+touch "$BRC"
 
-#
-# Phase I – Language Runtimes
-#
-
-# Python via pyenv
-if [ -n "$CODEX_ENV_PYTHON_VERSION" ]; then
-  print_status "Python → $CODEX_ENV_PYTHON_VERSION"
-  pyenv global "$CODEX_ENV_PYTHON_VERSION"
-  print_success "Python: $(python --version 2>&1)"
-fi
-
-# Node via NVM: respect env override, then .nvmrc, then CODEX_ENV_NODE_VERSION, default 22
-export NVM_DIR=/root/.nvm
-source "$NVM_DIR/nvm.sh"
-TARGET_NODE=
-if [ -n "$CODEX_ENV_NODE_VERSION" ]; then
-  TARGET_NODE="$CODEX_ENV_NODE_VERSION"
-elif [ -f .nvmrc ]; then
-  TARGET_NODE="$(<.nvmrc)"
-else
-  TARGET_NODE="22"
-fi
-print_status "Node.js → $TARGET_NODE"
-nvm install "$TARGET_NODE" >/dev/null
-nvm use    "$TARGET_NODE" >/dev/null
-nvm alias default "$TARGET_NODE"
-corepack enable
-print_success "Node.js: $(node --version)"
-
-# Ruby via mise
-if [ -n "$CODEX_ENV_RUBY_VERSION" ]; then
-  CURRENT_RUBY=$(ruby -v | awk '{print $2}' | cut -d'p' -f1)
-  print_status "Ruby → $CODEX_ENV_RUBY_VERSION (current: $CURRENT_RUBY)"
-  if [ "$CURRENT_RUBY" != "$CODEX_ENV_RUBY_VERSION" ]; then
-    mise use --global "ruby@$CODEX_ENV_RUBY_VERSION"
-  fi
-  print_success "Ruby: $(ruby -v | awk '{print $2}' | cut -d'p' -f1)"
-fi
-
-# Rust via rustup
-if [ -n "$CODEX_ENV_RUST_VERSION" ]; then
-  CURRENT_RUST=$(rustc --version | awk '{print $2}')
-  print_status "Rust → $CODEX_ENV_RUST_VERSION (current: $CURRENT_RUST)"
-  if [ "$CURRENT_RUST" != "$CODEX_ENV_RUST_VERSION" ]; then
-    rustup default "$CODEX_ENV_RUST_VERSION"
-  fi
-  print_success "Rust: $(rustc --version | awk '{print $2}')"
-fi
-
-# Go via mise
-if [ -n "$CODEX_ENV_GO_VERSION" ]; then
-  CURRENT_GO=$(go version | awk '{print $3}' | sed 's/go//')
-  print_status "Go → $CODEX_ENV_GO_VERSION (current: $CURRENT_GO)"
-  if [ "$CURRENT_GO" != "$CODEX_ENV_GO_VERSION" ]; then
-    mise use --global "go@$CODEX_ENV_GO_VERSION"
-  fi
-  print_success "Go: $(go version | awk '{print $3}')"
-fi
-
-# Swift via mise
-if [ -n "$CODEX_ENV_SWIFT_VERSION" ]; then
-  CURRENT_SWIFT=$(swift --version 2>&1 | sed -n 's/^Swift version \([0-9]\+\.[0-9]\+\).*/\1/p')
-  print_status "Swift → $CODEX_ENV_SWIFT_VERSION (current: $CURRENT_SWIFT)"
-  if [ "$CURRENT_SWIFT" != "$CODEX_ENV_SWIFT_VERSION" ]; then
-    mise use --global "swift@$CODEX_ENV_SWIFT_VERSION"
-  fi
-  print_success "Swift: $(swift --version 2>&1 | sed -n 's/^Swift version \([0-9]\+\.[0-9]\+\).*/\1/p')"
-fi
-
-# PHP via mise
-if [ -n "$CODEX_ENV_PHP_VERSION" ]; then
-  CURRENT_PHP=$(php -r 'echo PHP_MAJOR_VERSION.".".PHP_MINOR_VERSION;')
-  print_status "PHP → $CODEX_ENV_PHP_VERSION (current: $CURRENT_PHP)"
-  if [ "$CURRENT_PHP" != "$CODEX_ENV_PHP_VERSION" ]; then
-    mise use --global "php@$CODEX_ENV_PHP_VERSION"
-  fi
-  print_success "PHP: $CURRENT_PHP"
-fi
-
-#
-# Phase II – Project Tools
-#
-
-# Ensure our local bin directory shims take precedence
-export PATH="$PWD/bin:$PATH"
-
-# Fix npm config
-print_status "Optimizing npm config..."
-npm config delete proxy         >/dev/null 2>&1 || true
-npm config delete https-proxy   >/dev/null 2>&1 || true
-npm config delete http-proxy    >/dev/null 2>&1 || true
-npm config set registry https://registry.npmjs.org/
-npm config set fetch-timeout 300000
-npm config set fetch-retry-mintimeout 20000
-npm config set fetch-retry-maxtimeout 120000
-print_success "npm config optimized"
-
-# Install dprint
-print_status "Installing dprint..."
-if ! command -v dprint >/dev/null 2>&1; then
-  curl -fsSL https://dprint.dev/install.sh | sh
-  export PATH="$HOME/.dprint/bin:$PATH"
-  echo 'export PATH="$HOME/.dprint/bin:$PATH"' >> ~/.bashrc
-fi
-print_success "dprint: $(dprint --version || echo 'not found')"
-
-# Install npm packages
-print_status "Installing npm packages..."
-npm install --no-audit --no-fund || {
-  print_warning "npm install failed; installing critical packages..."
-  for pkg in prettier@3 dprint @playwright/test c8 npm-run-all eslint markdown-link-check; do
-    npm install --no-audit --no-fund --save-dev --save-exact "$pkg" || print_warning "Failed $pkg"
+# ── Phase 0: Persist proxy + CA for agent shell
+persist_proxy() {
+  local k v
+  for k in HTTP_PROXY HTTPS_PROXY NO_PROXY http_proxy https_proxy no_proxy; do
+    v="${!k-}"
+    if [ -n "${v:-}" ] && ! grep -q "^export $k=" "$BRC" 2>/dev/null; then
+      echo "export $k=\"$v\"" >> "$BRC"
+    fi
   done
 }
-print_success "npm dependencies installed"
+persist_proxy
 
-# Install system utilities for shims
-print_status "Ensuring shim utilities..."
-apt-get update -y
-apt-get install -y --no-install-recommends \
-  fd-find sd tree bat jq ripgrep coreutils
-print_success "Shim utilities installed"
+# If Codex provides a MITM CA bundle, wire all major stacks to it and persist
+if [ -n "${CODEX_PROXY_CERT-}" ] && [ -r "$CODEX_PROXY_CERT" ]; then
+  grep -q 'NODE_EXTRA_CA_CERTS=' "$BRC" 2>/dev/null || echo "export NODE_EXTRA_CA_CERTS=\"$CODEX_PROXY_CERT\"" >> "$BRC"
+  grep -q 'GIT_SSL_CAINFO='    "$BRC" 2>/dev/null || echo "export GIT_SSL_CAINFO=\"$CODEX_PROXY_CERT\""  >> "$BRC"
+  grep -q 'SSL_CERT_FILE='     "$BRC" 2>/dev/null || echo "export SSL_CERT_FILE=\"$CODEX_PROXY_CERT\""   >> "$BRC"
+  grep -q 'REQUESTS_CA_BUNDLE=' "$BRC" 2>/dev/null || echo "export REQUESTS_CA_BUNDLE=\"$CODEX_PROXY_CERT\"" >> "$BRC"
+fi
 
-# Install Playwright browsers
-print_status "Installing Playwright browsers..."
-npx playwright install --with-deps || print_warning "Playwright install issues"
-print_success "Playwright browsers installed"
+# Make persisted vars visible to the rest of this script
+# shellcheck disable=SC1090
+. "$BRC" || true
+ok "Proxy/CA persisted to ~/.bashrc (if provided)"
 
-#
-# Phase III – Verification
-#
-print_status "Verifying installation..."
-
-# Node
-print_status "Node.js $(node --version)"
-
-# dprint
-print_status "dprint $(dprint --version || echo 'none')"
-
-# Key npm packages
-for pkg in @playwright/test c8 npm-run-all eslint prettier; do
-  if npm list "$pkg" >/dev/null 2>&1; then
-    print_success "$pkg installed"
-  else
-    print_warning "$pkg missing"
+# Teach apt about the proxy if present (you are root; no sudo)
+if command -v apt-get >/dev/null 2>&1; then
+  if [ -n "${http_proxy-}${HTTP_PROXY-}${https_proxy-}${HTTPS_PROXY-}" ]; then
+    cat > /etc/apt/apt.conf.d/99proxy <<APTCONF
+Acquire::http::Proxy  "${http_proxy:-${HTTP_PROXY:-}}";
+Acquire::https::Proxy "${https_proxy:-${HTTPS_PROXY:-${http_proxy:-${HTTP_PROXY:-}}}}";
+APTCONF
   fi
-done
+fi
 
-# npm scripts
-print_status "Testing npm run doctor..."
-npm run doctor >/dev/null 2>&1 && print_success "doctor passes" || print_warning "doctor fails"
+# ── Phase 1: Node via nvm, with nvm auto-use disabled to stop loops
+say "Installing Node via nvm (no auto-mode)"
+export NVM_DIR="${NVM_DIR:-$HOME/.nvm}"
+# Disable nvm “auto use” before sourcing to prevent repeated nvm_use chatter
+export NVM_AUTO_MODE=0
+export NVM_AUTO_USE=false
 
-print_status "Testing npm run format:check..."
-npm run format:check >/dev/null 2>&1 && print_success "format:check passes" || print_warning "format:check fails"
+if [ ! -s "$NVM_DIR/nvm.sh" ]; then
+  command -v curl >/dev/null 2>&1 || die "curl required for nvm"
+  curl -fsSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+fi
+# shellcheck disable=SC1090
+. "$NVM_DIR/nvm.sh"
 
-print_success "🎉 Setup complete! Source ~/.bashrc to apply PATH changes."
+# Resolve desired Node
+if [ -f .nvmrc ]; then
+  NODE_TARGET="$(head -n1 .nvmrc)"
+else
+  NODE_TARGET="${NODE_TARGET:-22}"
+fi
+
+# Single install/use path. No duplicate calls.
+nvm install "$NODE_TARGET" >/dev/null
+nvm alias default "$NODE_TARGET" >/dev/null
+nvm use --silent "$NODE_TARGET"
+command -v corepack >/dev/null 2>&1 && corepack enable >/dev/null 2>&1 || true
+ok "Node $(node -v), npm $(npm -v)"
+
+# ── Phase 2: npm hygiene + single lock-aware install
+say "Configuring npm and installing deps (once)"
+npm config set fund false           >/dev/null
+npm config set audit false          >/dev/null
+npm config set progress false       >/dev/null
+npm config set fetch-timeout 300000 >/dev/null
+npm config set fetch-retry-maxtimeout 120000 >/dev/null
+# If proxy CA exists, let npm trust it
+if [ -n "${CODEX_PROXY_CERT-}" ] && [ -r "$CODEX_PROXY_CERT" ]; then
+  npm config set cafile "$CODEX_PROXY_CERT" >/dev/null || true
+fi
+# If proxy provided, set npm proxy explicitly
+[ -n "${HTTP_PROXY-}${http_proxy-}" ]  && npm config set proxy       "${HTTP_PROXY:-${http_proxy:-}}"       >/dev/null || true
+[ -n "${HTTPS_PROXY-}${https_proxy-}" ]&& npm config set https-proxy "${HTTPS_PROXY:-${https_proxy:-}}"     >/dev/null || true
+
+if [ -f pnpm-lock.yaml ]; then
+  corepack prepare pnpm@latest --activate >/dev/null 2>&1 || true
+  pnpm install --frozen-lockfile
+elif [ -f yarn.lock ]; then
+  corepack prepare yarn@stable --activate >/dev/null 2>&1 || true
+  yarn install --frozen-lockfile
+elif [ -f package-lock.json ]; then
+  npm ci --no-audit --no-fund
+else
+  npm install --no-audit --no-fund
+fi
+ok "Dependencies installed"
+
+# ── Phase 3: System Chrome via apt (preferred) and Puppeteer no-download
+say "Provisioning browser"
+CHROME_BIN=""
+if command -v apt-get >/dev/null 2>&1; then
+  export DEBIAN_FRONTEND=noninteractive
+  . /etc/os-release 2>/dev/null || true
+  apt-get update -yq
+  apt-get install -yq ca-certificates curl gnupg
+  # Try Google Chrome repo first
+  install -d -m 0755 /etc/apt/keyrings
+  if curl -fsSL https://dl.google.com/linux/linux_signing_key.pub | gpg --dearmor > /etc/apt/keyrings/google.gpg; then
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/google.gpg] https://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list
+    apt-get update -yq || true
+    apt-get install -yq google-chrome-stable || true
+    CHROME_BIN="$(command -v google-chrome || command -v google-chrome-stable || true)"
+  fi
+  # Fallback to distro Chromium
+  if [ -z "$CHROME_BIN" ]; then
+    apt-get install -yq chromium-browser || apt-get install -yq chromium || true
+    CHROME_BIN="$(command -v chromium || command -v chromium-browser || true)"
+  fi
+fi
+
+# Persist Puppeteer policy to avoid Chromium downloads
+grep -q 'PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=' "$BRC" 2>/dev/null || echo 'export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1' >> "$BRC"
+if [ -n "$CHROME_BIN" ]; then
+  grep -q 'PUPPETEER_EXECUTABLE_PATH=' "$BRC" 2>/dev/null || echo "export PUPPETEER_EXECUTABLE_PATH=\"$CHROME_BIN\"" >> "$BRC"
+  mkdir -p node_modules/.bin
+  for name in google-chrome-stable google-chrome chromium chromium-browser; do
+    printf '#!/usr/bin/env bash\nexec "%s" --no-sandbox "$@"\n' "$CHROME_BIN" > "node_modules/.bin/$name"
+    chmod +x "node_modules/.bin/$name"
+  done
+  ok "Browser at $CHROME_BIN"
+else
+  warn "No system browser found; Puppeteer may need manual executable path."
+fi
+
+# ── Phase 4: Quick verify
+say "Verification"
+echo "• Node $(node -v), npm $(npm -v)"
+echo "• Proxy HTTP=${HTTP_PROXY:-${http_proxy:-unset}} HTTPS=${HTTPS_PROXY:-${https_proxy:-unset}}"
+[ -n "$CHROME_BIN" ] && echo "• Browser: $CHROME_BIN"
+npm ping || warn "npm ping failed behind proxy"
+
+ok "Setup complete. Open a new shell or 'source ~/.bashrc' for agent phase."
