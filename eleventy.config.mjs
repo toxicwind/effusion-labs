@@ -142,6 +142,31 @@ export default function(eleventyConfig) {
   })
   eleventyConfig.addPlugin(schema)
 
+  if (eleventyConfig.htmlTransformer?.addPosthtmlPlugin) {
+    // Ensure remote image URLs are passed through untouched — the Eleventy image
+    // transform plugin eagerly attempts to download external assets otherwise.
+    eleventyConfig.htmlTransformer.addPosthtmlPlugin(
+      'html',
+      function remoteImagePassthrough() {
+        return (tree) => {
+          tree.match({ tag: 'img' }, (node) => {
+            const src = node?.attrs?.src
+            if (typeof src === 'string' && /^https?:\/\//i.test(src)) {
+              node.attrs ||= {}
+              if (!('eleventy:ignore' in node.attrs)) {
+                node.attrs['eleventy:ignore'] = ''
+              }
+            }
+            return node
+          })
+
+          return tree
+        }
+      },
+      { priority: 5 }
+    )
+  }
+
   const enableImagePlugin = !isTest || process.env.ELEVENTY_TEST_ENABLE_IMAGES === '1'
 
   if (enableImagePlugin) {
