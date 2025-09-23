@@ -10,7 +10,15 @@ RUN apk add --no-cache build-base python3 libc6-compat
 
 # Keep install in "dev" mode so devDependencies are present for the build
 ENV npm_config_fund=false \
-    npm_config_audit=false
+    npm_config_audit=false \
+    npm_config_proxy= \
+    npm_config_https_proxy= \
+    npm_config_http_proxy= \
+    http_proxy= \
+    https_proxy= \
+    PUPPETEER_SKIP_DOWNLOAD=1 \
+    PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1 \
+    PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1
 
 COPY package*.json ./
 COPY patches/ ./patches/
@@ -28,7 +36,15 @@ ENV COMMIT_SHA=${COMMIT_SHA}
 
 # Production signals for the toolchain
 ENV NODE_ENV=production \
-    ELEVENTY_ENV=production
+    ELEVENTY_ENV=production \
+    npm_config_proxy= \
+    npm_config_https_proxy= \
+    npm_config_http_proxy= \
+    http_proxy= \
+    https_proxy= \
+    PUPPETEER_SKIP_DOWNLOAD=1 \
+    PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1 \
+    PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1
 
 COPY --from=deps /app/node_modules /app/node_modules
 COPY package*.json ./

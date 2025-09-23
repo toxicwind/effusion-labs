@@ -13,6 +13,7 @@
     "serve": "npx @11ty/eleventy --serve",
     "bench": "DEBUG=Eleventy:Benchmark* npx @11ty/eleventy",
     "build": "npx @11ty/eleventy",
+    "verify:patches": "patch-package --check",
     "clean": "del-cli _site",
     "format:check": "dprint check -c dprint.json",
     "format": "dprint fmt -c dprint.json",
@@ -173,6 +174,11 @@
   },
   "engines": {
     "node": ">=22.19.0"
+  },
+  "overrides": {
+    "rustywind": {
+      "https-proxy-agent": "5.0.1"
+    }
   },
   "dependencies": {
     "iconify-icon": "3.0.1"
