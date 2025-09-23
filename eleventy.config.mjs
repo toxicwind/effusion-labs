@@ -16,7 +16,7 @@ import interlinker from '@photogabble/eleventy-plugin-interlinker'
 import schema from '@quasibit/eleventy-plugin-schema'
 import sitemap from '@quasibit/eleventy-plugin-sitemap'
 import tailwindcss from '@tailwindcss/vite'
-import rollupPluginCritical from 'rollup-plugin-critical'
+import Beasties from 'beasties'
 
 import registerArchive from './src/lib/archives/index.mjs'
 import { buildArchiveNav } from './src/lib/archives/nav.mjs'
@@ -35,6 +35,8 @@ import htmlToMarkdownUnified from './src/lib/transforms/html-to-markdown.mjs'
 
 const projectRoot = path.dirname(fileURLToPath(import.meta.url))
 const srcDir = path.join(projectRoot, 'src')
+const criticalPages = ['index.html', '404.html']
+const outputDir = path.join(projectRoot, dirs.output)
 
 export default function(eleventyConfig) {
   // --- Start: Event Handlers ---
@@ -46,14 +48,47 @@ export default function(eleventyConfig) {
     }
   })
 
-  // After build: write unresolved interlinker report (log-only)
-  eleventyConfig.on('eleventy.after', () => {
+  // After build: write unresolved interlinker report (log-only) and inline critical CSS
+  eleventyConfig.on('eleventy.after', async () => {
     try {
       const payload = flushUnresolved()
       console.log(`Interlinker unresolved (logged only): ${payload.count}`)
     } catch (e) {
       console.error(String(e?.message || e))
     }
+
+    if (process.env.ELEVENTY_ENV === 'test') {
+      return
+    }
+
+    const beasties = new Beasties({
+      path: outputDir,
+      publicPath: '/',
+      preload: 'swap',
+      inlineFonts: true,
+      compress: true,
+      pruneSource: false,
+      logLevel: 'warn',
+    })
+
+    await Promise.all(
+      criticalPages.map(async(page) => {
+        const targetPath = path.join(outputDir, page)
+
+        if (!fs.existsSync(targetPath)) {
+          return
+        }
+
+        const html = await fsp.readFile(targetPath, 'utf8')
+
+        try {
+          const inlined = await beasties.process(html)
+          await fsp.writeFile(targetPath, inlined)
+        } catch (error) {
+          console.error(`Beasties inline failed for ${page}:`, String(error?.message || error))
+        }
+      }),
+    )
   })
 
   // --- End: Event Handlers ---
@@ -100,32 +135,6 @@ export default function(eleventyConfig) {
             chunkFileNames: 'assets/[name].[hash].js',
             entryFileNames: 'assets/[name].[hash].js',
           },
-          plugins: isTest
-            ? []
-            : [
-              rollupPluginCritical({
-                criticalUrl: './_site/',
-                criticalBase: './_site/',
-                criticalPages: [{ uri: 'index.html' }, { uri: '404.html' }],
-                criticalConfig: {
-                  inline: true,
-                  dimensions: [
-                    {
-                      height: 900,
-                      width: 375,
-                    },
-                    {
-                      height: 720,
-                      width: 1280,
-                    },
-                    {
-                      height: 1080,
-                      width: 1920,
-                    },
-                  ],
-                },
-              }),
-            ],
         },
       },
     },
