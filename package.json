@@ -19,6 +19,7 @@
     "format:classes": "rustywind --write \"src/**/*.{njk,html,js,jsx,ts,tsx}\"",
     "format:all": "npm run format:classes && npm run format",
     "format:check:all": "npm run format:check",
+    "verify:patches": "patch-package --error-on-fail",
     "lint": "npm-run-all --parallel lint:js lint:links",
     "lint:js": "eslint \"src/**/*.{js,mjs,ts,tsx}\" \"tools/**/*.mjs\" \"mcp-stack/**/*.mjs\" eleventy.config.mjs --report-unused-disable-directives",
     "lint:fix": "eslint \"src/**/*.{js,mjs,ts,tsx}\" \"tools/**/*.mjs\" \"mcp-stack/**/*.mjs\" eleventy.config.mjs --fix",
