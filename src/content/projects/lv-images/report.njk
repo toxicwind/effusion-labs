@@ -616,8 +616,21 @@ metaDisable: true
     {% if sample | length %}
       <div class="grid gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 mt-4">
         {% for i in sample %}
-          <a class="relative block aspect-square overflow-hidden rounded-box border border-base-content/10 hover:shadow-md transition" href="{{ i.src }}" target="_blank" title="{{ i.title or i.src }}" rel="noreferrer">
-            <img loading="lazy" src="{{ i.src }}" alt="" class="h-full w-full object-cover" />
+          <a
+            class="relative block aspect-square overflow-hidden rounded-box border border-base-content/10 hover:shadow-md transition"
+            href="{{ i.pageUrl or i.src }}"
+            target="_blank"
+            title="{{ i.title or i.src }}"
+            rel="noreferrer"
+            data-original-image="{{ i.src }}"
+          >
+            <img
+              loading="lazy"
+              src="{{ i.cachedSrc or i.src }}"
+              data-original-src="{{ i.src }}"
+              alt=""
+              class="h-full w-full object-cover"
+            />
           </a>
         {% endfor %}
       </div>

@@ -3,6 +3,8 @@ import fss from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
+import { cacheRemoteImage } from "../lib/cache/remote-images.mjs";
+
 // This file is a data helper for Eleventy. It reads the summary and
 // cache data produced by the crawler (update‑dataset.mjs) and exposes
 // derived structures that the report template can consume. It has
@@ -21,6 +23,7 @@ const CACHE_DIR = path.join(LV_BASE, "cache");
 const ROBOTS_DIR = path.join(CACHE_DIR, "robots");
 const SITEMAPS_DIR = path.join(CACHE_DIR, "sitemaps");
 const ITEMS_DIR = path.join(LV_BASE, "items");
+const REPORT_TEMPLATE_DIR = path.resolve(__dirname, "../content/projects/lv-images");
 const SUMMARY_JSON = path.join(LV_BASE, "summary.json");
 const URLMETA_JSON = path.join(CACHE_DIR, "urlmeta.json");
 const BLACKLIST_JSON = path.join(LV_BASE, "hosts", "blacklist.json");
@@ -789,7 +792,28 @@ export default async function () {
     })();
 
     // Sample a few image items from NDJSON shards for the UI.
-    const sample = await sampleItems(ITEMS_DIR, 60);
+    const sampleRaw = await sampleItems(ITEMS_DIR, 60);
+    const sample = await Promise.all(
+        sampleRaw.map(async (entry) => {
+            let cachedSrc = null;
+            try {
+                cachedSrc = await cacheRemoteImage(entry?.src);
+            }
+            catch (error) {
+                console.warn(`[lvreport] cache failed for ${entry?.src}: ${error?.message || error}`);
+            }
+            let templateRelative = null;
+            if (cachedSrc) {
+                templateRelative = path.relative(REPORT_TEMPLATE_DIR, cachedSrc).split(path.sep).join("/");
+            }
+            return {
+                ...entry,
+                cachedSrc: templateRelative,
+                cachedSrcAbsolute: cachedSrc,
+                originalSrc: entry?.src || null,
+            };
+        }),
+    );
 
     return {
         // Base HREF used by the report to link into cached files
