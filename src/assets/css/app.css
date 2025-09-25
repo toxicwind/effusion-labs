@@ -1654,4 +1654,29 @@ html {
   #mschf-overlay-root[data-mschf-profile="essay"] .mschf-pip::after {
     opacity: 0.65;
   }
+
+  #mschf-overlay-root[data-mschf-tier="uhd"] {
+    --mschf-noise: 0.035;
+  }
+  #mschf-overlay-root[data-mschf-tier="uhd"] .mschf-scanline {
+    animation-duration: calc(var(--mschf-scan-speed, 9s) * 1.45);
+  }
+  #mschf-overlay-root[data-mschf-tier="uhd"] .mschf-glitch {
+    animation-duration: 1.6s;
+  }
+  #mschf-overlay-root[data-mschf-tier="uhd"] .mschf-holo {
+    animation-duration: 20s;
+  }
+  #mschf-overlay-root[data-mschf-tier="uhd"] .mschf-callout {
+    animation-duration: 7s;
+  }
+  #mschf-overlay-root[data-mschf-tier="uhd"] .mschf-flower {
+    animation-duration: 28s;
+  }
+  #mschf-overlay-root[data-mschf-tier="uhd"] .mschf-stars {
+    animation-duration: 18s;
+  }
+  #mschf-overlay-root[data-mschf-tier="uhd"] .mschf-wm-line {
+    animation-duration: 36s;
+  }
 }
