@@ -1,6 +1,6 @@
 // Effusion Labs — Hypebrüt Overlay v2.1 (Garden-Calm)
 // Non-blocking, prose-safe, SPA-safe, mobile-sane, reduced-motion/data aware.
-// Console: __mschfOn(), __mschfOff(), __mschfPulse(), __mschfMood(m), __mschfDensity(x), __mschfMask(0|1), __mschfAlpha(x)
+// Console: __mschfOn(), __mschfOff(), __mschfPulse(), __mschfMood(m), __mschfDensity(x), __mschfMask(0|1), __mschfAlpha(x), __mschfFps(x)
 ;(() => {
   if (window.__mschfBooted) {
     try {
@@ -90,6 +90,36 @@
     for (const k in obj) el.style[k] = obj[k]
     return el
   }
+  const prefersReducedMotion = (() => {
+    try {
+      return !!(
+        typeof matchMedia === 'function'
+        && matchMedia('(prefers-reduced-motion: reduce)').matches
+      )
+    } catch {
+      return false
+    }
+  })()
+  const desiredFps = (() => {
+    const token = scope.dataset?.mschfFps || qparam('mschfFps')
+    const raw = token != null ? parseFloat(token) : NaN
+    if (Number.isFinite(raw)) return clamp(raw, 12, 60)
+    return prefersReducedMotion ? 24 : 30
+  })()
+  const DEFAULT_UPDATE_EVERY = 3
+  const UPDATE_RATES = new Map([
+    ['grid', 12],
+    ['frame', 2],
+    ['scan', 6],
+    ['callout', 4],
+    ['graph', 1],
+    ['tape', 1],
+    ['watermark', 1],
+    ['dims', 2],
+    ['edgeGlow', 1],
+    ['pips', 1],
+    ['brackets', 4],
+  ])
   const el = (tag, cls, parent) => {
     const n = document.createElement(tag)
     if (cls) n.className = cls
@@ -462,7 +492,7 @@
     density: 0.38, // gentler default
     mood: 'calm', // calm → lite → bold → loud → storm → studio
     tempo: 1.0,
-    reduceMotion: matchMedia?.('(prefers-reduced-motion: reduce)').matches || false,
+    reduceMotion: prefersReducedMotion,
     reduceData: !!(
       navigator.connection
       && (navigator.connection.saveData
@@ -495,6 +525,11 @@
     caps: { scaffold: 6, ephemera: 6, lab: 4, frame: 5 },
     alpha: 0.85, // overall overlay alpha (debuggable)
     gpu: { maskOn: true, stageAlpha: 1.0 },
+    tickFps: desiredFps,
+    tickInterval: 1000 / desiredFps,
+    lastTickAt: 0,
+    contextCooldown: 7000,
+    lastContextAt: 0,
     // runtime config knobs
     config: {
       // 'once' (default): single recomposition; 'auto': periodic; 'off': never after initial
@@ -735,11 +770,20 @@
     const total = W * H || 1
     State.readingPressure = clamp(area / total, 0, 1)
   }
-  function computeContext() {
+  function computeContext(force = false) {
+    const stamp = now()
+    if (!force) {
+      const cooldown = State.contextCooldown || 0
+      if (State.lastContextAt && stamp - State.lastContextAt < cooldown) {
+        return false
+      }
+    }
+    State.lastContextAt = stamp
     computeSafeZones()
     computeReadingPressure()
     evaluateSceneProfile()
     computeCaps()
+    return true
   }
 
   // Recompute per-family caps by tier, density, motion, and reading pressure
@@ -1382,6 +1426,15 @@
       DEBUG && warn('actor.mount threw', e)
       CNR.release(actor)
       return (DEBUG && groupEnd(), false)
+    }
+    if (typeof actor.update === 'function') {
+      const raw =
+        actor.updateEvery != null
+          ? actor.updateEvery
+          : UPDATE_RATES.get(actor.kind) ?? DEFAULT_UPDATE_EVERY
+      const every = Math.max(1, Math.round(raw))
+      actor._updateEvery = every
+      actor._updateTick = every - 1
     }
     // record bounding box to discourage future overlaps
     try {
@@ -2165,20 +2218,22 @@
         node.style.setProperty('--rot', rot + 'deg')
         node.style.setProperty('--y', y + '%')
         node.style.setProperty('--h', h + 'px')
-        node.style.setProperty(
-          '--o',
-          (/(loud|storm)/.test(State.mood) ? 0.12 : 0.08).toString(),
-        )
+        const baseOpacity = (/(loud|storm)/.test(State.mood) ? 0.12 : 0.08).toString()
+        node.style.setProperty('--o', baseOpacity)
+        node.dataset.baseOpacity = baseOpacity
         inner = document.createElement('span')
         inner.className = 'mschf-wm-line'
         inner.textContent = (phrase() + ' ').repeat(12)
         node.appendChild(inner)
+        const dir = Math.random() < 0.5 ? '1' : '-1'
+        const speed = (State.tiers.lg ? 18 : 12)
+          * (/(studio|loud)/.test(State.mood) ? 1.3 : 1.0)
+        node.dataset.dir = dir
+        node.dataset.scrollSpeed = speed.toFixed(2)
       },
       update(t) {
         if (!node) return
-        const base = parseFloat(
-          getComputedStyle(node).getPropertyValue('--o') || '0.08',
-        ) || 0.08
+        const base = parseFloat(node.dataset.baseOpacity || '0.08') || 0.08
         const o = lerp(
           base * 0.35,
           base,
@@ -2186,10 +2241,8 @@
         )
         node.style.opacity = o.toFixed(3)
         if (State.reduceMotion) return
-        const dir = node.dataset.dir
-          || (node.dataset.dir = Math.random() < 0.5 ? '1' : '-1')
-        const speed = (State.tiers.lg ? 18 : 12)
-          * (/(studio|loud)/.test(State.mood) ? 1.3 : 1.0)
+        const dir = node.dataset.dir || '1'
+        const speed = parseFloat(node.dataset.scrollSpeed || '12')
         const tx = ((t / 1000) * speed * (dir === '1' ? 1 : -1)) % 100
         if (inner) inner.style.transform = `translateX(${tx.toFixed(1)}px)`
       },
@@ -2769,6 +2822,13 @@
       if (State.fps.bad) degradeDensity()
     }
 
+    const interval = State.tickInterval || 1000 / 30
+    const lastTick = State.lastTickAt || 0
+    const elapsed = lastTick ? t - lastTick : interval
+    if (elapsed < interval) return
+    State.lastTickAt = t
+    const stepDt = Math.min(elapsed, interval * 3)
+
     if (t - State.beats.last > State.beats.dur) {
       State.beats.last = t
       C.beats++
@@ -2803,7 +2863,15 @@
 
     for (const a of Array.from(State.actors)) {
       try {
-        a.update && a.update(t, dt)
+        if (a.update) {
+          const every = a._updateEvery || 0
+          if (every > 1) {
+            a._updateTick = (a._updateTick || 0) + 1
+            if (a._updateTick < every) continue
+            a._updateTick = 0
+          }
+          a.update(t, stepDt)
+        }
       } catch {}
       if (a.dead) retire(a)
     }
@@ -2942,7 +3010,8 @@
       lab: State.families.lab.size,
       frame: State.families.frame.size,
     }
-    const line1 = `bars:${C.bars} beats:${C.beats} mood:${State.mood} d:${State.density.toFixed(2)}`
+    const line1 =
+      `bars:${C.bars} beats:${C.beats} mood:${State.mood} d:${State.density.toFixed(2)} fps:${State.tickFps}`
     const line2 =
       `scaf:${sizes.scaffold} eph:${sizes.ephemera} lab:${sizes.lab} frame:${sizes.frame}`
     const line3 = `actors:${State.actors.size} nodes:${State.nodeCount}`
@@ -3039,6 +3108,7 @@
       State.paused = false
       State.beats.last = now()
       State.bars.last = now()
+      State.lastTickAt = 0
       DEBUG && log('visibility: resume')
       requestAnimationFrame(tick)
     }
@@ -3068,7 +3138,7 @@
     DEBUG && log('boot()')
     mountRoot()
     computeTiers()
-    computeContext()
+    computeContext(true)
     resetOccupancy()
 
     // GPU init (LG only, not reduced-data, and avoid truly weak CPUs)
@@ -3112,7 +3182,7 @@
   // Events
   addEventListener('resize', () => {
     computeTiers()
-    computeContext()
+    computeContext(true)
     resetOccupancy()
   })
   document.addEventListener('visibilitychange', onVisibility, false)
@@ -3177,6 +3247,13 @@
   window.__mschfAlpha = x => {
     State.alpha = clamp(+x || State.alpha, 0.3, 1.0)
     if (State.root) State.root.style.opacity = State.alpha
+  }
+  window.__mschfFps = fps => {
+    const target = clamp(+fps || State.tickFps, 12, 60)
+    State.tickFps = target
+    State.tickInterval = 1000 / target
+    State.lastTickAt = 0
+    return target
   }
   window.__mschfDebug = (on = 1) => {
     localStorage.setItem('mschf:debug', on ? '1' : '0')
