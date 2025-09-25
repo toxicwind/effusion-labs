@@ -473,6 +473,11 @@
     nodeCount: 0,
     scene: { profile: 'default', allowRare: true, blockKinds: new Set() },
     actors: new Set(),
+    updaters: new Set(),
+    _actorsDirty: true,
+    _updatersDirty: true,
+    _actorList: [],
+    _updaterList: [],
     families: {
       scaffold: new Set(),
       ephemera: new Set(),
@@ -1375,6 +1380,7 @@
     State._mountCtx = { id: actor._id, kind: actor.kind, family }
     State.families[family].add(actor)
     State.actors.add(actor)
+    State._actorsDirty = true
     State.nodeCount += cost
     try {
       actor.mount(State.domLayer)
@@ -1382,6 +1388,10 @@
       DEBUG && warn('actor.mount threw', e)
       CNR.release(actor)
       return (DEBUG && groupEnd(), false)
+    }
+    if (typeof actor.update === 'function') {
+      State.updaters.add(actor)
+      State._updatersDirty = true
     }
     // record bounding box to discourage future overlaps
     try {
@@ -1472,7 +1482,12 @@
         State._labels.delete(actor._id)
       }
     } catch {}
+    if (State.updaters.has(actor)) {
+      State.updaters.delete(actor)
+      State._updatersDirty = true
+    }
     State.actors.delete(actor)
+    State._actorsDirty = true
     for (const k in State.families) State.families[k].delete(actor)
     State.nodeCount = Math.max(0, State.nodeCount - (actor.cost || 1))
     C.retire++
@@ -2801,11 +2816,45 @@
       }
     }
 
-    for (const a of Array.from(State.actors)) {
+    if (State._updatersDirty) {
+      State._updaterList = Array.from(State.updaters)
+      State._updatersDirty = false
+    }
+    if (State._actorsDirty) {
+      State._actorList = Array.from(State.actors)
+      State._actorsDirty = false
+    }
+
+    for (const a of State._updaterList) {
+      if (!State.updaters.has(a)) continue
       try {
         a.update && a.update(t, dt)
       } catch {}
-      if (a.dead) retire(a)
+      if (a.dead) {
+        retire(a)
+        continue
+      }
+      if (typeof a.update !== 'function') {
+        State.updaters.delete(a)
+        State._updatersDirty = true
+      }
+    }
+
+    // Retire any static actors flagged as dead between ticks.
+    if (State._actorsDirty) {
+      State._actorList = Array.from(State.actors)
+      State._actorsDirty = false
+    }
+    for (const a of State._actorList) {
+      if (!State.actors.has(a)) continue
+      if (!State.updaters.has(a)) {
+        if (typeof a.update === 'function') {
+          State.updaters.add(a)
+          State._updatersDirty = true
+          continue
+        }
+        if (a.dead) retire(a)
+      }
     }
     GPU.step(t)
 
