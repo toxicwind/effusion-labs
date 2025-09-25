@@ -240,6 +240,9 @@
     }
   }
 
+  const ARTICLE_SELECTOR = '.prose,[data-kind="spark"],[data-kind="concept"],'
+    + '[data-kind="project"],article,main .prose'
+
   const SCENE_PROFILES = {
     default: {
       allowRare: true,
@@ -493,6 +496,7 @@
     tiers: { xs: false, sm: false, md: false, lg: false },
     // hard caps per family to bound DOM churn; recomputed by tier/pressure
     caps: { scaffold: 6, ephemera: 6, lab: 4, frame: 5 },
+    flags: { isArticle: false },
     alpha: 0.85, // overall overlay alpha (debuggable)
     gpu: { maskOn: true, stageAlpha: 1.0 },
     // runtime config knobs
@@ -538,7 +542,9 @@
       })(),
     },
     _didRecompose: false,
+    _needsRecompose: false,
     _t0: now(),
+    _lastContextReason: 'boot',
     debug: {
       // Aggressive when DEBUG=true (?mschfDebug=1), quiet otherwise
       labelsOn: (() => {
@@ -706,15 +712,21 @@
       '.prose, main, article, header, nav, .map-cta, [data-safe], [data-mschf-safe], [data-occlude="avoid"]'
     const sel = scope.getAttribute('data-mschf-safe') || selFallback
     const pad = 24 // ↑ from 16
-    const rects = [...document.querySelectorAll(sel)]
-      .map(n => n.getBoundingClientRect())
-      .filter(r => r.width * r.height > 0)
-      .map(r => ({
+    const rects = []
+    const nodes = document.querySelectorAll(sel)
+    let seen = 0
+    for (const node of nodes) {
+      if (seen++ > 80) break // hard cap to avoid heavy layouts
+      if (!node || !node.getBoundingClientRect) continue
+      const r = node.getBoundingClientRect()
+      if (!r || r.width * r.height <= 0) continue
+      rects.push({
         x: clamp(r.left - pad, 0, innerWidth),
         y: clamp(r.top - pad, 0, innerHeight),
         w: clamp(r.width + pad * 2, 0, innerWidth),
         h: clamp(r.height + pad * 2, 0, innerHeight),
-      }))
+      })
+    }
     State.safeZones = rects
     GPU.updateMask() // keep GPU from painting over prose
   }
@@ -728,10 +740,13 @@
       * Math.max(0, Math.min(r.bottom, H) - Math.max(r.top, 0))
 
     let area = 0
-    document.querySelectorAll('p, li, blockquote').forEach(n => {
-      const r = n.getBoundingClientRect()
+    let count = 0
+    for (const node of document.querySelectorAll('p, li, blockquote')) {
+      if (count++ > 400) break // cap expensive rect reads on long pages
+      if (!node || !node.getBoundingClientRect) continue
+      const r = node.getBoundingClientRect()
       area += clip(r)
-    })
+    }
     const total = W * H || 1
     State.readingPressure = clamp(area / total, 0, 1)
   }
@@ -740,7 +755,57 @@
     computeReadingPressure()
     evaluateSceneProfile()
     computeCaps()
+    State.flags.isArticle = !!document.querySelector(ARTICLE_SELECTOR)
   }
+
+  function markNeedsRecompose(reason = '') {
+    if (State.config.recompose === 'off') return
+    if (State.config.recompose === 'once' && State._didRecompose) return
+    State._needsRecompose = true
+    State._lastContextReason = reason || State._lastContextReason
+  }
+
+  function refreshContext({ withTiers = false, reason = 'unspecified' } = {}) {
+    if (withTiers) computeTiers()
+    computeContext()
+    resetOccupancy()
+    if (reason !== 'boot') markNeedsRecompose(reason)
+  }
+
+  const scheduleContextRefresh = (() => {
+    const MIN_DELAY = 120
+    let pending = false
+    let timer = 0
+    let raf = 0
+    let lastRun = 0
+    let latestOpts = { withTiers: false, reason: 'unspecified' }
+    const flush = () => {
+      timer = 0
+      raf = requestAnimationFrame(() => {
+        raf = 0
+        pending = false
+        lastRun = now()
+        refreshContext(latestOpts)
+      })
+    }
+    return (opts = {}) => {
+      latestOpts = { withTiers: false, reason: 'unspecified', ...opts }
+      if (latestOpts.immediate) {
+        if (timer) clearTimeout(timer)
+        if (raf) cancelAnimationFrame(raf)
+        pending = false
+        lastRun = now()
+        refreshContext(latestOpts)
+        return
+      }
+      if (pending) return
+      pending = true
+      const budget =
+        latestOpts.minDelay != null ? latestOpts.minDelay : MIN_DELAY
+      const wait = Math.max(0, budget - (now() - lastRun))
+      timer = setTimeout(flush, wait)
+    }
+  })()
 
   // Recompute per-family caps by tier, density, motion, and reading pressure
   function computeCaps() {
@@ -968,9 +1033,7 @@
     }[mood] || 0.4
     State.density = clamp(lerp(State.density, base, 0.6), 0.18, 0.9)
 
-    const isArticle = !!document.querySelector(
-      '.prose,[data-kind="spark"],[data-kind="concept"],[data-kind="project"],article,main .prose',
-    )
+    const isArticle = State.flags.isArticle
     if (isArticle) State.density = Math.min(State.density, 0.45)
     if (State.tiers.xs || State.tiers.sm) {
       State.density = Math.min(State.density, 0.45)
@@ -1318,9 +1381,7 @@
       return void groupEnd()
     }
 
-    const isArticle = !!document.querySelector(
-      '.prose,[data-kind="spark"],[data-kind="concept"],[data-kind="project"],article,main .prose',
-    )
+    const isArticle = State.flags.isArticle
 
     // Preflight: corner occupancy (avoid stacking multiple corner-bound actors)
     const wantsCorners = k => ['reg', 'pips', 'corners'].includes(k || '')
@@ -2095,7 +2156,7 @@
       mount(p) {
         node = el('div', 'mschf-brackets', p)
         node.classList.add(pick(['tight', 'wide']))
-        const isArticle = !!document.querySelector('.prose,article,main .prose')
+        const isArticle = State.flags.isArticle
         node.dataset.variant = State.readingPressure > 0.18 || isArticle ? 'lite' : 'bold'
         const pad = node.classList.contains('wide')
           ? 2 + Math.random() * 2
@@ -2154,7 +2215,7 @@
       ...watermarkMeta,
       mount(p) {
         node = el('div', 'mschf-watermark', p)
-        const isArticle = !!document.querySelector('.prose,article,main .prose')
+        const isArticle = State.flags.isArticle
         const variant = State.readingPressure > 0.25 || isArticle
           ? 'stripe'
           : pick(['stripe', 'full'])
@@ -2514,7 +2575,7 @@
         mount(factory(), 'scaffold')
       })
 
-    const isArticle = !!document.querySelector('.prose,article,main .prose')
+    const isArticle = State.flags.isArticle
 
     const waves = {
       structural: () => {
@@ -2776,6 +2837,17 @@
         && C.beats % 20 === 0
         && log('beat', { beats: C.beats, bars: C.bars })
     }
+    if (State._needsRecompose) {
+      const mode = State.config.recompose
+      if (mode === 'off' || (mode === 'once' && State._didRecompose)) {
+        State._needsRecompose = false
+      } else {
+        State._needsRecompose = false
+        recompose()
+        if (mode === 'once') State._didRecompose = true
+      }
+    }
+
     if (t - State.bars.last > State.bars.dur) {
       State.bars.last = t
       C.bars++
@@ -2801,7 +2873,7 @@
       }
     }
 
-    for (const a of Array.from(State.actors)) {
+    for (const a of State.actors) {
       try {
         a.update && a.update(t, dt)
       } catch {}
@@ -3040,6 +3112,7 @@
       State.beats.last = now()
       State.bars.last = now()
       DEBUG && log('visibility: resume')
+      scheduleContextRefresh({ reason: 'visibility', minDelay: 180 })
       requestAnimationFrame(tick)
     }
   }
@@ -3067,9 +3140,7 @@
   async function boot() {
     DEBUG && log('boot()')
     mountRoot()
-    computeTiers()
-    computeContext()
-    resetOccupancy()
+    scheduleContextRefresh({ withTiers: true, reason: 'boot', immediate: true })
 
     // GPU init (LG only, not reduced-data, and avoid truly weak CPUs)
     const weakCPU = navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4
@@ -3078,10 +3149,7 @@
     }
 
     // Prefer structural on obvious reading pages
-    if (
-      document.querySelector('.prose,article,main .prose')
-      && State.style === 'collage'
-    ) {
+    if (State.flags.isArticle && State.style === 'collage') {
       State.style = 'structural'
     }
 
@@ -3111,9 +3179,7 @@
 
   // Events
   addEventListener('resize', () => {
-    computeTiers()
-    computeContext()
-    resetOccupancy()
+    scheduleContextRefresh({ withTiers: true, reason: 'resize' })
   })
   document.addEventListener('visibilitychange', onVisibility, false)
 
@@ -3196,7 +3262,7 @@
   }
   window.__mschfCull = (kind = 'rings') => {
     const culled = []
-    for (const a of Array.from(State.actors)) {
+    for (const a of State.actors) {
       if ((a.kind || '') === kind) {
         retire(a)
         culled.push(a._id)
