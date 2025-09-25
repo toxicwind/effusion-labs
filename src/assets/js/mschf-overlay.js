@@ -1,6 +1,6 @@
 // Effusion Labs — Hypebrüt Overlay v2.1 (Garden-Calm)
 // Non-blocking, prose-safe, SPA-safe, mobile-sane, reduced-motion/data aware.
-// Console: __mschfOn(), __mschfOff(), __mschfPulse(), __mschfMood(m), __mschfDensity(x), __mschfMask(0|1), __mschfAlpha(x), __mschfFps(x)
+// Console: __mschfOn(), __mschfOff(), __mschfPulse(), __mschfMood(m), __mschfDensity(x), __mschfMask(0|1), __mschfAlpha(x)
 ;(() => {
   if (window.__mschfBooted) {
     try {
@@ -37,6 +37,8 @@
     beats: 0,
     bars: 0,
   }
+  const SAFE_ZONE_SELECTOR_DEFAULT =
+    '.prose, main, article, header, nav, .map-cta, [data-safe], [data-mschf-safe], [data-occlude="avoid"]'
   const qparam = name => {
     try {
       return new URLSearchParams(q).get(name)
@@ -100,26 +102,6 @@
       return false
     }
   })()
-  const desiredFps = (() => {
-    const token = scope.dataset?.mschfFps || qparam('mschfFps')
-    const raw = token != null ? parseFloat(token) : NaN
-    if (Number.isFinite(raw)) return clamp(raw, 12, 60)
-    return prefersReducedMotion ? 24 : 30
-  })()
-  const DEFAULT_UPDATE_EVERY = 3
-  const UPDATE_RATES = new Map([
-    ['grid', 12],
-    ['frame', 2],
-    ['scan', 6],
-    ['callout', 4],
-    ['graph', 1],
-    ['tape', 1],
-    ['watermark', 1],
-    ['dims', 2],
-    ['edgeGlow', 1],
-    ['pips', 1],
-    ['brackets', 4],
-  ])
   const el = (tag, cls, parent) => {
     const n = document.createElement(tag)
     if (cls) n.className = cls
@@ -269,6 +251,9 @@
       if (value != null) root.style.setProperty(`--mschf-${key}`, value)
     }
   }
+
+  const ARTICLE_SELECTOR = '.prose,[data-kind="spark"],[data-kind="concept"],'
+    + '[data-kind="project"],article,main .prose'
 
   const SCENE_PROFILES = {
     default: {
@@ -503,6 +488,11 @@
     nodeCount: 0,
     scene: { profile: 'default', allowRare: true, blockKinds: new Set() },
     actors: new Set(),
+    updaters: new Set(),
+    _actorsDirty: true,
+    _updatersDirty: true,
+    _actorList: [],
+    _updaterList: [],
     families: {
       scaffold: new Set(),
       ephemera: new Set(),
@@ -523,13 +513,20 @@
     tiers: { xs: false, sm: false, md: false, lg: false },
     // hard caps per family to bound DOM churn; recomputed by tier/pressure
     caps: { scaffold: 6, ephemera: 6, lab: 4, frame: 5 },
+    metrics: {
+      dirty: true,
+      measuring: false,
+      scheduled: false,
+      last: 0,
+      safeSelector:
+        scope.getAttribute('data-mschf-safe') || SAFE_ZONE_SELECTOR_DEFAULT,
+      safeZones: [],
+      readingPressure: 0,
+      isArticle: false,
+    },
+    flags: { isArticle: false },
     alpha: 0.85, // overall overlay alpha (debuggable)
     gpu: { maskOn: true, stageAlpha: 1.0 },
-    tickFps: desiredFps,
-    tickInterval: 1000 / desiredFps,
-    lastTickAt: 0,
-    contextCooldown: 7000,
-    lastContextAt: 0,
     // runtime config knobs
     config: {
       // 'once' (default): single recomposition; 'auto': periodic; 'off': never after initial
@@ -573,7 +570,9 @@
       })(),
     },
     _didRecompose: false,
+    _needsRecompose: false,
     _t0: now(),
+    _lastContextReason: 'boot',
     debug: {
       // Aggressive when DEBUG=true (?mschfDebug=1), quiet otherwise
       labelsOn: (() => {
@@ -736,22 +735,26 @@
   // ————————————————————————————————————————
   // Safe zones & placement
   // ————————————————————————————————————————
-  function computeSafeZones() {
-    const selFallback =
-      '.prose, main, article, header, nav, .map-cta, [data-safe], [data-mschf-safe], [data-occlude="avoid"]'
-    const sel = scope.getAttribute('data-mschf-safe') || selFallback
+  function computeSafeZones(selector) {
+    const sel = selector || scope.getAttribute('data-mschf-safe')
+      || SAFE_ZONE_SELECTOR_DEFAULT
     const pad = 24 // ↑ from 16
-    const rects = [...document.querySelectorAll(sel)]
-      .map(n => n.getBoundingClientRect())
-      .filter(r => r.width * r.height > 0)
-      .map(r => ({
+    const rects = []
+    const nodes = document.querySelectorAll(sel)
+    let seen = 0
+    for (const node of nodes) {
+      if (seen++ > 80) break // hard cap to avoid heavy layouts
+      if (!node || !node.getBoundingClientRect) continue
+      const r = node.getBoundingClientRect()
+      if (!r || r.width * r.height <= 0) continue
+      rects.push({
         x: clamp(r.left - pad, 0, innerWidth),
         y: clamp(r.top - pad, 0, innerHeight),
         w: clamp(r.width + pad * 2, 0, innerWidth),
         h: clamp(r.height + pad * 2, 0, innerHeight),
-      }))
-    State.safeZones = rects
-    GPU.updateMask() // keep GPU from painting over prose
+      })
+    }
+    return rects
   }
 
   // Clip each rect to the viewport; measure visible text only
@@ -763,28 +766,166 @@
       * Math.max(0, Math.min(r.bottom, H) - Math.max(r.top, 0))
 
     let area = 0
-    document.querySelectorAll('p, li, blockquote').forEach(n => {
-      const r = n.getBoundingClientRect()
+    let count = 0
+    for (const node of document.querySelectorAll('p, li, blockquote')) {
+      if (count++ > 400) break // cap expensive rect reads on long pages
+      if (!node || !node.getBoundingClientRect) continue
+      const r = node.getBoundingClientRect()
       area += clip(r)
-    })
-    const total = W * H || 1
-    State.readingPressure = clamp(area / total, 0, 1)
-  }
-  function computeContext(force = false) {
-    const stamp = now()
-    if (!force) {
-      const cooldown = State.contextCooldown || 0
-      if (State.lastContextAt && stamp - State.lastContextAt < cooldown) {
-        return false
-      }
     }
-    State.lastContextAt = stamp
-    computeSafeZones()
-    computeReadingPressure()
+    const total = W * H || 1
+    return clamp(area / total, 0, 1)
+  }
+
+  function detectArticleContext() {
+    return !!document.querySelector(ARTICLE_SELECTOR)
+  }
+
+  function markMetricsDirty(reason) {
+    const metrics = State.metrics
+    if (!metrics) return
+    if (!metrics.dirty && DEBUG && reason) log('metrics dirty', reason)
+    metrics.dirty = true
+  }
+
+  function markNeedsRecompose(reason = '') {
+    if (State.config.recompose === 'off') return
+    if (State.config.recompose === 'once' && State._didRecompose) return
+    State._needsRecompose = true
+    State._lastContextReason = reason || State._lastContextReason
+  }
+
+  function scheduleMetricsRefresh({ force = false, reason = 'unspecified', withTiers = false } = {}) {
+    const metrics = State.metrics
+    if (!metrics) return
+    if (reason) markMetricsDirty(reason)
+    if (force) {
+      refreshContext({ withTiers, reason, forceMetrics: true, deferOk: false })
+      return
+    }
+    if (metrics.scheduled) return
+    metrics.scheduled = true
+    const run = () => {
+      metrics.scheduled = false
+      refreshContext({
+        withTiers,
+        reason,
+        forceMetrics: true,
+        deferOk: false,
+        immediate: true,
+      })
+    }
+    if ('requestIdleCallback' in window) {
+      try {
+        requestIdleCallback(() => run(), { timeout: 180 })
+        return
+      } catch {}
+    }
+    setTimeout(run, 36)
+  }
+
+  function refreshMetrics({ force = false, deferOk = true, reason: _reason = 'unspecified' } = {}) {
+    const metrics = State.metrics
+    if (!metrics) return
+    const t = now()
+    if (!force && !metrics.dirty && t - metrics.last < 360) return
+    if (!force && deferOk && metrics.dirty && t - metrics.last < 200) {
+      scheduleMetricsRefresh({ reason: 'throttle defer' })
+      return
+    }
+    if (metrics.measuring) return
+    metrics.measuring = true
+    try {
+      metrics.safeSelector = scope.getAttribute('data-mschf-safe')
+        || SAFE_ZONE_SELECTOR_DEFAULT
+      const safeZones = computeSafeZones(metrics.safeSelector)
+      const pressure = computeReadingPressure()
+      const isArticle = detectArticleContext()
+      metrics.safeZones = safeZones
+      metrics.readingPressure = pressure
+      metrics.isArticle = isArticle
+      metrics.last = t
+      metrics.dirty = false
+      State.safeZones = safeZones
+      State.readingPressure = pressure
+      State.flags.isArticle = isArticle
+      GPU.updateMask() // keep GPU from painting over prose
+    } catch (error) {
+      metrics.dirty = true
+      if (DEBUG) warn('metrics refresh failed', error)
+    } finally {
+      metrics.measuring = false
+    }
+  }
+
+  function computeContext({ force = false, deferOk = true, reason = 'unspecified' } = {}) {
+    refreshMetrics({ force, deferOk, reason })
+    if (State.metrics) {
+      State.safeZones = State.metrics.safeZones
+      State.readingPressure = State.metrics.readingPressure
+      State.flags.isArticle = State.metrics.isArticle
+    }
     evaluateSceneProfile()
     computeCaps()
-    return true
   }
+
+  function refreshContext({
+    withTiers = false,
+    reason = 'unspecified',
+    forceMetrics = false,
+    deferOk = true,
+  } = {}) {
+    if (withTiers) computeTiers()
+    computeContext({ force: forceMetrics, deferOk, reason })
+    resetOccupancy()
+    if (reason !== 'boot') markNeedsRecompose(reason)
+  }
+
+  const scheduleContextRefresh = (() => {
+    const MIN_DELAY = 120
+    let pending = false
+    let timer = 0
+    let raf = 0
+    let lastRun = 0
+    let latestOpts = {
+      withTiers: false,
+      reason: 'unspecified',
+      forceMetrics: false,
+      deferOk: true,
+    }
+    const flush = () => {
+      timer = 0
+      raf = requestAnimationFrame(() => {
+        raf = 0
+        pending = false
+        lastRun = now()
+        refreshContext(latestOpts)
+      })
+    }
+    return (opts = {}) => {
+      latestOpts = {
+        withTiers: false,
+        reason: 'unspecified',
+        forceMetrics: false,
+        deferOk: true,
+        ...opts,
+      }
+      if (latestOpts.immediate) {
+        if (timer) clearTimeout(timer)
+        if (raf) cancelAnimationFrame(raf)
+        pending = false
+        lastRun = now()
+        refreshContext(latestOpts)
+        return
+      }
+      if (pending) return
+      pending = true
+      const budget =
+        latestOpts.minDelay != null ? latestOpts.minDelay : MIN_DELAY
+      const wait = Math.max(0, budget - (now() - lastRun))
+      timer = setTimeout(flush, wait)
+    }
+  })()
 
   // Recompute per-family caps by tier, density, motion, and reading pressure
   function computeCaps() {
@@ -1012,9 +1153,7 @@
     }[mood] || 0.4
     State.density = clamp(lerp(State.density, base, 0.6), 0.18, 0.9)
 
-    const isArticle = !!document.querySelector(
-      '.prose,[data-kind="spark"],[data-kind="concept"],[data-kind="project"],article,main .prose',
-    )
+    const isArticle = State.flags.isArticle
     if (isArticle) State.density = Math.min(State.density, 0.45)
     if (State.tiers.xs || State.tiers.sm) {
       State.density = Math.min(State.density, 0.45)
@@ -1362,9 +1501,7 @@
       return void groupEnd()
     }
 
-    const isArticle = !!document.querySelector(
-      '.prose,[data-kind="spark"],[data-kind="concept"],[data-kind="project"],article,main .prose',
-    )
+    const isArticle = State.flags.isArticle
 
     // Preflight: corner occupancy (avoid stacking multiple corner-bound actors)
     const wantsCorners = k => ['reg', 'pips', 'corners'].includes(k || '')
@@ -1419,22 +1556,24 @@
     State._mountCtx = { id: actor._id, kind: actor.kind, family }
     State.families[family].add(actor)
     State.actors.add(actor)
+    State._actorsDirty = true
     State.nodeCount += cost
     try {
       actor.mount(State.domLayer)
     } catch (e) {
       DEBUG && warn('actor.mount threw', e)
       CNR.release(actor)
+      State.families[family].delete(actor)
+      State.actors.delete(actor)
+      State.updaters.delete(actor)
+      State._actorsDirty = true
+      State._updatersDirty = true
+      State.nodeCount = Math.max(0, State.nodeCount - cost)
       return (DEBUG && groupEnd(), false)
     }
     if (typeof actor.update === 'function') {
-      const raw =
-        actor.updateEvery != null
-          ? actor.updateEvery
-          : UPDATE_RATES.get(actor.kind) ?? DEFAULT_UPDATE_EVERY
-      const every = Math.max(1, Math.round(raw))
-      actor._updateEvery = every
-      actor._updateTick = every - 1
+      State.updaters.add(actor)
+      State._updatersDirty = true
     }
     // record bounding box to discourage future overlaps
     try {
@@ -1525,7 +1664,12 @@
         State._labels.delete(actor._id)
       }
     } catch {}
+    if (State.updaters.has(actor)) {
+      State.updaters.delete(actor)
+      State._updatersDirty = true
+    }
     State.actors.delete(actor)
+    State._actorsDirty = true
     for (const k in State.families) State.families[k].delete(actor)
     State.nodeCount = Math.max(0, State.nodeCount - (actor.cost || 1))
     C.retire++
@@ -2148,7 +2292,7 @@
       mount(p) {
         node = el('div', 'mschf-brackets', p)
         node.classList.add(pick(['tight', 'wide']))
-        const isArticle = !!document.querySelector('.prose,article,main .prose')
+        const isArticle = State.flags.isArticle
         node.dataset.variant = State.readingPressure > 0.18 || isArticle ? 'lite' : 'bold'
         const pad = node.classList.contains('wide')
           ? 2 + Math.random() * 2
@@ -2207,7 +2351,7 @@
       ...watermarkMeta,
       mount(p) {
         node = el('div', 'mschf-watermark', p)
-        const isArticle = !!document.querySelector('.prose,article,main .prose')
+        const isArticle = State.flags.isArticle
         const variant = State.readingPressure > 0.25 || isArticle
           ? 'stripe'
           : pick(['stripe', 'full'])
@@ -2218,22 +2362,20 @@
         node.style.setProperty('--rot', rot + 'deg')
         node.style.setProperty('--y', y + '%')
         node.style.setProperty('--h', h + 'px')
-        const baseOpacity = (/(loud|storm)/.test(State.mood) ? 0.12 : 0.08).toString()
-        node.style.setProperty('--o', baseOpacity)
-        node.dataset.baseOpacity = baseOpacity
+        node.style.setProperty(
+          '--o',
+          (/(loud|storm)/.test(State.mood) ? 0.12 : 0.08).toString(),
+        )
         inner = document.createElement('span')
         inner.className = 'mschf-wm-line'
         inner.textContent = (phrase() + ' ').repeat(12)
         node.appendChild(inner)
-        const dir = Math.random() < 0.5 ? '1' : '-1'
-        const speed = (State.tiers.lg ? 18 : 12)
-          * (/(studio|loud)/.test(State.mood) ? 1.3 : 1.0)
-        node.dataset.dir = dir
-        node.dataset.scrollSpeed = speed.toFixed(2)
       },
       update(t) {
         if (!node) return
-        const base = parseFloat(node.dataset.baseOpacity || '0.08') || 0.08
+        const base = parseFloat(
+          getComputedStyle(node).getPropertyValue('--o') || '0.08',
+        ) || 0.08
         const o = lerp(
           base * 0.35,
           base,
@@ -2241,8 +2383,10 @@
         )
         node.style.opacity = o.toFixed(3)
         if (State.reduceMotion) return
-        const dir = node.dataset.dir || '1'
-        const speed = parseFloat(node.dataset.scrollSpeed || '12')
+        const dir = node.dataset.dir
+          || (node.dataset.dir = Math.random() < 0.5 ? '1' : '-1')
+        const speed = (State.tiers.lg ? 18 : 12)
+          * (/(studio|loud)/.test(State.mood) ? 1.3 : 1.0)
         const tx = ((t / 1000) * speed * (dir === '1' ? 1 : -1)) % 100
         if (inner) inner.style.transform = `translateX(${tx.toFixed(1)}px)`
       },
@@ -2567,7 +2711,7 @@
         mount(factory(), 'scaffold')
       })
 
-    const isArticle = !!document.querySelector('.prose,article,main .prose')
+    const isArticle = State.flags.isArticle
 
     const waves = {
       structural: () => {
@@ -2692,7 +2836,7 @@
     DEBUG && group('recompose')
     C.recompose++
     resetOccupancy()
-    computeContext()
+    computeContext({ reason: 'recompose' })
     const paletteChance = State.scene?.profile === 'essay' ? 0.12 : 0.22
     if (Math.random() < paletteChance) {
       State.palette = pickPalette(State.scene?.paletteBias)
@@ -2822,13 +2966,6 @@
       if (State.fps.bad) degradeDensity()
     }
 
-    const interval = State.tickInterval || 1000 / 30
-    const lastTick = State.lastTickAt || 0
-    const elapsed = lastTick ? t - lastTick : interval
-    if (elapsed < interval) return
-    State.lastTickAt = t
-    const stepDt = Math.min(elapsed, interval * 3)
-
     if (t - State.beats.last > State.beats.dur) {
       State.beats.last = t
       C.beats++
@@ -2836,6 +2973,17 @@
         && C.beats % 20 === 0
         && log('beat', { beats: C.beats, bars: C.bars })
     }
+    if (State._needsRecompose) {
+      const mode = State.config.recompose
+      if (mode === 'off' || (mode === 'once' && State._didRecompose)) {
+        State._needsRecompose = false
+      } else {
+        State._needsRecompose = false
+        recompose()
+        if (mode === 'once') State._didRecompose = true
+      }
+    }
+
     if (t - State.bars.last > State.bars.dur) {
       State.bars.last = t
       C.bars++
@@ -2860,20 +3008,44 @@
         // 'off' → no periodic recomposition
       }
     }
+    if (State._updatersDirty) {
+      State._updaterList = Array.from(State.updaters)
+      State._updatersDirty = false
+    }
+    if (State._actorsDirty) {
+      State._actorList = Array.from(State.actors)
+      State._actorsDirty = false
+    }
 
-    for (const a of Array.from(State.actors)) {
+    for (const a of State._updaterList) {
+      if (!State.updaters.has(a)) continue
       try {
-        if (a.update) {
-          const every = a._updateEvery || 0
-          if (every > 1) {
-            a._updateTick = (a._updateTick || 0) + 1
-            if (a._updateTick < every) continue
-            a._updateTick = 0
-          }
-          a.update(t, stepDt)
-        }
+        a.update && a.update(t, dt)
       } catch {}
-      if (a.dead) retire(a)
+      if (a.dead) {
+        retire(a)
+        continue
+      }
+      if (typeof a.update !== 'function') {
+        State.updaters.delete(a)
+        State._updatersDirty = true
+      }
+    }
+
+    if (State._actorsDirty) {
+      State._actorList = Array.from(State.actors)
+      State._actorsDirty = false
+    }
+    for (const a of State._actorList) {
+      if (!State.actors.has(a)) continue
+      if (!State.updaters.has(a)) {
+        if (typeof a.update === 'function') {
+          State.updaters.add(a)
+          State._updatersDirty = true
+          continue
+        }
+        if (a.dead) retire(a)
+      }
     }
     GPU.step(t)
 
@@ -3010,8 +3182,7 @@
       lab: State.families.lab.size,
       frame: State.families.frame.size,
     }
-    const line1 =
-      `bars:${C.bars} beats:${C.beats} mood:${State.mood} d:${State.density.toFixed(2)} fps:${State.tickFps}`
+    const line1 = `bars:${C.bars} beats:${C.beats} mood:${State.mood} d:${State.density.toFixed(2)}`
     const line2 =
       `scaf:${sizes.scaffold} eph:${sizes.ephemera} lab:${sizes.lab} frame:${sizes.frame}`
     const line3 = `actors:${State.actors.size} nodes:${State.nodeCount}`
@@ -3108,8 +3279,9 @@
       State.paused = false
       State.beats.last = now()
       State.bars.last = now()
-      State.lastTickAt = 0
       DEBUG && log('visibility: resume')
+      markMetricsDirty('visibility')
+      scheduleContextRefresh({ reason: 'visibility', minDelay: 180 })
       requestAnimationFrame(tick)
     }
   }
@@ -3137,9 +3309,14 @@
   async function boot() {
     DEBUG && log('boot()')
     mountRoot()
-    computeTiers()
-    computeContext(true)
-    resetOccupancy()
+    markMetricsDirty('boot')
+    scheduleContextRefresh({
+      withTiers: true,
+      reason: 'boot',
+      immediate: true,
+      forceMetrics: true,
+      deferOk: false,
+    })
 
     // GPU init (LG only, not reduced-data, and avoid truly weak CPUs)
     const weakCPU = navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4
@@ -3148,10 +3325,7 @@
     }
 
     // Prefer structural on obvious reading pages
-    if (
-      document.querySelector('.prose,article,main .prose')
-      && State.style === 'collage'
-    ) {
+    if (State.flags.isArticle && State.style === 'collage') {
       State.style = 'structural'
     }
 
@@ -3181,9 +3355,8 @@
 
   // Events
   addEventListener('resize', () => {
-    computeTiers()
-    computeContext(true)
-    resetOccupancy()
+    markMetricsDirty('resize')
+    scheduleContextRefresh({ withTiers: true, reason: 'resize' })
   })
   document.addEventListener('visibilitychange', onVisibility, false)
 
@@ -3248,13 +3421,6 @@
     State.alpha = clamp(+x || State.alpha, 0.3, 1.0)
     if (State.root) State.root.style.opacity = State.alpha
   }
-  window.__mschfFps = fps => {
-    const target = clamp(+fps || State.tickFps, 12, 60)
-    State.tickFps = target
-    State.tickInterval = 1000 / target
-    State.lastTickAt = 0
-    return target
-  }
   window.__mschfDebug = (on = 1) => {
     localStorage.setItem('mschf:debug', on ? '1' : '0')
     location.reload()
@@ -3273,7 +3439,7 @@
   }
   window.__mschfCull = (kind = 'rings') => {
     const culled = []
-    for (const a of Array.from(State.actors)) {
+    for (const a of State.actors) {
       if ((a.kind || '') === kind) {
         retire(a)
         culled.push(a._id)
