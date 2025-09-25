@@ -679,6 +679,16 @@ html {
     opacity: var(--mschf-noise, 0.06);
     mix-blend-mode: screen;
   }
+  #mschf-overlay-root[data-mschf-perf] {
+    --mschf-noise: 0.04;
+  }
+  #mschf-overlay-root[data-mschf-perf]::before {
+    opacity: 0.18;
+    filter: blur(96px);
+  }
+  #mschf-overlay-root[data-mschf-perf]::after {
+    opacity: var(--mschf-noise, 0.04);
+  }
   #mschf-overlay-root *,
   #mschf-overlay-root *::before,
   #mschf-overlay-root *::after {
@@ -847,6 +857,13 @@ html {
     animation: mschf-scan-sweep var(--mschf-scan-speed, 9s) cubic-bezier(0.37, 0.01, 0.13, 1) infinite;
     animation-delay: var(--mschf-scan-delay, -2s);
   }
+  #mschf-overlay-root[data-mschf-perf] .mschf-scanline {
+    opacity: 0.28;
+    animation-duration: calc(var(--mschf-scan-speed, 9s) * 1.6);
+  }
+  #mschf-overlay-root[data-mschf-perf='uhd'] .mschf-scanline {
+    animation-duration: calc(var(--mschf-scan-speed, 9s) * 1.9);
+  }
   .mschf-scanline::after {
     content: "";
     position: absolute;
@@ -980,6 +997,10 @@ html {
     mix-blend-mode: screen;
     filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.4));
     animation: mschf-callout-pulse 4.6s ease-in-out infinite;
+  }
+  #mschf-overlay-root[data-mschf-perf] .mschf-callout {
+    animation-duration: 6.4s;
+    opacity: 0.6;
   }
   .mschf-callout::after {
     content: "";
@@ -1220,6 +1241,9 @@ html {
     opacity: 0.3;
     animation: mschf-glitch 0.8s steps(2, jump-none) infinite;
   }
+  #mschf-overlay-root[data-mschf-perf] .mschf-glitch {
+    animation-duration: 1.2s;
+  }
   .mschf-glitch::after {
     content: "";
     position: absolute;
@@ -1265,6 +1289,9 @@ html {
     text-shadow: 0 0 22px color-mix(in srgb, var(--mschf-pop) 40%, transparent);
     animation: mschf-marquee 24s linear infinite;
   }
+  #mschf-overlay-root[data-mschf-perf] .mschf-wm-line {
+    animation-duration: 32s;
+  }
   .mschf-watermark[data-variant="stripe"] .mschf-wm-line {
     font-size: clamp(1.8rem, 5vw, 3.2rem);
   }
@@ -1283,6 +1310,9 @@ html {
     opacity: 0.42;
     mix-blend-mode: screen;
     animation: mschf-flower 18s ease-in-out infinite;
+  }
+  #mschf-overlay-root[data-mschf-perf] .mschf-flower {
+    animation-duration: 26s;
   }
   .mschf-flower::after {
     content: "";
@@ -1305,6 +1335,9 @@ html {
     opacity: 0.28;
     mix-blend-mode: screen;
     animation: mschf-holo 14s ease-in-out infinite;
+  }
+  #mschf-overlay-root[data-mschf-perf] .mschf-holo {
+    animation-duration: 22s;
   }
   .mschf-holo.static {
     animation: none;
