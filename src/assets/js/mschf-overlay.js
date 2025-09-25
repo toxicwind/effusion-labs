@@ -46,6 +46,45 @@
       return null
     }
   }
+  const detectPerfProfile = () => {
+    const root = scope0 || document.documentElement
+    const w = Math.max(
+      typeof innerWidth === 'number' && innerWidth > 0
+        ? innerWidth
+        : root?.clientWidth || 0,
+      320,
+    )
+    const h = Math.max(
+      typeof innerHeight === 'number' && innerHeight > 0
+        ? innerHeight
+        : root?.clientHeight || 0,
+      320,
+    )
+    const rawDpr =
+      typeof devicePixelRatio === 'number' && devicePixelRatio > 0
+        ? devicePixelRatio
+        : 1
+    const dpr = Math.min(Math.max(rawDpr, 1), 2.5)
+    const pixels = Math.round(w * h * dpr)
+    const cores =
+      typeof navigator !== 'undefined' && navigator.hardwareConcurrency
+        ? navigator.hardwareConcurrency
+        : 0
+    const weakCPU = cores && cores <= 4
+    let tier = 'base'
+    let stepMs = 0
+    let autoReduce = false
+    if (pixels >= 9000000 || (pixels >= 6500000 && weakCPU)) {
+      tier = 'ultra'
+      stepMs = 42
+      autoReduce = true
+    } else if (pixels >= 6500000 || weakCPU) {
+      tier = 'hi'
+      stepMs = 28
+    }
+    return { tier, pixels, stepMs, autoReduce, weakCPU }
+  }
+  const PERF = detectPerfProfile()
   const log = (...a) => {
     if (DEBUG) {
       try {
@@ -478,6 +517,8 @@
     mood: 'calm', // calm → lite → bold → loud → storm → studio
     tempo: 1.0,
     reduceMotion: prefersReducedMotion,
+    userReduceMotion: prefersReducedMotion,
+    autoReduceMotion: PERF.autoReduce,
     reduceData: !!(
       navigator.connection
       && (navigator.connection.saveData
@@ -511,6 +552,13 @@
     paused: false,
     fps: { samples: [], bad: false },
     tiers: { xs: false, sm: false, md: false, lg: false },
+    perf: {
+      tier: PERF.tier,
+      pixels: PERF.pixels,
+      stepMs: PERF.stepMs,
+      autoReduce: PERF.autoReduce,
+      weakCPU: PERF.weakCPU,
+    },
     // hard caps per family to bound DOM churn; recomputed by tier/pressure
     caps: { scaffold: 6, ephemera: 6, lab: 4, frame: 5 },
     metrics: {
@@ -595,6 +643,49 @@
     _labels: new Map(),
     labelLayer: null,
     hud: null,
+    _perfStepT: 0,
+  }
+
+  if (PERF.tier !== 'base' && scope0) {
+    try {
+      scope0.dataset.mschfTier = PERF.tier
+    } catch {}
+  }
+
+  State.reduceMotion = State.userReduceMotion || State.autoReduceMotion
+
+  if (State.perf.tier === 'hi') {
+    State.nodeBudget = Math.min(State.nodeBudget, 84)
+    State.density = Math.min(State.density, 0.44)
+  } else if (State.perf.tier === 'ultra') {
+    State.nodeBudget = Math.min(State.nodeBudget, 68)
+    State.density = Math.min(State.density, 0.36)
+  }
+
+  const configForced = {
+    rare: scope.dataset.mschfRare !== undefined || qparam('mschfRare') != null,
+    rings: scope.dataset.mschfRings !== undefined || qparam('mschfRings') != null,
+    topo: scope.dataset.mschfTopo !== undefined || qparam('mschfTopo') != null,
+    gpuRings:
+      scope.dataset.mschfGpuRings !== undefined || qparam('mschfGpuRings') != null,
+    gpuTopo:
+      scope.dataset.mschfGpuTopo !== undefined || qparam('mschfGpuTopo') != null,
+    gpuStars:
+      scope.dataset.mschfGpuStars !== undefined || qparam('mschfGpuStars') != null,
+  }
+  configForced.gpuAny =
+    configForced.gpuRings || configForced.gpuTopo || configForced.gpuStars
+  State.configForced = configForced
+
+  if (State.perf.tier !== 'base') {
+    if (!configForced.rings) State.config.rings = false
+    if (!configForced.topo) State.config.topo = false
+  }
+  if (State.perf.tier === 'ultra') {
+    if (!configForced.rare) State.config.rare = false
+    if (!configForced.gpuRings) State.config.gpuRings = false
+    if (!configForced.gpuTopo) State.config.gpuTopo = false
+    if (!configForced.gpuStars) State.config.gpuStars = false
   }
 
   // Density from token (softened a touch)
@@ -727,6 +818,11 @@
     State.nodeBudget = State.tiers.lg ? 110 : State.tiers.md ? 90 : 60
     if (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4) {
       State.nodeBudget = Math.min(State.nodeBudget, 70)
+    }
+    if (State.perf?.tier === 'hi') {
+      State.nodeBudget = Math.min(State.nodeBudget, 80)
+    } else if (State.perf?.tier === 'ultra') {
+      State.nodeBudget = Math.min(State.nodeBudget, 60)
     }
 
     computeCaps()
@@ -937,19 +1033,25 @@
     const pressureMod = State.readingPressure > 0.25 ? 0.6 : 1.0
     const motionMod = State.reduceMotion ? 0.75 : 1.0
     const densityMod = lerp(0.6, 1.0, clamp(State.density, 0.2, 0.8))
+    const perfCapMod =
+      State.perf?.tier === 'ultra' ? 0.72 : State.perf?.tier === 'hi' ? 0.85 : 1
     State.caps = {
       scaffold: 6,
       ephemera: Math.max(
         1,
-        Math.floor(base.ephemera * pressureMod * motionMod * densityMod),
+        Math.floor(
+          base.ephemera * pressureMod * motionMod * densityMod * perfCapMod,
+        ),
       ),
       lab: Math.max(
         1,
-        Math.floor(base.lab * pressureMod * motionMod * densityMod),
+        Math.floor(base.lab * pressureMod * motionMod * densityMod * perfCapMod),
       ),
       frame: Math.max(
         1,
-        Math.floor(base.frame * pressureMod * motionMod * densityMod),
+        Math.floor(
+          base.frame * pressureMod * motionMod * densityMod * perfCapMod,
+        ),
       ),
     }
     if (State.scene?.capOverrides) {
@@ -1137,6 +1239,9 @@
       studio: 0.95,
     }[mood] || 1.0
     State.tempo = t
+    const tempoMod =
+      State.perf?.tier === 'ultra' ? 0.8 : State.perf?.tier === 'hi' ? 0.9 : 1
+    State.tempo *= tempoMod
 
     // calmer bar/beat lengths
     State.bars.dur = lerp(3400, 5200, 1 / (State.tempo + 0.01))
@@ -1151,7 +1256,16 @@
       storm: 0.85,
       studio: 0.35,
     }[mood] || 0.4
-    State.density = clamp(lerp(State.density, base, 0.6), 0.18, 0.9)
+    const adjustedBase = Math.max(
+      0.18,
+      base
+        * (State.perf?.tier === 'ultra'
+          ? 0.75
+          : State.perf?.tier === 'hi'
+          ? 0.88
+          : 1),
+    )
+    State.density = clamp(lerp(State.density, adjustedBase, 0.6), 0.18, 0.9)
 
     const isArticle = State.flags.isArticle
     if (isArticle) State.density = Math.min(State.density, 0.45)
@@ -1180,6 +1294,10 @@
       if (State.reduceData) return null
       // Only on large screens by default
       if (!State.tiers.lg) return null
+      if (State.perf?.tier === 'ultra' && !State.configForced?.gpuAny) {
+        DEBUG && log('GPU.init skipped — perf tier ultra')
+        return null
+      }
       DEBUG && log('GPU.init start')
       const PIXI = await loadPixi()
       if (!PIXI) {
@@ -2758,6 +2876,15 @@
     DEBUG && groupEnd()
   }
 
+  const spawnCount = (min, max) => {
+    const mod =
+      State.perf?.tier === 'ultra' ? 0.55 : State.perf?.tier === 'hi' ? 0.75 : 1
+    const raw = lerp(min, max, State.density) * mod
+    if (raw <= 0) return 0
+    if (min > 0 && raw < 1) return 1
+    return Math.floor(raw)
+  }
+
   function spawnEphemera(min, max) {
     const baseBag = [A.tape, A.stamp, A.quotes, A.plate, A.specimen]
     const bag = filterAllowedFactories(baseBag, 'ephemera')
@@ -2766,7 +2893,7 @@
       ? bag.filter(f => (f.meta?.complexity || 1) <= 2)
       : bag
     const pool = poolSource.length ? poolSource : bag
-    const n = Math.floor(lerp(min, max, State.density))
+    const n = spawnCount(min, max)
     for (let i = 0; i < n; i++) {
       const factory = pick(pool.length ? pool : bag)
       if (!factory) continue
@@ -2791,7 +2918,7 @@
       ? bag.filter(f => (f.meta?.complexity || 1) <= 3)
       : bag
     const pool = poolSource.length ? poolSource : bag
-    const n = Math.floor(lerp(min, max, State.density))
+    const n = spawnCount(min, max)
     for (let i = 0; i < n; i++) {
       const factory = pick(pool.length ? pool : bag)
       if (!factory) continue
@@ -2817,7 +2944,7 @@
       ? bag.filter(f => (f.meta?.complexity || 1) <= 2)
       : bag
     const pool = poolSource.length ? poolSource : bag
-    const n = Math.floor(lerp(min, max, State.density))
+    const n = spawnCount(min, max)
     for (let i = 0; i < n; i++) {
       const candidates = (pool.length ? pool : bag).slice()
       let placed = false
@@ -2923,6 +3050,8 @@
   }
 
   function rareMoment() {
+    if (State.perf?.tier === 'ultra') return
+    if (State.perf?.tier === 'hi' && State.density > 0.42) return
     if (State.scene && State.scene.allowRare === false) return
     if (State.reduceMotion || State.tiers.xs) return
     C.rare++
@@ -2953,6 +3082,17 @@
   function tick(t) {
     if (State.paused) return
     requestAnimationFrame(tick)
+    const stepMs = State.perf?.stepMs || 0
+    if (stepMs > 0) {
+      const lastPerf = State._perfStepT || 0
+      if (lastPerf && t - lastPerf < stepMs) {
+        State._t = t
+        return
+      }
+      State._perfStepT = t
+    } else {
+      State._perfStepT = t
+    }
     const dt = t - (State._t || t)
     State._t = t
 
@@ -3320,7 +3460,15 @@
 
     // GPU init (LG only, not reduced-data, and avoid truly weak CPUs)
     const weakCPU = navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4
-    if (!State.tiers.xs && !State.tiers.sm && !State.reduceData && !weakCPU) {
+    const skipGpuTier =
+      State.perf?.tier === 'ultra' && !State.configForced?.gpuAny
+    if (
+      !State.tiers.xs
+      && !State.tiers.sm
+      && !State.reduceData
+      && !weakCPU
+      && !skipGpuTier
+    ) {
       State.app = await GPU.init()
     }
 
