@@ -37,6 +37,8 @@
     beats: 0,
     bars: 0,
   }
+  const SAFE_ZONE_SELECTOR_DEFAULT =
+    '.prose, main, article, header, nav, .map-cta, [data-safe], [data-mschf-safe], [data-occlude="avoid"]'
   const qparam = name => {
     try {
       return new URLSearchParams(q).get(name)
@@ -472,6 +474,7 @@
     nodeBudget: 120,
     nodeCount: 0,
     scene: { profile: 'default', allowRare: true, blockKinds: new Set() },
+    isArticle: false,
     actors: new Set(),
     families: {
       scaffold: new Set(),
@@ -495,6 +498,17 @@
     caps: { scaffold: 6, ephemera: 6, lab: 4, frame: 5 },
     alpha: 0.85, // overall overlay alpha (debuggable)
     gpu: { maskOn: true, stageAlpha: 1.0 },
+    metrics: {
+      dirty: true,
+      measuring: false,
+      scheduled: false,
+      last: 0,
+      safeSelector: scope.getAttribute('data-mschf-safe')
+        || SAFE_ZONE_SELECTOR_DEFAULT,
+      safeZones: [],
+      readingPressure: 0,
+      isArticle: false,
+    },
     // runtime config knobs
     config: {
       // 'once' (default): single recomposition; 'auto': periodic; 'off': never after initial
@@ -702,11 +716,9 @@
   // Safe zones & placement
   // ————————————————————————————————————————
   function computeSafeZones() {
-    const selFallback =
-      '.prose, main, article, header, nav, .map-cta, [data-safe], [data-mschf-safe], [data-occlude="avoid"]'
-    const sel = scope.getAttribute('data-mschf-safe') || selFallback
+    const selector = State.metrics?.safeSelector || SAFE_ZONE_SELECTOR_DEFAULT
     const pad = 24 // ↑ from 16
-    const rects = [...document.querySelectorAll(sel)]
+    const rects = [...document.querySelectorAll(selector)]
       .map(n => n.getBoundingClientRect())
       .filter(r => r.width * r.height > 0)
       .map(r => ({
@@ -715,8 +727,7 @@
         w: clamp(r.width + pad * 2, 0, innerWidth),
         h: clamp(r.height + pad * 2, 0, innerHeight),
       }))
-    State.safeZones = rects
-    GPU.updateMask() // keep GPU from painting over prose
+    return rects
   }
 
   // Clip each rect to the viewport; measure visible text only
@@ -733,13 +744,83 @@
       area += clip(r)
     })
     const total = W * H || 1
-    State.readingPressure = clamp(area / total, 0, 1)
+    return clamp(area / total, 0, 1)
   }
-  function computeContext() {
-    computeSafeZones()
-    computeReadingPressure()
+  function computeContext(options = {}) {
+    refreshMetrics(options)
     evaluateSceneProfile()
     computeCaps()
+  }
+
+  function detectArticleContext() {
+    return !!document.querySelector(
+      '.prose,[data-kind="spark"],[data-kind="concept"],[data-kind="project"],article,main .prose',
+    )
+  }
+
+  function markMetricsDirty(reason) {
+    const metrics = State.metrics
+    if (!metrics) return
+    if (!metrics.dirty && DEBUG && reason) {
+      log('metrics dirty', reason)
+    }
+    metrics.dirty = true
+  }
+
+  function scheduleMetricsRefresh({ force = false, reason } = {}) {
+    const metrics = State.metrics
+    if (!metrics) return
+    if (reason) markMetricsDirty(reason)
+    if (force) {
+      computeContext({ force: true, deferOk: false })
+      return
+    }
+    if (metrics.scheduled) return
+    metrics.scheduled = true
+    const run = () => {
+      metrics.scheduled = false
+      computeContext({ deferOk: false })
+    }
+    if ('requestIdleCallback' in window) {
+      try {
+        requestIdleCallback(run, { timeout: 180 })
+        return
+      } catch {}
+    }
+    setTimeout(run, 36)
+  }
+
+  function refreshMetrics({ force = false, deferOk = true } = {}) {
+    const metrics = State.metrics
+    if (!metrics) return
+    const t = now()
+    if (!force && !metrics.dirty && t - metrics.last < 360) return
+    if (!force && deferOk && metrics.dirty && t - metrics.last < 200) {
+      scheduleMetricsRefresh({ reason: 'throttle defer' })
+      return
+    }
+    if (metrics.measuring) {
+      // Already in-flight — let the scheduled run pick up the latest
+      return
+    }
+    metrics.measuring = true
+    try {
+      metrics.safeSelector = scope.getAttribute('data-mschf-safe')
+        || SAFE_ZONE_SELECTOR_DEFAULT
+      const safeZones = computeSafeZones()
+      const pressure = computeReadingPressure()
+      metrics.safeZones = State.safeZones = safeZones
+      metrics.readingPressure = State.readingPressure = pressure
+      metrics.isArticle = State.isArticle = detectArticleContext()
+      metrics.last = t
+      metrics.dirty = false
+      GPU.updateMask() // keep GPU from painting over prose
+    } catch (error) {
+      metrics.dirty = true
+      if (DEBUG) warn('metrics refresh failed', error)
+    } finally {
+      metrics.measuring = false
+    }
   }
 
   // Recompute per-family caps by tier, density, motion, and reading pressure
@@ -968,9 +1049,7 @@
     }[mood] || 0.4
     State.density = clamp(lerp(State.density, base, 0.6), 0.18, 0.9)
 
-    const isArticle = !!document.querySelector(
-      '.prose,[data-kind="spark"],[data-kind="concept"],[data-kind="project"],article,main .prose',
-    )
+    const isArticle = State.isArticle
     if (isArticle) State.density = Math.min(State.density, 0.45)
     if (State.tiers.xs || State.tiers.sm) {
       State.density = Math.min(State.density, 0.45)
@@ -2801,7 +2880,7 @@
       }
     }
 
-    for (const a of Array.from(State.actors)) {
+    for (const a of State.actors) {
       try {
         a.update && a.update(t, dt)
       } catch {}
@@ -3112,7 +3191,8 @@
   // Events
   addEventListener('resize', () => {
     computeTiers()
-    computeContext()
+    markMetricsDirty('resize')
+    scheduleMetricsRefresh({ reason: 'resize' })
     resetOccupancy()
   })
   document.addEventListener('visibilitychange', onVisibility, false)
