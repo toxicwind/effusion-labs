@@ -102,6 +102,25 @@
       return false
     }
   })()
+  const viewportMetrics = () => {
+    const width = Math.max(1, typeof innerWidth === 'number' ? innerWidth : 1024)
+    const height = Math.max(1, typeof innerHeight === 'number' ? innerHeight : 768)
+    const area = width * height
+    const pixelRatio = typeof devicePixelRatio === 'number' ? devicePixelRatio : 1
+    const hiDensity = pixelRatio >= 1.5
+    const xl = width >= 1440 || area >= 3_200_000
+    const uhd = width >= 2200 || area >= 5_000_000
+    return {
+      width,
+      height,
+      area,
+      pixelRatio,
+      hiDensity,
+      xl,
+      uhd,
+      degrade: uhd || (hiDensity && xl),
+    }
+  }
   const el = (tag, cls, parent) => {
     const n = document.createElement(tag)
     if (cls) n.className = cls
@@ -291,6 +310,12 @@
   const syncRootSceneDataset = () => {
     if (State?.root && State.scene) {
       State.root.dataset.mschfProfile = State.scene.profile || 'default'
+      const perf = State.performance
+      if (perf?.degrade) {
+        State.root.dataset.mschfPerf = perf.uhd ? 'uhd' : 'hi'
+      } else {
+        delete State.root.dataset.mschfPerf
+      }
     }
   }
 
@@ -467,6 +492,8 @@
   // ————————————————————————————————————————
   // Global State
   // ————————————————————————————————————————
+  const PERF0 = viewportMetrics()
+
   const State = {
     root: null,
     domLayer: null,
@@ -484,7 +511,7 @@
         || /2g/.test(navigator.connection.effectiveType || ''))
     ),
     visible: !document.hidden,
-    nodeBudget: 120,
+    nodeBudget: PERF0.degrade ? 60 : 110,
     nodeCount: 0,
     scene: { profile: 'default', allowRare: true, blockKinds: new Set() },
     actors: new Set(),
@@ -510,7 +537,8 @@
     gridRows: 6,
     paused: false,
     fps: { samples: [], bad: false },
-    tiers: { xs: false, sm: false, md: false, lg: false },
+    tiers: { xs: false, sm: false, md: false, lg: false, xl: false, uhd: false },
+    performance: PERF0,
     // hard caps per family to bound DOM churn; recomputed by tier/pressure
     caps: { scaffold: 6, ephemera: 6, lab: 4, frame: 5 },
     metrics: {
@@ -717,19 +745,46 @@
   // Mobile tiers + budgets
   // ————————————————————————————————————————
   function computeTiers() {
-    const w = innerWidth
+    const metrics = viewportMetrics()
+    State.performance = metrics
+
+    const w = metrics.width
     State.tiers.xs = w < 480
     State.tiers.sm = w >= 480 && w < 768
     State.tiers.md = w >= 768 && w < 1024
     State.tiers.lg = w >= 1024
+    State.tiers.xl = !!metrics.xl
+    State.tiers.uhd = !!metrics.uhd
 
-    // tiered budgets
-    State.nodeBudget = State.tiers.lg ? 110 : State.tiers.md ? 90 : 60
-    if (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4) {
-      State.nodeBudget = Math.min(State.nodeBudget, 70)
+    let budget
+    if (metrics.degrade) {
+      budget = 60
+    } else if (State.tiers.xl) {
+      budget = 84
+    } else if (State.tiers.lg) {
+      budget = 96
+    } else if (State.tiers.md) {
+      budget = 72
+    } else {
+      budget = 54
+    }
+
+    if (State.reduceData) budget = Math.min(budget, 48)
+
+    const cores = navigator.hardwareConcurrency || 8
+    if (cores <= 4) {
+      budget = Math.min(budget, metrics.degrade ? 52 : 64)
+    }
+
+    State.nodeBudget = Math.max(36, Math.round(budget))
+
+    if (metrics.degrade) {
+      const cap = metrics.uhd ? 0.36 : 0.42
+      State.density = Math.min(State.density, cap)
     }
 
     computeCaps()
+    if (State.root) syncRootSceneDataset()
   }
 
   // ————————————————————————————————————————
@@ -929,7 +984,11 @@
 
   // Recompute per-family caps by tier, density, motion, and reading pressure
   function computeCaps() {
-    const base = State.tiers.lg
+    const base = State.tiers.uhd
+      ? { ephemera: 5, lab: 3, frame: 4 }
+      : State.tiers.xl
+      ? { ephemera: 7, lab: 5, frame: 5 }
+      : State.tiers.lg
       ? { ephemera: 8, lab: 6, frame: 6 }
       : State.tiers.md
       ? { ephemera: 6, lab: 4, frame: 5 }
@@ -937,19 +996,20 @@
     const pressureMod = State.readingPressure > 0.25 ? 0.6 : 1.0
     const motionMod = State.reduceMotion ? 0.75 : 1.0
     const densityMod = lerp(0.6, 1.0, clamp(State.density, 0.2, 0.8))
+    const perfMod = State.performance?.degrade ? 0.75 : 1.0
     State.caps = {
       scaffold: 6,
       ephemera: Math.max(
         1,
-        Math.floor(base.ephemera * pressureMod * motionMod * densityMod),
+        Math.floor(base.ephemera * perfMod * pressureMod * motionMod * densityMod),
       ),
       lab: Math.max(
         1,
-        Math.floor(base.lab * pressureMod * motionMod * densityMod),
+        Math.floor(base.lab * perfMod * pressureMod * motionMod * densityMod),
       ),
       frame: Math.max(
         1,
-        Math.floor(base.frame * pressureMod * motionMod * densityMod),
+        Math.floor(base.frame * perfMod * pressureMod * motionMod * densityMod),
       ),
     }
     if (State.scene?.capOverrides) {
@@ -1136,11 +1196,17 @@
       storm: 1.25,
       studio: 0.95,
     }[mood] || 1.0
-    State.tempo = t
+    const perf = State.performance
+    const tempoMod = perf?.degrade ? 0.9 : 1
+    State.tempo = t * tempoMod
 
     // calmer bar/beat lengths
     State.bars.dur = lerp(3400, 5200, 1 / (State.tempo + 0.01))
     State.beats.dur = lerp(580, 820, 1 / (State.tempo + 0.01))
+    if (perf?.degrade) {
+      State.bars.dur = Math.max(State.bars.dur, perf.uhd ? 5800 : 5400)
+      State.beats.dur = Math.max(State.beats.dur, perf.uhd ? 820 : 760)
+    }
 
     // density settles toward base, then capped by page type
     const base = {
@@ -1157,6 +1223,10 @@
     if (isArticle) State.density = Math.min(State.density, 0.45)
     if (State.tiers.xs || State.tiers.sm) {
       State.density = Math.min(State.density, 0.45)
+    }
+    if (perf?.degrade) {
+      const perfCap = perf.uhd ? 0.36 : 0.42
+      State.density = Math.min(State.density, perfCap)
     }
 
     if (State.root) State.root.dataset.mood = mood
@@ -1180,6 +1250,7 @@
       if (State.reduceData) return null
       // Only on large screens by default
       if (!State.tiers.lg) return null
+      if (State.performance?.degrade) return null
       DEBUG && log('GPU.init start')
       const PIXI = await loadPixi()
       if (!PIXI) {
@@ -2925,6 +2996,7 @@
   function rareMoment() {
     if (State.scene && State.scene.allowRare === false) return
     if (State.reduceMotion || State.tiers.xs) return
+    if (State.performance?.degrade) return
     C.rare++
     DEBUG && log('rareMoment')
     mount(A.holo(), 'frame')
@@ -2955,6 +3027,7 @@
     requestAnimationFrame(tick)
     const dt = t - (State._t || t)
     State._t = t
+    const degrade = State.performance?.degrade
 
     // FPS sentinel (sooner + gentler)
     const S = State.fps.samples
@@ -2974,7 +3047,8 @@
         && log('beat', { beats: C.beats, bars: C.bars })
     }
     if (State._needsRecompose) {
-      const mode = State.config.recompose
+      const configMode = State.config.recompose
+      const mode = degrade && configMode === 'auto' ? 'once' : configMode
       if (mode === 'off' || (mode === 'once' && State._didRecompose)) {
         State._needsRecompose = false
       } else {
@@ -2994,11 +3068,12 @@
           density: State.density,
           actors: State.actors.size,
         })
-      const mode = State.config.recompose
+      const configMode = State.config.recompose
+      const mode = degrade && configMode === 'auto' ? 'once' : configMode
       if (mode === 'auto') {
-        if (Math.random() < 0.7) applyMood(nextMood(State.mood))
-        recompose()
-        if (State.config.rare && Math.random() < 0.06) rareMoment()
+        if (!degrade && Math.random() < 0.7) applyMood(nextMood(State.mood))
+        if (!degrade || !State._didRecompose) recompose()
+        if (!degrade && State.config.rare && Math.random() < 0.06) rareMoment()
       } else if (mode === 'once') {
         if (!State._didRecompose) {
           recompose()
@@ -3320,7 +3395,13 @@
 
     // GPU init (LG only, not reduced-data, and avoid truly weak CPUs)
     const weakCPU = navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4
-    if (!State.tiers.xs && !State.tiers.sm && !State.reduceData && !weakCPU) {
+    if (
+      !State.tiers.xs
+      && !State.tiers.sm
+      && !State.reduceData
+      && !weakCPU
+      && !State.performance?.degrade
+    ) {
       State.app = await GPU.init()
     }
 
