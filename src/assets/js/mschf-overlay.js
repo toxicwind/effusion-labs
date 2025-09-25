@@ -323,6 +323,9 @@
       const target = State.scene.density.target
       State.density = lerp(State.density, target, 0.55)
     }
+    if (State.performance?.maxDensity != null) {
+      State.density = Math.min(State.density, State.performance.maxDensity)
+    }
 
     if (!State.scene.allowRare) {
       State.config.rare = false
@@ -467,6 +470,9 @@
   // ————————————————————————————————————————
   // Global State
   // ————————————————————————————————————————
+  const BASE_BEAT_MS = 680
+  const BASE_BAR_MS = 4200
+
   const State = {
     root: null,
     domLayer: null,
@@ -499,8 +505,8 @@
       lab: new Set(),
       frame: new Set(),
     },
-    beats: { last: now(), dur: 680 },
-    bars: { last: now(), dur: 4200 },
+    beats: { last: now(), dur: BASE_BEAT_MS },
+    bars: { last: now(), dur: BASE_BAR_MS },
     safeZones: [],
     occupancy: [],
     actorBoxes: new Map(), // id -> rect {x,y,w,h}
@@ -510,6 +516,16 @@
     gridRows: 6,
     paused: false,
     fps: { samples: [], bad: false },
+    performance: {
+      tier: 'base',
+      capMod: 1,
+      spawnMod: 1,
+      maxDensity: 0.38,
+      beat: 1,
+      bar: 1,
+      tick: 0,
+      gpu: true,
+    },
     tiers: { xs: false, sm: false, md: false, lg: false },
     // hard caps per family to bound DOM churn; recomputed by tier/pressure
     caps: { scaffold: 6, ephemera: 6, lab: 4, frame: 5 },
@@ -716,6 +732,70 @@
   // ————————————————————————————————————————
   // Mobile tiers + budgets
   // ————————————————————————————————————————
+  const PERFORMANCE_PROFILES = {
+    base: {
+      capMod: 1,
+      spawnMod: 1,
+      maxDensity: 0.38,
+      beat: 1,
+      bar: 1,
+      tick: 0,
+      gpu: true,
+      nodeBudget: { xs: 42, sm: 52, md: 68, lg: 88 },
+    },
+    cautious: {
+      capMod: 0.68,
+      spawnMod: 0.55,
+      maxDensity: 0.26,
+      beat: 1.18,
+      bar: 1.28,
+      tick: 18,
+      gpu: false,
+      nodeBudget: { xs: 34, sm: 40, md: 52, lg: 64 },
+    },
+    minimal: {
+      capMod: 0.45,
+      spawnMod: 0.35,
+      maxDensity: 0.2,
+      beat: 1.32,
+      bar: 1.55,
+      tick: 26,
+      gpu: false,
+      nodeBudget: { xs: 26, sm: 32, md: 40, lg: 48 },
+    },
+  }
+
+  function computePerformanceProfile() {
+    const concurrency = navigator.hardwareConcurrency || 8
+    const mem = navigator.deviceMemory || 16
+    const dpr = typeof devicePixelRatio === 'number' ? devicePixelRatio : 1
+    const area = innerWidth * innerHeight * dpr * dpr
+    let tier = 'base'
+    if (area >= 7_500_000 || concurrency <= 6) tier = 'cautious'
+    if (area >= 9_500_000 || concurrency <= 4 || mem <= 8) tier = 'minimal'
+    if (State.reduceData) tier = 'minimal'
+    if (State.reduceMotion && tier === 'base') tier = 'cautious'
+    const profile = PERFORMANCE_PROFILES[tier] || PERFORMANCE_PROFILES.base
+    const resolved = { tier, ...profile }
+    State.performance = resolved
+    if (resolved.maxDensity != null) {
+      State.density = Math.min(State.density, resolved.maxDensity)
+    }
+    State.beats.dur = Math.round(BASE_BEAT_MS * resolved.beat)
+    State.bars.dur = Math.round(BASE_BAR_MS * resolved.bar)
+    if (!resolved.gpu) {
+      if (scope.dataset.mschfGpuRings == null) State.config.gpuRings = false
+      if (scope.dataset.mschfGpuTopo == null) State.config.gpuTopo = false
+      if (scope.dataset.mschfGpuStars == null) State.config.gpuStars = false
+    }
+    if (resolved.tier !== 'base') {
+      State.config.rare = false
+      if (scope.dataset.mschfRings == null) State.config.rings = false
+      if (scope.dataset.mschfTopo == null) State.config.topo = false
+    }
+    return resolved
+  }
+
   function computeTiers() {
     const w = innerWidth
     State.tiers.xs = w < 480
@@ -723,10 +803,26 @@
     State.tiers.md = w >= 768 && w < 1024
     State.tiers.lg = w >= 1024
 
-    // tiered budgets
-    State.nodeBudget = State.tiers.lg ? 110 : State.tiers.md ? 90 : 60
+    const sizeKey = State.tiers.lg
+      ? 'lg'
+      : State.tiers.md
+      ? 'md'
+      : State.tiers.sm
+      ? 'sm'
+      : 'xs'
+
+    const perf = computePerformanceProfile()
+    const fallbackBudget = sizeKey === 'lg'
+      ? 70
+      : sizeKey === 'md'
+      ? 56
+      : sizeKey === 'sm'
+      ? 44
+      : 36
+    const targetBudget = perf.nodeBudget?.[sizeKey] || fallbackBudget
+    State.nodeBudget = targetBudget
     if (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4) {
-      State.nodeBudget = Math.min(State.nodeBudget, 70)
+      State.nodeBudget = Math.min(State.nodeBudget, Math.max(32, targetBudget - 12))
     }
 
     computeCaps()
@@ -937,19 +1033,24 @@
     const pressureMod = State.readingPressure > 0.25 ? 0.6 : 1.0
     const motionMod = State.reduceMotion ? 0.75 : 1.0
     const densityMod = lerp(0.6, 1.0, clamp(State.density, 0.2, 0.8))
+    const perfMod = clamp(State.performance?.capMod ?? 1, 0.2, 1)
     State.caps = {
       scaffold: 6,
       ephemera: Math.max(
         1,
-        Math.floor(base.ephemera * pressureMod * motionMod * densityMod),
+        Math.floor(
+          base.ephemera * pressureMod * motionMod * densityMod * perfMod,
+        ),
       ),
       lab: Math.max(
         1,
-        Math.floor(base.lab * pressureMod * motionMod * densityMod),
+        Math.floor(base.lab * pressureMod * motionMod * densityMod * perfMod),
       ),
       frame: Math.max(
         1,
-        Math.floor(base.frame * pressureMod * motionMod * densityMod),
+        Math.floor(
+          base.frame * pressureMod * motionMod * densityMod * perfMod,
+        ),
       ),
     }
     if (State.scene?.capOverrides) {
@@ -2758,6 +2859,20 @@
     DEBUG && groupEnd()
   }
 
+  function computeSpawnCount(min, max) {
+    const spawnMod = clamp(State.performance?.spawnMod ?? 1, 0, 1)
+    const base = Math.floor(lerp(min, max, State.density))
+    if (base <= 0) {
+      return min > 0 || max > 0 ? (Math.random() < spawnMod ? 1 : 0) : 0
+    }
+    if (spawnMod >= 0.999) return base
+    const scaled = Math.round(base * spawnMod)
+    if (scaled <= 0) {
+      return Math.random() < spawnMod ? 1 : 0
+    }
+    return Math.max(0, Math.min(base, scaled))
+  }
+
   function spawnEphemera(min, max) {
     const baseBag = [A.tape, A.stamp, A.quotes, A.plate, A.specimen]
     const bag = filterAllowedFactories(baseBag, 'ephemera')
@@ -2766,7 +2881,7 @@
       ? bag.filter(f => (f.meta?.complexity || 1) <= 2)
       : bag
     const pool = poolSource.length ? poolSource : bag
-    const n = Math.floor(lerp(min, max, State.density))
+    const n = computeSpawnCount(min, max)
     for (let i = 0; i < n; i++) {
       const factory = pick(pool.length ? pool : bag)
       if (!factory) continue
@@ -2791,7 +2906,7 @@
       ? bag.filter(f => (f.meta?.complexity || 1) <= 3)
       : bag
     const pool = poolSource.length ? poolSource : bag
-    const n = Math.floor(lerp(min, max, State.density))
+    const n = computeSpawnCount(min, max)
     for (let i = 0; i < n; i++) {
       const factory = pick(pool.length ? pool : bag)
       if (!factory) continue
@@ -2817,7 +2932,7 @@
       ? bag.filter(f => (f.meta?.complexity || 1) <= 2)
       : bag
     const pool = poolSource.length ? poolSource : bag
-    const n = Math.floor(lerp(min, max, State.density))
+    const n = computeSpawnCount(min, max)
     for (let i = 0; i < n; i++) {
       const candidates = (pool.length ? pool : bag).slice()
       let placed = false
@@ -2924,6 +3039,7 @@
 
   function rareMoment() {
     if (State.scene && State.scene.allowRare === false) return
+    if (State.performance?.tier !== 'base') return
     if (State.reduceMotion || State.tiers.xs) return
     C.rare++
     DEBUG && log('rareMoment')
@@ -2936,7 +3052,10 @@
   function degradeDensity() {
     // drop some actors and reduce target density
     const fams = ['lab', 'frame', 'ephemera']
-    State.density = Math.max(0.18, State.density - 0.06)
+    const floor = State.performance?.maxDensity
+      ? Math.max(0.14, State.performance.maxDensity - 0.08)
+      : 0.18
+    State.density = Math.max(floor, State.density - 0.06)
     for (const fam of fams) {
       const n = Math.ceil(State.families[fam].size * 0.3)
       for (let i = 0; i < n; i++) {
@@ -2953,8 +3072,17 @@
   function tick(t) {
     if (State.paused) return
     requestAnimationFrame(tick)
-    const dt = t - (State._t || t)
+    let dt = t - (State._t || t)
     State._t = t
+    State._tickAccum = (State._tickAccum || 0) + dt
+    const throttle = State.performance?.tick || 0
+    if (throttle && State._tickAccum < throttle) {
+      return
+    }
+    if (throttle) {
+      dt = State._tickAccum
+    }
+    State._tickAccum = 0
 
     // FPS sentinel (sooner + gentler)
     const S = State.fps.samples
@@ -3047,7 +3175,15 @@
         if (a.dead) retire(a)
       }
     }
-    GPU.step(t)
+    if (State.performance?.gpu === false) {
+      try {
+        if (State.app && typeof State.app.stop === 'function') {
+          State.app.stop()
+        }
+      } catch {}
+    } else {
+      GPU.step(t)
+    }
 
     // Debug dev-labels (throttled)
     // enforce pass-through unless picking
@@ -3185,7 +3321,15 @@
     const line1 = `bars:${C.bars} beats:${C.beats} mood:${State.mood} d:${State.density.toFixed(2)}`
     const line2 =
       `scaf:${sizes.scaffold} eph:${sizes.ephemera} lab:${sizes.lab} frame:${sizes.frame}`
+    const perf = State.performance || {}
     const line3 = `actors:${State.actors.size} nodes:${State.nodeCount}`
+    const capStr = typeof perf.capMod === 'number'
+      ? perf.capMod.toFixed(2)
+      : String(perf.capMod || '1')
+    const spawnStr = typeof perf.spawnMod === 'number'
+      ? perf.spawnMod.toFixed(2)
+      : String(perf.spawnMod || '1')
+    const linePerf = `perf:${perf.tier || 'base'} cap:${capStr} spawn:${spawnStr}`
     // brief legend of kinds by frame/ephemera
     const kinds = fam => {
       const m = Object.create(null)
@@ -3198,7 +3342,7 @@
     }
     const line4 = `@ephemera ${kinds('ephemera')}`
     const line5 = `@frame ${kinds('frame')}`
-    State.hud.textContent = `${line1}\n${line2}\n${line3}\n${line4}\n${line5}`
+    State.hud.textContent = `${line1}\n${line2}\n${line3}\n${linePerf}\n${line4}\n${line5}`
   }
   function wireSections() {
     const hero = document.querySelector(
@@ -3320,7 +3464,13 @@
 
     // GPU init (LG only, not reduced-data, and avoid truly weak CPUs)
     const weakCPU = navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4
-    if (!State.tiers.xs && !State.tiers.sm && !State.reduceData && !weakCPU) {
+    if (
+      !State.tiers.xs
+      && !State.tiers.sm
+      && !State.reduceData
+      && !weakCPU
+      && State.performance?.gpu !== false
+    ) {
       State.app = await GPU.init()
     }
 
