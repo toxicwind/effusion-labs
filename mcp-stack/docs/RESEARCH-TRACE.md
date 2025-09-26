@@ -13,10 +13,10 @@ Interlinker fortification:
 - After: inputs sanitized via `toHtmlString`, canonical-first resolution, and
   unresolved links recorded for audit.
 - v2: Patched both CJS and ESM plugin surfaces
-  (`@photogabble/eleventy-plugin-interlinker@1.1.0`) via patch-package; added
+  (`@photogabble/eleventy-plugin-interlinker@1.1.0`) via `tools/apply-patches.mjs`; added
   i18n-aware href prefixing and generalized multi-scaffold resolvers.
 - v3: Coerced all parser inputs to strings (CJS + ESM), added sentinel comments,
-  introduced `safeMatch(...)`, fixed Docker layering so `patch-package` sees
+  introduced `safeMatch(...)`, fixed Docker layering so the patch runner sees
   `patches/` in deps stage, and added CI guard
   (`utils/scripts/validation/verify-patch-applied.mjs`).
 

@@ -43,7 +43,7 @@ Project facts for tools and agents. No meta-instructions.
 | mcp:*              | MCP gateway + tests (`mcp:dev`, `mcp:integration`, `mcp:test`)                            |
 | lv-images:*        | Dataset utilities                                                                         |
 
-> `postinstall` is handled by setup (Puppeteer CfT shims + optional patch-package).
+> `postinstall` is handled by setup (Puppeteer CfT shims + tools/apply-patches.mjs).
 
 ## Notable Dev Dependencies (signal only)
 - Eleventy core/plugins, Vite, Tailwind, daisyUI

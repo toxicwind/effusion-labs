@@ -1,12 +1,11 @@
 # Effusion Labs
 
-Effusion Labs is a digital studio and knowledge base for rapid iteration. It
-uses **Eleventy v3** as a static-site generator with **Vite** for modern
-bundling and hot-module reloading. Content is authored in **Markdown** and
-**Nunjucks** under `src/content/` and compiled into a deployable static site in
-`_site/`. Styles are managed with **Tailwind CSS v4** and **daisyUI v5**, with a
-single entry stylesheet. The project targets **Node.js ≥24** and runs fully in
-**ECMAScript-module (ESM)** mode.
+Effusion Labs is a digital studio and knowledge base for rapid iteration. It uses **Eleventy v3** as
+a static-site generator with **Vite** for modern bundling and hot-module reloading. Content is
+authored in **Markdown** and **Nunjucks** under `src/content/` and compiled into a deployable static
+site in `_site/`. Styles are managed with **Tailwind CSS v4** and **daisyUI v5**, with a single
+entry stylesheet. The project targets **Node.js ≥24** and runs fully in **ECMAScript-module (ESM)**
+mode.
 
 ---
 
@@ -34,50 +33,45 @@ single entry stylesheet. The project targets **Node.js ≥24** and runs fully in
 
 ## Overview
 
-A fast, opinionated Eleventy + Tailwind static site—curated as a digital garden.
-Batteries included, CI-ready, and friendly to autonomous coding agents.
+A fast, opinionated Eleventy + Tailwind static site—curated as a digital garden. Batteries included,
+CI-ready, and friendly to autonomous coding agents.
 
 ---
 
 ## Features
 
-- **Dynamic interlinking** — Uses `@photogabble/eleventy-plugin-interlinker` to
-  resolve wiki-style links across multiple content types. If a link omits a kind
-  (e.g. `[[Labubu]]`), the resolver falls back through:  
-  `work → character → product → series → concept → project → spark → meta`.  
-  Named kinds such as `product`, `character`, and `series` map to canonical
-  archive routes like `/archives/product/<slug>/`.
+- **Dynamic interlinking** — Uses `@photogabble/eleventy-plugin-interlinker` to resolve wiki-style
+  links across multiple content types. If a link omits a kind (e.g. `[[Labubu]]`), the resolver
+  falls back through:\
+  `work → character → product → series → concept → project → spark → meta`.\
+  Named kinds such as `product`, `character`, and `series` map to canonical archive routes like
+  `/archives/product/<slug>/`.
 
-- **Unresolved-link reporting** — Each build writes
-  `artifacts/reports/interlinker-unresolved.json`. CI can be configured with
-  `INTERLINKER_MAX_UNRESOLVED` and `INTERLINKER_FAIL_ON_UNRESOLVED` to fail on
-  overs.
+- **Unresolved-link reporting** — Each build writes `artifacts/reports/interlinker-unresolved.json`.
+  CI can be configured with `INTERLINKER_MAX_UNRESOLVED` and `INTERLINKER_FAIL_ON_UNRESOLVED` to
+  fail on overs.
 
-- **Patched interlinker** — A hotfix via `patch-package` adds a `toHtmlString`
+- **Patched interlinker** — A hotfix via `tools/apply-patches.mjs` adds a `toHtmlString`
   coercion and guards non-string inputs across ESM/CJS, preventing crashes in
   Markdown-it and JSDOM.
 
-- **Eleventy plugins** — Navigation, RSS, sitemap, schema, plus official Vite
-  integration.
+- **Eleventy plugins** — Navigation, RSS, sitemap, schema, plus official Vite integration.
 
 - **Tailwind & daisyUI** — CSS-first styling.
 
-- **Content collections** — Custom collections expose “featured,” “interactive,”
-  and “recentAll.” The `work` collection aggregates sparks, concepts, projects,
-  and meta content.
+- **Content collections** — Custom collections expose “featured,” “interactive,” and “recentAll.”
+  The `work` collection aggregates sparks, concepts, projects, and meta content.
 
-- **Image optimization** — The Eleventy image plugin generates AVIF, WebP, and
-  fallback images at multiple widths under `/public`. Filenames are slugified
-  for determinism.
+- **Image optimization** — The Eleventy image plugin generates AVIF, WebP, and fallback images at
+  multiple widths under `/public`. Filenames are slugified for determinism.
 
-- **Link verification** — `npm run lint:links` uses `markdown-link-check` to
-  detect broken links. `npm run lint` runs link checks as part of linting.
+- **Link verification** — `npm run lint:links` uses `markdown-link-check` to detect broken links.
+  `npm run lint` runs link checks as part of linting.
 
-- **Testing & coverage** — Integration tests live in `test/` and run via
-  **Playwright**, with coverage via `c8`. Use `npm run test:watch` for
-  continuous feedback.
-- **npm-utils** — Built-in CLI to search, analyze, and install npm packages. We
-  love new packages and libraries; always consider them.
+- **Testing & coverage** — Integration tests live in `test/` and run via **Playwright**, with
+  coverage via `c8`. Use `npm run test:watch` for continuous feedback.
+- **npm-utils** — Built-in CLI to search, analyze, and install npm packages. We love new packages
+  and libraries; always consider them.
 
 ---
 
@@ -160,16 +154,15 @@ utils/         → Dev wrappers and scripts (no runtime code)
 tools/         → Build/validation CLIs (e.g., doctor)
 src/content/   → Markdown & Nunjucks pages
 test/          → Integration & unit tests (Playwright)
-patches/       → Hotfixes via patch-package
+patches/       → Hotfixes applied by tools/apply-patches.mjs
 artifacts/     → Reports (e.g., unresolved links), worklogs, export bundles
 ```
 
 Collections: `sparks`, `concepts`, `projects`, `meta`, `archives`, `work`.
 
-Globals: only editorial data remains in `src/_data/` (e.g., branding, sections).
-Programmatic data (build metadata, computed keys, navigation, archive nav) is
-injected once via `addGlobalData` from modules in `src/lib/data/` and
-`src/lib/archives/`.
+Globals: only editorial data remains in `src/_data/` (e.g., branding, sections). Programmatic data
+(build metadata, computed keys, navigation, archive nav) is injected once via `addGlobalData` from
+modules in `src/lib/data/` and `src/lib/archives/`.
 
 ---
 
@@ -179,66 +172,61 @@ Effusion Labs treats wiki-style links as first-class citizens.
 
 - `[[product:Tempura Shrimp]]` → `/archives/product/tempura-shrimp/`
 - `[[character:Momo Fox]]` → `/archives/character/momo-fox/`
-- Kindless links attempt:
-  `work → character → product → series → concept → project → spark → meta`.
+- Kindless links attempt: `work → character → product → series → concept → project → spark → meta`.
 
-All slugs normalize to lowercase, NFKD, punctuation-free identifiers. Unresolved
-links are recorded in `artifacts/reports/interlinker-unresolved.json` and can
-fail CI when thresholds are exceeded.
+All slugs normalize to lowercase, NFKD, punctuation-free identifiers. Unresolved links are recorded
+in `artifacts/reports/interlinker-unresolved.json` and can fail CI when thresholds are exceeded.
 
 ---
 
 ## Optional Services
 
-A companion `markdown_gateway/` service provides an HTML→Markdown proxy via
-Docker Compose.
+A companion `markdown_gateway/` service provides an HTML→Markdown proxy via Docker Compose.
 
 ```bash
 cd markdown_gateway
 docker compose up
 ```
 
-This starts a gateway container and FlareSolverr solver, useful when converting
-external HTML into Markdown for inclusion in the digital garden.
+This starts a gateway container and FlareSolverr solver, useful when converting external HTML into
+Markdown for inclusion in the digital garden.
 
 ---
 
 ## LV Images dataset workflow
 
-The Louis Vuitton crawler writes its dataset to
-`src/content/projects/lv-images/generated/lv/`. GitHub Actions and Portainer
-builds now expect a pre-built bundle rather than reaching out to the network.
+The crawler stores its snapshot under `src/content/projects/lv-images/generated/lv/`. GitHub Actions
+and Portainer can't rely on the public network, so the pipeline centres around a bundled archive
+that travels with the repo.
 
-| Step | Command | Purpose |
-| --- | --- | --- |
-| 1 | `npm run lv-images:update` | Refresh the dataset locally via Playwright. |
-| 2 | `npm run lv-images:bundle` | Normalize cache metadata and publish `lv.bundle.tgz` + manifest. |
-| 3 | Commit `generated/lv/`, `lv.bundle.tgz`, and `lv.bundle.json`. | Makes the snapshot consumable in CI. |
+| Scenario                      | Command                     | Purpose                                                                                                   |
+| ----------------------------- | --------------------------- | --------------------------------------------------------------------------------------------------------- |
+| Local refresh (full internet) | `npm run lv-images:sync`    | Runs the Playwright crawler, normalizes cache metadata, packs `lv.bundle.tgz`, and verifies the manifest. |
+| Quick snapshot stats          | `npm run lv-images:stats`   | Prints file counts and total size for the generated dataset.                                              |
+| Offline reuse / CI prep       | `npm run lv-images:hydrate` | Expands `generated/lv` from the committed bundle. Combine with `--keep` to avoid wiping existing files.   |
+| Integrity check               | `npm run lv-images:verify`  | Confirms archive size/hash and dataset counts against `lv.bundle.json`.                                   |
 
-On any machine (including CI) you can hydrate the dataset without touching the
-network:
+For end-to-end builds the orchestration commands roll these steps together:
 
-```bash
-npm run lv-images:hydrate
-```
+- `npm run build-local-fullinternet` — crawl + bundle + Eleventy build (with full network access).
+- `npm run build-local-offline` — hydrate the bundle and run Eleventy through the offline shim (no
+  external calls).
+- `npm run build-gitactions` — strict hydrate/verify + offline Eleventy; this is the profile used by
+  CI and Portainer.
 
-This script expands `generated/lv` from the bundled archive and will fail if the
-bundle is missing or stale. CI jobs call it automatically before running tests
-or builds, guaranteeing deterministic snapshots even on restricted networks.
-
-To sanity-check the archive, run `npm run lv-images:verify`; the helper compares
-hashes and file counts against the manifest.
+Commit `generated/lv/`, `generated/lv.bundle.tgz`, and `generated/lv.bundle.json` after running
+`npm run lv-images:sync` so that downstream builds stay deterministic even when the network is
+hostile.
 
 ---
 
 ## Development Workflow
 
 - Use `npm run dev` for local editing.
-- Keep dependency hotfixes under `patches/` using `patch-package`.
+- Keep dependency hotfixes under `patches/` and manage them with `npm run postinstall` (via `tools/apply-patches.mjs`).
 - Run `npm run check` before opening a PR.
 - CI may enforce unresolved-link thresholds and script consistency.
-- Explore new packages with `npm-utils`; we love new libraries and always
-  consider them.
+- Explore new packages with `npm-utils`; we love new libraries and always consider them.
 
 ---
 
@@ -247,10 +235,8 @@ hashes and file counts against the manifest.
 For fast repo mapping and sampling large files:
 
 - List files: `fd` / `fdfind` or `rg --files`
-- Read in small windows (head/anchor/tail); avoid dumping minified or >4k-line
-  blocks
-- Treat heavy zones cautiously: `node_modules/`, `_site/`, `artifacts/`,
-  `logs/`, `lib_content.json`
+- Read in small windows (head/anchor/tail); avoid dumping minified or >4k-line blocks
+- Treat heavy zones cautiously: `node_modules/`, `_site/`, `artifacts/`, `logs/`, `lib_content.json`
 
 See `AGENTS.md` for the full protocol, clamps, and Preview Capsule format.
 
@@ -258,9 +244,9 @@ See `AGENTS.md` for the full protocol, clamps, and Preview Capsule format.
 
 ## Contributing
 
-Pull requests are welcome. Keep patches focused and run `npm run check` before
-submitting. Contributions should comply with the **ISC License** and follow repo
-conventions. For agent workflows, see [`AGENTS.md`](./AGENTS.md).
+Pull requests are welcome. Keep patches focused and run `npm run check` before submitting.
+Contributions should comply with the **ISC License** and follow repo conventions. For agent
+workflows, see [`AGENTS.md`](./AGENTS.md).
 
 ---
 
