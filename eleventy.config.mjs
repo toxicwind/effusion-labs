@@ -71,22 +71,59 @@ export default function(eleventyConfig) {
       logLevel: 'warn',
     })
 
+    const wait = (ms) => new Promise((resolve) => {
+      setTimeout(resolve, ms)
+    })
+
+    const ensurePageOutput = async(targetPath, { attempts = 10, backoff = 100 } = {}) => {
+      for (let index = 0; index < attempts; index++) {
+        try {
+          await fsp.access(targetPath, fs.constants.F_OK)
+          return true
+        } catch {
+          await wait(backoff * (index + 1))
+        }
+      }
+
+      return false
+    }
+
     await Promise.all(
       criticalPages.map(async(page) => {
         const targetPath = path.join(outputDir, page)
 
-        if (!fs.existsSync(targetPath)) {
+        const hasInitialOutput = await ensurePageOutput(targetPath)
+
+        if (!hasInitialOutput) {
+          console.warn(
+            `Beasties inline skipped for ${page}: missing file at ${targetPath}`,
+          )
           return
         }
 
-        const html = await fsp.readFile(targetPath, 'utf8')
+        const maxAttempts = 5
 
-        try {
-          const inlined = await beasties.process(html)
-          await fsp.writeFile(targetPath, inlined)
-        } catch (error) {
-          console.error(`Beasties inline failed for ${page}:`, String(error?.message || error))
+        for (let attempt = 0; attempt < maxAttempts; attempt++) {
+          try {
+            const html = await fsp.readFile(targetPath, 'utf8')
+            const inlined = await beasties.process(html)
+            await fsp.writeFile(targetPath, inlined)
+            return
+          } catch (error) {
+            if (error?.code === 'ENOENT' && error?.path === targetPath) {
+              await wait(200 * (attempt + 1))
+              await ensurePageOutput(targetPath, { attempts: 1 })
+              continue
+            }
+
+            console.error(`Beasties inline failed for ${page}:`, String(error?.message || error))
+            return
+          }
         }
+
+        console.warn(
+          `Beasties inline skipped for ${page}: ${targetPath} unavailable after retries`,
+        )
       }),
     )
   })
