@@ -13,11 +13,10 @@
     "serve": "npx @11ty/eleventy --serve",
     "bench": "DEBUG=Eleventy:Benchmark* npx @11ty/eleventy",
     "prebuild": "node tools/lv-images/pipeline.mjs hydrate",
-    "prebuild:offline": "node tools/lv-images/pipeline.mjs hydrate",
     "build": "npx @11ty/eleventy",
-    "build:offline": "node tools/build-offline.mjs",
-    "verify:patches": "node tools/apply-patches.mjs --check",
+    "prebuild:offline": "node tools/lv-images/pipeline.mjs hydrate",
     "build:offline": "node tools/lv-images/pipeline.mjs build-local-offline",
+    "verify:patches": "node tools/apply-patches.mjs --check",
     "build-local-fullinternet": "node tools/lv-images/pipeline.mjs build-local-fullinternet",
     "build-local-offline": "node tools/lv-images/pipeline.mjs build-local-offline",
     "build-gitactions": "node tools/lv-images/pipeline.mjs build-gitactions",
@@ -100,6 +99,7 @@
     "ajv-formats": "3.0.1",
     "autoprefixer": "^10.4.21",
     "axios": "1.12.2",
+    "beasties": "^0.3.5",
     "bloom-filters": "^3.0.4",
     "c8": "10.1.3",
     "chalk": "5.6.2",
@@ -129,6 +129,7 @@
     "gray-matter": "4.0.3",
     "hast-util-select": "6.0.4",
     "husky": "^9.1.7",
+    "iconify-icon": "3.0.1",
     "jscodeshift": "^17.3.0",
     "jsdom": "^27.0.0",
     "knip": "^5.64.0",
@@ -168,13 +169,12 @@
     "remark-math": "6.0.0",
     "remark-smartypants": "^3.0.2",
     "remark-stringify": "11.0.0",
-    "beasties": "^0.3.5",
     "rustywind": "^0.24.3",
     "sass": "^1.93.2",
-    "tar": "^7.4.3",
     "shiki": "3.13.0",
     "slugify": "1.6.6",
     "tailwindcss": "4.1.13",
+    "tar": "^7.4.3",
     "tree-cli": "0.6.7",
     "typescript": "^5.9.2",
     "typescript-eslint": "^8.44.1",
@@ -198,8 +198,5 @@
     "rimraf": {
       "glob": "^10.4.5"
     }
-  },
-  "dependencies": {
-    "iconify-icon": "3.0.1"
   }
 }
