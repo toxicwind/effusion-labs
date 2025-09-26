@@ -145,22 +145,64 @@ const cache = {
 };
 
 class NdjsonWriter {
-  constructor(dir) { this.dir = dir; this.shardIndex = 0; this.shardLines = 0; this.totalItems = 0; this.stream = null; }
+  constructor(dir) {
+    this.dir = dir;
+    this.shardIndex = 0;
+    this.shardLines = 0;
+    this.totalItems = 0;
+    this.stream = null;
+
+    // Single-file write gate: ensures only one write hits the stream at a time.
+    this._queue = Promise.resolve();
+  }
+
   async _openShard() {
     if (this.stream) await new Promise((r) => this.stream.end(r));
-    this.shardIndex++; this.shardLines = 0;
+    this.shardIndex++;
+    this.shardLines = 0;
     const ts = new Date().toISOString().replace(/[:.]/g, "");
-    const shardPath = path.join(this.dir, `shard-${ts}-${String(this.shardIndex).padStart(3, "0")}.ndjson`);
+    const shardPath = path.join(
+      this.dir,
+      `shard-${ts}-${String(this.shardIndex).padStart(3, "0")}.ndjson`
+    );
+
     this.stream = createWriteStream(shardPath, { flags: "w" });
+    // Remove listener ceiling to avoid benign warnings under heavy churn.
+    this.stream.setMaxListeners(0);
     await once(this.stream, "open");
   }
-  async write(item) {
+
+  // Internal helper: perform a single physical write with backpressure handling.
+  async _writeLine(line) {
     if (!this.stream || this.shardLines >= 25000) await this._openShard();
-    if (!this.stream.write(JSON.stringify(item) + "\n")) await once(this.stream, "drain");
-    this.shardLines++; this.totalItems++;
+
+    // Try a direct write first. If it returns false, wait exactly one drain.
+    if (this.stream.write(line)) {
+      this.shardLines++;
+      this.totalItems++;
+      return;
+    }
+
+    // Backpressure path: wait for 'drain' once, then account the line.
+    await once(this.stream, "drain");
+    this.shardLines++;
+    this.totalItems++;
   }
-  async close() { if (this.stream) await new Promise((r) => this.stream.end(r)); }
+
+  // Public API: queue writes so only one hits the stream at a time.
+  async write(item) {
+    const line = JSON.stringify(item) + "\n";
+    this._queue = this._queue.then(() => this._writeLine(line));
+    return this._queue;
+  }
+
+  async close() {
+    // Flush any queued writes before closing.
+    await this._queue;
+    if (this.stream) await new Promise((r) => this.stream.end(r));
+  }
 }
+
 
 /* ============================================================
    Playwright lifecycle (shared)
