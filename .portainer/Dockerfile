@@ -22,6 +22,7 @@ ENV npm_config_fund=false \
 
 COPY package*.json ./
 COPY patches/ ./patches/
+COPY tools/apply-patches.mjs ./tools/
 RUN --mount=type=cache,target=/root/.npm \
     npm ci
 

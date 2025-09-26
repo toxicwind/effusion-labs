@@ -1,19 +1,59 @@
-name: build-offline
+name: "CI • Offline build smoke"
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
+
+concurrency:
+  group: offline-${{ github.ref_name }}
+  cancel-in-progress: true
 
 jobs:
   offline:
+    name: "Offline profile"
     runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      CI: true
+      PUPPETEER_SKIP_DOWNLOAD: 'true'
+      PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: 'true'
+      PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 'true'
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: ⬇️ Checkout
+        uses: actions/checkout@v4
+
+      - name: 🔧 Setup Node
+        uses: actions/setup-node@v4
         with:
-          node-version: '22.19.0'
-          cache: 'npm'
-      - run: npm ci
-      - run: npm run lv-images:hydrate
-      - run: npm run build:offline
+          node-version-file: .nvmrc
+          check-latest: true
+          cache: npm
+          cache-dependency-path: package-lock.json
+
+      - name: ♻️ Restore node_modules
+        id: node-modules
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: node-modules-${{ runner.os }}-${{ hashFiles('.nvmrc', 'package-lock.json') }}
+          restore-keys: |
+            node-modules-${{ runner.os }}-
+
+      - name: 📦 Install dependencies
+        if: steps.node-modules.outputs.cache-hit != 'true'
+        run: npm ci --prefer-offline --no-audit --no-fund
+
+      - name: 🗃️ Hydrate dataset bundle
+        run: npm run dataset:hydrate -- --keep
+
+      - name: 🏗️ Offline Eleventy build
+        run: npm run build:offline
+
+      - name: 📦 Upload offline build (PRs)
+        if: github.event_name == 'pull_request'
+        uses: actions/upload-artifact@v4
+        with:
+          name: _site-offline
+          path: _site/
+          if-no-files-found: ignore
