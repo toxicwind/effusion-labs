@@ -190,6 +190,13 @@
   "overrides": {
     "rustywind": {
       "https-proxy-agent": "5.0.1"
+    },
+    "patch-package": {
+      "glob": "^10.4.5",
+      "rimraf": "^5.0.9"
+    },
+    "rimraf": {
+      "glob": "^10.4.5"
     }
   },
   "dependencies": {
