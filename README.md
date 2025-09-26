@@ -18,9 +18,10 @@ mode.
   - [Requirements](#requirements)
   - [Quickstart](#quickstart)
   - [Scripts](#scripts)
-    - [Core](#core)
-    - [Tooling / Utilities](#tooling--utilities)
-    - [MCP (optional experiments)](#mcp-optional-experiments)
+    - [Core runtime](#core-runtime)
+    - [Quality, linting, and tests](#quality-linting-and-tests)
+    - [Dataset / LV images](#dataset--lv-images)
+  - [MCP (optional experiments)](#mcp-optional-experiments)
   - [Project Structure](#project-structure)
   - [Linking \& Route Canon](#linking--route-canon)
   - [Optional Services](#optional-services)
@@ -106,40 +107,74 @@ When the dev server prints a local URL, open it in your browser.
 
 ## Scripts
 
-> The tables below mirror `package.json` exactly.
+> Commands are grouped by intent; every entry maps 1:1 with `package.json`.
 
-### Core
+### Core runtime
 
-| Script         | Purpose                                                          |
-| -------------- | ---------------------------------------------------------------- |
-| `dev`          | Run Eleventy with Vite and hot-module reloading                  |
-| `preview`      | Serve via the Eleventy wrapper with `--serve` (explicit preview) |
-| `eleventy`     | Invoke Eleventy CLI directly (`npx @11ty/eleventy`)              |
-| `build`        | Build the static site to `_site/`                                |
-| `doctor`       | Verify local environment (Node, npm, rg, fd/fdfind, jq, sd)      |
-| `check`        | Run doctor, format check, lint, and tests                        |
-| `test`         | Run Playwright integration tests under coverage (`c8`)           |
-| `test:watch`   | Watch tests during development                                   |
-| `format`       | Format the repo with Prettier (`prettier -w .`)                  |
-| `format:check` | Check formatting (`prettier -c .`)                               |
-| `lint`         | Project lint entry (runs link checks)                            |
-| `lint:links`   | Check Markdown links via `markdown-link-check`                   |
+| Script            | Purpose                                                                 |
+| ----------------- | ----------------------------------------------------------------------- |
+| `dev` / `start`   | Launch Eleventy + Vite dev server with HMR.                             |
+| `serve`           | Run Eleventy in preview mode (`--serve`) without rebuilding on save.    |
+| `watch`           | Watch-mode Eleventy rebuilds (no Vite overlay).                         |
+| `bench`           | Benchmark Eleventy boot/build with `DEBUG=Eleventy:Benchmark*`.         |
+| `eleventy`        | Direct access to the Eleventy CLI (`npx @11ty/eleventy`).               |
+| `build`           | Standard production build (`dataset:hydrate` + Eleventy).               |
+| `build:offline`   | Offline profile used for smoke checks (hydrate, verify, offline shim).  |
+| `build:full`      | Full-network crawl + bundle refresh before building.                    |
+| `build:ci`        | Deterministic CI build (hydrate, strict verify, quiet Eleventy).        |
+| `clean`           | Delete `_site/`.                                                         |
 
-### Tooling / Utilities
+### Quality, linting, and tests
 
-| Script            | Purpose                                                                        |
-| ----------------- | ------------------------------------------------------------------------------ |
-| `verify:patches`  | Ensure required dependency patches are applied                                 |
-| `deps:playwright` | Install Playwright Chromium dependency (no-fail helper)                        |
-| `patch:ternary`   | Patch Nunjucks ternary patterns                                                |
-| `scan:ternary`    | Scan Nunjucks ternary usage                                                    |
-| `npm-utils`       | Search, view, analyze, and install npm packages; always consider new libraries |
+| Script         | Purpose                                                                                  |
+| -------------- | ---------------------------------------------------------------------------------------- |
+| `format`       | Format sources via `dprint`.                                                             |
+| `format:check` | Validate formatting without touching files.                                             |
+| `format:classes` | Normalize Tailwind class order with `rustywind`.                                      |
+| `format:all`   | Run `format:classes` then `format`.                                                      |
+| `lint`         | Parallel `lint:js` + `lint:links`.                                                       |
+| `lint:js`      | ESLint across `src/`, `tools/`, `mcp-stack/`, and `eleventy.config.mjs`.                 |
+| `lint:fix`     | ESLint with `--fix`.                                                                     |
+| `lint:links`   | Markdown link validation via `markdown-link-check`.                                      |
+| `dead`         | Base Knip scan (compact reporter).                                                       |
+| `dead:ci`      | Production Knip check (used by CI summaries).                                           |
+| `dead:strict`  | Knip production scan with `--strict`.                                                    |
+| `dead:watch`   | Watch-mode Knip for local pruning.                                                       |
+| `dead:deps` / `dead:files` / `dead:exports` | Focused Knip reports for dependencies, files, and exports. |
+| `dead:fix` / `dead:fix:deps` | Guided Knip autofixers for exports/deps.                                   |
+| `dead:json` / `dead:md` | Emit Knip reports in JSON or Markdown.                                          |
+| `test`         | Integration suite (`c8` + Playwright runner).                                           |
+| `test:watch`   | Watch mode for the integration suite.                                                    |
+| `test:playwright` | Raw Playwright runner (no coverage).                                                 |
+| `check`        | Aggregate guard (`verify:patches`, `format:check`, `lint`, `test`).                      |
+| `check:fast`   | Quicker guardrail (`lint` + `test`).                                                     |
+| `ci:quality`   | Compact lint + production Knip, intended for CI use.                                    |
+| `ci:test`      | Hydrate the dataset (keep cache) then run `npm test`.                                    |
+| `ci:build`     | Verify dependency patches then execute the strict CI build profile.                      |
+| `doctor`       | Verify local tooling (Node, npm, `rg`, `fd`/`fdfind`, `jq`, etc.).                       |
+| `verify:patches` | Ensure `patches/` have been applied to dependencies.                                   |
+
+### Dataset / LV images
+
+| Script              | Purpose                                                                          |
+| ------------------- | -------------------------------------------------------------------------------- |
+| `dataset:hydrate`   | Expand the committed `lv.bundle.tgz` into `generated/lv/` (supports `--keep`).   |
+| `dataset:update`    | Run the Playwright crawler to refresh the dataset snapshot.                      |
+| `dataset:bundle`    | Pack the dataset into `lv.bundle.tgz` and regenerate the manifest.               |
+| `dataset:verify`    | Validate archive hash/size against the manifest.                                |
+| `dataset:normalize` | Repair absolute paths inside cached URL metadata.                               |
+| `dataset:sync`      | Convenience combo (`update` + `bundle` + `verify`).                              |
+| `dataset:stats`     | Print file counts and byte totals.                                               |
+| `build:full`        | Crawl, bundle, verify, then build locally with full network.                     |
+| `build:offline`     | Hydrate + offline Eleventy build for zero-network environments.                   |
+| `build:ci`          | Hydrate + strict verify + quiet Eleventy (CI/Portainer profile).                  |
+| `lv-images:*`       | Legacy aliases pointing to the corresponding `dataset:*` commands.               |
 
 ### MCP (optional experiments)
 
 | Script            | Purpose                   |
 | ----------------- | ------------------------- |
-| `mcp:dev`         | Start MCP gateway (dev)   |
+| `mcp:dev`         | Start MCP gateway (dev).  |
 | `mcp:integration` | Run MCP integration tests |
 | `mcp:test`        | Run MCP smoke tests       |
 
@@ -199,24 +234,34 @@ The crawler stores its snapshot under `src/content/projects/lv-images/generated/
 and Portainer can't rely on the public network, so the pipeline centres around a bundled archive
 that travels with the repo.
 
-| Scenario                      | Command                     | Purpose                                                                                                   |
-| ----------------------------- | --------------------------- | --------------------------------------------------------------------------------------------------------- |
-| Local refresh (full internet) | `npm run lv-images:sync`    | Runs the Playwright crawler, normalizes cache metadata, packs `lv.bundle.tgz`, and verifies the manifest. |
-| Quick snapshot stats          | `npm run lv-images:stats`   | Prints file counts and total size for the generated dataset.                                              |
-| Offline reuse / CI prep       | `npm run lv-images:hydrate` | Expands `generated/lv` from the committed bundle. Combine with `--keep` to avoid wiping existing files.   |
-| Integrity check               | `npm run lv-images:verify`  | Confirms archive size/hash and dataset counts against `lv.bundle.json`.                                   |
+| Scenario                      | Command                        | Purpose                                                                                                    |
+| ----------------------------- | ------------------------------ | ---------------------------------------------------------------------------------------------------------- |
+| Local refresh (full internet) | `npm run dataset:sync`         | Run the Playwright crawler, normalize cache metadata, bundle, and verify the manifest.                     |
+| Quick snapshot stats          | `npm run dataset:stats`        | Print file counts and total size for the generated dataset.                                                |
+| Offline reuse / CI prep       | `npm run dataset:hydrate -- --keep` | Expand `generated/lv` from the committed bundle; keep existing files between runs.                    |
+| Integrity check               | `npm run dataset:verify`       | Confirm archive size/hash and dataset counts against `lv.bundle.json`.                                     |
 
 For end-to-end builds the orchestration commands roll these steps together:
 
-- `npm run build-local-fullinternet` — crawl + bundle + Eleventy build (with full network access).
-- `npm run build-local-offline` — hydrate the bundle and run Eleventy through the offline shim (no
+- `npm run build:full` — crawl + bundle + Eleventy build (with full network access).
+- `npm run build:offline` — hydrate the bundle and run Eleventy through the offline shim (no
   external calls).
-- `npm run build-gitactions` — strict hydrate/verify + offline Eleventy; this is the profile used by
+- `npm run build:ci` — strict hydrate/verify + offline Eleventy; this is the profile used by
   CI and Portainer.
 
 Commit `generated/lv/`, `generated/lv.bundle.tgz`, and `generated/lv.bundle.json` after running
-`npm run lv-images:sync` so that downstream builds stay deterministic even when the network is
+`npm run dataset:sync` so that downstream builds stay deterministic even when the network is
 hostile.
+
+---
+
+## CI & deployment pipeline
+
+- **Quality** restores cached `node_modules`, runs ESLint, link checks, and Knip in soft-fail mode, and uploads concise summaries.
+- **Tests** reuse the same cache, hydrate the dataset bundle with `--keep`, and execute the integration suite.
+- **Static build** runs `npm run ci:build`, producing the exact offline artifact that Portainer consumes; pull requests upload `_site/` for inspection.
+- **Docker images** leverage Buildx cache, pushing only on `main` (PRs build locally with `load: true`). Gateway images rebuild only when `markdown_gateway/` changes.
+- **Deploy** triggers the Portainer webhook once the web image is published.
 
 ---
 
@@ -225,6 +270,7 @@ hostile.
 - Use `npm run dev` for local editing.
 - Keep dependency hotfixes under `patches/` and manage them with `npm run postinstall` (via `tools/apply-patches.mjs`).
 - Run `npm run check` before opening a PR.
+- Mirror GitHub Actions locally with `npm run ci:quality`, `npm run ci:test`, and `npm run ci:build`.
 - CI may enforce unresolved-link thresholds and script consistency.
 - Explore new packages with `npm-utils`; we love new libraries and always consider them.
 
