@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { spawn } from 'node:child_process'
+import { execFileSync, spawn } from 'node:child_process'
 import path from 'node:path'
 import process from 'node:process'
 import { fileURLToPath } from 'node:url'
@@ -12,6 +12,7 @@ import {
   paths,
   verifyBundle,
 } from './bundle-lib.mjs'
+import { resolveChromium } from '../resolve-chromium.mjs'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -53,6 +54,23 @@ function logStep(message) {
   console.log(`\x1b[95m[lv-images]\x1b[0m ${message}`)
 }
 
+let chromiumPathCache = ''
+
+function ensureChromiumReady() {
+  if (chromiumPathCache) return chromiumPathCache
+  const path = resolveChromium()
+  let version = ''
+  try {
+    version = execFileSync(path, ['--version'], { encoding: 'utf8' }).trim()
+  } catch (error) {
+    console.warn(`[lv-images] Unable to read Chromium version from ${path}:`, error)
+  }
+  const versionLabel = version ? ` (${version})` : ''
+  logStep(`Chromium @ ${path}${versionLabel}`)
+  chromiumPathCache = path
+  return chromiumPathCache
+}
+
 function spawnProcess(command, args = [], options = {}) {
   return new Promise((resolve, reject) => {
     const child = spawn(command, args, {
@@ -78,6 +96,7 @@ function spawnNodeScript(scriptPath, args = [], env = {}) {
 }
 
 async function runUpdate() {
+  ensureChromiumReady()
   logStep('Refreshing dataset via Playwright (full network)')
   await spawnNodeScript(updateScript)
 }

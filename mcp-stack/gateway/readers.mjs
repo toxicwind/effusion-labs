@@ -1,5 +1,6 @@
 import { fetch } from 'undici'
 // Prefer the local gateway implementation to keep container builds self-contained.
+import { resolveChromium } from '../../tools/resolve-chromium.mjs'
 import { resolveSidecar } from '../sidecars/resolver.mjs'
 import { assertAllowed } from './lib/host-allowlist.mjs'
 import { htmlToMarkdown } from './lib/webToMd.js'
@@ -156,7 +157,7 @@ export async function screenshotUrl(inputUrl, _opts = {}) {
     } catch {}
   }
   if (!chromium) return { ok: false, url, error: 'playwright_not_available' }
-  const browser = await chromium.launch({ headless: true })
+  const browser = await chromium.launch({ headless: true, executablePath: resolveChromium() })
   try {
     const ctx = await browser.newContext({
       userAgent: UA,

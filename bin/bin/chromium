@@ -6,7 +6,14 @@ if [[ -n "${PUPPETEER_EXECUTABLE_PATH:-}" && -x "$PUPPETEER_EXECUTABLE_PATH" ]];
   exec "$PUPPETEER_EXECUTABLE_PATH" "$@"
 fi
 
-retry_exec "$@" --   "$REPO_ROOT/node_modules/.bin/chromium"   "$TOOLS_DIR/chromium/chromium"   chromium   chromium-browser   google-chrome-stable   google-chrome
+if ! CHROMIUM_PATH="$(node "$REPO_ROOT/tools/resolve-chromium.mjs" 2>/dev/null)"; then
+  echo "❌ Chromium not found. Install via apt (chromium) or adjust paths." >&2
+  exit 127
+fi
 
-echo "❌ Chromium binary not available. Install system chromium and export PUPPETEER_EXECUTABLE_PATH." >&2
-exit 127
+if [[ -z "$CHROMIUM_PATH" || ! -x "$CHROMIUM_PATH" ]]; then
+  echo "❌ Chromium not executable at: $CHROMIUM_PATH" >&2
+  exit 127
+fi
+
+exec "$CHROMIUM_PATH" "$@"
