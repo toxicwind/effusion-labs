@@ -136,7 +136,7 @@ function decodeBody(buffer, contentType) {
 function decodeEntities(text = '') {
   return text
     .replace(/&#(\d+);/g, (_, num) => String.fromCharCode(Number.parseInt(num, 10)))
-    .replace(/&#x([0-9a-f]+);/gi, (_, hex) =>
+    .replace(/&#x([\da-f]+);/gi, (_, hex) =>
       String.fromCharCode(Number.parseInt(hex, 16)),
     )
     .replace(/&nbsp;/gi, ' ')
@@ -156,17 +156,17 @@ function stripTags(value = '') {
 function basicHtmlToMarkdown(html = '', effectiveUrl = '') {
   if (!html) return ''
   let working = String(html)
-  const titleMatch = /<title[^>]*>([\s\S]*?)<\/title>/i.exec(working)
+  const titleMatch = /<title[^>]*>([\S\s]*?)<\/title>/i.exec(working)
   const title = titleMatch ? stripTags(titleMatch[1]).trim() : ''
 
   working = working
-    .replace(/<head[\s\S]*?<\/head>/gi, ' ')
-    .replace(/<script[\s\S]*?<\/script>/gi, ' ')
-    .replace(/<style[\s\S]*?<\/style>/gi, ' ')
-    .replace(/<!--([\s\S]*?)-->/g, ' ')
+    .replace(/<head[\S\s]*?<\/head>/gi, ' ')
+    .replace(/<script[\S\s]*?<\/script>/gi, ' ')
+    .replace(/<style[\S\s]*?<\/style>/gi, ' ')
+    .replace(/<!--([\S\s]*?)-->/g, ' ')
 
   working = working.replace(
-    /<(h[1-6])[^>]*>([\s\S]*?)<\/\1>/gi,
+    /<(h[1-6])[^>]*>([\S\s]*?)<\/\1>/gi,
     (match, tag, inner) => {
       const level = Number.parseInt(String(tag).slice(1), 10) || 1
       const prefix = '#'.repeat(Math.max(1, Math.min(level, 6)))
@@ -179,7 +179,7 @@ function basicHtmlToMarkdown(html = '', effectiveUrl = '') {
   working = working.replace(/<br\s*\/?>(?=\s*<)/gi, '\n')
 
   working = working.replace(
-    /<p[^>]*>([\s\S]*?)<\/p>/gi,
+    /<p[^>]*>([\S\s]*?)<\/p>/gi,
     (match, inner) => {
       const content = stripTags(inner).trim()
       return content ? `${content}\n\n` : ''
@@ -187,7 +187,7 @@ function basicHtmlToMarkdown(html = '', effectiveUrl = '') {
   )
 
   working = working.replace(
-    /<li[^>]*>([\s\S]*?)<\/li>/gi,
+    /<li[^>]*>([\S\s]*?)<\/li>/gi,
     (match, inner) => {
       const content = stripTags(inner).trim()
       return content ? `- ${content}\n` : ''
@@ -195,7 +195,7 @@ function basicHtmlToMarkdown(html = '', effectiveUrl = '') {
   )
 
   working = working.replace(
-    /<blockquote[^>]*>([\s\S]*?)<\/blockquote>/gi,
+    /<blockquote[^>]*>([\S\s]*?)<\/blockquote>/gi,
     (match, inner) => {
       const block = basicHtmlToMarkdown(inner)
       const lines = block.split(/\n+/).filter(Boolean)
@@ -204,7 +204,7 @@ function basicHtmlToMarkdown(html = '', effectiveUrl = '') {
   )
 
   working = working.replace(
-    /<pre[^>]*>([\s\S]*?)<\/pre>/gi,
+    /<pre[^>]*>([\S\s]*?)<\/pre>/gi,
     (match, inner) => {
       const cleaned = decodeEntities(inner.replace(/<\/?[^>]*>/g, '')).trim()
       return cleaned ? `\n\n\`\`\`\n${cleaned}\n\`\`\`\n\n` : ''
@@ -212,7 +212,7 @@ function basicHtmlToMarkdown(html = '', effectiveUrl = '') {
   )
 
   working = working.replace(
-    /<a[^>]*href=("|')([^"']+?)\1[^>]*>([\s\S]*?)<\/a>/gi,
+    /<a[^>]*href=("|')([^"']+?)\1[^>]*>([\S\s]*?)<\/a>/gi,
     (match, _q, href, inner) => {
       const label = stripTags(inner).trim() || href
       return `[${label}](${href})`
@@ -220,7 +220,7 @@ function basicHtmlToMarkdown(html = '', effectiveUrl = '') {
   )
 
   working = working.replace(
-    /<(strong|b)[^>]*>([\s\S]*?)<\/(strong|b)>/gi,
+    /<(strong|b)[^>]*>([\S\s]*?)<\/(strong|b)>/gi,
     (match, _tag, inner) => {
       const content = stripTags(inner).trim()
       return content ? `**${content}**` : ''
@@ -228,7 +228,7 @@ function basicHtmlToMarkdown(html = '', effectiveUrl = '') {
   )
 
   working = working.replace(
-    /<(em|i)[^>]*>([\s\S]*?)<\/(em|i)>/gi,
+    /<(em|i)[^>]*>([\S\s]*?)<\/(em|i)>/gi,
     (match, _tag, inner) => {
       const content = stripTags(inner).trim()
       return content ? `_${content}_` : ''
@@ -238,9 +238,9 @@ function basicHtmlToMarkdown(html = '', effectiveUrl = '') {
   working = working.replace(/<[^>]+>/g, ' ')
   let text = decodeEntities(working)
   text = text.replace(/\r/g, '')
-  text = text.replace(/[ \t]+\n/g, '\n')
+  text = text.replace(/[\t ]+\n/g, '\n')
   text = text.replace(/\n{3,}/g, '\n\n')
-  text = text.replace(/[ \t]{2,}/g, ' ')
+  text = text.replace(/[\t ]{2,}/g, ' ')
   const lines = text.split('\n').map(line => line.trim())
   let final = lines.join('\n').trim()
   if (title && !final.startsWith('# ')) {

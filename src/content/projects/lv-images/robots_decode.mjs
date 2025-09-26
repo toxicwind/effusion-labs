@@ -1,6 +1,6 @@
 // robots_decode.mjs — decodes robots.txt into rich JSON (regex, examples, overlaps, crawl-delay)
 
-const ESCAPE_RX = /[.*+?^${}()|[\]\\]/g;
+const ESCAPE_RX = /[$()*+.?[\\\]^{|}]/g;
 const escapeRegex = (s) => s.replace(ESCAPE_RX, "\\$&");
 
 function normalizeDirective(k) {

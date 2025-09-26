@@ -24,7 +24,7 @@ async function fetchText(url) {
 
 function parseRobotsForSitemaps(text) {
     // CORRECTED: Use .replace() instead of .split() to handle URLs with colons.
-    return (text.match(/^Sitemap:\s*(.+)$/gim) || []).map(line => line.replace(/^Sitemap:\s*/i, '').trim());
+    return (text.match(/^sitemap:\s*(.+)$/gim) || []).map(line => line.replace(/^sitemap:\s*/i, '').trim());
 }
 
 function* iterSitemapItems(xmlText) {

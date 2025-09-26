@@ -170,7 +170,7 @@ function parseRobots(text) {
       cur.rules.push({ type: key, path: val })
       ruleCount++
     } else {
-      const nk = key.replace(/[^a-z0-9]+/gi, '_')
+      const nk = key.replace(/[^\da-z]+/gi, '_')
       ;(other[nk] ||= []).push(val)
     }
   }
@@ -320,13 +320,13 @@ function extractHttpStatus(text) {
   const statusCodeMatch = trimmed.match(/\b(301|302|307|308|400|401|403|404|410|429|500|503)\b/)
   let code = statusCodeMatch ? Number(statusCodeMatch[1]) : null
   let reason = null
-  if (/Forbidden/i.test(trimmed)) reason = 'Forbidden'
-  else if (/Unauthorized/i.test(trimmed)) reason = 'Unauthorized'
-  else if (/Not Found/i.test(trimmed) || /Cannot GET/i.test(trimmed)) reason = 'Not Found'
-  else if (/Too Many Requests/i.test(trimmed)) reason = 'Too Many Requests'
-  else if (/Service Unavailable|Unavailable/i.test(trimmed)) reason = 'Service Unavailable'
-  else if (/Access Denied/i.test(trimmed)) reason = 'Access Denied'
-  else if (/Bad Request/i.test(trimmed)) reason = 'Bad Request'
+  if (/forbidden/i.test(trimmed)) reason = 'Forbidden'
+  else if (/unauthorized/i.test(trimmed)) reason = 'Unauthorized'
+  else if (/not found/i.test(trimmed) || /cannot get/i.test(trimmed)) reason = 'Not Found'
+  else if (/too many requests/i.test(trimmed)) reason = 'Too Many Requests'
+  else if (/service unavailable|unavailable/i.test(trimmed)) reason = 'Service Unavailable'
+  else if (/access denied/i.test(trimmed)) reason = 'Access Denied'
+  else if (/bad request/i.test(trimmed)) reason = 'Bad Request'
   if (!code && reason) {
     const map = {
       Forbidden: 403,
@@ -375,7 +375,7 @@ function classifyRobotsResponse(rawText, hasCached) {
       httpLabel: '',
     }
   }
-  if (/<!DOCTYPE html|<html/i.test(trimmed.substring(0, 200))) {
+  if (/<!doctype html|<html/i.test(trimmed.substring(0, 200))) {
     const status = extractHttpStatus(trimmed)
     const meta = ROBOTS_CATEGORY_META['html-error']
     const httpLabel = status ? formatHttpStatus(status.code, status.reason) : meta.label
@@ -453,7 +453,7 @@ function classifyDocContent(filePath, previewText) {
       httpLabel: '',
     }
   }
-  if (/<!DOCTYPE html|<html/i.test(text.substring(0, 200))) {
+  if (/<!doctype html|<html/i.test(text.substring(0, 200))) {
     const status = extractHttpStatus(text)
     const meta = DOC_CATEGORY_META['html-error']
     const label = status ? formatHttpStatus(status.code, status.reason) : meta.label
@@ -492,7 +492,7 @@ function classifyDocContent(filePath, previewText) {
       httpLabel: '',
     }
   }
-  if (/User-agent|Disallow|Allow/i.test(text)) {
+  if (/user-agent|disallow|allow/i.test(text)) {
     const meta = DOC_CATEGORY_META['robots-txt']
     return {
       category: 'robots-txt',

@@ -98,8 +98,8 @@ const detectExtension = (text, ct = "") => {
 };
 
 const parseRobotsForSitemaps = (text) =>
-  (text.match(/^Sitemap:\s*(.+)$/gim) || []).map((line) =>
-    line.replace(/^Sitemap:\s*/i, "").trim()
+  (text.match(/^sitemap:\s*(.+)$/gim) || []).map((line) =>
+    line.replace(/^sitemap:\s*/i, "").trim()
   );
 
 const isSitemapIndex = (xml) => /<sitemapindex\b/i.test(xml);
@@ -184,7 +184,7 @@ class NdjsonWriter {
     if (this.stream) await new Promise((r) => this.stream.end(r));
     this.shardIndex++;
     this.shardLines = 0;
-    const ts = new Date().toISOString().replace(/[:.]/g, "");
+    const ts = new Date().toISOString().replace(/[.:]/g, "");
     const shardPath = path.join(
       this.dir,
       `shard-${ts}-${String(this.shardIndex).padStart(3, "0")}.ndjson`
@@ -283,7 +283,7 @@ class Crawler {
   _looksDenied(text = "") {
     const t = (text || "").toLowerCase();
     return (
-      /access(?:\s|-)denied/.test(t) ||
+      /access[\s-]denied/.test(t) ||
       /unauthorized/.test(t) ||
       /forbidden/.test(t) ||
       /you don't have permission/.test(t) ||
