@@ -1,39 +1,76 @@
 {# components/list-item.njk #}
 {% macro listItem(item) %}
+  {# type → badge style #}
+  {% set t = (item.data.type or item.type or 'meta') | lower %}
+  {% set badge =
+      t == 'project'  ? 'badge-primary'
+    : t == 'concept'  ? 'badge-secondary'
+    : t == 'spark'    ? 'badge-accent'
+    :                   'badge-ghost' %}
+
   <a
     href="{{ item.url | url }}"
-    aria-label="{{ item.data.title }}"
-    class="group block surface-solid slab no-elevate with-rail p-5 sm:p-6 transition-colors hover:border-base-300 text-left no-underline"
+    aria-label="Open {{ item.data.title }}"
+    class="group relative block rounded-lg border-2 border-base-content/15 bg-base-100/60
+           px-5 py-5 sm:px-6 transition-colors
+           hover:border-primary/60 hover:bg-base-100
+           focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/40
+           focus:border-primary/70 with-rail"
     data-title="{{ item.data.title }}"
-    data-date="{{ item.date | date('yyyy-MM-dd') }}"
+    {% if item.date %}data-date="{{ item.date | date('yyyy-MM-dd') }}"{% endif %}
+    role="listitem"
   >
-    <div>
-      {% set t = (item.data.type or item.type) | lower %}
-      {% set typeClass = 'pill--meta' %}
-      {% if t == 'project' %}{% set typeClass = 'pill--project' %}{% elif t == 'concept' %}{%
-          set typeClass = 'pill--concept'
-        %}
-      {% elif t == 'spark' %}{% set typeClass = 'pill--spark' %}{% elif t == 'meta' %}{%
-          set typeClass = 'pill--meta'
-        %}{% endif %}
-      <div class="flex items-start justify-between">
-        {% if item.data.type %}<span class="pill {{ typeClass }}">{{
-            item.data.type | capitalize
-          }}</span>{% endif %}
-        {% if item.date %}<time
-            datetime="{{ item.date | htmlDateString }}"
-            class="text-[0.7rem] opacity-90"
-          >{{ item.date | readableDate }}</time>{% endif %}
-      </div>
-      <h3 class="font-heading text-base-content text-lg leading-tight group-hover:text-primary transition-colors">
-        {{ item.data.title }}
-      </h3>
-      {% if item.data.description %}<p class="text-sm text-base-content/90">
-          {{ item.data.description | truncate(120) }}
-        </p>{% endif %}
-      <div class="mt-1 flex items-center justify-between text-xs text-base-content/70">
-        {% if item.data.status %}<span class="capitalize">[{{ item.data.status }}]</span>{% endif %}
-      </div>
+    {# top row: type + date #}
+    <div class="flex items-start justify-between gap-3">
+      <span class="badge {{ badge }} badge-outline badge-sm">
+        {{ t | capitalize }}
+      </span>
+
+      {% if item.date %}
+        <time
+          datetime="{{ item.date | htmlDateString }}"
+          class="text-[0.7rem] tabular-nums text-base-content/70"
+        >
+          {{ item.date | readableDate }}
+        </time>
+      {% endif %}
     </div>
+
+    {# title #}
+    <h3 class="mt-3 font-heading text-lg leading-snug text-base-content
+               group-hover:text-primary transition-colors line-clamp-2">
+      {{ item.data.title }}
+    </h3>
+
+    {# premise/description (optional) #}
+    {% if item.data.description %}
+      <p class="mt-2 text-sm text-base-content/70 line-clamp-3">
+        {{ item.data.description | truncate(140) }}
+      </p>
+    {% endif %}
+
+    {# footer: status + open affordance #}
+    <div class="mt-4 flex items-center justify-between">
+      <div class="flex items-center gap-2 text-xs text-base-content/70">
+        {% if item.data.status %}
+          <span class="badge badge-ghost badge-sm">{{ item.data.status | capitalize }}</span>
+        {% endif %}
+        {% if item.data.certainty %}
+          <span class="badge badge-outline badge-sm">{{ item.data.certainty }}</span>
+        {% endif %}
+      </div>
+
+      <span class="inline-flex items-center gap-1 text-sm font-medium
+                   link link-primary">
+        Open
+        <span aria-hidden class="transition-transform group-hover:translate-x-0.5">→</span>
+      </span>
+    </div>
+
+    {# rail accent (Hypebrüt cue); keep it subtle #}
+    <span aria-hidden
+          class="pointer-events-none absolute inset-y-2 left-2 w-1 rounded-full
+                 bg-gradient-to-b from-primary/70 to-primary/30 opacity-70
+                 group-hover:opacity-100 group-focus:opacity-100"></span>
   </a>
 {% endmacro %}

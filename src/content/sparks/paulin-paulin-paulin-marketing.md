@@ -16,7 +16,7 @@ tags:
   - luxury-market
   - authenticity
   - narrative-control
-spark_type: analytic-report
+type: analytic-report
 target: Paulin, Paulin, Paulin as a Legacy-to-Luxury Conversion Engine
 analytic_lens:
   - narrative-engineering
@@ -265,28 +265,24 @@ it preserves the legacy, but because it replaces it with something more commerci
 > [Artifort](https://www.artifort.com/Living/News-and-inspiration/Anniversary-Edition-Artifort?utm_source=chatgpt.com)
 
 [^7]: **Architectural Digest, 2017** – _Pierre Paulin Debuts at Ralph Pucci_
-
 > _Epistemic Note (Market):_ Trade journalism that normalizes craft rhetoric around industrial
 > reality. Describing CNC-milling as "craft" represents linguistic sleight-of-hand common in luxury
 > goods marketing—it's artisanal until you see the machine doing the work. Source:
 > [Architectural Digest](https://www.architecturaldigest.com/story/pierre-paulin-debuts-at-ralph-pucci?utm_source=chatgpt.com)
 
 [^8]: **West86th, 2016** – _Pierre Paulin – Centre Pompidou Retrospective Review_
-
 > _Epistemic Note (Institutional):_ Academic review that illustrates institutional validation power
 > dynamics. When your exhibition depends on estate loans, truly independent curatorial critique
 > becomes diplomatically impossible—it's hard to bite the hand that lends you the art. Source:
 > [West86th](https://west86th.bgc.bard.edu/exhibitionreviews/pierre-paulin-centre-pompidou-paris-may-11-august-22-2016/?utm_source=chatgpt.com)
 
 [^9]: **Phillips, 2024** – _Design Thursday, May 2, 2024 at BST_
-
 > _Epistemic Note (Auction):_ Hammer price as unvarnished narrative success validation. The market's
 > brutal honesty cuts through all cultural positioning—when a lamp sells for £33,020, someone
 > genuinely believes the story. Source:
 > [Phillips](https://www.phillips.com/auction/UK050124?utm_source=chatgpt.com)
-
+> 
 [^10]: **Sotheby’s, 2024** – _Pierre Paulin: Design Icon_
-
 > _Epistemic Note (Auction):_ "Liquidity anchors" represents the terminal point of design
 > commodification—when chairs become portfolio diversification tools rather than furniture. It's the
 > moment Pierre Paulin's democratic ideals become investment instruments. Source:
@@ -294,7 +290,6 @@ it preserves the legacy, but because it replaces it with something more commerci
 
 [^11]: **Homes & Gardens, 2025** – _Kim Kardashian, Flea, and Travis Scott have this space-age sofa
     in their living room_
-
 > _Epistemic Note (Lifestyle Journalism):_ Celebrity endorsement as critical evaluation bypass
 > mechanism. High-status ownership translates directly into brand value without requiring aesthetic
 > or historical analysis—it's much easier to desire what famous people own than to understand why
@@ -303,14 +298,12 @@ it preserves the legacy, but because it replaces it with something more commerci
 
 [^12]: **designboom, 2024** – _‘Pierre Paulin: Action House’ exhibits legacy of radical design in
     NYC_
-
 > _Epistemic Note (Design Media):_ Coverage that functions as frictionless PR amplification. When
 > journalism quotes only stakeholders and sources facts from press releases, it's not reporting—it's
 > unpaid advertising with editorial credibility. Source:
 > [designboom](https://www.designboom.com/design/pierre-paulin-action-house-judd-foundation-interview-11-14-2024/?utm_source=chatgpt.com)
 
 [^13]: **OYUNA, 2024** – _Circle Conversations with Maïa Paulin_
-
 > _Epistemic Note (Primary):_ The Cévennes "foundation" discussion exemplifies non-falsifiable
 > claims that add cultural weight to the brand despite non-existent physical reality. It's the
 > estate equivalent of promising to donate to charity "someday"—ethically reassuring, practically
@@ -319,7 +312,6 @@ it preserves the legacy, but because it replaces it with something more commerci
 
 [^14]: **Financial Times, 2023** – _“It’s all about the curves”: a 1960s vision of a domestic
     utopia_
-
 > _Epistemic Note (Journalism):_ Rare mainstream critical nuance. "Dimensional variances" is polite
 > code for "these aren't the same as the originals"—a subtle crack in the fidelity facade that most
 > publications would diplomatically ignore. Source:

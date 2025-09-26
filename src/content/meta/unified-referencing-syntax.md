@@ -89,14 +89,6 @@ Something stayed on."_
 
 ---
 
-### 4. Optional Inserts in Body (Advanced Use)
-
-**Epistolary** materials may appear inline using this callout format:
-
-```markdown
-⚯ Insert: [Title or Persona]
-```
-
 - Must also appear in the **Annotated Appendix**
 - Treated as **diegetic nodes**: reveal shifts in voice, motive, affect
 - Function to **disrupt narrative authority** and render invisible logic **visible**
