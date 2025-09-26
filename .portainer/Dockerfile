@@ -7,7 +7,7 @@ FROM node:24-bookworm AS deps
 WORKDIR /app
 
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends build-essential python3 ca-certificates chromium && \
+    apt-get install -y --no-install-recommends build-essential python3 ca-certificates chromium git && \
     rm -rf /var/lib/apt/lists/*
 
 ENV npm_config_fund=false \
@@ -24,7 +24,9 @@ ENV npm_config_fund=false \
 
 COPY package*.json ./
 COPY patches/ ./patches/
-RUN --mount=type=cache,target=/root/.npm npm ci
+# postinstall needs the patch runner available during dependency install
+COPY tools/apply-patches.mjs ./tools/apply-patches.mjs
+RUN npm ci --no-audit --no-fund
 
 ############################
 # build layer (production)
@@ -54,18 +56,21 @@ COPY tools ./tools
 COPY bin ./bin
 COPY . .
 
-RUN --mount=type=cache,target=/app/.cache \
-    --mount=type=cache,target=/root/.cache \
-    node tools/check-chromium.mjs && \
+RUN node tools/check-chromium.mjs && \
     npm run tools:check-patches && \
     npm run build
 
 ############################
 # runtime (tiny, static)
 ############################
-FROM nginx:1.27-bookworm
+FROM nginx:1.29-bookworm
+
+RUN apt-get update \
+  && apt-get install -y --no-install-recommends curl \
+  && rm -rf /var/lib/apt/lists/*
+
 COPY --from=builder /app/_site/ /usr/share/nginx/html/
 COPY .portainer/nginx.conf /etc/nginx/conf.d/default.conf
 EXPOSE 80
 HEALTHCHECK --interval=30s --timeout=3s --start-period=10s \
-  CMD wget -qO- http://127.0.0.1/ >/dev/null 2>&1 || exit 1
+  CMD curl --fail --silent --show-error http://127.0.0.1/ >/dev/null 2>&1 || exit 1
