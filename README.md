@@ -53,7 +53,7 @@ Batteries included, CI-ready, and friendly to autonomous coding agents.
   `INTERLINKER_MAX_UNRESOLVED` and `INTERLINKER_FAIL_ON_UNRESOLVED` to fail on
   overs.
 
-- **Patched interlinker** — A hotfix via `patch-package` adds a `toHtmlString`
+- **Patched interlinker** — A hotfix via `tools/apply-patches.mjs` adds a `toHtmlString`
   coercion and guards non-string inputs across ESM/CJS, preventing crashes in
   Markdown-it and JSDOM.
 
@@ -160,7 +160,7 @@ utils/         → Dev wrappers and scripts (no runtime code)
 tools/         → Build/validation CLIs (e.g., doctor)
 src/content/   → Markdown & Nunjucks pages
 test/          → Integration & unit tests (Playwright)
-patches/       → Hotfixes via patch-package
+patches/       → Hotfixes applied by tools/apply-patches.mjs
 artifacts/     → Reports (e.g., unresolved links), worklogs, export bundles
 ```
 
@@ -234,7 +234,7 @@ hashes and file counts against the manifest.
 ## Development Workflow
 
 - Use `npm run dev` for local editing.
-- Keep dependency hotfixes under `patches/` using `patch-package`.
+- Keep dependency hotfixes under `patches/` and manage them with `npm run postinstall` (via `tools/apply-patches.mjs`).
 - Run `npm run check` before opening a PR.
 - CI may enforce unresolved-link thresholds and script consistency.
 - Explore new packages with `npm-utils`; we love new libraries and always
