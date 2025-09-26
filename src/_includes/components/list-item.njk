@@ -1,6 +1,5 @@
 {# components/list-item.njk #}
 {% macro listItem(item) %}
-  {# type → badge style #}
   {% set t = (item.data.type or item.type or 'meta') | lower %}
   {% set badge =
       t == 'project'  ? 'badge-primary'
@@ -15,12 +14,11 @@
            px-5 py-5 sm:px-6 transition-colors
            hover:border-primary/60 hover:bg-base-100
            focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/40
-           focus:border-primary/70 with-rail"
+           focus:border-primary/70"
     data-title="{{ item.data.title }}"
     {% if item.date %}data-date="{{ item.date | date('yyyy-MM-dd') }}"{% endif %}
     role="listitem"
   >
-    {# top row: type + date #}
     <div class="flex items-start justify-between gap-3">
       <span class="badge {{ badge }} badge-outline badge-sm">
         {{ t | capitalize }}
@@ -36,20 +34,18 @@
       {% endif %}
     </div>
 
-    {# title #}
     <h3 class="mt-3 font-heading text-lg leading-snug text-base-content
-               group-hover:text-primary transition-colors line-clamp-2">
+               group-hover:text-primary transition-colors
+               clamp-2">
       {{ item.data.title }}
     </h3>
 
-    {# premise/description (optional) #}
     {% if item.data.description %}
-      <p class="mt-2 text-sm text-base-content/70 line-clamp-3">
+      <p class="mt-2 text-sm text-base-content/70 clamp-3">
         {{ item.data.description | truncate(140) }}
       </p>
     {% endif %}
 
-    {# footer: status + open affordance #}
     <div class="mt-4 flex items-center justify-between">
       <div class="flex items-center gap-2 text-xs text-base-content/70">
         {% if item.data.status %}
@@ -60,14 +56,11 @@
         {% endif %}
       </div>
 
-      <span class="inline-flex items-center gap-1 text-sm font-medium
-                   link link-primary">
-        Open
-        <span aria-hidden class="transition-transform group-hover:translate-x-0.5">→</span>
+      <span class="inline-flex items-center gap-1 text-sm font-medium link link-primary">
+        Open <span aria-hidden class="transition-transform group-hover:translate-x-0.5">→</span>
       </span>
     </div>
 
-    {# rail accent (Hypebrüt cue); keep it subtle #}
     <span aria-hidden
           class="pointer-events-none absolute inset-y-2 left-2 w-1 rounded-full
                  bg-gradient-to-b from-primary/70 to-primary/30 opacity-70

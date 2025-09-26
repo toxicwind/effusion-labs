@@ -3,18 +3,21 @@
 {% from "components/footer.njk" import footer %}
 {% from "components/meta-aside.njk" import metaAside %}
 <!DOCTYPE html>
-<html lang="en" class="scroll-pt-16" data-theme="dim">
+<html lang="en" class="scroll-pt-16" data-theme="hypebrut">
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <meta name="color-scheme" content="dark light">
+    {# Theme color should match our daisyUI tokens; keep pairs for OS UI #}
     <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f7f5f3">
-    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#2a303c">
-    <meta name="msapplication-TileColor" content="#2a303c">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#16161a"> {# matches --b1 dark #}
+    <meta name="msapplication-TileColor" content="#16161a">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
     <title>{{ title or 'Untitled' }} | Effusion Labs</title>
-    {# Canonical/OG #}
+
+    {# ---------------- Canonical / OpenGraph ---------------- #}
     {% set canon = canonicalUrl or page.canonicalUrl %}
     {% set siteUrl = metadata and metadata.site and metadata.site.url %}
     {% set canonicalHref = canon %}
@@ -29,25 +32,32 @@
       <link rel="canonical" href="{{ page.url | url | absoluteUrl(siteUrl) }}" data-vite-ignore>
       <meta property="og:url" content="{{ page.url | url | absoluteUrl(siteUrl) }}" data-vite-ignore>
     {% endif %}
+
     {{ headExtra | safe }}
-    {# Early theme: zero-dep, prevents FART w/ daisyUI #}
+
+    {# ---------------- Early theme: prevent FART ---------------- #}
     <script>
-    try {
-      const saved = localStorage.getItem('theme')
-      const prefersDark = window.matchMedia?.('(prefers-color-scheme: dark)').matches
-      const theme = saved || (prefersDark ? 'dim' : 'light')
-      document.documentElement.setAttribute('data-theme', theme)
-    } catch {}
+      try {
+        const saved = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        // Allowed tokens in CSS: 'hypebrut' (dark), 'dim' (alias), 'silk' (light)
+        const initial = saved || (prefersDark ? 'hypebrut' : 'silk');
+        document.documentElement.setAttribute('data-theme', initial);
+      } catch (e) { /* noop */ }
     </script>
-    {# Fonts #}
+
+    {# ---------------- Fonts ---------------- #}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
       href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Manrope:wght@300..800&family=Plus+Jakarta+Sans:wght@400..800&display=swap"
       rel="stylesheet"
     >
+
+    {# ---------------- JS entry (Vite handles module preload) ---------------- #}
     <script type="module" src="{{ '/assets/js/app.js' | url }}"></script>
-    {# Favicons / PWA (all live in /public per audit) #}
+
+    {# ---------------- Favicons / PWA ---------------- #}
     <link rel="icon" type="image/svg+xml" href="{{ '/favicon.svg' | url }}">
     <link rel="icon" href="{{ '/favicon.ico' | url }}">
     <link rel="apple-touch-icon" sizes="180x180" href="{{ '/apple-touch-icon.png' | url }}">
@@ -56,32 +66,35 @@
   </head>
   <body class="bg-base-100 text-base-content font-body antialiased">
     {{ header(nav, page, branding) }}
+
+    {# ---------------- Layout flags ---------------- #}
     {% set fullBleed = fullBleed == true or fullBleed == 'true' %}
     {% set metaOff = metaDisable == true or metaDisable == 'true' %}
-    {%
-      set metaEligible =
-      (status or certainty or importance or tags or memory_ref or date or page.date)
-    %}
+    {% set metaEligible = (status or certainty or importance or tags or memory_ref or date or page.date) %}
     {% set hasMeta = not fullBleed and metaEligible and not metaOff %}
+
+    {# ---------------- Main wrapper ---------------- #}
     {% set mainClass = 'min-h-[60vh]' %}
     {% if fullBleed %}
       {% set mainClass = mainClass + ' w-full px-0' %}
     {% else %}
-      {% set mainClass = mainClass + ' max-w-screen-xl mx-auto px-6' %}
+      {% set mainClass = mainClass + ' max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8' %}
     {% endif %}
-    <main id="main" class="{{ mainClass }}">
+
+    <main id="main" class="{{ mainClass }}" tabindex="-1">
       {% if fullBleed %}
         {{ content | safe }}
       {% else %}
         <div class="{% if hasMeta %}xl:grid xl:grid-cols-[1fr_18rem] xl:gap-10{% endif %} {% if showTitle != false %}mt-8 lg:mt-10{% endif %}">
-          <article class="prose dark:prose-invert max-w-none m-0 {% if hasMeta %}xl:col-span-1{% endif %}">
+          <article class="prose max-w-none m-0 {% if hasMeta %}xl:col-span-1{% endif %}">
             {% if showTitle != false %}
               <header class="mb-6 lg:mb-8">
-                <h1 class="font-heading fluid-title tracking-wide">{{ title }}</h1>
+                <h1 class="font-heading text-4xl sm:text-5xl md:text-6xl tracking-tight leading-tight">{{ title }}</h1>
               </header>
             {% endif %}
             {{ content | safe }}
           </article>
+
           {% if hasMeta %}
             {% set d = date or page.date %}
             {{ metaAside(status, d, certainty, importance, tags, memory_ref) }}
@@ -89,6 +102,7 @@
         </div>
       {% endif %}
     </main>
+
     {{ footer(buildTime) }}
   </body>
 </html>
