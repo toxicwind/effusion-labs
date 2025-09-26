@@ -1,21 +1,23 @@
 {
-  "generatedAt": "2025-09-26T04:46:58.113Z",
+  "generatedAt": "2025-09-26T05:28:40.868Z",
   "dataset": {
-    "fileCount": 75,
-    "totalBytes": 44229997
+    "fileCount": 77,
+    "totalBytes": 187077223
   },
   "archive": {
     "path": "generated/lv.bundle.tgz",
-    "size": 6359829,
-    "sha256": "34c33796ac18b36124c6edac0aeab7be3d1d706773d6c5f7e2c6a492833cfba4"
+    "size": 23030639,
+    "sha256": "79e8ed56d6d8176355801359b7ff7f3a952f759a3489d84e62ca30353a3e9135"
   },
   "summary": {
-    "version": "2025.09.20",
-    "generatedAt": "2025-09-20T20:03:27.694Z",
+    "version": "2025.09.21-pw",
+    "generatedAt": "2025-09-26T05:28:36.040Z",
     "totals": {
       "hosts": 6,
       "sitemapsProcessed": 24,
-      "itemsFound": 26969
+      "itemsFound": 0,
+      "pages": 44618,
+      "images": 80821
     }
   }
 }
