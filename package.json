@@ -47,7 +47,6 @@
     "check": "npm run doctor && npm run format:check && npm run lint && npm run test",
     "doctor": "node tools/doctor.mjs",
     "lv-images:update": "node src/content/projects/lv-images/update-dataset.mjs",
-    "lv-images:report": "node src/content/projects/lv-images/generate-lv-report.mjs",
     "lv-images:bundle": "node tools/lv-images/bundle.mjs bundle",
     "lv-images:hydrate": "node tools/lv-images/bundle.mjs hydrate",
     "lv-images:verify": "node tools/lv-images/bundle.mjs verify",
