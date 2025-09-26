@@ -84,8 +84,8 @@ and smoke testing. They continue to run only when explicitly requested.
 
 ## Continuous Integration
 
-- **`ci.yml`** — three-stage pipeline (lint → test → build). Each stage installs Chromium via APT,
-  writes `PUPPETEER_EXECUTABLE_PATH`, and runs `tools/check-chromium.mjs` before any headless work.
+- **`ci.yml`** — three-stage pipeline (lint → test → build). Each stage installs Chromium via APT
+  and runs `tools/check-chromium.mjs` before any headless work.
   Build artifacts are published as workflow artifacts for inspection.
 - **`dead.yml`** — scheduled/manual Knip scan. Respects the network contract and uploads the JSON
   report when generated.
@@ -100,10 +100,9 @@ and smoke testing. They continue to run only when explicitly requested.
 ## Chromium Policy
 
 - Chromium is provisioned via system packages (`apt-get install chromium`).
-- `tools/check-chromium.mjs` validates availability and writes `PUPPETEER_EXECUTABLE_PATH` to the
-  GitHub Actions environment when missing.
-- `bin/chromium` exposes a consistent CLI entrypoint, prioritising the env var and falling back to
-  system binaries.
+- `tools/check-chromium.mjs` validates availability and logs the detected version in CI.
+- `bin/chromium` exposes a consistent CLI entrypoint, resolving the system binary via
+  `tools/resolve-chromium.mjs` (an existing `PUPPETEER_EXECUTABLE_PATH` is honoured when present).
 - Puppeteer and Playwright downloads are disabled (`PUPPETEER_SKIP_DOWNLOAD=1`,
   `PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1`).
 
@@ -114,9 +113,8 @@ This keeps Puppeteer, Playwright, and any Eleventy transforms aligned without hi
 ## Docker Image
 
 `.portainer/Dockerfile` now targets Debian Bookworm. It installs Chromium inside the build stage,
-exports `PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium`, runs `tools/check-chromium.mjs`, validates
-patches, and produces the static `_site/` output. The final image is a slim `nginx:1.27-bookworm`
-layer with health checks intact.
+runs `tools/check-chromium.mjs`, validates patches, and produces the static `_site/` output. The
+final image is a slim `nginx:1.27-bookworm` layer with health checks intact.
 
 ---
 
@@ -125,7 +123,8 @@ layer with health checks intact.
 Local shims live under `bin/bin/` and provide deterministic CLIs for CI and Docker. Highlights:
 
 - `bin/_lib.sh` removes the repo bin directory from lookup order to avoid recursion.
-- `bin/chromium` honours `PUPPETEER_EXECUTABLE_PATH` then falls back to system executables.
+- `bin/chromium` honours `PUPPETEER_EXECUTABLE_PATH` then falls back to the resolver-backed system
+  executable.
 - `bin/curl` funnels requests through `tools/shims/curl-to-markdown.mjs` while preserving the system
   binary in `CURL_SHIM_REAL`.
 - `fd`, `rg`, and siblings enforce safe defaults (hidden files allowed, repository directories

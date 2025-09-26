@@ -22,6 +22,7 @@ import pkg from "bloom-filters";
 const { ScalableBloomFilter } = pkg;
 
 import { chromium } from "playwright";
+import { resolveChromium } from "../../../../tools/resolve-chromium.mjs";
 import { decodeRobots } from "./robots_decode.mjs";
 import { bundleDataset } from "../../../../tools/lv-images/bundle-lib.mjs";
 
@@ -234,7 +235,7 @@ let pwBrowser = null;
 let pwCtx = null;
 
 async function startPlaywright() {
-  pwBrowser = await chromium.launch({ headless: true });
+  pwBrowser = await chromium.launch({ headless: true, executablePath: resolveChromium() });
   pwCtx = await pwBrowser.newContext({
     userAgent: USER_AGENT,
     ignoreHTTPSErrors: true,

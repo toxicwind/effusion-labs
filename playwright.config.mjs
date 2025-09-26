@@ -1,7 +1,9 @@
 import { defineConfig, devices } from '@playwright/test'
+import { resolveChromium } from './tools/resolve-chromium.mjs'
 
 const PORT = process.env.PLAYWRIGHT_WEB_PORT ? Number(process.env.PLAYWRIGHT_WEB_PORT) : 4173
 const HOST = process.env.PLAYWRIGHT_WEB_HOST || '127.0.0.1'
+const EXECUTABLE_PATH = resolveChromium()
 
 export default defineConfig({
   testDir: './tests/playwright',
@@ -13,11 +15,17 @@ export default defineConfig({
     baseURL: `http://${HOST}:${PORT}`,
     trace: 'on-first-retry',
     viewport: { width: 1280, height: 720 },
+    browserName: 'chromium',
+    launchOptions: {
+      executablePath: EXECUTABLE_PATH,
+    },
   },
   projects: [
     {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      use: {
+        ...devices['Desktop Chrome'],
+      },
     },
   ],
   webServer: {

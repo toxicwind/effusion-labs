@@ -2,6 +2,7 @@
 // Usage: node test-sitemap.mjs [URL]
 
 import { chromium } from "playwright";
+import { resolveChromium } from "./tools/resolve-chromium.mjs";
 import { gunzipSync } from "node:zlib";
 
 // ---------- config ----------
@@ -119,7 +120,10 @@ function gunzipIfNeeded(buf, headers) {
 // ---------- runner ----------
 async function run() {
     console.log(`=== sitemap debugger for ${TARGET} ===\n`);
-    const browser = await chromium.launch({ headless: true });
+    const browser = await chromium.launch({
+        headless: true,
+        executablePath: resolveChromium(),
+    });
     const ctx = await browser.newContext({
         userAgent: USER_AGENT,
         ignoreHTTPSErrors: true,
