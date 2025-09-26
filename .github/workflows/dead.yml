@@ -1,0 +1,47 @@
+name: "CI • Dead Code Scan"
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 5 * * 1'
+
+env:
+  CI: true
+  npm_config_audit: 'false'
+  npm_config_fund: 'false'
+  PUPPETEER_SKIP_DOWNLOAD: '1'
+  PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: '1'
+  PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: '1'
+
+jobs:
+  knip:
+    name: "🧬 Knip"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - run: npm ci
+
+      - name: 🧊 Install Chromium (optional tools)
+        run: |
+          set -Eeuo pipefail
+          if command -v chromium >/dev/null 2>&1 || command -v chromium-browser >/dev/null 2>&1; then
+            exit 0
+          fi
+          sudo apt-get update
+          sudo apt-get install -y chromium || sudo apt-get install -y chromium-browser || true
+
+      - run: npm run lint:dead
+
+      - name: Upload report
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: knip-report
+          path: .knip-report.json
+          if-no-files-found: ignore

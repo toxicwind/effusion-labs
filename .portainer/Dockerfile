@@ -3,12 +3,13 @@
 ############################
 # deps layer (heavy caching)
 ############################
-FROM node:24-alpine AS deps
+FROM node:24-bookworm AS deps
 WORKDIR /app
 
-RUN apk add --no-cache build-base python3 libc6-compat
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends build-essential python3 ca-certificates chromium && \
+    rm -rf /var/lib/apt/lists/*
 
-# Keep install in "dev" mode so devDependencies are present for the build
 ENV npm_config_fund=false \
     npm_config_audit=false \
     npm_config_proxy= \
@@ -18,23 +19,22 @@ ENV npm_config_fund=false \
     https_proxy= \
     PUPPETEER_SKIP_DOWNLOAD=1 \
     PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1 \
+    PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium \
     PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1
 
 COPY package*.json ./
 COPY patches/ ./patches/
-RUN --mount=type=cache,target=/root/.npm \
-    npm ci
+RUN --mount=type=cache,target=/root/.npm npm ci
 
 ############################
 # build layer (production)
 ############################
-FROM node:24-alpine AS builder
+FROM node:24-bookworm AS builder
 WORKDIR /app
 
 ARG COMMIT_SHA=unknown
 ENV COMMIT_SHA=${COMMIT_SHA}
 
-# Production signals for the toolchain
 ENV NODE_ENV=production \
     ELEVENTY_ENV=production \
     npm_config_proxy= \
@@ -44,21 +44,26 @@ ENV NODE_ENV=production \
     https_proxy= \
     PUPPETEER_SKIP_DOWNLOAD=1 \
     PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1 \
+    PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium \
     PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1
 
+COPY --from=deps /usr/bin/chromium /usr/bin/chromium
 COPY --from=deps /app/node_modules /app/node_modules
 COPY package*.json ./
+COPY tools ./tools
+COPY bin ./bin
 COPY . .
 
 RUN --mount=type=cache,target=/app/.cache \
     --mount=type=cache,target=/root/.cache \
-    npm run verify:patches && \
+    node tools/check-chromium.mjs && \
+    npm run tools:check-patches && \
     npm run build
 
 ############################
 # runtime (tiny, static)
 ############################
-FROM nginx:stable-alpine
+FROM nginx:1.27-bookworm
 COPY --from=builder /app/_site/ /usr/share/nginx/html/
 COPY .portainer/nginx.conf /etc/nginx/conf.d/default.conf
 EXPOSE 80

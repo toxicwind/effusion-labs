@@ -2,7 +2,7 @@
 set -Eeuo pipefail
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-TOOLS_DIR="$REPO_ROOT/.tools"
+TOOLS_DIR="$REPO_ROOT/tools/shims"
 
 # Remove REPO_ROOT/bin from PATH when resolving fallback candidates
 path_without_repo_bin() {
