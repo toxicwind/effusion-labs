@@ -24,7 +24,7 @@ ENV npm_config_fund=false \
 
 COPY package*.json ./
 COPY patches/ ./patches/
-RUN --mount=type=cache,target=/root/.npm npm ci
+RUN npm ci --no-audit --no-fund
 
 ############################
 # build layer (production)
@@ -54,9 +54,7 @@ COPY tools ./tools
 COPY bin ./bin
 COPY . .
 
-RUN --mount=type=cache,target=/app/.cache \
-    --mount=type=cache,target=/root/.cache \
-    node tools/check-chromium.mjs && \
+RUN node tools/check-chromium.mjs && \
     npm run tools:check-patches && \
     npm run build
 
