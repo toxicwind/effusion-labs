@@ -26,7 +26,7 @@ network is hostile.
 npm ci
 npm run dev            # Eleventy dev server with Vite
 npm run build          # Production build → _site/
-npm run lint           # ESLint + markdown-link-check (skips network in CI)
+npm run lint           # ESLint + Rustywind check + dprint + markdown-link-check
 npm run test           # Playwright integration suite (Chromium required)
 ```
 
@@ -56,12 +56,15 @@ and guard against restricted CI environments.
 | Script | Description |
 | --- | --- |
 | `format`, `format:check`, `format:classes`, `format:all` | dprint + Rustywind formatting. |
-| `lint` | Runs `lint:js` and `lint:links` with pretty stage output. |
+| `lint` | Runs JS lint, Rustywind check, dprint check, and link lint with stage labels. |
+| `lint:ci-soft` | Sequential soft-lint bundle used by CI (`npm-run-all` + `|| true`). |
+| `lint:classes` | Rustywind `--check` over Eleventy templates. |
+| `lint:format` | `dprint check` wrapper for CI-friendly formatting reports. |
 | `lint:fix` | ESLint autofix plus link lint (when permitted). |
 | `lint:links` | Uses `tools/run-if-network.mjs` to skip when `CI_NETWORK_OK` is not `1`. |
 | `lint:dead` | Delegates to `tools:knip:ci`. |
 | `test`, `test:watch`, `test:playwright` | Ensure Chromium is wired (`tools/check-chromium.mjs`) before launching the runner. |
-| `check` | doctor → format check → lint → tests. |
+| `check` | doctor → format check → **soft** lint → tests. |
 | `doctor` | Verifies local prerequisites (`rg`, `fd`, `jq`, `sd`, etc.). |
 
 ### Tooling & Datasets
@@ -84,8 +87,9 @@ and smoke testing. They continue to run only when explicitly requested.
 
 ## Continuous Integration
 
-- **`ci.yml`** — three-stage pipeline (lint → test → build). Each stage installs Chromium via APT
-  and runs `tools/check-chromium.mjs` before any headless work.
+- **`ci.yml`** — three-stage pipeline (lint → test → build). Lint is marked `continue-on-error` and
+  runs `./bin/lint-soft.sh` so failures are logged but never block later stages. Each stage installs
+  Chromium via APT and runs `tools/check-chromium.mjs` before any headless work.
   Build artifacts are published as workflow artifacts for inspection.
 - **`dead.yml`** — scheduled/manual Knip scan. Respects the network contract and uploads the JSON
   report when generated.
@@ -125,6 +129,9 @@ Local shims live under `bin/bin/` and provide deterministic CLIs for CI and Dock
 - `bin/_lib.sh` removes the repo bin directory from lookup order to avoid recursion.
 - `bin/chromium` honours `PUPPETEER_EXECUTABLE_PATH` then falls back to the resolver-backed system
   executable.
+- `bin/resolve-chromium.sh` surfaces the resolved Chromium path for shell pipelines and CI steps.
+- `bin/lint-soft.sh` orchestrates all lint passes, captures non-zero exits, and always returns 0 for
+  CI.
 - `bin/curl` funnels requests through `tools/shims/curl-to-markdown.mjs` while preserving the system
   binary in `CURL_SHIM_REAL`.
 - `fd`, `rg`, and siblings enforce safe defaults (hidden files allowed, repository directories
