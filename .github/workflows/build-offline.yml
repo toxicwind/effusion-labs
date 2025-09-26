@@ -1,19 +1,52 @@
-name: build-offline
+name: Offline bundle smoke
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    shell: bash
+
+env:
+  CI: true
+  PUPPETEER_SKIP_DOWNLOAD: 'true'
+  PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: 'true'
+  PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 'true'
 
 jobs:
   offline:
     runs-on: ubuntu-latest
+    timeout-minutes: 25
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
-          node-version: '22.19.0'
-          cache: 'npm'
-      - run: npm ci
-      - run: npm run lv-images:hydrate
-      - run: npm run build:offline
+          node-version-file: .nvmrc
+          cache: npm
+          cache-dependency-path: package-lock.json
+
+      - name: Restore dataset cache
+        uses: actions/cache@v4
+        with:
+          path: src/content/projects/lv-images/generated
+          key: offline-${{ runner.os }}-${{ hashFiles('src/content/projects/lv-images/generated/lv.bundle.json') }}
+          restore-keys: |
+            offline-${{ runner.os }}-
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Verify patches
+        run: npm run verify:patches
+
+      - name: Offline build
+        run: npm run build:offline

@@ -52,8 +52,9 @@ COPY . .
 
 RUN --mount=type=cache,target=/app/.cache \
     --mount=type=cache,target=/root/.cache \
+    npm run apply:patches && \
     npm run verify:patches && \
-    npm run build
+    npm run build:ci
 
 ############################
 # runtime (tiny, static)

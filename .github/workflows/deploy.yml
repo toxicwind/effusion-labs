@@ -7,6 +7,10 @@ on:
     branches: [main]
   workflow_dispatch:
 
+defaults:
+  run:
+    shell: bash
+
 env:
   REGISTRY: ghcr.io
   WEB_IMAGE: ghcr.io/toxicwind/effusion-labs
@@ -30,122 +34,97 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  # 1) Quality gates (soft): lint, knip, links → summarize in Checks UI
-  quality:
-    name: "✅ Quality (soft)"
+  checks:
+    name: "🧪 Checks + Build"
     runs-on: ubuntu-latest
+    timeout-minutes: 35
+    permissions:
+      contents: read
     steps:
-      - name: ⬇️ Checkout
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: 🔧 Setup Node (from .nvmrc + cache)
+      - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version-file: .nvmrc
-          check-latest: true
           cache: npm
+          cache-dependency-path: package-lock.json
 
-      - name: 📦 Install deps
+      - name: Restore dataset cache
+        uses: actions/cache@v4
+        with:
+          path: src/content/projects/lv-images/generated
+          key: dataset-${{ runner.os }}-${{ hashFiles('src/content/projects/lv-images/generated/lv.bundle.json') }}
+          restore-keys: |
+            dataset-${{ runner.os }}-
+
+      - name: Install dependencies
         run: npm ci
 
-      - name: 🧹 ESLint (non-blocking, pretty summary)
-        id: eslint
-        continue-on-error: true
+      - name: Verify patches
+        run: npm run verify:patches
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Soft quality signals
         run: |
+          set +e
           mkdir -p reports
-          # human output for summary
-          npx eslint "src/**/*.{js,mjs,ts,tsx}" "tools/**/*.mjs" "mcp-stack/**/*.mjs" eleventy.config.mjs \
-            --report-unused-disable-directives \
-            | tee reports/eslint.txt || true
+          summary="### ⚙️ Soft quality checks\n\n"
+          run_soft() {
+            local label="$1"
+            shift
+            echo "::group::${label}"
+            "$@" &>"reports/${label}.log"
+            local status=$?
+            if [[ $status -eq 0 ]]; then
+              summary+="- ✅ ${label}\n"
+            else
+              summary+="- ⚠️ ${label}\n"
+            fi
+            tail -n 200 "reports/${label}.log" || true
+            echo "::endgroup::"
+            return $status
+          }
+          run_soft "markdown-link-check" npm run lint:links
+          run_soft "knip" npm run knip:ci
+          printf "%b" "$summary" >> "$GITHUB_STEP_SUMMARY"
+          exit 0
 
-          {
-            echo "### 🧹 ESLint"
-            echo ""
-            echo "<details><summary>Open report</summary>"
-            echo
-            echo '```text'
-            tail -n 400 reports/eslint.txt
-            echo '```'
-            echo "</details>"
-          } >> "$GITHUB_STEP_SUMMARY"
+      - name: Tests
+        run: npm test
 
-      - name: 🔗 Link check (non-blocking)
-        id: linkcheck
-        continue-on-error: true
-        run: |
-          markdown-link-check -c oneoff/link-check.config.json README.md \
-            | tee reports/linkcheck.txt || true
+      - name: Build (offline strict)
+        run: npm run build:ci
 
-          {
-            echo "### 🔗 Link Check"
-            echo ""
-            echo "<details><summary>Open report</summary>"
-            echo
-            echo '```text'
-            tail -n 400 reports/linkcheck.txt
-            echo '```'
-            echo "</details>"
-          } >> "$GITHUB_STEP_SUMMARY"
-
-      - name: 🧬 Knip dead code (non-blocking)
-        id: knip
-        continue-on-error: true
-        run: |
-          npx knip --production --reporter compact \
-            | tee reports/knip.txt || true
-
-          {
-            echo "### 🧬 Knip"
-            echo ""
-            echo "<details><summary>Open report</summary>"
-            echo
-            echo '```text'
-            tail -n 400 reports/knip.txt
-            echo '```'
-            echo "</details>"
-          } >> "$GITHUB_STEP_SUMMARY"
-
-      - name: 📎 Upload reports (optional download later)
+      - name: Upload site artifact
         uses: actions/upload-artifact@v4
         with:
-          name: reports
-          path: reports/
+          name: site
+          path: _site/
+          retention-days: 3
 
-  # 2) Tests (blocking). If this passes, we build.
-  tests:
-    name: "🧪 Tests"
-    runs-on: ubuntu-latest
-    needs: quality
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version-file: .nvmrc
-          check-latest: true
-          cache: npm
-      - run: npm ci
-      - run: npm run lv-images:hydrate
-      - run: npm test
-
-  # 3) Build & push the web image
   build_web:
-    name: "🏗️ Build & Push • Web"
+    name: "🐳 Build & Push • Web"
     runs-on: ubuntu-latest
-    needs: tests
+    needs: checks
+    if: github.ref_name == 'main'
     steps:
       - uses: actions/checkout@v4
 
-      - name: 🐳 Setup Buildx
+      - name: Setup Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: 🔑 Login to GHCR
+      - name: Login to GHCR
         uses: docker/login-action@v3
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: 🏷️ Docker metadata
+      - name: Docker metadata
         id: meta
         uses: docker/metadata-action@v5
         with:
@@ -157,7 +136,7 @@ jobs:
             org.opencontainers.image.source=${{ github.repository }}
             org.opencontainers.image.revision=${{ github.sha }}
 
-      - name: 🏗️ Build & push
+      - name: Build & push web image
         uses: docker/build-push-action@v6
         with:
           context: .
@@ -165,36 +144,36 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-from: type=gha,scope=portainer-web
+          cache-to: type=gha,mode=max,scope=portainer-web
           platforms: linux/amd64
           build-args: |
             COMMIT_SHA=${{ github.sha }}
 
-  # 4) (Optional) build the gateway if needed — doesn’t gate deploy
   build_gateway:
-    name: "🏗️ Build • Gateway (if changed)"
+    name: "🐳 Build • Gateway (if changed)"
     runs-on: ubuntu-latest
-    needs: tests
+    needs: checks
     if: github.ref_name == 'main'
     steps:
       - uses: actions/checkout@v4
-        with: { fetch-depth: 0 }
+        with:
+          fetch-depth: 0
 
-      - name: 🔍 Detect changes in ./markdown_gateway
+      - name: Detect gateway changes
         id: gw
         run: |
           if git diff --quiet HEAD^ HEAD -- ./markdown_gateway; then
-            echo "changed=false" >> $GITHUB_OUTPUT
+            echo "changed=false" >> "$GITHUB_OUTPUT"
           else
-            echo "changed=true" >> $GITHUB_OUTPUT
+            echo "changed=true" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: 🐳 Setup Buildx
+      - name: Setup Buildx
         if: steps.gw.outputs.changed == 'true'
         uses: docker/setup-buildx-action@v3
 
-      - name: 🔑 Login to GHCR
+      - name: Login to GHCR
         if: steps.gw.outputs.changed == 'true'
         uses: docker/login-action@v3
         with:
@@ -202,9 +181,9 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: 🏷️ Docker metadata
+      - name: Docker metadata
         if: steps.gw.outputs.changed == 'true'
-        id: meta
+        id: gwmeta
         uses: docker/metadata-action@v5
         with:
           images: ${{ env.GATEWAY_IMAGE }}
@@ -212,28 +191,27 @@ jobs:
             type=sha,format=short
             type=raw,value=latest,enable={{is_default_branch}}
 
-      - name: 🏗️ Build & push
+      - name: Build & push gateway image
         if: steps.gw.outputs.changed == 'true'
         uses: docker/build-push-action@v6
         with:
           context: ./markdown_gateway
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          tags: ${{ steps.gwmeta.outputs.tags }}
+          labels: ${{ steps.gwmeta.outputs.labels }}
+          cache-from: type=gha,scope=portainer-gateway
+          cache-to: type=gha,mode=max,scope=portainer-gateway
           platforms: linux/amd64
           build-args: |
             COMMIT_SHA=${{ github.sha }}
 
-  # 5) Deploy via Portainer webhook (main only)
   deploy:
     name: "🚀 Deploy (Portainer)"
     runs-on: ubuntu-latest
     needs: build_web
     if: github.ref_name == 'main'
     steps:
-      - name: 📞 Trigger webhook
+      - name: Trigger Portainer redeploy
         env:
           HOOK: ${{ secrets.PORTAINER_WEBHOOK_EFFUSION }}
         run: |
@@ -241,11 +219,6 @@ jobs:
           curl --fail --retry-all-errors --retry 5 --retry-delay 3 -X POST "$HOOK"
           echo "✅ Redeploy signal sent."
 
-  # ——————————————————————————————————————————————
-  # OPTIONAL SPRINKLES (off by default)
-  # ——————————————————————————————————————————————
-
-  # A) Soft commitlint on PRs (opt-in via repo variable)
   commitlint_soft:
     if: github.event_name == 'pull_request' && vars.ENABLE_COMMITLINT == 'true'
     name: "📝 Commit style (soft)"
@@ -260,11 +233,11 @@ jobs:
         with:
           node-version-file: .nvmrc
           cache: npm
+          cache-dependency-path: package-lock.json
       - run: npm ci
       - name: Commitlint (soft)
         run: npx commitlint --from="${{ github.event.pull_request.base.sha }}" --to=HEAD || true
 
-  # B) Reviewdog PR annotations for ESLint (opt-in via repo variable)
   reviewdog_eslint:
     if: github.event_name == 'pull_request' && vars.ENABLE_REVIEWDOG == 'true'
     name: "🐶 ESLint (annotations)"
@@ -278,8 +251,9 @@ jobs:
         with:
           node-version-file: .nvmrc
           cache: npm
+          cache-dependency-path: package-lock.json
       - run: npm ci
-      - run: npx eslint "src/**/*.{js,mjs,ts,tsx}" "tools/**/*.mjs" "mcp-stack/**/*.mjs" eleventy.config.mjs -f json -o eslint-report.json || true
+      - run: npm run lint -- --format json --output-file eslint-report.json || true
       - uses: reviewdog/action-eslint@v1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
