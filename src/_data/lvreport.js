@@ -49,12 +49,26 @@ async function loadJSON(p, fallback) {
 // urlmeta.json file maps a URL to { path, status, contentType }. We
 // need the reverse so we can decorate cached files with their source
 // URL and fetch status.
+function resolveUrlmetaPath(stored) {
+    if (!stored) return null;
+    const normalized = String(stored).trim();
+    if (!normalized) return null;
+    const candidate = path.isAbsolute(normalized)
+        ? normalized
+        : path.join(LV_BASE, normalized.replace(/\\/g, "/"));
+    return path.resolve(candidate);
+}
+
 function buildReverseUrlmeta(urlmeta) {
     const m = new Map();
     for (const [url, meta] of Object.entries(urlmeta || {})) {
-        if (meta && meta.path) {
-            m.set(path.resolve(meta.path), { url, status: meta.status ?? "", contentType: meta.contentType || "" });
-        }
+        const resolved = resolveUrlmetaPath(meta?.path);
+        if (!resolved) continue;
+        m.set(resolved, {
+            url,
+            status: meta?.status ?? "",
+            contentType: meta?.contentType || "",
+        });
     }
     return m;
 }

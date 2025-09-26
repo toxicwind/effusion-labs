@@ -203,6 +203,34 @@ external HTML into Markdown for inclusion in the digital garden.
 
 ---
 
+## LV Images dataset workflow
+
+The Louis Vuitton crawler writes its dataset to
+`src/content/projects/lv-images/generated/lv/`. GitHub Actions and Portainer
+builds now expect a pre-built bundle rather than reaching out to the network.
+
+| Step | Command | Purpose |
+| --- | --- | --- |
+| 1 | `npm run lv-images:update` | Refresh the dataset locally via Playwright. |
+| 2 | `npm run lv-images:bundle` | Normalize cache metadata and publish `lv.bundle.tgz` + manifest. |
+| 3 | Commit `generated/lv/`, `lv.bundle.tgz`, and `lv.bundle.json`. | Makes the snapshot consumable in CI. |
+
+On any machine (including CI) you can hydrate the dataset without touching the
+network:
+
+```bash
+npm run lv-images:hydrate
+```
+
+This script expands `generated/lv` from the bundled archive and will fail if the
+bundle is missing or stale. CI jobs call it automatically before running tests
+or builds, guaranteeing deterministic snapshots even on restricted networks.
+
+To sanity-check the archive, run `npm run lv-images:verify`; the helper compares
+hashes and file counts against the manifest.
+
+---
+
 ## Development Workflow
 
 - Use `npm run dev` for local editing.

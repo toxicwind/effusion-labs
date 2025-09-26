@@ -15,4 +15,5 @@ jobs:
           node-version: '22.19.0'
           cache: 'npm'
       - run: npm ci
+      - run: npm run lv-images:hydrate
       - run: npm run build:offline

@@ -124,6 +124,7 @@ jobs:
           check-latest: true
           cache: npm
       - run: npm ci
+      - run: npm run lv-images:hydrate
       - run: npm test
 
   # 3) Build & push the web image

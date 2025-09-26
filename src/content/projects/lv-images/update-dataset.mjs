@@ -23,6 +23,7 @@ const { ScalableBloomFilter } = pkg;
 
 import { chromium } from "playwright";
 import { decodeRobots } from "./robots_decode.mjs";
+import { bundleDataset } from "../../../../tools/lv-images/bundle-lib.mjs";
 
 /* ============================================================
    PATHS & CONFIG
@@ -46,6 +47,28 @@ const hostsTxtPath = path.join(baseDir, "./config/hosts.txt");
 
 const bloomPath = path.join(cacheDir, "seen.bloom.json");
 const summaryPath = path.join(genDir, "summary.json");
+
+const posixify = (value) => value.split(path.sep).join("/");
+const toRelativeCachePath = (inputPath) => {
+  if (!inputPath) return "";
+  const normalized = String(inputPath).trim();
+  if (!normalized) return "";
+  const unixified = normalized.replace(/\\/g, "/");
+  const marker = "/generated/lv/";
+  const idx = unixified.indexOf(marker);
+  if (idx !== -1) {
+    const tail = unixified.slice(idx + marker.length).replace(/^\/+/, "");
+    if (tail) return tail;
+  }
+  const absolute = path.isAbsolute(normalized)
+    ? normalized
+    : path.resolve(genDir, normalized);
+  const relative = path.relative(genDir, absolute);
+  if (!relative || relative.startsWith("..")) {
+    return posixify(normalized);
+  }
+  return posixify(relative);
+};
 
 /* ============================================================
    STATELESS HELPERS & UTILITIES
@@ -461,9 +484,14 @@ async function main() {
 
   // URL metadata recorder (with timestamp)
   const urlmeta = JSON.parse((await readFile(urlmetaPath, "utf8").catch(() => "{}")) || "{}");
+  for (const entry of Object.values(urlmeta)) {
+    if (entry?.path) {
+      entry.path = toRelativeCachePath(entry.path);
+    }
+  }
   const recordUrlMeta = (url, absPath, status = "", contentType = "") => {
     urlmeta[url] = {
-      path: path.resolve(absPath),
+      path: toRelativeCachePath(absPath),
       status,
       contentType,
       fetchedAt: new Date().toISOString(),
@@ -654,6 +682,18 @@ async function main() {
   await saveJson(runsHistoryPath, runsHistory);
   await saveJson(allImagesPath, allImages);
   await saveJson(allProductsPath, allProducts);
+
+  try {
+    const manifest = await bundleDataset({ skipIfMissing: true, quiet: true });
+    if (manifest) {
+      const shortHash = manifest.archive.sha256 ? manifest.archive.sha256.slice(0, 12) : "";
+      console.log(
+        `\n📦 Bundle updated → ${manifest.archive.path} ${shortHash ? `(sha256:${shortHash}…)` : ""}`.trim(),
+      );
+    }
+  } catch (error) {
+    console.warn(`\n⚠️ Failed to update lv bundle: ${error?.message || error}`);
+  }
 
   console.log(`\n📊 Summary → ${path.relative(process.cwd(), summaryPath)}`);
   console.log(

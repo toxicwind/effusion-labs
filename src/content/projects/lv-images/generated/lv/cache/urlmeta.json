@@ -1,252 +1,252 @@
 {
   "https://en.louisvuitton.com/robots.txt": {
-    "path": "/home/toxic/effusion_labs_final/src/content/projects/lv-images/generated/lv/cache/robots/en.louisvuitton.com.txt",
+    "path": "cache/robots/en.louisvuitton.com.txt",
     "status": "200",
     "contentType": "text/plain",
     "fetchedAt": "2025-09-20T20:03:12.016Z"
   },
   "https://us.louisvuitton.com/robots.txt": {
-    "path": "/home/toxic/effusion_labs_final/src/content/projects/lv-images/generated/lv/cache/robots/us.louisvuitton.com.txt",
+    "path": "cache/robots/us.louisvuitton.com.txt",
     "status": "200",
     "contentType": "text/plain",
     "fetchedAt": "2025-09-20T20:03:12.024Z"
   },
   "https://de.louisvuitton.com/robots.txt": {
-    "path": "/home/toxic/effusion_labs_final/src/content/projects/lv-images/generated/lv/cache/robots/de.louisvuitton.com.txt",
+    "path": "cache/robots/de.louisvuitton.com.txt",
     "status": "200",
     "contentType": "text/plain",
     "fetchedAt": "2025-09-20T20:03:12.061Z"
   },
   "https://fr.louisvuitton.com/robots.txt": {
-    "path": "/home/toxic/effusion_labs_final/src/content/projects/lv-images/generated/lv/cache/robots/fr.louisvuitton.com.txt",
+    "path": "cache/robots/fr.louisvuitton.com.txt",
     "status": "200",
     "contentType": "text/plain",
     "fetchedAt": "2025-09-20T20:03:12.076Z"
   },
   "https://it.louisvuitton.com/robots.txt": {
-    "path": "/home/toxic/effusion_labs_final/src/content/projects/lv-images/generated/lv/cache/robots/it.louisvuitton.com.txt",
+    "path": "cache/robots/it.louisvuitton.com.txt",
     "status": "200",
     "contentType": "text/plain",
     "fetchedAt": "2025-09-20T20:03:12.084Z"
   },
   "https://es.louisvuitton.com/robots.txt": {
-    "path": "/home/toxic/effusion_labs_final/src/content/projects/lv-images/generated/lv/cache/robots/es.louisvuitton.com.txt",
+    "path": "cache/robots/es.louisvuitton.com.txt",
     "status": "200",
     "contentType": "text/plain",
     "fetchedAt": "2025-09-20T20:03:12.145Z"
   },
   "https://us.louisvuitton.com/content/louisvuitton/sitemap/eng_US/sitemap-product.xml": {
-    "path": "/home/toxic/effusion_labs_final/src/content/projects/lv-images/generated/lv/cache/us.louisvuitton.com/f6e4ca6f448073dbdd9fd0cd59b59d01b3e5d8f2.xml",
+    "path": "cache/us.louisvuitton.com/f6e4ca6f448073dbdd9fd0cd59b59d01b3e5d8f2.xml",
     "status": "200",
     "contentType": "text/xml",
     "fetchedAt": "2025-09-20T20:03:13.317Z"
   },
   "https://en.louisvuitton.com/content/louisvuitton/sitemap/eng_NL/sitemap-product.xml": {
-    "path": "/home/toxic/effusion_labs_final/src/content/projects/lv-images/generated/lv/cache/en.louisvuitton.com/bd8664c9fcd629f894d72092a4559e7f7ad050bc.xml",
+    "path": "cache/en.louisvuitton.com/bd8664c9fcd629f894d72092a4559e7f7ad050bc.xml",
     "status": "200",
     "contentType": "text/xml",
     "fetchedAt": "2025-09-20T20:03:13.387Z"
   },
   "https://it.louisvuitton.com/content/louisvuitton/sitemap/ita_IT/sitemap-product.xml": {
-    "path": "/home/toxic/effusion_labs_final/src/content/projects/lv-images/generated/lv/cache/it.louisvuitton.com/9e8696d58165140a41df9369b1b9c9daa5c325f5.xml",
+    "path": "cache/it.louisvuitton.com/9e8696d58165140a41df9369b1b9c9daa5c325f5.xml",
     "status": "200",
     "contentType": "text/xml",
     "fetchedAt": "2025-09-20T20:03:13.393Z"
   },
   "https://fr.louisvuitton.com/content/louisvuitton/sitemap/fra_FR/sitemap-product.xml": {
-    "path": "/home/toxic/effusion_labs_final/src/content/projects/lv-images/generated/lv/cache/fr.louisvuitton.com/b6d53a82951ff41b188bf7e7a1bec3718a944c13.xml",
+    "path": "cache/fr.louisvuitton.com/b6d53a82951ff41b188bf7e7a1bec3718a944c13.xml",
     "status": "200",
     "contentType": "text/xml",
     "fetchedAt": "2025-09-20T20:03:13.409Z"
   },
   "https://es.louisvuitton.com/content/louisvuitton/sitemap/esp_ES/sitemap-product.xml": {
-    "path": "/home/toxic/effusion_labs_final/src/content/projects/lv-images/generated/lv/cache/es.louisvuitton.com/ed89dc0449406969e5129ff335e73892c434106f.xml",
+    "path": "cache/es.louisvuitton.com/ed89dc0449406969e5129ff335e73892c434106f.xml",
     "status": "200",
     "contentType": "text/xml",
     "fetchedAt": "2025-09-20T20:03:13.413Z"
   },
   "https://de.louisvuitton.com/content/louisvuitton/sitemap/deu_DE/sitemap-product.xml": {
-    "path": "/home/toxic/effusion_labs_final/src/content/projects/lv-images/generated/lv/cache/de.louisvuitton.com/100ea266a990e3d7c5c2a5d8f8ee2098b701be08.xml",
+    "path": "cache/de.louisvuitton.com/100ea266a990e3d7c5c2a5d8f8ee2098b701be08.xml",
     "status": "200",
     "contentType": "text/xml",
     "fetchedAt": "2025-09-20T20:03:13.418Z"
   },
   "https://us.louisvuitton.com/content/louisvuitton/sitemap/eng_US/sitemap-content.xml": {
-    "path": "/home/toxic/effusion_labs_final/src/content/projects/lv-images/generated/lv/cache/us.louisvuitton.com/6d5baa86387dc2e8510d3bae2ef9a3731f4c5675.xml",
+    "path": "cache/us.louisvuitton.com/6d5baa86387dc2e8510d3bae2ef9a3731f4c5675.xml",
     "status": "200",
     "contentType": "text/xml",
     "fetchedAt": "2025-09-20T20:03:13.483Z"
   },
   "https://de.louisvuitton.com/content/louisvuitton/sitemap/deu_DE/sitemap-content.xml": {
-    "path": "/home/toxic/effusion_labs_final/src/content/projects/lv-images/generated/lv/cache/de.louisvuitton.com/9aab666603372740aeeb6d2c428889e1108945a0.xml",
+    "path": "cache/de.louisvuitton.com/9aab666603372740aeeb6d2c428889e1108945a0.xml",
     "status": "200",
     "contentType": "text/xml",
     "fetchedAt": "2025-09-20T20:03:13.587Z"
   },
   "https://en.louisvuitton.com/content/louisvuitton/sitemap/eng_NL/sitemap-content.xml": {
-    "path": "/home/toxic/effusion_labs_final/src/content/projects/lv-images/generated/lv/cache/en.louisvuitton.com/9794e392412d0bdf760f35e78b13948e9a0e7944.xml",
+    "path": "cache/en.louisvuitton.com/9794e392412d0bdf760f35e78b13948e9a0e7944.xml",
     "status": "200",
     "contentType": "text/xml",
     "fetchedAt": "2025-09-20T20:03:13.614Z"
   },
   "https://de.louisvuitton.com/content/louisvuitton/sitemap/deu_DE/sitemap-catalog.xml": {
-    "path": "/home/toxic/effusion_labs_final/src/content/projects/lv-images/generated/lv/cache/de.louisvuitton.com/a72eb8a9c9909e7954712428627c162e5c4e99e6.xml",
+    "path": "cache/de.louisvuitton.com/a72eb8a9c9909e7954712428627c162e5c4e99e6.xml",
     "status": "200",
     "contentType": "text/xml",
     "fetchedAt": "2025-09-20T20:03:13.778Z"
   },
   "https://it.louisvuitton.com/content/louisvuitton/sitemap/ita_IT/sitemap-content.xml": {
-    "path": "/home/toxic/effusion_labs_final/src/content/projects/lv-images/generated/lv/cache/it.louisvuitton.com/d1e8ca83a02ce0bc3efff8a55fb674c115fbcd4e.xml",
+    "path": "cache/it.louisvuitton.com/d1e8ca83a02ce0bc3efff8a55fb674c115fbcd4e.xml",
     "status": "200",
     "contentType": "text/xml",
     "fetchedAt": "2025-09-20T20:03:13.868Z"
   },
   "https://en.louisvuitton.com/content/louisvuitton/sitemap/eng_NL/sitemap-catalog.xml": {
-    "path": "/home/toxic/effusion_labs_final/src/content/projects/lv-images/generated/lv/cache/en.louisvuitton.com/ef275a8f52d7c4360d25b95add9e1de7f0036007.xml",
+    "path": "cache/en.louisvuitton.com/ef275a8f52d7c4360d25b95add9e1de7f0036007.xml",
     "status": "200",
     "contentType": "text/xml",
     "fetchedAt": "2025-09-20T20:03:13.882Z"
   },
   "https://us.louisvuitton.com/content/louisvuitton/sitemap/eng_US/sitemap-catalog.xml": {
-    "path": "/home/toxic/effusion_labs_final/src/content/projects/lv-images/generated/lv/cache/us.louisvuitton.com/d1cbfad69ac26b3e043efed18165e3d5976ea4b5.xml",
+    "path": "cache/us.louisvuitton.com/d1cbfad69ac26b3e043efed18165e3d5976ea4b5.xml",
     "status": "200",
     "contentType": "text/xml",
     "fetchedAt": "2025-09-20T20:03:13.885Z"
   },
   "https://es.louisvuitton.com/content/louisvuitton/sitemap/esp_ES/sitemap-content.xml": {
-    "path": "/home/toxic/effusion_labs_final/src/content/projects/lv-images/generated/lv/cache/es.louisvuitton.com/ee4ed33003162f673981bce0b347eded2741eb8e.xml",
+    "path": "cache/es.louisvuitton.com/ee4ed33003162f673981bce0b347eded2741eb8e.xml",
     "status": "200",
     "contentType": "text/xml",
     "fetchedAt": "2025-09-20T20:03:13.897Z"
   },
   "https://fr.louisvuitton.com/content/louisvuitton/sitemap/fra_FR/sitemap-content.xml": {
-    "path": "/home/toxic/effusion_labs_final/src/content/projects/lv-images/generated/lv/cache/fr.louisvuitton.com/269a1e38c208dbab6d17a269ecd8cd6357d6bccd.xml",
+    "path": "cache/fr.louisvuitton.com/269a1e38c208dbab6d17a269ecd8cd6357d6bccd.xml",
     "status": "200",
     "contentType": "text/xml",
     "fetchedAt": "2025-09-20T20:03:13.932Z"
   },
   "https://it.louisvuitton.com/content/louisvuitton/sitemap/ita_IT/sitemap-catalog.xml": {
-    "path": "/home/toxic/effusion_labs_final/src/content/projects/lv-images/generated/lv/cache/it.louisvuitton.com/850c26a45e467c8f269421f6ba858bfb145827c9.xml",
+    "path": "cache/it.louisvuitton.com/850c26a45e467c8f269421f6ba858bfb145827c9.xml",
     "status": "200",
     "contentType": "text/xml",
     "fetchedAt": "2025-09-20T20:03:14.060Z"
   },
   "https://es.louisvuitton.com/content/louisvuitton/sitemap/esp_ES/sitemap-catalog.xml": {
-    "path": "/home/toxic/effusion_labs_final/src/content/projects/lv-images/generated/lv/cache/es.louisvuitton.com/21db2dbfc893f865f1ad5302e3fd1b77583e35f6.xml",
+    "path": "cache/es.louisvuitton.com/21db2dbfc893f865f1ad5302e3fd1b77583e35f6.xml",
     "status": "200",
     "contentType": "text/xml",
     "fetchedAt": "2025-09-20T20:03:14.073Z"
   },
   "https://fr.louisvuitton.com/content/louisvuitton/sitemap/fra_FR/sitemap-catalog.xml": {
-    "path": "/home/toxic/effusion_labs_final/src/content/projects/lv-images/generated/lv/cache/fr.louisvuitton.com/7247f525109e01569244ef871cf2bbb54747f9e1.xml",
+    "path": "cache/fr.louisvuitton.com/7247f525109e01569244ef871cf2bbb54747f9e1.xml",
     "status": "200",
     "contentType": "text/xml",
     "fetchedAt": "2025-09-20T20:03:14.116Z"
   },
   "https://de.louisvuitton.com/content/louisvuitton/sitemap/deu_DE/sitemap-image.xml": {
-    "path": "/home/toxic/effusion_labs_final/src/content/projects/lv-images/generated/lv/cache/de.louisvuitton.com/b22709e6130ba5b141592e17997c46737eb875cf.xml",
+    "path": "cache/de.louisvuitton.com/b22709e6130ba5b141592e17997c46737eb875cf.xml",
     "status": "200",
     "contentType": "text/xml",
     "fetchedAt": "2025-09-20T20:03:14.217Z"
   },
   "https://us.louisvuitton.com/content/louisvuitton/sitemap/eng_US/sitemap-image.xml": {
-    "path": "/home/toxic/effusion_labs_final/src/content/projects/lv-images/generated/lv/cache/us.louisvuitton.com/ccedb1a9ce8d5b42532fd024219ac131bbaab69f.xml",
+    "path": "cache/us.louisvuitton.com/ccedb1a9ce8d5b42532fd024219ac131bbaab69f.xml",
     "status": "200",
     "contentType": "text/xml",
     "fetchedAt": "2025-09-20T20:03:14.360Z"
   },
   "https://en.louisvuitton.com/content/louisvuitton/sitemap/eng_NL/sitemap-image.xml": {
-    "path": "/home/toxic/effusion_labs_final/src/content/projects/lv-images/generated/lv/cache/en.louisvuitton.com/c7b3ce26d5bc28b1c5263cb6eb4a2bf39b10f3b8.xml",
+    "path": "cache/en.louisvuitton.com/c7b3ce26d5bc28b1c5263cb6eb4a2bf39b10f3b8.xml",
     "status": "200",
     "contentType": "text/xml",
     "fetchedAt": "2025-09-20T20:03:14.381Z"
   },
   "https://es.louisvuitton.com/content/louisvuitton/sitemap/esp_ES/sitemap-image.xml": {
-    "path": "/home/toxic/effusion_labs_final/src/content/projects/lv-images/generated/lv/cache/es.louisvuitton.com/ffe94f0981ac9b3a5c0757cd7dfc9accad7d6c0b.xml",
+    "path": "cache/es.louisvuitton.com/ffe94f0981ac9b3a5c0757cd7dfc9accad7d6c0b.xml",
     "status": "200",
     "contentType": "text/xml",
     "fetchedAt": "2025-09-20T20:03:14.498Z"
   },
   "https://fr.louisvuitton.com/content/louisvuitton/sitemap/fra_FR/sitemap-image.xml": {
-    "path": "/home/toxic/effusion_labs_final/src/content/projects/lv-images/generated/lv/cache/fr.louisvuitton.com/c3c7db387ad4a2aaa19e8726268dd6031f31dc12.xml",
+    "path": "cache/fr.louisvuitton.com/c3c7db387ad4a2aaa19e8726268dd6031f31dc12.xml",
     "status": "200",
     "contentType": "text/xml",
     "fetchedAt": "2025-09-20T20:03:14.727Z"
   },
   "https://de.louisvuitton.com/sitemap.xml": {
-    "path": "/home/toxic/effusion_labs_final/src/content/projects/lv-images/generated/lv/cache/de.louisvuitton.com/40a87d105914438feb9997041ff27a20e6308def.html",
+    "path": "cache/de.louisvuitton.com/40a87d105914438feb9997041ff27a20e6308def.html",
     "status": "200",
     "contentType": "text/html; charset=utf-8",
     "fetchedAt": "2025-09-20T20:03:14.774Z"
   },
   "https://it.louisvuitton.com/content/louisvuitton/sitemap/ita_IT/sitemap-image.xml": {
-    "path": "/home/toxic/effusion_labs_final/src/content/projects/lv-images/generated/lv/cache/it.louisvuitton.com/9cb7533bfddd66dbf28d5e396a19ec77cf715251.xml",
+    "path": "cache/it.louisvuitton.com/9cb7533bfddd66dbf28d5e396a19ec77cf715251.xml",
     "status": "200",
     "contentType": "text/xml",
     "fetchedAt": "2025-09-20T20:03:14.774Z"
   },
   "https://en.louisvuitton.com/sitemap.xml": {
-    "path": "/home/toxic/effusion_labs_final/src/content/projects/lv-images/generated/lv/cache/en.louisvuitton.com/8bc31a1beb3d7faaa7545984e19a64b802f7d804.html",
+    "path": "cache/en.louisvuitton.com/8bc31a1beb3d7faaa7545984e19a64b802f7d804.html",
     "status": "200",
     "contentType": "text/html; charset=utf-8",
     "fetchedAt": "2025-09-20T20:03:14.843Z"
   },
   "https://es.louisvuitton.com/sitemap.xml": {
-    "path": "/home/toxic/effusion_labs_final/src/content/projects/lv-images/generated/lv/cache/es.louisvuitton.com/9c04f3db7166199f773a65489e34026afa0c6d71.html",
+    "path": "cache/es.louisvuitton.com/9c04f3db7166199f773a65489e34026afa0c6d71.html",
     "status": "200",
     "contentType": "text/html; charset=utf-8",
     "fetchedAt": "2025-09-20T20:03:14.926Z"
   },
   "https://us.louisvuitton.com/sitemap.xml": {
-    "path": "/home/toxic/effusion_labs_final/src/content/projects/lv-images/generated/lv/cache/us.louisvuitton.com/c8432b4aa687eeba6c341ac5144ff71bd22d1b67.html",
+    "path": "cache/us.louisvuitton.com/c8432b4aa687eeba6c341ac5144ff71bd22d1b67.html",
     "status": "200",
     "contentType": "text/html; charset=utf-8",
     "fetchedAt": "2025-09-20T20:03:14.970Z"
   },
   "https://de.louisvuitton.com/sitemap_index.xml": {
-    "path": "/home/toxic/effusion_labs_final/src/content/projects/lv-images/generated/lv/cache/de.louisvuitton.com/c1de4761c3b91d031d030c417a2ce016aad7746d.html",
+    "path": "cache/de.louisvuitton.com/c1de4761c3b91d031d030c417a2ce016aad7746d.html",
     "status": "200",
     "contentType": "text/html; charset=utf-8",
     "fetchedAt": "2025-09-20T20:03:15.168Z"
   },
   "https://it.louisvuitton.com/sitemap.xml": {
-    "path": "/home/toxic/effusion_labs_final/src/content/projects/lv-images/generated/lv/cache/it.louisvuitton.com/1fc2d211cb83a3915b52badfaed3438a21d637e6.html",
+    "path": "cache/it.louisvuitton.com/1fc2d211cb83a3915b52badfaed3438a21d637e6.html",
     "status": "200",
     "contentType": "text/html; charset=utf-8",
     "fetchedAt": "2025-09-20T20:03:15.198Z"
   },
   "https://fr.louisvuitton.com/sitemap.xml": {
-    "path": "/home/toxic/effusion_labs_final/src/content/projects/lv-images/generated/lv/cache/fr.louisvuitton.com/f3b563f7c6248a67a831856ebc6103ac9dc84111.html",
+    "path": "cache/fr.louisvuitton.com/f3b563f7c6248a67a831856ebc6103ac9dc84111.html",
     "status": "200",
     "contentType": "text/html; charset=utf-8",
     "fetchedAt": "2025-09-20T20:03:15.311Z"
   },
   "https://es.louisvuitton.com/sitemap_index.xml": {
-    "path": "/home/toxic/effusion_labs_final/src/content/projects/lv-images/generated/lv/cache/es.louisvuitton.com/98c9a4a9948c302df9107c5fe382fd844dda1a13.html",
+    "path": "cache/es.louisvuitton.com/98c9a4a9948c302df9107c5fe382fd844dda1a13.html",
     "status": "200",
     "contentType": "text/html; charset=utf-8",
     "fetchedAt": "2025-09-20T20:03:15.322Z"
   },
   "https://en.louisvuitton.com/sitemap_index.xml": {
-    "path": "/home/toxic/effusion_labs_final/src/content/projects/lv-images/generated/lv/cache/en.louisvuitton.com/3a9b102c91a525914e1a5c51d5d8b1785b7e17b0.html",
+    "path": "cache/en.louisvuitton.com/3a9b102c91a525914e1a5c51d5d8b1785b7e17b0.html",
     "status": "200",
     "contentType": "text/html; charset=utf-8",
     "fetchedAt": "2025-09-20T20:03:15.336Z"
   },
   "https://us.louisvuitton.com/sitemap_index.xml": {
-    "path": "/home/toxic/effusion_labs_final/src/content/projects/lv-images/generated/lv/cache/us.louisvuitton.com/095dafc1111beeeb71ac9b5b67ed57c3bb3a4edf.html",
+    "path": "cache/us.louisvuitton.com/095dafc1111beeeb71ac9b5b67ed57c3bb3a4edf.html",
     "status": "200",
     "contentType": "text/html; charset=utf-8",
     "fetchedAt": "2025-09-20T20:03:15.484Z"
   },
   "https://it.louisvuitton.com/sitemap_index.xml": {
-    "path": "/home/toxic/effusion_labs_final/src/content/projects/lv-images/generated/lv/cache/it.louisvuitton.com/0ff27763bc0856a217c8db4b111714922c0cb23c.html",
+    "path": "cache/it.louisvuitton.com/0ff27763bc0856a217c8db4b111714922c0cb23c.html",
     "status": "200",
     "contentType": "text/html; charset=utf-8",
     "fetchedAt": "2025-09-20T20:03:15.505Z"
   },
   "https://fr.louisvuitton.com/sitemap_index.xml": {
-    "path": "/home/toxic/effusion_labs_final/src/content/projects/lv-images/generated/lv/cache/fr.louisvuitton.com/c848b122d65a59d3c181478c86f6f3944450d9e6.html",
+    "path": "cache/fr.louisvuitton.com/c848b122d65a59d3c181478c86f6f3944450d9e6.html",
     "status": "200",
     "contentType": "text/html; charset=utf-8",
     "fetchedAt": "2025-09-20T20:03:15.673Z"
