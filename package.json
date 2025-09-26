@@ -15,18 +15,18 @@
     "prebuild": "node tools/lv-images/pipeline.mjs hydrate",
     "prebuild:offline": "node tools/lv-images/pipeline.mjs hydrate",
     "build": "npx @11ty/eleventy",
+    "build:offline": "node tools/build-offline.mjs",
+    "verify:patches": "node tools/apply-patches.mjs --check",
     "build:offline": "node tools/lv-images/pipeline.mjs build-local-offline",
     "build-local-fullinternet": "node tools/lv-images/pipeline.mjs build-local-fullinternet",
     "build-local-offline": "node tools/lv-images/pipeline.mjs build-local-offline",
     "build-gitactions": "node tools/lv-images/pipeline.mjs build-gitactions",
-    "verify:patches": "patch-package --check",
     "clean": "del-cli _site",
     "format:check": "dprint check -c dprint.json",
     "format": "dprint fmt -c dprint.json",
     "format:classes": "rustywind --write \"src/**/*.{njk,html,js,jsx,ts,tsx}\"",
     "format:all": "npm run format:classes && npm run format",
     "format:check:all": "npm run format:check",
-    "verify:patches": "patch-package --error-on-fail",
     "lint": "npm-run-all --parallel lint:js lint:links",
     "lint:js": "eslint \"src/**/*.{js,mjs,ts,tsx}\" \"tools/**/*.mjs\" \"mcp-stack/**/*.mjs\" eleventy.config.mjs --report-unused-disable-directives",
     "lint:fix": "eslint \"src/**/*.{js,mjs,ts,tsx}\" \"tools/**/*.mjs\" \"mcp-stack/**/*.mjs\" eleventy.config.mjs --fix",
@@ -59,7 +59,7 @@
     "mcp:dev": "node mcp-stack/gateway/server.mjs",
     "mcp:integration": "node mcp-stack/tests/integration.mjs",
     "mcp:test": "node mcp-stack/tests/smoke.mjs",
-    "postinstall": "if [ \"${PATCH_PACKAGE_RUN:-1}\" != \"0\" ] && [ -x node_modules/.bin/patch-package ]; then patch-package; fi"
+    "postinstall": "node tools/apply-patches.mjs"
   },
   "lint-staged": {
     "package.json": [
@@ -154,7 +154,6 @@
     "p-limit": "^7.1.1",
     "p-queue": "8.1.1",
     "p-retry": "7.0.0",
-    "patch-package": "8.0.0",
     "picocolors": "1.1.1",
     "playwright-extra": "4.3.6",
     "postcss": "^8.5.6",
