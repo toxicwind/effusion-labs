@@ -63,7 +63,7 @@ RUN node tools/check-chromium.mjs && \
 ############################
 # runtime (tiny, static)
 ############################
-FROM nginx:1.27-bookworm
+FROM nginx:1.29-bookworm
 
 RUN apt-get update \
   && apt-get install -y --no-install-recommends curl \
