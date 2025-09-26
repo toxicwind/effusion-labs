@@ -7,7 +7,7 @@ FROM node:24-bookworm AS deps
 WORKDIR /app
 
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends build-essential python3 ca-certificates chromium && \
+    apt-get install -y --no-install-recommends build-essential python3 ca-certificates chromium git && \
     rm -rf /var/lib/apt/lists/*
 
 ENV npm_config_fund=false \
@@ -24,6 +24,8 @@ ENV npm_config_fund=false \
 
 COPY package*.json ./
 COPY patches/ ./patches/
+# postinstall needs the patch runner available during dependency install
+COPY tools/apply-patches.mjs ./tools/apply-patches.mjs
 RUN npm ci --no-audit --no-fund
 
 ############################
