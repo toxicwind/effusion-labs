@@ -4,178 +4,60 @@ showTitle: false
 metaDisable: true
 ---
 
-{# reader shell for imported HTML #}
-<section class="card shadow-xs border-transparent rounded-box">
-  <div class="card-body">
-    <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight border-l-8 border-primary pl-3 m-0">
-      {{ title or page.fileSlug | title }}
-    </h1>
-    <div class="mt-2 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm opacity-80">
-      <span>Published {{ (page.date or buildTime) | date("yyyy-MM-dd") }}</span>
-      {# simple read-min estimate (chars/5 ≈ words, /240 wpm) #}
-      {% set _chars = (content | striptags) | length %}
-      {% set _read = ((_chars / 5) / 240) | round(0, 'ceil') %}
-      {% if not _read or _read < 1 %}
-        {% set _read = 1 %}
-      {% endif %}
-      <span aria-hidden="true">·</span>
-      <span>{{ _read }} min read</span>
-      {% if byline %}<span aria-hidden="true">·</span><span>by {{ byline }}</span>{% endif %}
-      {% if convertedFromHtml %}<span aria-hidden="true">·</span><span class="text-info"
-        >Auto-converted</span>{% endif %}
-    </div>
-    {% if excerpt %}<p class="opacity-90 mt-2">{{ excerpt }}</p>{% endif %}
-  </div>
+
+<section class="hb-brut-card rounded-box p-5 sm:p-7">
+<h1 class="m-0 border-l-8 border-primary pl-3 font-heading text-3xl font-extrabold tracking-tight sm:text-4xl">
+{{ title or page.fileSlug | title }}
+</h1>
+<div class="mt-2 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm opacity-80">
+<span>Published {{ (page.date or buildTime) | date('yyyy-MM-dd') }}</span>
+{% set _chars = (content | striptags) | length %}
+{% set _read = ((_chars / 5) / 240) | round(0, 'ceil') %}
+{% if not _read or _read < 1 %}{% set _read = 1 %}{% endif %}
+<span aria-hidden="true">·</span>
+<span>{{ _read }} min read</span>
+{% if byline %}<span aria-hidden="true">·</span><span>by {{ byline }}</span>{% endif %}
+{% if convertedFromHtml %}<span aria-hidden="true">·</span><span class="text-info">Auto-converted</span>{% endif %}
+</div>
+{% if excerpt %}<p class="mt-2 opacity-90">{{ excerpt }}</p>{% endif %}
 </section>
-<section class="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8">
-  <aside class="lg:col-span-3 order-last lg:order-first space-y-4">
-    <div class="p-4 border border-dashed border-primary bg-base-200 rounded">
-      <h2 class="font-bold text-primary uppercase text-xs mb-2">Contents</h2>
-      <nav id="toc" class="max-h-[50vh] overflow-auto pr-1">
-        <ul id="toc-list" class="menu menu-sm"></ul>
-      </nav>
-      <div class="pt-2 flex gap-2">
-        <button id="expand-toc" class="btn btn-xs btn-outline">Expand all</button>
-        <button id="collapse-toc" class="btn btn-xs btn-ghost">Collapse</button>
-      </div>
-      <div class="divider my-3"></div>
-      <h2 class="font-bold text-primary uppercase text-xs mb-2">Meta</h2>
-      <dl class="text-sm">
-        <div class="flex justify-between gap-4">
-          <dt class="opacity-70">Date</dt>
-          <dd>
-            {{ (page.date or buildTime) | date("yyyy-MM-dd") }}
-          </dd>
-        </div>
-        <div class="flex justify-between gap-4">
-          <dt class="opacity-70">Read</dt>
-          <dd>
-            {{ _read }} min
-          </dd>
-        </div>
-      </dl>
-      {% set _tags = (tags or []) | filter(t => t != "all") %}
-      {% if _tags.length %}
-        <div class="mt-3 flex flex-wrap gap-2">
-          {% for t in _tags %}
-            <a
-              href="{{ ('/tags/' + (t | slug) + '/') | url }}"
-              class="badge badge-primary badge-outline no-underline"
-            >#{{ t }}</a>
-          {% endfor %}
-        </div>
-      {% endif %}
-    </div>
-  </aside>
-  <article class="lg:col-span-9">
-    <div class="relative border-2 border-black bg-base-200 p-5 sm:p-8">
-      <div id="content-root" class="relative prose prose-neutral max-w-none">
-        {{ content | safe }}
-      </div>
-    </div>
-    <div class="mt-10 flex items-center justify-between text-sm uppercase tracking-wide">
-      {% if pagination and pagination.href and pagination.href.previous %}
-        <a class="hover:underline" href="{{ pagination.href.previous }}">← Prev</a>
-      {% else %}
-        <span></span>
-      {% endif %}
-      {% if pagination and pagination.href and pagination.href.next %}
-        <a class="hover:underline" href="{{ pagination.href.next }}">Next →</a>
-      {% endif %}
-    </div>
-    <div class="mt-8 flex justify-end">
-      <button id="back-to-top" class="btn btn-sm btn-outline">Back to top ↑</button>
-    </div>
-  </article>
-</section>
-<script>
-;(function() {
-  const root = document.getElementById('content-root')
-  if (!root) return
 
-  // IDs + copy anchors on h2–h4
-  const headings = root.querySelectorAll('h2, h3, h4')
-  const slug = s =>
-    (s || '').toLowerCase().trim().replace(/[\s]+/g, '-').replace(/[^\w\-]+/g, '').replace(
-      /\-+/g,
-      '-',
-    )
-  headings.forEach(h => {
-    if (!h.id) {
-      const base = slug(h.textContent || 'section') || 'section'
-      let id = base, i = 2
-      while (document.getElementById(id)) id = base + '-' + i++
-      h.id = id
-    }
-    const a = document.createElement('a')
-    a.href = '#' + h.id
-    a.className = 'no-underline opacity-0 hover:opacity-60 ml-1'
-    a.textContent = '#'
-    a.addEventListener('click', (e) => {
-      e.preventDefault()
-      const url = location.origin + location.pathname + '#' + h.id
-      navigator.clipboard?.writeText(url)
-      history.replaceState({}, '', '#' + h.id)
-      a.style.opacity = 1
-      setTimeout(() => a.style.opacity = .6, 600)
-    })
-    h.appendChild(a)
-  })
 
-  // TOC
-  const tocList = document.getElementById('toc-list')
-  const items = []
-  headings.forEach(h =>
-    items.push({ id: h.id, text: h.textContent.trim(), level: +h.tagName.slice(1) })
-  )
-  const stack = [{ level: 1, ul: tocList }]
-  items.forEach(it => {
-    const lvl = Math.min(Math.max(it.level, 2), 4)
-    while (stack.length && stack[stack.length - 1].level >= lvl) stack.pop()
-    const parent = stack[stack.length - 1] || { level: 1, ul: tocList }
-    const ul = document.createElement('ul')
-    ul.className = lvl === 2 ? 'menu menu-sm pl-0' : 'menu menu-xs pl-4'
-    parent.ul.appendChild(ul)
-    const li = document.createElement('li')
-    const a = document.createElement('a')
-    a.className = 'link link-hover'
-    a.href = '#' + it.id
-    a.textContent = it.text.replace(/\s*#\s*$/, '')
-    li.appendChild(a)
-    ul.appendChild(li)
-    stack.push({ level: lvl, ul })
-  })
+<section class="mt-6 grid grid-cols-1 gap-6 sm:gap-8 lg:grid-cols-12">
+<aside class="order-last space-y-4 lg:order-first lg:col-span-3">
+<div class="rounded border border-dashed border-primary bg-base-200 p-4">
+<h2 class="mb-2 text-xs font-bold uppercase text-primary">Contents</h2>
+<nav id="toc" class="max-h-[50vh] overflow-auto pr-1">
+<ul id="toc-list" class="menu menu-sm"></ul>
+</nav>
+<div class="my-3 divider"></div>
+<h2 class="mb-2 text-xs font-bold uppercase text-primary">Meta</h2>
+<dl class="text-sm">
+<div class="flex justify-between gap-4"><dt class="opacity-70">Date</dt><dd>{{ (page.date or buildTime) | date('yyyy-MM-dd') }}</dd></div>
+<div class="flex justify-between gap-4"><dt class="opacity-70">Read</dt><dd>{{ _read }} min</dd></div>
+</dl>
+{% set _tags = (tags or []) | filter(t => t != 'all') %}
+{% if _tags.length %}
+<div class="mt-3 flex flex-wrap gap-2">
+{% for t in _tags %}
+<a href="{{ ('/tags/' + (t | slug) + '/') | url }}" class="badge badge-primary badge-outline no-underline">#{{ t }}</a>
+{% endfor %}
+</div>
+{% endif %}
+<div class="pt-3 flex gap-2">
+<button id="expand-toc" class="btn btn-xs btn-outline">Expand</button>
+<button id="collapse-toc" class="btn btn-xs btn-ghost">Collapse</button>
+</div>
+</div>
+</aside>
 
-  const expandBtn = document.getElementById('expand-toc'),
-    collapseBtn = document.getElementById('collapse-toc')
-  function setExpanded(expanded) {
-    tocList.querySelectorAll('ul').forEach((ul, idx) => {
-      if (idx === 0) return
-      ul.style.display = expanded ? '' : 'none'
-    })
-  }
-  setExpanded(false)
-  expandBtn?.addEventListener('click', () => setExpanded(true))
-  collapseBtn?.addEventListener('click', () => setExpanded(false))
 
-  document.getElementById('back-to-top')?.addEventListener(
-    'click',
-    () => window.scrollTo({ top: 0, behavior: 'smooth' }),
-  )
-
-  // scrollspy
-  const links = [...tocList.querySelectorAll('a[href^="#"]')]
-  const map = new Map(links.map(a => [a.getAttribute('href').slice(1), a]))
-  const io = new IntersectionObserver(es => {
-    es.forEach(e => {
-      const link = map.get(e.target.id)
-      if (!link) return
-      if (e.isIntersecting) {
-        links.forEach(l => l.classList.remove('text-primary'))
-        link.classList.add('text-primary')
-      }
-    })
-  }, { rootMargin: '-70px 0px -70% 0px', threshold: 0.01 })
-  headings.forEach(h => io.observe(h))
-})()
+<article class="lg:col-span-9">
+<div class="hb-brut-card rounded-box p-5 sm:p-8">
+<div id="content-root" class="prose max-w-none dark:prose-invert">
+{{ content | safe }}
+</div>
+</div>
+<div class="mt-10 flex items-center justify-between text-sm uppercase tracking-wide">
+{% if pagination and pagination.href and pagination.href.previous %}
 </script>

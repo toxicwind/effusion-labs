@@ -3,45 +3,42 @@ layout: base.njk
 title: "Redirecting…"
 showTitle: false
 metaDisable: true
-# Expect a 'redirect' value from data or front matter on the page using this layout.
-# e.g. in a content file:  redirect: "https://example.com/target"
 ---
 
-{# Normalize the URL we’ll use everywhere #}
+
 {% set redirectUrl = redirect | default('/') %}
-{% set siteUrl =
-  (metadata and metadata.site and metadata.site.url) or 'https://effusionlabs.com'
-%}
+{% set siteUrl = (metadata and metadata.site and metadata.site.url) or '' %}
 {% set canonicalHref = redirectUrl %}
-{% if canonicalHref and '://' not in canonicalHref %}
-  {% set canonicalHref = canonicalHref | absoluteUrl(siteUrl) %}
+{% if canonicalHref and '://' not in canonicalHref and siteUrl %}
+{% set canonicalHref = canonicalHref | absoluteUrl(siteUrl) %}
 {% endif %}
 
-{# If your base.njk defines a "headExtra" block, we inject head tags here. #}
+
 {% block headExtra %}
-  <meta http-equiv="refresh" content="0; url={{ canonicalHref or redirectUrl }}" data-vite-ignore>
-  {% if canonicalHref %}
-    <link rel="canonical" href="{{ canonicalHref }}" data-vite-ignore>
-  {% endif %}
-  <meta name="robots" content="noindex">
+{% if canonicalHref %}
+<link rel="canonical" href="{{ canonicalHref }}" data-vite-ignore>
+{% endif %}
+<meta name="robots" content="noindex">
+<meta http-equiv="refresh" content="0; url={{ canonicalHref or redirectUrl }}" data-vite-ignore>
 {% endblock headExtra %}
 
-<p>
-  Redirecting to
-  <a class="link link-hover" href="{{ redirectUrl }}">{{ redirectUrl }}</a>…
+
+<p aria-live="polite" class="opacity-80">
+Redirecting to
+<a class="link link-hover" href="{{ redirectUrl }}">{{ redirectUrl }}</a>…
 </p>
+
 
 <!-- markup-fmt-ignore -->
 <script>
 (function () {
-  // Nunjucks emits a proper JS string literal here (or "" if missing)
-  var u = {{ redirectUrl | dump | default('""') }};
-  if (!u) return;
-  try { location.replace(u); }
-  catch (_) { location.href = u; }
+var u = {{ redirectUrl | dump | default('""') }};
+if (!u) return;
+try { location.replace(u); } catch (_) { location.href = u; }
 })();
 </script>
 
+
 <noscript>
-  <meta http-equiv="refresh" content="0; url={{ redirectUrl }}">
+<meta http-equiv="refresh" content="0; url={{ redirectUrl }}">
 </noscript>
