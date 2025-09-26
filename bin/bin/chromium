@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+. "$(cd "$(dirname "$0")" && pwd)/_lib.sh"
+
+if [[ -n "${PUPPETEER_EXECUTABLE_PATH:-}" && -x "$PUPPETEER_EXECUTABLE_PATH" ]]; then
+  exec "$PUPPETEER_EXECUTABLE_PATH" "$@"
+fi
+
+retry_exec "$@" --   "$REPO_ROOT/node_modules/.bin/chromium"   "$TOOLS_DIR/chromium/chromium"   chromium   chromium-browser   google-chrome-stable   google-chrome
+
+echo "❌ Chromium binary not available. Install system chromium and export PUPPETEER_EXECUTABLE_PATH." >&2
+exit 127

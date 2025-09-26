@@ -1,255 +1,160 @@
 # Effusion Labs
 
-Effusion Labs is a digital studio and knowledge base for rapid iteration. It uses **Eleventy v3** as
-a static-site generator with **Vite** for modern bundling and hot-module reloading. Content is
-authored in **Markdown** and **Nunjucks** under `src/content/` and compiled into a deployable static
-site in `_site/`. Styles are managed with **Tailwind CSS v4** and **daisyUI v5**, with a single
-entry stylesheet. The project targets **Node.js ≥24** and runs fully in **ECMAScript-module (ESM)**
-mode.
+Effusion Labs is a Hypebrut-flavoured Eleventy site wired for constrained CI. The build stack couples
+Eleventy 3, Vite 7, Tailwind 4, and daisyUI 5 on Node.js ≥ 22.19. Chromium-driven tooling (Puppeteer,
+Playwright) now targets a system-installed browser so the pipeline stays deterministic even when the
+network is hostile.
 
 ---
 
 ## Table of Contents
 
-- [Effusion Labs](#effusion-labs)
-  - [Table of Contents](#table-of-contents)
-  - [Overview](#overview)
-  - [Features](#features)
-  - [Requirements](#requirements)
-  - [Quickstart](#quickstart)
-  - [Scripts](#scripts)
-    - [Core](#core)
-    - [Tooling / Utilities](#tooling--utilities)
-    - [MCP (optional experiments)](#mcp-optional-experiments)
-  - [Project Structure](#project-structure)
-  - [Linking \& Route Canon](#linking--route-canon)
-  - [Optional Services](#optional-services)
-  - [Development Workflow](#development-workflow)
-  - [Search \& View (quick orientation)](#search--view-quick-orientation)
-  - [Contributing](#contributing)
-  - [License](#license)
-
----
-
-## Overview
-
-A fast, opinionated Eleventy + Tailwind static site—curated as a digital garden. Batteries included,
-CI-ready, and friendly to autonomous coding agents.
-
----
-
-## Features
-
-- **Dynamic interlinking** — Uses `@photogabble/eleventy-plugin-interlinker` to resolve wiki-style
-  links across multiple content types. If a link omits a kind (e.g. `[[Labubu]]`), the resolver
-  falls back through:\
-  `work → character → product → series → concept → project → spark → meta`.\
-  Named kinds such as `product`, `character`, and `series` map to canonical archive routes like
-  `/archives/product/<slug>/`.
-
-- **Unresolved-link reporting** — Each build writes `artifacts/reports/interlinker-unresolved.json`.
-  CI can be configured with `INTERLINKER_MAX_UNRESOLVED` and `INTERLINKER_FAIL_ON_UNRESOLVED` to
-  fail on overs.
-
-- **Patched interlinker** — A hotfix via `tools/apply-patches.mjs` adds a `toHtmlString`
-  coercion and guards non-string inputs across ESM/CJS, preventing crashes in
-  Markdown-it and JSDOM.
-
-- **Eleventy plugins** — Navigation, RSS, sitemap, schema, plus official Vite integration.
-
-- **Tailwind & daisyUI** — CSS-first styling.
-
-- **Content collections** — Custom collections expose “featured,” “interactive,” and “recentAll.”
-  The `work` collection aggregates sparks, concepts, projects, and meta content.
-
-- **Image optimization** — The Eleventy image plugin generates AVIF, WebP, and fallback images at
-  multiple widths under `/public`. Filenames are slugified for determinism.
-
-- **Link verification** — `npm run lint:links` uses `markdown-link-check` to detect broken links.
-  `npm run lint` runs link checks as part of linting.
-
-- **Testing & coverage** — Integration tests live in `test/` and run via **Playwright**, with
-  coverage via `c8`. Use `npm run test:watch` for continuous feedback.
-- **npm-utils** — Built-in CLI to search, analyze, and install npm packages. We love new packages
-  and libraries; always consider them.
-
----
-
-## Requirements
-
-- Node.js ≥ 24 (ESM)
-- npm (≥ 10 recommended)
-- Git
-- Optional: Docker + Docker Compose for the companion Markdown gateway
+1. [Quickstart](#quickstart)
+2. [Script Taxonomy](#script-taxonomy)
+3. [Continuous Integration](#continuous-integration)
+4. [Chromium Policy](#chromium-policy)
+5. [Docker Image](#docker-image)
+6. [Shell Shims](#shell-shims)
+7. [Project Structure](#project-structure)
+8. [Contributing](#contributing)
 
 ---
 
 ## Quickstart
 
 ```bash
-# install dependencies
-npm install
-
-# start dev server with hot reload
-npm run dev
-
-# generate a static build in _site/
-npm run build
-
-# run format check, lint, and tests
-npm run check
+npm ci
+npm run dev            # Eleventy dev server with Vite
+npm run build          # Production build → _site/
+npm run lint           # ESLint + markdown-link-check (skips network in CI)
+npm run test           # Playwright integration suite (Chromium required)
 ```
 
-When the dev server prints a local URL, open it in your browser.
+All scripts assume ESM (`"type": "module"`) and respect Node ≥ 22.19. Use `npm run check` to execute
+doctor, formatting, linting, and tests as a single gate before shipping.
 
 ---
 
-## Scripts
+## Script Taxonomy
 
-> The tables below mirror `package.json` exactly.
+The npm scripts are grouped by intent. Network-dependent commands are kept under the `tools:*` tree
+and guard against restricted CI environments.
 
-### Core
+### Build & Runtime
 
-| Script         | Purpose                                                          |
-| -------------- | ---------------------------------------------------------------- |
-| `dev`          | Run Eleventy with Vite and hot-module reloading                  |
-| `preview`      | Serve via the Eleventy wrapper with `--serve` (explicit preview) |
-| `eleventy`     | Invoke Eleventy CLI directly (`npx @11ty/eleventy`)              |
-| `build`        | Build the static site to `_site/`                                |
-| `doctor`       | Verify local environment (Node, npm, rg, fd/fdfind, jq, sd)      |
-| `check`        | Run doctor, format check, lint, and tests                        |
-| `test`         | Run Playwright integration tests under coverage (`c8`)           |
-| `test:watch`   | Watch tests during development                                   |
-| `format`       | Format the repo with Prettier (`prettier -w .`)                  |
-| `format:check` | Check formatting (`prettier -c .`)                               |
-| `lint`         | Project lint entry (runs link checks)                            |
-| `lint:links`   | Check Markdown links via `markdown-link-check`                   |
+| Script | Description |
+| --- | --- |
+| `start` / `dev` | Eleventy dev server with Vite live reload. |
+| `build` | Production build wrapper (`build:site`). |
+| `build:site` | Runs Eleventy in production mode. |
+| `build:offline` | Hydrates the LV Images dataset and runs Eleventy behind the offline shim. |
+| `build:ci` | Production build that explicitly keeps `CI_NETWORK_OK=0`. |
+| `clean` | Removes the `_site/` output directory. |
 
-### Tooling / Utilities
+### Lint, Format, and Tests
 
-| Script            | Purpose                                                                        |
-| ----------------- | ------------------------------------------------------------------------------ |
-| `verify:patches`  | Ensure required dependency patches are applied                                 |
-| `deps:playwright` | Install Playwright Chromium dependency (no-fail helper)                        |
-| `patch:ternary`   | Patch Nunjucks ternary patterns                                                |
-| `scan:ternary`    | Scan Nunjucks ternary usage                                                    |
-| `npm-utils`       | Search, view, analyze, and install npm packages; always consider new libraries |
+| Script | Description |
+| --- | --- |
+| `format`, `format:check`, `format:classes`, `format:all` | dprint + Rustywind formatting. |
+| `lint` | Runs `lint:js` and `lint:links` with pretty stage output. |
+| `lint:fix` | ESLint autofix plus link lint (when permitted). |
+| `lint:links` | Uses `tools/run-if-network.mjs` to skip when `CI_NETWORK_OK` is not `1`. |
+| `lint:dead` | Delegates to `tools:knip:ci`. |
+| `test`, `test:watch`, `test:playwright` | Ensure Chromium is wired (`tools/check-chromium.mjs`) before launching the runner. |
+| `check` | doctor → format check → lint → tests. |
+| `doctor` | Verifies local prerequisites (`rg`, `fd`, `jq`, `sd`, etc.). |
 
-### MCP (optional experiments)
+### Tooling & Datasets
 
-| Script            | Purpose                   |
-| ----------------- | ------------------------- |
-| `mcp:dev`         | Start MCP gateway (dev)   |
-| `mcp:integration` | Run MCP integration tests |
-| `mcp:test`        | Run MCP smoke tests       |
+All LV Images routines sit under `tools:lv-images:*` so CI never calls them implicitly. Notable
+commands:
+
+- `tools:lv-images:hydrate` — restore the bundled dataset.
+- `tools:lv-images:build:ci` — deterministic hydrate + offline Eleventy build profile.
+- `tools:apply-patches` / `tools:check-patches` — wrap `tools/apply-patches.mjs` for manual patch
+  management.
+- `tools:run-if-network` — helper used by lint scripts to enforce the network contract.
+
+### MCP Utilities
+
+The MCP gateway lives under `mcp-stack/` and retains the `mcp:*` trio for development, integration,
+and smoke testing. They continue to run only when explicitly requested.
+
+---
+
+## Continuous Integration
+
+- **`ci.yml`** — three-stage pipeline (lint → test → build). Each stage installs Chromium via APT,
+  writes `PUPPETEER_EXECUTABLE_PATH`, and runs `tools/check-chromium.mjs` before any headless work.
+  Build artifacts are published as workflow artifacts for inspection.
+- **`dead.yml`** — scheduled/manual Knip scan. Respects the network contract and uploads the JSON
+  report when generated.
+- **`deploy.yml`** — builds the production image with `.portainer/Dockerfile`, pushes to GHCR, and
+  optionally pings the Portainer webhook.
+
+> **Network contract:** CI runners treat the public network as unavailable unless
+> `CI_NETWORK_OK=1`. Scripts that require outbound traffic are opt-in via `tools/run-if-network.mjs`.
+
+---
+
+## Chromium Policy
+
+- Chromium is provisioned via system packages (`apt-get install chromium`).
+- `tools/check-chromium.mjs` validates availability and writes `PUPPETEER_EXECUTABLE_PATH` to the
+  GitHub Actions environment when missing.
+- `bin/chromium` exposes a consistent CLI entrypoint, prioritising the env var and falling back to
+  system binaries.
+- Puppeteer and Playwright downloads are disabled (`PUPPETEER_SKIP_DOWNLOAD=1`,
+  `PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1`).
+
+This keeps Puppeteer, Playwright, and any Eleventy transforms aligned without hitting forbidden CDNs.
+
+---
+
+## Docker Image
+
+`.portainer/Dockerfile` now targets Debian Bookworm. It installs Chromium inside the build stage,
+exports `PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium`, runs `tools/check-chromium.mjs`, validates
+patches, and produces the static `_site/` output. The final image is a slim `nginx:1.27-bookworm`
+layer with health checks intact.
+
+---
+
+## Shell Shims
+
+Local shims live under `bin/bin/` and provide deterministic CLIs for CI and Docker. Highlights:
+
+- `bin/_lib.sh` removes the repo bin directory from lookup order to avoid recursion.
+- `bin/chromium` honours `PUPPETEER_EXECUTABLE_PATH` then falls back to system executables.
+- `bin/curl` funnels requests through `tools/shims/curl-to-markdown.mjs` while preserving the system
+  binary in `CURL_SHIM_REAL`.
+- `fd`, `rg`, and siblings enforce safe defaults (hidden files allowed, repository directories
+  excluded, risky flags stripped) before delegating to Node-installed or system binaries.
+
+Shims exit with clear errors when the required command is missing—especially important when running
+in CI.
 
 ---
 
 ## Project Structure
 
 ```
-eleventy.config.mjs → Monolithic Eleventy configuration (single source of truth)
-src/lib/       → Runtime helpers (filters, shortcodes, collections, markdown, archives, data, transforms)
-utils/         → Dev wrappers and scripts (no runtime code)
-tools/         → Build/validation CLIs (e.g., doctor)
-src/content/   → Markdown & Nunjucks pages
-test/          → Integration & unit tests (Playwright)
-patches/       → Hotfixes applied by tools/apply-patches.mjs
-artifacts/     → Reports (e.g., unresolved links), worklogs, export bundles
+src/content/          → Markdown & Nunjucks content.
+src/lib/              → Filters, data pipelines, Eleventy helpers.
+tools/                → Build + diagnostics scripts (Chromium checker, LV Images pipeline, patches).
+bin/bin/              → Shimmed CLI utilities for reproducible environments.
+.github/workflows/    → ci.yml, dead.yml, deploy.yml.
+.portainer/           → Dockerfile + nginx.conf for production.
+patches/              → Vendored hotfixes applied via tools/apply-patches.mjs.
 ```
-
-Collections: `sparks`, `concepts`, `projects`, `meta`, `archives`, `work`.
-
-Globals: only editorial data remains in `src/_data/` (e.g., branding, sections). Programmatic data
-(build metadata, computed keys, navigation, archive nav) is injected once via `addGlobalData` from
-modules in `src/lib/data/` and `src/lib/archives/`.
-
----
-
-## Linking & Route Canon
-
-Effusion Labs treats wiki-style links as first-class citizens.
-
-- `[[product:Tempura Shrimp]]` → `/archives/product/tempura-shrimp/`
-- `[[character:Momo Fox]]` → `/archives/character/momo-fox/`
-- Kindless links attempt: `work → character → product → series → concept → project → spark → meta`.
-
-All slugs normalize to lowercase, NFKD, punctuation-free identifiers. Unresolved links are recorded
-in `artifacts/reports/interlinker-unresolved.json` and can fail CI when thresholds are exceeded.
-
----
-
-## Optional Services
-
-A companion `markdown_gateway/` service provides an HTML→Markdown proxy via Docker Compose.
-
-```bash
-cd markdown_gateway
-docker compose up
-```
-
-This starts a gateway container and FlareSolverr solver, useful when converting external HTML into
-Markdown for inclusion in the digital garden.
-
----
-
-## LV Images dataset workflow
-
-The crawler stores its snapshot under `src/content/projects/lv-images/generated/lv/`. GitHub Actions
-and Portainer can't rely on the public network, so the pipeline centres around a bundled archive
-that travels with the repo.
-
-| Scenario                      | Command                     | Purpose                                                                                                   |
-| ----------------------------- | --------------------------- | --------------------------------------------------------------------------------------------------------- |
-| Local refresh (full internet) | `npm run lv-images:sync`    | Runs the Playwright crawler, normalizes cache metadata, packs `lv.bundle.tgz`, and verifies the manifest. |
-| Quick snapshot stats          | `npm run lv-images:stats`   | Prints file counts and total size for the generated dataset.                                              |
-| Offline reuse / CI prep       | `npm run lv-images:hydrate` | Expands `generated/lv` from the committed bundle. Combine with `--keep` to avoid wiping existing files.   |
-| Integrity check               | `npm run lv-images:verify`  | Confirms archive size/hash and dataset counts against `lv.bundle.json`.                                   |
-
-For end-to-end builds the orchestration commands roll these steps together:
-
-- `npm run build-local-fullinternet` — crawl + bundle + Eleventy build (with full network access).
-- `npm run build-local-offline` — hydrate the bundle and run Eleventy through the offline shim (no
-  external calls).
-- `npm run build-gitactions` — strict hydrate/verify + offline Eleventy; this is the profile used by
-  CI and Portainer.
-
-Commit `generated/lv/`, `generated/lv.bundle.tgz`, and `generated/lv.bundle.json` after running
-`npm run lv-images:sync` so that downstream builds stay deterministic even when the network is
-hostile.
-
----
-
-## Development Workflow
-
-- Use `npm run dev` for local editing.
-- Keep dependency hotfixes under `patches/` and manage them with `npm run postinstall` (via `tools/apply-patches.mjs`).
-- Run `npm run check` before opening a PR.
-- CI may enforce unresolved-link thresholds and script consistency.
-- Explore new packages with `npm-utils`; we love new libraries and always consider them.
-
----
-
-## Search & View (quick orientation)
-
-For fast repo mapping and sampling large files:
-
-- List files: `fd` / `fdfind` or `rg --files`
-- Read in small windows (head/anchor/tail); avoid dumping minified or >4k-line blocks
-- Treat heavy zones cautiously: `node_modules/`, `_site/`, `artifacts/`, `logs/`, `lib_content.json`
-
-See `AGENTS.md` for the full protocol, clamps, and Preview Capsule format.
 
 ---
 
 ## Contributing
 
-Pull requests are welcome. Keep patches focused and run `npm run check` before submitting.
-Contributions should comply with the **ISC License** and follow repo conventions. For agent
-workflows, see [`AGENTS.md`](./AGENTS.md).
+1. `npm ci`
+2. `npm run check`
+3. Open a pull request — CI will lint, test, and build automatically.
 
----
-
-## License
-
-This project is licensed under the [ISC License](./LICENSE).
+Follow the ISC license and respect the network contract (`CI_NETWORK_OK`) when adding new scripts or
+workflows.

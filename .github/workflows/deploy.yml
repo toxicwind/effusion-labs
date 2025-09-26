@@ -1,292 +1,73 @@
-name: "CI • Build • Deploy"
+name: "Deploy • Portainer"
 
 on:
   push:
     branches: [main]
-  pull_request:
-    branches: [main]
   workflow_dispatch:
 
 env:
+  CI: true
   REGISTRY: ghcr.io
   WEB_IMAGE: ghcr.io/toxicwind/effusion-labs
-  GATEWAY_IMAGE: ghcr.io/toxicwind/markdown-gateway
-  CI: true
-  PUPPETEER_SKIP_DOWNLOAD: 'true'
-  PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: 'true'
-  PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 'true'
-  http_proxy: ''
-  https_proxy: ''
+  npm_config_audit: 'false'
+  npm_config_fund: 'false'
   npm_config_proxy: ''
   npm_config_https_proxy: ''
   npm_config_http_proxy: ''
-
-permissions:
-  contents: read
-  packages: write
-
-concurrency:
-  group: deploy-${{ github.ref_name }}
-  cancel-in-progress: true
+  PUPPETEER_SKIP_DOWNLOAD: '1'
+  PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: '1'
+  PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: '1'
 
 jobs:
-  # 1) Quality gates (soft): lint, knip, links → summarize in Checks UI
-  quality:
-    name: "✅ Quality (soft)"
-    runs-on: ubuntu-latest
-    steps:
-      - name: ⬇️ Checkout
-        uses: actions/checkout@v4
-
-      - name: 🔧 Setup Node (from .nvmrc + cache)
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: .nvmrc
-          check-latest: true
-          cache: npm
-
-      - name: 📦 Install deps
-        run: npm ci
-
-      - name: 🧹 ESLint (non-blocking, pretty summary)
-        id: eslint
-        continue-on-error: true
-        run: |
-          mkdir -p reports
-          # human output for summary
-          npx eslint "src/**/*.{js,mjs,ts,tsx}" "tools/**/*.mjs" "mcp-stack/**/*.mjs" eleventy.config.mjs \
-            --report-unused-disable-directives \
-            | tee reports/eslint.txt || true
-
-          {
-            echo "### 🧹 ESLint"
-            echo ""
-            echo "<details><summary>Open report</summary>"
-            echo
-            echo '```text'
-            tail -n 400 reports/eslint.txt
-            echo '```'
-            echo "</details>"
-          } >> "$GITHUB_STEP_SUMMARY"
-
-      - name: 🔗 Link check (non-blocking)
-        id: linkcheck
-        continue-on-error: true
-        run: |
-          markdown-link-check -c oneoff/link-check.config.json README.md \
-            | tee reports/linkcheck.txt || true
-
-          {
-            echo "### 🔗 Link Check"
-            echo ""
-            echo "<details><summary>Open report</summary>"
-            echo
-            echo '```text'
-            tail -n 400 reports/linkcheck.txt
-            echo '```'
-            echo "</details>"
-          } >> "$GITHUB_STEP_SUMMARY"
-
-      - name: 🧬 Knip dead code (non-blocking)
-        id: knip
-        continue-on-error: true
-        run: |
-          npx knip --production --reporter compact \
-            | tee reports/knip.txt || true
-
-          {
-            echo "### 🧬 Knip"
-            echo ""
-            echo "<details><summary>Open report</summary>"
-            echo
-            echo '```text'
-            tail -n 400 reports/knip.txt
-            echo '```'
-            echo "</details>"
-          } >> "$GITHUB_STEP_SUMMARY"
-
-      - name: 📎 Upload reports (optional download later)
-        uses: actions/upload-artifact@v4
-        with:
-          name: reports
-          path: reports/
-
-  # 2) Tests (blocking). If this passes, we build.
-  tests:
-    name: "🧪 Tests"
-    runs-on: ubuntu-latest
-    needs: quality
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version-file: .nvmrc
-          check-latest: true
-          cache: npm
-      - run: npm ci
-      - run: npm run lv-images:hydrate
-      - run: npm test
-
-  # 3) Build & push the web image
   build_web:
-    name: "🏗️ Build & Push • Web"
-    runs-on: ubuntu-latest
-    needs: tests
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: 🐳 Setup Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: 🔑 Login to GHCR
-        uses: docker/login-action@v3
-        with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: 🏷️ Docker metadata
-        id: meta
-        uses: docker/metadata-action@v5
-        with:
-          images: ${{ env.WEB_IMAGE }}
-          tags: |
-            type=sha,format=short
-            type=raw,value=latest,enable={{is_default_branch}}
-          labels: |
-            org.opencontainers.image.source=${{ github.repository }}
-            org.opencontainers.image.revision=${{ github.sha }}
-
-      - name: 🏗️ Build & push
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          file: ./.portainer/Dockerfile
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-          platforms: linux/amd64
-          build-args: |
-            COMMIT_SHA=${{ github.sha }}
-
-  # 4) (Optional) build the gateway if needed — doesn’t gate deploy
-  build_gateway:
-    name: "🏗️ Build • Gateway (if changed)"
-    runs-on: ubuntu-latest
-    needs: tests
-    if: github.ref_name == 'main'
-    steps:
-      - uses: actions/checkout@v4
-        with: { fetch-depth: 0 }
-
-      - name: 🔍 Detect changes in ./markdown_gateway
-        id: gw
-        run: |
-          if git diff --quiet HEAD^ HEAD -- ./markdown_gateway; then
-            echo "changed=false" >> $GITHUB_OUTPUT
-          else
-            echo "changed=true" >> $GITHUB_OUTPUT
-          fi
-
-      - name: 🐳 Setup Buildx
-        if: steps.gw.outputs.changed == 'true'
-        uses: docker/setup-buildx-action@v3
-
-      - name: 🔑 Login to GHCR
-        if: steps.gw.outputs.changed == 'true'
-        uses: docker/login-action@v3
-        with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: 🏷️ Docker metadata
-        if: steps.gw.outputs.changed == 'true'
-        id: meta
-        uses: docker/metadata-action@v5
-        with:
-          images: ${{ env.GATEWAY_IMAGE }}
-          tags: |
-            type=sha,format=short
-            type=raw,value=latest,enable={{is_default_branch}}
-
-      - name: 🏗️ Build & push
-        if: steps.gw.outputs.changed == 'true'
-        uses: docker/build-push-action@v6
-        with:
-          context: ./markdown_gateway
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-          platforms: linux/amd64
-          build-args: |
-            COMMIT_SHA=${{ github.sha }}
-
-  # 5) Deploy via Portainer webhook (main only)
-  deploy:
-    name: "🚀 Deploy (Portainer)"
-    runs-on: ubuntu-latest
-    needs: build_web
-    if: github.ref_name == 'main'
-    steps:
-      - name: 📞 Trigger webhook
-        env:
-          HOOK: ${{ secrets.PORTAINER_WEBHOOK_EFFUSION }}
-        run: |
-          echo "Triggering Portainer redeploy..."
-          curl --fail --retry-all-errors --retry 5 --retry-delay 3 -X POST "$HOOK"
-          echo "✅ Redeploy signal sent."
-
-  # ——————————————————————————————————————————————
-  # OPTIONAL SPRINKLES (off by default)
-  # ——————————————————————————————————————————————
-
-  # A) Soft commitlint on PRs (opt-in via repo variable)
-  commitlint_soft:
-    if: github.event_name == 'pull_request' && vars.ENABLE_COMMITLINT == 'true'
-    name: "📝 Commit style (soft)"
+    name: "🏗️ Build & Push"
     runs-on: ubuntu-latest
     permissions:
       contents: read
+      packages: write
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - uses: actions/setup-node@v4
-        with:
-          node-version-file: .nvmrc
-          cache: npm
-      - run: npm ci
-      - name: Commitlint (soft)
-        run: npx commitlint --from="${{ github.event.pull_request.base.sha }}" --to=HEAD || true
 
-  # B) Reviewdog PR annotations for ESLint (opt-in via repo variable)
-  reviewdog_eslint:
-    if: github.event_name == 'pull_request' && vars.ENABLE_REVIEWDOG == 'true'
-    name: "🐶 ESLint (annotations)"
+      - name: 🐳 Set up Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: 🔑 Login to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 🏗️ Build image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: .portainer/Dockerfile
+          push: true
+          tags: |
+            ${{ env.WEB_IMAGE }}:latest
+            ${{ env.WEB_IMAGE }}:${{ github.sha }}
+          labels: |
+            org.opencontainers.image.revision=${{ github.sha }}
+            org.opencontainers.image.source=${{ github.repository }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  deploy:
+    name: "🚀 Trigger Portainer"
+    needs: build_web
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      pull-requests: write
+    if: github.ref == 'refs/heads/main'
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version-file: .nvmrc
-          cache: npm
-      - run: npm ci
-      - run: npx eslint "src/**/*.{js,mjs,ts,tsx}" "tools/**/*.mjs" "mcp-stack/**/*.mjs" eleventy.config.mjs -f json -o eslint-report.json || true
-      - uses: reviewdog/action-eslint@v1
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          reporter: github-pr-check
-          fail_on_error: "false"
-          eslint_input: eslint-report.json
-          eslint_reporter: json
-          filter_mode: added
-          path: .
-          level: info
+      - name: 📞 Invoke webhook
+        env:
+          HOOK: ${{ secrets.PORTAINER_WEBHOOK_EFFUSION }}
+        run: |
+          set -Eeuo pipefail
+          if [[ -z "$HOOK" ]]; then
+            echo "Portainer webhook not configured; skipping." >&2
+            exit 0
+          fi
+          curl --fail --retry 5 --retry-delay 3 --retry-all-errors -X POST "$HOOK"
