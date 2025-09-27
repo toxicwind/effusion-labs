@@ -1,0 +1,28 @@
+User-Agent: *
+Disallow: /eng-ca/mylv/
+Disallow: /fra-ca/mylv/
+Disallow: /fra-ca/rechercher*
+Disallow: /eng-ca/search*
+Disallow: /*article_search_result?*
+Disallow: /exclusive-access/
+Disallow: /*sort=
+Disallow: /*kitID=
+Noindex: */page-*
+Disallow: /*?search=
+Disallow: /*lvxmurakami
+Disallow: */booking-appointments?storeId=
+Disallow: /*personalizationId=
+
+Allow: */mylv/booking-appointments
+Allow: */mylv/newsletter
+Allow: */mylv/prendre-rendez-vous
+
+Sitemap: https://ca.louisvuitton.com/content/louisvuitton/sitemap/fra_CA/sitemap-product.xml
+Sitemap: https://ca.louisvuitton.com/content/louisvuitton/sitemap/fra_CA/sitemap-content.xml
+Sitemap: https://ca.louisvuitton.com/content/louisvuitton/sitemap/fra_CA/sitemap-catalog.xml
+Sitemap: https://ca.louisvuitton.com/content/louisvuitton/sitemap/fra_CA/sitemap-image.xml
+
+Sitemap: https://ca.louisvuitton.com/content/louisvuitton/sitemap/eng_CA/sitemap-product.xml
+Sitemap: https://ca.louisvuitton.com/content/louisvuitton/sitemap/eng_CA/sitemap-content.xml
+Sitemap: https://ca.louisvuitton.com/content/louisvuitton/sitemap/eng_CA/sitemap-catalog.xml
+Sitemap: https://ca.louisvuitton.com/content/louisvuitton/sitemap/eng_CA/sitemap-image.xml

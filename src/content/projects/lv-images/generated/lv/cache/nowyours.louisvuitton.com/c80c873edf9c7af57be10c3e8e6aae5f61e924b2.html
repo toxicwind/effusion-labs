@@ -1,0 +1,50 @@
+
+
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta HTTP-EQUIV="PRAGMA" CONTENT="NO-CACHE">
+
+
+
+
+
+<script>
+function redirectOnLoad() {
+var escapedHash = '';
+var url = '/saml/authn-request.jsp?saml_request_id=_2CAAAAZoaiNFdMDAwMDAwMDAwMDAwMDAwAAABAAORE7A8mYj5vWUoiZrEihWp2YZqfzTuWw5GssDtTWGGDz2_tz3uO9CmkSalICymomTDd4943jaUtz20XpZUC5aU6BS4Qn1CePWPWXE9ekod_1arOaE_EBXjNBt7X050jMzlsSmSAyJboEFwZ3iczTq8V5y6avYy-ZBtT39mXJAZwzkNr0eAbBVBLFRos7fI4iWpzg5gGdXbXmcl0IYiJQwaPr9R-FdZtfmC_dN4alDwPt7RhZkoT8hhMx_yDOhOnQ&saml_acs=https%3A%2F%2Flouisvuitton.my.salesforce.com%3Fso%3D00Di0000000HF7A&saml_binding_type=HttpRedirect&Issuer=https%3A%2F%2Flouisvuitton.my.salesforce.com&samlSsoConfig=0LE6S0000008QMv&RelayState=%2Fvisualforce%2Fsession%3Furl%3Dhttps%253A%252F%252Flouisvuitton.lightning.force.com%252Fc%252FSO_NewBrief.app';
+if (window.location.hash) {
+   escapedHash = '%23' + window.location.hash.slice(1);
+}
+if (window.location.replace){ 
+window.location.replace(url + escapedHash);
+} else {
+window.location.href = url + escapedHash;
+} 
+} 
+redirectOnLoad();
+</script>
+
+</head>
+
+
+</html>
+
+
+
+
+
+<!-- Body events -->
+<script type="text/javascript">function bodyOnLoad(){if(window.PreferenceBits){window.PreferenceBits.prototype.csrfToken="null";};}function bodyOnBeforeUnload(){}function bodyOnFocus(){}function bodyOnUnload(){}</script>
+			
+</body>
+</html>
+
+
+<!--
+...................................................................................................
+...................................................................................................
+...................................................................................................
+...................................................................................................
+-->

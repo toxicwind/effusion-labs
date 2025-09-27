@@ -1,0 +1,1 @@
+User-Agent: *Disallow: /eng-sg/mylv/Disallow: /eng-sg/search*Disallow: /*article_search_result?*Disallow: /exclusive-access/Disallow: /*sort=Disallow: /*kitID=Disallow: /*?search=Disallow: /*lvxmurakamiSitemap: https://ap.louisvuitton.com/content/louisvuitton/sitemap/eng_SG/sitemap.xml

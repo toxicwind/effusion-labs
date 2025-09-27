@@ -1,0 +1,1 @@
+User-agent: *Allow: /Disallow: /admin/Sitemap: https://app.urlgeni.us/sitemap.xml
