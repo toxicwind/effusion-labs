@@ -10,6 +10,7 @@
   "scripts": {
     "start": "npm run dev",
     "dev": "npx @11ty/eleventy --serve",
+    "serve": "npx @11ty/eleventy --serve",
     "prebuild": "node bin/quality.mjs apply",
     "build": "npm run build:site",
     "prebuild:site": "node bin/quality.mjs apply",
