@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import libnpmsearch from 'libnpmsearch'
-import npmFetch from 'npm-registry-fetch'
 import { execSync } from 'node:child_process'
+import npmFetch from 'npm-registry-fetch'
 
 async function search(keyword) {
   const results = await libnpmsearch(keyword, { size: 20 })
@@ -22,8 +22,7 @@ async function analyze(keyword) {
     const pkg = r.package || r
     try {
       const info = await npmFetch.json(pkg.name)
-      const lastPublish =
-        info.time?.modified || info.time?.[pkg.version] || 'unknown'
+      const lastPublish = info.time?.modified || info.time?.[pkg.version] || 'unknown'
       enriched.push({
         name: pkg.name,
         version: pkg.version,

@@ -10,7 +10,8 @@
     <meta name="color-scheme" content="dark light">
     {# Theme color should match our daisyUI tokens; keep pairs for OS UI #}
     <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f7f5f3">
-    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#16161a"> {# matches --b1 dark #}
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#16161a">
+    {# matches --b1 dark #}
     <meta name="msapplication-TileColor" content="#16161a">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -37,13 +38,14 @@
 
     {# ---------------- Early theme: prevent FART ---------------- #}
     <script>
-      try {
-        const saved = localStorage.getItem('theme');
-        const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-        // Allowed tokens in CSS: 'hypebrut' (dark), 'dim' (alias), 'silk' (light)
-        const initial = saved || (prefersDark ? 'hypebrut' : 'silk');
-        document.documentElement.setAttribute('data-theme', initial);
-      } catch (e) { /* noop */ }
+    try {
+      const saved = localStorage.getItem('theme')
+      const prefersDark = window.matchMedia
+        && window.matchMedia('(prefers-color-scheme: dark)').matches
+      // Allowed tokens in CSS: 'hypebrut' (dark), 'dim' (alias), 'silk' (light)
+      const initial = saved || (prefersDark ? 'hypebrut' : 'silk')
+      document.documentElement.setAttribute('data-theme', initial)
+    } catch (e) { /* noop */ }
     </script>
 
     {# ---------------- Fonts ---------------- #}
@@ -70,7 +72,9 @@
     {# ---------------- Layout flags ---------------- #}
     {% set fullBleed = fullBleed == true or fullBleed == 'true' %}
     {% set metaOff = metaDisable == true or metaDisable == 'true' %}
-    {% set metaEligible = (status or certainty or importance or tags or memory_ref or date or page.date) %}
+    {%
+      set metaEligible = (status or certainty or importance or tags or memory_ref or date or page.date)
+    %}
     {% set hasMeta = not fullBleed and metaEligible and not metaOff %}
 
     {# ---------------- Main wrapper ---------------- #}
@@ -89,7 +93,9 @@
           <article class="prose max-w-none m-0 {% if hasMeta %}xl:col-span-1{% endif %}">
             {% if showTitle != false %}
               <header class="mb-6 lg:mb-8">
-                <h1 class="font-heading text-4xl sm:text-5xl md:text-6xl tracking-tight leading-tight">{{ title }}</h1>
+                <h1 class="font-heading text-4xl sm:text-5xl md:text-6xl tracking-tight leading-tight">
+                  {{ title }}
+                </h1>
               </header>
             {% endif %}
             {{ content | safe }}

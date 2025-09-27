@@ -1,17 +1,30 @@
 import Alpine from 'alpinejs'
-import MiniSearch from 'minisearch'
 import Fuse from 'fuse.js'
+import MiniSearch from 'minisearch'
 
 const datasetEl = document.getElementById('lvreport-data')
-const payload = datasetEl ? JSON.parse(datasetEl.textContent) : {}
+const payloadSource = (() => {
+  if (!datasetEl) return null
+  if (datasetEl.tagName === 'TEMPLATE') return datasetEl.innerHTML
+  return datasetEl.textContent
+})()
+const payload = payloadSource ? JSON.parse(payloadSource) : {}
 const baseHref = payload.baseHref || ''
 const sections = payload.page?.sections || {}
 const sectionKeys = Object.keys(sections)
 
 const fuseConfigs = {
   sitemaps: { keys: ['host', 'url', 'type', 'status'], threshold: 0.35, ignoreLocation: true },
-  robots: { keys: ['host', 'statusLabel', 'httpLabel', 'preview'], threshold: 0.35, ignoreLocation: true },
-  docs: { keys: ['host', 'fileName', 'statusLabel', 'contentType', 'preview'], threshold: 0.3, ignoreLocation: true },
+  robots: {
+    keys: ['host', 'statusLabel', 'httpLabel', 'preview'],
+    threshold: 0.35,
+    ignoreLocation: true,
+  },
+  docs: {
+    keys: ['host', 'fileName', 'statusLabel', 'contentType', 'preview'],
+    threshold: 0.3,
+    ignoreLocation: true,
+  },
   duplicates: { keys: ['basename', 'title', 'pageUrl'], threshold: 0.3, ignoreLocation: true },
   topProducts: { keys: ['title', 'pageUrl'], threshold: 0.3, ignoreLocation: true },
   hosts: { keys: ['host'], threshold: 0.2, ignoreLocation: true },

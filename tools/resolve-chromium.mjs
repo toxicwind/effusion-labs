@@ -1,7 +1,7 @@
 import { accessSync, constants } from 'node:fs'
-import { fileURLToPath } from 'node:url'
 import path from 'node:path'
 import process from 'node:process'
+import { fileURLToPath } from 'node:url'
 
 const CANDIDATES = [
   '/usr/bin/chromium',

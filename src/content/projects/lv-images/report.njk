@@ -3,6 +3,7 @@ layout: base.njk
 fullBleed: true
 metaDisable: true
 ---
+# dprint-ignore-file
 {#
   This template renders a comprehensive, data‑driven report for the LV image atlas
   crawl.  It takes the summarized crawl information provided via the `lvreport`
@@ -44,47 +45,29 @@ metaDisable: true
 {% set manifestArchive = manifest.archive or {} %}
 {% set manifestSummary = manifest.summary or {} %}
 {% set datasetWarnings = dataset.warnings or [] %}
-{% set clientPayload = {
-  baseHref: baseHref,
-  totals: totals,
-  dataset: {
-    ndjson: dataset.ndjson,
-    cache: dataset.cache,
-    warnings: datasetWarnings,
-  },
-  page: {
-    number: lvReportPage.pageNumber,
-    count: lvReportPage.pageCount,
-    sections: pageSections,
-    hrefs: pagination.hrefs,
-  },
-  search: lv.search,
-} %}
-<script type="application/json" id="lvreport-data">
-  {{ clientPayload | dump | safe }}
-</script>
+<template id="lvreport-data">{{ clientPayloadJson | safe }}</template>
 <script type="module" src="/assets/js/lvreport-app.js"></script>
 {%
   set warningCopy = {
-    'missing-archive': 'Bundle archive missing — run <code>npm run lv-images:sync</code> before shipping.',
-    'missing-manifest': 'Bundle manifest missing — rebuild via <code>npm run lv-images:bundle</code>.',
-    'empty-dataset': 'Dataset is empty — crawl with <code>npm run lv-images:sync</code> to populate generated/lv/. '
+    "missing-archive": "Bundle archive missing — run <code>npm run lv-images:sync</code> before shipping.",
+    "missing-manifest": "Bundle manifest missing — rebuild via <code>npm run lv-images:bundle</code>.",
+    "empty-dataset": "Dataset is empty — crawl with <code>npm run lv-images:sync</code> to populate generated/lv/. "
   }
 %}
 {%
   set toneBadge = {
-    'error': 'badge-error',
-    'warn' : 'badge-warning',
-    'ok'   : 'badge-success',
-    'info' : 'badge-info'
+    "error": "badge-error",
+    "warn": "badge-warning",
+    "ok": "badge-success",
+    "info": "badge-info"
   }
 %}
 {%
   set toneChip = {
-    'error': 'bg-error/15 text-error',
-    'warn' : 'bg-warning/20 text-warning-content',
-    'ok'   : 'bg-success/15 text-success',
-    'info' : 'bg-info/15 text-info'
+    "error": "bg-error/15 text-error",
+    "warn": "bg-warning/20 text-warning-content",
+    "ok": "bg-success/15 text-success",
+    "info": "bg-info/15 text-info"
   }
 %}
 
@@ -182,9 +165,15 @@ metaDisable: true
                   class="input input-bordered input-sm md:input-md flex-1"
                   placeholder="Search the LV dataset…"
                 />
-                <button type="button" class="btn btn-sm btn-ghost" @click="closePanel()">Esc</button>
+                <button type="button" class="btn btn-sm btn-ghost" @click="closePanel()">
+                  Esc
+                </button>
               </div>
-              <div class="max-h-80 overflow-y-auto divide-y divide-base-content/10" x-show="results.length" x-transition>
+              <div
+                class="max-h-80 overflow-y-auto divide-y divide-base-content/10"
+                x-show="results.length"
+                x-transition
+              >
                 <template x-for="(result, idx) in results" :key="result.id">
                   <button
                     type="button"
@@ -204,7 +193,8 @@ metaDisable: true
                 </template>
               </div>
               <div class="px-4 py-3 text-xs opacity-60" x-show="!results.length">
-                Start typing to surface sitemaps, cached XML, robots directives, duplicate clusters, hosts, and high-volume products.
+                Start typing to surface sitemaps, cached XML, robots directives, duplicate clusters,
+                hosts, and high-volume products.
               </div>
             </div>
           </div>
@@ -551,12 +541,21 @@ metaDisable: true
         </button>
       {% endfor %}
     </div>
-    <button class="btn btn-sm btn-outline" id="exportSitemaps" type="button" data-export-section="sitemaps">Export CSV</button>
+    <button
+      class="btn btn-sm btn-outline"
+      id="exportSitemaps"
+      type="button"
+      data-export-section="sitemaps"
+    >
+      Export CSV
+    </button>
   </div>
   {% if sitemapsPage.totalItems %}
     <p class="text-xs opacity-60 mt-2" data-filter-summary="sitemaps">
-      Showing {{ sitemapsPage.from }}–{{ sitemapsPage.to }} of {{ sitemapsPage.totalItems }} sitemaps
-      (page {{ (pagination.pageNumber or 0) + 1 }} of {{ paginationSections.sitemaps.pageCount or 1 }}).
+      Showing {{ sitemapsPage.from }}–{{ sitemapsPage.to }} of {{ sitemapsPage.totalItems }}
+      sitemaps (page {{ (pagination.pageNumber or 0) + 1 }} of {{
+        paginationSections.sitemaps.pageCount or 1
+      }}).
     </p>
   {% endif %}
   {% if sitemaps | length %}
@@ -685,11 +684,19 @@ metaDisable: true
         data-search-input="duplicates"
       />
     </label>
-    <button class="btn btn-sm btn-outline" id="exportDuplicates" type="button" data-export-section="duplicates">Export CSV</button>
+    <button
+      class="btn btn-sm btn-outline"
+      id="exportDuplicates"
+      type="button"
+      data-export-section="duplicates"
+    >
+      Export CSV
+    </button>
   </div>
   {% if duplicatesPage.totalItems %}
     <p class="text-xs opacity-60 mt-2" data-filter-summary="duplicates">
-      Showing {{ duplicatesPage.from }}–{{ duplicatesPage.to }} of {{ duplicatesPage.totalItems }} duplicate groups.
+      Showing {{ duplicatesPage.from }}–{{ duplicatesPage.to }} of {{ duplicatesPage.totalItems }}
+      duplicate groups.
     </p>
   {% endif %}
   {% if duplicates and (duplicates | length) %}
@@ -768,11 +775,20 @@ metaDisable: true
         data-search-input="topProducts"
       />
     </label>
-    <button class="btn btn-sm btn-outline" id="exportProducts" type="button" data-export-section="topProducts">Export CSV</button>
+    <button
+      class="btn btn-sm btn-outline"
+      id="exportProducts"
+      type="button"
+      data-export-section="topProducts"
+    >
+      Export CSV
+    </button>
   </div>
   {% if topProductsPage.totalItems %}
     <p class="text-xs opacity-60 mt-2" data-filter-summary="topProducts">
-      Showing {{ topProductsPage.from }}–{{ topProductsPage.to }} of {{ topProductsPage.totalItems }} products.
+      Showing {{ topProductsPage.from }}–{{ topProductsPage.to }} of {{
+        topProductsPage.totalItems
+      }} products.
     </p>
   {% endif %}
   {% if topProducts and (topProducts | length) %}
@@ -842,11 +858,19 @@ metaDisable: true
         data-search-input="hosts"
       />
     </label>
-    <button class="btn btn-sm btn-outline" id="exportHosts" type="button" data-export-section="hosts">Export CSV</button>
+    <button
+      class="btn btn-sm btn-outline"
+      id="exportHosts"
+      type="button"
+      data-export-section="hosts"
+    >
+      Export CSV
+    </button>
   </div>
   {% if hostStatsPage.totalItems %}
     <p class="text-xs opacity-60 mt-2" data-filter-summary="hosts">
-      Showing {{ hostStatsPage.from }}–{{ hostStatsPage.to }} of {{ hostStatsPage.totalItems }} hosts.
+      Showing {{ hostStatsPage.from }}–{{ hostStatsPage.to }} of {{ hostStatsPage.totalItems }}
+      hosts.
     </p>
   {% endif %}
   {% if hostStats and (hostStats | length) %}
@@ -913,20 +937,31 @@ metaDisable: true
     <div id="robotsStatusFilters" class="flex flex-wrap gap-2">
       {% for seg in robotsMetrics.breakdown or [] %}
         {% set badgeClass = toneBadge[seg.tone] or 'badge-outline' %}
-        <button type="button" class="btn btn-xs btn-ghost status-chip" data-section="robots" data-status="{{ seg.key }}">
+        <button
+          type="button"
+          class="btn btn-xs btn-ghost status-chip"
+          data-section="robots"
+          data-status="{{ seg.key }}"
+        >
           <span class="badge {{ badgeClass }} badge-xs">{{ seg.label }}</span>
           <span class="text-xs opacity-60">{{ seg.count }}</span>
         </button>
       {% endfor %}
     </div>
     <label class="flex items-center gap-2 text-sm mt-2 sm:mt-0">
-      <input id="robotsIssuesOnly" type="checkbox" class="checkbox checkbox-sm" data-issues-toggle="robots" />
+      <input
+        id="robotsIssuesOnly"
+        type="checkbox"
+        class="checkbox checkbox-sm"
+        data-issues-toggle="robots"
+      />
       <span>Show issues only</span>
     </label>
   </div>
   {% if robotsPage.totalItems %}
     <p class="text-xs opacity-60 mt-2" data-filter-summary="robots">
-      Showing {{ robotsPage.from }}–{{ robotsPage.to }} of {{ robotsPage.totalItems }} robots snapshots.
+      Showing {{ robotsPage.from }}–{{ robotsPage.to }} of {{ robotsPage.totalItems }} robots
+      snapshots.
     </p>
   {% endif %}
   {% if robots | length %}
@@ -1115,17 +1150,29 @@ metaDisable: true
     <div id="docsStatusFilters" class="flex flex-wrap gap-2">
       {% for seg in docsMetrics.breakdown or [] %}
         {% set badgeClass = toneBadge[seg.tone] or 'badge-outline' %}
-        <button type="button" class="btn btn-xs btn-ghost status-chip" data-section="docs" data-status="{{ seg.key }}">
+        <button
+          type="button"
+          class="btn btn-xs btn-ghost status-chip"
+          data-section="docs"
+          data-status="{{ seg.key }}"
+        >
           <span class="badge {{ badgeClass }} badge-xs">{{ seg.label }}</span>
           <span class="text-xs opacity-60">{{ seg.count }}</span>
         </button>
       {% endfor %}
     </div>
     <label class="flex items-center gap-2 text-sm mt-2 sm:mt-0">
-      <input id="docsIssuesOnly" type="checkbox" class="checkbox checkbox-sm" data-issues-toggle="docs" />
+      <input
+        id="docsIssuesOnly"
+        type="checkbox"
+        class="checkbox checkbox-sm"
+        data-issues-toggle="docs"
+      />
       <span>Show issues only</span>
     </label>
-    <button class="btn btn-sm btn-outline" id="exportDocs" type="button" data-export-section="docs">Export CSV</button>
+    <button class="btn btn-sm btn-outline" id="exportDocs" type="button" data-export-section="docs">
+      Export CSV
+    </button>
   </div>
   {% if docsPage.totalItems %}
     <p class="text-xs opacity-60 mt-2" data-filter-summary="docs">

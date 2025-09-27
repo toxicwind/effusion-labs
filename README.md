@@ -1,9 +1,9 @@
 # Effusion Labs
 
-Effusion Labs is a Hypebrut-flavoured Eleventy site wired for constrained CI. The build stack couples
-Eleventy 3, Vite 7, Tailwind 4, and daisyUI 5 on Node.js ≥ 22.19. Chromium-driven tooling (Puppeteer,
-Playwright) now targets a system-installed browser so the pipeline stays deterministic even when the
-network is hostile.
+Effusion Labs is a Hypebrut-flavoured Eleventy site wired for constrained CI. The build stack
+couples Eleventy 3, Vite 7, Tailwind 4, and daisyUI 5 on Node.js ≥ 22.19. Chromium-driven tooling
+(Puppeteer, Playwright) now targets a system-installed browser so the pipeline stays deterministic
+even when the network is hostile.
 
 ---
 
@@ -42,30 +42,30 @@ and guard against restricted CI environments.
 
 ### Build & Runtime
 
-| Script | Description |
-| --- | --- |
-| `start` / `dev` | Eleventy dev server with Vite live reload. |
-| `build` | Production build wrapper (`build:site`). |
-| `build:site` | Runs Eleventy in production mode. |
+| Script          | Description                                                               |
+| --------------- | ------------------------------------------------------------------------- |
+| `start` / `dev` | Eleventy dev server with Vite live reload.                                |
+| `build`         | Production build wrapper (`build:site`).                                  |
+| `build:site`    | Runs Eleventy in production mode.                                         |
 | `build:offline` | Hydrates the LV Images dataset and runs Eleventy behind the offline shim. |
-| `build:ci` | Production build that explicitly keeps `CI_NETWORK_OK=0`. |
-| `clean` | Removes the `_site/` output directory. |
+| `build:ci`      | Production build that explicitly keeps `CI_NETWORK_OK=0`.                 |
+| `clean`         | Removes the `_site/` output directory.                                    |
 
 ### Lint, Format, and Tests
 
-| Script | Description |
-| --- | --- |
-| `format`, `format:check`, `format:classes`, `format:all` | dprint + Rustywind formatting. |
-| `lint` | Runs JS lint, Rustywind check, dprint check, and link lint with stage labels. |
-| `lint:ci-soft` | Sequential soft-lint bundle used by CI (`npm-run-all` + `|| true`). |
-| `lint:classes` | Rustywind `--check` over Eleventy templates. |
-| `lint:format` | `dprint check` wrapper for CI-friendly formatting reports. |
-| `lint:fix` | ESLint autofix plus link lint (when permitted). |
-| `lint:links` | Uses `tools/run-if-network.mjs` to skip when `CI_NETWORK_OK` is not `1`. |
-| `lint:dead` | Delegates to `tools:knip:ci`. |
-| `test`, `test:watch`, `test:playwright` | Ensure Chromium is wired (`tools/check-chromium.mjs`) before launching the runner. |
-| `check` | doctor → format check → **soft** lint → tests. |
-| `doctor` | Verifies local prerequisites (`rg`, `fd`, `jq`, `sd`, etc.). |
+| Script                                                   | Description                                                                        |
+| -------------------------------------------------------- | ---------------------------------------------------------------------------------- |
+| `format`, `format:check`, `format:classes`, `format:all` | dprint + Rustywind formatting.                                                     |
+| `lint`                                                   | Runs JS lint, Rustywind check, dprint check, and link lint with stage labels.      |
+| `lint:ci-soft`                                           | Sequential soft-lint bundle used by CI (`npm-run-all` + `                          |
+| `lint:classes`                                           | Rustywind `--check` over Eleventy templates.                                       |
+| `lint:format`                                            | `dprint check` wrapper for CI-friendly formatting reports.                         |
+| `lint:fix`                                               | ESLint autofix plus link lint (when permitted).                                    |
+| `lint:links`                                             | Uses `tools/run-if-network.mjs` to skip when `CI_NETWORK_OK` is not `1`.           |
+| `lint:dead`                                              | Delegates to `tools:knip:ci`.                                                      |
+| `test`, `test:watch`, `test:playwright`                  | Ensure Chromium is wired (`tools/check-chromium.mjs`) before launching the runner. |
+| `check`                                                  | doctor → format check → **soft** lint → tests.                                     |
+| `doctor`                                                 | Verifies local prerequisites (`rg`, `fd`, `jq`, `sd`, etc.).                       |
 
 ### Tooling & Datasets
 
@@ -93,15 +93,15 @@ and smoke testing. They continue to run only when explicitly requested.
 
 - **`ci.yml`** — three-stage pipeline (lint → test → build). Lint is marked `continue-on-error` and
   runs `./bin/lint-soft.sh` so failures are logged but never block later stages. Each stage installs
-  Chromium via APT and runs `tools/check-chromium.mjs` before any headless work.
-  Build artifacts are published as workflow artifacts for inspection.
+  Chromium via APT and runs `tools/check-chromium.mjs` before any headless work. Build artifacts are
+  published as workflow artifacts for inspection.
 - **`dead.yml`** — scheduled/manual Knip scan. Respects the network contract and uploads the JSON
   report when generated.
 - **`deploy.yml`** — builds the production image with `.portainer/Dockerfile`, pushes to GHCR, and
   optionally pings the Portainer webhook.
 
-> **Network contract:** CI runners treat the public network as unavailable unless
-> `CI_NETWORK_OK=1`. Scripts that require outbound traffic are opt-in via `tools/run-if-network.mjs`.
+> **Network contract:** CI runners treat the public network as unavailable unless `CI_NETWORK_OK=1`.
+> Scripts that require outbound traffic are opt-in via `tools/run-if-network.mjs`.
 
 ---
 
@@ -114,7 +114,8 @@ and smoke testing. They continue to run only when explicitly requested.
 - Puppeteer and Playwright downloads are disabled (`PUPPETEER_SKIP_DOWNLOAD=1`,
   `PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1`).
 
-This keeps Puppeteer, Playwright, and any Eleventy transforms aligned without hitting forbidden CDNs.
+This keeps Puppeteer, Playwright, and any Eleventy transforms aligned without hitting forbidden
+CDNs.
 
 ---
 

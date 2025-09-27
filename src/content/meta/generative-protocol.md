@@ -29,12 +29,17 @@ preamble:
   version: "1.0-final"
 ---
 
-> _A process cannot be understood by stopping it. Understanding must move with the flow of the process, must join it and flow with it._
-> — Frank Herbert, Dune
+> _A process cannot be understood by stopping it. Understanding must move with the flow of the
+> process, must join it and flow with it._ — Frank Herbert, Dune
 
 ### **Preamble**
 
-This document specifies the generative protocol for creating artifacts within the Effusion Labs system. It is a repeatable, multi-phase workflow designed to guide the collaboration between the human **curator-operator** and the **generative engine**. Adherence to this protocol ensures that all outputs, regardless of subject, are consistent with the principles of **Analytic Brutalism** and the artistic intent of the **Protocolist Framework**. It is an operational manual, not a set of suggestions.
+This document specifies the generative protocol for creating artifacts within the Effusion Labs
+system. It is a repeatable, multi-phase workflow designed to guide the collaboration between the
+human **curator-operator** and the **generative engine**. Adherence to this protocol ensures that
+all outputs, regardless of subject, are consistent with the principles of **Analytic Brutalism** and
+the artistic intent of the **Protocolist Framework**. It is an operational manual, not a set of
+suggestions.
 
 ---
 ### **Phase I: Deconstruction & Mapping**
@@ -52,34 +57,57 @@ Next, a dense corpus of primary evidence detailing the actual mechanics of the s
 
 #### **1.3 Identify the Core Dynamic**
 The operator methodically compares the Surface Narrative against the Underlying Infrastructure to identify the central point of friction, resonance, or absence. This is the conceptual heart of the artifact. This core dynamic is rarely a simple hypocrisy and is often a more complex pattern, such as a structural void, a strange symbiosis, or an absurd resonance between disparate parts of the system.
-
 ---
+
 ### **Phase II: Architectural Formulation**
 
-This phase translates the raw findings from Phase I into a coherent, longform argumentative structure. It is an act of deliberate architectural design.
+This phase translates the raw findings from Phase I into a coherent, longform argumentative
+structure. It is an act of deliberate architectural design.
 
 #### **2.1 Select an Analytical Stance**
-Based on the core dynamic identified, the operator chooses the strategic goal of the artifact. This stance (Adversarial, Ethnographic, Archaeological, or Ironic/Meta) will govern the tonal palette and the ultimate thesis of the piece.
+
+Based on the core dynamic identified, the operator chooses the strategic goal of the artifact. This
+stance (Adversarial, Ethnographic, Archaeological, or Ironic/Meta) will govern the tonal palette and
+the ultimate thesis of the piece.
 
 #### **2.2 Formulate the Thesis (The "Undertone")**
-The core dynamic is articulated as a sharp, counter-intuitive thesis. This statement *is* the "hidden undertone" the artifact is engineered to deliver. It must be presented clearly in the artifact's preamble as the central argument.
+
+The core dynamic is articulated as a sharp, counter-intuitive thesis. This statement _is_ the
+"hidden undertone" the artifact is engineered to deliver. It must be presented clearly in the
+artifact's preamble as the central argument.
 
 #### **2.3 Derive & Sequence Thematic Sections**
-The evidence is grouped into 3-5 logical themes that will form the body of the artifact. These themes are emergent from the evidence, not based on a pre-existing template. They are then sequenced to build the argument with escalating force, moving from foundational evidence to the most complex or damning implications.
+
+The evidence is grouped into 3-5 logical themes that will form the body of the artifact. These
+themes are emergent from the evidence, not based on a pre-existing template. They are then sequenced
+to build the argument with escalating force, moving from foundational evidence to the most complex
+or damning implications.
 
 ---
+
 ### **Phase III: Synthesis & Artifact Generation**
 
-The final phase is the generation of the text itself, applying the full aesthetic and stylistic protocol to produce the finished artifact.
+The final phase is the generation of the text itself, applying the full aesthetic and stylistic
+protocol to produce the finished artifact.
 
 #### **3.1 Draft with Analytical Layering**
-The generative engine is prompted to produce text for each thematic section. The operator's role is to guide this generation to achieve authority through density by layering the analysis. For each key fact, the text must be expanded with:
-* **Historical Context:** Tracing the origin of the fact or pattern.
-* **Corroboration:** Citing multiple sources to triangulate a claim.
-* **Second-Order Implications:** Exploring the ripple effects and systemic consequences of the fact.
+
+The generative engine is prompted to produce text for each thematic section. The operator's role is
+to guide this generation to achieve authority through density by layering the analysis. For each key
+fact, the text must be expanded with:
+
+- **Historical Context:** Tracing the origin of the fact or pattern.
+- **Corroboration:** Citing multiple sources to triangulate a claim.
+- **Second-Order Implications:** Exploring the ripple effects and systemic consequences of the fact.
 
 #### **3.2 Deploy Stylistic Signatures**
-The curator-operator meticulously edits and structures the raw output. They must consistently deploy the **Conclusive Undercut** to land critical points, integrate the **Epistemic Note System** to provide transparent meta-commentary, and ensure the entire text maintains a **Forensic Detachment**.
+
+The curator-operator meticulously edits and structures the raw output. They must consistently deploy
+the **Conclusive Undercut** to land critical points, integrate the **Epistemic Note System** to
+provide transparent meta-commentary, and ensure the entire text maintains a **Forensic Detachment**.
 
 #### **3.3 Finalize the Form**
-The artifact is formatted as either a longform **Note** or a concise **Specimen Sheet**. It must be concluded with a strong **Synthesizing Conclusion** that restates the thesis with definitive authority, cementing the argument and closing the analytical loop.
+
+The artifact is formatted as either a longform **Note** or a concise **Specimen Sheet**. It must be
+concluded with a strong **Synthesizing Conclusion** that restates the thesis with definitive
+authority, cementing the argument and closing the analytical loop.

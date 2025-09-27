@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 // tools/doctor.mjs — quick env check for contributors and CI
 import { execFileSync } from 'node:child_process'
-import { fileURLToPath } from 'node:url'
 import { join } from 'node:path'
 import process from 'node:process'
+import { fileURLToPath } from 'node:url'
 
 const repoRoot = fileURLToPath(new URL('..', import.meta.url))
 const repoBin = join(repoRoot, 'bin')

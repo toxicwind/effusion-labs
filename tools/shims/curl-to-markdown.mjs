@@ -1,8 +1,8 @@
 #!/usr/bin/env node
-import process from 'node:process'
 import { spawn } from 'node:child_process'
-import { fileURLToPath } from 'node:url'
 import path from 'node:path'
+import process from 'node:process'
+import { fileURLToPath } from 'node:url'
 
 const realCurl = process.env.CURL_SHIM_REAL
 const safePath = process.env.CURL_SHIM_SAFE_PATH || process.env.PATH || ''
@@ -136,9 +136,7 @@ function decodeBody(buffer, contentType) {
 function decodeEntities(text = '') {
   return text
     .replace(/&#(\d+);/g, (_, num) => String.fromCharCode(Number.parseInt(num, 10)))
-    .replace(/&#x([\da-f]+);/gi, (_, hex) =>
-      String.fromCharCode(Number.parseInt(hex, 16)),
-    )
+    .replace(/&#x([\da-f]+);/gi, (_, hex) => String.fromCharCode(Number.parseInt(hex, 16)))
     .replace(/&nbsp;/gi, ' ')
     .replace(/&amp;/gi, '&')
     .replace(/&lt;/gi, '<')

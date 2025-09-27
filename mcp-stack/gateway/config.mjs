@@ -13,8 +13,8 @@ export function loadConfig() {
   const PORT_HTTP = process.env.PORT_HTTP
     ? envInt('PORT_HTTP', 0)
     : process.env.PORT_SSE
-      ? envInt('PORT_SSE', 0)
-      : undefined
+    ? envInt('PORT_SSE', 0)
+    : undefined
   const PORT_RANGE_START = process.env.PORT_RANGE_START
     ? envInt('PORT_RANGE_START', undefined)
     : undefined

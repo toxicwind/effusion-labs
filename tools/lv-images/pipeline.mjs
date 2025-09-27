@@ -4,6 +4,7 @@ import path from 'node:path'
 import process from 'node:process'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 
+import { resolveChromium } from '../resolve-chromium.mjs'
 import {
   bundleDataset,
   datasetStats as readDatasetStats,
@@ -12,7 +13,6 @@ import {
   paths,
   verifyBundle,
 } from './bundle-lib.mjs'
-import { resolveChromium } from '../resolve-chromium.mjs'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -189,6 +189,10 @@ async function runEleventy({ offline = false, eleventyArgs = [] } = {}) {
   const env = { ...process.env }
   if (offline) env.BUILD_OFFLINE = '1'
   else delete env.BUILD_OFFLINE
+  const heapFlag = '--max-old-space-size=8192'
+  env.NODE_OPTIONS = env.NODE_OPTIONS
+    ? `${env.NODE_OPTIONS} ${heapFlag}`.trim()
+    : heapFlag
   await spawnProcess(process.execPath, nodeArgs, { env })
 }
 

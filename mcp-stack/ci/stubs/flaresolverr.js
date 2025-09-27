@@ -1,5 +1,5 @@
-import http from 'node:http'
 import { readFileSync } from 'node:fs'
+import http from 'node:http'
 const data = readFileSync(new URL('./data/flaresolverr.json', import.meta.url))
 http
   .createServer((req, res) => {

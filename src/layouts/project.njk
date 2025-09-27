@@ -8,64 +8,61 @@ proj: "{{ resume and resume.projectPages and resume.projectPages[slug] }}"
 title: "{{ (proj and proj.title) or title or (page.fileSlug | title) }}"
 ---
 
-
 <section class="hb-brut-card rounded-box p-5 sm:p-7 hb-intensity-lite">
-<div class="flex flex-wrap items-center gap-3">
-{% set heading = title or (page.fileSlug | title) %}
-<h1 class="m-0 font-heading font-extrabold tracking-tight hb-fluid-h1">
-{{ heading }}
-</h1>
-{% if proj and proj.badge %}
-<span class="badge badge-outline rounded-full">{{ proj.badge }}</span>
-{% endif %}
-</div>
-{% if proj and proj.blurb %}
-<p class="mt-2 max-w-prose opacity-90">{{ proj.blurb }}</p>
-{% endif %}
-{% if proj and (proj.repo or proj.demo) %}
-<div class="mt-3 flex flex-wrap gap-2">
-{% if proj.repo %}
-<a href="{{ proj.repo }}" class="btn btn-sm btn-outline">Repo</a>
-{% endif %}
-{% if proj.demo %}
-<a href="{{ proj.demo }}" class="btn btn-sm btn-primary">Live</a>
-{% endif %}
-</div>
-{% endif %}
+  <div class="flex flex-wrap items-center gap-3">
+    {% set heading = title or (page.fileSlug | title) %}
+    <h1 class="m-0 font-heading font-extrabold tracking-tight hb-fluid-h1">
+      {{ heading }}
+    </h1>
+    {% if proj and proj.badge %}
+      <span class="badge badge-outline rounded-full">{{ proj.badge }}</span>
+    {% endif %}
+  </div>
+  {% if proj and proj.blurb %}
+    <p class="mt-2 max-w-prose opacity-90">{{ proj.blurb }}</p>
+  {% endif %}
+  {% if proj and (proj.repo or proj.demo) %}
+    <div class="mt-3 flex flex-wrap gap-2">
+      {% if proj.repo %}
+        <a href="{{ proj.repo }}" class="btn btn-sm btn-outline">Repo</a>
+      {% endif %}
+      {% if proj.demo %}
+        <a href="{{ proj.demo }}" class="btn btn-sm btn-primary">Live</a>
+      {% endif %}
+    </div>
+  {% endif %}
 </section>
-
 
 <section class="mt-6 grid grid-cols-1 gap-6 sm:gap-8 md:grid-cols-3">
-<article class="hb-brut-card rounded-box p-5">
-<h2 class="text-xs uppercase tracking-widest opacity-60">Highlights</h2>
-{% if proj and proj.highlights %}
-<ul class="mt-2 space-y-1.5 text-[15px] leading-6">
-{% for item in proj.highlights %}<li>{{ item }}</li>{% endfor %}
-</ul>
-{% else %}
-<p class="opacity-70">—</p>
-{% endif %}
-</article>
-<article class="hb-brut-card rounded-box p-5">
-<h2 class="text-xs uppercase tracking-widest opacity-60">Stack</h2>
-<div class="mt-2 flex flex-wrap gap-2">
-{% for t in (proj and proj.stack) or [] %}
-<span class="badge badge-ghost rounded-full">{{ t }}</span>
-{% endfor %}
-</div>
-</article>
-<article class="hb-brut-card rounded-box p-5">
-<h2 class="text-xs uppercase tracking-widest opacity-60">Status</h2>
-<p class="mt-2">{{ (proj and proj.status) or '—' }}</p>
-{% if proj and proj.when %}
-<p class="mt-1 text-sm opacity-70">{{ proj.when }}</p>
-{% endif %}
-</article>
+  <article class="hb-brut-card rounded-box p-5">
+    <h2 class="text-xs uppercase tracking-widest opacity-60">Highlights</h2>
+    {% if proj and proj.highlights %}
+      <ul class="mt-2 space-y-1.5 text-[15px] leading-6">
+        {% for item in proj.highlights %}<li>{{ item }}</li>{% endfor %}
+      </ul>
+    {% else %}
+      <p class="opacity-70">—</p>
+    {% endif %}
+  </article>
+  <article class="hb-brut-card rounded-box p-5">
+    <h2 class="text-xs uppercase tracking-widest opacity-60">Stack</h2>
+    <div class="mt-2 flex flex-wrap gap-2">
+      {% for t in (proj and proj.stack) or [] %}
+        <span class="badge badge-ghost rounded-full">{{ t }}</span>
+      {% endfor %}
+    </div>
+  </article>
+  <article class="hb-brut-card rounded-box p-5">
+    <h2 class="text-xs uppercase tracking-widest opacity-60">Status</h2>
+    <p class="mt-2">{{ (proj and proj.status) or '—' }}</p>
+    {% if proj and proj.when %}
+      <p class="mt-1 text-sm opacity-70">{{ proj.when }}</p>
+    {% endif %}
+  </article>
 </section>
-
 
 {% if content | trim %}
-<section class="mt-8 space-y-8">
-{{ content | safe }}
-</section>
+  <section class="mt-8 space-y-8">
+    {{ content | safe }}
+  </section>
 {% endif %}

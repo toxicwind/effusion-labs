@@ -1,19 +1,23 @@
 {# components/list-item.njk — fixed, clean Nunjucks #}
 {% macro listItem(item) %}
   {% set t = (item.data.type or item.type or 'meta') | lower %}
-  {% set typeClass = (
-    t == 'project' and 'pill--project' or
-    t == 'concept' and 'pill--concept' or
-    t == 'spark'   and 'pill--spark'   or
-                     'pill--meta'
-  ) %}
+  {%
+    set typeClass = (
+      t == 'project' and 'pill--project' or
+      t == 'concept' and 'pill--concept' or
+      t == 'spark'   and 'pill--spark'   or
+                       'pill--meta'
+    )
+  %}
 
   <a
     href="{{ item.url | url }}"
     aria-label="{{ item.data.title }}"
     class="group block hb-brut-card hb-intensity-lite p-5 sm:p-6 text-left no-underline transition-transform hover:-translate-y-0.5 focus-visible:-translate-y-0.5"
     data-title="{{ item.data.title }}"
-    {% if item.date %}data-date="{{ item.date | date('yyyy-MM-dd') }}"{% endif %}
+    {% if item.date %}
+      data-date="{{ item.date | date('yyyy-MM-dd') }}"
+    {% endif %}
     role="listitem"
   >
     <div class="flex items-start justify-between gap-3">

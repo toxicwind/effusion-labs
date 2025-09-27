@@ -5,8 +5,6 @@ import fs from 'node:fs/promises'
 import path from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 
-import MiniSearch from 'minisearch'
-
 import { cacheRemoteImage } from '../lib/cache/remote-images.mjs'
 
 // This file is a data helper for Eleventy. It reads the summary and
@@ -150,7 +148,11 @@ async function writeDatasetReport(signature, payload) {
   }
 }
 
-async function persistReportOutputs(signature, payload, { writeCache = true, writeDataset = true } = {}) {
+async function persistReportOutputs(
+  signature,
+  payload,
+  { writeCache = true, writeDataset = true } = {},
+) {
   const tasks = []
   if (writeCache) tasks.push(writeCachedReport(signature, payload))
   if (writeDataset) tasks.push(writeDatasetReport(signature, payload))
@@ -692,12 +694,12 @@ function makeBreakdown(counts, meta, total) {
 }
 
 const PAGINATION_DEFAULT_SIZES = {
-  sitemaps: 150,
-  docs: 150,
-  robots: 120,
-  duplicates: 60,
-  topProducts: 60,
-  hostStats: 160,
+  sitemaps: 250,
+  docs: 500,
+  robots: 500,
+  duplicates: 200,
+  topProducts: 200,
+  hostStats: 400,
 }
 
 const MINI_SEARCH_OPTIONS = {
@@ -706,14 +708,13 @@ const MINI_SEARCH_OPTIONS = {
   searchOptions: { prefix: true, fuzzy: 0.2 },
 }
 
-const EMPTY_PAGINATION_SECTIONS = Object.freeze({
-  sitemaps: [],
-  docs: [],
-  robots: [],
-  duplicates: [],
-  topProducts: [],
-  hostStats: [],
-})
+// eslint-disable-next-line no-control-regex
+const CONTROL_CHARS_REGEX = /[\x00-\x1F\x7F]/g
+
+function cleanText(value, fallback = '') {
+  if (typeof value !== 'string') return fallback
+  return value.replace(CONTROL_CHARS_REGEX, '').trim()
+}
 
 function paginateList(items, size) {
   const list = Array.isArray(items) ? items : []
@@ -761,7 +762,10 @@ function buildPagination(sections, overrides = {}) {
   let globalPages = 1
   for (const [key, list] of Object.entries(sections)) {
     const cfg = overrides[key] || {}
-    const chosenSize = cfg.size || cfg || PAGINATION_DEFAULT_SIZES[key] || 100
+    const rawSize = typeof cfg === 'number' ? cfg : cfg?.size
+    const chosenSize = Number.isFinite(rawSize) && rawSize > 0
+      ? rawSize
+      : PAGINATION_DEFAULT_SIZES[key] || 100
     const paged = paginateList(list, chosenSize)
     meta[key] = { ...paged, size: chosenSize }
     if (paged.pageCount > globalPages) {
@@ -800,59 +804,9 @@ function buildPagination(sections, overrides = {}) {
   return { sections: meta, pages }
 }
 
-function createEmptyReport(reason = 'missing-data') {
-  const { sections, pages } = buildPagination(EMPTY_PAGINATION_SECTIONS)
-  const search = {
-    documents: [],
-    index: new MiniSearch(MINI_SEARCH_OPTIONS).toJSON(),
-    options: MINI_SEARCH_OPTIONS,
-  }
-  return {
-    baseHref: '/content/projects/lv-images/generated/lv/',
-    summary: {},
-    sitemaps: [],
-    docs: [],
-    robots: [],
-    sample: [],
-    allImages: [],
-    allProducts: [],
-    runsHistory: [],
-    duplicates: [],
-    topProducts: [],
-    hostStats: [],
-    dataset: {
-      manifest: null,
-      manifestHref: '/content/projects/lv-images/generated/lv.bundle.json',
-      archiveHref: '/content/projects/lv-images/generated/lv.bundle.tgz',
-      archiveExists: false,
-      totals: { fileCount: 0, totalBytes: 0, sizeLabel: formatBytes(0) },
-      directories: [],
-      ndjson: { count: 0, latestShard: '' },
-      cache: { robotsFiles: 0, sitemapFiles: 0, urlmetaEntries: 0 },
-      warnings: reason ? ['empty-dataset', reason] : ['empty-dataset'],
-    },
-    metrics: {
-      robots: { total: 0, issues: 0, breakdown: [] },
-      docs: { total: 0, issues: 0, breakdown: [] },
-      items: { total: 0, added: 0, duplicates: 0, removed: 0, purged: 0, active: 0 },
-    },
-    totals: {
-      images: 0,
-      pages: 0,
-      hosts: 0,
-      sitemapsProcessed: 0,
-      itemsFound: 0,
-    },
-    pagination: sections,
-    pages,
-    search,
-    __lvreportFallbackReason: reason,
-  }
-}
-
 function ensureReportShape(report, { reason = 'invalid-report' } = {}) {
   if (!report || typeof report !== 'object') {
-    return createEmptyReport(reason)
+    throw new Error(`[lvreport] dataset missing (${reason})`)
   }
 
   const sectionsSource = {
@@ -867,14 +821,16 @@ function ensureReportShape(report, { reason = 'invalid-report' } = {}) {
   let pagination = report.pagination
   let pages = report.pages
 
-  if (!pagination || typeof pagination !== 'object' || !Array.isArray(pages) || pages.length === 0) {
+  if (
+    !pagination || typeof pagination !== 'object' || !Array.isArray(pages) || pages.length === 0
+  ) {
     const { sections, pages: rebuiltPages } = buildPagination(sectionsSource)
     pagination = sections
     pages = rebuiltPages
   }
 
   if (!Array.isArray(pages) || pages.length === 0) {
-    return createEmptyReport(reason)
+    throw new Error(`[lvreport] dataset pages empty (${reason})`)
   }
 
   const totals = {
@@ -882,7 +838,8 @@ function ensureReportShape(report, { reason = 'invalid-report' } = {}) {
     pages: Number(report?.totals?.pages ?? report?.summary?.totals?.pages ?? 0) || 0,
     hosts: Number(report?.totals?.hosts ?? report?.summary?.totals?.hosts ?? 0) || 0,
     sitemapsProcessed:
-      Number(report?.totals?.sitemapsProcessed ?? report?.summary?.totals?.sitemapsProcessed ?? 0) || 0,
+      Number(report?.totals?.sitemapsProcessed ?? report?.summary?.totals?.sitemapsProcessed ?? 0)
+      || 0,
     itemsFound: Number(report?.totals?.itemsFound ?? report?.summary?.totals?.itemsFound ?? 0) || 0,
   }
 
@@ -898,11 +855,13 @@ function pushSearchDoc(target, doc = {}) {
   const entry = {
     id: doc.id,
     section: doc.section,
-    title: doc.title || '',
-    description: doc.description || '',
-    href: doc.href || '',
-    badge: doc.badge || '',
-    tags: Array.isArray(doc.tags) ? doc.tags : [],
+    title: cleanText(doc.title || ''),
+    description: cleanText(doc.description || ''),
+    href: cleanText(doc.href || ''),
+    badge: cleanText(doc.badge || ''),
+    tags: Array.isArray(doc.tags)
+      ? doc.tags.map((tag) => cleanText(tag || '')).filter(Boolean)
+      : [],
     meta: doc.meta || {},
   }
   target.push(entry)
@@ -1050,7 +1009,8 @@ async function buildReportData() {
   const searchDocuments = []
 
   const sitemaps = sitemapsLog.map((s, index) => {
-    const um = urlmeta[s.url] || {}
+    const url = cleanText(s.url || '')
+    const um = urlmeta[url] || {}
     const id = `sitemaps-${index}`
     const hrefCached = um.path
       ? path.relative(LV_BASE, path.resolve(um.path)).split(path.sep).join('/')
@@ -1059,18 +1019,18 @@ async function buildReportData() {
     pushSearchDoc(searchDocuments, {
       id,
       section: 'sitemaps',
-      title: s.host || s.url || 'Sitemap',
-      description: s.url || '',
-      href: cachedHrefFull || s.url || '',
-      badge: classifySitemap(s.url),
-      tags: ['sitemap', classifySitemap(s.url)].filter(Boolean),
+      title: cleanText(s.host || url || 'Sitemap'),
+      description: url,
+      href: cachedHrefFull || url,
+      badge: classifySitemap(url),
+      tags: ['sitemap', classifySitemap(url)].filter(Boolean),
       meta: { status: um.status ?? '', itemCount: s.itemCount ?? s.imageCount ?? 0 },
     })
     return {
       id,
-      host: s.host || '',
-      url: s.url,
-      type: classifySitemap(s.url),
+      host: cleanText(s.host || ''),
+      url,
+      type: classifySitemap(url),
       imageCount: s.itemCount ?? s.imageCount ?? 0,
       status: um.status ?? '',
       savedPath: hrefCached,
@@ -1086,12 +1046,12 @@ async function buildReportData() {
   for await (const absPath of walk(SITEMAPS_DIR)) {
     if (!/\.(xml|txt|gz)$/i.test(absPath)) continue
     const meta = rev.get(path.resolve(absPath)) || {}
-    const url = meta.url || ''
+    const url = cleanText(meta.url || '')
     const host = (() => {
       try {
         return new URL(url).host
       } catch {
-        return path.basename(path.dirname(absPath))
+        return cleanText(path.basename(path.dirname(absPath)))
       }
     })()
     const relPath = path.relative(LV_BASE, path.resolve(absPath)).split(path.sep).join('/')
@@ -1132,7 +1092,7 @@ async function buildReportData() {
       status: meta.status ?? '',
       contentType: meta.contentType || '',
       savedPath: relPath,
-      fileName: path.basename(absPath),
+      fileName: cleanText(path.basename(absPath)),
       sizeBytes,
       sizeLabel: formatBytes(sizeBytes),
       statusCategory: classification.category,
@@ -1269,11 +1229,13 @@ async function buildReportData() {
       badge: classification.tone,
       tags: ['robots', classification.category].filter(Boolean),
       meta: {
-        directives: parsed?.merged ? {
-          allow: parsed.merged.allow.length,
-          disallow: parsed.merged.disallow.length,
-          noindex: parsed.merged.noindex.length,
-        } : {},
+        directives: parsed?.merged
+          ? {
+            allow: parsed.merged.allow.length,
+            disallow: parsed.merged.disallow.length,
+            noindex: parsed.merged.noindex.length,
+          }
+          : {},
       },
     })
   }
@@ -1367,7 +1329,8 @@ async function buildReportData() {
         pushSearchDoc(searchDocuments, {
           id: cid,
           section: 'duplicates',
-          title: group.canonical.basename || group.canonical.title || group.canonical.pageUrl || 'Duplicate image',
+          title: group.canonical.basename || group.canonical.title || group.canonical.pageUrl
+            || 'Duplicate image',
           description: group.canonical.pageUrl || group.canonical.src,
           href: group.canonical.pageUrl || group.canonical.src,
           badge: 'duplicate',
@@ -1493,11 +1456,14 @@ async function buildReportData() {
   const sampleRaw = await sampleItems(ITEMS_DIR, 60)
   const sample = await Promise.all(
     sampleRaw.map(async (entry) => {
+      const src = cleanText(entry?.src || '')
+      const pageUrl = cleanText(entry?.pageUrl || '')
+      const title = cleanText(entry?.title || '')
       let cachedSrc = null
       try {
-        cachedSrc = await cacheRemoteImage(entry?.src)
+        cachedSrc = await cacheRemoteImage(src)
       } catch (error) {
-        console.warn(`[lvreport] cache failed for ${entry?.src}: ${error?.message || error}`)
+        console.warn(`[lvreport] cache failed for ${src}: ${error?.message || error}`)
       }
       let templateRelative = null
       if (cachedSrc) {
@@ -1505,9 +1471,12 @@ async function buildReportData() {
       }
       return {
         ...entry,
+        src,
+        pageUrl,
+        title,
         cachedSrc: templateRelative,
         cachedSrcAbsolute: cachedSrc,
-        originalSrc: entry?.src || null,
+        originalSrc: src || null,
       }
     }),
   )
@@ -1556,15 +1525,29 @@ async function buildReportData() {
     hostStats,
   })
 
-  const globalMiniSearch = new MiniSearch(MINI_SEARCH_OPTIONS)
-  if (searchDocuments.length) {
-    globalMiniSearch.addAll(searchDocuments)
+  for (const page of pages) {
+    if (!page || typeof page !== 'object') continue
+    const sections = page.sections || {}
+    for (const section of Object.values(sections)) {
+      if (!section || !Array.isArray(section.items)) continue
+      for (const item of section.items) {
+        if (!item || typeof item !== 'object') continue
+        for (const key of Object.keys(item)) {
+          const value = item[key]
+          if (typeof value === 'string') {
+            item[key] = cleanText(value)
+          }
+        }
+      }
+    }
   }
 
   const search = {
-    documents: searchDocuments,
-    index: globalMiniSearch.toJSON(),
+    documents: [],
+    index: null,
     options: MINI_SEARCH_OPTIONS,
+    datasetHref: '/content/projects/lv-images/generated/lv/lvreport.dataset.json',
+    documentCount: searchDocuments.length,
   }
 
   return {
@@ -1575,9 +1558,8 @@ async function buildReportData() {
     docs,
     robots,
     sample,
-    // Expose aggregated lists for possible future use
-    allImages,
-    allProducts,
+    allImages: [],
+    allProducts: [],
     // Expose runs history so the report can surface a timeline of
     // previous crawls.  Each entry is { timestamp, metrics, totals }.
     runsHistory,
@@ -1654,7 +1636,12 @@ export default async function() {
         writeCache: false,
         writeDataset: false,
       })
-      return ensureReportShape(payload, { reason: 'cache-disabled' })
+      const report = ensureReportShape(payload, { reason: 'cache-disabled' })
+      console.log('[lvreport] returning (cache-disabled)', {
+        pages: Array.isArray(report?.pages) ? report.pages.length : 'missing',
+        pagination: Object.keys(report?.pagination || {}).length,
+      })
+      return report
     }
 
     const datasetCached = await readDatasetReport()
@@ -1675,6 +1662,10 @@ export default async function() {
             Array.isArray(report?.pages) ? report.pages.length : 'missing',
           )
         }
+        console.log('[lvreport] returning (dataset-cached)', {
+          pages: Array.isArray(report?.pages) ? report.pages.length : 'missing',
+          pagination: Object.keys(report?.pagination || {}).length,
+        })
         return report
       }
       return report
@@ -1692,22 +1683,31 @@ export default async function() {
           Array.isArray(report?.pages) ? report.pages.length : 'missing',
         )
       }
+      console.log('[lvreport] returning (cache-hit)', {
+        pages: Array.isArray(report?.pages) ? report.pages.length : 'missing',
+        pagination: Object.keys(report?.pagination || {}).length,
+      })
       return report
     }
 
-    return await rebuild('fresh-rebuild')
+    const report = await rebuild('fresh-rebuild')
+    console.log('[lvreport] returning (fresh)', {
+      pages: Array.isArray(report?.pages) ? report.pages.length : 'missing',
+      pagination: Object.keys(report?.pagination || {}).length,
+    })
+    return report
   } catch (error) {
     console.error('[lvreport] failed to load dataset:', error?.message || error)
-    return createEmptyReport('load-error')
+    throw error
   }
 }
 
 export {
-  DATASET_REPORT_FILE,
-  REPORT_CACHE_FILE,
   computeSignature,
+  DATASET_REPORT_FILE,
   readCachedReport,
   readDatasetReport,
+  REPORT_CACHE_FILE,
   signaturesEqual,
   writeDatasetReport,
 }

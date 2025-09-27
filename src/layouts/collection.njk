@@ -5,82 +5,87 @@ showTitle: true
 metaDisable: true
 ---
 
-
 {% from "components/list-item.njk" import listItem %}
-
 
 <p class="max-w-prose text-base-content/80">{{ sections[section].intro }}</p>
 <div class="mt-4 flex flex-wrap items-center gap-2 text-sm">
-<span class="opacity-70">View:</span>
-<button class="btn btn-xs btn-outline" type="button" data-view="comfort">Comfort</button>
-<button class="btn btn-xs btn-ghost" type="button" data-view="dense">Dense</button>
-<span class="ml-3 opacity-70">Sort:</span>
-<button class="btn btn-xs btn-outline" type="button" data-sort="date">Date</button>
-<button class="btn btn-xs btn-ghost" type="button" data-sort="title">Title</button>
+  <span class="opacity-70">View:</span>
+  <button class="btn btn-xs btn-outline" type="button" data-view="comfort">Comfort</button>
+  <button class="btn btn-xs btn-ghost" type="button" data-view="dense">Dense</button>
+  <span class="ml-3 opacity-70">Sort:</span>
+  <button class="btn btn-xs btn-outline" type="button" data-sort="date">Date</button>
+  <button class="btn btn-xs btn-ghost" type="button" data-sort="title">Title</button>
 </div>
 
-
-<div id="collection-grid" class="mt-4 grid grid-cols-1 items-stretch gap-6 sm:grid-cols-2 xl:grid-cols-3" data-section="{{ section }}">
-{% for item in collections[section] %}
-{% if item.url != page.url %}
-<div class="group" data-title="{{ (item.data.title or '') | escape }}" {% if item.date %}data-date="{{ item.date | htmlDateString }}"{% endif %}>
-{{ listItem(item) }}
+<div
+  id="collection-grid"
+  class="mt-4 grid grid-cols-1 items-stretch gap-6 sm:grid-cols-2 xl:grid-cols-3"
+  data-section="{{ section }}"
+>
+  {% for item in collections[section] %}
+    {% if item.url != page.url %}
+      <div
+        class="group"
+        data-title="{{ (item.data.title or '') | escape }}"
+        {% if item.date %}
+          data-date="{{ item.date | htmlDateString }}"
+        {% endif %}
+      >
+        {{ listItem(item) }}
+      </div>
+    {% endif %}
+  {% endfor %}
 </div>
-{% endif %}
-{% endfor %}
-</div>
-
 
 <script>
 ;(() => {
-const grid = document.getElementById('collection-grid');
-if (!grid) return;
-const items = Array.from(grid.children);
+  const grid = document.getElementById('collection-grid')
+  if (!grid) return
+  const items = Array.from(grid.children)
 
+  function sortBy(key) {
+    const s = items.slice().sort((a, b) => {
+      if (key === 'title') return (a.dataset.title || '').localeCompare(b.dataset.title || '')
+      if (key === 'date') {
+        const da = new Date(a.dataset.date || 0).getTime()
+        const db = new Date(b.dataset.date || 0).getTime()
+        return db - da
+      }
+      return 0
+    })
+    s.forEach(el => grid.appendChild(el))
+  }
 
-function sortBy(key) {
-const s = items.slice().sort((a, b) => {
-if (key === 'title') return (a.dataset.title || '').localeCompare(b.dataset.title || '');
-if (key === 'date') {
-const da = new Date(a.dataset.date || 0).getTime();
-const db = new Date(b.dataset.date || 0).getTime();
-return db - da;
-}
-return 0;
-});
-s.forEach(el => grid.appendChild(el));
-}
+  function setView(mode) {
+    grid.classList.toggle('gap-6', mode === 'comfort')
+    grid.classList.toggle('gap-3', mode === 'dense')
+    items.forEach(el => {
+      const card = el.firstElementChild // anchor from listItem
+      if (!card) return
+      card.classList.toggle('scale-[0.99]', mode === 'dense')
+      card.classList.toggle('opacity-95', mode === 'dense')
+    })
+  }
 
+  document.querySelectorAll('[data-sort]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('[data-sort]').forEach(b =>
+        b.classList.toggle('btn-outline', b !== btn)
+      )
+      sortBy(btn.dataset.sort)
+    })
+  })
 
-function setView(mode) {
-grid.classList.toggle('gap-6', mode === 'comfort');
-grid.classList.toggle('gap-3', mode === 'dense');
-items.forEach(el => {
-const card = el.firstElementChild; // anchor from listItem
-if (!card) return;
-card.classList.toggle('scale-[0.99]', mode === 'dense');
-card.classList.toggle('opacity-95', mode === 'dense');
-});
-}
+  document.querySelectorAll('[data-view]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('[data-view]').forEach(b =>
+        b.classList.toggle('btn-outline', b !== btn)
+      )
+      setView(btn.dataset.view)
+    })
+  })
 
-
-document.querySelectorAll('[data-sort]').forEach(btn => {
-btn.addEventListener('click', () => {
-document.querySelectorAll('[data-sort]').forEach(b => b.classList.toggle('btn-outline', b !== btn));
-sortBy(btn.dataset.sort);
-});
-});
-
-
-document.querySelectorAll('[data-view]').forEach(btn => {
-btn.addEventListener('click', () => {
-document.querySelectorAll('[data-view]').forEach(b => b.classList.toggle('btn-outline', b !== btn));
-setView(btn.dataset.view);
-});
-});
-
-
-setView('comfort');
-sortBy('date');
-})();
+  setView('comfort')
+  sortBy('date')
+})()
 </script>

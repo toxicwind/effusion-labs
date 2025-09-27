@@ -34,9 +34,14 @@ preamble:
   version: "1.0-final"
 ---
 
-> _A generative protocol for a digital garden. This document defines an analytical method and voice that treats text as a designed artifact and analysis as an architectural survey._
+> _A generative protocol for a digital garden. This document defines an analytical method and voice
+> that treats text as a designed artifact and analysis as an architectural survey._
 
-**Analytic Brutalism** is a writing style that treats text as a designed artifact and analysis as an architectural survey. Its core purpose is to dissect a subject by revealing its invisible infrastructure—the systems, incentives, and unspoken rules that truly govern it. The voice is that of a detached, rigorous **diagnostic operator** who presents findings with the stark clarity of the Hypebrüt interface.
+**Analytic Brutalism** is a writing style that treats text as a designed artifact and analysis as an
+architectural survey. Its core purpose is to dissect a subject by revealing its invisible
+infrastructure—the systems, incentives, and unspoken rules that truly govern it. The voice is that
+of a detached, rigorous **diagnostic operator** who presents findings with the stark clarity of the
+Hypebrüt interface.
 
 ---
 ### **I. Core Principles (The Aesthetic Stance)**
@@ -51,28 +56,36 @@ The voice is clinical, precise, and maintains strict **epistemic distance**. It 
 
 #### **Authority Through Density (Tourist × Purist)**
 The argument's authority comes from the overwhelming density of its evidence. The text provides a **crisp premise for newcomers** while containing layers of deep, interconnected evidence for the dedicated reader. Word count is achieved not through filler but by adding layers of **corroborating evidence**, **historical context**, and **second-order analysis**.
-
 ---
+
 ### **II. The Voice & Palette**
 
 The voice is the constant across all artifacts. The palette provides tonal flexibility.
 
 #### **The Voice: Forensic Detachment**
-The voice is clinical, precise, and maintains strict **epistemic distance**. It describes observable phenomena and avoids asserting unobservable internal states like "intent." This calculated detachment makes the final thesis feel like an objective, inescapable conclusion and is the source of the style's **aggressive** and **rude** quality: it is the unapologetic rudeness of radical, unvarnished honesty.
+
+The voice is clinical, precise, and maintains strict **epistemic distance**. It describes observable
+phenomena and avoids asserting unobservable internal states like "intent." This calculated
+detachment makes the final thesis feel like an objective, inescapable conclusion and is the source
+of the style's **aggressive** and **rude** quality: it is the unapologetic rudeness of radical,
+unvarnished honesty.
 
 #### **The Palette: Analytical Stances & Tones**
+
 The core voice can be modulated by a chosen stance to serve the thesis.
 
-* **Stances (The "Why"):**
-    * **Adversarial:** To expose a systemic flaw or hypocrisy.
-    * **Ethnographic:** To explain the internal logic of a complex system.
-    * **Archaeological:** To reconstruct a unifying logic from disparate evidence.
-    * **Ironic/Meta:** To apply the analytical engine to a mundane subject to explore the nature of analysis itself.
+- **Stances (The "Why"):**
+  - **Adversarial:** To expose a systemic flaw or hypocrisy.
+  - **Ethnographic:** To explain the internal logic of a complex system.
+  - **Archaeological:** To reconstruct a unifying logic from disparate evidence.
+  - **Ironic/Meta:** To apply the analytical engine to a mundane subject to explore the nature of
+    analysis itself.
 
-* **Tones (The "How"):**
-    * **Sardonic Wit:** Deployed via dry understatement and the deadpan juxtaposition of contradictory facts.
-    * **Dark Humor:** Emerges when clinical detachment is applied to tragic or absurd human events.
-    * **Encyclopedic Authority:** Achieved through the high-density presentation of specialized data.
+- **Tones (The "How"):**
+  - **Sardonic Wit:** Deployed via dry understatement and the deadpan juxtaposition of contradictory
+    facts.
+  - **Dark Humor:** Emerges when clinical detachment is applied to tragic or absurd human events.
+  - **Encyclopedic Authority:** Achieved through the high-density presentation of specialized data.
 
 ---
 ### **III. The Forms & Signatures**
@@ -87,8 +100,8 @@ The method can produce artifacts of varying shapes, corresponding to the Hypebr�
 * **The Synthesizing Conclusion:** Articles must end with a strong, decisive conclusion. This section does not introduce new evidence but instead restates the central thesis (the "undertone") in its sharpest form, cementing the argument and providing a definitive final statement.
 * **The Conclusive Undercut:** The sharp, declarative "stinger" sentence at the end of a key paragraph that bluntly states the implication of the evidence.
 * **The Epistemic Note System:** The use of a footnoted appendix for meta-commentary on sources, using the formal types: **Primary**, **Adversarial**, **Conceptual**, and **Epistolary**. This provides a transparent look at the research scaffolding.
-
 ---
+
 ### **IV. Formalization & Attribution
 
 This document has been formalized under the Effusion Labs protocol. All structural and intellectual

@@ -71,11 +71,12 @@ export default function(eleventyConfig) {
       logLevel: 'warn',
     })
 
-    const wait = (ms) => new Promise((resolve) => {
-      setTimeout(resolve, ms)
-    })
+    const wait = (ms) =>
+      new Promise((resolve) => {
+        setTimeout(resolve, ms)
+      })
 
-    const ensurePageOutput = async(targetPath, { attempts = 10, backoff = 100 } = {}) => {
+    const ensurePageOutput = async (targetPath, { attempts = 10, backoff = 100 } = {}) => {
       for (let index = 0; index < attempts; index++) {
         try {
           await fsp.access(targetPath, fs.constants.F_OK)
@@ -89,7 +90,7 @@ export default function(eleventyConfig) {
     }
 
     await Promise.all(
-      criticalPages.map(async(page) => {
+      criticalPages.map(async (page) => {
         const targetPath = path.join(outputDir, page)
 
         const hasInitialOutput = await ensurePageOutput(targetPath)
@@ -209,7 +210,7 @@ export default function(eleventyConfig) {
           return tree
         }
       },
-      { priority: 5 }
+      { priority: 5 },
     )
   }
 
@@ -303,15 +304,16 @@ export default function(eleventyConfig) {
     dumpMarkdownTo: null,
     pageTitlePrefix: '',
     defaultLayout: 'converted-html.njk',
-    frontMatterExtra: { source: "html-import" },
-    smartTypography: false,           // keep MD diffs clean; flip to true if you want curly quotes baked in
-  });
+    frontMatterExtra: { source: 'html-import' },
+    smartTypography: false, // keep MD diffs clean; flip to true if you want curly quotes baked in
+  })
 
   // --- End: Libraries & Custom Functions ---
   // Copy/pass-through files
   eleventyConfig.addPassthroughCopy('src/assets/js')
-  eleventyConfig.addPassthroughCopy({ "src/content/projects/lv-images/generated": "content/projects/lv-images/generated" });
-
+  eleventyConfig.addPassthroughCopy({
+    'src/content/projects/lv-images/generated': 'content/projects/lv-images/generated',
+  })
 
   return {
     templateFormats: ['md', 'njk', 'html', 'liquid', '11ty.js'],

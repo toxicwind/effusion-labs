@@ -1,8 +1,8 @@
-import test from 'node:test'
 import { strict as assert } from 'node:assert'
 import { execFile } from 'node:child_process'
-import { fileURLToPath } from 'node:url'
 import { dirname } from 'node:path'
+import test from 'node:test'
+import { fileURLToPath } from 'node:url'
 import { assertAllowed } from '../gateway/lib/host-allowlist.mjs'
 
 const root = dirname(fileURLToPath(import.meta.url)) + '/..'
