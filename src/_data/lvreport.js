@@ -38,6 +38,24 @@ const RUNS_HISTORY_JSON = path.join(LV_BASE, 'runs-history.json')
 const BUNDLE_MANIFEST_JSON = path.join(GENERATED_DIR, 'lv.bundle.json')
 const BUNDLE_ARCHIVE_PATH = path.join(GENERATED_DIR, 'lv.bundle.tgz')
 
+const PROJECT_ROOT = path.resolve(__dirname, '..', '..')
+const DATA_CACHE_DIR = path.join(PROJECT_ROOT, '.cache', 'eleventy-data')
+const REPORT_CACHE_FILE = path.join(DATA_CACHE_DIR, 'lvreport.json')
+const CACHE_SIGNATURE_VERSION = 1
+const CACHE_SIGNATURE_TARGETS = [
+  SUMMARY_JSON,
+  URLMETA_JSON,
+  BLACKLIST_JSON,
+  ALL_IMAGES_JSON,
+  ALL_PRODUCTS_JSON,
+  RUNS_HISTORY_JSON,
+  BUNDLE_MANIFEST_JSON,
+  BUNDLE_ARCHIVE_PATH,
+  ITEMS_DIR,
+  ROBOTS_DIR,
+  SITEMAPS_DIR,
+]
+
 // Helper to load JSON files with a fallback.
 async function loadJSON(p, fallback) {
   try {
@@ -55,6 +73,80 @@ async function fileExists(p) {
   } catch {
     return false
   }
+}
+
+async function readCachedReport() {
+  try {
+    const raw = await fs.readFile(REPORT_CACHE_FILE, 'utf8')
+    const parsed = JSON.parse(raw)
+    if (parsed?.cacheVersion !== CACHE_SIGNATURE_VERSION) {
+      return null
+    }
+    if (!parsed.signature || parsed.payload == null) {
+      return null
+    }
+    return parsed
+  } catch {
+    return null
+  }
+}
+
+async function writeCachedReport(signature, payload) {
+  try {
+    await fs.mkdir(DATA_CACHE_DIR, { recursive: true })
+    const body = JSON.stringify(
+      {
+        cacheVersion: CACHE_SIGNATURE_VERSION,
+        signature,
+        cachedAt: new Date().toISOString(),
+        payload,
+      },
+      null,
+      2,
+    )
+    await fs.writeFile(REPORT_CACHE_FILE, body, 'utf8')
+  } catch (error) {
+    console.warn(`[lvreport] cache write failed: ${error?.message || error}`)
+  }
+}
+
+async function statFingerprint(target) {
+  try {
+    const stat = await fs.stat(target)
+    const mtime = Math.floor(Number(stat.mtimeMs || 0))
+    if (stat.isDirectory()) {
+      return `dir:${mtime}`
+    }
+    return `file:${stat.size}:${mtime}`
+  } catch {
+    return 'missing'
+  }
+}
+
+async function computeSignature() {
+  const entries = []
+  for (const target of CACHE_SIGNATURE_TARGETS) {
+    const key = path.relative(PROJECT_ROOT, target) || path.resolve(target)
+    const fingerprint = await statFingerprint(target)
+    entries.push([key, fingerprint])
+  }
+  entries.sort((a, b) => a[0].localeCompare(b[0]))
+  return { version: CACHE_SIGNATURE_VERSION, entries }
+}
+
+function signaturesEqual(a, b) {
+  if (!a || !b) return false
+  if (a.version !== b.version) return false
+  if (!Array.isArray(a.entries) || !Array.isArray(b.entries)) return false
+  if (a.entries.length !== b.entries.length) return false
+  for (let index = 0; index < a.entries.length; index++) {
+    const [aKey, aFingerprint] = a.entries[index]
+    const [bKey, bFingerprint] = b.entries[index]
+    if (aKey !== bKey || aFingerprint !== bFingerprint) {
+      return false
+    }
+  }
+  return true
 }
 
 // Build a reverse lookup mapping absolute paths to URL metadata. The
@@ -189,7 +281,11 @@ function parseRobots(text) {
       if (r.type === 'sitemap') merged.sitemaps.push(r.path)
     }
   }
-  return { groups, merged, other, hasRules: ruleCount > 0 }
+  const serializableGroups = groups.map((group) => ({
+    agents: Array.from(group.agents ?? []),
+    rules: group.rules.map((rule) => ({ ...rule })),
+  }))
+  return { groups: serializableGroups, merged, other, hasRules: ruleCount > 0 }
 }
 
 // Classify sitemap URLs by content type. The crawler sets a
@@ -551,7 +647,7 @@ function makeBreakdown(counts, meta, total) {
 // The main data loader. Returns an object with all the data needed
 // for the report template. See report.njk for details on how these
 // values are consumed.
-export default async function() {
+async function buildReportData() {
   // Load primary data files. Missing files are tolerated.
   const [summary, urlmeta, blacklist, allImages, allProducts, runsHistory, manifest] = await Promise
     .all([
@@ -1102,4 +1198,20 @@ export default async function() {
       pages: uniquePagesCount,
     },
   }
+}
+
+export default async function() {
+  if (process.env.LVREPORT_DISABLE_CACHE === '1') {
+    return buildReportData()
+  }
+
+  const signature = await computeSignature()
+  const cached = await readCachedReport()
+  if (cached && signaturesEqual(signature, cached.signature)) {
+    return cached.payload
+  }
+
+  const payload = await buildReportData()
+  await writeCachedReport(signature, payload)
+  return payload
 }

@@ -228,6 +228,11 @@ export default function(eleventyConfig) {
           .replace(/[^\da-z]+/g, '-')
         return `${s}-${width}.${format}`
       },
+      cacheOptions: {
+        directory: path.join(projectRoot, '.cache', 'eleventy-img'),
+        removeUrlQueryParams: false,
+        duration: '6w',
+      },
     })
   }
 
