@@ -11,7 +11,7 @@
 import { createHash } from 'node:crypto'
 import { once } from 'node:events'
 import { createWriteStream } from 'node:fs'
-import { mkdir, readFile, writeFile } from 'node:fs/promises'
+import { mkdir, readFile, writeFile, appendFile } from 'node:fs/promises'
 import path from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 import { gunzipSync } from 'node:zlib'
@@ -45,6 +45,8 @@ const allImagesPath = path.join(genDir, 'all-images.json')
 const allProductsPath = path.join(genDir, 'all-products.json')
 
 const hostsTxtPath = path.join(baseDir, './config/hosts.txt')
+const hostsBannedPath = path.join(baseDir, './config/hosts.banned.ndjson')
+const hostsActiveSnapshotPath = path.join(baseDir, './config/hosts.active.snapshot.txt')
 
 const bloomPath = path.join(cacheDir, 'seen.bloom.json')
 const summaryPath = path.join(genDir, 'summary.json')
@@ -508,6 +510,39 @@ class Crawler {
       hosts.map((host) => this.limiter(() => this._discoverHost(host))),
     )
 
+    const zeroSitemapResults = discoveryResults.filter(
+      (result) => result && (!Array.isArray(result.sitemaps) || result.sitemaps.length === 0),
+    )
+
+    const bannedHosts = zeroSitemapResults.map((r) => r.host)
+    const bannedSet = new Set(bannedHosts)
+
+    if (bannedHosts.length > 0) {
+      await mkdir(path.dirname(hostsBannedPath), { recursive: true })
+      const nowIso = new Date().toISOString()
+      const lines = bannedHosts
+        .map((host) =>
+          `${JSON.stringify({ host, reason: 'zero-content-sitemaps', discoveredAt: nowIso })}\n`,
+        )
+        .join('')
+      await appendFile(hostsBannedPath, lines, 'utf8')
+
+      console.log(
+        `\n🚫 Banned ${bannedHosts.length} host(s) → ${path.relative(process.cwd(), hostsBannedPath)}`,
+      )
+      bannedHosts.forEach((host) => console.log(`   - ${host}`))
+
+      const updatedHosts = hosts.filter((host) => !bannedSet.has(host))
+      const serialized = updatedHosts.length > 0 ? `${updatedHosts.join('\n')}\n` : ''
+      await writeFile(hostsTxtPath, serialized, 'utf8')
+      await writeFile(hostsActiveSnapshotPath, serialized, 'utf8')
+      console.log(
+        `📝 hosts.txt rewritten (active=${updatedHosts.length}, removed=${bannedHosts.length})`,
+      )
+    } else {
+      console.log('\n✅ No zero-sitemap hosts to ban in this run.')
+    }
+
     // Save per-host sitemap lists
     await Promise.all(
       discoveryResults.filter(Boolean).map(async (result) => {
@@ -557,10 +592,15 @@ class Crawler {
       version: '2025.09.21-pw',
       totals: {
         hosts: hosts.length,
+        hostsActive: hosts.length - bannedHosts.length,
         sitemapsProcessed: sitemapsLog.length,
         itemsFound: totalProcessedThisRun,
         newItems: totalNewThisRun,
         duplicates: duplicatesDuringRun,
+      },
+      bans: {
+        zeroContentSitemaps: bannedHosts,
+        count: bannedHosts.length,
       },
       sitemaps: sitemapsLog.sort((a, b) => b.itemCount - a.itemCount),
     }
