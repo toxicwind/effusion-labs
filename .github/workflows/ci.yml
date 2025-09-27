@@ -47,18 +47,7 @@ jobs:
         run: npm ci --no-audit --no-fund
 
       - name: 🧊 Install Chromium
-        run: |
-          set -Eeuo pipefail
-          if ! command -v chromium >/dev/null 2>&1 && ! command -v chromium-browser >/dev/null 2>&1; then
-            sudo apt-get update
-            sudo apt-get install -y chromium || sudo apt-get install -y chromium-browser
-          fi
-          CHROMIUM_BIN="$(command -v chromium || command -v chromium-browser || true)"
-          if [[ -z "$CHROMIUM_BIN" ]]; then
-            echo "Chromium install failed" >&2
-            exit 1
-          fi
-          echo "PUPPETEER_EXECUTABLE_PATH=$CHROMIUM_BIN" >> "$GITHUB_ENV"
+        run: ./bin/install-chromium.sh
 
       - name: ✅ Verify Chromium wiring
         run: node tools/check-chromium.mjs
@@ -82,18 +71,7 @@ jobs:
       - run: npm ci --no-audit --no-fund
 
       - name: 🧊 Install Chromium
-        run: |
-          set -Eeuo pipefail
-          if ! command -v chromium >/dev/null 2>&1 && ! command -v chromium-browser >/dev/null 2>&1; then
-            sudo apt-get update
-            sudo apt-get install -y chromium || sudo apt-get install -y chromium-browser
-          fi
-          CHROMIUM_BIN="$(command -v chromium || command -v chromium-browser || true)"
-          if [[ -z "$CHROMIUM_BIN" ]]; then
-            echo "Chromium install failed" >&2
-            exit 1
-          fi
-          echo "PUPPETEER_EXECUTABLE_PATH=$CHROMIUM_BIN" >> "$GITHUB_ENV"
+        run: ./bin/install-chromium.sh
 
       - name: ✅ Verify Chromium wiring
         run: node tools/check-chromium.mjs
@@ -118,18 +96,7 @@ jobs:
       - run: npm ci --no-audit --no-fund
 
       - name: 🧊 Install Chromium
-        run: |
-          set -Eeuo pipefail
-          if ! command -v chromium >/dev/null 2>&1 && ! command -v chromium-browser >/dev/null 2>&1; then
-            sudo apt-get update
-            sudo apt-get install -y chromium || sudo apt-get install -y chromium-browser
-          fi
-          CHROMIUM_BIN="$(command -v chromium || command -v chromium-browser || true)"
-          if [[ -z "$CHROMIUM_BIN" ]]; then
-            echo "Chromium install failed" >&2
-            exit 1
-          fi
-          echo "PUPPETEER_EXECUTABLE_PATH=$CHROMIUM_BIN" >> "$GITHUB_ENV"
+        run: ./bin/install-chromium.sh
 
       - name: ✅ Verify Chromium wiring
         run: node tools/check-chromium.mjs
