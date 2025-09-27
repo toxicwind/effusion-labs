@@ -1,3 +1,5 @@
+console.log('[lvreport] global data module loaded')
+
 import fss from 'node:fs'
 import fs from 'node:fs/promises'
 import path from 'node:path'
@@ -698,6 +700,21 @@ const PAGINATION_DEFAULT_SIZES = {
   hostStats: 160,
 }
 
+const MINI_SEARCH_OPTIONS = {
+  fields: ['title', 'description', 'section', 'tags'],
+  storeFields: ['id', 'section', 'title', 'description', 'href', 'badge', 'tags', 'meta'],
+  searchOptions: { prefix: true, fuzzy: 0.2 },
+}
+
+const EMPTY_PAGINATION_SECTIONS = Object.freeze({
+  sitemaps: [],
+  docs: [],
+  robots: [],
+  duplicates: [],
+  topProducts: [],
+  hostStats: [],
+})
+
 function paginateList(items, size) {
   const list = Array.isArray(items) ? items : []
   const numericSize = Number(size)
@@ -781,6 +798,100 @@ function buildPagination(sections, overrides = {}) {
   }
 
   return { sections: meta, pages }
+}
+
+function createEmptyReport(reason = 'missing-data') {
+  const { sections, pages } = buildPagination(EMPTY_PAGINATION_SECTIONS)
+  const search = {
+    documents: [],
+    index: new MiniSearch(MINI_SEARCH_OPTIONS).toJSON(),
+    options: MINI_SEARCH_OPTIONS,
+  }
+  return {
+    baseHref: '/content/projects/lv-images/generated/lv/',
+    summary: {},
+    sitemaps: [],
+    docs: [],
+    robots: [],
+    sample: [],
+    allImages: [],
+    allProducts: [],
+    runsHistory: [],
+    duplicates: [],
+    topProducts: [],
+    hostStats: [],
+    dataset: {
+      manifest: null,
+      manifestHref: '/content/projects/lv-images/generated/lv.bundle.json',
+      archiveHref: '/content/projects/lv-images/generated/lv.bundle.tgz',
+      archiveExists: false,
+      totals: { fileCount: 0, totalBytes: 0, sizeLabel: formatBytes(0) },
+      directories: [],
+      ndjson: { count: 0, latestShard: '' },
+      cache: { robotsFiles: 0, sitemapFiles: 0, urlmetaEntries: 0 },
+      warnings: reason ? ['empty-dataset', reason] : ['empty-dataset'],
+    },
+    metrics: {
+      robots: { total: 0, issues: 0, breakdown: [] },
+      docs: { total: 0, issues: 0, breakdown: [] },
+      items: { total: 0, added: 0, duplicates: 0, removed: 0, purged: 0, active: 0 },
+    },
+    totals: {
+      images: 0,
+      pages: 0,
+      hosts: 0,
+      sitemapsProcessed: 0,
+      itemsFound: 0,
+    },
+    pagination: sections,
+    pages,
+    search,
+    __lvreportFallbackReason: reason,
+  }
+}
+
+function ensureReportShape(report, { reason = 'invalid-report' } = {}) {
+  if (!report || typeof report !== 'object') {
+    return createEmptyReport(reason)
+  }
+
+  const sectionsSource = {
+    sitemaps: Array.isArray(report.sitemaps) ? report.sitemaps : [],
+    docs: Array.isArray(report.docs) ? report.docs : [],
+    robots: Array.isArray(report.robots) ? report.robots : [],
+    duplicates: Array.isArray(report.duplicates) ? report.duplicates : [],
+    topProducts: Array.isArray(report.topProducts) ? report.topProducts : [],
+    hostStats: Array.isArray(report.hostStats) ? report.hostStats : [],
+  }
+
+  let pagination = report.pagination
+  let pages = report.pages
+
+  if (!pagination || typeof pagination !== 'object' || !Array.isArray(pages) || pages.length === 0) {
+    const { sections, pages: rebuiltPages } = buildPagination(sectionsSource)
+    pagination = sections
+    pages = rebuiltPages
+  }
+
+  if (!Array.isArray(pages) || pages.length === 0) {
+    return createEmptyReport(reason)
+  }
+
+  const totals = {
+    images: Number(report?.totals?.images ?? report?.summary?.totals?.images ?? 0) || 0,
+    pages: Number(report?.totals?.pages ?? report?.summary?.totals?.pages ?? 0) || 0,
+    hosts: Number(report?.totals?.hosts ?? report?.summary?.totals?.hosts ?? 0) || 0,
+    sitemapsProcessed:
+      Number(report?.totals?.sitemapsProcessed ?? report?.summary?.totals?.sitemapsProcessed ?? 0) || 0,
+    itemsFound: Number(report?.totals?.itemsFound ?? report?.summary?.totals?.itemsFound ?? 0) || 0,
+  }
+
+  return {
+    ...report,
+    totals,
+    pagination,
+    pages,
+  }
 }
 
 function pushSearchDoc(target, doc = {}) {
@@ -1445,12 +1556,7 @@ async function buildReportData() {
     hostStats,
   })
 
-  const miniSearchOptions = {
-    fields: ['title', 'description', 'section', 'tags'],
-    storeFields: ['id', 'section', 'title', 'description', 'href', 'badge', 'tags', 'meta'],
-    searchOptions: { prefix: true, fuzzy: 0.2 },
-  }
-  const globalMiniSearch = new MiniSearch(miniSearchOptions)
+  const globalMiniSearch = new MiniSearch(MINI_SEARCH_OPTIONS)
   if (searchDocuments.length) {
     globalMiniSearch.addAll(searchDocuments)
   }
@@ -1458,7 +1564,7 @@ async function buildReportData() {
   const search = {
     documents: searchDocuments,
     index: globalMiniSearch.toJSON(),
-    options: miniSearchOptions,
+    options: MINI_SEARCH_OPTIONS,
   }
 
   return {
@@ -1507,7 +1613,8 @@ export async function buildAndPersistReport({
   log = null,
 } = {}) {
   const signature = providedSignature || (await computeSignature())
-  const payload = await buildReportData()
+  const rawPayload = await buildReportData()
+  const payload = ensureReportShape(rawPayload, { reason: 'build-report-invalid' })
   if (writeCache || writeDataset) {
     await persistReportOutputs(signature, payload, { writeCache, writeDataset })
   }
@@ -1525,36 +1632,74 @@ export async function buildAndPersistReport({
 }
 
 export default async function() {
-  const signature = await computeSignature()
+  console.log('[lvreport] default export invoked')
+  try {
+    const signature = await computeSignature()
 
-  if (process.env.LVREPORT_DISABLE_CACHE === '1') {
-    const { payload } = await buildAndPersistReport({
-      signature,
-      writeCache: false,
-      writeDataset: false,
-    })
-    return payload
-  }
-
-  const datasetCached = await readDatasetReport()
-  const datasetPayload = datasetCached?.payload
-  const datasetFresh =
-    datasetPayload && Array.isArray(datasetPayload.pages) && datasetPayload.pages.length > 0
-  if (datasetCached && datasetFresh && signaturesEqual(signature, datasetCached.signature)) {
-    const cached = await readCachedReport()
-    if (!cached || !signaturesEqual(signature, cached.signature)) {
-      await writeCachedReport(signature, datasetPayload)
+    const rebuild = async (reason) => {
+      const { payload } = await buildAndPersistReport({ signature })
+      const report = ensureReportShape(payload, { reason })
+      if (process.env.DEBUG_LVREPORT === '1') {
+        console.log(
+          '[lvreport] rebuilt payload pages=',
+          Array.isArray(report?.pages) ? report.pages.length : 'missing',
+        )
+      }
+      return report
     }
-    return datasetPayload
-  }
 
-  const cached = await readCachedReport()
-  if (cached && signaturesEqual(signature, cached.signature)) {
-    return cached.payload
-  }
+    if (process.env.LVREPORT_DISABLE_CACHE === '1') {
+      const { payload } = await buildAndPersistReport({
+        signature,
+        writeCache: false,
+        writeDataset: false,
+      })
+      return ensureReportShape(payload, { reason: 'cache-disabled' })
+    }
 
-  const { payload } = await buildAndPersistReport({ signature })
-  return payload
+    const datasetCached = await readDatasetReport()
+    const datasetPayload = datasetCached?.payload
+    const datasetMatch = datasetCached && signaturesEqual(signature, datasetCached.signature)
+    if (datasetMatch && datasetPayload) {
+      let report = ensureReportShape(datasetPayload, { reason: 'dataset-cached' })
+      if (report.__lvreportFallbackReason) {
+        report = await rebuild('dataset-fallback')
+      } else {
+        const cached = await readCachedReport()
+        if (!cached || !signaturesEqual(signature, cached.signature)) {
+          await writeCachedReport(signature, report)
+        }
+        if (process.env.DEBUG_LVREPORT === '1') {
+          console.log(
+            '[lvreport] dataset payload (cached) pages=',
+            Array.isArray(report?.pages) ? report.pages.length : 'missing',
+          )
+        }
+        return report
+      }
+      return report
+    }
+
+    const cached = await readCachedReport()
+    if (cached && signaturesEqual(signature, cached.signature)) {
+      let report = ensureReportShape(cached.payload, { reason: 'cache-hit' })
+      if (report.__lvreportFallbackReason) {
+        report = await rebuild('cache-fallback')
+      }
+      if (process.env.DEBUG_LVREPORT === '1') {
+        console.log(
+          '[lvreport] cached payload pages=',
+          Array.isArray(report?.pages) ? report.pages.length : 'missing',
+        )
+      }
+      return report
+    }
+
+    return await rebuild('fresh-rebuild')
+  } catch (error) {
+    console.error('[lvreport] failed to load dataset:', error?.message || error)
+    return createEmptyReport('load-error')
+  }
 }
 
 export {

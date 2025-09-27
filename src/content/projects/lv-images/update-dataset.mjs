@@ -235,16 +235,31 @@ let pwBrowser = null;
 let pwCtx = null;
 
 async function startPlaywright() {
-  pwBrowser = await chromium.launch({ headless: true, executablePath: resolveChromium() });
+  pwBrowser = await chromium.launch({
+    headless: true,
+    executablePath: resolveChromium(),
+    args: [
+      "--disable-http-cache",
+      "--disk-cache-size=0",
+      "--media-cache-size=0",
+      "--disable-application-cache",
+      "--disable-offline-auto-reload",
+      "--disable-background-networking",
+    ],
+  });
   pwCtx = await pwBrowser.newContext({
     userAgent: USER_AGENT,
     ignoreHTTPSErrors: true,
+    bypassCSP: true,
     extraHTTPHeaders: {
       "accept-language": "en-US,en;q=0.8",
-      "cache-control": "no-cache",
-      "pragma": "no-cache",
+      "cache-control": "no-store, max-age=0, must-revalidate",
+      pragma: "no-cache",
+      expires: "0",
     },
   });
+  await pwCtx.setDefaultNavigationTimeout(TIMEOUT_MS);
+  await pwCtx.setDefaultTimeout(TIMEOUT_MS);
 }
 async function stopPlaywright() {
   try { await pwCtx?.close(); } catch { }
@@ -268,15 +283,19 @@ class Crawler {
         "user-agent": USER_AGENT,
         accept: "text/plain,*/*;q=0.3",
         "accept-language": "en-US,en;q=0.8",
-        "cache-control": "no-cache",
+        "cache-control": "no-store, max-age=0, must-revalidate",
         pragma: "no-cache",
+        expires: "0",
+        "if-modified-since": "Thu, 01 Jan 1970 00:00:00 GMT",
       }
       : {
         "user-agent": USER_AGENT,
         accept: "application/xml,text/xml;q=0.9,*/*;q=0.2",
         "accept-language": "en-US,en;q=0.8",
-        "cache-control": "no-cache",
+        "cache-control": "no-store, max-age=0, must-revalidate",
         pragma: "no-cache",
+        expires: "0",
+        "if-modified-since": "Thu, 01 Jan 1970 00:00:00 GMT",
       };
   }
 
@@ -336,16 +355,7 @@ class Crawler {
   }
 
   async _fetchAndCache(url, { forceRefresh = false } = {}) {
-    let cached = null;
-    if (!forceRefresh) {
-      cached = await cache.read(url);
-      if (cached) {
-        return { text: cached.text, fromCache: true, cachePath: cached.path, status: "", contentType: "" };
-      }
-    } else {
-      cached = await cache.read(url);
-    }
-
+    const cached = forceRefresh ? null : await cache.read(url).catch(() => null);
     try {
       const res = await this._pwGet(url);
       return {
@@ -356,8 +366,16 @@ class Crawler {
         contentType: res.headers["content-type"] || "",
       };
     } catch (error) {
-      if (cached) {
-        return { text: cached.text, fromCache: true, cachePath: cached.path, status: "", contentType: "" };
+      if (!forceRefresh && cached) {
+        console.warn(`[lv-images] Network error for ${url}; using cached copy (${error?.message || error}).`);
+        return {
+          text: cached.text,
+          fromCache: true,
+          cachePath: cached.path,
+          status: "",
+          contentType: "",
+          error: error?.message || String(error),
+        };
       }
       return { error: error?.message || String(error) };
     }
@@ -389,7 +407,7 @@ class Crawler {
       if (!url || visited.has(url)) continue;
       visited.add(url);
 
-      const res = await this._fetchAndCache(url);
+      const res = await this._fetchAndCache(url, { forceRefresh: true });
       if (!res?.text || !isXmlLike(res.text)) continue;
 
       if (isSitemapIndex(res.text)) {
@@ -405,12 +423,23 @@ class Crawler {
   }
 
   async _processSitemap(url, writer, updateItemMeta) {
-    const hit = await cache.read(url);
-    const text = hit?.text || null;
-    if (!text) { console.log(`  - ⚠️ No cache for ${url}`); return 0; }
+    const res = await this._fetchAndCache(url, { forceRefresh: true });
+    if (!res?.text) {
+      const reason = res?.error ? ` (${res.error})` : "";
+      console.log(`  - ⚠️ Failed to refresh ${path.basename(url)}${reason}`);
+      return { processed: 0, newItems: 0, duplicates: 0 };
+    }
+    if (res.fromCache) {
+      console.log(`  - ⚠️ Using cached copy for ${path.basename(url)} (network fallback)`);
+    }
 
-    let itemCount = 0;
+    const text = res.text;
+
+    let processedCount = 0;
+    let newItemCount = 0;
+    let duplicateCount = 0;
     for (const item of iterSitemapItems(text)) {
+      processedCount++;
       const id = shortId(item.src);
       const dupOf = updateItemMeta(id, {
         src: item.src,
@@ -421,14 +450,20 @@ class Crawler {
         sitemap: url,
         itemType: item.itemType || "image",
       });
-      if (!dupOf && !this.seenBloom.has(id)) {
+      const alreadySeen = this.seenBloom.has(id);
+      const isDuplicate = Boolean(dupOf) || alreadySeen;
+      if (!isDuplicate) {
         await writer.write({ ...item, id, host: hostOf(url), sitemap: url });
         this.seenBloom.add(id);
-        itemCount++;
+        newItemCount++;
+      } else {
+        duplicateCount++;
       }
     }
-    console.log(`  - Parsed ${itemCount} new items from ${path.basename(url)}`);
-    return itemCount;
+    console.log(
+      `  - Parsed ${processedCount} items from ${path.basename(url)} (new: ${newItemCount}, duplicates: ${duplicateCount})`,
+    );
+    return { processed: processedCount, newItems: newItemCount, duplicates: duplicateCount };
   }
 
   async run(hosts, updateItemMeta) {
@@ -458,12 +493,24 @@ class Crawler {
     console.log(`\n⚙️ Processing ${sitemapQueue.length} sitemaps...`);
     const writer = new NdjsonWriter(this.config.itemsDir);
     const sitemapsLog = [];
+    let totalProcessedThisRun = 0;
+    let totalNewThisRun = 0;
+    let duplicatesDuringRun = 0;
 
     await Promise.all(
       sitemapQueue.map((url) =>
         this.limiter(async () => {
-          const itemCount = await this._processSitemap(url, writer, updateItemMeta);
-          sitemapsLog.push({ host: hostOf(url), url, itemCount });
+          const stats = await this._processSitemap(url, writer, updateItemMeta);
+          totalProcessedThisRun += stats.processed;
+          totalNewThisRun += stats.newItems;
+          duplicatesDuringRun += stats.duplicates;
+          sitemapsLog.push({
+            host: hostOf(url),
+            url,
+            itemCount: stats.processed,
+            newItems: stats.newItems,
+            duplicates: stats.duplicates,
+          });
         })
       )
     );
@@ -472,7 +519,13 @@ class Crawler {
     return {
       generatedAt: new Date().toISOString(),
       version: "2025.09.21-pw",
-      totals: { hosts: hosts.length, sitemapsProcessed: sitemapsLog.length, itemsFound: writer.totalItems },
+      totals: {
+        hosts: hosts.length,
+        sitemapsProcessed: sitemapsLog.length,
+        itemsFound: totalProcessedThisRun,
+        newItems: totalNewThisRun,
+        duplicates: duplicatesDuringRun,
+      },
       sitemaps: sitemapsLog.sort((a, b) => b.itemCount - a.itemCount),
     };
   }
@@ -626,7 +679,10 @@ async function main() {
 
   summary.items = {
     added: newItemsCount,
+    processed: Number(summary?.totals?.itemsFound ?? 0),
+    discovered: Number(summary?.totals?.newItems ?? newItemsCount),
     duplicates: duplicateItemsCount,
+    duplicatesThisRun: Number(summary?.totals?.duplicates ?? 0),
     removed: removedThisRun,
     purged: purgedCount,
     active: activeCount,
@@ -727,7 +783,7 @@ async function main() {
 
   console.log(`\n📊 Summary → ${path.relative(process.cwd(), summaryPath)}`);
   console.log(
-    `   Found (this run): ${summary.totals.itemsFound.toLocaleString()} | New: ${newItemsCount} | Removed: ${removedThisRun} | Active: ${activeCount} | Total: ${totalCount}`
+    `   Processed: ${Number(summary.totals.itemsFound || 0).toLocaleString()} | New: ${newItemsCount.toLocaleString()} | Duplicates: ${Number(summary.items.duplicatesThisRun || 0).toLocaleString()} | Removed: ${removedThisRun.toLocaleString()} | Active: ${activeCount.toLocaleString()} | Total indexed: ${totalCount.toLocaleString()}`
   );
 
   await stopPlaywright();

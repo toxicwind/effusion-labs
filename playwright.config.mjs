@@ -18,7 +18,21 @@ export default defineConfig({
     browserName: 'chromium',
     launchOptions: {
       executablePath: EXECUTABLE_PATH,
+      args: [
+        '--disable-http-cache',
+        '--disk-cache-size=0',
+        '--media-cache-size=0',
+        '--disable-application-cache',
+        '--disable-offline-auto-reload',
+        '--disable-background-networking',
+      ],
     },
+    extraHTTPHeaders: {
+      'cache-control': 'no-store, max-age=0, must-revalidate',
+      pragma: 'no-cache',
+      expires: '0',
+    },
+    ignoreHTTPSErrors: true,
   },
   projects: [
     {

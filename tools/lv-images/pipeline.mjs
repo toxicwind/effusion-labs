@@ -24,15 +24,21 @@ const eleventyCmd = path.join(projectRoot, 'node_modules', '@11ty', 'eleventy', 
 const COMMAND_ALIASES = new Map([
   ['bundle', 'bundle'],
   ['pack', 'bundle'],
+  ['refresh', 'update'],
+  ['update', 'update'],
   ['hydrate', 'hydrate'],
   ['restore', 'hydrate'],
   ['verify', 'verify'],
   ['check', 'verify'],
   ['normalize', 'normalize'],
-  ['sync', 'sync'],
-  ['update', 'update'],
   ['stats', 'stats'],
+  ['sync', 'sync'],
+  ['full', 'build-local-fullinternet'],
   ['build-local-fullinternet', 'build-local-fullinternet'],
+  ['offline', 'build-local-offline'],
+  ['local', 'build-local-offline'],
+  ['build', 'build-gitactions'],
+  ['ci', 'build-gitactions'],
   ['build-local-offline', 'build-local-offline'],
   ['build-gitactions', 'build-gitactions'],
 ])
@@ -225,6 +231,7 @@ async function buildLocalOffline(args) {
   const keep = scenario.includes('--keep')
   await runHydrate({ force: !keep })
   await runVerify({ strict: false })
+  await runReportBuild({ reason: keep ? 'build-local-offline-keep' : 'build-local-offline' })
   await runEleventy({ offline: true, eleventyArgs: eleventy })
 }
 
@@ -233,12 +240,13 @@ async function buildGitActions(args) {
   await runHydrate({ force: true })
   await runVerify({ strict: true })
   const defaultArgs = eleventy.length ? eleventy : ['--quiet']
+  await runReportBuild({ reason: 'build-gitactions' })
   await runEleventy({ offline: true, eleventyArgs: defaultArgs })
 }
 
 function usage() {
   console.log(
-    `LV images pipeline\n\nUsage: node tools/lv-images/pipeline.mjs <command> [options]\n\nCommands:\n  update                         Fetch the latest dataset via Playwright\n  bundle|pack                    Create lv.bundle.tgz and manifest\n  hydrate [--keep]               Restore generated/lv from bundle\n  verify [--soft]                Check archive + manifest integrity\n  normalize                      Fix urlmeta paths inside cache\n  stats                          Print dataset file/size stats\n  sync                           update + bundle + verify\n  build-local-fullinternet [-- ... eleventy]\n                                 Full local build with network crawl\n  build-local-offline [--keep] [-- ... eleventy]\n                                 Hydrate + offline Eleventy build\n  build-gitactions [-- ... eleventy]\n                                 Hydrate + verify + offline Eleventy (strict)\n`,
+    `LV images pipeline\n\nUsage: node tools/lv-images/pipeline.mjs <command> [options]\n\nCommands:\n  update|refresh                 Fetch the latest dataset via Playwright\n  bundle|pack                    Create lv.bundle.tgz and manifest\n  hydrate [--keep]               Restore generated/lv from bundle\n  verify [--soft]                Check archive + manifest integrity\n  normalize                      Fix urlmeta paths inside cache\n  stats                          Print dataset file/size stats\n  sync                           update + bundle + verify\n  build|ci [-- ... eleventy]     Hydrate + verify + offline Eleventy (strict)\n  build-local-fullinternet [-- ... eleventy]\n                                 Full local build with network crawl\n  offline|local [--keep] [-- ... eleventy]\n                                 Hydrate + verify + offline Eleventy build\n`,
   )
 }
 
@@ -289,7 +297,7 @@ async function main() {
       case '-h':
       default:
         usage()
-        if (command !== 'help') process.exitCode = 1
+        if (!['help', '--help', '-h'].includes(command)) process.exitCode = 1
     }
   } catch (error) {
     console.error('[lv-images] Fatal:', error?.message || error)

@@ -69,11 +69,15 @@ and guard against restricted CI environments.
 
 ### Tooling & Datasets
 
-All LV Images routines sit under `tools:lv-images:*` so CI never calls them implicitly. Notable
-commands:
+All LV Images routines now flow through `npm run lv-images`. Five opinionated scripts cover the
+common paths while still allowing `npm run lv-images -- <command>` for anything advanced:
 
-- `tools:lv-images:hydrate` — restore the bundled dataset.
-- `tools:lv-images:build:ci` — deterministic hydrate + offline Eleventy build profile.
+- `lv-images:refresh` — full Playwright crawl with caching disabled at the browser level.
+- `lv-images:sync` — refresh + bundle + verify for a shippable snapshot.
+- `lv-images:bundle` — regenerate `lv.bundle.tgz` without touching the crawl.
+- `lv-images:build` — hydrate, verify, and run the offline Eleventy build (CI profile).
+- `lv-images` — direct access to the pipeline CLI (`npm run lv-images -- stats`, etc.).
+
 - `tools:apply-patches` / `tools:check-patches` — wrap `tools/apply-patches.mjs` for manual patch
   management.
 - `tools:run-if-network` — helper used by lint scripts to enforce the network contract.
