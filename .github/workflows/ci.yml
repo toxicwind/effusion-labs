@@ -63,7 +63,7 @@ jobs:
       - name: ✅ Verify Chromium wiring
         run: node tools/check-chromium.mjs
 
-      - name: 🧽 Run soft lint suite
+      - name: 🧽 Run soft quality suite
         run: ./bin/lint-soft.sh
 
   test:

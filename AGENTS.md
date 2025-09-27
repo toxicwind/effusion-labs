@@ -23,29 +23,31 @@ Project facts for tools and agents. No meta-instructions.
 
 ## Commands (npm scripts)
 
-| Script          | Command                                                                                                                          |
-| --------------- | -------------------------------------------------------------------------------------------------------------------------------- |
-| start / serve   | `npx @11ty/eleventy --serve`                                                                                                     |
-| watch           | `npx @11ty/eleventy --watch`                                                                                                     |
-| bench           | `DEBUG=Eleventy:Benchmark* npx @11ty/eleventy`                                                                                   |
-| build           | `npx @11ty/eleventy`                                                                                                             |
-| clean           | `del-cli _site`                                                                                                                  |
-| format          | `dprint fmt -c dprint.json`                                                                                                      |
-| format:check    | `dprint check -c dprint.json`                                                                                                    |
-| format:classes  | `rustywind --write "src/**/*.{njk,html,js,jsx,ts,tsx}"`                                                                          |
-| format:all      | `npm run format:classes && npm run format`                                                                                       |
-| lint            | `npm-run-all --parallel lint:js lint:links`                                                                                      |
-| lint:js         | `eslint "src/**/*.{js,mjs,ts,tsx}" "tools/**/*.mjs" "mcp-stack/**/*.mjs" eleventy.config.mjs --report-unused-disable-directives` |
-| lint:fix        | same targets as `lint:js` with `--fix`                                                                                           |
-| lint:links      | `markdown-link-check -c oneoff/link-check.config.json README.md`                                                                 |
-| dead (variants) | `knip` report tasks (`dead`, `dead:prod`, `dead:strict`, etc.)                                                                   |
-| test            | `c8 node test/integration/runner.spec.mjs`                                                                                       |
-| test:watch      | `node --watch test/integration/runner.spec.mjs`                                                                                  |
-| test:playwright | `playwright test`                                                                                                                |
-| check           | `npm run doctor && npm run format:check && npm run lint && npm run test`                                                         |
-| doctor          | `node tools/doctor.mjs`                                                                                                          |
-| mcp:*           | MCP gateway + tests (`mcp:dev`, `mcp:integration`, `mcp:test`)                                                                   |
-| lv-images:*     | Dataset utilities                                                                                                                |
+| Script          | Command                                                                                                             |
+| --------------- | ------------------------------------------------------------------------------------------------------------------- |
+| start / dev     | `npx @11ty/eleventy --serve`                                                                                        |
+| clean           | `del-cli _site`                                                                                                     |
+| build           | `npm run build:site` (prebuild hooks run `node bin/quality.mjs apply`)                                              |
+| build:site      | `NODE_ENV=production npx @11ty/eleventy`                                                                            |
+| build:ci        | `node bin/quality.mjs check --soft && NODE_ENV=production npx @11ty/eleventy`                                      |
+| quality         | `node bin/quality.mjs`                                                                                              |
+| quality:apply   | `node bin/quality.mjs apply`                                                                                        |
+| quality:check   | `node bin/quality.mjs check`                                                                                        |
+| quality:ci      | `node bin/quality.mjs check --soft`                                                                                |
+| quality:report  | `node bin/quality.mjs check --soft --knip-report` (writes JSON + Markdown + CodeClimate reports)                      |
+| lint            | `npm run quality:check`                                                                                              |
+| lint:ci         | `npm run quality:ci`                                                                                                |
+| format          | `npm run quality:apply`                                                                                              |
+| links:check     | `node tools/run-if-network.mjs markdown-link-check -c oneoff/link-check.config.json README.md`                      |
+| links:ci        | `node tools/run-if-network.mjs markdown-link-check -c oneoff/link-check.config.json README.md || true`             |
+| lint:dead       | `npm run quality:report`                                                                                            |
+| test            | `node tools/check-chromium.mjs && c8 node test/integration/runner.spec.mjs`                                         |
+| test:watch      | `node tools/check-chromium.mjs && node --watch test/integration/runner.spec.mjs`                                    |
+| test:playwright | `node tools/check-chromium.mjs && playwright test`                                                                  |
+| check           | `npm run doctor && npm run quality:check && npm run test`                                                           |
+| doctor          | `node tools/doctor.mjs`                                                                                             |
+| mcp:*           | MCP gateway + tests (`mcp:dev`, `mcp:integration`, `mcp:test`)                                                      |
+| lv-images:*     | Dataset utilities                                                                                                   |
 
 > `postinstall` is handled by setup (Puppeteer CfT shims + tools/apply-patches.mjs).
 

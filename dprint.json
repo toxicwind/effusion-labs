@@ -33,10 +33,9 @@
   ],
 
   "includes": [
-    "src/**/*.{njk,html,js,mjs,ts,tsx,css,md,json,yml,yaml}",
-    "tools/**/*.{js,mjs,ts,md,json,yml,yaml}",
-    "mcp-stack/**/*.{mjs,js,ts,md,json,yml,yaml}",
-    "*.md",
+    "src/**/*.{njk,html,js,mjs,ts,tsx,css,json,yml,yaml}",
+    "tools/**/*.{js,mjs,ts,json,yml,yaml}",
+    "mcp-stack/**/*.{mjs,js,ts,json,yml,yaml}",
     "*.json",
     "*.yml",
     "*.yaml",
@@ -51,6 +50,7 @@
     "coverage",
     "src/content/docs/vendor",
     "src/content/docs/vendor/**",
-    "src/pages/feed.njk"
+    "src/pages/feed.njk",
+    "src/content/projects/**"
   ]
 }

@@ -38,12 +38,16 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y chromium || sudo apt-get install -y chromium-browser || true
 
-      - run: npm run lint:dead
+      - name: 🧮 Soft quality report
+        run: npm run quality:report
 
       - name: Upload report
         if: success()
         uses: actions/upload-artifact@v4
         with:
           name: knip-report
-          path: .knip-report.json
+          path: |
+            .knip-report.json
+            .knip-report.md
+            .knip-report.codeclimate.json
           if-no-files-found: ignore

@@ -36,6 +36,9 @@ Thumbs.db
 coverage/
 .llm-bash-env
 .dead-links.json
+.knip-report.json
+.knip-report.md
+.knip-report.codeclimate.json
 tmp/
 
 # HYPEBRUT sidecars
