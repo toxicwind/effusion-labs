@@ -1,1 +1,0 @@
-User-agent: *Disallow: /wishes_2020/Disallow: /wishes_2021/Disallow: /launchpack/

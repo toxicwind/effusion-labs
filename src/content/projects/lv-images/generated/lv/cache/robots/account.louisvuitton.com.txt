@@ -1,1 +1,0 @@
-User-agent: * # applies to all robotsDisallow: / # disallow all

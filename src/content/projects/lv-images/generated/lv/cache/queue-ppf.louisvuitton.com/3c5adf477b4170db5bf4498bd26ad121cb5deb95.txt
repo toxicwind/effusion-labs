@@ -1,4 +1,0 @@
-﻿User-agent: Googlebot, bingbot, BingPreview, Yandex, DuckDuckBot, AhrefsBot
-Allow: /
-User-agent: *
-Disallow: /

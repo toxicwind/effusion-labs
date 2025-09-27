@@ -1,1 +1,0 @@
-{"traceId":null,"date":"2025-09-27T09:06:59.352Z","path":"/sitemap.xml","statusCode":404,"errors":[{"errorCode":"genericError","message":null,"scope":null}],"error":"Not found","message":"Cannot GET /sitemap.xml","details":null}

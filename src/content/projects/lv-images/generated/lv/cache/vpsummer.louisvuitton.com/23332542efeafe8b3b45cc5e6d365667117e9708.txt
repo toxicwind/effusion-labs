@@ -1,7 +1,0 @@
-User-agent: *
-Disallow: /wp-admin/
-Allow: /wp-admin/admin-ajax.php
-
-Sitemap: https://www.olyv.co.in/blog/sitemap.xml
-#Sitemap: https://www.olyv.co.in/blog/sitemap.rss
-Sitemap: https://www.olyv.co.in/blog/sitemap_index.xml
