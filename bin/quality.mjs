@@ -2,7 +2,7 @@
 import { spawn } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { dirname, join, delimiter as PATH_DELIM } from 'node:path';
-import { writeFile } from 'node:fs/promises';
+import { appendFile, writeFile } from 'node:fs/promises';
 import process from 'node:process';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -20,6 +20,8 @@ const KNIP_REPORT_TARGETS = [
   { reporter: 'markdown', file: '.knip-report.md', format: 'text' },
   { reporter: 'codeclimate', file: '.knip-report.codeclimate.json', format: 'json' }
 ];
+const STEP_SUMMARY_PATH = process.env.GITHUB_STEP_SUMMARY;
+const SUMMARY_ENABLED = Boolean(STEP_SUMMARY_PATH);
 
 for (const arg of rawArgs) {
   if (arg === 'apply' || arg === '--apply') {
@@ -75,7 +77,7 @@ const TASKS = [
 
 function runCommand(command, args, { capture = false } = {}) {
   return new Promise(resolve => {
-    const stdio = capture ? ['inherit', 'pipe', 'inherit'] : 'inherit';
+    const stdio = capture ? ['inherit', 'pipe', 'pipe'] : 'inherit';
     const child = spawn(command, args, {
       cwd: REPO_ROOT,
       shell: false,
@@ -84,14 +86,24 @@ function runCommand(command, args, { capture = false } = {}) {
     });
 
     let stdout = '';
+    let stderr = '';
     if (capture && child.stdout) {
       child.stdout.on('data', chunk => {
-        stdout += chunk.toString();
+        const text = chunk.toString();
+        stdout += text;
+        process.stdout.write(text);
+      });
+    }
+    if (capture && child.stderr) {
+      child.stderr.on('data', chunk => {
+        const text = chunk.toString();
+        stderr += text;
+        process.stderr.write(text);
       });
     }
 
     child.on('close', code => {
-      resolve({ code: code ?? 0, stdout });
+      resolve({ code: code ?? 0, stdout, stderr });
     });
   });
 }
@@ -145,19 +157,72 @@ async function writeKnipReports() {
   }
 }
 
+function tailLines(input, limit = 400) {
+  if (!input) return '';
+  const lines = input.trimEnd().split(/\r?\n/);
+  if (lines.length <= limit) return lines.join('\n');
+  return lines.slice(-limit).join('\n');
+}
+
+async function appendQualitySummary(entries, { mode, soft, knipReport: includeKnipReport, failures }) {
+  if (!SUMMARY_ENABLED || !entries.length) return;
+  const softLabel = soft ? 'enabled' : 'disabled';
+  const lines = ['## 🧹 Quality Suite'];
+  lines.push('> Mode: `' + mode + '` · Soft failures: ' + softLabel);
+  lines.push('');
+
+  for (const entry of entries) {
+    const icon = entry.code === 0 ? '✅' : soft ? '⚠️' : '❌';
+    const combined = [entry.stdout, entry.stderr].filter(Boolean).join('\n').trim();
+    lines.push('### ' + icon + ' ' + entry.label);
+    lines.push('');
+    if (combined) {
+      lines.push('<details><summary>Open report</summary>');
+      lines.push('');
+      lines.push('```text');
+      lines.push(tailLines(combined));
+      lines.push('```');
+      lines.push('</details>');
+    } else {
+      lines.push('_No output captured._');
+    }
+    lines.push('');
+  }
+
+  if (includeKnipReport) {
+    lines.push('Artifacts: `.knip-report.json`, `.knip-report.md`, `.knip-report.codeclimate.json`');
+    lines.push('');
+  }
+
+  if (failures.length) {
+    lines.push('**Failures**');
+    for (const failure of failures) {
+      lines.push('- ' + failure.task + ' (exit ' + failure.code + ')');
+    }
+    lines.push('');
+  }
+
+  await appendFile(STEP_SUMMARY_PATH, lines.join('\n') + '\n');
+}
+
 (async () => {
   console.log(`Quality pipeline → mode: ${mode}, soft: ${soft ? 'yes' : 'no'}`);
   const failures = [];
+  const summaryEntries = [];
 
   for (const task of TASKS) {
     const spec = task.commands[mode];
     if (!spec) continue;
     console.log(`\n▶ ${task.label}`);
     const [command, ...args] = spec;
-    const { code } = await runCommand(command, args);
+    const { code, stdout, stderr } = await runCommand(command, args, { capture: SUMMARY_ENABLED });
     if (code !== 0) {
       failures.push({ task: task.label, code });
       console.error(`⚠ ${task.label} exited with code ${code}`);
+    }
+
+    if (SUMMARY_ENABLED) {
+      summaryEntries.push({ id: task.id, label: task.label, code, stdout, stderr });
     }
 
     if (task.id === 'knip' && knipReport) {
@@ -172,9 +237,8 @@ async function writeKnipReports() {
     }
   }
 
-  if (failures.length && !soft) {
-    process.exit(1);
-  }
+  const exitCode = failures.length && !soft ? 1 : 0;
+  await appendQualitySummary(summaryEntries, { mode, soft, knipReport, failures });
 
-  process.exit(0);
+  process.exit(exitCode);
 })();
