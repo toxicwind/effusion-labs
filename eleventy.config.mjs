@@ -8,7 +8,7 @@ import { fileURLToPath } from 'node:url'
 
 import EleventyVitePlugin from '@11ty/eleventy-plugin-vite'
 
-import { eleventyImageTransformPlugin } from '@11ty/eleventy-img'
+import localImageTransformPlugin from './src/lib/plugins/local-image-transform.mjs'
 import EleventyPluginNavigation from '@11ty/eleventy-navigation'
 import EleventyPluginRss from '@11ty/eleventy-plugin-rss'
 import EleventyPluginSyntaxhighlight from '@11ty/eleventy-plugin-syntaxhighlight'
@@ -198,7 +198,10 @@ export default function(eleventyConfig) {
         return (tree) => {
           tree.match({ tag: 'img' }, (node) => {
             const src = node?.attrs?.src
-            if (typeof src === 'string' && /^https?:\/\//i.test(src)) {
+            if (
+              typeof src === 'string' &&
+              (/^https?:\/\//i.test(src) || /^\/\//.test(src))
+            ) {
               node.attrs ||= {}
               if (!('eleventy:ignore' in node.attrs)) {
                 node.attrs['eleventy:ignore'] = ''
@@ -217,7 +220,7 @@ export default function(eleventyConfig) {
   const enableImagePlugin = !isTest || process.env.ELEVENTY_TEST_ENABLE_IMAGES === '1'
 
   if (enableImagePlugin) {
-    eleventyConfig.addPlugin(eleventyImageTransformPlugin, {
+    eleventyConfig.addPlugin(localImageTransformPlugin, {
       urlPath: '/images/',
       outputDir: path.join(dirs.output, 'images/'),
       formats: ['avif', 'webp', 'auto'],
