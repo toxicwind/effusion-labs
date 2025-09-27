@@ -412,7 +412,12 @@ class Crawler {
   async _discoverHost(host) {
     console.log(`\n🕵️ Discovering sitemaps for ${host}...`)
     const robotsUrl = `https://${host}/robots.txt`
+    const discoveryErrors = []
     const robotsRes = await this._fetchAndCache(robotsUrl, { forceRefresh: true })
+
+    if (robotsRes.error) {
+      discoveryErrors.push(`robots.txt → ${robotsRes.error}`)
+    }
 
     if (robotsRes.text) {
       const robotsTxtFile = path.join(robotsDir, `${host}.txt`)
@@ -436,6 +441,10 @@ class Crawler {
       visited.add(url)
 
       const res = await this._fetchAndCache(url, { forceRefresh: true })
+      if (res?.error) {
+        discoveryErrors.push(`${url} → ${res.error}`)
+        continue
+      }
       if (!res?.text || !isXmlLike(res.text)) continue
 
       if (isSitemapIndex(res.text)) {
@@ -455,6 +464,7 @@ class Crawler {
       host,
       sitemaps: [...finalSitemaps],
       robotsInfo: { url: robotsUrl, found: sitemapsFromRobots.length > 0 },
+      errors: discoveryErrors,
     }
   }
 
@@ -513,6 +523,82 @@ class Crawler {
     const zeroSitemapResults = discoveryResults.filter(
       (result) => result && (!Array.isArray(result.sitemaps) || result.sitemaps.length === 0),
     )
+    const zeroSitemapHosts = zeroSitemapResults.map((r) => r.host)
+
+    const zeroAnalyses = await Promise.all(
+      zeroSitemapResults.map(async (result) => {
+        const host = result.host
+        const errors = Array.isArray(result.errors) ? result.errors.filter(Boolean) : []
+        if (errors.length > 0) {
+          return { host, decision: 'error', errors }
+        }
+        const indexPath = path.join(cacheDir, host, '_index.json')
+        const raw = await readFile(indexPath, 'utf8').catch(() => null)
+        if (raw == null) {
+          return { host, decision: 'ban', history: { status: 'missing', count: 0 } }
+        }
+        try {
+          const parsed = JSON.parse(raw)
+          const priorCount = Array.isArray(parsed?.sitemaps) ? parsed.sitemaps.length : 0
+          if (priorCount > 0) {
+            return { host, decision: 'history', history: { status: 'parsed', count: priorCount } }
+          }
+          return { host, decision: 'ban', history: { status: 'parsed', count: priorCount } }
+        } catch {
+          return { host, decision: 'unknown', history: { status: 'unparseable', count: 0 } }
+        }
+      }),
+    )
+
+    const preservedDueToHistory = zeroAnalyses
+      .filter((entry) => entry.decision === 'history')
+      .map((entry) => entry.host)
+    const skippedDueToErrors = zeroAnalyses
+      .filter((entry) => entry.decision === 'error')
+      .map((entry) => entry.host)
+    const errorDetails = zeroAnalyses.filter((entry) => entry.decision === 'error')
+    const skippedDueToUnknownHistory = zeroAnalyses
+      .filter((entry) => entry.decision === 'unknown')
+      .map((entry) => entry.host)
+
+    const bannedCandidates = zeroAnalyses
+      .filter((entry) => entry.decision === 'ban')
+      .map((entry) => entry.host)
+
+    let massRemovalSafeguard = []
+    let bannedHosts = [...bannedCandidates]
+
+    if (bannedHosts.length && bannedHosts.length === hosts.length) {
+      massRemovalSafeguard = [...bannedHosts]
+      console.log(
+        '\n⚠️ Discovery flagged zero content sitemaps for every host; skipping ban enforcement to avoid wiping hosts.txt.',
+      )
+      bannedHosts = []
+    }
+
+    if (preservedDueToHistory.length > 0) {
+      console.log(`\n⏪ Preserved ${preservedDueToHistory.length} host(s) with historical sitemaps:`)
+      preservedDueToHistory.forEach((host) => console.log(`   - ${host}`))
+    }
+
+    if (skippedDueToUnknownHistory.length > 0) {
+      console.log(
+        `\n🛈 Skipped banning ${skippedDueToUnknownHistory.length} host(s) with unreadable cached discovery.`,
+      )
+      skippedDueToUnknownHistory.forEach((host) => console.log(`   - ${host}`))
+    }
+
+    if (errorDetails.length > 0) {
+      console.log(
+        `\n⚠️ Discovery errors encountered for ${errorDetails.length} host(s); bans skipped:`,
+      )
+      errorDetails.forEach((entry) => {
+        const detail = entry.errors?.[0] || 'unknown error'
+        console.log(`   - ${entry.host}: ${detail}`)
+      })
+    }
+
+
 
     const bannedResults = []
     for (const result of zeroSitemapResults) {
@@ -535,6 +621,7 @@ class Crawler {
     }
 
     const bannedHosts = bannedResults.map((r) => r.host)
+
     const bannedSet = new Set(bannedHosts)
 
     if (bannedHosts.length > 0) {
@@ -552,7 +639,18 @@ class Crawler {
       )
       bannedHosts.forEach((host) => console.log(`   - ${host}`))
 
-      if (this.config.noRewriteHosts) {
+
+      const updatedHosts = hosts.filter((host) => !bannedSet.has(host))
+      const serialized = updatedHosts.length > 0 ? `${updatedHosts.join('\n')}\n` : ''
+      await writeFile(hostsTxtPath, serialized, 'utf8')
+      await writeFile(hostsActiveSnapshotPath, serialized, 'utf8')
+      console.log(
+        `📝 hosts.txt rewritten (active=${updatedHosts.length}, removed=${bannedHosts.length})`,
+      )
+    } else if (zeroSitemapResults.length > 0) {
+      if (massRemovalSafeguard.length > 0) {
+        console.log('\n⚠️ Zero-sitemap bans skipped due to safeguard (all hosts affected).')
+      } else if (this.config.noRewriteHosts) {
         console.log('⚠️ Skipped hosts.txt rewrite due to --no-rewrite-hosts')
       } else {
         const updatedHosts = hosts.filter((host) => !bannedSet.has(host))
@@ -625,6 +723,12 @@ class Crawler {
       bans: {
         zeroContentSitemaps: bannedHosts,
         count: bannedHosts.length,
+        candidates: zeroSitemapHosts,
+        preservedDueToHistory,
+        skippedDueToErrors,
+        skippedDueToUnknownHistory,
+        massRemovalSafeguardTriggered: massRemovalSafeguard.length > 0,
+        massRemovalSafeguardHosts: massRemovalSafeguard,
         skippedRewrite: Boolean(this.config.noRewriteHosts && bannedHosts.length > 0),
       },
       sitemaps: sitemapsLog.sort((a, b) => b.itemCount - a.itemCount),
