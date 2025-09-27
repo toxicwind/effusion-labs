@@ -1,1 +1,1 @@
-{"traceId":null,"date":"2025-09-27T08:37:12.900Z","path":"/sitemap_index.xml","statusCode":404,"errors":[{"errorCode":"genericError","message":null,"scope":null}],"error":"Not found","message":"Cannot GET /sitemap_index.xml","details":null}
+{"traceId":null,"date":"2025-09-27T09:06:59.522Z","path":"/sitemap_index.xml","statusCode":404,"errors":[{"errorCode":"genericError","message":null,"scope":null}],"error":"Not found","message":"Cannot GET /sitemap_index.xml","details":null}
