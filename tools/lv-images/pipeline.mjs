@@ -2,7 +2,7 @@
 import { execFileSync, spawn } from 'node:child_process'
 import path from 'node:path'
 import process from 'node:process'
-import { fileURLToPath } from 'node:url'
+import { fileURLToPath, pathToFileURL } from 'node:url'
 
 import {
   bundleDataset,
@@ -99,6 +99,7 @@ async function runUpdate() {
   ensureChromiumReady()
   logStep('Refreshing dataset via Playwright (full network)')
   await spawnNodeScript(updateScript)
+  await runReportBuild({ reason: 'update' })
 }
 
 function logManifest(manifest) {
@@ -183,6 +184,29 @@ async function runEleventy({ offline = false, eleventyArgs = [] } = {}) {
   if (offline) env.BUILD_OFFLINE = '1'
   else delete env.BUILD_OFFLINE
   await spawnProcess(process.execPath, nodeArgs, { env })
+}
+
+async function runReportBuild({ reason = 'manual' } = {}) {
+  try {
+    const modulePath = path.join(projectRoot, 'src', '_data', 'lvreport.js')
+    const moduleUrl = pathToFileURL(modulePath).href
+    const { buildAndPersistReport, DATASET_REPORT_FILE } = await import(moduleUrl)
+    if (typeof buildAndPersistReport !== 'function') {
+      throw new Error('lvreport module missing buildAndPersistReport export')
+    }
+    logStep(`Rebuilding lvreport dataset cache (${reason})`)
+    const { payload } = await buildAndPersistReport({ log: logStep })
+    const totals = payload?.totals || {}
+    const relPath = DATASET_REPORT_FILE
+      ? path.relative(projectRoot, DATASET_REPORT_FILE)
+      : 'src/content/projects/lv-images/generated/lv/lvreport.dataset.json'
+    logStep(
+      `lvreport cached → ${relPath} (images=${totals.images ?? '?'}, pages=${totals.pages ?? '?'})`,
+    )
+  } catch (error) {
+    console.error(`[lv-images] lvreport build failed (${reason}):`, error?.message || error)
+    throw error
+  }
 }
 
 async function runSync() {

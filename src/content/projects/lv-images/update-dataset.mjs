@@ -12,7 +12,7 @@ import { createHash } from "node:crypto";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { createWriteStream } from "node:fs";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 import { once } from "node:events";
 import { gunzipSync } from "node:zlib";
 
@@ -683,6 +683,27 @@ async function main() {
   await saveJson(runsHistoryPath, runsHistory);
   await saveJson(allImagesPath, allImages);
   await saveJson(allProductsPath, allProducts);
+
+  console.log("\n🧮 Building lvreport dataset cache...");
+  try {
+    const lvreportModulePath = path.join(__dirname, "..", "..", "..", "_data", "lvreport.js");
+    const { buildAndPersistReport, DATASET_REPORT_FILE } = await import(
+      pathToFileURL(lvreportModulePath).href
+    );
+    const { payload } = await buildAndPersistReport({
+      log: (message) => console.log(`   ${message}`),
+    });
+    const totals = payload?.totals || {};
+    const relPath = DATASET_REPORT_FILE
+      ? path.relative(process.cwd(), DATASET_REPORT_FILE)
+      : "src/content/projects/lv-images/generated/lv/lvreport.dataset.json";
+    console.log(
+      `   lvreport cached → ${relPath} (images=${totals.images ?? "?"}, pages=${totals.pages ?? "?"})`,
+    );
+  } catch (error) {
+    console.error(`\n💥 Failed to build lvreport dataset: ${error?.message || error}`);
+    throw error;
+  }
 
   try {
     const manifest = await bundleDataset({ skipIfMissing: true, quiet: true });

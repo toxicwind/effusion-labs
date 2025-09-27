@@ -41,6 +41,7 @@ const BUNDLE_ARCHIVE_PATH = path.join(GENERATED_DIR, 'lv.bundle.tgz')
 const PROJECT_ROOT = path.resolve(__dirname, '..', '..')
 const DATA_CACHE_DIR = path.join(PROJECT_ROOT, '.cache', 'eleventy-data')
 const REPORT_CACHE_FILE = path.join(DATA_CACHE_DIR, 'lvreport.json')
+const DATASET_REPORT_FILE = path.join(LV_BASE, 'lvreport.dataset.json')
 const CACHE_SIGNATURE_VERSION = 1
 const CACHE_SIGNATURE_TARGETS = [
   SUMMARY_JSON,
@@ -108,6 +109,48 @@ async function writeCachedReport(signature, payload) {
   } catch (error) {
     console.warn(`[lvreport] cache write failed: ${error?.message || error}`)
   }
+}
+
+async function readDatasetReport() {
+  try {
+    const raw = await fs.readFile(DATASET_REPORT_FILE, 'utf8')
+    const parsed = JSON.parse(raw)
+    if (parsed?.cacheVersion !== CACHE_SIGNATURE_VERSION) {
+      return null
+    }
+    if (!parsed.signature || parsed.payload == null) {
+      return null
+    }
+    return parsed
+  } catch {
+    return null
+  }
+}
+
+async function writeDatasetReport(signature, payload) {
+  try {
+    await fs.mkdir(LV_BASE, { recursive: true })
+    const body = JSON.stringify(
+      {
+        cacheVersion: CACHE_SIGNATURE_VERSION,
+        signature,
+        cachedAt: new Date().toISOString(),
+        payload,
+      },
+      null,
+      2,
+    )
+    await fs.writeFile(DATASET_REPORT_FILE, body, 'utf8')
+  } catch (error) {
+    console.warn(`[lvreport] dataset cache write failed: ${error?.message || error}`)
+  }
+}
+
+async function persistReportOutputs(signature, payload, { writeCache = true, writeDataset = true } = {}) {
+  const tasks = []
+  if (writeCache) tasks.push(writeCachedReport(signature, payload))
+  if (writeDataset) tasks.push(writeDatasetReport(signature, payload))
+  await Promise.all(tasks)
 }
 
 async function statFingerprint(target) {
@@ -1200,18 +1243,66 @@ async function buildReportData() {
   }
 }
 
+export async function buildAndPersistReport({
+  signature: providedSignature = null,
+  writeCache = true,
+  writeDataset = true,
+  log = null,
+} = {}) {
+  const signature = providedSignature || (await computeSignature())
+  const payload = await buildReportData()
+  if (writeCache || writeDataset) {
+    await persistReportOutputs(signature, payload, { writeCache, writeDataset })
+  }
+  if (typeof log === 'function') {
+    try {
+      const totals = payload?.totals || {}
+      const totalImages = totals.images != null ? String(totals.images) : '?'
+      const totalPages = totals.pages != null ? String(totals.pages) : '?'
+      log(`[lvreport] dataset cached (images=${totalImages}, pages=${totalPages})`)
+    } catch (error) {
+      console.warn(`[lvreport] log callback failed: ${error?.message || error}`)
+    }
+  }
+  return { signature, payload }
+}
+
 export default async function() {
+  const signature = await computeSignature()
+
   if (process.env.LVREPORT_DISABLE_CACHE === '1') {
-    return buildReportData()
+    const { payload } = await buildAndPersistReport({
+      signature,
+      writeCache: false,
+      writeDataset: false,
+    })
+    return payload
   }
 
-  const signature = await computeSignature()
+  const datasetCached = await readDatasetReport()
+  if (datasetCached && signaturesEqual(signature, datasetCached.signature)) {
+    const cached = await readCachedReport()
+    if (!cached || !signaturesEqual(signature, cached.signature)) {
+      await writeCachedReport(signature, datasetCached.payload)
+    }
+    return datasetCached.payload
+  }
+
   const cached = await readCachedReport()
   if (cached && signaturesEqual(signature, cached.signature)) {
     return cached.payload
   }
 
-  const payload = await buildReportData()
-  await writeCachedReport(signature, payload)
+  const { payload } = await buildAndPersistReport({ signature })
   return payload
+}
+
+export {
+  DATASET_REPORT_FILE,
+  REPORT_CACHE_FILE,
+  computeSignature,
+  readCachedReport,
+  readDatasetReport,
+  signaturesEqual,
+  writeDatasetReport,
 }
