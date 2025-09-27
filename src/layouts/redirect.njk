@@ -7,8 +7,18 @@ metaDisable: true
 
 
 {% set redirectUrl = redirect | default('/') %}
+{% set redirectAssetUrl = redirectUrl %}
+{% if redirectAssetUrl and redirectAssetUrl.slice and redirectAssetUrl.slice(-1) == '/' %}
+{%   set redirectAssetUrl = redirectAssetUrl + 'index.html' %}
+{% endif %}
 {% set siteUrl = (metadata and metadata.site and metadata.site.url) or '' %}
 {% set canonicalHref = redirectUrl %}
+{% if canonicalHref and canonicalHref.slice %}
+{%   set canonicalSuffix = canonicalHref.slice(-10) %}
+{%   if canonicalSuffix == 'index.html' %}
+{%     set canonicalHref = canonicalHref.slice(0, -10) %}
+{%   endif %}
+{% endif %}
 {% if canonicalHref and '://' not in canonicalHref and siteUrl %}
 {% set canonicalHref = canonicalHref | absoluteUrl(siteUrl) %}
 {% endif %}
@@ -16,16 +26,16 @@ metaDisable: true
 
 {% block headExtra %}
 {% if canonicalHref %}
-<link rel="canonical" href="{{ canonicalHref }}" data-vite-ignore>
+<link rel="canonical" href="{{ canonicalHref }}" vite-ignore>
 {% endif %}
 <meta name="robots" content="noindex">
-<meta http-equiv="refresh" content="0; url={{ canonicalHref or redirectUrl }}" data-vite-ignore>
+<meta http-equiv="refresh" content="0; url={{ redirectAssetUrl or redirectUrl }}" vite-ignore>
 {% endblock headExtra %}
 
 
 <p aria-live="polite" class="opacity-80">
 Redirecting to
-<a class="link link-hover" href="{{ redirectUrl }}">{{ redirectUrl }}</a>…
+<a class="link link-hover" href="{{ redirectUrl }}">{{ canonicalHref or redirectUrl }}</a>…
 </p>
 
 
@@ -40,5 +50,5 @@ try { location.replace(u); } catch (_) { location.href = u; }
 
 
 <noscript>
-<meta http-equiv="refresh" content="0; url={{ redirectUrl }}">
+<meta http-equiv="refresh" content="0; url={{ redirectAssetUrl or redirectUrl }}" vite-ignore>
 </noscript>

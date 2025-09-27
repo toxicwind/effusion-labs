@@ -23,8 +23,8 @@
     {% endif %}
     {% set canonicalIsAbsolute = canonicalHref and '://' in canonicalHref %}
     {% if canonicalIsAbsolute %}
-      <link rel="canonical" href="{{ canonicalHref }}" data-vite-ignore />
-      <meta property="og:url" content="{{ canonicalHref }}" data-vite-ignore />
+      <link rel="canonical" href="{{ canonicalHref }}" vite-ignore />
+      <meta property="og:url" content="{{ canonicalHref }}" vite-ignore />
     {% endif %}
 
     {# Per-page head injections (redirects, robots, etc.) #}

@@ -1,7 +1,7 @@
 // Redirect: /work/latest → newest work item (any type)
 export const data = {
   layout: 'redirect.njk',
-  permalink: '/work/latest/index.html',
+  permalink: '/work/latest/',
   eleventyComputed: {
     outboundLinks: () => [],
     redirect: data => {
@@ -11,7 +11,14 @@ export const data = {
       const sorted = [...items].sort(
         (a, b) => (b?.date?.valueOf?.() ?? 0) - (a?.date?.valueOf?.() ?? 0),
       )
-      return sorted[0]?.url ?? '/work/'
+      const target = sorted[0]?.url ?? '/work/'
+      if (typeof target !== 'string') {
+        return '/work/'
+      }
+      if (target.endsWith('/')) {
+        return `${target}index.html`
+      }
+      return target
     },
   },
   eleventyExcludeFromCollections: true,

@@ -26,11 +26,11 @@
     {% endif %}
     {% set canonicalIsAbsolute = canonicalHref and '://' in canonicalHref %}
     {% if canonicalIsAbsolute %}
-      <link rel="canonical" href="{{ canonicalHref }}" data-vite-ignore>
-      <meta property="og:url" content="{{ canonicalHref }}" data-vite-ignore>
+      <link rel="canonical" href="{{ canonicalHref }}" vite-ignore>
+      <meta property="og:url" content="{{ canonicalHref }}" vite-ignore>
     {% elif siteUrl and page.url %}
-      <link rel="canonical" href="{{ page.url | url | absoluteUrl(siteUrl) }}" data-vite-ignore>
-      <meta property="og:url" content="{{ page.url | url | absoluteUrl(siteUrl) }}" data-vite-ignore>
+      <link rel="canonical" href="{{ page.url | url | absoluteUrl(siteUrl) }}" vite-ignore>
+      <meta property="og:url" content="{{ page.url | url | absoluteUrl(siteUrl) }}" vite-ignore>
     {% endif %}
 
     {{ headExtra | safe }}
