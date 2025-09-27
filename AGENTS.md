@@ -7,6 +7,7 @@ Project facts for tools and agents. No meta-instructions.
 - Node: **≥22.19.0** (`"engines.node": ">=22.19.0"`)
 - Module system: **ESM** (`"type": "module"`)
 - Agent internet access: On (Unrestricted)
+- Chromium provisioning: `./bin/install-chromium.sh` writes diagnostics to **stderr** and the resolved path to **stdout** so Docker/CI layers can capture it; the script installs dependencies via apt when possible before falling back to Playwright-managed downloads and exports `PUPPETEER_EXECUTABLE_PATH` when available.
 
 ## Build System
 
@@ -14,6 +15,12 @@ Project facts for tools and agents. No meta-instructions.
 - Bundler: **Vite 7**
 - Styling: **Tailwind 4** + **daisyUI 5**
 -
+
+## Playwright & Browser Tooling
+
+- Resolver checks `PUPPETEER_EXECUTABLE_PATH`, system Chromium binaries (`/usr/bin`, Snap), and Playwright caches under `node_modules/.cache/ms-playwright` and `~/.cache/ms-playwright`.
+- Provision locally with `./bin/install-chromium.sh` **or** `npx playwright install chromium`; CI and Docker builds use the script (skip inline apt snippets) and rely on the emitted path for `/usr/local/bin/chromium` symlinks.
+- `node tools/check-chromium.mjs` prints the resolved browser path and suggests remediation if missing.
 
 ## Paths
 
@@ -23,31 +30,32 @@ Project facts for tools and agents. No meta-instructions.
 
 ## Commands (npm scripts)
 
-| Script          | Command                                                                                                             |
-| --------------- | ------------------------------------------------------------------------------------------------------------------- |
-| start / dev     | `npx @11ty/eleventy --serve`                                                                                        |
-| clean           | `del-cli _site`                                                                                                     |
-| build           | `npm run build:site` (prebuild hooks run `node bin/quality.mjs apply`)                                              |
-| build:site      | `NODE_ENV=production npx @11ty/eleventy`                                                                            |
-| build:ci        | `node bin/quality.mjs check --soft && NODE_ENV=production npx @11ty/eleventy`                                      |
-| quality         | `node bin/quality.mjs`                                                                                              |
-| quality:apply   | `node bin/quality.mjs apply`                                                                                        |
-| quality:check   | `node bin/quality.mjs check`                                                                                        |
-| quality:ci      | `node bin/quality.mjs check --soft`                                                                                |
-| quality:report  | `node bin/quality.mjs check --soft --knip-report` (writes JSON + Markdown + CodeClimate reports)                      |
-| lint            | `npm run quality:check`                                                                                              |
-| lint:ci         | `npm run quality:ci`                                                                                                |
-| format          | `npm run quality:apply`                                                                                              |
-| links:check     | `node tools/run-if-network.mjs markdown-link-check -c oneoff/link-check.config.json README.md`                      |
-| links:ci        | `node tools/run-if-network.mjs markdown-link-check -c oneoff/link-check.config.json README.md || true`             |
-| lint:dead       | `npm run quality:report`                                                                                            |
-| test            | `node tools/check-chromium.mjs && c8 node test/integration/runner.spec.mjs`                                         |
-| test:watch      | `node tools/check-chromium.mjs && node --watch test/integration/runner.spec.mjs`                                    |
-| test:playwright | `node tools/check-chromium.mjs && playwright test`                                                                  |
-| check           | `npm run doctor && npm run quality:check && npm run test`                                                           |
-| doctor          | `node tools/doctor.mjs`                                                                                             |
-| mcp:*           | MCP gateway + tests (`mcp:dev`, `mcp:integration`, `mcp:test`)                                                      |
-| lv-images:*     | Dataset utilities                                                                                                   |
+| Script          | Command |
+| --------------- | ------------------------------------------------------------------------------------------------------------- |
+| start / dev     | `npx @11ty/eleventy --serve` |
+| serve           | `npx @11ty/eleventy --serve` (Playwright web server hook) |
+| clean           | `del-cli _site` |
+| build           | `npm run build:site` (prebuild hooks run `node bin/quality.mjs apply`) |
+| build:site      | `NODE_ENV=production npx @11ty/eleventy` |
+| build:ci        | `node bin/quality.mjs check --soft && NODE_ENV=production npx @11ty/eleventy` |
+| quality         | `node bin/quality.mjs` |
+| quality:apply   | `node bin/quality.mjs apply` |
+| quality:check   | `node bin/quality.mjs check` |
+| quality:ci      | `node bin/quality.mjs check --soft` |
+| quality:report  | `node bin/quality.mjs check --soft --knip-report` (writes JSON + Markdown + CodeClimate reports) |
+| lint            | `npm run quality:check` |
+| lint:ci         | `npm run quality:ci` |
+| format          | `npm run quality:apply` |
+| links:check     | `node tools/run-if-network.mjs markdown-link-check -c oneoff/link-check.config.json README.md` |
+| links:ci        | `node tools/run-if-network.mjs markdown-link-check -c oneoff/link-check.config.json README.md || true` |
+| lint:dead       | `npm run quality:report` |
+| test            | `node tools/check-chromium.mjs && c8 node test/integration/runner.spec.mjs` |
+| test:watch      | `node tools/check-chromium.mjs && node --watch test/integration/runner.spec.mjs` |
+| test:playwright | `node tools/check-chromium.mjs && playwright test` |
+| check           | `npm run doctor && npm run quality:check && npm run test` |
+| doctor          | `node tools/doctor.mjs` |
+| mcp:*           | MCP gateway + tests (`mcp:dev`, `mcp:integration`, `mcp:test`) |
+| lv-images:*     | Dataset utilities |
 
 > `postinstall` is handled by setup (Puppeteer CfT shims + tools/apply-patches.mjs).
 
