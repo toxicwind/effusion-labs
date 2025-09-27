@@ -86,9 +86,7 @@ export function resolveChromium() {
       // continue searching
     }
   }
-  throw new Error(
-    'Chromium not found. Install via ./bin/install-chromium.sh or `npx playwright install chromium`.',
-  )
+  throw new Error('Chromium not found after automated provisioning attempts (bin/install-chromium.sh).')
 }
 
 const modulePath = fileURLToPath(import.meta.url)
