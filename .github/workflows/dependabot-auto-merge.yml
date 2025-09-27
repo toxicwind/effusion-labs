@@ -19,6 +19,7 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           token: ${{ secrets.GITHUB_TOKEN }}
+          lfs: true
 
       # Prefer runner's preinstalled gh; install only if absent.
       - name: Ensure gh

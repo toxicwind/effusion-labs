@@ -1,23 +1,3 @@
-{
-  "generatedAt": "2025-09-26T20:44:54.806Z",
-  "dataset": {
-    "fileCount": 77,
-    "totalBytes": 187077454
-  },
-  "archive": {
-    "path": "generated/lv.bundle.tgz",
-    "size": 23025189,
-    "sha256": "32af47f6b492cf73385861f81e4b38dd8c772db1086f17b2a6e9afebfb6f8f65"
-  },
-  "summary": {
-    "version": "2025.09.21-pw",
-    "generatedAt": "2025-09-26T20:44:51.877Z",
-    "totals": {
-      "hosts": 6,
-      "sitemapsProcessed": 24,
-      "itemsFound": 0,
-      "pages": 44618,
-      "images": 80821
-    }
-  }
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:ea9507df7a13c58a3effdebe36d2eac26b749fa7da2364791bc05fc966c5d54f
+size 515

@@ -4,6 +4,7 @@ import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 
 import EleventyFetch from "@11ty/eleventy-fetch";
+import { LRUCache } from "lru-cache";
 
 const projectRoot = process.cwd();
 const cacheRoot = path.join(projectRoot, ".cache");
@@ -17,6 +18,7 @@ const placeholderPng = Buffer.from(
 
 const pending = new Map();
 const logged = new Set();
+const memoryCache = new LRUCache({ max: 500, ttl: 1000 * 60 * 60 });
 
 async function ensureCacheDirs() {
   await mkdir(imageCacheDir, { recursive: true });
@@ -83,6 +85,9 @@ async function fetchAndCache(url, filePath) {
 
 export function cacheRemoteImage(url) {
   if (!url) return Promise.resolve(null);
+  if (memoryCache.has(url)) {
+    return Promise.resolve(memoryCache.get(url));
+  }
   if (pending.has(url)) {
     return pending.get(url);
   }
@@ -95,6 +100,7 @@ export function cacheRemoteImage(url) {
 
     if (await fileExists(filePath)) {
       await appendLog(url);
+      memoryCache.set(url, filePath);
       return filePath;
     }
 
@@ -105,6 +111,7 @@ export function cacheRemoteImage(url) {
     }
 
     await appendLog(url);
+    memoryCache.set(url, filePath);
     return filePath;
   })().finally(() => {
     pending.delete(url);

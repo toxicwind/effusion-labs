@@ -1,14 +1,3 @@
-{
-  "host": "fr.louisvuitton.com",
-  "discoveredAt": "2025-09-26T20:44:43.116Z",
-  "robotsInfo": {
-    "url": "https://fr.louisvuitton.com/robots.txt",
-    "found": true
-  },
-  "sitemaps": [
-    "https://fr.louisvuitton.com/content/louisvuitton/sitemap/fra_FR/sitemap-product.xml",
-    "https://fr.louisvuitton.com/content/louisvuitton/sitemap/fra_FR/sitemap-content.xml",
-    "https://fr.louisvuitton.com/content/louisvuitton/sitemap/fra_FR/sitemap-catalog.xml",
-    "https://fr.louisvuitton.com/content/louisvuitton/sitemap/fra_FR/sitemap-image.xml"
-  ]
-}
+version https://git-lfs.github.com/spec/v1
+oid sha256:934f4db35823e6047bb7db29aaa90aed81d623256f2e026a5ef00843f463214b
+size 557

@@ -29,6 +29,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          lfs: true
 
       - name: 🐳 Set up Buildx
         uses: docker/setup-buildx-action@v3

@@ -1,6 +1,4 @@
 ---
-title: LV Image Atlas — Report
-permalink: /lv/report/
 layout: base.njk
 fullBleed: true
 metaDisable: true
@@ -20,9 +18,20 @@ metaDisable: true
 {% set summary  = lv.summary  or {} %}
 {# Pull global totals from the top level (lv.totals) first, falling back to summary.totals if not present.  The crawler exposes unique image and page counts via lv.totals. #}
 {% set totals   = lv.totals or summary.totals or {} %}
-{% set sitemaps = lv.sitemaps or [] %}
-{% set docs     = lv.docs     or [] %}
-{% set robots   = lv.robots   or [] %}
+{% set paginationSections = lv.pagination or {} %}
+{% set pageSections = lvReportPage and lvReportPage.sections or {} %}
+{% set sitemapsPage = pageSections.sitemaps or {} %}
+{% set docsPage = pageSections.docs or {} %}
+{% set robotsPage = pageSections.robots or {} %}
+{% set duplicatesPage = pageSections.duplicates or {} %}
+{% set topProductsPage = pageSections.topProducts or {} %}
+{% set hostStatsPage = pageSections.hostStats or {} %}
+{% set sitemaps = sitemapsPage.items or [] %}
+{% set docs     = docsPage.items or [] %}
+{% set robots   = robotsPage.items or [] %}
+{% set duplicates = duplicatesPage.items or [] %}
+{% set topProducts = topProductsPage.items or [] %}
+{% set hostStats = hostStatsPage.items or [] %}
 {% set sample   = lv.sample   or [] %}
 {% set metrics  = lv.metrics  or {} %}
 {% set robotsMetrics = metrics.robots or {} %}
@@ -35,6 +44,26 @@ metaDisable: true
 {% set manifestArchive = manifest.archive or {} %}
 {% set manifestSummary = manifest.summary or {} %}
 {% set datasetWarnings = dataset.warnings or [] %}
+{% set clientPayload = {
+  baseHref: baseHref,
+  totals: totals,
+  dataset: {
+    ndjson: dataset.ndjson,
+    cache: dataset.cache,
+    warnings: datasetWarnings,
+  },
+  page: {
+    number: lvReportPage.pageNumber,
+    count: lvReportPage.pageCount,
+    sections: pageSections,
+    hrefs: pagination.hrefs,
+  },
+  search: lv.search,
+} %}
+<script type="application/json" id="lvreport-data">
+  {{ clientPayload | dump | safe }}
+</script>
+<script type="module" src="/assets/js/lvreport-app.js"></script>
 {%
   set warningCopy = {
     'missing-archive': 'Bundle archive missing — run <code>npm run lv-images:sync</code> before shipping.',
@@ -120,6 +149,67 @@ metaDisable: true
           </ul>
         </div>
       {% endif %}
+      <div
+        x-data="globalSearch()"
+        x-init="init()"
+        class="mt-6 space-y-3"
+      >
+        <div class="flex flex-wrap items-center gap-3">
+          <button type="button" class="btn btn-sm md:btn-md btn-outline" @click="openPanel()">
+            <span class="font-semibold">Global dataset search</span>
+            <span class="hidden sm:inline opacity-70">⌘K / Ctrl K</span>
+          </button>
+          <p class="text-xs opacity-70">
+            Search across sitemaps, cached documents, robots, hosts, duplicates, and products.
+          </p>
+        </div>
+        <template x-if="open">
+          <div
+            class="fixed inset-0 z-[90] flex items-start justify-center bg-base-100/90 backdrop-blur"
+            @keydown.window.escape="closePanel()"
+            @click.self="closePanel()"
+          >
+            <div class="mt-16 w-full max-w-3xl rounded-box border border-base-content/10 bg-base-200/95 shadow-2xl">
+              <div class="flex items-center gap-3 border-b border-base-content/10 px-4 py-3">
+                <input
+                  x-model="query"
+                  @input.debounce.120ms="search()"
+                  @keydown.down.prevent="move(1)"
+                  @keydown.up.prevent="move(-1)"
+                  @keydown.enter.prevent="selectActive"
+                  autofocus
+                  type="search"
+                  class="input input-bordered input-sm md:input-md flex-1"
+                  placeholder="Search the LV dataset…"
+                />
+                <button type="button" class="btn btn-sm btn-ghost" @click="closePanel()">Esc</button>
+              </div>
+              <div class="max-h-80 overflow-y-auto divide-y divide-base-content/10" x-show="results.length" x-transition>
+                <template x-for="(result, idx) in results" :key="result.id">
+                  <button
+                    type="button"
+                    class="flex w-full items-start gap-3 px-4 py-3 text-left hover:bg-base-300/40 focus:bg-base-300/50"
+                    :class="{ 'bg-base-300/50': activeIndex === idx }"
+                    @mouseenter="setActive(idx)"
+                    @click="openResult(result)"
+                  >
+                    <div class="mt-1">
+                      <span class="badge badge-sm" x-text="result.badge"></span>
+                    </div>
+                    <div class="flex-1 space-y-1">
+                      <p class="font-semibold" x-text="result.title"></p>
+                      <p class="text-xs opacity-70" x-text="result.description"></p>
+                    </div>
+                  </button>
+                </template>
+              </div>
+              <div class="px-4 py-3 text-xs opacity-60" x-show="!results.length">
+                Start typing to surface sitemaps, cached XML, robots directives, duplicate clusters, hosts, and high-volume products.
+              </div>
+            </div>
+          </div>
+        </template>
+      </div>
     </div>
     <div>
       {% set shaPreview = manifestArchive.shaPreview or manifestArchive.sha256 %}
@@ -174,6 +264,21 @@ metaDisable: true
   </div>
 </section>
 
+{% if pagination and pagination.hrefs and (pagination.hrefs | length) > 1 %}
+  <nav class="mt-6 flex flex-wrap items-center justify-center gap-2">
+    {% for href in pagination.hrefs %}
+      {% set pageIndex = loop.index0 %}
+      {% set isCurrent = pageIndex == pagination.pageNumber %}
+      <a
+        href="{{ href }}"
+        class="btn btn-sm md:btn-md {{ 'btn-primary' if isCurrent else 'btn-outline' }}"
+      >
+        Page {{ pageIndex + 1 }}
+      </a>
+    {% endfor %}
+  </nav>
+{% endif %}
+
 <section class="mt-12 space-y-10">
   <div class="grid gap-6 lg:grid-cols-3">
     <div class="card border border-base-content/15 bg-base-200/70 shadow-sm">
@@ -195,6 +300,14 @@ metaDisable: true
           <div>
             <p class="text-xs uppercase opacity-60">Sample tiles</p>
             <p class="text-xl font-semibold">{{ sample | length }}</p>
+          </div>
+          <div>
+            <p class="text-xs uppercase opacity-60">Sitemaps processed</p>
+            <p class="text-xl font-semibold">{{ totals.sitemapsProcessed or 0 }}</p>
+          </div>
+          <div>
+            <p class="text-xs uppercase opacity-60">Items ingested</p>
+            <p class="text-xl font-semibold">{{ totals.itemsFound or totals.images or 0 }}</p>
           </div>
         </div>
         {% if dataset.ndjson and dataset.ndjson.latestShard %}
@@ -423,11 +536,29 @@ metaDisable: true
         class="grow"
         placeholder="Filter host or URL…"
         autocomplete="off"
+        data-search-input="sitemaps"
       />
     </label>
-    <div id="typeChips" class="join"></div>
-    <button class="btn btn-sm btn-outline" id="exportSitemaps" type="button">Export CSV</button>
+    <div id="typeChips" class="join" data-filter-chips="sitemaps">
+      {% for type in ['image', 'product', 'catalog', 'content', 'index', 'other'] %}
+        <button
+          type="button"
+          class="btn btn-xs btn-outline"
+          data-section="sitemaps"
+          data-type="{{ type }}"
+        >
+          {{ type }}
+        </button>
+      {% endfor %}
+    </div>
+    <button class="btn btn-sm btn-outline" id="exportSitemaps" type="button" data-export-section="sitemaps">Export CSV</button>
   </div>
+  {% if sitemapsPage.totalItems %}
+    <p class="text-xs opacity-60 mt-2" data-filter-summary="sitemaps">
+      Showing {{ sitemapsPage.from }}–{{ sitemapsPage.to }} of {{ sitemapsPage.totalItems }} sitemaps
+      (page {{ (pagination.pageNumber or 0) + 1 }} of {{ paginationSections.sitemaps.pageCount or 1 }}).
+    </p>
+  {% endif %}
   {% if sitemaps | length %}
     <div class="overflow-x-auto rounded-box border border-base-content/10 mt-4">
       <table class="table table-zebra table-sm" id="sitemapsTable">
@@ -443,7 +574,7 @@ metaDisable: true
         </thead>
         <tbody>
           {% for r in sitemaps %}
-            <tr data-type="{{ r.type }}">
+            <tr data-section-row="sitemaps" data-entry-id="{{ r.id }}" data-type="{{ r.type }}">
               <td class="font-medium">{{ r.host or '—' }}</td>
               <td><span class="badge badge-outline capitalize">{{ r.type or 'other' }}</span></td>
               <td>{{ r.imageCount or 0 }}</td>
@@ -551,11 +682,17 @@ metaDisable: true
         class="grow"
         placeholder="Search basename, title or page…"
         autocomplete="off"
+        data-search-input="duplicates"
       />
     </label>
-    <button class="btn btn-sm btn-outline" id="exportDuplicates" type="button">Export CSV</button>
+    <button class="btn btn-sm btn-outline" id="exportDuplicates" type="button" data-export-section="duplicates">Export CSV</button>
   </div>
-  {% if lv.duplicates and (lv.duplicates | length) %}
+  {% if duplicatesPage.totalItems %}
+    <p class="text-xs opacity-60 mt-2" data-filter-summary="duplicates">
+      Showing {{ duplicatesPage.from }}–{{ duplicatesPage.to }} of {{ duplicatesPage.totalItems }} duplicate groups.
+    </p>
+  {% endif %}
+  {% if duplicates and (duplicates | length) %}
     <div class="overflow-x-auto rounded-box border border-base-content/10 mt-4">
       <table class="table table-zebra table-xs" id="duplicatesTable">
         <thead>
@@ -569,8 +706,8 @@ metaDisable: true
           </tr>
         </thead>
         <tbody>
-          {% for d in lv.duplicates %}
-            <tr>
+          {% for d in duplicates %}
+            <tr data-section-row="duplicates" data-entry-id="{{ d.id }}">
               <td>
                 <a href="{{ d.src }}" target="_blank" rel="noreferrer"><img
                     src="{{ d.src }}"
@@ -604,8 +741,8 @@ metaDisable: true
 <section id="products-section" class="space-y-4 mt-12">
   <h2 class="text-3xl font-semibold">Top Products</h2>
   <p class="text-sm opacity-70">
-    Pages with the most images (showing top {{ lv.topProducts and lv.topProducts | length or 0 }}
-    results).
+    Pages with the most cached images. Review {{ topProductsPage.totalItems or 0 }} products, paged
+    for easier browsing.
   </p>
   <div class="flex flex-wrap gap-3 items-end mt-4">
     <label class="input input-bordered flex items-center gap-2 w-full sm:w-72">
@@ -628,11 +765,17 @@ metaDisable: true
         class="grow"
         placeholder="Search page or title…"
         autocomplete="off"
+        data-search-input="topProducts"
       />
     </label>
-    <button class="btn btn-sm btn-outline" id="exportProducts" type="button">Export CSV</button>
+    <button class="btn btn-sm btn-outline" id="exportProducts" type="button" data-export-section="topProducts">Export CSV</button>
   </div>
-  {% if lv.topProducts and (lv.topProducts | length) %}
+  {% if topProductsPage.totalItems %}
+    <p class="text-xs opacity-60 mt-2" data-filter-summary="topProducts">
+      Showing {{ topProductsPage.from }}–{{ topProductsPage.to }} of {{ topProductsPage.totalItems }} products.
+    </p>
+  {% endif %}
+  {% if topProducts and (topProducts | length) %}
     <div class="overflow-x-auto rounded-box border border-base-content/10 mt-4">
       <table class="table table-zebra table-xs" id="productsTable">
         <thead>
@@ -645,8 +788,8 @@ metaDisable: true
           </tr>
         </thead>
         <tbody>
-          {% for p in lv.topProducts %}
-            <tr>
+          {% for p in topProducts %}
+            <tr data-section-row="topProducts" data-entry-id="{{ p.id }}">
               <td>
                 {% if p.pageUrl %}<a
                     href="{{ p.pageUrl }}"
@@ -696,11 +839,17 @@ metaDisable: true
         class="grow"
         placeholder="Search host…"
         autocomplete="off"
+        data-search-input="hosts"
       />
     </label>
-    <button class="btn btn-sm btn-outline" id="exportHosts" type="button">Export CSV</button>
+    <button class="btn btn-sm btn-outline" id="exportHosts" type="button" data-export-section="hosts">Export CSV</button>
   </div>
-  {% if lv.hostStats and (lv.hostStats | length) %}
+  {% if hostStatsPage.totalItems %}
+    <p class="text-xs opacity-60 mt-2" data-filter-summary="hosts">
+      Showing {{ hostStatsPage.from }}–{{ hostStatsPage.to }} of {{ hostStatsPage.totalItems }} hosts.
+    </p>
+  {% endif %}
+  {% if hostStats and (hostStats | length) %}
     <div class="overflow-x-auto rounded-box border border-base-content/10 mt-4">
       <table class="table table-zebra table-xs" id="hostsTable">
         <thead>
@@ -713,8 +862,8 @@ metaDisable: true
           </tr>
         </thead>
         <tbody>
-          {% for h in lv.hostStats %}
-            <tr>
+          {% for h in hostStats %}
+            <tr data-section-row="hosts" data-entry-id="{{ h.id }}">
               <td>{{ h.host or '—' }}</td>
               <td>{{ h.images }}</td>
               <td>{{ h.uniqueImages }}</td>
@@ -758,22 +907,28 @@ metaDisable: true
         class="grow"
         placeholder="Search host, directive, or status…"
         autocomplete="off"
+        data-search-input="robots"
       />
     </label>
     <div id="robotsStatusFilters" class="flex flex-wrap gap-2">
       {% for seg in robotsMetrics.breakdown or [] %}
         {% set badgeClass = toneBadge[seg.tone] or 'badge-outline' %}
-        <button type="button" class="btn btn-xs btn-ghost status-chip" data-status="{{ seg.key }}">
+        <button type="button" class="btn btn-xs btn-ghost status-chip" data-section="robots" data-status="{{ seg.key }}">
           <span class="badge {{ badgeClass }} badge-xs">{{ seg.label }}</span>
           <span class="text-xs opacity-60">{{ seg.count }}</span>
         </button>
       {% endfor %}
     </div>
     <label class="flex items-center gap-2 text-sm mt-2 sm:mt-0">
-      <input id="robotsIssuesOnly" type="checkbox" class="checkbox checkbox-sm" />
+      <input id="robotsIssuesOnly" type="checkbox" class="checkbox checkbox-sm" data-issues-toggle="robots" />
       <span>Show issues only</span>
     </label>
   </div>
+  {% if robotsPage.totalItems %}
+    <p class="text-xs opacity-60 mt-2" data-filter-summary="robots">
+      Showing {{ robotsPage.from }}–{{ robotsPage.to }} of {{ robotsPage.totalItems }} robots snapshots.
+    </p>
+  {% endif %}
   {% if robots | length %}
     <div class="overflow-x-auto rounded-box border border-base-content/10 mt-4">
       <table class="table table-zebra table-xs" id="robotsTable">
@@ -789,6 +944,8 @@ metaDisable: true
         <tbody>
           {% for r in robots %}
             <tr
+              data-section-row="robots"
+              data-entry-id="{{ r.id }}"
               data-host="{{ r.host }}"
               data-status="{{ r.statusCategory }}"
               data-issue="{% if r.isIssue %}1{% else %}0{% endif %}"
@@ -952,23 +1109,29 @@ metaDisable: true
         class="grow"
         placeholder="Search host, filename, or status…"
         autocomplete="off"
+        data-search-input="docs"
       />
     </label>
     <div id="docsStatusFilters" class="flex flex-wrap gap-2">
       {% for seg in docsMetrics.breakdown or [] %}
         {% set badgeClass = toneBadge[seg.tone] or 'badge-outline' %}
-        <button type="button" class="btn btn-xs btn-ghost status-chip" data-status="{{ seg.key }}">
+        <button type="button" class="btn btn-xs btn-ghost status-chip" data-section="docs" data-status="{{ seg.key }}">
           <span class="badge {{ badgeClass }} badge-xs">{{ seg.label }}</span>
           <span class="text-xs opacity-60">{{ seg.count }}</span>
         </button>
       {% endfor %}
     </div>
     <label class="flex items-center gap-2 text-sm mt-2 sm:mt-0">
-      <input id="docsIssuesOnly" type="checkbox" class="checkbox checkbox-sm" />
+      <input id="docsIssuesOnly" type="checkbox" class="checkbox checkbox-sm" data-issues-toggle="docs" />
       <span>Show issues only</span>
     </label>
-    <button class="btn btn-sm btn-outline" id="exportDocs" type="button">Export CSV</button>
+    <button class="btn btn-sm btn-outline" id="exportDocs" type="button" data-export-section="docs">Export CSV</button>
   </div>
+  {% if docsPage.totalItems %}
+    <p class="text-xs opacity-60 mt-2" data-filter-summary="docs">
+      Showing {{ docsPage.from }}–{{ docsPage.to }} of {{ docsPage.totalItems }} cached documents.
+    </p>
+  {% endif %}
   {% if docs | length %}
     <div class="overflow-x-auto rounded-box border border-base-content/10 mt-4">
       <table class="table table-zebra table-xs" id="docsTable">
@@ -984,6 +1147,8 @@ metaDisable: true
         <tbody>
           {% for d in docs %}
             <tr
+              data-section-row="docs"
+              data-entry-id="{{ d.id }}"
               data-status="{{ d.statusCategory }}"
               data-issue="{% if d.isIssue %}1{% else %}0{% endif %}"
             >
@@ -1091,204 +1256,3 @@ metaDisable: true
 </section>
 
 </section>
-
-{#
-  The interactive filtering and export code remains largely untouched from the
-  previous implementation, ensuring table search, status filtering and CSV
-  export continues to work seamlessly.  Feel free to extend or refactor the
-  JavaScript below to add new interactions, such as tabbed sections or
-  advanced analytics.  For now, we simply initialise the chips and attach
-  filters as before.
-#}
-<script>
-;(function() {
-  const TYPES = ['image', 'product', 'content', 'catalog', 'index', 'other']
-  const chipsRoot = document.getElementById('typeChips')
-  const sitemapFilter = document.getElementById('sitemapFilter')
-  const sitemapsTable = document.getElementById('sitemapsTable')
-  const exportSitemaps = document.getElementById('exportSitemaps')
-
-  if (chipsRoot && sitemapsTable) {
-    const active = new Set(TYPES)
-    TYPES.forEach(type => {
-      const button = document.createElement('button')
-      button.type = 'button'
-      button.textContent = type
-      button.className = 'btn btn-xs btn-outline'
-      syncChipState(button, true)
-      button.addEventListener('click', () => {
-        if (active.has(type)) {
-          active.delete(type)
-          syncChipState(button, false)
-        } else {
-          active.add(type)
-          syncChipState(button, true)
-        }
-        filterSitemaps()
-      })
-      chipsRoot.appendChild(button)
-    })
-    function filterSitemaps() {
-      const query = (sitemapFilter && sitemapFilter.value || '').toLowerCase()
-      sitemapsTable.querySelectorAll('tbody tr').forEach(tr => {
-        const type = tr.getAttribute('data-type')
-        const text = tr.innerText.toLowerCase()
-        const okType = !type || active.has(type)
-        const okText = !query || text.includes(query)
-        tr.style.display = okType && okText ? '' : 'none'
-      })
-    }
-    if (sitemapFilter) sitemapFilter.addEventListener('input', filterSitemaps)
-    filterSitemaps()
-    if (exportSitemaps) {
-      exportSitemaps.addEventListener('click', () => {
-        const rows = [['Host', 'Type', 'Images', 'Status', 'URL', 'Cached']]
-        sitemapsTable.querySelectorAll('tbody tr').forEach(tr => {
-          if (tr.style.display === 'none') return
-          const cells = Array.from(tr.querySelectorAll('td')).map(td => td.innerText.trim())
-          rows.push(cells)
-        })
-        downloadCsv('sitemaps.csv', rows)
-      })
-    }
-  }
-  const robotsTable = document.getElementById('robotsTable')
-  const robotsFilter = document.getElementById('robotsFilter')
-  const robotsStatusButtons = Array.from(
-    document.querySelectorAll('#robotsStatusFilters .status-chip'),
-  )
-  const robotsIssuesOnly = document.getElementById('robotsIssuesOnly')
-  setupTableFilter({
-    table: robotsTable,
-    searchInput: robotsFilter,
-    statusButtons: robotsStatusButtons,
-    issuesToggle: robotsIssuesOnly,
-  })
-  const docsTable = document.getElementById('docsTable')
-  const docsFilter = document.getElementById('docsFilter')
-  const docsStatusButtons = Array.from(document.querySelectorAll('#docsStatusFilters .status-chip'))
-  const docsIssuesOnly = document.getElementById('docsIssuesOnly')
-  setupTableFilter({
-    table: docsTable,
-    searchInput: docsFilter,
-    statusButtons: docsStatusButtons,
-    issuesToggle: docsIssuesOnly,
-  })
-  const exportDocs = document.getElementById('exportDocs')
-  if (exportDocs && docsTable) {
-    exportDocs.addEventListener('click', () => {
-      const rows = [['Host', 'File', 'Status', 'Meta', 'Preview']]
-      docsTable.querySelectorAll('tbody tr').forEach(tr => {
-        if (tr.style.display === 'none') return
-        const cells = Array.from(tr.querySelectorAll('td')).map(td => td.innerText.trim())
-        rows.push(cells)
-      })
-      downloadCsv('lv-docs.csv', rows)
-    })
-  }
-
-  // Hosts table: simple text search and CSV export.  We reuse setupTableFilter
-  // without status or issues filters.  The host overview exposes
-  // hostStats via lv.hostStats.
-  const hostsTable = document.getElementById('hostsTable')
-  const hostsFilter = document.getElementById('hostsFilter')
-  if (hostsTable) {
-    setupTableFilter({
-      table: hostsTable,
-      searchInput: hostsFilter,
-      statusButtons: null,
-      issuesToggle: null,
-    })
-  }
-  const exportHosts = document.getElementById('exportHosts')
-  if (exportHosts && hostsTable) {
-    exportHosts.addEventListener('click', () => {
-      const rows = [['Host', 'Images', 'Unique', 'Duplicates', 'Pages']]
-      hostsTable.querySelectorAll('tbody tr').forEach(tr => {
-        if (tr.style.display === 'none') return
-        const cells = Array.from(tr.querySelectorAll('td')).map(td => td.innerText.trim())
-        rows.push(cells)
-      })
-      downloadCsv('hosts.csv', rows)
-    })
-  }
-})()
-
-function syncChipState(button, on) {
-  if (!button) return
-  if (on) {
-    button.classList.add('btn-primary')
-    button.classList.remove('btn-ghost')
-  } else {
-    button.classList.remove('btn-primary')
-    button.classList.add('btn-ghost')
-  }
-}
-function setupTableFilter({ table, searchInput, statusButtons, issuesToggle }) {
-  if (!table) return
-  const rows = Array.from(table.querySelectorAll('tbody tr'))
-  const activeStatuses = new Set(
-    statusButtons && statusButtons.length ? statusButtons.map(btn => btn.dataset.status) : [],
-  )
-  if (statusButtons && statusButtons.length) {
-    statusButtons.forEach(btn => {
-      syncChipState(btn, true)
-      btn.addEventListener('click', () => {
-        const status = btn.dataset.status
-        if (activeStatuses.has(status)) {
-          activeStatuses.delete(status)
-          syncChipState(btn, false)
-        } else {
-          activeStatuses.add(status)
-          syncChipState(btn, true)
-        }
-        if (activeStatuses.size === 0) {
-          statusButtons.forEach(other => {
-            activeStatuses.add(other.dataset.status)
-            syncChipState(other, true)
-          })
-        }
-        applyFilters()
-      })
-    })
-  }
-  if (searchInput) searchInput.addEventListener('input', applyFilters)
-  if (issuesToggle) issuesToggle.addEventListener('change', applyFilters)
-  applyFilters()
-  function applyFilters() {
-    const query = (searchInput && searchInput.value || '').toLowerCase().trim()
-    const terms = query ? query.split(/\s+/).filter(Boolean) : []
-    const issuesOnly = !!(issuesToggle && issuesToggle.checked)
-    rows.forEach(row => {
-      const rowStatus = row.getAttribute('data-status')
-      const rowIssue = row.getAttribute('data-issue') === '1'
-      let visible = true
-      if (statusButtons && statusButtons.length && rowStatus && !activeStatuses.has(rowStatus)) {
-        visible = false
-      }
-      if (issuesOnly && !rowIssue) visible = false
-      if (visible && terms.length) {
-        const haystack = row.innerText.toLowerCase()
-        visible = terms.every(term => haystack.includes(term))
-      }
-      row.style.display = visible ? '' : 'none'
-    })
-  }
-}
-function downloadCsv(filename, rows) {
-  const csv = rows.map(row =>
-    row.map(cell => {
-      if (cell == null) return ''
-      const value = String(cell).replace(/"/g, '""')
-      return /[",\n]/.test(value) ? `"${value}"` : value
-    }).join(',')
-  ).join('\n')
-  const blob = new Blob([csv], { type: 'text/csv' })
-  const url = URL.createObjectURL(blob)
-  const link = document.createElement('a')
-  link.href = url
-  link.download = filename
-  link.click()
-  setTimeout(() => URL.revokeObjectURL(url), 1000)
-}
-</script>

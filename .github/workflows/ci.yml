@@ -35,6 +35,8 @@ jobs:
     steps:
       - name: ⬇️ Checkout
         uses: actions/checkout@v4
+        with:
+          lfs: true
 
       - name: 🔧 Setup Node
         uses: actions/setup-node@v4
@@ -70,6 +72,8 @@ jobs:
     timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
+        with:
+          lfs: true
 
       - uses: actions/setup-node@v4
         with:
@@ -104,6 +108,8 @@ jobs:
     timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
+        with:
+          lfs: true
 
       - uses: actions/setup-node@v4
         with:

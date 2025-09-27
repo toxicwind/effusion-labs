@@ -292,7 +292,7 @@ class Crawler {
     );
   }
 
-  async _pwGet(url, { type = "auto" } = {}) {
+  async _pwGet(url, { type: _type = "auto" } = {}) {
     // 1) Primary: context.request.get with working headers
     const headers = this._headersFor(url);
     let resp = await pwCtx.request.get(url, { headers, timeout: TIMEOUT_MS });
@@ -335,12 +335,17 @@ class Crawler {
     return { status, text, headers: hdrs, cachePath: savedPath };
   }
 
-  async _fetchAndCache(url) {
-    // CACHE read first
-    const hit = await cache.read(url);
-    if (hit) return { text: hit.text, fromCache: true, cachePath: hit.path, status: "", contentType: "" };
+  async _fetchAndCache(url, { forceRefresh = false } = {}) {
+    let cached = null;
+    if (!forceRefresh) {
+      cached = await cache.read(url);
+      if (cached) {
+        return { text: cached.text, fromCache: true, cachePath: cached.path, status: "", contentType: "" };
+      }
+    } else {
+      cached = await cache.read(url);
+    }
 
-    // Live via Playwright
     try {
       const res = await this._pwGet(url);
       return {
@@ -351,6 +356,9 @@ class Crawler {
         contentType: res.headers["content-type"] || "",
       };
     } catch (error) {
+      if (cached) {
+        return { text: cached.text, fromCache: true, cachePath: cached.path, status: "", contentType: "" };
+      }
       return { error: error?.message || String(error) };
     }
   }
@@ -358,7 +366,7 @@ class Crawler {
   async _discoverHost(host) {
     console.log(`\n🕵️ Discovering sitemaps for ${host}...`);
     const robotsUrl = `https://${host}/robots.txt`;
-    const robotsRes = await this._fetchAndCache(robotsUrl);
+    const robotsRes = await this._fetchAndCache(robotsUrl, { forceRefresh: true });
 
     if (robotsRes.text) {
       const robotsTxtFile = path.join(robotsDir, `${host}.txt`);

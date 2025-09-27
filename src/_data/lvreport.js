@@ -3,6 +3,8 @@ import fs from 'node:fs/promises'
 import path from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 
+import MiniSearch from 'minisearch'
+
 import { cacheRemoteImage } from '../lib/cache/remote-images.mjs'
 
 // This file is a data helper for Eleventy. It reads the summary and
@@ -288,7 +290,7 @@ function parseRobots(text) {
   for (const raw of lines) {
     const line = raw.trim()
     if (!line || line.startsWith('#')) continue
-    const m = line.match(/^([A-Za-z][A-Za-z\-]*)\s*:\s*(.+)$/)
+    const m = line.match(/^([A-Za-z][A-Za-z-]*)\s*:\s*(.+)$/)
     if (!m) continue
     const key = m[1].toLowerCase()
     const val = m[2].trim()
@@ -687,6 +689,115 @@ function makeBreakdown(counts, meta, total) {
   })
 }
 
+const PAGINATION_DEFAULT_SIZES = {
+  sitemaps: 150,
+  docs: 150,
+  robots: 120,
+  duplicates: 60,
+  topProducts: 60,
+  hostStats: 160,
+}
+
+function paginateList(items, size) {
+  const list = Array.isArray(items) ? items : []
+  const numericSize = Number(size)
+  const chunkSize = Math.max(1, Number.isFinite(numericSize) && numericSize > 0 ? numericSize : 1)
+  const totalItems = list.length
+  const pageCount = Math.max(1, Math.ceil(totalItems / chunkSize))
+  const pages = []
+  for (let pageNumber = 0; pageNumber < pageCount; pageNumber++) {
+    const start = pageNumber * chunkSize
+    const end = Math.min(start + chunkSize, totalItems)
+    const pageItems = list.slice(start, end)
+    const from = totalItems ? start + 1 : 0
+    const to = totalItems ? end : 0
+    pages.push({
+      pageNumber,
+      pageCount,
+      size: chunkSize,
+      totalItems,
+      items: pageItems,
+      from,
+      to,
+      hasPrev: pageNumber > 0,
+      hasNext: pageNumber < pageCount - 1,
+    })
+  }
+  if (pages.length === 0) {
+    pages.push({
+      pageNumber: 0,
+      pageCount: 1,
+      size: chunkSize,
+      totalItems: 0,
+      items: [],
+      from: 0,
+      to: 0,
+      hasPrev: false,
+      hasNext: false,
+    })
+  }
+  return { size: chunkSize, totalItems, pageCount: pages.length, pages }
+}
+
+function buildPagination(sections, overrides = {}) {
+  const meta = {}
+  let globalPages = 1
+  for (const [key, list] of Object.entries(sections)) {
+    const cfg = overrides[key] || {}
+    const chosenSize = cfg.size || cfg || PAGINATION_DEFAULT_SIZES[key] || 100
+    const paged = paginateList(list, chosenSize)
+    meta[key] = { ...paged, size: chosenSize }
+    if (paged.pageCount > globalPages) {
+      globalPages = paged.pageCount
+    }
+  }
+
+  const pages = []
+  for (let pageNumber = 0; pageNumber < globalPages; pageNumber++) {
+    const sectionsForPage = {}
+    for (const [key, details] of Object.entries(meta)) {
+      const current = details.pages[pageNumber]
+      if (current) {
+        sectionsForPage[key] = current
+      } else {
+        sectionsForPage[key] = {
+          pageNumber,
+          pageCount: details.pageCount,
+          size: details.size,
+          totalItems: details.totalItems,
+          items: [],
+          from: 0,
+          to: 0,
+          hasPrev: pageNumber > 0,
+          hasNext: pageNumber < details.pageCount - 1,
+        }
+      }
+    }
+    pages.push({
+      pageNumber,
+      pageCount: globalPages,
+      sections: sectionsForPage,
+    })
+  }
+
+  return { sections: meta, pages }
+}
+
+function pushSearchDoc(target, doc = {}) {
+  const entry = {
+    id: doc.id,
+    section: doc.section,
+    title: doc.title || '',
+    description: doc.description || '',
+    href: doc.href || '',
+    badge: doc.badge || '',
+    tags: Array.isArray(doc.tags) ? doc.tags : [],
+    meta: doc.meta || {},
+  }
+  target.push(entry)
+  return entry
+}
+
 // The main data loader. Returns an object with all the data needed
 // for the report template. See report.njk for details on how these
 // values are consumed.
@@ -704,6 +815,7 @@ async function buildReportData() {
     ])
 
   const bundleExists = await fileExists(BUNDLE_ARCHIVE_PATH)
+  const baseHref = '/content/projects/lv-images/generated/lv/'
 
   const rev = buildReverseUrlmeta(urlmeta)
 
@@ -824,17 +936,33 @@ async function buildReportData() {
   // imageCount (number of items parsed), fetch status and path to
   // cached file, if available.
   const sitemapsLog = Array.isArray(summary?.sitemaps) ? summary.sitemaps : []
-  const sitemaps = sitemapsLog.map((s) => {
+  const searchDocuments = []
+
+  const sitemaps = sitemapsLog.map((s, index) => {
     const um = urlmeta[s.url] || {}
+    const id = `sitemaps-${index}`
+    const hrefCached = um.path
+      ? path.relative(LV_BASE, path.resolve(um.path)).split(path.sep).join('/')
+      : ''
+    const cachedHrefFull = hrefCached ? `${baseHref}${hrefCached}` : ''
+    pushSearchDoc(searchDocuments, {
+      id,
+      section: 'sitemaps',
+      title: s.host || s.url || 'Sitemap',
+      description: s.url || '',
+      href: cachedHrefFull || s.url || '',
+      badge: classifySitemap(s.url),
+      tags: ['sitemap', classifySitemap(s.url)].filter(Boolean),
+      meta: { status: um.status ?? '', itemCount: s.itemCount ?? s.imageCount ?? 0 },
+    })
     return {
+      id,
       host: s.host || '',
       url: s.url,
       type: classifySitemap(s.url),
       imageCount: s.itemCount ?? s.imageCount ?? 0,
       status: um.status ?? '',
-      savedPath: um.path
-        ? path.relative(LV_BASE, path.resolve(um.path)).split(path.sep).join('/')
-        : '',
+      savedPath: hrefCached,
     }
   })
 
@@ -842,6 +970,7 @@ async function buildReportData() {
   // each file, classify its contents (XML vs HTML error vs JSON etc.),
   // attach fetch status from urlmeta, and build a preview snippet.
   const docs = []
+  let docIndex = 0
   const docCounts = Object.create(null)
   for await (const absPath of walk(SITEMAPS_DIR)) {
     if (!/\.(xml|txt|gz)$/i.test(absPath)) continue
@@ -883,7 +1012,9 @@ async function buildReportData() {
     const classification = classifyDocContent(relPath, previewSource)
     docCounts[classification.category] = (docCounts[classification.category] || 0) + 1
     const preview = truncatePreview(previewSource, 360)
+    const id = `docs-${docIndex++}`
     docs.push({
+      id,
       host,
       kind,
       url,
@@ -900,6 +1031,16 @@ async function buildReportData() {
       httpLabel: classification.httpLabel || '',
       isIssue: classification.isIssue,
       preview,
+    })
+    pushSearchDoc(searchDocuments, {
+      id,
+      section: 'docs',
+      title: `${host || kind} document`,
+      description: relPath,
+      href: `${baseHref}${relPath}`,
+      badge: classification.label,
+      tags: ['docs', classification.category, kind].filter(Boolean),
+      meta: { status: meta.status ?? '', http: classification.httpLabel || '' },
     })
   }
   docs.sort((a, b) => a.host.localeCompare(b.host) || a.savedPath.localeCompare(b.savedPath))
@@ -920,6 +1061,7 @@ async function buildReportData() {
   const allHosts = Array.from(robotsHosts).filter(Boolean).sort()
 
   const robots = []
+  let robotsIndex = 0
   const robotsCounts = Object.create(null)
   for (const host of allHosts) {
     const robotsPath = path.join(ROBOTS_DIR, `${host}.txt`)
@@ -981,10 +1123,13 @@ async function buildReportData() {
     const classification = classifyRobotsResponse(rawText || '', hasCached)
     robotsCounts[classification.category] = (robotsCounts[classification.category] || 0) + 1
     const sizeBytes = rawText ? Buffer.byteLength(rawText, 'utf8') : 0
+    const id = `robots-${robotsIndex++}`
+    const hrefCached = rawText ? path.relative(LV_BASE, robotsPath).split(path.sep).join('/') : ''
     robots.push({
+      id,
       host,
       hasCached,
-      robotsTxtPath: rawText ? path.relative(LV_BASE, robotsPath).split(path.sep).join('/') : '',
+      robotsTxtPath: hrefCached,
       rawText: rawText || '',
       linesTotal: parsed && parsed.groups
         ? parsed.groups.reduce((sum, g) => sum + g.rules.length, 0)
@@ -1003,6 +1148,22 @@ async function buildReportData() {
       httpLabel: classification.httpLabel || '',
       isIssue: classification.isIssue,
       preview: truncatePreview(rawText, 360),
+    })
+    pushSearchDoc(searchDocuments, {
+      id,
+      section: 'robots',
+      title: `${host} robots.txt`,
+      description: classification.label,
+      href: hrefCached ? `${baseHref}${hrefCached}` : `https://${host}/robots.txt`,
+      badge: classification.tone,
+      tags: ['robots', classification.category].filter(Boolean),
+      meta: {
+        directives: parsed?.merged ? {
+          allow: parsed.merged.allow.length,
+          disallow: parsed.merged.disallow.length,
+          noindex: parsed.merged.noindex.length,
+        } : {},
+      },
     })
   }
 
@@ -1092,6 +1253,16 @@ async function buildReportData() {
           duplicates: group.images.filter((i) => i.id !== cid).map((i) => i.id),
           count: group.count,
         })
+        pushSearchDoc(searchDocuments, {
+          id: cid,
+          section: 'duplicates',
+          title: group.canonical.basename || group.canonical.title || group.canonical.pageUrl || 'Duplicate image',
+          description: group.canonical.pageUrl || group.canonical.src,
+          href: group.canonical.pageUrl || group.canonical.src,
+          badge: 'duplicate',
+          tags: ['duplicates', group.count > 2 ? 'heavy' : 'pair'],
+          meta: { duplicateCount: group.count - 1 },
+        })
       }
     }
     return list.sort((a, b) => b.count - a.count)
@@ -1100,30 +1271,42 @@ async function buildReportData() {
   // Construct a list of top products sorted by total number of images.
   // Each product entry contains pageUrl, title, total image count,
   // unique image count (non-duplicate), firstSeen, lastSeen and
-  // associated images.  We sort by total image count descending and
-  // limit the list to a reasonable number for display (e.g. 50).
+  // associated images.  We sort by total image count descending so
+  // pagination can surface the heaviest pages first.
   const topProducts = (() => {
     const prods = []
     if (allProducts && typeof allProducts === 'object') {
-      for (const [key, prod] of Object.entries(allProducts)) {
+      for (const [pageKey, prod] of Object.entries(allProducts)) {
         const total = Array.isArray(prod.images) ? prod.images.length : 0
         const unique = Array.isArray(prod.images)
           ? prod.images.filter((img) => !img.duplicateOf).length
           : 0
+        const resolvedPageUrl = prod.pageUrl || pageKey
+        const id = `product-${prods.length}`
         prods.push({
-          pageUrl: prod.pageUrl,
-          title: prod.title || prod.pageUrl,
+          id,
+          pageUrl: resolvedPageUrl,
+          title: prod.title || resolvedPageUrl,
           totalImages: total,
           uniqueImages: unique,
           firstSeen: prod.firstSeen,
           lastSeen: prod.lastSeen,
           images: prod.images || [],
         })
+        pushSearchDoc(searchDocuments, {
+          id,
+          section: 'products',
+          title: prod.title || resolvedPageUrl,
+          description: resolvedPageUrl,
+          href: resolvedPageUrl,
+          badge: `${unique} unique · ${total} total`,
+          tags: ['product'],
+          meta: { uniqueImages: unique, totalImages: total },
+        })
       }
     }
     prods.sort((a, b) => b.totalImages - a.totalImages)
-    // limit to top 50 products for display to avoid overwhelming the report
-    return prods.slice(0, 50)
+    return prods
   })()
 
   // Construct an overview of images, unique images, duplicates and pages per host.  Each
@@ -1149,7 +1332,7 @@ async function buildReportData() {
     }
     // Count pages per host
     if (allProducts && typeof allProducts === 'object') {
-      for (const [pageUrl, prod] of Object.entries(allProducts)) {
+      for (const pageUrl of Object.keys(allProducts)) {
         let host
         try {
           host = new URL(pageUrl).host
@@ -1178,7 +1361,21 @@ async function buildReportData() {
         stats[host].duplicates += Math.max(0, dup.count - 1)
       }
     }
-    return Object.values(stats).sort((a, b) => b.images - a.images)
+    const sorted = Object.values(stats).sort((a, b) => b.images - a.images)
+    return sorted.map((entry, index) => {
+      const item = { ...entry, id: `host-${index}` }
+      pushSearchDoc(searchDocuments, {
+        id: item.id,
+        section: 'hosts',
+        title: item.host || 'Unknown host',
+        description: `${item.images} images (${item.uniqueImages} unique)`,
+        href: '#hosts-section',
+        badge: 'host',
+        tags: ['hosts'],
+        meta: { duplicates: item.duplicates, pages: item.pages },
+      })
+      return item
+    })
   })()
 
   // Sample a few image items from NDJSON shards for the UI.
@@ -1204,9 +1401,69 @@ async function buildReportData() {
     }),
   )
 
+  const hostCount = (() => {
+    if (summary?.totals && typeof summary.totals.hosts === 'number') return summary.totals.hosts
+    if (Array.isArray(hostStats) && hostStats.length) return hostStats.length
+    if (Array.isArray(allImages)) {
+      const set = new Set()
+      for (const img of allImages) {
+        if (img?.host) set.add(img.host)
+      }
+      return set.size
+    }
+    return 0
+  })()
+
+  const sitemapsProcessed = (() => {
+    if (summary?.totals && typeof summary.totals.sitemapsProcessed === 'number') {
+      return summary.totals.sitemapsProcessed
+    }
+    return sitemaps.length
+  })()
+
+  const itemsFound = (() => {
+    if (summary?.totals && typeof summary.totals.itemsFound === 'number') {
+      return summary.totals.itemsFound
+    }
+    return uniqueImagesCount
+  })()
+
+  const totals = {
+    images: uniqueImagesCount,
+    pages: uniquePagesCount,
+    hosts: hostCount,
+    sitemapsProcessed,
+    itemsFound,
+  }
+
+  const { sections: paginationSections, pages } = buildPagination({
+    sitemaps,
+    docs,
+    robots,
+    duplicates: duplicatesList,
+    topProducts,
+    hostStats,
+  })
+
+  const miniSearchOptions = {
+    fields: ['title', 'description', 'section', 'tags'],
+    storeFields: ['id', 'section', 'title', 'description', 'href', 'badge', 'tags', 'meta'],
+    searchOptions: { prefix: true, fuzzy: 0.2 },
+  }
+  const globalMiniSearch = new MiniSearch(miniSearchOptions)
+  if (searchDocuments.length) {
+    globalMiniSearch.addAll(searchDocuments)
+  }
+
+  const search = {
+    documents: searchDocuments,
+    index: globalMiniSearch.toJSON(),
+    options: miniSearchOptions,
+  }
+
   return {
     // Base HREF used by the report to link into cached files
-    baseHref: '/content/projects/lv-images/generated/lv/',
+    baseHref,
     summary,
     sitemaps,
     docs,
@@ -1236,10 +1493,10 @@ async function buildReportData() {
       items: itemsMetrics,
     },
     // Expose global totals for quick display
-    totals: {
-      images: uniqueImagesCount,
-      pages: uniquePagesCount,
-    },
+    totals,
+    pagination: paginationSections,
+    pages,
+    search,
   }
 }
 
@@ -1280,12 +1537,15 @@ export default async function() {
   }
 
   const datasetCached = await readDatasetReport()
-  if (datasetCached && signaturesEqual(signature, datasetCached.signature)) {
+  const datasetPayload = datasetCached?.payload
+  const datasetFresh =
+    datasetPayload && Array.isArray(datasetPayload.pages) && datasetPayload.pages.length > 0
+  if (datasetCached && datasetFresh && signaturesEqual(signature, datasetCached.signature)) {
     const cached = await readCachedReport()
     if (!cached || !signaturesEqual(signature, cached.signature)) {
-      await writeCachedReport(signature, datasetCached.payload)
+      await writeCachedReport(signature, datasetPayload)
     }
-    return datasetCached.payload
+    return datasetPayload
   }
 
   const cached = await readCachedReport()
