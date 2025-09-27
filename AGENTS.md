@@ -7,7 +7,7 @@ Project facts for tools and agents. No meta-instructions.
 - Node: **≥22.19.0** (`"engines.node": ">=22.19.0"`)
 - Module system: **ESM** (`"type": "module"`)
 - Agent internet access: On (Unrestricted)
-- Chromium provisioning: `./bin/install-chromium.sh` installs via apt and exports `PUPPETEER_EXECUTABLE_PATH` when available.
+- Chromium provisioning: `./bin/install-chromium.sh` writes diagnostics to **stderr** and the resolved path to **stdout** so Docker/CI layers can capture it; the script installs dependencies via apt when possible before falling back to Playwright-managed downloads and exports `PUPPETEER_EXECUTABLE_PATH` when available.
 
 ## Build System
 
@@ -19,7 +19,8 @@ Project facts for tools and agents. No meta-instructions.
 ## Playwright & Browser Tooling
 
 - Resolver checks `PUPPETEER_EXECUTABLE_PATH`, system Chromium binaries (`/usr/bin`, Snap), and Playwright caches under `node_modules/.cache/ms-playwright` and `~/.cache/ms-playwright`.
-- Provision locally with `./bin/install-chromium.sh` **or** `npx playwright install chromium`; CI uses the script (skip inline apt snippets).
+
+- Provision locally with `./bin/install-chromium.sh` **or** `npx playwright install chromium`; CI and Docker builds use the script (skip inline apt snippets) and rely on the emitted path for `/usr/local/bin/chromium` symlinks.
 - `node tools/check-chromium.mjs` prints the resolved browser path and suggests remediation if missing.
 
 ## Paths

@@ -5,7 +5,7 @@ ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 RESOLVER="${ROOT_DIR}/tools/resolve-chromium.mjs"
 
 log() {
-  printf '%s\n' "$*"
+  printf '%s\n' "$*" >&2
 }
 
 find_chromium() {
