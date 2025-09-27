@@ -7,7 +7,7 @@ FROM node:24-bookworm AS deps
 WORKDIR /app
 
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends build-essential python3 ca-certificates chromium git && \
+    apt-get install -y --no-install-recommends build-essential python3 ca-certificates git && \
     rm -rf /var/lib/apt/lists/*
 
 ENV npm_config_fund=false \
@@ -19,14 +19,21 @@ ENV npm_config_fund=false \
     https_proxy= \
     PUPPETEER_SKIP_DOWNLOAD=1 \
     PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1 \
-    PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium \
     PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1
 
 COPY package*.json ./
 COPY patches/ ./patches/
 # postinstall needs the patch runner available during dependency install
 COPY tools/apply-patches.mjs ./tools/apply-patches.mjs
+COPY tools/resolve-chromium.mjs ./tools/resolve-chromium.mjs
+COPY bin/install-chromium.sh ./bin/install-chromium.sh
 RUN npm ci --no-audit --no-fund
+RUN chmod +x bin/install-chromium.sh && \
+    mkdir -p /usr/local/bin && \
+    PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=0 ./bin/install-chromium.sh >/tmp/chromium-path && \
+    CHROMIUM_PATH="$(tail -n1 /tmp/chromium-path)" && \
+    ln -sf "$CHROMIUM_PATH" /usr/local/bin/chromium && \
+    ln -sf "$CHROMIUM_PATH" /usr/local/bin/chromium-browser
 
 ############################
 # build layer (production)
@@ -46,10 +53,11 @@ ENV NODE_ENV=production \
     https_proxy= \
     PUPPETEER_SKIP_DOWNLOAD=1 \
     PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1 \
-    PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium \
+    PUPPETEER_EXECUTABLE_PATH=/usr/local/bin/chromium \
     PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1
 
-COPY --from=deps /usr/bin/chromium /usr/bin/chromium
+COPY --from=deps /usr/local/bin/chromium /usr/local/bin/chromium
+COPY --from=deps /usr/local/bin/chromium-browser /usr/local/bin/chromium-browser
 COPY --from=deps /app/node_modules /app/node_modules
 COPY package*.json ./
 COPY tools ./tools

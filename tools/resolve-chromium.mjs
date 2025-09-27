@@ -1,5 +1,5 @@
-import { accessSync, constants, readdirSync } from 'node:fs'
 import { execFileSync } from 'node:child_process'
+import { accessSync, constants, readdirSync } from 'node:fs'
 import path from 'node:path'
 import process from 'node:process'
 import { fileURLToPath } from 'node:url'
@@ -12,6 +12,8 @@ const ENV_CANDIDATES = [
 ]
 
 const SYSTEM_CANDIDATES = [
+  '/usr/local/bin/chromium',
+  '/usr/local/bin/chromium-browser',
   '/usr/bin/chromium',
   '/usr/bin/chromium-browser',
   '/usr/bin/google-chrome-stable',
@@ -84,7 +86,7 @@ export function resolveChromium() {
       // continue searching
     }
   }
-  throw new Error('Chromium not found. Install via ./bin/install-chromium.sh or `npx playwright install chromium`.')
+  throw new Error('Chromium not found after automated provisioning attempts (bin/install-chromium.sh).')
 }
 
 const modulePath = fileURLToPath(import.meta.url)
