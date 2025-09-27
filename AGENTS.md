@@ -19,6 +19,7 @@ Project facts for tools and agents. No meta-instructions.
 ## Playwright & Browser Tooling
 
 - Resolver checks `PUPPETEER_EXECUTABLE_PATH`, system Chromium binaries (`/usr/bin`, Snap), and Playwright caches under `node_modules/.cache/ms-playwright` and `~/.cache/ms-playwright`.
+
 - Provision locally with `./bin/install-chromium.sh` **or** `npx playwright install chromium`; CI and Docker builds use the script (skip inline apt snippets) and rely on the emitted path for `/usr/local/bin/chromium` symlinks.
 - `node tools/check-chromium.mjs` prints the resolved browser path and suggests remediation if missing.
 

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="https://press.louisvuitton.com/wp-content/plugins/epresspack-visibility/xsl/bwp-sitemap.xsl"?>
+
+<urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+	http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd"
+	xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+	<url>
+		<loc>https://press.louisvuitton.com/section/pages-site/</loc>
+		<lastmod>2025-03-06T15:43:47+00:00</lastmod>
+		<changefreq>monthly</changefreq>
+		<priority>0.4</priority>
+	</url>
+</urlset>
+
+<!-- This sitemap was originally generated in 0.011 second(s) (Memory usage: 5.57 MB) - 3 queries - 1 URL(s) listed -->
