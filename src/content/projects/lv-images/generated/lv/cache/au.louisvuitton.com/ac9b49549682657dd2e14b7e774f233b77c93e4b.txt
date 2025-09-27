@@ -1,0 +1,19 @@
+User-Agent: *
+Disallow: /eng-au/mylv/
+Disallow: /eng-au/search*
+Disallow: /*article_search_result?*
+Disallow: /exclusive-access/
+Disallow: /*sort=
+Disallow: /*kitID=
+Disallow: /*?search=
+Disallow: /*lvxmurakami
+Disallow: */booking-appointments?storeId=
+Disallow: /*personalizationId=
+
+Allow: */mylv/booking-appointments	
+Allow: */mylv/newsletter
+ 
+Sitemap: https://au.louisvuitton.com/content/louisvuitton/sitemap/eng_AU/sitemap-product.xml
+Sitemap: https://au.louisvuitton.com/content/louisvuitton/sitemap/eng_AU/sitemap-content.xml
+Sitemap: https://au.louisvuitton.com/content/louisvuitton/sitemap/eng_AU/sitemap-catalog.xml
+Sitemap: https://au.louisvuitton.com/content/louisvuitton/sitemap/eng_AU/sitemap-image.xml
