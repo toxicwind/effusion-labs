@@ -1,0 +1,1 @@
+{"traceId":null,"date":"2025-09-27T09:07:06.126Z","path":"/robots.txt","statusCode":404,"errors":[{"errorCode":"genericError","message":null,"scope":null}],"error":"Not found","message":"Cannot GET /robots.txt","details":null}

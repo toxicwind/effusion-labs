@@ -598,6 +598,30 @@ class Crawler {
       })
     }
 
+
+
+    const bannedResults = []
+    for (const result of zeroSitemapResults) {
+      const previousIndexPath = path.join(cacheDir, result.host, '_index.json')
+      let previousSitemapCount = 0
+      try {
+        const previous = JSON.parse(await readFile(previousIndexPath, 'utf8'))
+        if (Array.isArray(previous?.sitemaps)) {
+          previousSitemapCount = previous.sitemaps.length
+        }
+      } catch {}
+
+      if (previousSitemapCount > 0) {
+        console.log(
+          `   ◦ ${result.host}: preserving due to ${previousSitemapCount} previously discovered sitemap${previousSitemapCount === 1 ? '' : 's'}`,
+        )
+        continue
+      }
+      bannedResults.push(result)
+    }
+
+    const bannedHosts = bannedResults.map((r) => r.host)
+
     const bannedSet = new Set(bannedHosts)
 
     if (bannedHosts.length > 0) {
@@ -615,6 +639,7 @@ class Crawler {
       )
       bannedHosts.forEach((host) => console.log(`   - ${host}`))
 
+
       const updatedHosts = hosts.filter((host) => !bannedSet.has(host))
       const serialized = updatedHosts.length > 0 ? `${updatedHosts.join('\n')}\n` : ''
       await writeFile(hostsTxtPath, serialized, 'utf8')
@@ -625,8 +650,16 @@ class Crawler {
     } else if (zeroSitemapResults.length > 0) {
       if (massRemovalSafeguard.length > 0) {
         console.log('\n⚠️ Zero-sitemap bans skipped due to safeguard (all hosts affected).')
+      } else if (this.config.noRewriteHosts) {
+        console.log('⚠️ Skipped hosts.txt rewrite due to --no-rewrite-hosts')
       } else {
-        console.log('\n⚖️ Zero-sitemap hosts detected, but no bans enforced.')
+        const updatedHosts = hosts.filter((host) => !bannedSet.has(host))
+        const serialized = updatedHosts.length > 0 ? `${updatedHosts.join('\n')}\n` : ''
+        await writeFile(hostsTxtPath, serialized, 'utf8')
+        await writeFile(hostsActiveSnapshotPath, serialized, 'utf8')
+        console.log(
+          `📝 hosts.txt rewritten (active=${updatedHosts.length}, removed=${bannedHosts.length})`,
+        )
       }
     } else {
       console.log('\n✅ No zero-sitemap hosts to ban in this run.')
@@ -696,6 +729,7 @@ class Crawler {
         skippedDueToUnknownHistory,
         massRemovalSafeguardTriggered: massRemovalSafeguard.length > 0,
         massRemovalSafeguardHosts: massRemovalSafeguard,
+        skippedRewrite: Boolean(this.config.noRewriteHosts && bannedHosts.length > 0),
       },
       sitemaps: sitemapsLog.sort((a, b) => b.itemCount - a.itemCount),
     }
@@ -710,6 +744,7 @@ async function main() {
     process.argv.slice(2).map((x) => (x.includes('=') ? x.split('=') : [x, true])),
   )
   const MAX_HOSTS = argv.has('--max-hosts') ? Number(argv.get('--max-hosts')) : Infinity
+  const NO_REWRITE_HOSTS = argv.has('--no-rewrite-hosts')
 
   console.log('🚀 Starting crawler (Playwright mode)...')
   await mkdir(cacheDir, { recursive: true })
@@ -816,6 +851,7 @@ async function main() {
     itemsDir,
     initialBloom,
     recordUrlMeta,
+    noRewriteHosts: NO_REWRITE_HOSTS,
   }
 
   const crawler = new Crawler(config)

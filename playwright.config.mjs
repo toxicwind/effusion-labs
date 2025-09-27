@@ -3,7 +3,16 @@ import { resolveChromium } from './tools/resolve-chromium.mjs'
 
 const PORT = process.env.PLAYWRIGHT_WEB_PORT ? Number(process.env.PLAYWRIGHT_WEB_PORT) : 4173
 const HOST = process.env.PLAYWRIGHT_WEB_HOST || '127.0.0.1'
-const EXECUTABLE_PATH = resolveChromium()
+let EXECUTABLE_PATH
+try {
+  EXECUTABLE_PATH = resolveChromium()
+} catch (error) {
+  const hint = error instanceof Error ? error.message : String(error)
+  if (process.env.CI) {
+    throw error
+  }
+  console.warn(`⚠️ ${hint}. Falling back to Playwright-managed Chromium.`)
+}
 
 export default defineConfig({
   testDir: './tests/playwright',
@@ -17,7 +26,6 @@ export default defineConfig({
     viewport: { width: 1280, height: 720 },
     browserName: 'chromium',
     launchOptions: {
-      executablePath: EXECUTABLE_PATH,
       args: [
         '--disable-http-cache',
         '--disk-cache-size=0',
@@ -26,6 +34,7 @@ export default defineConfig({
         '--disable-offline-auto-reload',
         '--disable-background-networking',
       ],
+      ...(EXECUTABLE_PATH ? { executablePath: EXECUTABLE_PATH } : {}),
     },
     extraHTTPHeaders: {
       'cache-control': 'no-store, max-age=0, must-revalidate',

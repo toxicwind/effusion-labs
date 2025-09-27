@@ -1,0 +1,1 @@
+User-agent: *Disallow: /front/static$Disallow: /front/static/$
