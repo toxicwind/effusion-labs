@@ -44,12 +44,11 @@ const imageIndexPath = path.join(imageCacheDir, 'index.json')
 const markdownMirrorDir = path.join(genDir, 'pages-markdown')
 
 const robotsDir = path.join(cacheDir, 'robots')
+const sitemapsDir = path.join(cacheDir, 'sitemaps')
 const urlmetaPath = path.join(cacheDir, 'urlmeta.json')
 
 const itemsMetaPath = path.join(genDir, 'items-meta.json')
 const runsHistoryPath = path.join(genDir, 'runs-history.json')
-const allImagesPath = path.join(genDir, 'all-images.json')
-const allProductsPath = path.join(genDir, 'all-products.json')
 
 const hostsTxtPath = path.join(baseDir, './config/hosts.txt')
 const hostsBannedPath = path.join(baseDir, './config/hosts.banned.ndjson')
@@ -1075,6 +1074,7 @@ async function main() {
   const forcePageRefresh = argv.has('--refresh-pages')
   const forceImageRefresh = argv.has('--refresh-images')
   const skipBundle = argv.has('--skip-bundle')
+  const keepWorkdir = argv.has('--keep-workdir')
   const bundleLabel = argv.get('--bundle-label')
     ? String(argv.get('--bundle-label'))
     : captureImages
@@ -1090,6 +1090,7 @@ async function main() {
   await mkdir(cacheDir, { recursive: true })
   await mkdir(itemsDir, { recursive: true })
   await mkdir(robotsDir, { recursive: true })
+  await mkdir(sitemapsDir, { recursive: true })
   await ensureDir(pageSnapshotsDir)
   await ensureDir(markdownMirrorDir)
   await ensureDir(imageCacheDir)
@@ -1383,8 +1384,6 @@ async function main() {
   await saveJson(urlmetaPath, JSON.parse(JSON.stringify(urlmeta)))
   await saveJson(itemsMetaPath, itemsMeta)
   await saveJson(runsHistoryPath, runsHistory)
-  await saveJson(allImagesPath, allImages)
-  await saveJson(allProductsPath, allProducts)
 
   console.log('\n🧮 Building lvreport dataset cache...')
   try {
@@ -1430,6 +1429,14 @@ async function main() {
     }
   } else {
     console.log('\n📦 Bundle update skipped via --skip-bundle flag.')
+  }
+
+  if (!skipBundle && !keepWorkdir) {
+    console.log('\n🧹 Pruning crawler workspace (items, sitemaps, robots)...')
+    const pruneTargets = [itemsDir, sitemapsDir, robotsDir]
+    await Promise.all(pruneTargets.map((dir) => rm(dir, { recursive: true, force: true })))
+  } else if (!skipBundle && keepWorkdir) {
+    console.log('\n🧳 Workspace retained via --keep-workdir flag.')
   }
 
   console.log(`\n📊 Summary → ${path.relative(process.cwd(), summaryPath)}`)

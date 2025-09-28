@@ -127,7 +127,12 @@ function transformTag(context, sourceNode, rootTargetNode, opts) {
   }
 
   const outputDirectoryFromAttribute = getOutputDirectory(sourceNode)
-  const instanceOptions = getOutputLocations(originalSource, outputDirectoryFromAttribute, context.page, opts)
+  const instanceOptions = getOutputLocations(
+    originalSource,
+    outputDirectoryFromAttribute,
+    context.page,
+    opts,
+  )
 
   return imageAttributesToPosthtmlNode(sourceNode.attrs, instanceOptions, opts).then(
     (newNode) => {
@@ -170,7 +175,10 @@ export function localImageTransformPlugin(eleventyConfig, options = {}) {
 
   const opts = getGlobalOptions(eleventyConfig, mergedOptions, 'transform')
 
-  eleventyConfig.addJavaScriptFunction('__private_eleventyImageTransformConfigurationOptions', () => opts)
+  eleventyConfig.addJavaScriptFunction(
+    '__private_eleventyImageTransformConfigurationOptions',
+    () => opts,
+  )
 
   function posthtmlPlugin(context) {
     return async (tree) => {
@@ -211,7 +219,7 @@ export function localImageTransformPlugin(eleventyConfig, options = {}) {
 
   if (!eleventyConfig.htmlTransformer || !('addPosthtmlPlugin' in eleventyConfig.htmlTransformer)) {
     throw new Error(
-      "[@11ty/eleventy-img] `localImageTransformPlugin` is not compatible with this version of Eleventy. You will need to use v3.0.0 or newer.",
+      '[@11ty/eleventy-img] `localImageTransformPlugin` is not compatible with this version of Eleventy. You will need to use v3.0.0 or newer.',
     )
   }
 

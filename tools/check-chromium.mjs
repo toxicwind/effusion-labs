@@ -10,7 +10,9 @@ try {
 } catch (error) {
   const message = error instanceof Error ? error.message : String(error)
   console.error(`❌ ${message}`)
-  console.error('💡 Run ./bin/install-chromium.sh or `npx playwright install chromium` to provision a browser.')
+  console.error(
+    '💡 Run ./bin/install-chromium.sh or `npx playwright install chromium` to provision a browser.',
+  )
   process.exit(1)
 }
 
