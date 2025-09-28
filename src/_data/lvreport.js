@@ -35,6 +35,8 @@ const SUMMARY_JSON = path.join(LV_BASE, 'summary.json')
 const URLMETA_JSON = path.join(CACHE_DIR, 'urlmeta.json')
 const BLACKLIST_JSON = path.join(LV_BASE, 'hosts', 'blacklist.json')
 const ITEMS_META_JSON = path.join(LV_BASE, 'items-meta.json')
+const ALL_IMAGES_JSON = path.join(LV_BASE, 'all-images.json')
+const ALL_PRODUCTS_JSON = path.join(LV_BASE, 'all-products.json')
 // Runs history file captures recent run records with metrics.  Each
 // entry is an object { timestamp, metrics, totals }.  Only the last
 // 5 runs are retained in update‑dataset.  This path mirrors the
@@ -53,6 +55,8 @@ const CACHE_SIGNATURE_TARGETS = [
   URLMETA_JSON,
   BLACKLIST_JSON,
   ITEMS_META_JSON,
+  ALL_IMAGES_JSON,
+  ALL_PRODUCTS_JSON,
   RUNS_HISTORY_JSON,
   BUNDLE_MANIFEST_JSON,
   BUNDLE_ARCHIVE_PATH,
@@ -906,6 +910,8 @@ async function buildReportData() {
     urlmeta,
     blacklist,
     itemsMeta,
+    legacyAllImages,
+    legacyAllProducts,
     runsHistory,
     manifest,
     pageCacheIndex,
@@ -915,6 +921,8 @@ async function buildReportData() {
     loadJSON(URLMETA_JSON, {}),
     loadJSON(BLACKLIST_JSON, {}),
     loadJSON(ITEMS_META_JSON, {}),
+    loadJSON(ALL_IMAGES_JSON, []),
+    loadJSON(ALL_PRODUCTS_JSON, []),
     loadJSON(RUNS_HISTORY_JSON, []),
     loadJSON(BUNDLE_MANIFEST_JSON, null),
     loadJSON(PAGE_CACHE_INDEX_JSON, { version: 1, pages: {} }),
@@ -1102,52 +1110,162 @@ async function buildReportData() {
   const searchDocuments = []
 
   const allImages = []
-  const allProducts = {}
+  const allImagesMap = new Map()
+  const allProducts = Object.create(null)
   const hostSetFromMeta = new Set()
+
+  function upsertImage(entry) {
+    const id = String(entry?.id || '').trim()
+    if (!id) return null
+    const existing = allImagesMap.get(id)
+    if (existing) {
+      for (const key of ['src', 'basename', 'pageUrl', 'title', 'host', 'firstSeen', 'lastSeen']) {
+        if (!existing[key] && entry[key]) {
+          existing[key] = entry[key]
+        }
+      }
+      if (entry.duplicateOf && !existing.duplicateOf) existing.duplicateOf = entry.duplicateOf
+      if (existing.host) hostSetFromMeta.add(existing.host)
+      return existing
+    }
+    const normalized = {
+      id,
+      src: entry.src || '',
+      basename: entry.basename || '',
+      pageUrl: entry.pageUrl || '',
+      title: entry.title || '',
+      host: entry.host || '',
+      firstSeen: entry.firstSeen || '',
+      lastSeen: entry.lastSeen || '',
+      duplicateOf: entry.duplicateOf || null,
+    }
+    if (!normalized.basename && normalized.src) {
+      const noQuery = normalized.src.split('?')[0]?.split('#')[0] || normalized.src
+      normalized.basename = cleanText(path.basename(noQuery))
+    }
+    if (normalized.host) hostSetFromMeta.add(normalized.host)
+    allImagesMap.set(id, normalized)
+    allImages.push(normalized)
+    return normalized
+  }
+
+  function upsertProduct(pageUrl) {
+    const key = pageUrl || ''
+    if (!allProducts[key]) {
+      allProducts[key] = {
+        pageUrl: key,
+        title: '',
+        images: [],
+        firstSeen: '',
+        lastSeen: '',
+      }
+    }
+    return allProducts[key]
+  }
+
   for (const [id, meta] of Object.entries(itemsMeta || {})) {
     if (!meta || meta.removedAt) continue
     const itemType = (meta.itemType || 'image').toLowerCase()
     if (itemType !== 'image') continue
     const srcRaw = cleanText(meta.src || '')
-    const basename = (() => {
-      if (!srcRaw) return ''
-      const noQuery = srcRaw.split('?')[0]?.split('#')[0] || srcRaw
-      return cleanText(path.basename(noQuery))
-    })()
     const pageUrl = cleanText(meta.pageUrl || '')
     const title = cleanText(meta.title || '')
     const host = cleanText(meta.host || '')
-    if (host) hostSetFromMeta.add(host)
-    const imageEntry = {
+    const imageEntry = upsertImage({
       id,
       src: srcRaw,
-      basename,
-      firstSeen: meta.firstSeen || '',
-      lastSeen: meta.lastSeen || '',
-      duplicateOf: meta.duplicateOf || null,
       pageUrl,
       title,
       host,
+      firstSeen: meta.firstSeen || '',
+      lastSeen: meta.lastSeen || '',
+      duplicateOf: meta.duplicateOf || null,
+    })
+    const product = upsertProduct(pageUrl)
+    if (!product.images.some((img) => img.id === id)) {
+      product.images.push({ id, src: srcRaw, duplicateOf: meta.duplicateOf || null })
     }
-    allImages.push(imageEntry)
-    const productKey = pageUrl || ''
-    if (!allProducts[productKey]) {
-      allProducts[productKey] = {
-        pageUrl,
-        title: title || pageUrl,
-        images: [],
-        firstSeen: meta.firstSeen || '',
-        lastSeen: meta.lastSeen || '',
+    if (!product.title && title) product.title = title || pageUrl
+    if (!product.firstSeen || (meta.firstSeen && meta.firstSeen < product.firstSeen)) {
+      product.firstSeen = meta.firstSeen || product.firstSeen
+    }
+    if (!product.lastSeen || (meta.lastSeen && meta.lastSeen > product.lastSeen)) {
+      product.lastSeen = meta.lastSeen || product.lastSeen
+    }
+    if (imageEntry && imageEntry.pageUrl && !product.pageUrl) {
+      product.pageUrl = imageEntry.pageUrl
+    }
+  }
+
+  if (Array.isArray(legacyAllImages)) {
+    for (const legacy of legacyAllImages) {
+      const normalized = upsertImage({
+        id: legacy.id,
+        src: cleanText(legacy.src || ''),
+        basename: cleanText(legacy.basename || ''),
+        pageUrl: cleanText(legacy.pageUrl || ''),
+        title: cleanText(legacy.title || ''),
+        host: cleanText(legacy.host || ''),
+        firstSeen: legacy.firstSeen || '',
+        lastSeen: legacy.lastSeen || '',
+        duplicateOf: legacy.duplicateOf || null,
+      })
+      if (normalized?.pageUrl) {
+        const product = upsertProduct(normalized.pageUrl)
+        if (!product.images.some((img) => img.id === normalized.id)) {
+          product.images.push({
+            id: normalized.id,
+            src: normalized.src,
+            duplicateOf: normalized.duplicateOf || null,
+          })
+        }
+        if (!product.title && normalized.title) product.title = normalized.title
+        if (!product.firstSeen || (normalized.firstSeen && normalized.firstSeen < product.firstSeen)) {
+          product.firstSeen = normalized.firstSeen || product.firstSeen
+        }
+        if (!product.lastSeen || (normalized.lastSeen && normalized.lastSeen > product.lastSeen)) {
+          product.lastSeen = normalized.lastSeen || product.lastSeen
+        }
       }
     }
-    const product = allProducts[productKey]
-    product.images.push({ id, src: srcRaw, duplicateOf: meta.duplicateOf || null })
-    if (!product.title && title) product.title = title
-    if (meta.firstSeen && (!product.firstSeen || meta.firstSeen < product.firstSeen)) {
-      product.firstSeen = meta.firstSeen
-    }
-    if (meta.lastSeen && (!product.lastSeen || meta.lastSeen > product.lastSeen)) {
-      product.lastSeen = meta.lastSeen
+  }
+
+  if (Array.isArray(legacyAllProducts)) {
+    for (const legacyProduct of legacyAllProducts) {
+      const pageUrl = cleanText(legacyProduct.pageUrl || '')
+      const product = upsertProduct(pageUrl)
+      if (!product.pageUrl) product.pageUrl = pageUrl
+      if (!product.title && legacyProduct.title) product.title = cleanText(legacyProduct.title)
+      if (!product.firstSeen || (legacyProduct.firstSeen && legacyProduct.firstSeen < product.firstSeen)) {
+        product.firstSeen = legacyProduct.firstSeen || product.firstSeen
+      }
+      if (!product.lastSeen || (legacyProduct.lastSeen && legacyProduct.lastSeen > product.lastSeen)) {
+        product.lastSeen = legacyProduct.lastSeen || product.lastSeen
+      }
+      if (Array.isArray(legacyProduct.images)) {
+        for (const img of legacyProduct.images) {
+          const normalizedImg = upsertImage({
+            id: img?.id,
+            src: cleanText(img?.src || ''),
+            pageUrl,
+            duplicateOf: img?.duplicateOf || null,
+          })
+          if (!normalizedImg) continue
+          if (!product.images.some((existing) => existing.id === normalizedImg.id)) {
+            product.images.push({
+              id: normalizedImg.id,
+              src: normalizedImg.src,
+              duplicateOf: normalizedImg.duplicateOf || null,
+            })
+          }
+        }
+      }
+      if (legacyProduct.cache && !product.cache) {
+        product.cache = legacyProduct.cache
+      }
+      if (Array.isArray(legacyProduct.urls) && !product.urls) {
+        product.urls = legacyProduct.urls
+      }
     }
   }
 
@@ -1631,6 +1749,8 @@ async function buildReportData() {
     }),
   )
 
+  deepCleanInPlace(allImages)
+  deepCleanInPlace(allProducts)
   deepCleanInPlace(sitemaps)
   deepCleanInPlace(docs)
   deepCleanInPlace(robots)
@@ -1719,8 +1839,8 @@ async function buildReportData() {
     docs,
     robots,
     sample,
-    allImages: [],
-    allProducts: [],
+    allImages,
+    allProducts,
     // Expose runs history so the report can surface a timeline of
     // previous crawls.  Each entry is { timestamp, metrics, totals }.
     runsHistory,

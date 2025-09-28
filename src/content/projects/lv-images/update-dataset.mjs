@@ -49,6 +49,8 @@ const urlmetaPath = path.join(cacheDir, 'urlmeta.json')
 
 const itemsMetaPath = path.join(genDir, 'items-meta.json')
 const runsHistoryPath = path.join(genDir, 'runs-history.json')
+const allImagesPath = path.join(genDir, 'all-images.json')
+const allProductsPath = path.join(genDir, 'all-products.json')
 
 const hostsTxtPath = path.join(baseDir, './config/hosts.txt')
 const hostsBannedPath = path.join(baseDir, './config/hosts.banned.ndjson')
@@ -1405,6 +1407,8 @@ async function main() {
   await saveJson(urlmetaPath, JSON.parse(JSON.stringify(urlmeta)))
   await saveJson(itemsMetaPath, itemsMeta)
   await saveJson(runsHistoryPath, runsHistory)
+  await saveJson(allImagesPath, allImages)
+  await saveJson(allProductsPath, allProducts)
 
   console.log('\n🧮 Building lvreport dataset cache...')
   try {

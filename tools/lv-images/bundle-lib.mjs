@@ -18,6 +18,8 @@ const stableBundlePath = path.join(generatedDir, 'lv.bundle.tgz')
 const manifestPath = path.join(generatedDir, 'lv.bundle.json')
 const archivesDir = path.join(generatedDir, 'archives')
 const historyManifestPath = path.join(archivesDir, 'history.json')
+const legacyBundleHistoryDir = path.join(generatedDir, 'bundles')
+const legacyHistoryManifestPath = path.join(generatedDir, 'lv.bundle.history.json')
 const urlmetaPath = path.join(lvDir, 'cache', 'urlmeta.json')
 const summaryPath = path.join(lvDir, 'summary.json')
 
@@ -155,6 +157,36 @@ async function pruneArchives(keepNames) {
   )
 }
 
+async function writeLegacyHistory(entries) {
+  await mkdir(legacyBundleHistoryDir, { recursive: true })
+  const legacyEntries = entries.map((entry) => ({
+    name: entry.name,
+    path: `generated/bundles/${entry.name}`,
+    generatedAt: entry.generatedAt,
+    size: entry.size,
+    sha256: entry.sha256,
+    mode: entry.mode || null,
+    label: entry.label || null,
+  }))
+  await writeFile(legacyHistoryManifestPath, JSON.stringify(legacyEntries, null, 2))
+}
+
+async function pruneLegacyArchives(keepNames) {
+  let files = []
+  try {
+    files = await readdir(legacyBundleHistoryDir)
+  } catch (error) {
+    if (error.code === 'ENOENT') return
+    throw error
+  }
+  const keep = new Set(keepNames)
+  await Promise.all(
+    files
+      .filter((name) => name.endsWith('.tgz') && !keep.has(name))
+      .map((name) => rm(path.join(legacyBundleHistoryDir, name), { force: true })),
+  )
+}
+
 export async function bundleDataset({
   skipIfMissing = false,
   quiet = false,
@@ -175,6 +207,7 @@ export async function bundleDataset({
   await normalizeUrlmetaPaths()
   await mkdir(generatedDir, { recursive: true })
   await mkdir(archivesDir, { recursive: true })
+  await mkdir(legacyBundleHistoryDir, { recursive: true })
 
   const generationTime = new Date()
   const generatedAtIso = generationTime.toISOString()
@@ -207,9 +240,12 @@ export async function bundleDataset({
 
   const totalBytes = entries.reduce((sum, file) => sum + file.size, 0)
 
+  const legacyArchivePath = path.join(legacyBundleHistoryDir, archiveName)
+
   const historyEntry = {
     name: archiveName,
     path: rel(datasetRoot, archivePath),
+    legacyPath: rel(datasetRoot, legacyArchivePath),
     size: archiveStat.size,
     sha256,
     generatedAt: generatedAtIso,
@@ -223,13 +259,17 @@ export async function bundleDataset({
     historyManifest = historyManifest.slice(0, HISTORY_LIMIT)
   }
   await writeHistoryManifest(historyManifest)
+  await writeLegacyHistory(historyManifest)
   await pruneArchives(historyManifest.map((entry) => entry.name))
+  await pruneLegacyArchives(historyManifest.map((entry) => entry.name))
 
   await copyFile(archivePath, stableBundlePath)
+  await copyFile(archivePath, legacyArchivePath)
 
   const historySummary = historyManifest.map((entry) => ({
     ...entry,
     path: rel(datasetRoot, path.join(datasetRoot, entry.path)),
+    legacyPath: rel(datasetRoot, path.join(datasetRoot, entry.legacyPath || entry.path)),
   }))
 
   const manifest = {
@@ -372,6 +412,8 @@ export const paths = {
   manifestPath,
   archivesDir,
   historyManifestPath,
+  legacyBundleHistoryDir,
+  legacyHistoryManifestPath,
   urlmetaPath,
   summaryPath,
 }

@@ -20,6 +20,26 @@ if (isTestMode) {
   globalThis.__LV_PIPELINE_TEST_LOG__ = testLog
 }
 
+const LEGACY_COMMANDS = new Map([
+  ['crawl-pages', { command: 'crawl', preset: { mode: 'pages' } }],
+  ['crawl-pages-images', { command: 'crawl', preset: { mode: 'pages-images' } }],
+  ['cycle-pages', { command: 'cycle', preset: { mode: 'pages' } }],
+  ['cycle-pages-images', { command: 'cycle', preset: { mode: 'pages-images' } }],
+  ['hydrate-build', { command: 'build', preset: {} }],
+  ['cycle', { command: 'cycle', preset: {} }],
+])
+
+export function resolveCommandDescriptor(rawCommand) {
+  const normalized = String(rawCommand || '').toLowerCase()
+  const legacy = LEGACY_COMMANDS.get(normalized)
+  return {
+    normalized,
+    baseCommand: legacy ? legacy.command : normalized,
+    preset: legacy?.preset ?? {},
+    isLegacy: Boolean(legacy),
+  }
+}
+
 function logStep(message) {
   console.log(`\x1b[95m[lv-images]\x1b[0m ${message}`)
 }
@@ -243,15 +263,22 @@ function usage() {
       '  doctor',
       '        Run environment diagnostics.',
       '',
+      'Legacy aliases: crawl-pages, crawl-pages-images, cycle-pages, cycle-pages-images, hydrate-build',
     ].join('\n'),
   )
 }
 
 async function main() {
   const [, , rawCommand = 'help', ...argv] = process.argv
-  const command = rawCommand.toLowerCase()
-  const ciPivot = process.env.CI === 'true' && command === 'crawl'
-  const effectiveCommand = ciPivot ? 'build' : command
+  const descriptor = resolveCommandDescriptor(rawCommand)
+  const { normalized, baseCommand, preset, isLegacy } = descriptor
+  if (isLegacy && !isTestMode) {
+    console.warn(`[lv-images] Legacy command "${normalized}" invoked; forwarding to ${baseCommand}.`)
+  }
+
+  const ciPivot = process.env.CI === 'true' && baseCommand === 'crawl'
+  const effectiveCommand = ciPivot ? 'build' : baseCommand
+  const appliedPreset = ciPivot ? {} : preset
   if (ciPivot) {
     console.warn('[lv-images] WARN: Live crawl requested in CI; pivoting to offline build.')
   }
@@ -262,27 +289,28 @@ async function main() {
         const { flags } = splitCliArgs(argv)
         const map = parseFlagMap(flags)
         await crawl({
-          mode: map.get('--mode') || 'pages',
+          mode: map.get('--mode') || appliedPreset.mode || 'pages',
           label: map.get('--label') || '',
           skipBundle: map.has('--skip-bundle'),
-          keepWorkdir: map.has('--keep-workdir'),
+          keepWorkdir: map.has('--keep-workdir') || appliedPreset.keepWorkdir || false,
         })
         break
       }
       case 'build': {
         const { flags, passthrough } = splitCliArgs(argv)
         const map = parseFlagMap(flags)
-        await build({ keep: map.has('--keep'), eleventyArgs: passthrough })
+        const keep = map.has('--keep') || appliedPreset.keep || false
+        await build({ keep, eleventyArgs: passthrough })
         break
       }
       case 'cycle': {
         const { flags, passthrough } = splitCliArgs(argv)
         const map = parseFlagMap(flags)
         await cycle({
-          mode: map.get('--mode') || 'pages',
+          mode: map.get('--mode') || appliedPreset.mode || 'pages',
           label: map.get('--label') || '',
           eleventyArgs: passthrough,
-          keepWorkdir: map.has('--keep-workdir'),
+          keepWorkdir: map.has('--keep-workdir') || appliedPreset.keepWorkdir || false,
         })
         break
       }
