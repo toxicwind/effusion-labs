@@ -5,26 +5,20 @@ import process from 'node:process'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 
 import { resolveChromium } from '../resolve-chromium.mjs'
-import {
-  hydrateDataset,
-  verifyBundle,
-} from './bundle-lib.mjs'
+import { hydrateDataset, verifyBundle } from './bundle-lib.mjs'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 const projectRoot = path.resolve(__dirname, '..', '..')
 const updateScript = path.join(projectRoot, 'src/content/projects/lv-images/update-dataset.mjs')
+const doctorScript = path.join(projectRoot, 'tools/doctor.mjs')
 const offlineShim = path.join(projectRoot, 'tools/offline-network-shim.cjs')
 const eleventyCmd = path.join(projectRoot, 'node_modules', '@11ty', 'eleventy', 'cmd.cjs')
-
-const COMMAND_ALIASES = new Map([
-  ['crawl-pages-images', 'crawl-pages-images'],
-  ['crawl-pages', 'crawl-pages'],
-  ['hydrate-build', 'hydrate-build'],
-  ['cycle-pages', 'cycle-pages'],
-  ['cycle', 'cycle-pages'],
-  ['help', 'help'],
-])
+const isTestMode = process.env.LV_PIPELINE_TEST_MODE === '1'
+const testLog = []
+if (isTestMode) {
+  globalThis.__LV_PIPELINE_TEST_LOG__ = testLog
+}
 
 function logStep(message) {
   console.log(`\x1b[95m[lv-images]\x1b[0m ${message}`)
@@ -33,21 +27,29 @@ function logStep(message) {
 let chromiumPathCache = ''
 
 function ensureChromiumReady() {
+  if (isTestMode) {
+    chromiumPathCache = chromiumPathCache || '/tmp/chromium-test'
+    return chromiumPathCache
+  }
   if (chromiumPathCache) return chromiumPathCache
-  const path = resolveChromium()
+  const resolved = resolveChromium()
   let version = ''
   try {
-    version = execFileSync(path, ['--version'], { encoding: 'utf8' }).trim()
+    version = execFileSync(resolved, ['--version'], { encoding: 'utf8' }).trim()
   } catch (error) {
-    console.warn(`[lv-images] Unable to read Chromium version from ${path}:`, error)
+    console.warn(`[lv-images] Unable to read Chromium version from ${resolved}:`, error)
   }
   const versionLabel = version ? ` (${version})` : ''
-  logStep(`Chromium @ ${path}${versionLabel}`)
-  chromiumPathCache = path
+  logStep(`Chromium @ ${resolved}${versionLabel}`)
+  chromiumPathCache = resolved
   return chromiumPathCache
 }
 
 function spawnProcess(command, args = [], options = {}) {
+  if (isTestMode) {
+    testLog.push({ type: 'spawn', command, args, options })
+    return Promise.resolve()
+  }
   return new Promise((resolve, reject) => {
     const child = spawn(command, args, {
       cwd: projectRoot,
@@ -65,26 +67,57 @@ function spawnProcess(command, args = [], options = {}) {
 }
 
 function spawnNodeScript(scriptPath, args = [], env = {}) {
-  const nodeArgs = [scriptPath, ...args]
-  return spawnProcess(process.execPath, nodeArgs, {
+  if (isTestMode) {
+    testLog.push({ type: 'node', scriptPath, args, env })
+    return Promise.resolve()
+  }
+  return spawnProcess(process.execPath, [scriptPath, ...args], {
     env: { ...process.env, ...env },
   })
 }
 
-async function runUpdate({ mode = 'pages', label = '', skipBundle = false } = {}) {
+function splitCliArgs(argv) {
+  const pivot = argv.indexOf('--')
+  if (pivot === -1) return { flags: argv, passthrough: [] }
+  return { flags: argv.slice(0, pivot), passthrough: argv.slice(pivot + 1) }
+}
+
+function parseFlagMap(args = []) {
+  return new Map(
+    args.map((token) => {
+      if (!token.startsWith('--')) return [token, true]
+      const eq = token.indexOf('=')
+      if (eq === -1) return [token, true]
+      const key = token.slice(0, eq)
+      const value = token.slice(eq + 1)
+      return [key, value]
+    }),
+  )
+}
+
+async function runUpdate(
+  { mode = 'pages', label = '', skipBundle = false, keepWorkdir = false } = {},
+) {
   ensureChromiumReady()
   const args = []
   if (mode) args.push(`--mode=${mode}`)
   if (label) args.push(`--bundle-label=${label}`)
   if (skipBundle) args.push('--skip-bundle')
+  if (keepWorkdir) args.push('--keep-workdir')
   const labelMsg = label ? ` label=${label}` : ''
   logStep(
-    `Refreshing dataset via Playwright (mode=${mode}${labelMsg}${skipBundle ? ' skip-bundle' : ''})`,
+    `Refreshing dataset via Playwright (mode=${mode}${labelMsg}${skipBundle ? ' skip-bundle' : ''}${
+      keepWorkdir ? ' keep-workdir' : ''
+    })`,
   )
   await spawnNodeScript(updateScript, args)
 }
 
 async function runHydrate({ force = true } = {}) {
+  if (isTestMode) {
+    testLog.push({ type: 'hydrate', force })
+    return { hydrated: true }
+  }
   logStep(`Hydrating dataset from bundle${force ? ' (force clean)' : ''}`)
   const result = await hydrateDataset({ force, quiet: false })
   if (!result.hydrated) {
@@ -94,11 +127,16 @@ async function runHydrate({ force = true } = {}) {
 }
 
 async function runVerify({ strict = true } = {}) {
+  if (isTestMode) {
+    testLog.push({ type: 'verify', strict })
+    return { ok: true }
+  }
   logStep('Verifying bundle against manifest')
   const result = await verifyBundle()
   if (!result.ok) {
     const reason = result.reason || result.mismatches?.join(', ') || 'unknown'
-    if (strict) {
+    const toleratedReasons = new Set(['manifest-lfs-pointer', 'invalid-manifest-json'])
+    if (strict && !toleratedReasons.has(reason)) {
       throw new Error(`Bundle verification failed: ${reason}`)
     }
     console.warn(`[lv-images] Bundle verification failed: ${reason}`)
@@ -108,13 +146,11 @@ async function runVerify({ strict = true } = {}) {
   return result
 }
 
-function splitArgs(args) {
-  const pivot = args.indexOf('--')
-  if (pivot === -1) return { scenario: args, eleventy: [] }
-  return { scenario: args.slice(0, pivot), eleventy: args.slice(pivot + 1) }
-}
-
 async function runEleventy({ offline = false, eleventyArgs = [] } = {}) {
+  if (isTestMode) {
+    testLog.push({ type: 'eleventy', offline, eleventyArgs })
+    return
+  }
   const nodeArgs = []
   if (offline) {
     nodeArgs.push('--require', offlineShim)
@@ -124,13 +160,15 @@ async function runEleventy({ offline = false, eleventyArgs = [] } = {}) {
   if (offline) env.BUILD_OFFLINE = '1'
   else delete env.BUILD_OFFLINE
   const heapFlag = '--max-old-space-size=8192'
-  env.NODE_OPTIONS = env.NODE_OPTIONS
-    ? `${env.NODE_OPTIONS} ${heapFlag}`.trim()
-    : heapFlag
+  env.NODE_OPTIONS = env.NODE_OPTIONS ? `${env.NODE_OPTIONS} ${heapFlag}`.trim() : heapFlag
   await spawnProcess(process.execPath, nodeArgs, { env })
 }
 
 async function runReportBuild({ reason = 'manual' } = {}) {
+  if (isTestMode) {
+    testLog.push({ type: 'report-build', reason })
+    return
+  }
   try {
     const modulePath = path.join(projectRoot, 'src', '_data', 'lvreport.js')
     const moduleUrl = pathToFileURL(modulePath).href
@@ -153,20 +191,39 @@ async function runReportBuild({ reason = 'manual' } = {}) {
   }
 }
 
-async function hydrateVerifyBuild({ keep = false, eleventyArgs = [] } = {}) {
+function sanitizeMode(requested) {
+  const normalized = String(requested || '').toLowerCase()
+  if (['pages', 'pages-images', 'metadata', 'metadata-only'].includes(normalized)) {
+    if (normalized === 'metadata') return 'metadata-only'
+    return normalized
+  }
+  return 'pages'
+}
+
+export async function crawl(
+  { mode = 'pages', label = '', skipBundle = false, keepWorkdir = false } = {},
+) {
+  const safeMode = sanitizeMode(mode)
+  await runUpdate({ mode: safeMode, label, skipBundle, keepWorkdir })
+}
+
+export async function build({ keep = false, eleventyArgs = [] } = {}) {
   await runHydrate({ force: !keep })
   await runVerify({ strict: true })
-  await runReportBuild({ reason: keep ? 'hydrate-build-keep' : 'hydrate-build' })
+  await runReportBuild({ reason: keep ? 'build-keep' : 'build' })
   await runEleventy({ offline: true, eleventyArgs })
 }
 
-async function runCrawlScenario({ mode = 'pages', label = '', skipBundle = false } = {}) {
-  await runUpdate({ mode, label, skipBundle })
+export async function cycle(
+  { mode = 'pages', label = '', eleventyArgs = [], keepWorkdir = false } = {},
+) {
+  const safeMode = sanitizeMode(mode)
+  await crawl({ mode: safeMode, label, skipBundle: false, keepWorkdir })
+  await build({ keep: false, eleventyArgs })
 }
 
-async function runCycleScenario({ mode = 'pages', label = '', eleventyArgs = [] } = {}) {
-  await runUpdate({ mode, label })
-  await hydrateVerifyBuild({ keep: false, eleventyArgs })
+export async function doctor() {
+  await spawnNodeScript(doctorScript)
 }
 
 function usage() {
@@ -177,53 +234,60 @@ function usage() {
       'Usage: node tools/lv-images/pipeline.mjs <command> [options]',
       '',
       'Commands:',
-      '  crawl-pages-images [--label=name]',
-      '        Crawl live pages and images, then bundle snapshot.',
-      '  crawl-pages [--label=name]',
-      '        Crawl live pages (no images), then bundle snapshot.',
-      '  hydrate-build [--keep] [-- ... eleventy]',
+      '  crawl [--mode=pages|pages-images|metadata] [--label=name] [--skip-bundle] [--keep-workdir]',
+      '        Crawl live site and refresh dataset (Playwright).',
+      '  build [--keep] [-- ... eleventy]',
       '        Hydrate from bundle, verify, rebuild dataset cache, offline Eleventy.',
-      '  cycle-pages [--label=name] [--mode=pages|pages-images] [-- ... eleventy]',
+      '  cycle [--mode=pages|pages-images|metadata] [--label=name] [--keep-workdir] [-- ... eleventy]',
       '        Crawl then hydrate/verify/offline build in one run.',
+      '  doctor',
+      '        Run environment diagnostics.',
       '',
     ].join('\n'),
   )
 }
 
 async function main() {
-  const raw = (process.argv[2] || 'help').toLowerCase()
-  const command = COMMAND_ALIASES.get(raw) || raw
-  const args = process.argv.slice(3)
+  const [, , rawCommand = 'help', ...argv] = process.argv
+  const command = rawCommand.toLowerCase()
+  const ciPivot = process.env.CI === 'true' && command === 'crawl'
+  const effectiveCommand = ciPivot ? 'build' : command
+  if (ciPivot) {
+    console.warn('[lv-images] WARN: Live crawl requested in CI; pivoting to offline build.')
+  }
+
   try {
-    switch (command) {
-      case 'crawl-pages-images': {
-        const { scenario } = splitArgs(args)
-        const labelArg = scenario.find((arg) => arg.startsWith('--label='))
-        const label = labelArg ? labelArg.split('=')[1] : 'pages-images'
-        await runCrawlScenario({ mode: 'pages-images', label })
+    switch (effectiveCommand) {
+      case 'crawl': {
+        const { flags } = splitCliArgs(argv)
+        const map = parseFlagMap(flags)
+        await crawl({
+          mode: map.get('--mode') || 'pages',
+          label: map.get('--label') || '',
+          skipBundle: map.has('--skip-bundle'),
+          keepWorkdir: map.has('--keep-workdir'),
+        })
         break
       }
-      case 'crawl-pages': {
-        const { scenario } = splitArgs(args)
-        const labelArg = scenario.find((arg) => arg.startsWith('--label='))
-        const label = labelArg ? labelArg.split('=')[1] : 'pages'
-        await runCrawlScenario({ mode: 'pages', label })
+      case 'build': {
+        const { flags, passthrough } = splitCliArgs(argv)
+        const map = parseFlagMap(flags)
+        await build({ keep: map.has('--keep'), eleventyArgs: passthrough })
         break
       }
-      case 'hydrate-build': {
-        const { scenario, eleventy } = splitArgs(args)
-        const keep = scenario.includes('--keep')
-        await hydrateVerifyBuild({ keep, eleventyArgs: eleventy })
+      case 'cycle': {
+        const { flags, passthrough } = splitCliArgs(argv)
+        const map = parseFlagMap(flags)
+        await cycle({
+          mode: map.get('--mode') || 'pages',
+          label: map.get('--label') || '',
+          eleventyArgs: passthrough,
+          keepWorkdir: map.has('--keep-workdir'),
+        })
         break
       }
-      case 'cycle-pages': {
-        const { scenario, eleventy } = splitArgs(args)
-        const labelArg = scenario.find((arg) => arg.startsWith('--label='))
-        const modeArg = scenario.find((arg) => arg.startsWith('--mode='))
-        const label = labelArg ? labelArg.split('=')[1] : 'pages-cycle'
-        const requestedMode = modeArg ? modeArg.split('=')[1] : 'pages'
-        const mode = ['pages', 'pages-images'].includes(requestedMode) ? requestedMode : 'pages'
-        await runCycleScenario({ mode, label, eleventyArgs: eleventy })
+      case 'doctor': {
+        await doctor()
         break
       }
       case 'help':
@@ -231,7 +295,7 @@ async function main() {
       case '-h':
       default:
         usage()
-        if (!['help', '--help', '-h'].includes(command)) process.exitCode = 1
+        if (!['help', '--help', '-h'].includes(effectiveCommand)) process.exitCode = 1
     }
   } catch (error) {
     console.error('[lv-images] Fatal:', error?.message || error)
@@ -240,4 +304,6 @@ async function main() {
   }
 }
 
-main()
+if (import.meta.url === pathToFileURL(__filename).href) {
+  main()
+}

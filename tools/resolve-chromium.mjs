@@ -86,7 +86,9 @@ export function resolveChromium() {
       // continue searching
     }
   }
-  throw new Error('Chromium not found after automated provisioning attempts (bin/install-chromium.sh).')
+  throw new Error(
+    'Chromium not found after automated provisioning attempts (bin/install-chromium.sh).',
+  )
 }
 
 const modulePath = fileURLToPath(import.meta.url)
