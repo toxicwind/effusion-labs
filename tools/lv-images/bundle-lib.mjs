@@ -1,6 +1,6 @@
 import { createHash } from 'node:crypto'
 import { createReadStream } from 'node:fs'
-import { access, mkdir, readdir, readFile, rm, stat, writeFile } from 'node:fs/promises'
+import { access, copyFile, mkdir, readdir, readFile, rm, stat, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -13,11 +13,17 @@ const generatedDir = path.join(datasetRoot, 'generated')
 const lvDir = path.join(generatedDir, 'lv')
 const bundlePath = path.join(generatedDir, 'lv.bundle.tgz')
 const manifestPath = path.join(generatedDir, 'lv.bundle.json')
+const bundleHistoryDir = path.join(generatedDir, 'bundles')
+const historyManifestPath = path.join(generatedDir, 'lv.bundle.history.json')
 const urlmetaPath = path.join(lvDir, 'cache', 'urlmeta.json')
 const summaryPath = path.join(lvDir, 'summary.json')
 
+const HISTORY_LIMIT = 12
+
 const posixify = (value) => value.split(path.sep).join('/')
 const rel = (from, to) => posixify(path.relative(from, to))
+const timestampSlug = (date = new Date()) =>
+  date.toISOString().replace(/[.:]/g, '-')
 
 async function hashFile(filePath, algorithm = 'sha256') {
   return new Promise((resolve, reject) => {
@@ -106,7 +112,12 @@ export async function normalizeUrlmetaPaths() {
   return { changed, count }
 }
 
-export async function bundleDataset({ skipIfMissing = false, quiet = false } = {}) {
+export async function bundleDataset({
+  skipIfMissing = false,
+  quiet = false,
+  runLabel = '',
+  mode = '',
+} = {}) {
   const entries = await collectDatasetEntries()
   if (entries.length === 0) {
     if (skipIfMissing) {
@@ -120,6 +131,11 @@ export async function bundleDataset({ skipIfMissing = false, quiet = false } = {
 
   await normalizeUrlmetaPaths()
   await mkdir(generatedDir, { recursive: true })
+  await mkdir(bundleHistoryDir, { recursive: true })
+
+  const generationTime = new Date()
+  const generatedAtIso = generationTime.toISOString()
+
   await tar.create({
     gzip: true,
     cwd: generatedDir,
@@ -139,8 +155,65 @@ export async function bundleDataset({ skipIfMissing = false, quiet = false } = {
   }
 
   const totalBytes = entries.reduce((sum, file) => sum + file.size, 0)
+
+  const modeSlug = mode
+    ? String(mode).toLowerCase().replace(/[^\da-z]+/g, '-').replace(/^-+|-+$/g, '')
+    : ''
+  const labelSlug = runLabel
+    ? String(runLabel).toLowerCase().replace(/[^\da-z]+/g, '-').replace(/^-+|-+$/g, '')
+    : ''
+  const suffixParts = [modeSlug, labelSlug].filter(Boolean)
+  const suffix = suffixParts.length ? `-${suffixParts.join('-')}` : ''
+  const historyName = `lv-${timestampSlug(generationTime)}${suffix}.tgz`
+  const historyPath = path.join(bundleHistoryDir, historyName)
+  await copyFile(bundlePath, historyPath)
+
+  const historyEntry = {
+    name: historyName,
+    path: rel(datasetRoot, historyPath),
+    size: archiveStat.size,
+    sha256,
+    generatedAt: generatedAtIso,
+    mode: mode || null,
+    label: runLabel || null,
+  }
+
+  let historyManifest = []
+  try {
+    const rawHistory = await readFile(historyManifestPath, 'utf8')
+    historyManifest = rawHistory ? JSON.parse(rawHistory) : []
+  } catch (error) {
+    if (error.code !== 'ENOENT') throw error
+  }
+
+  historyManifest.unshift(historyEntry)
+  if (historyManifest.length > HISTORY_LIMIT) {
+    historyManifest = historyManifest.slice(0, HISTORY_LIMIT)
+  }
+  await writeFile(historyManifestPath, JSON.stringify(historyManifest, null, 2))
+
+  const allowedHistoryNames = new Set(historyManifest.map((entry) => entry.name))
+  const existingHistoryFiles = await readdir(bundleHistoryDir)
+  await Promise.all(
+    existingHistoryFiles
+      .filter((name) => name.endsWith('.tgz') && !allowedHistoryNames.has(name))
+      .map((name) => rm(path.join(bundleHistoryDir, name), { force: true })),
+  )
+
+  const historySummary = historyManifest.map((entry) => ({
+    name: entry.name,
+    path: entry.path,
+    generatedAt: entry.generatedAt,
+    size: entry.size,
+    sha256: entry.sha256,
+    mode: entry.mode || null,
+    label: entry.label || null,
+  }))
+
   const manifest = {
-    generatedAt: new Date().toISOString(),
+    generatedAt: generatedAtIso,
+    runLabel: runLabel || null,
+    mode: mode || null,
     dataset: {
       fileCount: entries.length,
       totalBytes,
@@ -157,6 +230,11 @@ export async function bundleDataset({ skipIfMissing = false, quiet = false } = {
         totals: summary.totals || null,
       }
       : null,
+    history: {
+      latest: historySummary[0] || null,
+      entries: historySummary,
+      manifestPath: rel(datasetRoot, historyManifestPath),
+    },
   }
 
   await writeFile(manifestPath, JSON.stringify(manifest, null, 2))
@@ -258,6 +336,8 @@ export const paths = {
   lvDir,
   bundlePath,
   manifestPath,
+  bundleHistoryDir,
+  historyManifestPath,
   urlmetaPath,
   summaryPath,
 }

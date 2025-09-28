@@ -26,6 +26,8 @@ const CACHE_DIR = path.join(LV_BASE, 'cache')
 const ROBOTS_DIR = path.join(CACHE_DIR, 'robots')
 const SITEMAPS_DIR = path.join(CACHE_DIR, 'sitemaps')
 const ITEMS_DIR = path.join(LV_BASE, 'items')
+const PAGE_CACHE_INDEX_JSON = path.join(CACHE_DIR, 'pages', 'index.json')
+const IMAGE_CACHE_INDEX_JSON = path.join(CACHE_DIR, 'images', 'index.json')
 const REPORT_TEMPLATE_DIR = path.resolve(__dirname, '../content/projects/lv-images')
 const SUMMARY_JSON = path.join(LV_BASE, 'summary.json')
 const URLMETA_JSON = path.join(CACHE_DIR, 'urlmeta.json')
@@ -873,16 +875,27 @@ function pushSearchDoc(target, doc = {}) {
 // values are consumed.
 async function buildReportData() {
   // Load primary data files. Missing files are tolerated.
-  const [summary, urlmeta, blacklist, allImages, allProducts, runsHistory, manifest] = await Promise
-    .all([
-      loadJSON(SUMMARY_JSON, {}),
-      loadJSON(URLMETA_JSON, {}),
-      loadJSON(BLACKLIST_JSON, {}),
-      loadJSON(ALL_IMAGES_JSON, []),
-      loadJSON(ALL_PRODUCTS_JSON, {}),
-      loadJSON(RUNS_HISTORY_JSON, []),
-      loadJSON(BUNDLE_MANIFEST_JSON, null),
-    ])
+  const [
+    summary,
+    urlmeta,
+    blacklist,
+    allImages,
+    allProducts,
+    runsHistory,
+    manifest,
+    pageCacheIndex,
+    imageCacheIndex,
+  ] = await Promise.all([
+    loadJSON(SUMMARY_JSON, {}),
+    loadJSON(URLMETA_JSON, {}),
+    loadJSON(BLACKLIST_JSON, {}),
+    loadJSON(ALL_IMAGES_JSON, []),
+    loadJSON(ALL_PRODUCTS_JSON, {}),
+    loadJSON(RUNS_HISTORY_JSON, []),
+    loadJSON(BUNDLE_MANIFEST_JSON, null),
+    loadJSON(PAGE_CACHE_INDEX_JSON, { version: 1, pages: {} }),
+    loadJSON(IMAGE_CACHE_INDEX_JSON, { version: 1, images: {} }),
+  ])
 
   const bundleExists = await fileExists(BUNDLE_ARCHIVE_PATH)
   const baseHref = '/content/projects/lv-images/generated/lv/'
@@ -952,11 +965,57 @@ async function buildReportData() {
   const sitemapCacheFiles =
     datasetEntries.filter((entry) => entry?.path?.startsWith('cache/sitemaps/')).length
 
+  const pageCacheStats = (() => {
+    const pages = pageCacheIndex?.pages || {}
+    const ids = Object.keys(pages)
+    let snapshots = 0
+    let latest = null
+    for (const entry of Object.values(pages)) {
+      const list = Array.isArray(entry?.snapshots) ? entry.snapshots : []
+      snapshots += list.length
+      for (const snap of list) {
+        if (!snap || !snap.timestamp) continue
+        if (!latest || (snap.timestamp > latest.timestamp)) {
+          latest = { ...snap, url: entry.url || '', id: entry.id || '' }
+        }
+      }
+    }
+    return {
+      totalPages: ids.length,
+      totalSnapshots: snapshots,
+      latest: latest || null,
+    }
+  })()
+
+  const imageCacheStats = (() => {
+    const images = imageCacheIndex?.images || {}
+    const ids = Object.keys(images)
+    let snapshots = 0
+    let latest = null
+    for (const entry of Object.values(images)) {
+      const list = Array.isArray(entry?.snapshots) ? entry.snapshots : []
+      snapshots += list.length
+      for (const snap of list) {
+        if (!snap || !snap.timestamp) continue
+        if (!latest || (snap.timestamp > latest.timestamp)) {
+          latest = { ...snap, url: entry.url || '', id: entry.id || '' }
+        }
+      }
+    }
+    return {
+      totalImages: ids.length,
+      totalSnapshots: snapshots,
+      latest: latest || null,
+    }
+  })()
+
   const manifestDecorated = manifest
     ? (() => {
       const sha = manifest.archive?.sha256 || ''
       return {
         generatedAt: manifest.generatedAt || null,
+        mode: manifest.mode || null,
+        runLabel: manifest.runLabel || null,
         dataset: {
           fileCount: manifest.dataset?.fileCount ?? null,
           totalBytes: manifest.dataset?.totalBytes ?? null,
@@ -970,6 +1029,13 @@ async function buildReportData() {
           shaPreview: sha ? sha.slice(0, 16) : '',
         },
         summary: manifest.summary || null,
+        history: {
+          latest: manifest.history?.latest || null,
+          entries: Array.isArray(manifest.history?.entries) ? manifest.history.entries : [],
+          manifestHref: manifest.history?.manifestPath
+            ? `/content/projects/lv-images/${manifest.history.manifestPath}`
+            : '',
+        },
       }
     })()
     : null
@@ -979,6 +1045,7 @@ async function buildReportData() {
     manifestHref: '/content/projects/lv-images/generated/lv.bundle.json',
     archiveHref: '/content/projects/lv-images/generated/lv.bundle.tgz',
     archiveExists: bundleExists,
+    history: manifestDecorated?.history || { latest: null, entries: [], manifestHref: '' },
     totals: {
       fileCount: datasetFileCount,
       totalBytes: datasetTotalBytes,
@@ -993,6 +1060,8 @@ async function buildReportData() {
       robotsFiles: robotsCacheFiles,
       sitemapFiles: sitemapCacheFiles,
       urlmetaEntries: Object.keys(urlmeta || {}).length,
+      pages: pageCacheStats,
+      images: imageCacheStats,
     },
     warnings: [
       !bundleExists ? 'missing-archive' : null,
