@@ -121,6 +121,16 @@ metaDisable: true
             Manifest JSON
           </a>
         {% endif %}
+        {% if dataset.history.manifestHref %}
+          <a
+            href="{{ dataset.history.manifestHref }}"
+            class="btn btn-sm md:btn-md btn-outline border-primary/20 text-primary-content/70"
+            target="_blank"
+            rel="noreferrer"
+          >
+            History manifest
+          </a>
+        {% endif %}
       </div>
       {% if datasetWarnings | length %}
         <div class="alert alert-warning mt-6 max-w-xl shadow-lg">
@@ -229,6 +239,18 @@ metaDisable: true
             </div>
             <div class="grid grid-cols-2 gap-3">
               <div>
+                <dt class="text-xs uppercase opacity-60">Mode</dt>
+                <dd class="font-semibold">
+                  {{ manifest.mode or (summary.capture and summary.capture.pages and 'pages' or 'metadata') }}
+                </dd>
+              </div>
+              <div>
+                <dt class="text-xs uppercase opacity-60">Bundle label</dt>
+                <dd class="font-semibold">{{ manifest.runLabel or '—' }}</dd>
+              </div>
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+              <div>
                 <dt class="text-xs uppercase opacity-60">Files</dt>
                 <dd class="font-semibold">
                   {{ datasetTotals.fileCount or manifestDataset.fileCount or 0 }}
@@ -298,6 +320,14 @@ metaDisable: true
           <div>
             <p class="text-xs uppercase opacity-60">Items ingested</p>
             <p class="text-xl font-semibold">{{ totals.itemsFound or totals.images or 0 }}</p>
+          </div>
+          <div>
+            <p class="text-xs uppercase opacity-60">Cached page snapshots</p>
+            <p class="text-xl font-semibold">{{ dataset.cache.pages.totalSnapshots or 0 }}</p>
+          </div>
+          <div>
+            <p class="text-xs uppercase opacity-60">Cached image snapshots</p>
+            <p class="text-xl font-semibold">{{ dataset.cache.images.totalSnapshots or 0 }}</p>
           </div>
         </div>
         {% if dataset.ndjson and dataset.ndjson.latestShard %}

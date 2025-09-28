@@ -6,11 +6,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url'
 
 import { resolveChromium } from '../resolve-chromium.mjs'
 import {
-  bundleDataset,
-  datasetStats as readDatasetStats,
   hydrateDataset,
-  normalizeUrlmetaPaths,
-  paths,
   verifyBundle,
 } from './bundle-lib.mjs'
 
@@ -22,39 +18,13 @@ const offlineShim = path.join(projectRoot, 'tools/offline-network-shim.cjs')
 const eleventyCmd = path.join(projectRoot, 'node_modules', '@11ty', 'eleventy', 'cmd.cjs')
 
 const COMMAND_ALIASES = new Map([
-  ['bundle', 'bundle'],
-  ['pack', 'bundle'],
-  ['refresh', 'update'],
-  ['update', 'update'],
-  ['hydrate', 'hydrate'],
-  ['restore', 'hydrate'],
-  ['verify', 'verify'],
-  ['check', 'verify'],
-  ['normalize', 'normalize'],
-  ['stats', 'stats'],
-  ['sync', 'sync'],
-  ['full', 'build-local-fullinternet'],
-  ['build-local-fullinternet', 'build-local-fullinternet'],
-  ['offline', 'build-local-offline'],
-  ['local', 'build-local-offline'],
-  ['build', 'build-gitactions'],
-  ['ci', 'build-gitactions'],
-  ['build-local-offline', 'build-local-offline'],
-  ['build-gitactions', 'build-gitactions'],
+  ['crawl-pages-images', 'crawl-pages-images'],
+  ['crawl-pages', 'crawl-pages'],
+  ['hydrate-build', 'hydrate-build'],
+  ['cycle-pages', 'cycle-pages'],
+  ['cycle', 'cycle-pages'],
+  ['help', 'help'],
 ])
-
-function formatBytes(bytes) {
-  if (!bytes) return '0 B'
-  const units = ['B', 'KB', 'MB', 'GB', 'TB']
-  let value = bytes
-  let idx = 0
-  while (value >= 1024 && idx < units.length - 1) {
-    value /= 1024
-    idx++
-  }
-  const decimals = value >= 100 ? 0 : value >= 10 ? 1 : 2
-  return `${value.toFixed(decimals)} ${units[idx]}`
-}
 
 function logStep(message) {
   console.log(`\x1b[95m[lv-images]\x1b[0m ${message}`)
@@ -101,38 +71,17 @@ function spawnNodeScript(scriptPath, args = [], env = {}) {
   })
 }
 
-async function runUpdate() {
+async function runUpdate({ mode = 'pages', label = '', skipBundle = false } = {}) {
   ensureChromiumReady()
-  logStep('Refreshing dataset via Playwright (full network)')
-  await spawnNodeScript(updateScript)
-  await runReportBuild({ reason: 'update' })
-}
-
-function logManifest(manifest) {
-  if (!manifest) return
-  const dataset = manifest.dataset || {}
-  const archive = manifest.archive || {}
-  const summary = manifest.summary || {}
+  const args = []
+  if (mode) args.push(`--mode=${mode}`)
+  if (label) args.push(`--bundle-label=${label}`)
+  if (skipBundle) args.push('--skip-bundle')
+  const labelMsg = label ? ` label=${label}` : ''
   logStep(
-    `Snapshot: ${dataset.fileCount ?? '?'} files, ${
-      formatBytes(dataset.totalBytes ?? 0)
-    } | version ${summary.version || '?'} @ ${
-      summary.generatedAt || manifest.generatedAt || 'unknown'
-    }`,
+    `Refreshing dataset via Playwright (mode=${mode}${labelMsg}${skipBundle ? ' skip-bundle' : ''})`,
   )
-  logStep(
-    `Archive: ${archive.path || 'lv.bundle.tgz'} (${formatBytes(archive.size ?? 0)}) sha256=${
-      archive.sha256 || ''
-    }`,
-  )
-}
-
-async function runBundle() {
-  logStep('Bundling dataset snapshot')
-  const manifest = await bundleDataset({ skipIfMissing: false, quiet: false })
-  if (!manifest) throw new Error('Bundle creation failed')
-  logManifest(manifest)
-  return manifest
+  await spawnNodeScript(updateScript, args)
 }
 
 async function runHydrate({ force = true } = {}) {
@@ -157,21 +106,6 @@ async function runVerify({ strict = true } = {}) {
     logStep('Bundle verification passed')
   }
   return result
-}
-
-async function runNormalize() {
-  logStep('Normalizing cached urlmeta paths')
-  const { changed, count } = await normalizeUrlmetaPaths()
-  logStep(`Processed ${count} urlmeta entries (${changed ? 'updated' : 'already clean'}).`)
-}
-
-async function printStats() {
-  const stats = await readDatasetStats()
-  const totalBytes = stats?.totalBytes ?? 0
-  const files = stats?.entries?.length ?? 0
-  logStep(`Dataset root: ${paths.lvDir}`)
-  logStep(`Files: ${files}`)
-  logStep(`Size: ${formatBytes(totalBytes)}`)
 }
 
 function splitArgs(args) {
@@ -219,38 +153,40 @@ async function runReportBuild({ reason = 'manual' } = {}) {
   }
 }
 
-async function runSync() {
-  await runUpdate()
-  await runBundle()
-  await runVerify({ strict: true })
-}
-
-async function buildLocalFullInternet(eleventyArgs) {
-  await runSync()
-  await runEleventy({ offline: false, eleventyArgs })
-}
-
-async function buildLocalOffline(args) {
-  const { scenario, eleventy } = splitArgs(args)
-  const keep = scenario.includes('--keep')
+async function hydrateVerifyBuild({ keep = false, eleventyArgs = [] } = {}) {
   await runHydrate({ force: !keep })
-  await runVerify({ strict: false })
-  await runReportBuild({ reason: keep ? 'build-local-offline-keep' : 'build-local-offline' })
-  await runEleventy({ offline: true, eleventyArgs: eleventy })
+  await runVerify({ strict: true })
+  await runReportBuild({ reason: keep ? 'hydrate-build-keep' : 'hydrate-build' })
+  await runEleventy({ offline: true, eleventyArgs })
 }
 
-async function buildGitActions(args) {
-  const { eleventy } = splitArgs(args)
-  await runHydrate({ force: true })
-  await runVerify({ strict: true })
-  const defaultArgs = eleventy.length ? eleventy : ['--quiet']
-  await runReportBuild({ reason: 'build-gitactions' })
-  await runEleventy({ offline: true, eleventyArgs: defaultArgs })
+async function runCrawlScenario({ mode = 'pages', label = '', skipBundle = false } = {}) {
+  await runUpdate({ mode, label, skipBundle })
+}
+
+async function runCycleScenario({ mode = 'pages', label = '', eleventyArgs = [] } = {}) {
+  await runUpdate({ mode, label })
+  await hydrateVerifyBuild({ keep: false, eleventyArgs })
 }
 
 function usage() {
   console.log(
-    `LV images pipeline\n\nUsage: node tools/lv-images/pipeline.mjs <command> [options]\n\nCommands:\n  update|refresh                 Fetch the latest dataset via Playwright\n  bundle|pack                    Create lv.bundle.tgz and manifest\n  hydrate [--keep]               Restore generated/lv from bundle\n  verify [--soft]                Check archive + manifest integrity\n  normalize                      Fix urlmeta paths inside cache\n  stats                          Print dataset file/size stats\n  sync                           update + bundle + verify\n  build|ci [-- ... eleventy]     Hydrate + verify + offline Eleventy (strict)\n  build-local-fullinternet [-- ... eleventy]\n                                 Full local build with network crawl\n  offline|local [--keep] [-- ... eleventy]\n                                 Hydrate + verify + offline Eleventy build\n`,
+    [
+      'LV images pipeline',
+      '',
+      'Usage: node tools/lv-images/pipeline.mjs <command> [options]',
+      '',
+      'Commands:',
+      '  crawl-pages-images [--label=name]',
+      '        Crawl live pages and images, then bundle snapshot.',
+      '  crawl-pages [--label=name]',
+      '        Crawl live pages (no images), then bundle snapshot.',
+      '  hydrate-build [--keep] [-- ... eleventy]',
+      '        Hydrate from bundle, verify, rebuild dataset cache, offline Eleventy.',
+      '  cycle-pages [--label=name] [--mode=pages|pages-images] [-- ... eleventy]',
+      '        Crawl then hydrate/verify/offline build in one run.',
+      '',
+    ].join('\n'),
   )
 }
 
@@ -260,42 +196,36 @@ async function main() {
   const args = process.argv.slice(3)
   try {
     switch (command) {
-      case 'update':
-        await runUpdate()
-        break
-      case 'bundle':
-        await runBundle()
-        break
-      case 'hydrate': {
-        const keep = args.includes('--keep')
-        await runHydrate({ force: !keep })
+      case 'crawl-pages-images': {
+        const { scenario } = splitArgs(args)
+        const labelArg = scenario.find((arg) => arg.startsWith('--label='))
+        const label = labelArg ? labelArg.split('=')[1] : 'pages-images'
+        await runCrawlScenario({ mode: 'pages-images', label })
         break
       }
-      case 'verify': {
-        const soft = args.includes('--soft')
-        await runVerify({ strict: !soft })
+      case 'crawl-pages': {
+        const { scenario } = splitArgs(args)
+        const labelArg = scenario.find((arg) => arg.startsWith('--label='))
+        const label = labelArg ? labelArg.split('=')[1] : 'pages'
+        await runCrawlScenario({ mode: 'pages', label })
         break
       }
-      case 'normalize':
-        await runNormalize()
-        break
-      case 'stats':
-        await printStats()
-        break
-      case 'sync':
-        await runSync()
-        break
-      case 'build-local-fullinternet': {
-        const { eleventy } = splitArgs(args)
-        await buildLocalFullInternet(eleventy)
+      case 'hydrate-build': {
+        const { scenario, eleventy } = splitArgs(args)
+        const keep = scenario.includes('--keep')
+        await hydrateVerifyBuild({ keep, eleventyArgs: eleventy })
         break
       }
-      case 'build-local-offline':
-        await buildLocalOffline(args)
+      case 'cycle-pages': {
+        const { scenario, eleventy } = splitArgs(args)
+        const labelArg = scenario.find((arg) => arg.startsWith('--label='))
+        const modeArg = scenario.find((arg) => arg.startsWith('--mode='))
+        const label = labelArg ? labelArg.split('=')[1] : 'pages-cycle'
+        const requestedMode = modeArg ? modeArg.split('=')[1] : 'pages'
+        const mode = ['pages', 'pages-images'].includes(requestedMode) ? requestedMode : 'pages'
+        await runCycleScenario({ mode, label, eleventyArgs: eleventy })
         break
-      case 'build-gitactions':
-        await buildGitActions(args)
-        break
+      }
       case 'help':
       case '--help':
       case '-h':

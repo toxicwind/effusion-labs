@@ -11,7 +11,7 @@
 import { createHash } from 'node:crypto'
 import { once } from 'node:events'
 import { createWriteStream } from 'node:fs'
-import { mkdir, readFile, writeFile, appendFile } from 'node:fs/promises'
+import { mkdir, readFile, writeFile, appendFile, rm } from 'node:fs/promises'
 import path from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 import { gunzipSync } from 'node:zlib'
@@ -24,6 +24,7 @@ const { ScalableBloomFilter } = pkg
 import { chromium } from 'playwright'
 import { bundleDataset } from '../../../../tools/lv-images/bundle-lib.mjs'
 import { resolveChromium } from '../../../../tools/resolve-chromium.mjs'
+import { htmlFragmentToMarkdown } from '../../../lib/transforms/html-to-markdown.mjs'
 import { decodeRobots } from './robots_decode.mjs'
 
 /* ============================================================
@@ -35,6 +36,12 @@ const baseDir = path.join(__dirname)
 const genDir = path.join(__dirname, 'generated', 'lv')
 const cacheDir = path.join(genDir, 'cache')
 const itemsDir = path.join(genDir, 'items')
+
+const pageSnapshotsDir = path.join(cacheDir, 'pages')
+const pageIndexPath = path.join(pageSnapshotsDir, 'index.json')
+const imageCacheDir = path.join(cacheDir, 'images')
+const imageIndexPath = path.join(imageCacheDir, 'index.json')
+const markdownMirrorDir = path.join(genDir, 'pages-markdown')
 
 const robotsDir = path.join(cacheDir, 'robots')
 const urlmetaPath = path.join(cacheDir, 'urlmeta.json')
@@ -50,6 +57,9 @@ const hostsActiveSnapshotPath = path.join(baseDir, './config/hosts.active.snapsh
 
 const bloomPath = path.join(cacheDir, 'seen.bloom.json')
 const summaryPath = path.join(genDir, 'summary.json')
+
+const PAGE_HISTORY_LIMIT = 5
+const IMAGE_HISTORY_LIMIT = 2
 
 const posixify = (value) => value.split(path.sep).join('/')
 const toRelativeCachePath = (inputPath) => {
@@ -73,6 +83,14 @@ const toRelativeCachePath = (inputPath) => {
   return posixify(relative)
 }
 
+const fromRelativeCachePath = (inputPath) => {
+  if (!inputPath) return ''
+  const normalized = String(inputPath).trim()
+  if (!normalized) return ''
+  const unixified = normalized.replace(/\\/g, '/').replace(/^\/+/, '')
+  return path.join(genDir, unixified)
+}
+
 /* ============================================================
    STATELESS HELPERS & UTILITIES
    ============================================================ */
@@ -88,6 +106,18 @@ const hostOf = (u) => {
 const isGzipMagic = (buf) =>
   Buffer.isBuffer(buf) && buf.length >= 2 && buf[0] === 0x1f && buf[1] === 0x8b
 const saveJson = (p, obj) => writeFile(p, JSON.stringify(obj, null, 2), 'utf8')
+const readJsonFile = async (p, fallback) => {
+  try {
+    const raw = await readFile(p, 'utf8')
+    return raw ? JSON.parse(raw) : fallback
+  } catch (error) {
+    if (error?.code === 'ENOENT') return fallback
+    throw error
+  }
+}
+const ensureDir = (dirPath) => mkdir(dirPath, { recursive: true })
+const timestampSlug = (iso = nowIso()) => iso.replace(/[.:]/g, '-').replace(/Z$/, 'Z')
+const nowIso = () => new Date().toISOString()
 
 const USER_AGENT = 'Mozilla/5.0 (X11; Linux x86_64; rv:143.0) Gecko/20100101 Firefox/143.0'
 const TIMEOUT_MS = 15000
@@ -112,6 +142,32 @@ const detectExtension = (text, ct = '') => {
 
 const parseRobotsForSitemaps = (text) =>
   (text.match(/^sitemap:\s*(.+)$/gim) || []).map((line) => line.replace(/^sitemap:\s*/i, '').trim())
+
+const extensionFromContentType = (ct = '') => {
+  const lower = String(ct).toLowerCase()
+  if (lower.includes('image/jpeg') || lower.includes('image/jpg')) return '.jpg'
+  if (lower.includes('image/png')) return '.png'
+  if (lower.includes('image/webp')) return '.webp'
+  if (lower.includes('image/avif')) return '.avif'
+  if (lower.includes('image/gif')) return '.gif'
+  if (lower.includes('image/svg')) return '.svg'
+  if (lower.includes('image/heic')) return '.heic'
+  if (lower.includes('image/heif')) return '.heif'
+  if (lower.includes('image/bmp')) return '.bmp'
+  if (lower.includes('image/tiff')) return '.tiff'
+  return ''
+}
+
+const deriveImageExtension = (url, contentType = '') => {
+  const fromCt = extensionFromContentType(contentType)
+  if (fromCt) return fromCt
+  try {
+    const { pathname } = new URL(url)
+    const ext = path.extname(pathname)
+    if (ext) return ext
+  } catch {}
+  return '.bin'
+}
 
 const isSitemapIndex = (xml) => /<sitemapindex\b/i.test(xml)
 
@@ -241,6 +297,218 @@ class NdjsonWriter {
     await this._queue
     if (this.stream) await new Promise((r) => this.stream.end(r))
   }
+}
+
+async function cachePageSnapshots({
+  urls = [],
+  fetchPage,
+  index,
+  recordUrlMeta,
+  forceRefresh = false,
+  maxSnapshots = PAGE_HISTORY_LIMIT,
+}) {
+  if (!Array.isArray(urls) || urls.length === 0 || typeof fetchPage !== 'function') {
+    return {
+      dirty: false,
+      captured: 0,
+      totalSnapshots: Object.values(index?.pages || {}).reduce(
+        (sum, entry) => sum + (Array.isArray(entry?.snapshots) ? entry.snapshots.length : 0),
+        0,
+      ),
+    }
+  }
+
+  const uniqueUrls = Array.from(new Set(urls.filter(Boolean)))
+  const limiter = pLimit(4)
+  let dirty = false
+  let captured = 0
+
+  if (!index.pages) index.pages = {}
+
+  await Promise.all(
+    uniqueUrls.map((url) =>
+      limiter(async () => {
+        const id = shortId(url)
+        const host = hostOf(url) || 'unknown'
+        const entry = index.pages[id] || { id, url, host, snapshots: [] }
+        const snapshots = Array.isArray(entry.snapshots) ? [...entry.snapshots] : []
+        const latest = snapshots[0]
+
+        let result
+        try {
+          result = await fetchPage(url)
+        } catch (error) {
+          console.warn(`[lv-images] Failed to fetch page ${url}: ${error?.message || error}`)
+          return
+        }
+
+        if (!result?.text) return
+
+        const fetchedAt = nowIso()
+        const htmlBytes = Buffer.byteLength(result.text, 'utf8')
+        const contentHash = sha1(result.text)
+        const needsFreshArtifacts =
+          forceRefresh || !latest || (latest.hash && latest.hash !== contentHash) || !latest?.hash
+
+        let htmlAbsPath = ''
+        let markdownAbsPath = ''
+
+        if (needsFreshArtifacts) {
+          const slug = timestampSlug(fetchedAt)
+          const pageDir = path.join(pageSnapshotsDir, host, id)
+          await ensureDir(pageDir)
+          await ensureDir(markdownMirrorDir)
+
+          htmlAbsPath = path.join(pageDir, `${slug}.html`)
+          await writeFile(htmlAbsPath, result.text, 'utf8')
+
+          let markdown = ''
+          try {
+            markdown = await htmlFragmentToMarkdown(result.text, { smartTypography: false })
+          } catch (error) {
+            console.warn(
+              `[lv-images] html→markdown conversion failed for ${url}: ${error?.message || error}`,
+            )
+          }
+
+          const mdDir = path.join(markdownMirrorDir, host, id)
+          await ensureDir(mdDir)
+          markdownAbsPath = path.join(mdDir, `${slug}.md`)
+          await writeFile(markdownAbsPath, markdown || '', 'utf8')
+        } else {
+          htmlAbsPath = latest?.htmlPath ? fromRelativeCachePath(latest.htmlPath) : ''
+          markdownAbsPath = latest?.markdownPath ? fromRelativeCachePath(latest.markdownPath) : ''
+        }
+
+        const htmlRel = toRelativeCachePath(htmlAbsPath)
+        const markdownRel = toRelativeCachePath(markdownAbsPath)
+
+        const snapshotEntry = {
+          timestamp: fetchedAt,
+          htmlPath: htmlRel,
+          markdownPath: markdownRel,
+          status: String(result.status ?? ''),
+          contentType: result.contentType || '',
+          bytes: htmlBytes,
+          hash: contentHash,
+        }
+
+        snapshots.unshift(snapshotEntry)
+        while (snapshots.length > maxSnapshots) snapshots.pop()
+
+        index.pages[id] = {
+          id,
+          url,
+          host,
+          snapshots,
+          lastFetchedAt: fetchedAt,
+        }
+
+        if (typeof recordUrlMeta === 'function') {
+          recordUrlMeta(url, htmlAbsPath, String(result.status ?? ''), result.contentType || '')
+        }
+
+        dirty = true
+        captured++
+      }),
+    ),
+  )
+
+  const totalSnapshots = Object.values(index.pages).reduce((sum, entry) => {
+    const count = Array.isArray(entry.snapshots) ? entry.snapshots.length : 0
+    return sum + count
+  }, 0)
+
+  return { dirty, captured, totalSnapshots }
+}
+
+async function cacheImageSnapshots({
+  images = [],
+  fetchImage,
+  index,
+  forceRefresh = false,
+  maxSnapshots = IMAGE_HISTORY_LIMIT,
+}) {
+  if (!Array.isArray(images) || images.length === 0 || typeof fetchImage !== 'function') {
+    return { dirty: false, captured: 0, totalSnapshots: Array.isArray(index?.images) ? index.images.length : 0 }
+  }
+
+  if (!index.images) index.images = {}
+
+  const unique = new Map()
+  for (const image of images) {
+    if (!image || !image.src) continue
+    const canonicalId = image.duplicateOf || image.id
+    if (!canonicalId) continue
+    if (!unique.has(canonicalId)) {
+      unique.set(canonicalId, {
+        id: canonicalId,
+        url: image.src,
+        host: image.host || hostOf(image.src) || 'unknown',
+      })
+    }
+  }
+
+  const limiter = pLimit(4)
+  let dirty = false
+  let captured = 0
+
+  await Promise.all(
+    Array.from(unique.values()).map((record) =>
+      limiter(async () => {
+        const existing = index.images[record.id]
+        if (!forceRefresh && existing && Array.isArray(existing.snapshots) && existing.snapshots.length > 0) {
+          return
+        }
+
+        let result
+        try {
+          result = await fetchImage(record.url)
+        } catch (error) {
+          console.warn(`[lv-images] Failed to fetch image ${record.url}: ${error?.message || error}`)
+          return
+        }
+
+        if (!result?.buffer || !Buffer.isBuffer(result.buffer)) return
+
+        const fetchedAt = nowIso()
+        const slug = timestampSlug(fetchedAt)
+        const imageDir = path.join(imageCacheDir, record.host, record.id)
+        await ensureDir(imageDir)
+
+        const ext = deriveImageExtension(record.url, result.contentType || '')
+        const filePath = path.join(imageDir, `${slug}${ext}`)
+        await writeFile(filePath, result.buffer)
+
+        const snapshots = Array.isArray(existing?.snapshots) ? [...existing.snapshots] : []
+        snapshots.unshift({
+          timestamp: fetchedAt,
+          filePath: toRelativeCachePath(filePath),
+          status: String(result.status ?? ''),
+          contentType: result.contentType || '',
+          bytes: result.buffer.length,
+        })
+        while (snapshots.length > maxSnapshots) snapshots.pop()
+
+        index.images[record.id] = {
+          id: record.id,
+          url: record.url,
+          host: record.host,
+          snapshots,
+          lastFetchedAt: fetchedAt,
+        }
+        dirty = true
+        captured++
+      })
+    ),
+  )
+
+  const totalSnapshots = Object.values(index.images).reduce((sum, entry) => {
+    const count = Array.isArray(entry.snapshots) ? entry.snapshots.length : 0
+    return sum + count
+  }, 0)
+
+  return { dirty, captured, totalSnapshots }
 }
 
 /* ============================================================
@@ -566,14 +834,14 @@ class Crawler {
       .map((entry) => entry.host)
 
     let massRemovalSafeguard = []
-    let bannedHosts = [...bannedCandidates]
+    let enforceableHosts = [...bannedCandidates]
 
-    if (bannedHosts.length && bannedHosts.length === hosts.length) {
-      massRemovalSafeguard = [...bannedHosts]
+    if (enforceableHosts.length && enforceableHosts.length === hosts.length) {
+      massRemovalSafeguard = [...enforceableHosts]
       console.log(
         '\n⚠️ Discovery flagged zero content sitemaps for every host; skipping ban enforcement to avoid wiping hosts.txt.',
       )
-      bannedHosts = []
+      enforceableHosts = []
     }
 
     if (preservedDueToHistory.length > 0) {
@@ -617,7 +885,9 @@ class Crawler {
         )
         continue
       }
-      bannedResults.push(result)
+      if (enforceableHosts.includes(result.host)) {
+        bannedResults.push(result)
+      }
     }
 
     const bannedHosts = bannedResults.map((r) => r.host)
@@ -626,10 +896,10 @@ class Crawler {
 
     if (bannedHosts.length > 0) {
       await mkdir(path.dirname(hostsBannedPath), { recursive: true })
-      const nowIso = new Date().toISOString()
+      const bannedAt = nowIso()
       const lines = bannedHosts
         .map((host) =>
-          `${JSON.stringify({ host, reason: 'zero-content-sitemaps', discoveredAt: nowIso })}\n`,
+          `${JSON.stringify({ host, reason: 'zero-content-sitemaps', discoveredAt: bannedAt })}\n`,
         )
         .join('')
       await appendFile(hostsBannedPath, lines, 'utf8')
@@ -739,6 +1009,53 @@ class Crawler {
 /* ============================================================
    MAIN EXECUTION BLOCK
    ============================================================ */
+async function fetchPageSnapshot(url) {
+  const headers = {
+    'user-agent': USER_AGENT,
+    accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+    'accept-language': 'en-US,en;q=0.8',
+    'cache-control': 'no-store, max-age=0, must-revalidate',
+    pragma: 'no-cache',
+    expires: '0',
+  }
+
+  const response = await pwCtx.request.get(url, { headers, timeout: TIMEOUT_MS })
+  const status = response.status()
+  const hdrs = response.headers()
+  let body = await response.body()
+  if (isGzipMagic(body) || /\bgzip\b/.test((hdrs['content-encoding'] || '').toLowerCase())) {
+    try {
+      body = gunzipSync(body)
+    } catch {}
+  }
+  const text = body.toString('utf8')
+  return { text, status, contentType: hdrs['content-type'] || '' }
+}
+
+async function fetchImageBinary(url) {
+  const headers = {
+    'user-agent': USER_AGENT,
+    accept: 'image/avif,image/webp,image/apng,image/*,*/*;q=0.8',
+    'accept-language': 'en-US,en;q=0.8',
+    referer: (() => {
+      try {
+        return new URL(url).origin
+      } catch {
+        return 'https://www.louisvuitton.com/'
+      }
+    })(),
+    'cache-control': 'no-store, max-age=0, must-revalidate',
+  }
+
+  const response = await pwCtx.request.get(url, { headers, timeout: TIMEOUT_MS })
+  const buffer = await response.body()
+  return {
+    buffer,
+    status: response.status(),
+    contentType: response.headers()['content-type'] || '',
+  }
+}
+
 async function main() {
   const argv = new Map(
     process.argv.slice(2).map((x) => (x.includes('=') ? x.split('=') : [x, true])),
@@ -746,10 +1063,36 @@ async function main() {
   const MAX_HOSTS = argv.has('--max-hosts') ? Number(argv.get('--max-hosts')) : Infinity
   const NO_REWRITE_HOSTS = argv.has('--no-rewrite-hosts')
 
+  const requestedMode = String(argv.get('--mode') || 'pages').toLowerCase()
+  const modeFromFlag = argv.has('--cache-images') ? 'pages-images' : requestedMode
+  const normalizedMode = ['pages', 'pages-images'].includes(modeFromFlag)
+    ? modeFromFlag
+    : 'pages'
+  const disablePages = argv.has('--no-pages')
+  const runMode = disablePages ? 'metadata-only' : normalizedMode
+  const captureImages = runMode === 'pages-images'
+  const capturePages = runMode !== 'metadata-only'
+  const forcePageRefresh = argv.has('--refresh-pages')
+  const forceImageRefresh = argv.has('--refresh-images')
+  const skipBundle = argv.has('--skip-bundle')
+  const bundleLabel = argv.get('--bundle-label')
+    ? String(argv.get('--bundle-label'))
+    : captureImages
+      ? 'pages-images'
+      : capturePages
+        ? 'pages'
+        : 'metadata'
+
   console.log('🚀 Starting crawler (Playwright mode)...')
+  console.log(
+    `   Mode: ${runMode} (pages=${capturePages ? 'on' : 'off'}, images=${captureImages ? 'on' : 'off'})`,
+  )
   await mkdir(cacheDir, { recursive: true })
   await mkdir(itemsDir, { recursive: true })
   await mkdir(robotsDir, { recursive: true })
+  await ensureDir(pageSnapshotsDir)
+  await ensureDir(markdownMirrorDir)
+  await ensureDir(imageCacheDir)
   await startPlaywright()
 
   // URL metadata recorder (with timestamp)
@@ -767,6 +1110,14 @@ async function main() {
       fetchedAt: new Date().toISOString(),
     }
   }
+
+  const pageIndex = await readJsonFile(pageIndexPath, { version: 1, pages: {} })
+  if (!pageIndex.pages) pageIndex.pages = {}
+  pageIndex.version = 1
+
+  const imageIndex = await readJsonFile(imageIndexPath, { version: 1, images: {} })
+  if (!imageIndex.images) imageIndex.images = {}
+  imageIndex.version = 1
 
   // Hosts
   const hosts = (await readFile(hostsTxtPath, 'utf8'))
@@ -858,13 +1209,13 @@ async function main() {
   const summary = await crawler.run(hosts, updateItemMeta)
 
   // Removal / purge against retained runs
-  const nowIso = new Date().toISOString()
+  const runTimestamp = nowIso()
   let earliestRun
   if (runsHistory.length > 0) {
     const first = runsHistory[0]
     earliestRun = typeof first === 'string' ? first : first.timestamp
   } else {
-    earliestRun = nowIso
+    earliestRun = runTimestamp
   }
 
   let removedThisRun = 0
@@ -879,7 +1230,7 @@ async function main() {
     }
     if (!seenIds.has(id)) {
       if (!meta.removedAt) {
-        meta.removedAt = nowIso
+        meta.removedAt = runTimestamp
         removedThisRun++
       }
     } else {
@@ -935,16 +1286,92 @@ async function main() {
   }
   const allProducts = Object.values(allProductsMap)
 
+  const existingPageSnapshots = Object.values(pageIndex.pages || {}).reduce(
+    (sum, entry) => sum + (Array.isArray(entry?.snapshots) ? entry.snapshots.length : 0),
+    0,
+  )
+  const pageSnapshotResult = capturePages
+    ? await cachePageSnapshots({
+      urls: allProducts.map((p) => p.pageUrl).filter(Boolean),
+      fetchPage: fetchPageSnapshot,
+      index: pageIndex,
+      recordUrlMeta,
+      forceRefresh: forcePageRefresh,
+    })
+    : { dirty: false, captured: 0, totalSnapshots: existingPageSnapshots }
+
+  let imageSnapshotResult
+  if (captureImages) {
+    imageSnapshotResult = await cacheImageSnapshots({
+      images: allImages,
+      fetchImage: fetchImageBinary,
+      index: imageIndex,
+      forceRefresh: forceImageRefresh,
+    })
+  } else {
+    try {
+      await rm(imageCacheDir, { recursive: true, force: true })
+    } catch {}
+    await ensureDir(imageCacheDir)
+    imageIndex.images = {}
+    imageSnapshotResult = { dirty: true, captured: 0, totalSnapshots: 0 }
+  }
+
+  if (pageSnapshotResult.dirty) {
+    pageIndex.updatedAt = nowIso()
+    await saveJson(pageIndexPath, pageIndex)
+  }
+  if (imageSnapshotResult.dirty) {
+    imageIndex.updatedAt = nowIso()
+    await saveJson(imageIndexPath, imageIndex)
+  }
+
+  for (const product of allProducts) {
+    const id = shortId(product.pageUrl || '')
+    const entry = pageIndex.pages?.[id]
+    if (entry?.snapshots?.length) {
+      const latest = entry.snapshots[0]
+      product.cache = {
+        latestHtml: latest.htmlPath || '',
+        latestMarkdown: latest.markdownPath || '',
+        fetchedAt: latest.timestamp || '',
+        snapshots: entry.snapshots,
+      }
+    }
+  }
+
+  for (const image of allImages) {
+    const canonicalId = image.duplicateOf || image.id
+    const entry = imageIndex.images?.[canonicalId]
+    if (entry?.snapshots?.length) {
+      const latest = entry.snapshots[0]
+      image.cache = {
+        latestFile: latest.filePath || '',
+        fetchedAt: latest.timestamp || '',
+        snapshots: entry.snapshots,
+      }
+    }
+  }
+
   const pageCount = allProducts.length
   const uniqueImagesCount = allImages.length
   summary.totals = summary.totals || {}
   summary.totals.pages = pageCount
   summary.totals.images = uniqueImagesCount
+  summary.totals.pageSnapshots = pageSnapshotResult.totalSnapshots
+  summary.totals.pageSnapshotsCaptured = pageSnapshotResult.captured
+  summary.totals.imageSnapshots = imageSnapshotResult.totalSnapshots
+  summary.totals.imageSnapshotsCaptured = imageSnapshotResult.captured
+  summary.capture = { pages: capturePages, images: captureImages }
+  summary.runMode = runMode
+  summary.bundleLabel = bundleLabel
 
   const runRecord = {
-    timestamp: nowIso,
+    timestamp: runTimestamp,
     metrics: { ...summary.items },
     totals: { images: uniqueImagesCount, pages: pageCount },
+    mode: runMode,
+    capture: summary.capture,
   }
   runsHistory.push(runRecord)
   const MAX_RUNS = 5
@@ -982,18 +1409,27 @@ async function main() {
     throw error
   }
 
-  try {
-    const manifest = await bundleDataset({ skipIfMissing: true, quiet: true })
-    if (manifest) {
-      const shortHash = manifest.archive.sha256 ? manifest.archive.sha256.slice(0, 12) : ''
-      console.log(
-        `\n📦 Bundle updated → ${manifest.archive.path} ${
-          shortHash ? `(sha256:${shortHash}…)` : ''
-        }`.trim(),
-      )
+  if (!skipBundle) {
+    try {
+      const manifest = await bundleDataset({
+        skipIfMissing: true,
+        quiet: true,
+        runLabel: bundleLabel,
+        mode: runMode,
+      })
+      if (manifest) {
+        const shortHash = manifest.archive.sha256 ? manifest.archive.sha256.slice(0, 12) : ''
+        console.log(
+          `\n📦 Bundle updated → ${manifest.archive.path} ${
+            shortHash ? `(sha256:${shortHash}…)` : ''
+          }`.trim(),
+        )
+      }
+    } catch (error) {
+      console.warn(`\n⚠️ Failed to update lv bundle: ${error?.message || error}`)
     }
-  } catch (error) {
-    console.warn(`\n⚠️ Failed to update lv bundle: ${error?.message || error}`)
+  } else {
+    console.log('\n📦 Bundle update skipped via --skip-bundle flag.')
   }
 
   console.log(`\n📊 Summary → ${path.relative(process.cwd(), summaryPath)}`)
@@ -1003,6 +1439,12 @@ async function main() {
     } | New: ${newItemsCount.toLocaleString()} | Duplicates: ${
       Number(summary.items.duplicatesThisRun || 0).toLocaleString()
     } | Removed: ${removedThisRun.toLocaleString()} | Active: ${activeCount.toLocaleString()} | Total indexed: ${totalCount.toLocaleString()}`,
+  )
+  console.log(
+    `   Cached pages: ${pageSnapshotResult.totalSnapshots.toLocaleString()} (${pageSnapshotResult.captured.toLocaleString()} captured this run)`,
+  )
+  console.log(
+    `   Cached images: ${imageSnapshotResult.totalSnapshots.toLocaleString()} (${imageSnapshotResult.captured.toLocaleString()} captured this run)`,
   )
 
   await stopPlaywright()

@@ -50,4 +50,4 @@ logs
 npm-debug.log*
 
 artifacts/reports/interlinker-unresolved.json
-src/content/projects/lv-images/generated/lv/
+src/content/projects/lv-images/generated/

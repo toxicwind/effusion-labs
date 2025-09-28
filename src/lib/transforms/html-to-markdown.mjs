@@ -39,7 +39,7 @@ function inScope(inputPath, rootDir) {
 }
 
 /** HTML fragment -> Markdown string via unified */
-async function htmlFragmentToMarkdown(html, { smartTypography = false } = {}) {
+export async function htmlFragmentToMarkdown(html, { smartTypography = false } = {}) {
   // Build pipeline
   let processor = unified()
     .use(rehypeParse, { fragment: true })
