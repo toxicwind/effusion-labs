@@ -17,6 +17,8 @@ const generatedDir = path.join(datasetRoot, 'generated')
 const lvDir = path.join(generatedDir, 'lv')
 const archivesDir = path.join(generatedDir, 'archives')
 const historyFile = path.join(archivesDir, 'history.json')
+const legacyHistoryFile = path.join(generatedDir, 'lv.bundle.history.json')
+const legacyBundlesDir = path.join(generatedDir, 'bundles')
 
 async function ensureFixtureDataset(content = 'fixture') {
   await rm(lvDir, { recursive: true, force: true })
@@ -33,6 +35,7 @@ function resetLog() {
 
 async function testPipelineCli() {
   const pipeline = await import('./pipeline.mjs')
+  const { resolveCommandDescriptor } = pipeline
   const log = resetLog()
 
   await pipeline.crawl({ mode: 'invalid-mode', label: 'demo', skipBundle: true, keepWorkdir: true })
@@ -60,12 +63,22 @@ async function testPipelineCli() {
   const cycleEleventy = log.find((entry) => entry.type === 'eleventy')
   assert.ok(cycleEleventy, 'cycle should trigger build eleventy stage')
   assert.deepEqual(cycleEleventy.eleventyArgs, ['--foo'])
+
+  const legacyAlias = resolveCommandDescriptor('crawl-pages-images')
+  assert.equal(legacyAlias.baseCommand, 'crawl', 'legacy crawl-pages-images maps to crawl command')
+  assert.equal(legacyAlias.preset.mode, 'pages-images', 'legacy crawl-pages-images presets mode pages-images')
+  assert.equal(legacyAlias.isLegacy, true, 'legacy alias flagged appropriately')
+
+  const modernCommand = resolveCommandDescriptor('crawl')
+  assert.equal(modernCommand.isLegacy, false, 'modern command not treated as legacy')
 }
 
 async function testArchiving() {
   const bundle = await import('./bundle-lib.mjs')
   await rm(historyFile, { force: true })
+  await rm(legacyHistoryFile, { force: true })
   await rm(archivesDir, { recursive: true, force: true })
+  await rm(legacyBundlesDir, { recursive: true, force: true })
   await rm(path.join(generatedDir, 'lv.bundle.tgz'), { force: true })
 
   await ensureFixtureDataset('one')
@@ -95,6 +108,17 @@ async function testArchiving() {
   const archiveFiles = await readdir(archivesDir)
   for (const entry of history) {
     assert.ok(archiveFiles.includes(entry.name), `archive file ${entry.name} should exist`)
+  }
+
+  const legacyHistory = JSON.parse(await readFile(legacyHistoryFile, 'utf8'))
+  assert.equal(legacyHistory[0].name, history[0].name, 'legacy history mirrors latest entry')
+  assert.ok(
+    legacyHistory.every((entry) => entry.path.startsWith('generated/bundles/')),
+    'legacy history uses bundles directory paths',
+  )
+  const legacyArchives = await readdir(legacyBundlesDir)
+  for (const entry of legacyHistory) {
+    assert.ok(legacyArchives.includes(entry.name), `legacy archive ${entry.name} should exist`)
   }
 }
 

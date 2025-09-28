@@ -342,17 +342,39 @@ let documentsById = new Map()
 if (Array.isArray(searchPayload.documents)) {
   documentsById = new Map(searchPayload.documents.map(doc => [doc.id, doc]))
 }
+let indexLoaded = false
 if (searchPayload.index && searchPayload.options) {
   try {
     const indexSource = typeof searchPayload.index === 'string'
       ? JSON.parse(searchPayload.index)
       : searchPayload.index
     globalSearchEngine = MiniSearch.loadJSON(indexSource, searchPayload.options)
+    indexLoaded = true
   } catch (error) {
     console.warn('[lvreport-app] Failed to load search index:', error)
     globalSearchEngine = null
   }
-} else if (searchPayload.documentCount) {
+}
+if (!globalSearchEngine) {
+  const options = searchPayload.options || {
+    fields: ['title', 'description', 'section', 'tags'],
+    storeFields: ['id', 'title', 'description', 'href', 'section', 'badge', 'tags'],
+    searchOptions: { prefix: true, fuzzy: 0.2 },
+  }
+  try {
+    globalSearchEngine = new MiniSearch(options)
+    if (documentsById.size) {
+      globalSearchEngine.addAll(Array.from(documentsById.values()))
+    }
+    if (!indexLoaded && searchPayload.documentCount) {
+      console.warn('[lvreport-app] Rebuilt search index in-memory from dataset snapshot.')
+    }
+  } catch (error) {
+    console.warn('[lvreport-app] Search index unavailable:', error)
+    globalSearchEngine = null
+  }
+}
+if (!globalSearchEngine && searchPayload.documentCount && !indexLoaded) {
   console.warn('[lvreport-app] Search index missing; global dataset search disabled.')
 }
 
