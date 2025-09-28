@@ -1,61 +1,93 @@
 #!/usr/bin/env node
-// tools/doctor.mjs — quick env check for contributors and CI
 import { execFileSync } from 'node:child_process'
-import { join } from 'node:path'
 import process from 'node:process'
-import { fileURLToPath } from 'node:url'
 
-const repoRoot = fileURLToPath(new URL('..', import.meta.url))
-const repoBin = join(repoRoot, 'bin')
+import { resolveChromium } from './resolve-chromium.mjs'
 
-const shim = name => join(repoBin, name)
+const MIN_NODE = '22.19.0'
 
-function npmVersion() {
-  const agent = process.env.npm_config_user_agent || ''
-  const token = agent.split(' ')[0] || ''
-  const version = token.includes('/') ? token.split('/')[1] : ''
-  if (version) {
-    return version
+function compareSemver(a, b) {
+  const pa = String(a).split('.').map((part) => Number.parseInt(part, 10) || 0)
+  const pb = String(b).split('.').map((part) => Number.parseInt(part, 10) || 0)
+  const length = Math.max(pa.length, pb.length)
+  for (let index = 0; index < length; index++) {
+    const diff = (pa[index] || 0) - (pb[index] || 0)
+    if (diff !== 0) return diff
   }
-  return bin(shim('npm'))
+  return 0
 }
 
-function bin(name, args = ['--version']) {
+function readNpmVersion() {
   try {
-    const out = execFileSync(name, args, {
+    const out = execFileSync('npm', ['--version'], {
+      encoding: 'utf8',
       stdio: ['ignore', 'pipe', 'ignore'],
     })
-    return String(out).trim().split(/\r?\n/)[0]
+    return out.trim()
   } catch {
     return null
   }
 }
 
-const checks = []
-checks.push(['node', process.versions.node, v => Number(v.split('.')[0]) >= 24])
-checks.push(['npm', npmVersion(), v => !!v])
-checks.push(['rg', bin(shim('rg'), ['--version']), v => !!v])
-checks.push([
-  'fd',
-  bin(shim('fd'), ['--version']) || bin('fdfind', ['--version']),
-  v => !!v,
-])
-checks.push(['jq', bin(shim('jq'), ['--version']), v => !!v])
-checks.push(['sd', bin(shim('sd'), ['--version']), v => !!v])
+const nodeVersion = process.versions.node
+const nodeOk = compareSemver(nodeVersion, MIN_NODE) >= 0
+const npmVersion = readNpmVersion()
+const npmOk = Boolean(npmVersion)
 
-let ok = true
-for (const [name, version, pass] of checks) {
-  const good = typeof pass === 'function' ? pass(version || '') : !!version
-  ok &&= good
-  const mark = good ? '✓' : '✗'
-  console.log(`${mark} ${name} ${version || '(missing)'}`)
+let chromiumPath = ''
+let chromiumOk = false
+let chromiumError = ''
+try {
+  chromiumPath = resolveChromium()
+  chromiumOk = true
+} catch (error) {
+  chromiumError = error instanceof Error ? error.message : String(error)
 }
 
-if (!ok) {
-  console.error('\nSome tools are missing or out of date.')
-  console.error('- Node >= 24 required')
-  console.error('- Install ripgrep (rg), fd (or fdfind), jq, and sd')
-  process.exit(1)
+const ciValue = process.env.CI ?? '(undefined)'
+
+const rows = [
+  {
+    label: 'Node',
+    value: nodeVersion,
+    detail: `>= ${MIN_NODE}`,
+    ok: nodeOk,
+  },
+  {
+    label: 'npm',
+    value: npmVersion || '(missing)',
+    detail: '',
+    ok: npmOk,
+  },
+  {
+    label: 'Chromium',
+    value: chromiumPath || '(missing)',
+    detail: chromiumError,
+    ok: chromiumOk,
+  },
+  {
+    label: 'CI env',
+    value: String(ciValue),
+    detail: '',
+    ok: true,
+  },
+]
+
+let allOk = true
+for (const row of rows) {
+  const mark = row.ok ? '✓' : '✗'
+  console.log(`${mark} ${row.label}: ${row.value}${row.detail ? ` (${row.detail})` : ''}`)
+  if (!row.ok) allOk = false
 }
 
-console.log('\nEnvironment looks good.')
+if (allOk) {
+  console.log('\nEnvironment looks good.')
+} else {
+  console.log('\nEnvironment issues detected.')
+}
+
+if (!chromiumOk) {
+  process.exitCode = 1
+} else if (!nodeOk || !npmOk) {
+  process.exitCode = 1
+}

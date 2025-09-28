@@ -71,14 +71,7 @@ metaDisable: true
   }
 %}
 
-{# Compute flagged percentages for radial progress indicators.  The logical
-   short‑circuit ensures we avoid division by zero when there are no items. #}
-{%
-  set robotsPct = (robotsMetrics.total and robotsMetrics.total > 0) and ((robotsMetrics.issues * 100) / robotsMetrics.total) or 0
-%}
-{%
-  set docsPct   = (docsMetrics.total   and docsMetrics.total   > 0) and ((docsMetrics.issues   * 100) / docsMetrics.total)   or 0
-%}
+
 
 <section class="relative overflow-hidden rounded-box bg-gradient-to-br from-primary via-secondary to-accent p-8 text-primary-content shadow-xl">
   <div class="absolute inset-0 pointer-events-none opacity-30 mix-blend-screen bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.45),_transparent_60%)]">
@@ -433,9 +426,9 @@ metaDisable: true
         <div class="flex items-center gap-6 mt-4">
           <div
             class="radial-progress text-error"
-            style="--value: {{ robotsPct | round(1) }}; --size: 4rem; --thickness: 4px"
+            style="--value: {{ robotsMetrics.issuePercent | round(1) }}; --size: 4rem; --thickness: 4px"
           >
-            {{ robotsPct | round(1) }}%
+            {{ robotsMetrics.issuePercent | round(1) }}%
           </div>
           <div>
             <p class="text-2xl font-bold">{{ robotsMetrics.issues or 0 }}</p>
@@ -457,9 +450,9 @@ metaDisable: true
         <div class="flex items-center gap-6 mt-4">
           <div
             class="radial-progress text-error"
-            style="--value: {{ docsPct | round(1) }}; --size: 4rem; --thickness: 4px"
+            style="--value: {{ docsMetrics.issuePercent | round(1) }}; --size: 4rem; --thickness: 4px"
           >
-            {{ docsPct | round(1) }}%
+            {{ docsMetrics.issuePercent | round(1) }}%
           </div>
           <div>
             <p class="text-2xl font-bold">{{ docsMetrics.issues or 0 }}</p>

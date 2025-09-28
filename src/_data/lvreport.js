@@ -3,7 +3,10 @@ console.log('[lvreport] global data module loaded')
 import fss from 'node:fs'
 import fs from 'node:fs/promises'
 import path from 'node:path'
+import process from 'node:process'
 import { fileURLToPath, pathToFileURL } from 'node:url'
+
+import MiniSearch from 'minisearch'
 
 import { cacheRemoteImage } from '../lib/cache/remote-images.mjs'
 
@@ -12,16 +15,18 @@ import { cacheRemoteImage } from '../lib/cache/remote-images.mjs'
 // derived structures that the report template can consume. It has
 // been updated to surface new lifecycle metrics (added, removed,
 // active, total, duplicates, purged) introduced by the enhanced
-// crawler, along with aggregated lists of unique images and products.
-// If additional JSON files (all-images.json, all-products.json) are
-// unavailable, it falls back gracefully.
+// crawler, along with aggregated lists of unique images and products
+// derived directly from the canonical item metadata shards.
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 // Paths into the generated LV image atlas structure. Adjust these if
 // your project layout differs.
-const LV_BASE = path.resolve(__dirname, '../content/projects/lv-images/generated/lv')
-const GENERATED_DIR = path.resolve(LV_BASE, '..')
+const LV_DATASET_ROOT = process.env.LV_IMAGES_DATASET_ROOT
+  ? path.resolve(process.env.LV_IMAGES_DATASET_ROOT)
+  : path.resolve(__dirname, '../content/projects/lv-images')
+const GENERATED_DIR = path.join(LV_DATASET_ROOT, 'generated')
+const LV_BASE = path.join(GENERATED_DIR, 'lv')
 const CACHE_DIR = path.join(LV_BASE, 'cache')
 const ROBOTS_DIR = path.join(CACHE_DIR, 'robots')
 const SITEMAPS_DIR = path.join(CACHE_DIR, 'sitemaps')
@@ -32,8 +37,7 @@ const REPORT_TEMPLATE_DIR = path.resolve(__dirname, '../content/projects/lv-imag
 const SUMMARY_JSON = path.join(LV_BASE, 'summary.json')
 const URLMETA_JSON = path.join(CACHE_DIR, 'urlmeta.json')
 const BLACKLIST_JSON = path.join(LV_BASE, 'hosts', 'blacklist.json')
-const ALL_IMAGES_JSON = path.join(LV_BASE, 'all-images.json')
-const ALL_PRODUCTS_JSON = path.join(LV_BASE, 'all-products.json')
+const ITEMS_META_JSON = path.join(LV_BASE, 'items-meta.json')
 // Runs history file captures recent run records with metrics.  Each
 // entry is an object { timestamp, metrics, totals }.  Only the last
 // 5 runs are retained in update‑dataset.  This path mirrors the
@@ -51,8 +55,7 @@ const CACHE_SIGNATURE_TARGETS = [
   SUMMARY_JSON,
   URLMETA_JSON,
   BLACKLIST_JSON,
-  ALL_IMAGES_JSON,
-  ALL_PRODUCTS_JSON,
+  ITEMS_META_JSON,
   RUNS_HISTORY_JSON,
   BUNDLE_MANIFEST_JSON,
   BUNDLE_ARCHIVE_PATH,
@@ -718,6 +721,62 @@ function cleanText(value, fallback = '') {
   return value.replace(CONTROL_CHARS_REGEX, '').trim()
 }
 
+function hostFromUrl(input) {
+  if (!input) return ''
+  try {
+    return new URL(String(input)).host
+  } catch {
+    return ''
+  }
+}
+
+function buildImageProductAggregations(itemsMeta = {}) {
+  const images = []
+  const products = {}
+  if (!itemsMeta || typeof itemsMeta !== 'object') {
+    return { images, products }
+  }
+  for (const [id, meta] of Object.entries(itemsMeta)) {
+    if (!meta || typeof meta !== 'object') continue
+    const src = meta.src || ''
+    const basename = path.basename(String(src).split('?')[0] || '')
+    const pageUrl = meta.pageUrl || ''
+    const host = meta.host || hostFromUrl(pageUrl) || hostFromUrl(src)
+    images.push({
+      id,
+      src,
+      basename,
+      firstSeen: meta.firstSeen || '',
+      lastSeen: meta.lastSeen || '',
+      duplicateOf: meta.duplicateOf || null,
+      pageUrl,
+      title: meta.title || '',
+      host,
+    })
+    if (pageUrl) {
+      if (!products[pageUrl]) {
+        products[pageUrl] = {
+          pageUrl,
+          title: meta.title || '',
+          images: [],
+          firstSeen: meta.firstSeen || '',
+          lastSeen: meta.lastSeen || '',
+        }
+      }
+      const prod = products[pageUrl]
+      prod.images.push({ id, src, duplicateOf: meta.duplicateOf || null })
+      if (!prod.title && meta.title) prod.title = meta.title
+      if (meta.firstSeen && (!prod.firstSeen || meta.firstSeen < prod.firstSeen)) {
+        prod.firstSeen = meta.firstSeen
+      }
+      if (meta.lastSeen && (!prod.lastSeen || meta.lastSeen > prod.lastSeen)) {
+        prod.lastSeen = meta.lastSeen
+      }
+    }
+  }
+  return { images, products }
+}
+
 function paginateList(items, size) {
   const list = Array.isArray(items) ? items : []
   const numericSize = Number(size)
@@ -879,8 +938,7 @@ async function buildReportData() {
     summary,
     urlmeta,
     blacklist,
-    allImages,
-    allProducts,
+    itemsMeta,
     runsHistory,
     manifest,
     pageCacheIndex,
@@ -889,13 +947,14 @@ async function buildReportData() {
     loadJSON(SUMMARY_JSON, {}),
     loadJSON(URLMETA_JSON, {}),
     loadJSON(BLACKLIST_JSON, {}),
-    loadJSON(ALL_IMAGES_JSON, []),
-    loadJSON(ALL_PRODUCTS_JSON, {}),
+    loadJSON(ITEMS_META_JSON, {}),
     loadJSON(RUNS_HISTORY_JSON, []),
     loadJSON(BUNDLE_MANIFEST_JSON, null),
     loadJSON(PAGE_CACHE_INDEX_JSON, { version: 1, pages: {} }),
     loadJSON(IMAGE_CACHE_INDEX_JSON, { version: 1, images: {} }),
   ])
+
+  const { images: allImages, products: allProducts } = buildImageProductAggregations(itemsMeta)
 
   const bundleExists = await fileExists(BUNDLE_ARCHIVE_PATH)
   const baseHref = '/content/projects/lv-images/generated/lv/'
@@ -1315,11 +1374,17 @@ async function buildReportData() {
     issues: robots.filter((r) => r.isIssue).length,
     breakdown: makeBreakdown(robotsCounts, ROBOTS_CATEGORY_META, robots.length),
   }
+  robotsMetrics.issuePercent = robotsMetrics.total
+    ? (robotsMetrics.issues * 100) / robotsMetrics.total
+    : 0
   const docsMetrics = {
     total: docs.length,
     issues: docs.filter((d) => d.isIssue).length,
     breakdown: makeBreakdown(docCounts, DOC_CATEGORY_META, docs.length),
   }
+  docsMetrics.issuePercent = docsMetrics.total
+    ? (docsMetrics.issues * 100) / docsMetrics.total
+    : 0
 
   // Derive items metrics from summary.items. The crawler persists
   // these counts: added, removed, duplicates (images only), purged
@@ -1611,12 +1676,22 @@ async function buildReportData() {
     }
   }
 
+  let searchIndexJson = null
+  try {
+    const mini = new MiniSearch(MINI_SEARCH_OPTIONS)
+    mini.addAll(searchDocuments)
+    searchIndexJson = mini.toJSON()
+  } catch (error) {
+    console.warn(`[lvreport] search index build failed: ${error?.message || error}`)
+  }
+
   const search = {
-    documents: [],
-    index: null,
+    documents: searchDocuments,
+    index: searchIndexJson,
     options: MINI_SEARCH_OPTIONS,
     datasetHref: '/content/projects/lv-images/generated/lv/lvreport.dataset.json',
     documentCount: searchDocuments.length,
+    version: 1,
   }
 
   return {

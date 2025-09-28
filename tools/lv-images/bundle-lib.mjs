@@ -2,28 +2,29 @@ import { createHash } from 'node:crypto'
 import { createReadStream } from 'node:fs'
 import { access, copyFile, mkdir, readdir, readFile, rm, stat, writeFile } from 'node:fs/promises'
 import path from 'node:path'
+import process from 'node:process'
 import { fileURLToPath } from 'node:url'
 
 import * as tar from 'tar'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const projectRoot = path.resolve(__dirname, '..', '..')
-const datasetRoot = path.join(projectRoot, 'src/content/projects/lv-images')
+const datasetRoot = process.env.LV_IMAGES_DATASET_ROOT
+  ? path.resolve(process.env.LV_IMAGES_DATASET_ROOT)
+  : path.join(projectRoot, 'src/content/projects/lv-images')
 const generatedDir = path.join(datasetRoot, 'generated')
 const lvDir = path.join(generatedDir, 'lv')
 const bundlePath = path.join(generatedDir, 'lv.bundle.tgz')
 const manifestPath = path.join(generatedDir, 'lv.bundle.json')
-const bundleHistoryDir = path.join(generatedDir, 'bundles')
-const historyManifestPath = path.join(generatedDir, 'lv.bundle.history.json')
+const archivesDir = path.join(generatedDir, 'archives')
+const historyManifestPath = path.join(archivesDir, 'history.json')
 const urlmetaPath = path.join(lvDir, 'cache', 'urlmeta.json')
 const summaryPath = path.join(lvDir, 'summary.json')
 
-const HISTORY_LIMIT = 12
+const HISTORY_LIMIT = 10
 
 const posixify = (value) => value.split(path.sep).join('/')
 const rel = (from, to) => posixify(path.relative(from, to))
-const timestampSlug = (date = new Date()) =>
-  date.toISOString().replace(/[.:]/g, '-')
 
 async function hashFile(filePath, algorithm = 'sha256') {
   return new Promise((resolve, reject) => {
@@ -131,21 +132,35 @@ export async function bundleDataset({
 
   await normalizeUrlmetaPaths()
   await mkdir(generatedDir, { recursive: true })
-  await mkdir(bundleHistoryDir, { recursive: true })
+  await mkdir(archivesDir, { recursive: true })
 
   const generationTime = new Date()
   const generatedAtIso = generationTime.toISOString()
+  const isoStamp = generatedAtIso.replace(/[:-]/g, '').replace(/\.\d{3}Z$/, 'Z')
+
+  const modeSlug = mode
+    ? String(mode).toLowerCase().replace(/[^\da-z]+/g, '-').replace(/^-+|-+$/g, '')
+    : ''
+  const labelSlug = runLabel
+    ? String(runLabel).toLowerCase().replace(/[^\da-z]+/g, '-').replace(/^-+|-+$/g, '')
+    : ''
+  const suffixParts = [modeSlug, labelSlug].filter(Boolean)
+  const suffix = suffixParts.length ? `-${suffixParts.join('-')}` : ''
+  const archiveName = `lv-${isoStamp}${suffix}.tgz`
+  const archivePath = path.join(archivesDir, archiveName)
 
   await tar.create({
     gzip: true,
     cwd: generatedDir,
-    file: bundlePath,
+    file: archivePath,
     portable: true,
     noMtime: true,
   }, ['lv'])
 
-  const archiveStat = await stat(bundlePath)
-  const sha256 = await hashFile(bundlePath)
+  await copyFile(archivePath, bundlePath)
+
+  const archiveStat = await stat(archivePath)
+  const sha256 = await hashFile(archivePath)
   let summary = null
   try {
     const raw = await readFile(summaryPath, 'utf8')
@@ -156,21 +171,9 @@ export async function bundleDataset({
 
   const totalBytes = entries.reduce((sum, file) => sum + file.size, 0)
 
-  const modeSlug = mode
-    ? String(mode).toLowerCase().replace(/[^\da-z]+/g, '-').replace(/^-+|-+$/g, '')
-    : ''
-  const labelSlug = runLabel
-    ? String(runLabel).toLowerCase().replace(/[^\da-z]+/g, '-').replace(/^-+|-+$/g, '')
-    : ''
-  const suffixParts = [modeSlug, labelSlug].filter(Boolean)
-  const suffix = suffixParts.length ? `-${suffixParts.join('-')}` : ''
-  const historyName = `lv-${timestampSlug(generationTime)}${suffix}.tgz`
-  const historyPath = path.join(bundleHistoryDir, historyName)
-  await copyFile(bundlePath, historyPath)
-
   const historyEntry = {
-    name: historyName,
-    path: rel(datasetRoot, historyPath),
+    name: archiveName,
+    path: rel(datasetRoot, archivePath),
     size: archiveStat.size,
     sha256,
     generatedAt: generatedAtIso,
@@ -193,11 +196,11 @@ export async function bundleDataset({
   await writeFile(historyManifestPath, JSON.stringify(historyManifest, null, 2))
 
   const allowedHistoryNames = new Set(historyManifest.map((entry) => entry.name))
-  const existingHistoryFiles = await readdir(bundleHistoryDir)
+  const existingHistoryFiles = await readdir(archivesDir)
   await Promise.all(
     existingHistoryFiles
       .filter((name) => name.endsWith('.tgz') && !allowedHistoryNames.has(name))
-      .map((name) => rm(path.join(bundleHistoryDir, name), { force: true })),
+      .map((name) => rm(path.join(archivesDir, name), { force: true })),
   )
 
   const historySummary = historyManifest.map((entry) => ({
@@ -269,6 +272,9 @@ export async function verifyBundle() {
   let manifest
   try {
     const raw = await readFile(manifestPath, 'utf8')
+    if (raw.trimStart().startsWith('version https://git-lfs.github.com/spec/v1')) {
+      return { ok: false, reason: 'manifest-pointer' }
+    }
     manifest = raw ? JSON.parse(raw) : null
   } catch (error) {
     if (error.code === 'ENOENT') {
@@ -336,7 +342,7 @@ export const paths = {
   lvDir,
   bundlePath,
   manifestPath,
-  bundleHistoryDir,
+  archivesDir,
   historyManifestPath,
   urlmetaPath,
   summaryPath,

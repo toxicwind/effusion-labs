@@ -1,5 +1,4 @@
 import Alpine from 'alpinejs'
-import Fuse from 'fuse.js'
 import MiniSearch from 'minisearch'
 
 const datasetEl = document.getElementById('lvreport-data')
@@ -13,35 +12,8 @@ const baseHref = payload.baseHref || ''
 const sections = payload.page?.sections || {}
 const sectionKeys = Object.keys(sections)
 
-const fuseConfigs = {
-  sitemaps: { keys: ['host', 'url', 'type', 'status'], threshold: 0.35, ignoreLocation: true },
-  robots: {
-    keys: ['host', 'statusLabel', 'httpLabel', 'preview'],
-    threshold: 0.35,
-    ignoreLocation: true,
-  },
-  docs: {
-    keys: ['host', 'fileName', 'statusLabel', 'contentType', 'preview'],
-    threshold: 0.3,
-    ignoreLocation: true,
-  },
-  duplicates: { keys: ['basename', 'title', 'pageUrl'], threshold: 0.3, ignoreLocation: true },
-  topProducts: { keys: ['title', 'pageUrl'], threshold: 0.3, ignoreLocation: true },
-  hosts: { keys: ['host'], threshold: 0.2, ignoreLocation: true },
-}
-
-const fuseInstances = new Map()
 const filters = {}
 const originalSummary = {}
-
-function initFuseEngines() {
-  for (const key of sectionKeys) {
-    const items = sections[key]?.items || []
-    const config = fuseConfigs[key]
-    if (!config || !items.length) continue
-    fuseInstances.set(key, new Fuse(items, { includeScore: true, ...config }))
-  }
-}
 
 function ensureSummaryCache(section) {
   const el = document.querySelector(`[data-filter-summary="${section}"]`)
@@ -79,13 +51,8 @@ function applyFilters(section) {
 
   const query = (filterState.query || '').trim()
   if (query.length) {
-    const fuse = fuseInstances.get(section)
-    if (fuse) {
-      results = fuse.search(query).map(hit => hit.item)
-    } else {
-      const lower = query.toLowerCase()
-      results = items.filter(item => JSON.stringify(item).toLowerCase().includes(lower))
-    }
+    const lower = query.toLowerCase()
+    results = items.filter(item => JSON.stringify(item).toLowerCase().includes(lower))
   }
 
   if (section === 'sitemaps' && filterState.types) {
@@ -323,7 +290,6 @@ function initialiseFilters() {
 
 function initLocalFiltering() {
   initialiseFilters()
-  initFuseEngines()
   hookSearchInputs()
   hookIssueToggles()
   hookStatusChips()
@@ -344,11 +310,9 @@ if (Array.isArray(searchPayload.documents)) {
 }
 if (searchPayload.index && searchPayload.options) {
   try {
-    const indexJson = typeof searchPayload.index === 'string'
-      ? searchPayload.index
-      : JSON.stringify(searchPayload.index)
-    globalSearchEngine = MiniSearch.loadJSON(indexJson, searchPayload.options)
-  } catch {
+    globalSearchEngine = MiniSearch.loadJSON(searchPayload.index, searchPayload.options)
+  } catch (error) {
+    console.warn('[lvreport-app] Failed to load prebuilt search index:', error)
     globalSearchEngine = null
   }
 }
