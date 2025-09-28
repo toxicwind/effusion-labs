@@ -8,7 +8,6 @@ import { fileURLToPath } from 'node:url'
 
 import EleventyVitePlugin from '@11ty/eleventy-plugin-vite'
 
-import localImageTransformPlugin from './src/lib/plugins/local-image-transform.mjs'
 import EleventyPluginNavigation from '@11ty/eleventy-navigation'
 import EleventyPluginRss from '@11ty/eleventy-plugin-rss'
 import EleventyPluginSyntaxhighlight from '@11ty/eleventy-plugin-syntaxhighlight'
@@ -17,6 +16,7 @@ import schema from '@quasibit/eleventy-plugin-schema'
 import sitemap from '@quasibit/eleventy-plugin-sitemap'
 import tailwindcss from '@tailwindcss/vite'
 import Beasties from 'beasties'
+import localImageTransformPlugin from './src/lib/plugins/local-image-transform.mjs'
 
 import registerArchive from './src/lib/archives/index.mjs'
 import { buildArchiveNav } from './src/lib/archives/nav.mjs'
@@ -199,8 +199,8 @@ export default function(eleventyConfig) {
           tree.match({ tag: 'img' }, (node) => {
             const src = node?.attrs?.src
             if (
-              typeof src === 'string' &&
-              (/^https?:\/\//i.test(src) || /^\/\//.test(src))
+              typeof src === 'string'
+              && (/^https?:\/\//i.test(src) || /^\/\//.test(src))
             ) {
               node.attrs ||= {}
               if (!('eleventy:ignore' in node.attrs)) {

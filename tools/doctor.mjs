@@ -1,60 +1,75 @@
 #!/usr/bin/env node
-// tools/doctor.mjs — quick env check for contributors and CI
+// tools/doctor.mjs — hardened environment validation for LV pipeline
 import { execFileSync } from 'node:child_process'
-import { join } from 'node:path'
 import process from 'node:process'
-import { fileURLToPath } from 'node:url'
 
-const repoRoot = fileURLToPath(new URL('..', import.meta.url))
-const repoBin = join(repoRoot, 'bin')
+import { resolveChromium } from './resolve-chromium.mjs'
 
-const shim = name => join(repoBin, name)
-
-function npmVersion() {
-  const agent = process.env.npm_config_user_agent || ''
-  const token = agent.split(' ')[0] || ''
-  const version = token.includes('/') ? token.split('/')[1] : ''
-  if (version) {
-    return version
-  }
-  return bin(shim('npm'))
+function compareVersions(a = '', b = '') {
+  const normalize = (value) =>
+    String(value).split('.').map((part) => Number.parseInt(part, 10) || 0)
+  const [aMajor, aMinor, aPatch] = normalize(a)
+  const [bMajor, bMinor, bPatch] = normalize(b)
+  if (aMajor !== bMajor) return aMajor - bMajor
+  if (aMinor !== bMinor) return aMinor - bMinor
+  return aPatch - bPatch
 }
 
-function bin(name, args = ['--version']) {
+function safeExec(command, args = []) {
   try {
-    const out = execFileSync(name, args, {
-      stdio: ['ignore', 'pipe', 'ignore'],
-    })
-    return String(out).trim().split(/\r?\n/)[0]
+    return execFileSync(command, args, { stdio: ['ignore', 'pipe', 'ignore'], encoding: 'utf8' })
+      .trim()
   } catch {
     return null
   }
 }
 
-const checks = []
-checks.push(['node', process.versions.node, v => Number(v.split('.')[0]) >= 24])
-checks.push(['npm', npmVersion(), v => !!v])
-checks.push(['rg', bin(shim('rg'), ['--version']), v => !!v])
-checks.push([
-  'fd',
-  bin(shim('fd'), ['--version']) || bin('fdfind', ['--version']),
-  v => !!v,
-])
-checks.push(['jq', bin(shim('jq'), ['--version']), v => !!v])
-checks.push(['sd', bin(shim('sd'), ['--version']), v => !!v])
+const results = []
 
-let ok = true
-for (const [name, version, pass] of checks) {
-  const good = typeof pass === 'function' ? pass(version || '') : !!version
-  ok &&= good
-  const mark = good ? '✓' : '✗'
-  console.log(`${mark} ${name} ${version || '(missing)'}`)
+const nodeVersion = process.versions.node
+const nodeRequired = '22.19.0'
+const nodeOk = compareVersions(nodeVersion, nodeRequired) >= 0
+results.push({ name: 'node', version: nodeVersion, ok: nodeOk, note: `>= ${nodeRequired}` })
+
+const npmVersion = safeExec('npm', ['--version'])
+results.push({ name: 'npm', version: npmVersion, ok: Boolean(npmVersion) })
+
+let chromiumVersion = null
+let chromiumPath = null
+let chromiumOk = false
+let chromiumError = null
+try {
+  chromiumPath = resolveChromium()
+  chromiumVersion = safeExec(chromiumPath, ['--version'])
+  chromiumOk = Boolean(chromiumVersion)
+} catch (error) {
+  chromiumError = error instanceof Error ? error.message : String(error)
+}
+results.push({
+  name: 'chromium',
+  version: chromiumVersion || 'missing',
+  ok: chromiumOk,
+  note: chromiumPath || chromiumError || '',
+})
+
+const ciState = process.env.CI == null ? 'unset' : String(process.env.CI)
+
+let allOk = true
+for (const { name, version, ok, note } of results) {
+  allOk &&= ok
+  const mark = ok ? '✓' : '✗'
+  const detail = note ? ` — ${note}` : ''
+  console.log(`${mark} ${name} ${version || '(missing)'}${detail}`)
+}
+console.log(`CI environment: ${ciState}`)
+
+if (!chromiumOk) {
+  console.error('\nChromium runtime missing; run ./bin/install-chromium.sh or npm run setup.')
+  process.exit(1)
 }
 
-if (!ok) {
-  console.error('\nSome tools are missing or out of date.')
-  console.error('- Node >= 24 required')
-  console.error('- Install ripgrep (rg), fd (or fdfind), jq, and sd')
+if (!allOk) {
+  console.error('\nEnvironment checks failed.')
   process.exit(1)
 }
 

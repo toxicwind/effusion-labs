@@ -5,6 +5,8 @@ import fs from 'node:fs/promises'
 import path from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 
+import MiniSearch from 'minisearch'
+
 import { cacheRemoteImage } from '../lib/cache/remote-images.mjs'
 
 // This file is a data helper for Eleventy. It reads the summary and
@@ -32,8 +34,7 @@ const REPORT_TEMPLATE_DIR = path.resolve(__dirname, '../content/projects/lv-imag
 const SUMMARY_JSON = path.join(LV_BASE, 'summary.json')
 const URLMETA_JSON = path.join(CACHE_DIR, 'urlmeta.json')
 const BLACKLIST_JSON = path.join(LV_BASE, 'hosts', 'blacklist.json')
-const ALL_IMAGES_JSON = path.join(LV_BASE, 'all-images.json')
-const ALL_PRODUCTS_JSON = path.join(LV_BASE, 'all-products.json')
+const ITEMS_META_JSON = path.join(LV_BASE, 'items-meta.json')
 // Runs history file captures recent run records with metrics.  Each
 // entry is an object { timestamp, metrics, totals }.  Only the last
 // 5 runs are retained in update‑dataset.  This path mirrors the
@@ -51,8 +52,7 @@ const CACHE_SIGNATURE_TARGETS = [
   SUMMARY_JSON,
   URLMETA_JSON,
   BLACKLIST_JSON,
-  ALL_IMAGES_JSON,
-  ALL_PRODUCTS_JSON,
+  ITEMS_META_JSON,
   RUNS_HISTORY_JSON,
   BUNDLE_MANIFEST_JSON,
   BUNDLE_ARCHIVE_PATH,
@@ -413,9 +413,9 @@ function formatBytes(bytes) {
 // if truncated.
 function truncatePreview(text, max = 320) {
   if (!text) return ''
-  const trimmed = text.trim()
-  if (trimmed.length <= max) return trimmed
-  return `${trimmed.slice(0, max).trim()}…`
+  const normalized = text.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim()
+  if (normalized.length <= max) return normalized
+  return `${normalized.slice(0, max).trim()}…`
 }
 
 // Normalize an HTML title or error reason by stripping tags and
@@ -715,7 +715,33 @@ const CONTROL_CHARS_REGEX = /[\x00-\x1F\x7F]/g
 
 function cleanText(value, fallback = '') {
   if (typeof value !== 'string') return fallback
-  return value.replace(CONTROL_CHARS_REGEX, '').trim()
+  let sanitized = value.replace(CONTROL_CHARS_REGEX, '').trim()
+  sanitized = sanitized.replace(/[,;]+$/, '').trim()
+  if (/^["'`].*["'`]$/.test(sanitized)) {
+    sanitized = sanitized.slice(1, -1).trim()
+  } else {
+    sanitized = sanitized.replace(/^["'`]+/, '').replace(/["'`]+$/, '').trim()
+  }
+  return sanitized
+}
+
+function deepCleanInPlace(value) {
+  if (typeof value === 'string') {
+    return cleanText(value)
+  }
+  if (Array.isArray(value)) {
+    for (let index = 0; index < value.length; index++) {
+      value[index] = deepCleanInPlace(value[index])
+    }
+    return value
+  }
+  if (value && typeof value === 'object') {
+    for (const key of Object.keys(value)) {
+      value[key] = deepCleanInPlace(value[key])
+    }
+    return value
+  }
+  return value
 }
 
 function paginateList(items, size) {
@@ -879,8 +905,7 @@ async function buildReportData() {
     summary,
     urlmeta,
     blacklist,
-    allImages,
-    allProducts,
+    itemsMeta,
     runsHistory,
     manifest,
     pageCacheIndex,
@@ -889,8 +914,7 @@ async function buildReportData() {
     loadJSON(SUMMARY_JSON, {}),
     loadJSON(URLMETA_JSON, {}),
     loadJSON(BLACKLIST_JSON, {}),
-    loadJSON(ALL_IMAGES_JSON, []),
-    loadJSON(ALL_PRODUCTS_JSON, {}),
+    loadJSON(ITEMS_META_JSON, {}),
     loadJSON(RUNS_HISTORY_JSON, []),
     loadJSON(BUNDLE_MANIFEST_JSON, null),
     loadJSON(PAGE_CACHE_INDEX_JSON, { version: 1, pages: {} }),
@@ -1077,6 +1101,56 @@ async function buildReportData() {
   const sitemapsLog = Array.isArray(summary?.sitemaps) ? summary.sitemaps : []
   const searchDocuments = []
 
+  const allImages = []
+  const allProducts = {}
+  const hostSetFromMeta = new Set()
+  for (const [id, meta] of Object.entries(itemsMeta || {})) {
+    if (!meta || meta.removedAt) continue
+    const itemType = (meta.itemType || 'image').toLowerCase()
+    if (itemType !== 'image') continue
+    const srcRaw = cleanText(meta.src || '')
+    const basename = (() => {
+      if (!srcRaw) return ''
+      const noQuery = srcRaw.split('?')[0]?.split('#')[0] || srcRaw
+      return cleanText(path.basename(noQuery))
+    })()
+    const pageUrl = cleanText(meta.pageUrl || '')
+    const title = cleanText(meta.title || '')
+    const host = cleanText(meta.host || '')
+    if (host) hostSetFromMeta.add(host)
+    const imageEntry = {
+      id,
+      src: srcRaw,
+      basename,
+      firstSeen: meta.firstSeen || '',
+      lastSeen: meta.lastSeen || '',
+      duplicateOf: meta.duplicateOf || null,
+      pageUrl,
+      title,
+      host,
+    }
+    allImages.push(imageEntry)
+    const productKey = pageUrl || ''
+    if (!allProducts[productKey]) {
+      allProducts[productKey] = {
+        pageUrl,
+        title: title || pageUrl,
+        images: [],
+        firstSeen: meta.firstSeen || '',
+        lastSeen: meta.lastSeen || '',
+      }
+    }
+    const product = allProducts[productKey]
+    product.images.push({ id, src: srcRaw, duplicateOf: meta.duplicateOf || null })
+    if (!product.title && title) product.title = title
+    if (meta.firstSeen && (!product.firstSeen || meta.firstSeen < product.firstSeen)) {
+      product.firstSeen = meta.firstSeen
+    }
+    if (meta.lastSeen && (!product.lastSeen || meta.lastSeen > product.lastSeen)) {
+      product.lastSeen = meta.lastSeen
+    }
+  }
+
   const sitemaps = sitemapsLog.map((s, index) => {
     const url = cleanText(s.url || '')
     const um = urlmeta[url] || {}
@@ -1260,6 +1334,9 @@ async function buildReportData() {
           hasRules: false,
         }}
     }
+    const sanitizedRobotsText = rawText
+      ? rawText.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim()
+      : ''
     const classification = classifyRobotsResponse(rawText || '', hasCached)
     robotsCounts[classification.category] = (robotsCounts[classification.category] || 0) + 1
     const sizeBytes = rawText ? Buffer.byteLength(rawText, 'utf8') : 0
@@ -1270,7 +1347,7 @@ async function buildReportData() {
       host,
       hasCached,
       robotsTxtPath: hrefCached,
-      rawText: rawText || '',
+      rawText: sanitizedRobotsText,
       linesTotal: parsed && parsed.groups
         ? parsed.groups.reduce((sum, g) => sum + g.rules.length, 0)
         : (rawText ? rawText.split(/\r?\n/).length : 0),
@@ -1287,7 +1364,7 @@ async function buildReportData() {
       httpStatus: classification.httpStatus ?? null,
       httpLabel: classification.httpLabel || '',
       isIssue: classification.isIssue,
-      preview: truncatePreview(rawText, 360),
+      preview: truncatePreview(sanitizedRobotsText || rawText, 360),
     })
     pushSearchDoc(searchDocuments, {
       id,
@@ -1310,15 +1387,19 @@ async function buildReportData() {
   }
 
   // Build breakdown metrics for robots and docs.
+  const robotsIssuesCount = robots.filter((r) => r.isIssue).length
   const robotsMetrics = {
     total: robots.length,
-    issues: robots.filter((r) => r.isIssue).length,
+    issues: robotsIssuesCount,
     breakdown: makeBreakdown(robotsCounts, ROBOTS_CATEGORY_META, robots.length),
+    issuePct: robots.length ? Math.round(((robotsIssuesCount * 100) / robots.length) * 10) / 10 : 0,
   }
+  const docsIssuesCount = docs.filter((d) => d.isIssue).length
   const docsMetrics = {
     total: docs.length,
-    issues: docs.filter((d) => d.isIssue).length,
+    issues: docsIssuesCount,
     breakdown: makeBreakdown(docCounts, DOC_CATEGORY_META, docs.length),
+    issuePct: docs.length ? Math.round(((docsIssuesCount * 100) / docs.length) * 10) / 10 : 0,
   }
 
   // Derive items metrics from summary.items. The crawler persists
@@ -1550,16 +1631,18 @@ async function buildReportData() {
     }),
   )
 
+  deepCleanInPlace(sitemaps)
+  deepCleanInPlace(docs)
+  deepCleanInPlace(robots)
+  deepCleanInPlace(duplicatesList)
+  deepCleanInPlace(topProducts)
+  deepCleanInPlace(hostStats)
+  deepCleanInPlace(sample)
+
   const hostCount = (() => {
     if (summary?.totals && typeof summary.totals.hosts === 'number') return summary.totals.hosts
     if (Array.isArray(hostStats) && hostStats.length) return hostStats.length
-    if (Array.isArray(allImages)) {
-      const set = new Set()
-      for (const img of allImages) {
-        if (img?.host) set.add(img.host)
-      }
-      return set.size
-    }
+    if (hostSetFromMeta.size) return hostSetFromMeta.size
     return 0
   })()
 
@@ -1601,22 +1684,31 @@ async function buildReportData() {
       if (!section || !Array.isArray(section.items)) continue
       for (const item of section.items) {
         if (!item || typeof item !== 'object') continue
-        for (const key of Object.keys(item)) {
-          const value = item[key]
-          if (typeof value === 'string') {
-            item[key] = cleanText(value)
-          }
-        }
+        deepCleanInPlace(item)
       }
     }
   }
 
+  let searchIndex = null
+  let searchError = null
+  if (searchDocuments.length) {
+    try {
+      const engine = new MiniSearch(MINI_SEARCH_OPTIONS)
+      engine.addAll(searchDocuments)
+      searchIndex = engine.toJSON()
+    } catch (error) {
+      searchError = error?.message || String(error)
+      console.warn(`[lvreport] search index build failed: ${searchError}`)
+    }
+  }
+
   const search = {
-    documents: [],
-    index: null,
+    documents: searchDocuments,
+    index: searchIndex,
     options: MINI_SEARCH_OPTIONS,
     datasetHref: '/content/projects/lv-images/generated/lv/lvreport.dataset.json',
     documentCount: searchDocuments.length,
+    error: searchError,
   }
 
   return {

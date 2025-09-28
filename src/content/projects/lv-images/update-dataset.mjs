@@ -43,13 +43,12 @@ const imageCacheDir = path.join(cacheDir, 'images')
 const imageIndexPath = path.join(imageCacheDir, 'index.json')
 const markdownMirrorDir = path.join(genDir, 'pages-markdown')
 
+const sitemapsDir = path.join(cacheDir, 'sitemaps')
 const robotsDir = path.join(cacheDir, 'robots')
 const urlmetaPath = path.join(cacheDir, 'urlmeta.json')
 
 const itemsMetaPath = path.join(genDir, 'items-meta.json')
 const runsHistoryPath = path.join(genDir, 'runs-history.json')
-const allImagesPath = path.join(genDir, 'all-images.json')
-const allProductsPath = path.join(genDir, 'all-products.json')
 
 const hostsTxtPath = path.join(baseDir, './config/hosts.txt')
 const hostsBannedPath = path.join(baseDir, './config/hosts.banned.ndjson')
@@ -118,6 +117,27 @@ const readJsonFile = async (p, fallback) => {
 const ensureDir = (dirPath) => mkdir(dirPath, { recursive: true })
 const timestampSlug = (iso = nowIso()) => iso.replace(/[.:]/g, '-').replace(/Z$/, '')
 const nowIso = () => new Date().toISOString()
+
+async function pruneWorkspaceDirectories({ keep = false } = {}) {
+  if (keep) {
+    console.log('\n🧳 Workspace pruning skipped via --keep-workdir flag.')
+    return
+  }
+  console.log('\n🧹 Pruning crawler workspace caches…')
+  const targets = [
+    { label: 'items', path: itemsDir },
+    { label: 'sitemaps', path: sitemapsDir },
+    { label: 'robots', path: robotsDir },
+  ]
+  for (const target of targets) {
+    try {
+      await rm(target.path, { recursive: true, force: true })
+      console.log(`   • cleared ${path.relative(baseDir, target.path) || target.label}`)
+    } catch (error) {
+      console.warn(`   • failed to clear ${target.label}: ${error?.message || error}`)
+    }
+  }
+}
 
 const USER_AGENT = 'Mozilla/5.0 (X11; Linux x86_64; rv:143.0) Gecko/20100101 Firefox/143.0'
 const TIMEOUT_MS = 15000
@@ -1075,6 +1095,7 @@ async function main() {
   const forcePageRefresh = argv.has('--refresh-pages')
   const forceImageRefresh = argv.has('--refresh-images')
   const skipBundle = argv.has('--skip-bundle')
+  const keepWorkdir = argv.has('--keep-workdir')
   const bundleLabel = argv.get('--bundle-label')
     ? String(argv.get('--bundle-label'))
     : captureImages
@@ -1090,6 +1111,7 @@ async function main() {
   await mkdir(cacheDir, { recursive: true })
   await mkdir(itemsDir, { recursive: true })
   await mkdir(robotsDir, { recursive: true })
+  await ensureDir(sitemapsDir)
   await ensureDir(pageSnapshotsDir)
   await ensureDir(markdownMirrorDir)
   await ensureDir(imageCacheDir)
@@ -1383,8 +1405,6 @@ async function main() {
   await saveJson(urlmetaPath, JSON.parse(JSON.stringify(urlmeta)))
   await saveJson(itemsMetaPath, itemsMeta)
   await saveJson(runsHistoryPath, runsHistory)
-  await saveJson(allImagesPath, allImages)
-  await saveJson(allProductsPath, allProducts)
 
   console.log('\n🧮 Building lvreport dataset cache...')
   try {
@@ -1409,6 +1429,7 @@ async function main() {
     throw error
   }
 
+  let bundleUpdated = false
   if (!skipBundle) {
     try {
       const manifest = await bundleDataset({
@@ -1424,12 +1445,17 @@ async function main() {
             shortHash ? `(sha256:${shortHash}…)` : ''
           }`.trim(),
         )
+        bundleUpdated = true
       }
     } catch (error) {
       console.warn(`\n⚠️ Failed to update lv bundle: ${error?.message || error}`)
     }
   } else {
     console.log('\n📦 Bundle update skipped via --skip-bundle flag.')
+  }
+
+  if (bundleUpdated) {
+    await pruneWorkspaceDirectories({ keep: keepWorkdir })
   }
 
   console.log(`\n📊 Summary → ${path.relative(process.cwd(), summaryPath)}`)

@@ -344,24 +344,16 @@ if (Array.isArray(searchPayload.documents)) {
 }
 if (searchPayload.index && searchPayload.options) {
   try {
-    const indexJson = typeof searchPayload.index === 'string'
-      ? searchPayload.index
-      : JSON.stringify(searchPayload.index)
-    globalSearchEngine = MiniSearch.loadJSON(indexJson, searchPayload.options)
-  } catch {
+    const indexSource = typeof searchPayload.index === 'string'
+      ? JSON.parse(searchPayload.index)
+      : searchPayload.index
+    globalSearchEngine = MiniSearch.loadJSON(indexSource, searchPayload.options)
+  } catch (error) {
+    console.warn('[lvreport-app] Failed to load search index:', error)
     globalSearchEngine = null
   }
-}
-if (!globalSearchEngine) {
-  const options = searchPayload.options || {
-    fields: ['title', 'description', 'section', 'tags'],
-    storeFields: ['id', 'title', 'description', 'href', 'section', 'badge', 'tags'],
-    searchOptions: { prefix: true, fuzzy: 0.2 },
-  }
-  globalSearchEngine = new MiniSearch(options)
-  if (documentsById.size) {
-    globalSearchEngine.addAll(Array.from(documentsById.values()))
-  }
+} else if (searchPayload.documentCount) {
+  console.warn('[lvreport-app] Search index missing; global dataset search disabled.')
 }
 
 function formatSectionLabel(section) {
@@ -402,6 +394,11 @@ Alpine.data('globalSearch', () => ({
   search() {
     const term = this.query.trim()
     if (!term) {
+      this.results = []
+      this.activeIndex = 0
+      return
+    }
+    if (!globalSearchEngine) {
       this.results = []
       this.activeIndex = 0
       return
