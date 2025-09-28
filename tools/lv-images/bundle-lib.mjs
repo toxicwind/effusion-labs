@@ -23,7 +23,7 @@ const HISTORY_LIMIT = 12
 const posixify = (value) => value.split(path.sep).join('/')
 const rel = (from, to) => posixify(path.relative(from, to))
 const timestampSlug = (date = new Date()) =>
-  date.toISOString().replace(/[.:]/g, '-').replace(/Z$/, 'Z')
+  date.toISOString().replace(/[.:]/g, '-')
 
 async function hashFile(filePath, algorithm = 'sha256') {
   return new Promise((resolve, reject) => {
