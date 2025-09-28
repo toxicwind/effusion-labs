@@ -116,7 +116,7 @@ const readJsonFile = async (p, fallback) => {
   }
 }
 const ensureDir = (dirPath) => mkdir(dirPath, { recursive: true })
-const timestampSlug = (iso = nowIso()) => iso.replace(/[.:]/g, '-').replace(/Z$/, 'Z')
+const timestampSlug = (iso = nowIso()) => iso.replace(/[.:]/g, '-').replace(/Z$/, '')
 const nowIso = () => new Date().toISOString()
 
 const USER_AGENT = 'Mozilla/5.0 (X11; Linux x86_64; rv:143.0) Gecko/20100101 Firefox/143.0'
