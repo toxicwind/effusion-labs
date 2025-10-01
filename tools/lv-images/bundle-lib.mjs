@@ -2,22 +2,24 @@ import { createHash } from 'node:crypto'
 import { createReadStream } from 'node:fs'
 import { access, copyFile, mkdir, readdir, readFile, rm, stat, writeFile } from 'node:fs/promises'
 import path from 'node:path'
-import process from 'node:process'
 import { fileURLToPath } from 'node:url'
 
 import * as tar from 'tar'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const projectRoot = path.resolve(__dirname, '..', '..')
-const datasetRoot = process.env.LV_IMAGES_DATASET_ROOT
-  ? path.resolve(process.env.LV_IMAGES_DATASET_ROOT)
+const datasetRootOverride = process.env.LV_DATASET_ROOT
+const datasetRoot = datasetRootOverride
+  ? path.resolve(datasetRootOverride)
   : path.join(projectRoot, 'src/content/projects/lv-images')
 const generatedDir = path.join(datasetRoot, 'generated')
 const lvDir = path.join(generatedDir, 'lv')
-const bundlePath = path.join(generatedDir, 'lv.bundle.tgz')
+const stableBundlePath = path.join(generatedDir, 'lv.bundle.tgz')
 const manifestPath = path.join(generatedDir, 'lv.bundle.json')
 const archivesDir = path.join(generatedDir, 'archives')
 const historyManifestPath = path.join(archivesDir, 'history.json')
+const legacyBundleHistoryDir = path.join(generatedDir, 'bundles')
+const legacyHistoryManifestPath = path.join(generatedDir, 'lv.bundle.history.json')
 const urlmetaPath = path.join(lvDir, 'cache', 'urlmeta.json')
 const summaryPath = path.join(lvDir, 'summary.json')
 
@@ -25,6 +27,8 @@ const HISTORY_LIMIT = 10
 
 const posixify = (value) => value.split(path.sep).join('/')
 const rel = (from, to) => posixify(path.relative(from, to))
+const timestampSlug = (date = new Date()) =>
+  date.toISOString().replace(/[:-]/g, '').replace(/\.\d{3}Z$/, 'Z')
 
 async function hashFile(filePath, algorithm = 'sha256') {
   return new Promise((resolve, reject) => {
@@ -113,6 +117,76 @@ export async function normalizeUrlmetaPaths() {
   return { changed, count }
 }
 
+async function readHistoryManifest() {
+  try {
+    const raw = await readFile(historyManifestPath, 'utf8')
+    return raw ? JSON.parse(raw) : []
+  } catch (error) {
+    if (error.code === 'ENOENT') return []
+    throw error
+  }
+}
+
+function sanitizeSlug(value) {
+  return value
+    ? String(value)
+      .toLowerCase()
+      .replace(/[^\da-z]+/g, '-')
+      .replace(/^-+|-+$/g, '')
+    : ''
+}
+
+async function writeHistoryManifest(entries) {
+  await mkdir(archivesDir, { recursive: true })
+  await writeFile(historyManifestPath, JSON.stringify(entries, null, 2))
+}
+
+async function pruneArchives(keepNames) {
+  let files = []
+  try {
+    files = await readdir(archivesDir)
+  } catch (error) {
+    if (error.code === 'ENOENT') return
+    throw error
+  }
+  const keep = new Set(keepNames)
+  await Promise.all(
+    files
+      .filter((name) => name.endsWith('.tgz') && !keep.has(name))
+      .map((name) => rm(path.join(archivesDir, name), { force: true })),
+  )
+}
+
+async function writeLegacyHistory(entries) {
+  await mkdir(legacyBundleHistoryDir, { recursive: true })
+  const legacyEntries = entries.map((entry) => ({
+    name: entry.name,
+    path: `generated/bundles/${entry.name}`,
+    generatedAt: entry.generatedAt,
+    size: entry.size,
+    sha256: entry.sha256,
+    mode: entry.mode || null,
+    label: entry.label || null,
+  }))
+  await writeFile(legacyHistoryManifestPath, JSON.stringify(legacyEntries, null, 2))
+}
+
+async function pruneLegacyArchives(keepNames) {
+  let files = []
+  try {
+    files = await readdir(legacyBundleHistoryDir)
+  } catch (error) {
+    if (error.code === 'ENOENT') return
+    throw error
+  }
+  const keep = new Set(keepNames)
+  await Promise.all(
+    files
+      .filter((name) => name.endsWith('.tgz') && !keep.has(name))
+      .map((name) => rm(path.join(legacyBundleHistoryDir, name), { force: true })),
+  )
+}
+
 export async function bundleDataset({
   skipIfMissing = false,
   quiet = false,
@@ -133,20 +207,16 @@ export async function bundleDataset({
   await normalizeUrlmetaPaths()
   await mkdir(generatedDir, { recursive: true })
   await mkdir(archivesDir, { recursive: true })
+  await mkdir(legacyBundleHistoryDir, { recursive: true })
 
   const generationTime = new Date()
   const generatedAtIso = generationTime.toISOString()
-  const isoStamp = generatedAtIso.replace(/[:-]/g, '').replace(/\.\d{3}Z$/, 'Z')
-
-  const modeSlug = mode
-    ? String(mode).toLowerCase().replace(/[^\da-z]+/g, '-').replace(/^-+|-+$/g, '')
-    : ''
-  const labelSlug = runLabel
-    ? String(runLabel).toLowerCase().replace(/[^\da-z]+/g, '-').replace(/^-+|-+$/g, '')
-    : ''
+  const timestamp = timestampSlug(generationTime)
+  const modeSlug = sanitizeSlug(mode)
+  const labelSlug = sanitizeSlug(runLabel)
   const suffixParts = [modeSlug, labelSlug].filter(Boolean)
   const suffix = suffixParts.length ? `-${suffixParts.join('-')}` : ''
-  const archiveName = `lv-${isoStamp}${suffix}.tgz`
+  const archiveName = `lv-${timestamp}${suffix}.tgz`
   const archivePath = path.join(archivesDir, archiveName)
 
   await tar.create({
@@ -157,10 +227,9 @@ export async function bundleDataset({
     noMtime: true,
   }, ['lv'])
 
-  await copyFile(archivePath, bundlePath)
-
   const archiveStat = await stat(archivePath)
   const sha256 = await hashFile(archivePath)
+
   let summary = null
   try {
     const raw = await readFile(summaryPath, 'utf8')
@@ -171,9 +240,12 @@ export async function bundleDataset({
 
   const totalBytes = entries.reduce((sum, file) => sum + file.size, 0)
 
+  const legacyArchivePath = path.join(legacyBundleHistoryDir, archiveName)
+
   const historyEntry = {
     name: archiveName,
     path: rel(datasetRoot, archivePath),
+    legacyPath: rel(datasetRoot, legacyArchivePath),
     size: archiveStat.size,
     sha256,
     generatedAt: generatedAtIso,
@@ -181,36 +253,23 @@ export async function bundleDataset({
     label: runLabel || null,
   }
 
-  let historyManifest = []
-  try {
-    const rawHistory = await readFile(historyManifestPath, 'utf8')
-    historyManifest = rawHistory ? JSON.parse(rawHistory) : []
-  } catch (error) {
-    if (error.code !== 'ENOENT') throw error
-  }
-
+  let historyManifest = await readHistoryManifest()
   historyManifest.unshift(historyEntry)
   if (historyManifest.length > HISTORY_LIMIT) {
     historyManifest = historyManifest.slice(0, HISTORY_LIMIT)
   }
-  await writeFile(historyManifestPath, JSON.stringify(historyManifest, null, 2))
+  await writeHistoryManifest(historyManifest)
+  await writeLegacyHistory(historyManifest)
+  await pruneArchives(historyManifest.map((entry) => entry.name))
+  await pruneLegacyArchives(historyManifest.map((entry) => entry.name))
 
-  const allowedHistoryNames = new Set(historyManifest.map((entry) => entry.name))
-  const existingHistoryFiles = await readdir(archivesDir)
-  await Promise.all(
-    existingHistoryFiles
-      .filter((name) => name.endsWith('.tgz') && !allowedHistoryNames.has(name))
-      .map((name) => rm(path.join(archivesDir, name), { force: true })),
-  )
+  await copyFile(archivePath, stableBundlePath)
+  await copyFile(archivePath, legacyArchivePath)
 
   const historySummary = historyManifest.map((entry) => ({
-    name: entry.name,
-    path: entry.path,
-    generatedAt: entry.generatedAt,
-    size: entry.size,
-    sha256: entry.sha256,
-    mode: entry.mode || null,
-    label: entry.label || null,
+    ...entry,
+    path: rel(datasetRoot, path.join(datasetRoot, entry.path)),
+    legacyPath: rel(datasetRoot, path.join(datasetRoot, entry.legacyPath || entry.path)),
   }))
 
   const manifest = {
@@ -222,7 +281,7 @@ export async function bundleDataset({
       totalBytes,
     },
     archive: {
-      path: rel(datasetRoot, bundlePath),
+      path: rel(datasetRoot, stableBundlePath),
       size: archiveStat.size,
       sha256,
     },
@@ -237,6 +296,7 @@ export async function bundleDataset({
       latest: historySummary[0] || null,
       entries: historySummary,
       manifestPath: rel(datasetRoot, historyManifestPath),
+      directory: rel(datasetRoot, archivesDir),
     },
   }
 
@@ -246,11 +306,11 @@ export async function bundleDataset({
 
 export async function hydrateDataset({ force = true, quiet = false } = {}) {
   try {
-    await access(bundlePath)
+    await access(stableBundlePath)
   } catch (error) {
     if (error.code === 'ENOENT') {
       if (!quiet) {
-        console.warn(`[lv-images] Bundle missing at ${bundlePath}`)
+        console.warn(`[lv-images] Bundle missing at ${stableBundlePath}`)
       }
       return { hydrated: false, reason: 'missing-bundle' }
     }
@@ -262,7 +322,7 @@ export async function hydrateDataset({ force = true, quiet = false } = {}) {
   }
 
   await mkdir(generatedDir, { recursive: true })
-  await tar.extract({ cwd: generatedDir, file: bundlePath, strip: 0 })
+  await tar.extract({ cwd: generatedDir, file: stableBundlePath, strip: 0 })
   await normalizeUrlmetaPaths()
 
   return { hydrated: true, reason: 'ok' }
@@ -272,10 +332,18 @@ export async function verifyBundle() {
   let manifest
   try {
     const raw = await readFile(manifestPath, 'utf8')
-    if (raw.trimStart().startsWith('version https://git-lfs.github.com/spec/v1')) {
-      return { ok: false, reason: 'manifest-pointer' }
+    if (!raw) {
+      manifest = null
+    } else {
+      try {
+        manifest = JSON.parse(raw)
+      } catch {
+        if (raw.startsWith('version https://git-lfs.github.com/spec/v1')) {
+          return { ok: false, reason: 'manifest-lfs-pointer', raw }
+        }
+        return { ok: false, reason: 'invalid-manifest-json', raw }
+      }
     }
-    manifest = raw ? JSON.parse(raw) : null
   } catch (error) {
     if (error.code === 'ENOENT') {
       return { ok: false, reason: 'missing-manifest' }
@@ -289,7 +357,7 @@ export async function verifyBundle() {
 
   let bundleStat
   try {
-    bundleStat = await stat(bundlePath)
+    bundleStat = await stat(stableBundlePath)
   } catch (error) {
     if (error.code === 'ENOENT') {
       return { ok: false, reason: 'missing-bundle', manifest }
@@ -297,7 +365,7 @@ export async function verifyBundle() {
     throw error
   }
 
-  const sha256 = await hashFile(bundlePath)
+  const sha256 = await hashFile(stableBundlePath)
   const entries = await collectDatasetEntries()
   const totalBytes = entries.reduce((sum, file) => sum + file.size, 0)
 
@@ -340,10 +408,12 @@ export const paths = {
   datasetRoot,
   generatedDir,
   lvDir,
-  bundlePath,
+  bundlePath: stableBundlePath,
   manifestPath,
   archivesDir,
   historyManifestPath,
+  legacyBundleHistoryDir,
+  legacyHistoryManifestPath,
   urlmetaPath,
   summaryPath,
 }

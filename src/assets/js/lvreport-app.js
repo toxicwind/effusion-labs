@@ -1,4 +1,5 @@
 import Alpine from 'alpinejs'
+import Fuse from 'fuse.js'
 import MiniSearch from 'minisearch'
 
 const datasetEl = document.getElementById('lvreport-data')
@@ -12,8 +13,35 @@ const baseHref = payload.baseHref || ''
 const sections = payload.page?.sections || {}
 const sectionKeys = Object.keys(sections)
 
+const fuseConfigs = {
+  sitemaps: { keys: ['host', 'url', 'type', 'status'], threshold: 0.35, ignoreLocation: true },
+  robots: {
+    keys: ['host', 'statusLabel', 'httpLabel', 'preview'],
+    threshold: 0.35,
+    ignoreLocation: true,
+  },
+  docs: {
+    keys: ['host', 'fileName', 'statusLabel', 'contentType', 'preview'],
+    threshold: 0.3,
+    ignoreLocation: true,
+  },
+  duplicates: { keys: ['basename', 'title', 'pageUrl'], threshold: 0.3, ignoreLocation: true },
+  topProducts: { keys: ['title', 'pageUrl'], threshold: 0.3, ignoreLocation: true },
+  hosts: { keys: ['host'], threshold: 0.2, ignoreLocation: true },
+}
+
+const fuseInstances = new Map()
 const filters = {}
 const originalSummary = {}
+
+function initFuseEngines() {
+  for (const key of sectionKeys) {
+    const items = sections[key]?.items || []
+    const config = fuseConfigs[key]
+    if (!config || !items.length) continue
+    fuseInstances.set(key, new Fuse(items, { includeScore: true, ...config }))
+  }
+}
 
 function ensureSummaryCache(section) {
   const el = document.querySelector(`[data-filter-summary="${section}"]`)
@@ -51,8 +79,13 @@ function applyFilters(section) {
 
   const query = (filterState.query || '').trim()
   if (query.length) {
-    const lower = query.toLowerCase()
-    results = items.filter(item => JSON.stringify(item).toLowerCase().includes(lower))
+    const fuse = fuseInstances.get(section)
+    if (fuse) {
+      results = fuse.search(query).map(hit => hit.item)
+    } else {
+      const lower = query.toLowerCase()
+      results = items.filter(item => JSON.stringify(item).toLowerCase().includes(lower))
+    }
   }
 
   if (section === 'sitemaps' && filterState.types) {
@@ -290,6 +323,7 @@ function initialiseFilters() {
 
 function initLocalFiltering() {
   initialiseFilters()
+  initFuseEngines()
   hookSearchInputs()
   hookIssueToggles()
   hookStatusChips()
@@ -308,11 +342,16 @@ let documentsById = new Map()
 if (Array.isArray(searchPayload.documents)) {
   documentsById = new Map(searchPayload.documents.map(doc => [doc.id, doc]))
 }
+let indexLoaded = false
 if (searchPayload.index && searchPayload.options) {
   try {
-    globalSearchEngine = MiniSearch.loadJSON(searchPayload.index, searchPayload.options)
+    const indexSource = typeof searchPayload.index === 'string'
+      ? JSON.parse(searchPayload.index)
+      : searchPayload.index
+    globalSearchEngine = MiniSearch.loadJSON(indexSource, searchPayload.options)
+    indexLoaded = true
   } catch (error) {
-    console.warn('[lvreport-app] Failed to load prebuilt search index:', error)
+    console.warn('[lvreport-app] Failed to load search index:', error)
     globalSearchEngine = null
   }
 }
@@ -322,10 +361,21 @@ if (!globalSearchEngine) {
     storeFields: ['id', 'title', 'description', 'href', 'section', 'badge', 'tags'],
     searchOptions: { prefix: true, fuzzy: 0.2 },
   }
-  globalSearchEngine = new MiniSearch(options)
-  if (documentsById.size) {
-    globalSearchEngine.addAll(Array.from(documentsById.values()))
+  try {
+    globalSearchEngine = new MiniSearch(options)
+    if (documentsById.size) {
+      globalSearchEngine.addAll(Array.from(documentsById.values()))
+    }
+    if (!indexLoaded && searchPayload.documentCount) {
+      console.warn('[lvreport-app] Rebuilt search index in-memory from dataset snapshot.')
+    }
+  } catch (error) {
+    console.warn('[lvreport-app] Search index unavailable:', error)
+    globalSearchEngine = null
   }
+}
+if (!globalSearchEngine && searchPayload.documentCount && !indexLoaded) {
+  console.warn('[lvreport-app] Search index missing; global dataset search disabled.')
 }
 
 function formatSectionLabel(section) {
@@ -366,6 +416,11 @@ Alpine.data('globalSearch', () => ({
   search() {
     const term = this.query.trim()
     if (!term) {
+      this.results = []
+      this.activeIndex = 0
+      return
+    }
+    if (!globalSearchEngine) {
       this.results = []
       this.activeIndex = 0
       return

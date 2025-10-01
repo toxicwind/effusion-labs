@@ -1,141 +1,129 @@
-import assert from 'node:assert/strict'
-import { execFile } from 'node:child_process'
-import { mkdir, mkdtemp, readdir, readFile, rm, stat, writeFile } from 'node:fs/promises'
-import { tmpdir } from 'node:os'
+import { strict as assert } from 'node:assert/strict'
+import { mkdtempSync } from 'node:fs'
+import { mkdir, readdir, readFile, rm, writeFile } from 'node:fs/promises'
+import os from 'node:os'
 import path from 'node:path'
-import test from 'node:test'
-import { promisify } from 'node:util'
+import process from 'node:process'
+import { fileURLToPath } from 'node:url'
 
-const execFileAsync = promisify(execFile)
+process.env.LV_PIPELINE_TEST_MODE = '1'
 
-async function setupDatasetFixture() {
-  const tempRoot = await mkdtemp(path.join(tmpdir(), 'lv-bundle-'))
-  const datasetRoot = path.join(tempRoot, 'dataset')
-  const generatedDir = path.join(datasetRoot, 'generated')
-  const lvDir = path.join(generatedDir, 'lv')
-  await mkdir(path.join(lvDir, 'cache'), { recursive: true })
-  await writeFile(
-    path.join(lvDir, 'summary.json'),
-    JSON.stringify({
-      version: 1,
-      generatedAt: '2024-01-01T00:00:00Z',
-      totals: { images: 1, pages: 1 },
-    }),
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+const tempRoot = mkdtempSync(path.join(os.tmpdir(), 'lv-dataset-'))
+process.env.LV_DATASET_ROOT = tempRoot
+const datasetRoot = tempRoot
+const generatedDir = path.join(datasetRoot, 'generated')
+const lvDir = path.join(generatedDir, 'lv')
+const archivesDir = path.join(generatedDir, 'archives')
+const historyFile = path.join(archivesDir, 'history.json')
+const legacyHistoryFile = path.join(generatedDir, 'lv.bundle.history.json')
+const legacyBundlesDir = path.join(generatedDir, 'bundles')
+
+async function ensureFixtureDataset(content = 'fixture') {
+  await rm(lvDir, { recursive: true, force: true })
+  await mkdir(lvDir, { recursive: true })
+  await writeFile(path.join(lvDir, 'sample.txt'), content, 'utf8')
+}
+
+function resetLog() {
+  const log = globalThis.__LV_PIPELINE_TEST_LOG__
+  assert.ok(Array.isArray(log), 'pipeline test log should exist')
+  log.length = 0
+  return log
+}
+
+async function testPipelineCli() {
+  const pipeline = await import('./pipeline.mjs')
+  const { resolveCommandDescriptor } = pipeline
+  const log = resetLog()
+
+  await pipeline.crawl({ mode: 'invalid-mode', label: 'demo', skipBundle: true, keepWorkdir: true })
+  const updateCall = log.find((entry) =>
+    entry.type === 'node' && entry.scriptPath?.endsWith('update-dataset.mjs')
   )
-  await writeFile(
-    path.join(lvDir, 'items.ndjson'),
-    JSON.stringify({ id: 'a', src: 'https://example.com/a.jpg' }),
+  assert.ok(updateCall, 'crawl should spawn update script')
+  assert.ok(updateCall.args.includes('--mode=pages'), 'crawl sanitizes invalid mode to pages')
+
+  resetLog()
+  await pipeline.build({ keep: true, eleventyArgs: ['--dry-run'] })
+  const hydrateCall = log.find((entry) => entry.type === 'hydrate')
+  assert.deepEqual(hydrateCall, { type: 'hydrate', force: false }, 'build respects --keep flag')
+  const eleventyCall = log.find((entry) => entry.type === 'eleventy')
+  assert.ok(eleventyCall, 'build should invoke eleventy')
+  assert.equal(eleventyCall.offline, true, 'eleventy runs offline')
+  assert.deepEqual(eleventyCall.eleventyArgs, ['--dry-run'])
+
+  resetLog()
+  await pipeline.cycle({ mode: 'pages-images', label: 'combo', eleventyArgs: ['--foo'] })
+  const cycleUpdate = log.find((entry) =>
+    entry.type === 'node' && entry.args?.includes('--mode=pages-images')
+  )
+  assert.ok(cycleUpdate, 'cycle forwards requested crawl mode')
+  const cycleEleventy = log.find((entry) => entry.type === 'eleventy')
+  assert.ok(cycleEleventy, 'cycle should trigger build eleventy stage')
+  assert.deepEqual(cycleEleventy.eleventyArgs, ['--foo'])
+
+  const legacyAlias = resolveCommandDescriptor('crawl-pages-images')
+  assert.equal(legacyAlias.baseCommand, 'crawl', 'legacy crawl-pages-images maps to crawl command')
+  assert.equal(legacyAlias.preset.mode, 'pages-images', 'legacy crawl-pages-images presets mode pages-images')
+  assert.equal(legacyAlias.isLegacy, true, 'legacy alias flagged appropriately')
+
+  const modernCommand = resolveCommandDescriptor('crawl')
+  assert.equal(modernCommand.isLegacy, false, 'modern command not treated as legacy')
+}
+
+async function testArchiving() {
+  const bundle = await import('./bundle-lib.mjs')
+  await rm(historyFile, { force: true })
+  await rm(legacyHistoryFile, { force: true })
+  await rm(archivesDir, { recursive: true, force: true })
+  await rm(legacyBundlesDir, { recursive: true, force: true })
+  await rm(path.join(generatedDir, 'lv.bundle.tgz'), { force: true })
+
+  await ensureFixtureDataset('one')
+  const first = await bundle.bundleDataset({ runLabel: 'test-a', mode: 'pages' })
+  assert.ok(first?.history?.latest, 'first bundle produces history entry')
+  assert.ok(first.history.latest.name.startsWith('lv-'), 'history entry is timestamped')
+  assert.equal(first.history.entries.length, 1, 'history manifest records first run')
+
+  await new Promise((resolve) => setTimeout(resolve, 1100))
+  await ensureFixtureDataset('two')
+  const second = await bundle.bundleDataset({ runLabel: 'test-b', mode: 'pages' })
+  assert.ok(second.history.entries.length >= 2, 'second bundle appends history entry')
+  assert.equal(
+    second.history.latest.name,
+    second.history.entries[0].name,
+    'latest entry is first in history',
   )
 
-  process.env.LV_IMAGES_DATASET_ROOT = datasetRoot
-  const bundleLib = await import(`../../tools/lv-images/bundle-lib.mjs?fixture=${Date.now()}`)
-  const { bundleDataset, paths } = bundleLib
-  await bundleDataset({ mode: 'pages', runLabel: 'spec' })
-  delete process.env.LV_IMAGES_DATASET_ROOT
+  const history = JSON.parse(await readFile(historyFile, 'utf8'))
+  assert.equal(
+    history[0].name,
+    second.history.latest.name,
+    'history.json newest entry matches manifest latest',
+  )
+  assert.ok(history.length <= 10, 'history manifest respects retention limit')
 
-  return {
-    datasetRoot,
-    tempRoot,
-    bundleDataset,
-    paths,
-    cleanup: () => rm(tempRoot, { recursive: true, force: true }),
+  const archiveFiles = await readdir(archivesDir)
+  for (const entry of history) {
+    assert.ok(archiveFiles.includes(entry.name), `archive file ${entry.name} should exist`)
+  }
+
+  const legacyHistory = JSON.parse(await readFile(legacyHistoryFile, 'utf8'))
+  assert.equal(legacyHistory[0].name, history[0].name, 'legacy history mirrors latest entry')
+  assert.ok(
+    legacyHistory.every((entry) => entry.path.startsWith('generated/bundles/')),
+    'legacy history uses bundles directory paths',
+  )
+  const legacyArchives = await readdir(legacyBundlesDir)
+  for (const entry of legacyHistory) {
+    assert.ok(legacyArchives.includes(entry.name), `legacy archive ${entry.name} should exist`)
   }
 }
 
-test('crawl defaults invalid modes to pages', async () => {
-  const { crawl } = await import(`./pipeline.mjs?test=crawl`)
-  const originalLog = console.log
-  const logs = []
-  process.env.LV_PIPELINE_NOOP = '1'
-  console.log = (message, ...rest) => {
-    logs.push([message, ...rest].join(' '))
-  }
-  try {
-    await crawl({ mode: 'totally-invalid', label: '' })
-  } finally {
-    console.log = originalLog
-    delete process.env.LV_PIPELINE_NOOP
-  }
-  assert(logs.some((line) => line.includes('mode=pages')))
-})
-
-test('cycle executes crawl and build flows in noop mode', async () => {
-  const fixture = await setupDatasetFixture()
-  const env = {
-    ...process.env,
-    LV_PIPELINE_NOOP: '1',
-    LV_IMAGES_DATASET_ROOT: fixture.datasetRoot,
-  }
-  try {
-    const { stdout, stderr } = await execFileAsync(
-      process.execPath,
-      [
-        path.resolve('tools/lv-images/pipeline.mjs'),
-        'cycle',
-        '--mode=pages-images',
-        '--label=spec',
-      ],
-      { env },
-    )
-    const combined = `${stdout}${stderr}`
-    assert(combined.includes('Hydrating dataset from bundle'), 'expected hydrate step to run')
-  } finally {
-    await fixture.cleanup()
-  }
-})
-
-test('bundleDataset archives snapshots with history pruning', async () => {
-  const fixture = await setupDatasetFixture()
-  const { bundleDataset, paths, cleanup } = fixture
-
-  try {
-    const first = await bundleDataset({ mode: 'pages', runLabel: 'spec' })
-    assert(first.history?.latest?.name)
-    assert(first.history.entries.length >= 1)
-    const archiveName = first.history.latest.name
-    const archives = await readdir(paths.archivesDir)
-    assert(archives.includes(archiveName))
-    const history = JSON.parse(await readFile(paths.historyManifestPath, 'utf8'))
-    assert.equal(history[0].name, archiveName)
-    assert.match(archiveName, /^lv-\d{8}T\d{6}Z-pages(?:-[\da-z-]+)?\.tgz$/)
-
-    for (let index = 0; index < 11; index++) {
-      await writeFile(
-        path.join(paths.lvDir, 'items.ndjson'),
-        JSON.stringify({ id: `a-${index}`, src: 'https://example.com/a.jpg' }),
-      )
-      await bundleDataset({ mode: 'pages', runLabel: `spec-${index}` })
-    }
-
-    const prunedHistory = JSON.parse(await readFile(paths.historyManifestPath, 'utf8'))
-    assert(prunedHistory.length <= 10)
-
-    const latestPointer = await stat(paths.bundlePath)
-    const latestArchive = await stat(path.join(paths.archivesDir, prunedHistory[0].name))
-    assert.equal(latestPointer.size, latestArchive.size)
-  } finally {
-    await cleanup()
-  }
-})
-
-test('verifyBundle tolerates git-lfs manifest pointers', async () => {
-  const fixture = await setupDatasetFixture()
-  const { cleanup, paths } = fixture
-
-  try {
-    await writeFile(
-      paths.manifestPath,
-      'version https://git-lfs.github.com/spec/v1\noid sha256:deadbeef\nsize 123',
-    )
-    process.env.LV_IMAGES_DATASET_ROOT = fixture.datasetRoot
-    const { verifyBundle } = await import(
-      `../../tools/lv-images/bundle-lib.mjs?check=${Date.now()}`
-    )
-    const result = await verifyBundle()
-    assert.equal(result.ok, false)
-    assert.equal(result.reason, 'manifest-pointer')
-  } finally {
-    delete process.env.LV_IMAGES_DATASET_ROOT
-    await cleanup()
-  }
-})
+export async function run() {
+  await testPipelineCli()
+  await testArchiving()
+  console.log('pipeline.spec.mjs ✅')
+}

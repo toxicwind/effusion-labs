@@ -1,4 +1,4 @@
-name: "CI • Validate → Build"
+name: "CI • Doctor → Quality → Test → Build"
 
 concurrency:
   group: ci-${{ github.workflow }}-${{ github.ref }}
@@ -25,8 +25,8 @@ env:
   PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: "1"
 
 jobs:
-  pipeline:
-    name: "🔁 Doctor → Quality → Test → Build"
+  verify:
+    name: "✅ Doctor, Quality, Test, Build"
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
@@ -38,7 +38,7 @@ jobs:
       - name: 🔧 Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 22.19.0
+          node-version-file: .nvmrc
 
       - name: 📦 Install dependencies
         run: npm ci --no-audit --no-fund
@@ -57,3 +57,10 @@ jobs:
 
       - name: 🏗️ npm run build:offline
         run: npm run build:offline
+
+      - name: 📦 Archive build output
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: site
+          path: _site/

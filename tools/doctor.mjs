@@ -1,93 +1,76 @@
 #!/usr/bin/env node
+// tools/doctor.mjs — hardened environment validation for LV pipeline
 import { execFileSync } from 'node:child_process'
 import process from 'node:process'
 
 import { resolveChromium } from './resolve-chromium.mjs'
 
-const MIN_NODE = '22.19.0'
-
-function compareSemver(a, b) {
-  const pa = String(a).split('.').map((part) => Number.parseInt(part, 10) || 0)
-  const pb = String(b).split('.').map((part) => Number.parseInt(part, 10) || 0)
-  const length = Math.max(pa.length, pb.length)
-  for (let index = 0; index < length; index++) {
-    const diff = (pa[index] || 0) - (pb[index] || 0)
-    if (diff !== 0) return diff
-  }
-  return 0
+function compareVersions(a = '', b = '') {
+  const normalize = (value) =>
+    String(value).split('.').map((part) => Number.parseInt(part, 10) || 0)
+  const [aMajor, aMinor, aPatch] = normalize(a)
+  const [bMajor, bMinor, bPatch] = normalize(b)
+  if (aMajor !== bMajor) return aMajor - bMajor
+  if (aMinor !== bMinor) return aMinor - bMinor
+  return aPatch - bPatch
 }
 
-function readNpmVersion() {
+function safeExec(command, args = []) {
   try {
-    const out = execFileSync('npm', ['--version'], {
-      encoding: 'utf8',
-      stdio: ['ignore', 'pipe', 'ignore'],
-    })
-    return out.trim()
+    return execFileSync(command, args, { stdio: ['ignore', 'pipe', 'ignore'], encoding: 'utf8' })
+      .trim()
   } catch {
     return null
   }
 }
 
-const nodeVersion = process.versions.node
-const nodeOk = compareSemver(nodeVersion, MIN_NODE) >= 0
-const npmVersion = readNpmVersion()
-const npmOk = Boolean(npmVersion)
+const results = []
 
-let chromiumPath = ''
+const nodeVersion = process.versions.node
+const nodeRequired = '22.19.0'
+const nodeOk = compareVersions(nodeVersion, nodeRequired) >= 0
+results.push({ name: 'node', version: nodeVersion, ok: nodeOk, note: `>= ${nodeRequired}` })
+
+const npmVersion = safeExec('npm', ['--version'])
+results.push({ name: 'npm', version: npmVersion, ok: Boolean(npmVersion) })
+
+let chromiumVersion = null
+let chromiumPath = null
 let chromiumOk = false
-let chromiumError = ''
+let chromiumError = null
 try {
   chromiumPath = resolveChromium()
-  chromiumOk = true
+  chromiumVersion = safeExec(chromiumPath, ['--version'])
+  chromiumOk = Boolean(chromiumVersion)
 } catch (error) {
   chromiumError = error instanceof Error ? error.message : String(error)
 }
+results.push({
+  name: 'chromium',
+  version: chromiumVersion || 'missing',
+  ok: chromiumOk,
+  note: chromiumPath || chromiumError || '',
+})
 
-const ciValue = process.env.CI ?? '(undefined)'
-
-const rows = [
-  {
-    label: 'Node',
-    value: nodeVersion,
-    detail: `>= ${MIN_NODE}`,
-    ok: nodeOk,
-  },
-  {
-    label: 'npm',
-    value: npmVersion || '(missing)',
-    detail: '',
-    ok: npmOk,
-  },
-  {
-    label: 'Chromium',
-    value: chromiumPath || '(missing)',
-    detail: chromiumError,
-    ok: chromiumOk,
-  },
-  {
-    label: 'CI env',
-    value: String(ciValue),
-    detail: '',
-    ok: true,
-  },
-]
+const ciState = process.env.CI == null ? 'unset' : String(process.env.CI)
 
 let allOk = true
-for (const row of rows) {
-  const mark = row.ok ? '✓' : '✗'
-  console.log(`${mark} ${row.label}: ${row.value}${row.detail ? ` (${row.detail})` : ''}`)
-  if (!row.ok) allOk = false
+for (const { name, version, ok, note } of results) {
+  allOk &&= ok
+  const mark = ok ? '✓' : '✗'
+  const detail = note ? ` — ${note}` : ''
+  console.log(`${mark} ${name} ${version || '(missing)'}${detail}`)
 }
-
-if (allOk) {
-  console.log('\nEnvironment looks good.')
-} else {
-  console.log('\nEnvironment issues detected.')
-}
+console.log(`CI environment: ${ciState}`)
 
 if (!chromiumOk) {
-  process.exitCode = 1
-} else if (!nodeOk || !npmOk) {
-  process.exitCode = 1
+  console.error('\nChromium runtime missing; run ./bin/install-chromium.sh or npm run setup.')
+  process.exit(1)
 }
+
+if (!allOk) {
+  console.error('\nEnvironment checks failed.')
+  process.exit(1)
+}
+
+console.log('\nEnvironment looks good.')
