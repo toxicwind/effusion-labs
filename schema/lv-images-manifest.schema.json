@@ -1,0 +1,148 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://effusion.labs/schema/lv-images-manifest.json",
+  "title": "LV Images Runs Manifest",
+  "type": "object",
+  "required": ["version", "generatedAt", "defaults", "inputs", "runs", "artifacts"],
+  "additionalProperties": false,
+  "properties": {
+    "version": { "type": "string" },
+    "generatedAt": { "type": "string", "format": "date-time" },
+    "defaults": {
+      "type": "object",
+      "required": ["mode", "toggles"],
+      "additionalProperties": false,
+      "properties": {
+        "mode": { "type": "string" },
+        "toggles": {
+          "type": "object",
+          "required": ["htmlScraping", "cachePages", "cacheImages"],
+          "additionalProperties": false,
+          "properties": {
+            "htmlScraping": { "type": "boolean" },
+            "cachePages": { "type": "boolean" },
+            "cacheImages": { "type": "boolean" }
+          }
+        }
+      }
+    },
+    "inputs": {
+      "type": "object",
+      "required": ["config", "tools"],
+      "additionalProperties": false,
+      "properties": {
+        "config": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["path", "sha256"],
+            "additionalProperties": false,
+            "properties": {
+              "path": { "type": "string" },
+              "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+              "size": { "type": "integer", "minimum": 0 },
+              "lineCount": { "type": "integer", "minimum": 0 },
+              "kind": { "type": "string" }
+            }
+          }
+        },
+        "tools": {
+          "type": "object",
+          "additionalProperties": { "type": "string" }
+        }
+      }
+    },
+    "runs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "timestamp", "mode", "toggles", "metrics", "totals", "inputs", "artifacts"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string" },
+          "timestamp": { "type": "string", "format": "date-time" },
+          "mode": { "type": "string" },
+          "label": { "type": ["string", "null"] },
+          "toggles": {
+            "type": "object",
+            "required": ["htmlScraping", "cachePages", "cacheImages"],
+            "additionalProperties": false,
+            "properties": {
+              "htmlScraping": { "type": "boolean" },
+              "cachePages": { "type": "boolean" },
+              "cacheImages": { "type": "boolean" }
+            }
+          },
+          "inputs": {
+            "type": "object",
+            "required": ["config"],
+            "additionalProperties": false,
+            "properties": {
+              "config": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": ["path", "sha256"],
+                  "additionalProperties": false,
+                  "properties": {
+                    "path": { "type": "string" },
+                    "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+                  }
+                }
+              }
+            }
+          },
+          "metrics": {
+            "type": "object",
+            "additionalProperties": { "type": "number" }
+          },
+          "totals": {
+            "type": "object",
+            "additionalProperties": { "type": "number" }
+          },
+          "capture": {
+            "type": ["object", "null"],
+            "additionalProperties": false,
+            "properties": {
+              "pages": { "type": "boolean" },
+              "images": { "type": "boolean" }
+            }
+          },
+          "artifacts": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["role", "artifactId"],
+              "additionalProperties": false,
+              "properties": {
+                "role": { "type": "string" },
+                "artifactId": { "type": "string" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "artifacts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "kind", "sha256", "paths"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string" },
+          "kind": { "type": "string" },
+          "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+          "size": { "type": ["integer", "null"], "minimum": 0 },
+          "generatedAt": { "type": ["string", "null"], "format": "date-time" },
+          "mode": { "type": ["string", "null"] },
+          "label": { "type": ["string", "null"] },
+          "paths": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        }
+      }
+    }
+  }
+}

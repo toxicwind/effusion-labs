@@ -55,6 +55,17 @@ const allProductsPath = path.join(genDir, 'all-products.json')
 const hostsTxtPath = path.join(baseDir, './config/hosts.txt')
 const hostsBannedPath = path.join(baseDir, './config/hosts.banned.ndjson')
 const hostsActiveSnapshotPath = path.join(baseDir, './config/hosts.active.snapshot.txt')
+const settingsPath = path.join(baseDir, './config/settings.json')
+const DEFAULT_SETTINGS = {
+  defaults: {
+    mode: 'metadata-only',
+  },
+  toggles: {
+    htmlScraping: false,
+    cachePages: false,
+    cacheImages: false,
+  },
+}
 
 const bloomPath = path.join(cacheDir, 'seen.bloom.json')
 const summaryPath = path.join(genDir, 'summary.json')
@@ -104,6 +115,18 @@ const hostOf = (u) => {
     return ''
   }
 }
+const normalizeHostToken = (value) => {
+  if (!value) return ''
+  const trimmed = String(value).trim()
+  if (!trimmed) return ''
+  try {
+    const url = trimmed.includes('://') ? trimmed : `https://${trimmed}`
+    return new URL(url).host.toLowerCase()
+  } catch {
+    return trimmed.replace(/^https?:\/\//, '').replace(/\/$/, '').toLowerCase()
+  }
+}
+const unique = (values = []) => Array.from(new Set(values.filter(Boolean)))
 const isGzipMagic = (buf) =>
   Buffer.isBuffer(buf) && buf.length >= 2 && buf[0] === 0x1f && buf[1] === 0x8b
 const saveJson = (p, obj) => writeFile(p, JSON.stringify(obj, null, 2), 'utf8')
@@ -1082,34 +1105,112 @@ async function main() {
   const argv = new Map(
     process.argv.slice(2).map((x) => (x.includes('=') ? x.split('=') : [x, true])),
   )
-  const MAX_HOSTS = argv.has('--max-hosts') ? Number(argv.get('--max-hosts')) : Infinity
-  const NO_REWRITE_HOSTS = argv.has('--no-rewrite-hosts')
+  const getFlag = (name) => argv.get(`--${name}`)
+  const hasFlag = (name) => argv.has(`--${name}`)
 
-  const requestedMode = String(argv.get('--mode') || 'pages').toLowerCase()
-  const modeFromFlag = argv.has('--cache-images') ? 'pages-images' : requestedMode
-  const normalizedMode = ['pages', 'pages-images'].includes(modeFromFlag)
-    ? modeFromFlag
-    : 'pages'
-  const disablePages = argv.has('--no-pages')
-  const runMode = disablePages ? 'metadata-only' : normalizedMode
-  const captureImages = runMode === 'pages-images'
-  const capturePages = runMode !== 'metadata-only'
-  const forcePageRefresh = argv.has('--refresh-pages')
-  const forceImageRefresh = argv.has('--refresh-images')
-  const skipBundle = argv.has('--skip-bundle')
-  const keepWorkdir = argv.has('--keep-workdir')
-  const bundleLabel = argv.get('--bundle-label')
-    ? String(argv.get('--bundle-label'))
-    : captureImages
-      ? 'pages-images'
-      : capturePages
-        ? 'pages'
-        : 'metadata'
+  const MAX_HOSTS = hasFlag('max-hosts') ? Number(getFlag('max-hosts')) : Infinity
+  const NO_REWRITE_HOSTS = hasFlag('no-rewrite-hosts')
+
+  const settings = await readJsonFile(settingsPath, DEFAULT_SETTINGS)
+  const settingsMode = sanitizeMode(settings?.defaults?.mode || 'metadata-only')
+  const requestedModeRaw = hasFlag('mode') ? String(getFlag('mode') || '') : settingsMode
+  const requestedMode = sanitizeMode(requestedModeRaw)
+
+  const toggles = {
+    htmlScraping: Boolean(settings?.toggles?.htmlScraping),
+    cachePages: Boolean(settings?.toggles?.cachePages),
+    cacheImages: Boolean(settings?.toggles?.cacheImages),
+  }
+  if (hasFlag('html-scraping')) toggles.htmlScraping = true
+  if (hasFlag('no-html-scraping')) toggles.htmlScraping = false
+  if (hasFlag('cache-pages')) toggles.cachePages = true
+  if (hasFlag('no-cache-pages')) toggles.cachePages = false
+  if (hasFlag('cache-images')) toggles.cacheImages = true
+  if (hasFlag('no-cache-images')) toggles.cacheImages = false
+
+  if (!hasFlag('html-scraping') && requestedMode !== 'metadata-only') {
+    toggles.htmlScraping = true
+  }
+  if (!hasFlag('cache-pages') && requestedMode !== 'metadata-only') {
+    toggles.cachePages = true
+  }
+  if (!hasFlag('cache-images') && requestedMode === 'pages-images') {
+    toggles.cacheImages = true
+  }
+
+  const disablePages = hasFlag('no-pages')
+  const disableImages = hasFlag('no-images')
+
+  let capturePages = !disablePages && toggles.htmlScraping && toggles.cachePages && requestedMode !== 'metadata-only'
+  let captureImages = !disableImages && toggles.htmlScraping && toggles.cacheImages && requestedMode === 'pages-images'
+  if (!capturePages) captureImages = false
+
+  const runMode = captureImages ? 'pages-images' : capturePages ? 'pages' : 'metadata-only'
+
+  const forcePageRefresh = hasFlag('refresh-pages')
+  const forceImageRefresh = hasFlag('refresh-images')
+  const skipBundle = hasFlag('skip-bundle')
+  const keepWorkdir = hasFlag('keep-workdir')
+
+  const hostFiltersRaw = []
+  if (hasFlag('host')) hostFiltersRaw.push(String(getFlag('host') || ''))
+  if (hasFlag('hosts')) {
+    const csv = String(getFlag('hosts') || '')
+    if (csv) hostFiltersRaw.push(...csv.split(/[,\s]+/))
+  }
+  if (hasFlag('hosts-file')) {
+    const hostsFile = String(getFlag('hosts-file') || '')
+    if (hostsFile) {
+      try {
+        const raw = await readFile(path.resolve(process.cwd(), hostsFile), 'utf8')
+        hostFiltersRaw.push(...raw.split(/\r?\n/))
+      } catch (error) {
+        console.warn(`[lv-images] Unable to read hosts file ${hostsFile}: ${error?.message || error}`)
+      }
+    }
+  }
+  const requestedHostTargets = unique(hostFiltersRaw.map((token) => normalizeHostToken(token)))
+  const requestedHostSet = new Set(requestedHostTargets)
+
+  let hostsList = (await readFile(hostsTxtPath, 'utf8'))
+    .split(/\r?\n/)
+    .map((s) => s.trim())
+    .filter(Boolean)
+  if (requestedHostSet.size > 0) {
+    hostsList = hostsList.filter((host) => requestedHostSet.has(normalizeHostToken(host)))
+  }
+  const hosts = hostsList.slice(0, MAX_HOSTS)
+  const appliedHostTargets = hosts.map((host) => normalizeHostToken(host))
+  const appliedHostSet = new Set(appliedHostTargets)
+  if (requestedHostSet.size > 0 && hosts.length === 0) {
+    console.warn('[lv-images] No hosts matched requested target filters; crawl will be metadata-only updates.')
+  }
+
+  const labelBase = captureImages ? 'pages-images' : capturePages ? 'pages' : 'metadata'
+  const hostLabelSegment = appliedHostTargets.length === 1
+    ? `-${appliedHostTargets[0].replace(/[^a-z0-9]+/g, '-')}`.replace(/-+/g, '-').replace(/^-+|-+$/g, '')
+    : ''
+  const defaultLabel = hostLabelSegment ? `${labelBase}-${hostLabelSegment}` : labelBase
+  const bundleLabel = hasFlag('bundle-label')
+    ? String(getFlag('bundle-label') || '')
+    : defaultLabel
 
   console.log('🚀 Starting crawler (Playwright mode)...')
   console.log(
     `   Mode: ${runMode} (pages=${capturePages ? 'on' : 'off'}, images=${captureImages ? 'on' : 'off'})`,
   )
+  console.log(
+    `   Toggles → htmlScraping=${toggles.htmlScraping ? 'on' : 'off'}, cachePages=${
+      capturePages ? 'on' : 'off'
+    }, cacheImages=${captureImages ? 'on' : 'off'}`,
+  )
+  if (requestedHostSet.size > 0) {
+    console.log(
+      `   Target hosts: requested=${requestedHostTargets.join(', ') || '∅'} | applied=${
+        appliedHostTargets.join(', ') || '∅'
+      }`,
+    )
+  }
   await mkdir(cacheDir, { recursive: true })
   await mkdir(itemsDir, { recursive: true })
   await mkdir(robotsDir, { recursive: true })
@@ -1160,6 +1261,27 @@ async function main() {
     (await readFile(runsHistoryPath, 'utf8').catch(() => '[]')) || '[]',
   )
 
+  const hostCounters = new Map()
+  const recordHostMetric = (host, type) => {
+    const key = normalizeHostToken(host) || host || 'unknown'
+    const entry = hostCounters.get(key) || {
+      host: key,
+      new: 0,
+      duplicates: 0,
+      updated: 0,
+      total: 0,
+      targeted: false,
+      requested: false,
+    }
+    entry.targeted = entry.targeted || appliedHostSet.has(key)
+    entry.requested = entry.requested || requestedHostSet.has(key)
+    entry.total += 1
+    if (type === 'new') entry.new += 1
+    else if (type === 'duplicate') entry.duplicates += 1
+    else if (type === 'updated') entry.updated += 1
+    hostCounters.set(key, entry)
+  }
+
   const basenameIndex = {}
   for (const [id, meta] of Object.entries(itemsMeta)) {
     if (!meta.duplicateOf) {
@@ -1178,13 +1300,16 @@ async function main() {
     const itemType = info.itemType || 'image'
     const rawSrc = info.src || ''
     const basename = path.basename((rawSrc.split('?')[0]) || '')
+    const hostName = info.host || hostOf(info.pageUrl)
     let duplicateOf = null
+    let duplicateDetected = false
+    let changeType = 'updated'
 
     if (!itemsMeta[id]) {
       if (itemType === 'image') {
         if (basename && basenameIndex[basename]) {
           duplicateOf = basenameIndex[basename]
-          duplicateItemsCount++
+          duplicateDetected = true
         } else if (basename) {
           basenameIndex[basename] = id
         }
@@ -1202,7 +1327,13 @@ async function main() {
         duplicateOf,
         itemType,
       }
-      newItemsCount++
+      if (duplicateDetected) {
+        duplicateItemsCount++
+        changeType = 'duplicate'
+      } else {
+        newItemsCount++
+        changeType = 'new'
+      }
     } else {
       itemsMeta[id].lastSeen = now
       itemsMeta[id].src = cleanText(info.src)
@@ -1217,7 +1348,15 @@ async function main() {
       if (!duplicateOf && itemType === 'image' && basename && !basenameIndex[basename]) {
         basenameIndex[basename] = id
       }
+      if (duplicateOf && duplicateOf !== id) {
+        duplicateDetected = true
+        changeType = 'duplicate'
+      } else {
+        changeType = 'updated'
+      }
     }
+
+    recordHostMetric(hostName, changeType)
     return duplicateOf
   }
 

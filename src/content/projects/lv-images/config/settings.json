@@ -1,0 +1,10 @@
+{
+  "defaults": {
+    "mode": "metadata-only"
+  },
+  "toggles": {
+    "htmlScraping": false,
+    "cachePages": false,
+    "cacheImages": false
+  }
+}
