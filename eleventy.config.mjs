@@ -160,6 +160,7 @@ export default function(eleventyConfig) {
         alias: {
           '@': srcDir,
           '/src': srcDir,
+          '/assets': path.join(srcDir, 'assets'),
         },
       },
       build: {
@@ -189,6 +190,14 @@ export default function(eleventyConfig) {
   })
   eleventyConfig.addPlugin(schema)
 
+  eleventyConfig.addTransform('normalize-remote-urls', (content, outputPath) => {
+    if (!outputPath || !outputPath.endsWith('.html')) return content
+    return content
+      .replace(/(src|href)=["']{2}(https?:\/\/)/g, '$1="$2')
+      .replace(/(src|href)=["']{2}(\/\/)/g, '$1="$2')
+      .replace(/(src|href)=["']{2}(data:)/g, '$1="$2')
+  })
+
   if (eleventyConfig.htmlTransformer?.addPosthtmlPlugin) {
     // Ensure remote image URLs are passed through untouched — the Eleventy image
     // transform plugin eagerly attempts to download external assets otherwise.
@@ -196,28 +205,38 @@ export default function(eleventyConfig) {
       'html',
       function remoteImagePassthrough() {
         return (tree) => {
-          tree.match({ tag: 'img' }, (node) => {
-            const src = node?.attrs?.src
-            if (
-              typeof src === 'string'
-              && (/^https?:\/\//i.test(src) || /^\/\//.test(src))
-            ) {
+          const sanitize = (value) => {
+            if (typeof value !== 'string') return ''
+            return value.trim().replace(/^['"]+/, '').replace(/['"]+$/, '')
+          }
+
+          const markRemote = (node, attr) => {
+            const raw = node?.attrs?.[attr]
+            if (typeof raw !== 'string') return node
+            const normalized = sanitize(raw)
+            if (/^https?:\/\//i.test(normalized) || /^\/\//.test(normalized) || normalized.startsWith('data:')) {
               node.attrs ||= {}
+              node.attrs[attr] = normalized
               if (!('eleventy:ignore' in node.attrs)) {
                 node.attrs['eleventy:ignore'] = ''
               }
             }
             return node
-          })
+          }
+
+          tree.match({ tag: 'img' }, (node) => markRemote(node, 'src'))
+          tree.match({ tag: 'link' }, (node) => markRemote(node, 'href'))
 
           return tree
         }
       },
-      { priority: 5 },
+      { priority: 1 },
     )
   }
 
-  const enableImagePlugin = !isTest || process.env.ELEVENTY_TEST_ENABLE_IMAGES === '1'
+  const enableImagePlugin = (
+    !isTest || process.env.ELEVENTY_TEST_ENABLE_IMAGES === '1'
+  ) && process.env.BUILD_OFFLINE !== '1'
 
   if (enableImagePlugin) {
     eleventyConfig.addPlugin(localImageTransformPlugin, {

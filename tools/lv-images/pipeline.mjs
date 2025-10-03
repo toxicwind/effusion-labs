@@ -273,7 +273,9 @@ async function main() {
   const descriptor = resolveCommandDescriptor(rawCommand)
   const { normalized, baseCommand, preset, isLegacy } = descriptor
   if (isLegacy && !isTestMode) {
-    console.warn(`[lv-images] Legacy command "${normalized}" invoked; forwarding to ${baseCommand}.`)
+    console.warn(
+      `[lv-images] Legacy command "${normalized}" invoked; forwarding to ${baseCommand}.`,
+    )
   }
 
   const ciPivot = process.env.CI === 'true' && baseCommand === 'crawl'

@@ -45,7 +45,7 @@ metaDisable: true
 {% set manifestArchive = manifest.archive or {} %}
 {% set manifestSummary = manifest.summary or {} %}
 {% set datasetWarnings = dataset.warnings or [] %}
-<template id="lvreport-data">{{ clientPayloadJson | safe }}</template>
+<script type="application/json" id="lvreport-data">{{ clientPayloadJson | safe }}</script>
 <script type="module" src="/assets/js/lvreport-app.js"></script>
 {%
   set warningCopy = {

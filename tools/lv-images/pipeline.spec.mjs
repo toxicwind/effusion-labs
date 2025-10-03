@@ -66,7 +66,11 @@ async function testPipelineCli() {
 
   const legacyAlias = resolveCommandDescriptor('crawl-pages-images')
   assert.equal(legacyAlias.baseCommand, 'crawl', 'legacy crawl-pages-images maps to crawl command')
-  assert.equal(legacyAlias.preset.mode, 'pages-images', 'legacy crawl-pages-images presets mode pages-images')
+  assert.equal(
+    legacyAlias.preset.mode,
+    'pages-images',
+    'legacy crawl-pages-images presets mode pages-images',
+  )
   assert.equal(legacyAlias.isLegacy, true, 'legacy alias flagged appropriately')
 
   const modernCommand = resolveCommandDescriptor('crawl')
