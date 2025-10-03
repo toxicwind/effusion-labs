@@ -1,20 +1,29 @@
 ---
-layout: base.njk
-permalink: "consulting/index.html"
-title: "Consulting — Effusion Labs"
-# optional if your base reads this; otherwise we inject a meta description in headExtra
+permalink: "/consulting/"
+layout: "../pages/consulting/layout.njk"
+title: "Consulting"
 metaDescription: "Top-10 global AI safety specialist. We eliminate hallucinations, prevent data leaks, and install fail-safe systems for enterprise LLM deployments."
+ogTitle: "Effusion Labs Consulting"
+ogDescription: "Bulletproof AI systems with hallucination elimination, jailbreak defense, and rapid containment."
 ---
+
+{% set siteUrl = 'https://effusionlabs.com' %}
+{% set canonicalHref = siteUrl + '/consulting/' %}
 
 {# --- page data (kept in-template so it's easy to tweak) --- #}
 {%
   set DATA = {
     brand: "EFFUSION LABS",
     alt: "Effusion Labs",
-    url: "https://effusionlabs.com/consulting/",
+    url: canonicalHref,
     email: "denverchrisortega@gmail.com",
     slogan: "We Control AI. You Control Markets.",
     desc: "Top-10 global AI safety specialist. We eliminate hallucinations, prevent data leaks, and install fail-safe systems for enterprise LLM deployments. Your AI becomes bulletproof or your liability disappears.",
+    areaServed: "Global",
+    sameAs: [
+      "https://linkedin.com/in/denverchrisortega",
+      "https://github.com/toxicwind",
+    ],
     hero: {
       headline: "Your AI is an Active Liability.",
       kicker: "We make it bulletproof instead.",
@@ -117,6 +126,8 @@ metaDescription: "Top-10 global AI safety specialist. We eliminate hallucination
   }
 %}
 
+{% set contactEmail = 'mailto:' + DATA.email %}
+
 {# --- tiny macro for the offer cards --- #}
 {% macro offerCard(o) %}
   <div class="card bg-base-200 border border-base-300 shadow-sm">
@@ -167,18 +178,16 @@ metaDescription: "Top-10 global AI safety specialist. We eliminate hallucination
 {% endfor %}
 
 {# ------------------ HEAD EXTRAS ------------------ #}
-{% block headExtra %}
-  {# meta description here in case your base doesn't read metaDescription #}
-  <meta name="description" content="{{ DATA.desc }}">
+{% set headExtra %}
   <link
     rel="preload"
     href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Inter:wght@400;700;900&display=swap"
     as="style"
-  >
+  />
   <link
     href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Inter:wght@400;700;900&display=swap"
     rel="stylesheet"
-  >
+  />
   <!-- markup-fmt-ignore -->
   <script type="application/ld+json">
   {{ {
@@ -187,10 +196,19 @@ metaDescription: "Top-10 global AI safety specialist. We eliminate hallucination
     "name": DATA.brand,
     "alternateName": DATA.alt,
     "url": DATA.url,
-    "email": DATA.email,
     "description": DATA.desc,
-    "areaServed": "Global",
+    "areaServed": DATA.areaServed,
     "serviceType": "AI Safety Consulting",
+    "sameAs": DATA.sameAs,
+    "contactPoint": [
+      {
+        "@type": "ContactPoint",
+        "contactType": "sales",
+        "email": contactEmail,
+        "areaServed": DATA.areaServed,
+        "availableLanguage": ["English"]
+      }
+    ],
     "hasOfferCatalog": {
       "@type": "OfferCatalog",
       "name": "AI Safety Interventions",
@@ -198,10 +216,9 @@ metaDescription: "Top-10 global AI safety specialist. We eliminate hallucination
     }
   } | json | safe }}
   </script>
-{% endblock headExtra %}
+{% endset %}
 
 {# ------------------ PAGE CONTENT ------------------ #}
-{% block content %}
   <header class="border-b">
     <div class="navbar max-w-[90rem] mx-auto px-4">
       <div class="navbar-start">
@@ -343,22 +360,3 @@ metaDescription: "Top-10 global AI safety specialist. We eliminate hallucination
       © {{ 'now' | date('yyyy') }}
     </div>
   </footer>
-{% endblock content %}
-
-{# ------------------ OPTIONAL PAGE SCRIPTS ------------------ #}
-{% block scriptsEnd %}
-  <script type="module" src="{{ '/assets/js/app.js' | url }}"></script>
-  <script type="module" src="{{ '/assets/js/theme-toggle.js' | url }}"></script>
-  <script>
-  // if ThemeUtils is available globally, configure it
-if (typeof ThemeUtils !== 'undefined') {
-  ThemeUtils.configure({
-    allowed: ['silk', 'dim'],
-    defaultTheme: 'dim',
-    lightTheme: 'silk',
-    darkTheme: 'dim',
-  })
-  ThemeUtils.initEarly()
-}
-  </script>
-{% endblock scriptsEnd %}

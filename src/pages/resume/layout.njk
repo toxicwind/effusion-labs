@@ -1,38 +1,59 @@
-{# layouts/resume.njk #}
 <!DOCTYPE html>
 <html lang="en" class="scroll-pt-16" data-theme="dim">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="color-scheme" content="dark light" />
-
     <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f7f5f3" />
     <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#2a303c" />
     <meta name="msapplication-TileColor" content="#2a303c" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 
-    <title>{{ title or 'Resume' }} | Effusion Labs</title>
-
-    {# Canonical/OG (ensure absolute so Vite doesn't treat /resume/ like an asset) #}
-    {% set canon = canonicalUrl or page.canonicalUrl or (page and page.url) %}
-    {% set siteUrl = metadata and metadata.site and metadata.site.url %}
-    {% set canonicalHref = canon %}
-    {% if siteUrl and canonicalHref %}
-      {% set canonicalHref = canonicalHref | url | absoluteUrl(siteUrl) %}
+    {% set siteUrl = 'https://effusionlabs.com' %}
+    {% set canonicalPath = page and page.url or '/' %}
+    {% set canonicalHref = canonicalUrl or (siteUrl + (canonicalPath | url)) %}
+    {% set description = metaDescription or description or '' %}
+    {% set ogTitle = ogTitle or title or 'Resume' %}
+    {% set ogDescription = ogDescription or description %}
+    {% set ogImageRel = ogImage or (resume and resume.ogImage) %}
+    {% if ogImageRel %}
+      {% set ogImageHref = ogImageRel %}
+      {% if '://' not in ogImageHref %}
+        {% set ogImageHref = siteUrl + (ogImageRel | url) %}
+      {% endif %}
     {% endif %}
-    {% set canonicalIsAbsolute = canonicalHref and '://' in canonicalHref %}
-    {% if canonicalIsAbsolute %}
-      <link rel="canonical" href="{{ canonicalHref }}" vite-ignore />
-      <meta property="og:url" content="{{ canonicalHref }}" vite-ignore />
+
+    <title>{{ (title or 'Resume') }} — Effusion Labs</title>
+    {% if description %}
+      <meta name="description" content="{{ description }}" />
+    {% endif %}
+    <link rel="canonical" href="{{ canonicalHref }}" />
+
+    <meta property="og:type" content="profile" />
+    <meta property="og:site_name" content="Effusion Labs" />
+    <meta property="og:title" content="{{ ogTitle }}" />
+    {% if ogDescription %}
+      <meta property="og:description" content="{{ ogDescription }}" />
+    {% endif %}
+    <meta property="og:url" content="{{ canonicalHref }}" />
+    {% if ogImageHref %}
+      <meta property="og:image" content="{{ ogImageHref }}" />
     {% endif %}
 
-    {# Per-page head injections (redirects, robots, etc.) #}
+    <meta name="twitter:card" content="{{ ogImageHref and 'summary_large_image' or 'summary' }}" />
+    <meta name="twitter:title" content="{{ ogTitle }}" />
+    {% if ogDescription %}
+      <meta name="twitter:description" content="{{ ogDescription }}" />
+    {% endif %}
+    {% if ogImageHref %}
+      <meta name="twitter:image" content="{{ ogImageHref }}" />
+    {% endif %}
+
     {{ headExtra | safe }}
 
     <script type="module" src="{{ '/assets/js/app.js' | url }}"></script>
 
-    {# Fonts #}
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -40,7 +61,6 @@
       rel="stylesheet"
     />
 
-    {# Favicons / manifest #}
     <link rel="icon" type="image/png" href="{{ '/favicon.ico' | url }}" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="{{ '/favicon.svg' | url }}" />
     <link rel="shortcut icon" href="{{ '/favicon.ico' | url }}" />

@@ -1,7 +1,10 @@
 ---
 permalink: "/resume/"
 title: "Resume"
-layout: "resume.njk"
+layout: "../pages/resume/layout.njk"
+metaDescription: "Resume for Christopher Ortega: LLM engineering, AI safety, and data platform leadership."
+ogTitle: "Christopher Ortega — Resume"
+ogDescription: "LLM engineering, AI safety, and data platform leadership from Christopher Ortega."
 eleventyExcludeFromCollections: true
 ---
 {% from "components/neon-card.njk" import neonCard %}
@@ -9,9 +12,9 @@ eleventyExcludeFromCollections: true
 <a href="#main" class="skip-link btn btn-sm">Skip to main content</a>
 <div class="navbar bg-base-100 border-b-2 border-base-300 sticky top-0 z-40 bar-underline">
   <div class="flex-1">
-    <a href="{{ '/' | url }}" class="btn btn-ghost text-base font-semibold">{{
+    <span class="btn btn-ghost text-base font-semibold pointer-events-none">{{
       resume and resume.name or 'Resume'
-    }}</a>
+    }}</span>
   </div>
   <div class="flex-none gap-2 items-center">
     <button
@@ -303,12 +306,16 @@ eleventyExcludeFromCollections: true
   </section>
 </div>
 <div id="toaster" class="toast toast-end z-[100]"></div>
-{% set canonicalPath = "/resume/" | url %}
-{% set canonicalHref = (site and site.url) | ternary((site.url + canonicalPath), canonicalPath) %}
-{% set homeHref = (site and site.url) | ternary((site.url + ('/' | url)), ('/' | url)) %}
+{% set siteUrl = 'https://effusionlabs.com' %}
+{% set canonicalPath = '/resume/' %}
+{% set canonicalHref = siteUrl + canonicalPath %}
+{% set homeHref = siteUrl + '/' %}
 {% if resume and resume.ogImage %}
   {% set ogImageRel = resume.ogImage | url %}
-  {% set ogImageHref = (site and site.url) | ternary((site.url + ogImageRel), ogImageRel) %}
+  {% set ogImageHref = ogImageRel %}
+  {% if '://' not in ogImageHref %}
+    {% set ogImageHref = siteUrl + ogImageRel %}
+  {% endif %}
 {% endif %}
 {%
   set sameAsLinks = [resume and resume.website, resume and resume.linkedin, resume and resume.github] | compactUnique
