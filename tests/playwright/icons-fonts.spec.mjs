@@ -4,7 +4,13 @@ const HOMEPAGE = '/' // root path to verify
 
 async function waitForFont(page, fontFamily, timeout = 10_000) {
   await page.waitForFunction(
-    fam => typeof document.fonts !== 'undefined' && document.fonts.check(`1em ${fam}`),
+    async fam => {
+      if (typeof document.fonts === 'undefined') return false
+      try {
+        await document.fonts.load(`1em ${fam}`)
+      } catch {}
+      return document.fonts.check(`1em ${fam}`)
+    },
     fontFamily,
     { timeout },
   )
@@ -38,7 +44,7 @@ test.describe('Effusion Labs visual primitives', () => {
 
   test('Manrope font loads and applies to body copy', async ({ page, baseURL }) => {
     await page.goto(new URL(HOMEPAGE, baseURL).toString(), { waitUntil: 'networkidle' })
-    await waitForFont(page, '"Manrope"')
+    await waitForFont(page, 'Manrope')
     const bodyFontFamily = await page.locator('body').evaluate(el => getComputedStyle(el).fontFamily)
     expect(bodyFontFamily).toMatch(/Manrope/i)
   })

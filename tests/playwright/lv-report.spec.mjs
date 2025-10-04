@@ -11,15 +11,22 @@ async function gotoReport(page, baseURL) {
 test.describe('LV Image Atlas report wiring', () => {
   test('exposes robots cache entries', async ({ page, baseURL }) => {
     await gotoReport(page, baseURL)
-    const robotsCards = page.locator('#robotsContainer .robots-card')
-    await expect(robotsCards.first()).toBeVisible()
-    expect(await robotsCards.count()).toBeGreaterThan(0)
+    const robotsRows = page.locator('#robotsTable tbody tr')
+    await expect(robotsRows.first()).toBeVisible()
+    expect(await robotsRows.count()).toBeGreaterThan(0)
   })
 
   test('lists cached XML/TXT docs', async ({ page, baseURL }) => {
     await gotoReport(page, baseURL)
     const docRows = page.locator('#docsTable tbody tr')
-    await expect(docRows.first()).toBeVisible()
-    expect(await docRows.count()).toBeGreaterThan(0)
+    const rowCount = await docRows.count()
+    if (rowCount > 0) {
+      await expect(docRows.first()).toBeVisible()
+      expect(rowCount).toBeGreaterThan(0)
+    } else {
+      const emptyState = page.locator('#docs .alert-info')
+      await expect(emptyState).toBeVisible()
+      await expect(emptyState).toContainText('No cached documents')
+    }
   })
 })

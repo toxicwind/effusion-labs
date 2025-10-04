@@ -54,6 +54,12 @@ export default async function() {
             ndjson: context.lvreport?.dataset?.ndjson || {},
             cache: context.lvreport?.dataset?.cache || {},
             warnings: context.lvreport?.dataset?.warnings || [],
+            history: context.lvreport?.dataset?.history || null,
+            flags: context.lvreport?.dataset?.flags || [],
+            capture: context.lvreport?.dataset?.capture || [],
+            summaryTotals: context.lvreport?.dataset?.summaryTotals || null,
+            bundleLabel: context.lvreport?.dataset?.bundleLabel || null,
+            runMode: context.lvreport?.dataset?.runMode || null,
           },
           page: {
             number: context.lvReportPage?.pageNumber ?? 0,
