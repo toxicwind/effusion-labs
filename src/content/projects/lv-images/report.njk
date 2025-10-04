@@ -45,6 +45,11 @@ metaDisable: true
 {% set manifestArchive = manifest.archive or {} %}
 {% set manifestSummary = manifest.summary or {} %}
 {% set datasetWarnings = dataset.warnings or [] %}
+{% set datasetHistory = dataset.history or {} %}
+{% set historyEntries = datasetHistory.entries or [] %}
+{% set datasetFlags = dataset.flags or [] %}
+{% set datasetCapture = dataset.capture or [] %}
+{% set summaryTotals = dataset.summaryTotals or summary.totals or {} %}
 <script type="application/json" id="lvreport-data">{{ clientPayloadJson | safe }}</script>
 <script type="module" src="/assets/js/lvreport-app.js"></script>
 {%
@@ -77,7 +82,7 @@ metaDisable: true
 <section class="relative overflow-hidden rounded-box bg-gradient-to-br from-primary via-secondary to-accent p-8 text-primary-content shadow-xl">
   <div class="absolute inset-0 pointer-events-none opacity-30 mix-blend-screen bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.45),_transparent_60%)]">
   </div>
-  <div class="relative grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,340px)] items-start">
+  <div class="relative grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,360px)] items-start">
     <div>
       <h1 class="text-4xl font-bold tracking-tight">{{ title }}</h1>
       <p class="mt-3 max-w-2xl text-sm md:text-base opacity-80">
@@ -205,7 +210,7 @@ metaDisable: true
         </template>
       </div>
     </div>
-    <div>
+    <div class="space-y-4">
       {% set shaPreview = manifestArchive.shaPreview or manifestArchive.sha256 %}
       <div class="card glass border border-white/30 bg-base-100/10 shadow-lg backdrop-blur">
         <div class="card-body space-y-3">
@@ -266,6 +271,64 @@ metaDisable: true
           </dl>
         </div>
       </div>
+      {% if historyEntries | length %}
+        <div class="card border border-base-content/10 bg-base-100/30 shadow-md backdrop-blur">
+          <div class="card-body space-y-4">
+            <h2 class="card-title text-sm uppercase tracking-[0.18em] text-primary-content/80">
+              Archive history
+            </h2>
+            <ul class="space-y-3 text-sm">
+              {% for entry in historyEntries | slice(0, 3) %}
+                <li class="flex items-start justify-between gap-3">
+                  <div class="space-y-1">
+                    <p class="font-semibold leading-tight">
+                      {{ entry.generatedAt or entry.name or 'Snapshot' }}
+                    </p>
+                    <p class="text-xs opacity-70">
+                      {{ entry.label or entry.mode or '—' }}
+                    </p>
+                  </div>
+                  <div class="text-right text-xs space-y-1">
+                    {% if entry.sizeLabel %}<span class="font-semibold">{{ entry.sizeLabel }}</span>{% endif %}
+                    {% if entry.shaPreview %}<span class="font-mono text-[11px] opacity-70">{{ entry.shaPreview }}</span>{% endif %}
+                    {% if entry.href %}
+                      <a
+                        class="link link-hover"
+                        href="{{ entry.href }}"
+                        target="_blank"
+                        rel="noreferrer"
+                      >Download</a>
+                    {% endif %}
+                  </div>
+                </li>
+              {% endfor %}
+            </ul>
+            <div class="flex items-center justify-between text-[11px] opacity-70">
+              {% if historyEntries | length > 3 %}
+                <span>+{{ historyEntries | length - 3 }} more snapshots preserved.</span>
+              {% endif %}
+              <div class="space-x-3">
+                {% if datasetHistory.directoryHref %}
+                  <a
+                    class="link link-hover"
+                    href="{{ datasetHistory.directoryHref }}"
+                    target="_blank"
+                    rel="noreferrer"
+                  >Browse archives</a>
+                {% endif %}
+                {% if datasetHistory.manifestHref %}
+                  <a
+                    class="link link-hover"
+                    href="{{ datasetHistory.manifestHref }}"
+                    target="_blank"
+                    rel="noreferrer"
+                  >Manifest JSON</a>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endif %}
     </div>
   </div>
 </section>
@@ -283,6 +346,91 @@ metaDisable: true
       </a>
     {% endfor %}
   </nav>
+{% endif %}
+
+{% if (datasetFlags | length) or (datasetCapture | length) %}
+  {% set captureCount = datasetCapture | length %}
+  <section id="dataset-intel" class="mt-10 space-y-4">
+    <h2 class="text-3xl font-semibold">Dataset intelligence</h2>
+    <p class="text-sm opacity-70">
+      Run metadata, safeguards, and capture switches surfaced directly from the bundle manifest.
+    </p>
+    <div
+      class="grid gap-6 {{ 'lg:grid-cols-[minmax(0,260px)_minmax(0,1fr)]' if captureCount else 'lg:grid-cols-1' }}"
+    >
+      {% if captureCount %}
+        <div class="card border border-base-content/15 bg-base-200/80 shadow-sm">
+          <div class="card-body space-y-4">
+            <h3 class="card-title text-lg">Capture profile</h3>
+            <ul class="space-y-2 text-sm">
+              {% for capture in datasetCapture %}
+                <li class="flex items-center justify-between gap-3">
+                  <span class="capitalize">{{ capture.key }}</span>
+                  <span
+                    class="badge {{ 'badge-success' if capture.enabled else 'badge-outline' }}"
+                  >{{ 'enabled' if capture.enabled else 'off' }}</span>
+                </li>
+              {% endfor %}
+            </ul>
+            <div class="text-xs opacity-70 space-y-1">
+              {% if dataset.bundleLabel %}
+                <p>Bundle label: <span class="font-semibold">{{ dataset.bundleLabel }}</span></p>
+              {% endif %}
+              {% if dataset.runMode %}
+                <p>Mode: <span class="font-semibold capitalize">{{ dataset.runMode }}</span></p>
+              {% endif %}
+              {% if summaryTotals.itemsFound %}
+                <p>Total items discovered: {{ summaryTotals.itemsFound }}</p>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      {% endif %}
+      <div class="space-y-4">
+        {% if datasetFlags | length %}
+          <div class="grid gap-4 md:grid-cols-2">
+            {% for flag in datasetFlags %}
+              <div class="card border border-base-content/15 bg-base-200/80 shadow-sm">
+                <div class="card-body space-y-3">
+                  <div class="flex items-start justify-between gap-3">
+                    <h3 class="card-title text-base leading-tight">{{ flag.title }}</h3>
+                    <span class="badge {{ toneBadge[flag.tone] or 'badge-outline' }}">
+                      {{ flag.count }}
+                    </span>
+                  </div>
+                  <p class="text-xs opacity-70">{{ flag.description }}</p>
+                  {% if flag.items and (flag.items | length) %}
+                    <details class="collapse collapse-arrow bg-base-300/30 rounded-box text-xs">
+                      <summary class="collapse-title font-semibold">
+                        View {{ flag.items | length }} host{% if flag.items | length != 1 %}s{% endif %}
+                        {% if flag.overflow %} ({{ flag.overflow }} more){% endif %}
+                      </summary>
+                      <div class="collapse-content">
+                        <ul class="max-h-40 overflow-y-auto space-y-1">
+                          {% for host in flag.items %}
+                            <li class="truncate">{{ host }}</li>
+                          {% endfor %}
+                          {% if flag.overflow %}
+                            <li class="text-[11px] opacity-60">
+                              … {{ flag.overflow }} additional entries omitted for brevity.
+                            </li>
+                          {% endif %}
+                        </ul>
+                      </div>
+                    </details>
+                  {% endif %}
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        {% else %}
+          <div class="alert alert-success shadow-sm">
+            <span>No ban candidates or safeguards triggered in this snapshot.</span>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </section>
 {% endif %}
 
 <section class="mt-12 space-y-10">
@@ -906,6 +1054,7 @@ metaDisable: true
             <th>Total Images</th>
             <th>Unique Images</th>
             <th>Duplicates</th>
+            <th>Products</th>
             <th>Pages</th>
           </tr>
         </thead>
@@ -916,6 +1065,7 @@ metaDisable: true
               <td>{{ h.images }}</td>
               <td>{{ h.uniqueImages }}</td>
               <td>{{ h.duplicates }}</td>
+              <td>{{ h.products }}</td>
               <td>{{ h.pages }}</td>
             </tr>
           {% endfor %}

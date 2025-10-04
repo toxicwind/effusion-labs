@@ -3,6 +3,7 @@ import { resolveChromium } from './tools/resolve-chromium.mjs'
 
 const PORT = process.env.PLAYWRIGHT_WEB_PORT ? Number(process.env.PLAYWRIGHT_WEB_PORT) : 4173
 const HOST = process.env.PLAYWRIGHT_WEB_HOST || '127.0.0.1'
+const STATIC_SERVER_SCRIPT = process.env.PLAYWRIGHT_WEB_COMMAND || 'npm run serve:playwright'
 let EXECUTABLE_PATH
 try {
   EXECUTABLE_PATH = resolveChromium()
@@ -52,7 +53,7 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: `npm run serve -- --port=${PORT}`,
+    command: `${STATIC_SERVER_SCRIPT} -- --port=${PORT} --host=${HOST}`,
     url: `http://${HOST}:${PORT}/`,
     reuseExistingServer: !process.env.CI,
     stdout: 'pipe',

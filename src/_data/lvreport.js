@@ -2,13 +2,15 @@
 
 import fs from 'node:fs/promises'
 import path from 'node:path'
-import { fileURLToPath } from 'node:url'
+import { fileURLToPath, pathToFileURL } from 'node:url'
 
 import MiniSearch from 'minisearch'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
+const projectRoot = path.resolve(__dirname, '..', '..')
 const LV_BASE = path.resolve(__dirname, '../content/projects/lv-images/generated/lv')
 const GENERATED_DIR = path.resolve(LV_BASE, '..')
+const DATASET_ROOT_HREF = '/content/projects/lv-images/'
 const CACHE_DIR = path.join(LV_BASE, 'cache')
 const ROBOTS_DIR = path.join(CACHE_DIR, 'robots')
 const SITEMAPS_DIR = path.join(CACHE_DIR, 'sitemaps')
@@ -24,6 +26,10 @@ const BUNDLE_MANIFEST_JSON = path.join(GENERATED_DIR, 'lv.bundle.json')
 const BUNDLE_ARCHIVE_PATH = path.join(GENERATED_DIR, 'lv.bundle.tgz')
 export const DATASET_REPORT_FILE = path.join(LV_BASE, 'lvreport.dataset.json')
 
+const bundleLibUrl = pathToFileURL(path.join(projectRoot, 'tools', 'lv-images', 'bundle-lib.mjs')).href
+
+let datasetReadyPromise = null
+
 const MINI_SEARCH_OPTIONS = {
   fields: ['title', 'description', 'tags'],
   storeFields: ['id', 'title', 'description', 'href', 'section', 'badge', 'tags', 'meta'],
@@ -32,6 +38,41 @@ const MINI_SEARCH_OPTIONS = {
     prefix: true,
     fuzzy: 0.2,
   },
+}
+
+function toDatasetHref(relPath) {
+  if (!relPath) return ''
+  const normalized = String(relPath).trim().replace(/^\.\/?/, '').replace(/^\/+/, '')
+  if (!normalized) return ''
+  return `${DATASET_ROOT_HREF}${normalized}`
+}
+
+async function ensureDatasetReady() {
+  if (!datasetReadyPromise) {
+    datasetReadyPromise = (async () => {
+      try {
+        await fs.access(SUMMARY_JSON)
+        return false
+      } catch (error) {
+        if (error?.code !== 'ENOENT') throw error
+      }
+
+      const module = await import(bundleLibUrl)
+      if (typeof module?.hydrateDataset !== 'function') {
+        throw new Error('hydrateDataset export missing in bundle-lib.mjs')
+      }
+      const result = await module.hydrateDataset({ force: false, quiet: true })
+      if (!result?.hydrated) {
+        const reason = result?.reason || 'unknown'
+        throw new Error(`LV dataset hydrate failed (${reason})`)
+      }
+      return true
+    })().catch((error) => {
+      datasetReadyPromise = null
+      throw error
+    })
+  }
+  return datasetReadyPromise
 }
 
 async function loadJSON(p, fb) {
@@ -358,6 +399,143 @@ function formatBytes(bytes) {
   return `${value.toFixed(decimals)} ${units[idx]}`
 }
 
+function enrichArchive(meta) {
+  if (!meta || typeof meta !== 'object') return null
+  return deepClean({
+    ...meta,
+    sizeLabel: typeof meta.size === 'number' ? formatBytes(meta.size) : null,
+    shaPreview: meta.sha256 ? String(meta.sha256).slice(0, 16) : null,
+    href: meta.path ? toDatasetHref(meta.path) : '',
+  })
+}
+
+function enrichDatasetMeta(meta) {
+  if (!meta || typeof meta !== 'object') return null
+  return deepClean({
+    ...meta,
+    sizeLabel: typeof meta.totalBytes === 'number' ? formatBytes(meta.totalBytes) : null,
+  })
+}
+
+function enrichHistoryEntry(entry) {
+  if (!entry || typeof entry !== 'object') return null
+  return deepClean({
+    ...entry,
+    sizeLabel: typeof entry.size === 'number' ? formatBytes(entry.size) : null,
+    href: entry.path ? toDatasetHref(entry.path) : '',
+    legacyHref: entry.legacyPath ? toDatasetHref(entry.legacyPath) : '',
+    shaPreview: entry.sha256 ? String(entry.sha256).slice(0, 16) : null,
+  })
+}
+
+function enrichHistory(history) {
+  if (!history || typeof history !== 'object') return null
+  const entries = Array.isArray(history.entries)
+    ? history.entries.map((entry) => enrichHistoryEntry(entry)).filter(Boolean)
+    : []
+  const latest = history.latest ? enrichHistoryEntry(history.latest) : entries[0] || null
+  return deepClean({
+    ...history,
+    entries,
+    latest,
+    manifestHref: history.manifestPath ? toDatasetHref(history.manifestPath) : '',
+    directoryHref: history.directory ? toDatasetHref(history.directory) : '',
+  })
+}
+
+function enrichManifest(manifest) {
+  if (!manifest || typeof manifest !== 'object') return null
+  return deepClean({
+    ...manifest,
+    archive: enrichArchive(manifest.archive || null),
+    dataset: enrichDatasetMeta(manifest.dataset || null),
+    history: enrichHistory(manifest.history || null),
+    summary: manifest.summary ? deepClean(manifest.summary) : null,
+  })
+}
+
+function buildFlagSections(bans) {
+  if (!bans || typeof bans !== 'object') return []
+  const listConfigs = [
+    {
+      key: 'candidates',
+      title: 'Primary ban candidates',
+      description: 'Hosts flagged for exclusion in this crawl.',
+      tone: 'warn',
+    },
+    {
+      key: 'zeroContentSitemaps',
+      title: 'Zero-content sitemaps',
+      description: 'Sitemaps that returned no URLs or empty payloads.',
+      tone: 'warn',
+    },
+    {
+      key: 'skippedDueToErrors',
+      title: 'Skipped hosts — fetch errors',
+      description: 'Endpoints skipped after repeated failures during sitemap or robots fetches.',
+      tone: 'error',
+    },
+    {
+      key: 'preservedDueToHistory',
+      title: 'Preserved for historical coverage',
+      description: 'Hosts retained because previous snapshots still reference them.',
+      tone: 'info',
+    },
+    {
+      key: 'massRemovalSafeguardHosts',
+      title: 'Safeguarded removals',
+      description: 'Hosts protected by mass-removal safeguards.',
+      tone: 'warn',
+    },
+    {
+      key: 'skippedDueToUnknownHistory',
+      title: 'Skipped — unknown history',
+      description: 'Hosts deferred because historical context was unavailable.',
+      tone: 'info',
+    },
+  ]
+  const MAX_ITEMS = 60
+  const sections = []
+  for (const config of listConfigs) {
+    const items = Array.isArray(bans[config.key])
+      ? bans[config.key].map((item) => cleanText(item)).filter(Boolean)
+      : []
+    if (!items.length) continue
+    const trimmed = items.slice(0, MAX_ITEMS)
+    const overflow = Math.max(0, items.length - trimmed.length)
+    sections.push({
+      key: config.key,
+      title: config.title,
+      description: config.description,
+      tone: config.tone,
+      count: items.length,
+      items: trimmed,
+      overflow,
+    })
+  }
+  if (bans.massRemovalSafeguardTriggered) {
+    sections.push({
+      key: 'massRemovalSafeguardTriggered',
+      title: 'Mass-removal safeguard triggered',
+      description: 'Bulk deletions were blocked to avoid regressions — review before purging.',
+      tone: 'warn',
+      count: 1,
+      items: [],
+    })
+  }
+  if (bans.skippedRewrite) {
+    sections.push({
+      key: 'skippedRewrite',
+      title: 'Rewrite phase skipped',
+      description: 'Rewrite operations were deferred; rebuilt URLs may require manual review.',
+      tone: 'info',
+      count: 1,
+      items: [],
+    })
+  }
+  return sections
+}
+
 function truncatePreview(text, max = 320) {
   if (!text) return ''
   const trimmed = text.trim()
@@ -486,9 +664,10 @@ function mergeProducts(product, image, meta) {
   }
 }
 
-function buildAggregates({ itemsMeta, legacyImages, legacyProducts }) {
+function buildAggregates({ itemsMeta, legacyImages, legacyProducts, summaryItems = {} }) {
   const imageMap = new Map()
   const productMap = new Map()
+  const summaryItemsSafe = summaryItems && typeof summaryItems === 'object' ? summaryItems : {}
 
   const addFromMeta = (metaEntries) => {
     if (!metaEntries) return
@@ -561,39 +740,59 @@ function buildAggregates({ itemsMeta, legacyImages, legacyProducts }) {
 
   const hostStats = (() => {
     const map = new Map()
-    for (const image of allImages) {
-      const host = image.host || (() => {
-        try {
-          return new URL(image.pageUrl).host
-        } catch {
-          return ''
-        }
-      })()
-      if (!host) continue
+    const ensure = (host) => {
       if (!map.has(host)) {
-        map.set(host, { host, imageCount: 0, duplicateCount: 0, productCount: 0 })
+        map.set(host, {
+          host,
+          images: 0,
+          uniqueImages: 0,
+          duplicates: 0,
+          products: 0,
+          pages: new Set(),
+        })
       }
-      const stats = map.get(host)
-      stats.imageCount++
-      if (image.duplicateOf) stats.duplicateCount++
+      return map.get(host)
+    }
+    const hostOfUrl = (value) => {
+      try {
+        return new URL(value).host
+      } catch {
+        return ''
+      }
+    }
+    for (const image of allImages) {
+      const host = image.host || hostOfUrl(image.pageUrl)
+      if (!host) continue
+      const stats = ensure(host)
+      stats.images++
+      if (image.duplicateOf) stats.duplicates++
+      else stats.uniqueImages++
+      if (image.pageUrl) stats.pages.add(image.pageUrl)
     }
     for (const product of allProducts) {
-      const host = (() => {
-        try {
-          return new URL(product.pageUrl).host
-        } catch {
-          return ''
-        }
-      })()
+      const host = hostOfUrl(product.pageUrl)
       if (!host) continue
-      if (!map.has(host)) {
-        map.set(host, { host, imageCount: 0, duplicateCount: 0, productCount: 0 })
-      }
-      map.get(host).productCount++
+      const stats = ensure(host)
+      stats.products++
+      if (product.pageUrl) stats.pages.add(product.pageUrl)
     }
-    return Array.from(map.values()).sort((a, b) =>
-      b.imageCount - a.imageCount || a.host.localeCompare(b.host)
-    )
+    for (const meta of Object.values(itemsMeta || {})) {
+      const host = hostOfUrl(meta?.pageUrl)
+      if (!host) continue
+      const stats = ensure(host)
+      if (meta?.pageUrl) stats.pages.add(meta.pageUrl)
+    }
+    return Array.from(map.values())
+      .map((entry) => ({
+        id: entry.host,
+        host: entry.host,
+        images: entry.images,
+        uniqueImages: entry.uniqueImages,
+        duplicates: entry.duplicates,
+        products: entry.products,
+        pages: entry.pages.size,
+      }))
+      .sort((a, b) => b.images - a.images || a.host.localeCompare(b.host))
   })()
 
   const topProducts = allProducts.slice(0, 25)
@@ -618,7 +817,20 @@ function buildAggregates({ itemsMeta, legacyImages, legacyProducts }) {
       else active++
       if (meta.duplicateOf) duplicatesCount++
     }
-    return { total, active, removed, duplicates: duplicatesCount }
+    return {
+      total: summaryItemsSafe.total ?? total,
+      active: summaryItemsSafe.active ?? active,
+      removed: summaryItemsSafe.removed ?? removed,
+      duplicates: summaryItemsSafe.duplicatesThisRun
+        ?? summaryItemsSafe.duplicates
+        ?? duplicatesCount,
+      added: summaryItemsSafe.added ?? null,
+      purged: summaryItemsSafe.purged ?? null,
+      processed: summaryItemsSafe.processed ?? null,
+      discovered: summaryItemsSafe.discovered ?? null,
+      duplicatesThisRun: summaryItemsSafe.duplicatesThisRun ?? null,
+      newItems: summaryItemsSafe.newItems ?? summaryItemsSafe.discovered ?? null,
+    }
   })()
 
   return { allImages, allProducts, duplicates, hostStats, topProducts, totals, itemsMetrics }
@@ -825,6 +1037,7 @@ function classifyDocContent(filePath, previewText) {
 }
 
 async function generateReport() {
+  await ensureDatasetReady()
   const [
     summary,
     urlmeta,
@@ -1079,6 +1292,7 @@ async function generateReport() {
     itemsMeta,
     legacyImages: Array.isArray(legacyAllImages) ? legacyAllImages : [],
     legacyProducts: Array.isArray(legacyAllProducts) ? legacyAllProducts : [],
+    summaryItems: summary?.items || {},
   })
 
   const { sections: paginationSections, pages } = buildPagination({
@@ -1139,14 +1353,15 @@ async function generateReport() {
       id: `host-${index}`,
       section: 'hosts',
       title: host.host,
-      description: `${host.imageCount} images`,
+      description: `${host.images} images`,
       href: '',
       badge: 'host',
       tags: ['host'],
       meta: {
-        imageCount: host.imageCount,
-        duplicateCount: host.duplicateCount,
-        productCount: host.productCount,
+        imageCount: host.images,
+        duplicateCount: host.duplicates,
+        productCount: host.products,
+        pages: host.pages,
       },
     })
   }
@@ -1156,6 +1371,9 @@ async function generateReport() {
     issues: robots.filter((r) => r.isIssue).length,
     breakdown: makeBreakdown(robotsCounts, ROBOTS_CATEGORY_META, robots.length),
   }
+  robotsMetrics.issuePct = robotsMetrics.total
+    ? (robotsMetrics.issues / robotsMetrics.total) * 100
+    : 0
 
   const docsMetrics = {
     total: docs.length,
@@ -1170,17 +1388,66 @@ async function generateReport() {
       docs.length,
     ),
   }
+  docsMetrics.issuePct = docsMetrics.total
+    ? (docsMetrics.issues / docsMetrics.total) * 100
+    : 0
 
   const bundleExists = await pathExists(BUNDLE_ARCHIVE_PATH)
+  const manifestEnriched = enrichManifest(bundleManifest)
   const dataset = {
-    manifest: bundleManifest ? deepClean(bundleManifest) : null,
+    manifest: manifestEnriched,
     manifestHref: '/content/projects/lv-images/generated/lv.bundle.json',
     archiveHref: '/content/projects/lv-images/generated/lv.bundle.tgz',
     archiveExists: bundleExists,
     totals: {
       images: aggregates.totals.images,
+      uniqueImages: aggregates.totals.uniqueImages,
+      duplicateImages: aggregates.totals.duplicateImages,
       products: aggregates.totals.products,
+      hosts: aggregates.totals.hosts,
     },
+    flags: buildFlagSections(summary?.bans || {}),
+    capture: summary?.capture && typeof summary.capture === 'object'
+      ? Object.entries(summary.capture).map(([key, enabled]) => ({
+        key,
+        enabled: Boolean(enabled),
+      }))
+      : [],
+    summaryTotals: summary?.totals ? deepClean(summary.totals) : null,
+    bundleLabel: summary?.bundleLabel || null,
+    runMode: summary?.runMode || null,
+  }
+  if (manifestEnriched?.history) {
+    dataset.history = manifestEnriched.history
+  }
+  if (manifestEnriched?.dataset?.fileCount != null) {
+    dataset.totals.fileCount = manifestEnriched.dataset.fileCount
+  }
+  if (manifestEnriched?.dataset?.totalBytes != null) {
+    dataset.totals.totalBytes = manifestEnriched.dataset.totalBytes
+  }
+  if (manifestEnriched?.dataset?.sizeLabel) {
+    dataset.totals.sizeLabel = manifestEnriched.dataset.sizeLabel
+  }
+  if (manifestEnriched?.archive?.sizeLabel) {
+    dataset.totals.bundleSizeLabel = manifestEnriched.archive.sizeLabel
+  }
+  if (manifestEnriched?.archive?.shaPreview) {
+    dataset.totals.shaPreview = manifestEnriched.archive.shaPreview
+  }
+  if (summary?.totals) {
+    if (summary.totals.pages != null) dataset.totals.pages = summary.totals.pages
+    if (summary.totals.sitemapsProcessed != null) {
+      dataset.totals.sitemapsProcessed = summary.totals.sitemapsProcessed
+    }
+    if (summary.totals.itemsFound != null) dataset.totals.itemsFound = summary.totals.itemsFound
+    if (summary.totals.newItems != null) dataset.totals.newItems = summary.totals.newItems
+    if (summary.totals.pageSnapshots != null) {
+      dataset.totals.pageSnapshots = summary.totals.pageSnapshots
+    }
+    if (summary.totals.imageSnapshots != null) {
+      dataset.totals.imageSnapshots = summary.totals.imageSnapshots
+    }
   }
   if (datasetReport?.payload?.totals) {
     dataset.totals = { ...dataset.totals, ...deepClean(datasetReport.payload.totals) }

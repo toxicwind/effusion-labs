@@ -11,6 +11,7 @@
     "start": "npm run dev",
     "dev": "npx @11ty/eleventy --serve",
     "serve": "npx @11ty/eleventy --serve",
+    "serve:playwright": "node tools/serve-static.mjs",
     "prebuild": "node bin/quality.mjs apply",
     "build": "npm run build:site",
     "prebuild:site": "node bin/quality.mjs apply",
