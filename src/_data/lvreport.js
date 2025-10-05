@@ -22,7 +22,7 @@ const ITEMS_META_JSON = path.join(LV_BASE, 'items-meta.json')
 const ALL_IMAGES_JSON = path.join(LV_BASE, 'all-images.json')
 const ALL_PRODUCTS_JSON = path.join(LV_BASE, 'all-products.json')
 const RUNS_HISTORY_JSON = path.join(LV_BASE, 'runs-history.json')
-const BUNDLE_MANIFEST_JSON = path.join(GENERATED_DIR, 'lv.bundle.json')
+const BUNDLE_PROVENANCE_JSON = path.join(GENERATED_DIR, 'lv.bundle.provenance.json')
 const BUNDLE_ARCHIVE_PATH = path.join(GENERATED_DIR, 'lv.bundle.tgz')
 export const DATASET_REPORT_FILE = path.join(LV_BASE, 'lvreport.dataset.json')
 
@@ -451,6 +451,14 @@ function enrichManifest(manifest) {
     dataset: enrichDatasetMeta(manifest.dataset || null),
     history: enrichHistory(manifest.history || null),
     summary: manifest.summary ? deepClean(manifest.summary) : null,
+    canonical: manifest.canonical
+      ? {
+        ...manifest.canonical,
+        commitPreview: manifest.canonical.commit
+          ? String(manifest.canonical.commit).slice(0, 12)
+          : null,
+      }
+      : null,
   })
 }
 
@@ -1045,7 +1053,7 @@ async function generateReport() {
     legacyAllImages,
     legacyAllProducts,
     runsHistory,
-    bundleManifest,
+    bundleProvenance,
     datasetReport,
   ] = await Promise.all([
     loadJSON(SUMMARY_JSON, {}),
@@ -1054,7 +1062,7 @@ async function generateReport() {
     loadJSON(ALL_IMAGES_JSON, []),
     loadJSON(ALL_PRODUCTS_JSON, []),
     loadJSON(RUNS_HISTORY_JSON, []),
-    loadJSON(BUNDLE_MANIFEST_JSON, null),
+    loadJSON(BUNDLE_PROVENANCE_JSON, null),
     loadJSON(DATASET_REPORT_FILE, null),
   ])
 
@@ -1393,10 +1401,12 @@ async function generateReport() {
     : 0
 
   const bundleExists = await pathExists(BUNDLE_ARCHIVE_PATH)
-  const manifestEnriched = enrichManifest(bundleManifest)
+  const manifestEnriched = enrichManifest(bundleProvenance)
   const dataset = {
     manifest: manifestEnriched,
-    manifestHref: '/content/projects/lv-images/generated/lv.bundle.json',
+    manifestHref: '/content/projects/lv-images/generated/lv.bundle.provenance.json',
+    provenanceHref: '/content/projects/lv-images/generated/lv.bundle.provenance.json',
+    provenance: manifestEnriched?.canonical || null,
     archiveHref: '/content/projects/lv-images/generated/lv.bundle.tgz',
     archiveExists: bundleExists,
     totals: {
@@ -1434,6 +1444,16 @@ async function generateReport() {
   }
   if (manifestEnriched?.archive?.shaPreview) {
     dataset.totals.shaPreview = manifestEnriched.archive.shaPreview
+  }
+  if (manifestEnriched?.canonical?.commit) {
+    dataset.totals.canonicalCommit = manifestEnriched.canonical.commit
+    dataset.totals.canonicalCommitPreview = manifestEnriched.canonical.commitPreview
+  }
+  if (manifestEnriched?.canonical?.sha256) {
+    dataset.totals.canonicalSha = manifestEnriched.canonical.sha256
+  }
+  if (manifestEnriched?.verifiedAt) {
+    dataset.totals.provenanceVerifiedAt = manifestEnriched.verifiedAt
   }
   if (summary?.totals) {
     if (summary.totals.pages != null) dataset.totals.pages = summary.totals.pages

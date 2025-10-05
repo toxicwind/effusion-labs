@@ -20,7 +20,7 @@ function formatBytes(bytes) {
 
 function usage() {
   console.log(
-    `LV images bundle helper\n\nCommands:\n  pack|bundle       Create lv.bundle.tgz and lv.bundle.json\n  hydrate           Restore generated/lv from the bundle\n  verify            Check bundle size/hash against manifest\n  stats             Print dataset stats\n  normalize         Normalize cache paths inside urlmeta.json\n\nFlags:\n  hydrate --keep    Keep existing generated/lv files (no clean)\n`,
+    `LV images bundle helper\n\nCommands:\n  pack|bundle       Create lv.bundle.tgz and lv.bundle.provenance.json\n  hydrate           Restore generated/lv from the canonical bundle\n  verify            Check bundle size/hash against provenance\n  stats             Print dataset stats\n  normalize         Normalize cache paths inside urlmeta.json\n\nFlags:\n  hydrate --keep    Keep existing generated/lv files (no clean)\n`,
   )
 }
 

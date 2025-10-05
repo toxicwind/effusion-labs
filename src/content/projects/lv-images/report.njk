@@ -55,7 +55,7 @@ metaDisable: true
 {%
   set warningCopy = {
     "missing-archive": "Bundle archive missing — run <code>npm run lv-images:sync</code> before shipping.",
-    "missing-manifest": "Bundle manifest missing — rebuild via <code>npm run lv-images:bundle</code>.",
+    "missing-manifest": "Bundle provenance missing — rebuild via <code>npm run lv-images:bundle</code>.",
     "empty-dataset": "Dataset is empty — crawl with <code>npm run lv-images:sync</code> to populate generated/lv/. "
   }
 %}
@@ -117,7 +117,7 @@ metaDisable: true
             target="_blank"
             rel="noreferrer"
           >
-            Manifest JSON
+            Bundle provenance
           </a>
         {% endif %}
         {% if dataset.history.manifestHref %}
@@ -267,6 +267,26 @@ metaDisable: true
             <div>
               <dt class="text-xs uppercase opacity-60">Bundle SHA (16)</dt>
               <dd class="font-mono text-xs">{{ shaPreview or '—' }}</dd>
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <dt class="text-xs uppercase opacity-60">Canonical commit</dt>
+                <dd class="font-mono text-[11px]">
+                  {{ datasetTotals.canonicalCommitPreview or '—' }}
+                </dd>
+              </div>
+              <div>
+                <dt class="text-xs uppercase opacity-60">Checksum source</dt>
+                <dd class="font-mono text-[11px]">
+                  {{ datasetTotals.canonicalSha or manifestArchive.sha256 or '—' }}
+                </dd>
+              </div>
+            </div>
+            <div>
+              <dt class="text-xs uppercase opacity-60">Provenance verified</dt>
+              <dd class="font-semibold">
+                {{ datasetTotals.provenanceVerifiedAt or manifest.verifiedAt or '—' }}
+              </dd>
             </div>
           </dl>
         </div>

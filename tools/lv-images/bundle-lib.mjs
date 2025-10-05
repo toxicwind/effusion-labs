@@ -1,6 +1,16 @@
 import { createHash } from 'node:crypto'
 import { createReadStream } from 'node:fs'
-import { access, copyFile, mkdir, readdir, readFile, rm, stat, writeFile } from 'node:fs/promises'
+import {
+  access,
+  copyFile,
+  mkdir,
+  readdir,
+  readFile,
+  rename,
+  rm,
+  stat,
+  writeFile,
+} from 'node:fs/promises'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -15,7 +25,7 @@ const datasetRoot = datasetRootOverride
 const generatedDir = path.join(datasetRoot, 'generated')
 const lvDir = path.join(generatedDir, 'lv')
 const stableBundlePath = path.join(generatedDir, 'lv.bundle.tgz')
-const manifestPath = path.join(generatedDir, 'lv.bundle.json')
+const provenancePath = path.join(generatedDir, 'lv.bundle.provenance.json')
 const archivesDir = path.join(generatedDir, 'archives')
 const historyManifestPath = path.join(archivesDir, 'history.json')
 const legacyBundleHistoryDir = path.join(generatedDir, 'bundles')
@@ -23,12 +33,125 @@ const legacyHistoryManifestPath = path.join(generatedDir, 'lv.bundle.history.jso
 const urlmetaPath = path.join(lvDir, 'cache', 'urlmeta.json')
 const summaryPath = path.join(lvDir, 'summary.json')
 
+const CANONICAL_BUNDLE = {
+  commit: '499f568f2973f5eba7ae80e61d49720390137847',
+  url: 'https://raw.githubusercontent.com/toxicwind/effusion-labs/499f568f2973f5eba7ae80e61d49720390137847/src/content/projects/lv-images/generated/lv.bundle.tgz',
+  sha256: '49a2e64a98d0c4c39257b1ba211c0406c730894873892d82dcdfe2b9d18d1c93',
+}
+
 const HISTORY_LIMIT = 10
 
 const posixify = (value) => value.split(path.sep).join('/')
 const rel = (from, to) => posixify(path.relative(from, to))
 const timestampSlug = (date = new Date()) =>
   date.toISOString().replace(/[:-]/g, '').replace(/\.\d{3}Z$/, 'Z')
+
+async function loadProvenance() {
+  try {
+    const raw = await readFile(provenancePath, 'utf8')
+    return raw ? JSON.parse(raw) : null
+  } catch (error) {
+    if (error.code === 'ENOENT') return null
+    throw error
+  }
+}
+
+async function saveProvenance(payload) {
+  await mkdir(generatedDir, { recursive: true })
+  await writeFile(provenancePath, JSON.stringify(payload, null, 2))
+}
+
+function buildArchiveRecord(stat) {
+  if (!stat) return null
+  return {
+    path: rel(datasetRoot, stableBundlePath),
+    size: stat.size,
+    sha256: CANONICAL_BUNDLE.sha256,
+  }
+}
+
+function buildDatasetRecord(stats) {
+  if (!stats) return null
+  return {
+    fileCount: stats.entries.length,
+    totalBytes: stats.totalBytes,
+  }
+}
+
+async function updateProvenance({
+  origin = 'hydrate',
+  datasetStats: datasetStatsValue = null,
+  archiveStat = null,
+  extra = {},
+} = {}) {
+  const existing = (await loadProvenance()) || {}
+  const datasetRecord = datasetStatsValue ? buildDatasetRecord(datasetStatsValue) : existing.dataset || null
+  const archiveRecord = archiveStat ? buildArchiveRecord(archiveStat) : existing.archive || null
+  const nowIso = new Date().toISOString()
+
+  const payload = {
+    ...existing,
+    canonical: { ...CANONICAL_BUNDLE },
+    archive: archiveRecord,
+    dataset: datasetRecord,
+    origin,
+    verifiedAt: nowIso,
+    ...extra,
+  }
+
+  if (!payload.generatedAt) {
+    payload.generatedAt = nowIso
+  }
+
+  await saveProvenance(payload)
+  return payload
+}
+
+async function ensureCanonicalBundle({ quiet = false } = {}) {
+  await mkdir(generatedDir, { recursive: true })
+
+  let needsDownload = false
+  try {
+    await access(stableBundlePath)
+    const currentHash = await hashFile(stableBundlePath)
+    if (currentHash !== CANONICAL_BUNDLE.sha256) {
+      needsDownload = true
+    }
+  } catch (error) {
+    if (error.code === 'ENOENT') {
+      needsDownload = true
+    } else {
+      throw error
+    }
+  }
+
+  if (needsDownload) {
+    if (!quiet) {
+      console.log(
+        `[lv-images] Fetching canonical lv.bundle.tgz (${CANONICAL_BUNDLE.commit.slice(0, 12)})`,
+      )
+    }
+    const response = await fetch(CANONICAL_BUNDLE.url)
+    if (!response.ok) {
+      throw new Error(
+        `Failed to download canonical bundle (${response.status} ${response.statusText})`,
+      )
+    }
+    const arrayBuffer = await response.arrayBuffer()
+    const tempPath = path.join(generatedDir, `lv.bundle.${Date.now()}.tmp`)
+    await writeFile(tempPath, Buffer.from(arrayBuffer))
+    const downloadedHash = await hashFile(tempPath)
+    if (downloadedHash !== CANONICAL_BUNDLE.sha256) {
+      await rm(tempPath, { force: true })
+      throw new Error('Canonical bundle checksum mismatch after download')
+    }
+    await rename(tempPath, stableBundlePath)
+  }
+
+  const archiveStat = await stat(stableBundlePath)
+  await updateProvenance({ origin: 'canonical-fetch', datasetStats: null, archiveStat })
+  return archiveStat
+}
 
 async function hashFile(filePath, algorithm = 'sha256') {
   return new Promise((resolve, reject) => {
@@ -300,22 +423,21 @@ export async function bundleDataset({
     },
   }
 
-  await writeFile(manifestPath, JSON.stringify(manifest, null, 2))
-  return manifest
+  await updateProvenance({
+    origin: 'bundle',
+    datasetStats: { entries, totalBytes },
+    archiveStat,
+    extra: manifest,
+  })
+
+  return {
+    ...manifest,
+    canonical: { ...CANONICAL_BUNDLE },
+  }
 }
 
 export async function hydrateDataset({ force = true, quiet = false } = {}) {
-  try {
-    await access(stableBundlePath)
-  } catch (error) {
-    if (error.code === 'ENOENT') {
-      if (!quiet) {
-        console.warn(`[lv-images] Bundle missing at ${stableBundlePath}`)
-      }
-      return { hydrated: false, reason: 'missing-bundle' }
-    }
-    throw error
-  }
+  const archiveStat = await ensureCanonicalBundle({ quiet })
 
   if (force) {
     await rm(lvDir, { recursive: true, force: true })
@@ -325,44 +447,18 @@ export async function hydrateDataset({ force = true, quiet = false } = {}) {
   await tar.extract({ cwd: generatedDir, file: stableBundlePath, strip: 0 })
   await normalizeUrlmetaPaths()
 
+  const stats = await datasetStats()
+  await updateProvenance({ origin: 'hydrate', datasetStats: stats, archiveStat })
+
   return { hydrated: true, reason: 'ok' }
 }
 
 export async function verifyBundle() {
-  let manifest
-  try {
-    const raw = await readFile(manifestPath, 'utf8')
-    if (!raw) {
-      manifest = null
-    } else {
-      try {
-        manifest = JSON.parse(raw)
-      } catch {
-        if (raw.startsWith('version https://git-lfs.github.com/spec/v1')) {
-          return { ok: false, reason: 'manifest-lfs-pointer', raw }
-        }
-        return { ok: false, reason: 'invalid-manifest-json', raw }
-      }
-    }
-  } catch (error) {
-    if (error.code === 'ENOENT') {
-      return { ok: false, reason: 'missing-manifest' }
-    }
-    throw error
-  }
+  const archiveStat = await ensureCanonicalBundle({ quiet: true })
 
+  const manifest = await loadProvenance()
   if (!manifest) {
-    return { ok: false, reason: 'invalid-manifest' }
-  }
-
-  let bundleStat
-  try {
-    bundleStat = await stat(stableBundlePath)
-  } catch (error) {
-    if (error.code === 'ENOENT') {
-      return { ok: false, reason: 'missing-bundle', manifest }
-    }
-    throw error
+    return { ok: false, reason: 'missing-provenance' }
   }
 
   const sha256 = await hashFile(stableBundlePath)
@@ -370,7 +466,7 @@ export async function verifyBundle() {
   const totalBytes = entries.reduce((sum, file) => sum + file.size, 0)
 
   const mismatches = []
-  if (manifest.archive?.size != null && manifest.archive.size !== bundleStat.size) {
+  if (manifest.archive?.size != null && manifest.archive.size !== archiveStat.size) {
     mismatches.push('size')
   }
   if (manifest.archive?.sha256 && manifest.archive.sha256 !== sha256) {
@@ -382,12 +478,15 @@ export async function verifyBundle() {
   if (manifest.dataset?.totalBytes != null && manifest.dataset.totalBytes !== totalBytes) {
     mismatches.push('totalBytes')
   }
+  if (manifest.canonical?.sha256 && manifest.canonical.sha256 !== sha256) {
+    mismatches.push('canonical-sha256')
+  }
 
   return {
     ok: mismatches.length === 0,
     manifest,
     actual: {
-      archive: { size: bundleStat.size, sha256 },
+      archive: { size: archiveStat.size, sha256 },
       dataset: { fileCount: entries.length, totalBytes },
     },
     mismatches,
@@ -409,7 +508,7 @@ export const paths = {
   generatedDir,
   lvDir,
   bundlePath: stableBundlePath,
-  manifestPath,
+  provenancePath,
   archivesDir,
   historyManifestPath,
   legacyBundleHistoryDir,
