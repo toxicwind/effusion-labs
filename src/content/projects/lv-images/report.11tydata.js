@@ -68,6 +68,20 @@ export default async function() {
           },
           search: context.lvreport?.search || {},
         }
+        payload.meta = context.lvreport?.meta || {}
+        const baked = context.lvreport?.baked || {}
+        payload.baked = {
+          indexHref:
+            baked.indexHref
+            || context.lvreport?.dataset?.indexHref
+            || '/lvreport/report.json',
+          statsHref:
+            baked.statsHref
+            || context.lvreport?.dataset?.statsHref
+            || '/lvreport/stats.json',
+          generatedAt: baked.generatedAt || payload.meta.generatedAt || null,
+          version: baked.version || payload.meta.version || null,
+        }
         return JSON.stringify(payload)
           .replace(/</g, '\\u003c')
           .replace(/>/g, '\\u003e')

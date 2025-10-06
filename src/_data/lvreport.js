@@ -1,5 +1,7 @@
 // src/_data/lvreport.js — prefers decoded robots JSON, falls back to text parser
 
+import { createHash } from 'node:crypto'
+import { createReadStream } from 'node:fs'
 import fs from 'node:fs/promises'
 import path from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
@@ -10,6 +12,10 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const projectRoot = path.resolve(__dirname, '..', '..')
 const LV_BASE = path.resolve(__dirname, '../content/projects/lv-images/generated/lv')
 const GENERATED_DIR = path.resolve(LV_BASE, '..')
+const BAKED_OUTPUT_DIR = path.resolve(projectRoot, 'public', 'lvreport')
+const BAKED_REPORT_PATH = path.join(BAKED_OUTPUT_DIR, 'report.json')
+const BAKED_STATS_PATH = path.join(BAKED_OUTPUT_DIR, 'stats.json')
+const BAKED_VERSION = 1
 const DATASET_ROOT_HREF = '/content/projects/lv-images/'
 const CACHE_DIR = path.join(LV_BASE, 'cache')
 const ROBOTS_DIR = path.join(CACHE_DIR, 'robots')
@@ -22,13 +28,18 @@ const ITEMS_META_JSON = path.join(LV_BASE, 'items-meta.json')
 const ALL_IMAGES_JSON = path.join(LV_BASE, 'all-images.json')
 const ALL_PRODUCTS_JSON = path.join(LV_BASE, 'all-products.json')
 const RUNS_HISTORY_JSON = path.join(LV_BASE, 'runs-history.json')
-const BUNDLE_MANIFEST_JSON = path.join(GENERATED_DIR, 'lv.bundle.json')
 const BUNDLE_ARCHIVE_PATH = path.join(GENERATED_DIR, 'lv.bundle.tgz')
+
+const BANNED_HOSTS = new Set(['www.olyv.co.in', 'app.urlgeni.us'])
 export const DATASET_REPORT_FILE = path.join(LV_BASE, 'lvreport.dataset.json')
 
-const bundleLibUrl = pathToFileURL(path.join(projectRoot, 'tools', 'lv-images', 'bundle-lib.mjs')).href
+const bundleLibUrl =
+  pathToFileURL(path.join(projectRoot, 'tools', 'lv-images', 'bundle-lib.mjs')).href
 
 let datasetReadyPromise = null
+
+let bakedArtifactCache = null
+let bakePromise = null
 
 const MINI_SEARCH_OPTIONS = {
   fields: ['title', 'description', 'tags'],
@@ -38,6 +49,32 @@ const MINI_SEARCH_OPTIONS = {
     prefix: true,
     fuzzy: 0.2,
   },
+}
+
+function normalizeHost(value) {
+  if (!value) return ''
+  if (typeof value === 'string') {
+    const trimmed = value.trim()
+    if (!trimmed) return ''
+    try {
+      return new URL(trimmed).host.toLowerCase()
+    } catch {
+      return trimmed.replace(/^https?:\/\//i, '').replace(/\/$/, '').toLowerCase()
+    }
+  }
+  if (value && typeof value === 'object') {
+    if (value.host) return normalizeHost(value.host)
+    if (value.url) return normalizeHost(value.url)
+    if (value.pageUrl) return normalizeHost(value.pageUrl)
+    if (value.src) return normalizeHost(value.src)
+  }
+  return ''
+}
+
+function isBannedHost(candidate) {
+  const host = normalizeHost(candidate)
+  if (!host) return false
+  return BANNED_HOSTS.has(host)
 }
 
 function toDatasetHref(relPath) {
@@ -73,6 +110,166 @@ async function ensureDatasetReady() {
     })
   }
   return datasetReadyPromise
+}
+
+async function hashFileSha256(filePath) {
+  return new Promise((resolve, reject) => {
+    const hash = createHash('sha256')
+    const stream = createReadStream(filePath)
+    stream.on('error', reject)
+    stream.on('data', (chunk) => hash.update(chunk))
+    stream.on('end', () => resolve(hash.digest('hex')))
+  })
+}
+
+async function computeBundleSnapshot() {
+  let archiveStat = null
+  try {
+    archiveStat = await fs.stat(BUNDLE_ARCHIVE_PATH)
+  } catch (error) {
+    if (error?.code !== 'ENOENT') throw error
+  }
+
+  let sha256 = null
+  if (archiveStat) {
+    try {
+      sha256 = await hashFileSha256(BUNDLE_ARCHIVE_PATH)
+    } catch (error) {
+      console.warn('[lvreport] Failed to hash lv.bundle.tgz:', error?.message || error)
+    }
+  }
+
+  let datasetEntries = []
+  let totalBytes = 0
+  try {
+    const module = await import(bundleLibUrl)
+    if (typeof module?.collectDatasetEntries === 'function') {
+      datasetEntries = await module.collectDatasetEntries()
+      totalBytes = datasetEntries.reduce((sum, entry) => sum + (entry.size || 0), 0)
+    } else if (typeof module?.datasetStats === 'function') {
+      const stats = await module.datasetStats()
+      if (Array.isArray(stats?.entries)) datasetEntries = stats.entries
+      if (typeof stats?.totalBytes === 'number') totalBytes = stats.totalBytes
+    }
+  } catch (error) {
+    if (error?.code !== 'ENOENT') {
+      console.warn('[lvreport] Failed to compute dataset stats:', error?.message || error)
+    }
+  }
+
+  const archive = archiveStat
+    ? deepClean({
+      size: archiveStat.size,
+      sizeLabel: formatBytes(archiveStat.size),
+      sha256,
+      shaPreview: sha256 ? sha256.slice(0, 16) : null,
+      path: 'generated/lv.bundle.tgz',
+      href: toDatasetHref('generated/lv.bundle.tgz'),
+    })
+    : null
+
+  const dataset = deepClean({
+    fileCount: datasetEntries.length || null,
+    totalBytes: totalBytes || null,
+    sizeLabel: totalBytes ? formatBytes(totalBytes) : null,
+  })
+
+  return { archive, dataset }
+}
+
+function buildArtifactMeta(report, generatedAt = new Date().toISOString()) {
+  return deepClean({
+    version: BAKED_VERSION,
+    generatedAt,
+    totals: deepClean(report?.totals || {}),
+    dataset: {
+      totals: deepClean(report?.dataset?.totals || {}),
+      archive: deepClean(report?.dataset?.manifest?.archive || null),
+    },
+    index: {
+      reportHref: '/lvreport/report.json',
+      statsHref: '/lvreport/stats.json',
+    },
+  })
+}
+
+function buildStatsPayload(report, meta) {
+  return deepClean({
+    version: meta?.version ?? BAKED_VERSION,
+    generatedAt: meta?.generatedAt || null,
+    totals: deepClean(report?.totals || {}),
+    sections: {
+      sitemaps: Array.isArray(report?.sitemaps) ? report.sitemaps.length : 0,
+      docs: Array.isArray(report?.docs) ? report.docs.length : 0,
+      robots: Array.isArray(report?.robots) ? report.robots.length : 0,
+      duplicates: Array.isArray(report?.duplicates) ? report.duplicates.length : 0,
+      topProducts: Array.isArray(report?.topProducts) ? report.topProducts.length : 0,
+      hostStats: Array.isArray(report?.hostStats) ? report.hostStats.length : 0,
+      runsHistory: Array.isArray(report?.runsHistory) ? report.runsHistory.length : 0,
+      sample: Array.isArray(report?.sample) ? report.sample.length : 0,
+    },
+  })
+}
+
+async function loadBakedArtifact() {
+  if (bakedArtifactCache) return bakedArtifactCache
+  try {
+    const raw = await fs.readFile(BAKED_REPORT_PATH, 'utf8')
+    if (!raw) return null
+    const parsed = JSON.parse(raw)
+    if (!parsed || typeof parsed !== 'object') return null
+    if (!parsed.report || typeof parsed.report !== 'object') return null
+    const artifact = {
+      meta: parsed.meta || {},
+      report: parsed.report,
+    }
+    bakedArtifactCache = artifact
+    return artifact
+  } catch (error) {
+    if (error?.code === 'ENOENT') return null
+    throw error
+  }
+}
+
+async function persistBakedArtifact(report, { generatedAt } = {}) {
+  const meta = buildArtifactMeta(report, generatedAt || new Date().toISOString())
+  const artifact = { meta, report }
+  await fs.mkdir(BAKED_OUTPUT_DIR, { recursive: true })
+  await fs.writeFile(BAKED_REPORT_PATH, JSON.stringify(artifact))
+  const stats = buildStatsPayload(report, meta)
+  await fs.writeFile(BAKED_STATS_PATH, JSON.stringify(stats))
+  bakedArtifactCache = artifact
+  return artifact
+}
+
+async function ensureBakedArtifact() {
+  const existing = await loadBakedArtifact()
+  if (existing) return existing
+  if (!bakePromise) {
+    bakePromise = (async () => {
+      await ensureDatasetReady()
+      const report = await generateReport()
+      return persistBakedArtifact(report)
+    })()
+    bakePromise = bakePromise.finally(() => {
+      bakePromise = null
+    })
+  }
+  return bakePromise
+}
+
+function attachBakedMetadata(report, meta) {
+  if (!report || typeof report !== 'object') return report
+  const baked = deepClean({
+    generatedAt: meta?.generatedAt || null,
+    version: meta?.version ?? BAKED_VERSION,
+    indexHref: meta?.index?.reportHref || '/lvreport/report.json',
+    statsHref: meta?.index?.statsHref || '/lvreport/stats.json',
+    archive: meta?.dataset?.archive || null,
+  })
+  report.baked = baked
+  report.meta = meta || {}
+  return report
 }
 
 async function loadJSON(p, fb) {
@@ -140,7 +337,16 @@ async function sampleItems(dir, max = 60) {
       for (const line of lines) {
         try {
           const obj = JSON.parse(line)
-          if (obj?.src) out.push(obj)
+          if (!obj?.src) continue
+          if (isBannedHost(obj.host) || isBannedHost(obj.pageUrl) || isBannedHost(obj.src)) {
+            continue
+          }
+          const record = {
+            ...obj,
+            preview: obj.preview || obj.thumbnail || obj.src,
+            thumbnail: obj.thumbnail || null,
+          }
+          out.push(deepClean(record))
           if (out.length >= max) return out
         } catch {}
       }
@@ -546,7 +752,9 @@ function truncatePreview(text, max = 320) {
 function cleanText(value) {
   if (value == null) return ''
   let text = String(value).replace(/\s+/g, ' ').trim()
-  if ((text.startsWith('"') && text.endsWith('"')) || (text.startsWith("'") && text.endsWith("'"))) {
+  if (
+    (text.startsWith('"') && text.endsWith('"')) || (text.startsWith("'") && text.endsWith("'"))
+  ) {
     text = text.slice(1, -1).trim()
   }
   if (text.startsWith('"') && text.includes('://')) {
@@ -673,6 +881,7 @@ function buildAggregates({ itemsMeta, legacyImages, legacyProducts, summaryItems
     if (!metaEntries) return
     for (const [id, meta] of Object.entries(metaEntries)) {
       if (!meta || meta.removedAt) continue
+      if (isBannedHost(meta.host) || isBannedHost(meta.pageUrl)) continue
       const image = upsertImage(imageMap, { ...meta, id })
       if (!image) continue
       const product = upsertProduct(productMap, meta.pageUrl || '')
@@ -684,6 +893,9 @@ function buildAggregates({ itemsMeta, legacyImages, legacyProducts, summaryItems
 
   if (Array.isArray(legacyImages)) {
     for (const entry of legacyImages) {
+      if (isBannedHost(entry?.host) || isBannedHost(entry?.pageUrl) || isBannedHost(entry?.src)) {
+        continue
+      }
       const image = upsertImage(imageMap, entry)
       if (!image) continue
       const product = upsertProduct(productMap, entry?.pageUrl || '')
@@ -693,6 +905,7 @@ function buildAggregates({ itemsMeta, legacyImages, legacyProducts, summaryItems
 
   if (Array.isArray(legacyProducts)) {
     for (const legacy of legacyProducts) {
+      if (isBannedHost(legacy?.pageUrl)) continue
       const product = upsertProduct(productMap, legacy?.pageUrl || '')
       if (!product) continue
       if (!product.title && legacy?.title) product.title = cleanText(legacy.title)
@@ -704,6 +917,7 @@ function buildAggregates({ itemsMeta, legacyImages, legacyProducts, summaryItems
       }
       if (Array.isArray(legacy?.images)) {
         for (const img of legacy.images) {
+          if (isBannedHost(img?.src) || isBannedHost(img?.pageUrl)) continue
           const normalized = upsertImage(imageMap, { ...img, pageUrl: legacy.pageUrl })
           if (!normalized) continue
           mergeProducts(product, normalized, img)
@@ -716,11 +930,17 @@ function buildAggregates({ itemsMeta, legacyImages, legacyProducts, summaryItems
     }
   }
 
-  const allImages = Array.from(imageMap.values()).sort((a, b) => a.id.localeCompare(b.id))
+  const allImages = Array.from(imageMap.values())
+    .filter((image) =>
+      !isBannedHost(image.host) && !isBannedHost(image.pageUrl) && !isBannedHost(image.src)
+    )
+    .sort((a, b) => a.id.localeCompare(b.id))
   const allProducts = Array.from(productMap.values()).map((product) => ({
     ...product,
     images: product.images.sort((a, b) => a.id.localeCompare(b.id)),
-  })).sort((a, b) => (b.images.length - a.images.length) || a.pageUrl.localeCompare(b.pageUrl))
+  }))
+    .filter((product) => !isBannedHost(product.pageUrl))
+    .sort((a, b) => (b.images.length - a.images.length) || a.pageUrl.localeCompare(b.pageUrl))
 
   const duplicatesMap = new Map()
   for (const image of allImages) {
@@ -762,7 +982,7 @@ function buildAggregates({ itemsMeta, legacyImages, legacyProducts, summaryItems
     }
     for (const image of allImages) {
       const host = image.host || hostOfUrl(image.pageUrl)
-      if (!host) continue
+      if (!host || isBannedHost(host)) continue
       const stats = ensure(host)
       stats.images++
       if (image.duplicateOf) stats.duplicates++
@@ -771,14 +991,14 @@ function buildAggregates({ itemsMeta, legacyImages, legacyProducts, summaryItems
     }
     for (const product of allProducts) {
       const host = hostOfUrl(product.pageUrl)
-      if (!host) continue
+      if (!host || isBannedHost(host)) continue
       const stats = ensure(host)
       stats.products++
       if (product.pageUrl) stats.pages.add(product.pageUrl)
     }
     for (const meta of Object.values(itemsMeta || {})) {
       const host = hostOfUrl(meta?.pageUrl)
-      if (!host) continue
+      if (!host || isBannedHost(host)) continue
       const stats = ensure(host)
       if (meta?.pageUrl) stats.pages.add(meta.pageUrl)
     }
@@ -836,7 +1056,7 @@ function buildAggregates({ itemsMeta, legacyImages, legacyProducts, summaryItems
   return { allImages, allProducts, duplicates, hostStats, topProducts, totals, itemsMetrics }
 }
 
-function paginateItems(items, size = 60) {
+function paginateItems(items, size = 25) {
   const list = Array.isArray(items) ? items : []
   const pageSize = Math.max(1, size)
   const totalItems = list.length
@@ -1045,7 +1265,6 @@ async function generateReport() {
     legacyAllImages,
     legacyAllProducts,
     runsHistory,
-    bundleManifest,
     datasetReport,
   ] = await Promise.all([
     loadJSON(SUMMARY_JSON, {}),
@@ -1054,9 +1273,10 @@ async function generateReport() {
     loadJSON(ALL_IMAGES_JSON, []),
     loadJSON(ALL_PRODUCTS_JSON, []),
     loadJSON(RUNS_HISTORY_JSON, []),
-    loadJSON(BUNDLE_MANIFEST_JSON, null),
     loadJSON(DATASET_REPORT_FILE, null),
   ])
+
+  const bundleSnapshot = await computeBundleSnapshot()
 
   const baseHref = '/content/projects/lv-images/generated/lv/'
   const rev = buildReverseUrlmeta(urlmeta)
@@ -1064,33 +1284,36 @@ async function generateReport() {
 
   // Sitemaps table rows (summary.sitemaps now contains {host,url,itemCount})
   const sitemapsLog = Array.isArray(summary?.sitemaps) ? summary.sitemaps : []
-  const sitemaps = sitemapsLog.map((s, index) => {
-    const url = cleanText(s.url || '')
-    const um = urlmeta[url] || {}
-    const savedPath = um.path
-      ? path.relative(LV_BASE, path.resolve(um.path)).split(path.sep).join('/')
-      : ''
-    const id = `sitemap-${index}`
-    pushSearchDoc(searchDocuments, {
-      id,
-      section: 'sitemaps',
-      title: cleanText(s.host || url || 'Sitemap'),
-      description: url,
-      href: savedPath ? `${baseHref}${savedPath}` : url,
-      badge: classifySitemap(url),
-      tags: ['sitemap', classifySitemap(url)].filter(Boolean),
-      meta: { status: um.status ?? '', itemCount: s.itemCount || 0 },
+  const sitemaps = sitemapsLog
+    .map((s, index) => {
+      const url = cleanText(s.url || '')
+      if (isBannedHost(s.host) || isBannedHost(url)) return null
+      const um = urlmeta[url] || {}
+      const savedPath = um.path
+        ? path.relative(LV_BASE, path.resolve(um.path)).split(path.sep).join('/')
+        : ''
+      const id = `sitemap-${index}`
+      pushSearchDoc(searchDocuments, {
+        id,
+        section: 'sitemaps',
+        title: cleanText(s.host || url || 'Sitemap'),
+        description: url,
+        href: savedPath ? `${baseHref}${savedPath}` : url,
+        badge: classifySitemap(url),
+        tags: ['sitemap', classifySitemap(url)].filter(Boolean),
+        meta: { status: um.status ?? '', itemCount: s.itemCount || 0 },
+      })
+      return {
+        id,
+        host: s.host || '',
+        url,
+        type: classifySitemap(url),
+        imageCount: s.itemCount || 0,
+        status: um.status ?? '',
+        savedPath,
+      }
     })
-    return {
-      id,
-      host: s.host || '',
-      url,
-      type: classifySitemap(url),
-      imageCount: s.itemCount || 0,
-      status: um.status ?? '',
-      savedPath,
-    }
-  })
+    .filter(Boolean)
 
   // All cached XML/TXT docs under cache/sitemaps/
   const docs = []
@@ -1143,6 +1366,8 @@ async function generateReport() {
       return `${trimmed.slice(0, m).trim()}…`
     })(previewSource, 360)
 
+    if (isBannedHost(host) || isBannedHost(url)) continue
+
     const record = {
       id: `doc-${docIndex++}`,
       host,
@@ -1182,16 +1407,21 @@ async function generateReport() {
   const robotsHosts = new Set()
   try {
     const files = await fs.readdir(ROBOTS_DIR)
-    for (const n of files) if (n.endsWith('.txt')) robotsHosts.add(n.replace(/\.txt$/i, ''))
+    for (const n of files) {
+      if (!n.endsWith('.txt')) continue
+      const host = n.replace(/\.txt$/i, '')
+      if (!isBannedHost(host)) robotsHosts.add(host)
+    }
   } catch {}
-  for (const r of sitemaps) robotsHosts.add(r.host)
-  for (const d of docs) robotsHosts.add(d.host)
+  for (const r of sitemaps) if (!isBannedHost(r.host)) robotsHosts.add(r.host)
+  for (const d of docs) if (!isBannedHost(d.host)) robotsHosts.add(d.host)
   const allHosts = Array.from(robotsHosts).filter(Boolean).sort()
 
   const robots = []
   const robotsCounts = Object.create(null)
   let robotIndex = 0
   for (const host of allHosts) {
+    if (isBannedHost(host)) continue
     const robotsPath = path.join(ROBOTS_DIR, `${host}.txt`)
     let rawText = null
     try {
@@ -1296,12 +1526,12 @@ async function generateReport() {
   })
 
   const { sections: paginationSections, pages } = buildPagination({
-    sitemaps: { title: 'Sitemaps', items: sitemaps, size: 60 },
-    docs: { title: 'Cached documents', items: docs, size: 40 },
-    robots: { title: 'Robots.txt', items: robots, size: 50 },
-    duplicates: { title: 'Duplicate images', items: aggregates.duplicates, size: 40 },
-    topProducts: { title: 'Top products', items: aggregates.topProducts, size: 30 },
-    hostStats: { title: 'Host statistics', items: aggregates.hostStats, size: 40 },
+    sitemaps: { title: 'Sitemaps', items: sitemaps, size: 25 },
+    docs: { title: 'Cached documents', items: docs, size: 25 },
+    robots: { title: 'Robots.txt', items: robots, size: 25 },
+    duplicates: { title: 'Duplicate images', items: aggregates.duplicates, size: 25 },
+    topProducts: { title: 'Top products', items: aggregates.topProducts, size: 25 },
+    hostStats: { title: 'Host statistics', items: aggregates.hostStats, size: 25 },
   })
 
   for (const [index, image] of aggregates.allImages.slice(0, 400).entries()) {
@@ -1318,6 +1548,9 @@ async function generateReport() {
   }
 
   for (const duplicate of aggregates.duplicates.slice(0, 120)) {
+    if (isBannedHost(duplicate?.canonical?.host) || isBannedHost(duplicate?.canonical?.pageUrl)) {
+      continue
+    }
     pushSearchDoc(searchDocuments, {
       id: `duplicate-${duplicate.canonicalId}`,
       section: 'duplicates',
@@ -1332,6 +1565,7 @@ async function generateReport() {
   }
 
   for (const [index, product] of aggregates.topProducts.entries()) {
+    if (isBannedHost(product?.pageUrl)) continue
     pushSearchDoc(searchDocuments, {
       id: `product-${index}`,
       section: 'products',
@@ -1349,6 +1583,7 @@ async function generateReport() {
   }
 
   for (const [index, host] of aggregates.hostStats.slice(0, 40).entries()) {
+    if (isBannedHost(host?.host)) continue
     pushSearchDoc(searchDocuments, {
       id: `host-${index}`,
       section: 'hosts',
@@ -1393,12 +1628,28 @@ async function generateReport() {
     : 0
 
   const bundleExists = await pathExists(BUNDLE_ARCHIVE_PATH)
-  const manifestEnriched = enrichManifest(bundleManifest)
+  const manifestRaw = bundleSnapshot.archive || bundleSnapshot.dataset
+    ? {
+      archive: bundleSnapshot.archive
+        ? { ...bundleSnapshot.archive, path: 'generated/lv.bundle.tgz' }
+        : null,
+      dataset: bundleSnapshot.dataset || null,
+      history: null,
+      summary: deepClean({
+        generatedAt: summary?.generatedAt || datasetReport?.generatedAt || null,
+        version: summary?.version || datasetReport?.payload?.version || null,
+      }),
+    }
+    : null
+  const manifestEnriched = enrichManifest(manifestRaw)
   const dataset = {
     manifest: manifestEnriched,
-    manifestHref: '/content/projects/lv-images/generated/lv.bundle.json',
-    archiveHref: '/content/projects/lv-images/generated/lv.bundle.tgz',
+    manifestHref: null,
+    archiveHref: manifestEnriched?.archive?.href
+      || '/content/projects/lv-images/generated/lv.bundle.tgz',
     archiveExists: bundleExists,
+    indexHref: '/lvreport/report.json',
+    statsHref: '/lvreport/stats.json',
     totals: {
       images: aggregates.totals.images,
       uniqueImages: aggregates.totals.uniqueImages,
@@ -1422,18 +1673,28 @@ async function generateReport() {
   }
   if (manifestEnriched?.dataset?.fileCount != null) {
     dataset.totals.fileCount = manifestEnriched.dataset.fileCount
+  } else if (bundleSnapshot.dataset?.fileCount != null) {
+    dataset.totals.fileCount = bundleSnapshot.dataset.fileCount
   }
   if (manifestEnriched?.dataset?.totalBytes != null) {
     dataset.totals.totalBytes = manifestEnriched.dataset.totalBytes
+  } else if (bundleSnapshot.dataset?.totalBytes != null) {
+    dataset.totals.totalBytes = bundleSnapshot.dataset.totalBytes
   }
   if (manifestEnriched?.dataset?.sizeLabel) {
     dataset.totals.sizeLabel = manifestEnriched.dataset.sizeLabel
+  } else if (bundleSnapshot.dataset?.sizeLabel) {
+    dataset.totals.sizeLabel = bundleSnapshot.dataset.sizeLabel
   }
   if (manifestEnriched?.archive?.sizeLabel) {
     dataset.totals.bundleSizeLabel = manifestEnriched.archive.sizeLabel
+  } else if (bundleSnapshot.archive?.sizeLabel) {
+    dataset.totals.bundleSizeLabel = bundleSnapshot.archive.sizeLabel
   }
   if (manifestEnriched?.archive?.shaPreview) {
     dataset.totals.shaPreview = manifestEnriched.archive.shaPreview
+  } else if (bundleSnapshot.archive?.shaPreview) {
+    dataset.totals.shaPreview = bundleSnapshot.archive.shaPreview
   }
   if (summary?.totals) {
     if (summary.totals.pages != null) dataset.totals.pages = summary.totals.pages
@@ -1471,7 +1732,7 @@ async function generateReport() {
     documents: searchDocuments,
     index: searchIndex,
     options: MINI_SEARCH_OPTIONS,
-    datasetHref: `${baseHref}lvreport.dataset.json`,
+    datasetHref: '/lvreport/report.json',
     documentCount: searchDocuments.length,
     error: searchError,
   }
@@ -1509,6 +1770,7 @@ export async function buildAndPersistReport({ log = null } = {}) {
   try {
     await fs.mkdir(path.dirname(DATASET_REPORT_FILE), { recursive: true })
     await fs.writeFile(DATASET_REPORT_FILE, `${JSON.stringify(record, null, 2)}\n`, 'utf8')
+    await persistBakedArtifact(payload, { generatedAt })
     if (typeof log === 'function') {
       const rel = path.relative(path.resolve(__dirname, '..'), DATASET_REPORT_FILE)
       const totals = payload?.totals || {}
@@ -1528,5 +1790,6 @@ export async function buildAndPersistReport({ log = null } = {}) {
 }
 
 export default async function() {
-  return generateReport()
+  const artifact = await ensureBakedArtifact()
+  return attachBakedMetadata(artifact.report, artifact.meta)
 }
