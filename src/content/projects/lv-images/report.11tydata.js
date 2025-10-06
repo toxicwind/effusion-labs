@@ -61,6 +61,28 @@ export default async function() {
             bundleLabel: context.lvreport?.dataset?.bundleLabel || null,
             runMode: context.lvreport?.dataset?.runMode || null,
           },
+          images: {
+            items: (context.lvreport?.allImages || []).map(image => ({
+              id: image.id,
+              src: image.src,
+              basename: image.basename,
+              title: image.title,
+              host: image.host,
+              pageUrl: image.pageUrl,
+              sitemap: image.sitemap,
+              firstSeen: image.firstSeen,
+              lastSeen: image.lastSeen,
+              removedAt: image.removedAt,
+              duplicateOf: image.duplicateOf,
+            })),
+            totals: {
+              images: context.lvreport?.totals?.images ?? null,
+              active: context.lvreport?.totals?.activeImages ?? null,
+              deprecated: context.lvreport?.totals?.deprecatedImages ?? null,
+              duplicates: context.lvreport?.totals?.duplicateImages ?? null,
+              filtered: context.lvreport?.totals?.filteredImages ?? null,
+            },
+          },
           page: {
             number: context.lvReportPage?.pageNumber ?? 0,
             count: context.lvReportPage?.pageCount ?? 1,

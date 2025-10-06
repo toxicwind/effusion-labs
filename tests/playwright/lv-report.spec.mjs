@@ -29,4 +29,12 @@ test.describe('LV Image Atlas report wiring', () => {
       await expect(emptyState).toContainText('No cached documents')
     }
   })
+
+  test('renders gallery controls with pagination select', async ({ page, baseURL }) => {
+    await gotoReport(page, baseURL)
+    const gallery = page.locator('#lv-gallery[data-gallery-root]')
+    await expect(gallery).toBeVisible()
+    const pageSizeSelect = gallery.locator('select').filter({ hasText: '25' }).first()
+    await expect(pageSizeSelect).toBeVisible()
+  })
 })
