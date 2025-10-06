@@ -26,7 +26,10 @@ const BUNDLE_PROVENANCE_JSON = path.join(GENERATED_DIR, 'lv.bundle.provenance.js
 const BUNDLE_ARCHIVE_PATH = path.join(GENERATED_DIR, 'lv.bundle.tgz')
 export const DATASET_REPORT_FILE = path.join(LV_BASE, 'lvreport.dataset.json')
 
-const bundleLibUrl = pathToFileURL(path.join(projectRoot, 'tools', 'lv-images', 'bundle-lib.mjs')).href
+const BANNED_HOSTS = new Set(['www.olyv.co.in', 'app.urlgeni.us'])
+
+const bundleLibUrl =
+  pathToFileURL(path.join(projectRoot, 'tools', 'lv-images', 'bundle-lib.mjs')).href
 
 let datasetReadyPromise = null
 
@@ -554,7 +557,9 @@ function truncatePreview(text, max = 320) {
 function cleanText(value) {
   if (value == null) return ''
   let text = String(value).replace(/\s+/g, ' ').trim()
-  if ((text.startsWith('"') && text.endsWith('"')) || (text.startsWith("'") && text.endsWith("'"))) {
+  if (
+    (text.startsWith('"') && text.endsWith('"')) || (text.startsWith("'") && text.endsWith("'"))
+  ) {
     text = text.slice(1, -1).trim()
   }
   if (text.startsWith('"') && text.includes('://')) {
@@ -584,6 +589,20 @@ function deepClean(value) {
   }
   if (typeof value === 'string') return cleanText(value)
   return value
+}
+
+function hostFromUrl(value) {
+  if (!value) return ''
+  try {
+    return new URL(value).host
+  } catch {
+    return ''
+  }
+}
+
+function isBannedHost(host) {
+  if (!host) return false
+  return BANNED_HOSTS.has(String(host).toLowerCase())
 }
 
 function pushSearchDoc(list, doc) {
@@ -630,12 +649,19 @@ function upsertImage(map, entry) {
       ? entry.lastSeen
       : existing.lastSeen,
     duplicateOf: entry?.duplicateOf ?? existing.duplicateOf ?? null,
+    removedAt: entry?.removedAt ?? existing.removedAt ?? null,
   }
 
   if (!updated.basename && updated.src) {
     const withoutQuery = updated.src.split(/[#?]/)[0] || updated.src
     updated.basename = cleanText(path.basename(withoutQuery))
   }
+
+  if (!updated.host && updated.pageUrl) {
+    updated.host = hostFromUrl(updated.pageUrl)
+  }
+
+  updated.isDeprecated = Boolean(updated.removedAt)
 
   map.set(id, updated)
   return updated
@@ -672,36 +698,118 @@ function mergeProducts(product, image, meta) {
   }
 }
 
-function buildAggregates({ itemsMeta, legacyImages, legacyProducts, summaryItems = {} }) {
+function buildAggregates({
+  itemsMeta,
+  datasetImages,
+  datasetPages,
+  legacyImages,
+  legacyProducts,
+  summaryItems = {},
+}) {
   const imageMap = new Map()
   const productMap = new Map()
   const summaryItemsSafe = summaryItems && typeof summaryItems === 'object' ? summaryItems : {}
 
-  const addFromMeta = (metaEntries) => {
-    if (!metaEntries) return
-    for (const [id, meta] of Object.entries(metaEntries)) {
-      if (!meta || meta.removedAt) continue
-      const image = upsertImage(imageMap, { ...meta, id })
-      if (!image) continue
-      const product = upsertProduct(productMap, meta.pageUrl || '')
-      mergeProducts(product, image, meta)
-    }
+  const metaEntries = itemsMeta && typeof itemsMeta === 'object' ? itemsMeta : {}
+  const metaById = new Map()
+  for (const [rawId, meta] of Object.entries(metaEntries)) {
+    if (!meta) continue
+    const id = cleanText(rawId || '')
+    if (!id) continue
+    const type = (meta.itemType || meta.type || '').toLowerCase()
+    if (type && type !== 'image') continue
+    if (!meta.src && !meta.pageUrl && !meta.host) continue
+    metaById.set(id, meta)
   }
 
-  addFromMeta(itemsMeta || {})
+  const ingestImageEntry = (entry, fallbackMeta = null) => {
+    if (!entry) return null
+    const id = cleanText(entry.id || fallbackMeta?.id || '')
+    if (!id) return null
+    const candidate = { ...entry, id }
+    if (fallbackMeta) {
+      if (!candidate.pageUrl && fallbackMeta.pageUrl) candidate.pageUrl = cleanText(fallbackMeta.pageUrl)
+      if (!candidate.title && fallbackMeta.title) candidate.title = cleanText(fallbackMeta.title)
+      if (!candidate.host && fallbackMeta.host) candidate.host = cleanText(fallbackMeta.host)
+      if (!candidate.firstSeen && fallbackMeta.firstSeen) candidate.firstSeen = fallbackMeta.firstSeen
+      if (!candidate.lastSeen && fallbackMeta.lastSeen) candidate.lastSeen = fallbackMeta.lastSeen
+      if (fallbackMeta.duplicateOf != null && candidate.duplicateOf == null) {
+        candidate.duplicateOf = fallbackMeta.duplicateOf
+      }
+      if (fallbackMeta.removedAt && !candidate.removedAt) candidate.removedAt = fallbackMeta.removedAt
+    }
+    let host = cleanText(candidate.host || '')
+    if (!host) host = cleanText(hostFromUrl(candidate.pageUrl) || hostFromUrl(candidate.src) || '')
+    if (isBannedHost(host)) {
+      return null
+    }
+    if (host) candidate.host = host
+    const image = upsertImage(imageMap, candidate)
+    if (!image) return null
+    if (fallbackMeta?.removedAt) {
+      image.removedAt = fallbackMeta.removedAt
+      image.isDeprecated = true
+    }
+    const product = upsertProduct(productMap, image.pageUrl || fallbackMeta?.pageUrl || '')
+    mergeProducts(product, image, {
+      firstSeen: image.firstSeen || fallbackMeta?.firstSeen || null,
+      lastSeen: image.lastSeen || fallbackMeta?.lastSeen || null,
+    })
+    return image
+  }
 
-  if (Array.isArray(legacyImages)) {
-    for (const entry of legacyImages) {
-      const image = upsertImage(imageMap, entry)
-      if (!image) continue
-      const product = upsertProduct(productMap, entry?.pageUrl || '')
-      mergeProducts(product, image, entry)
+  const datasetList = Array.isArray(datasetImages) ? datasetImages : []
+  for (const raw of datasetList) {
+    const id = cleanText(raw?.id || '')
+    if (!id) continue
+    const meta = metaById.get(id) || null
+    const created = ingestImageEntry({ ...raw, id }, meta)
+    if (created && meta) metaById.delete(id)
+  }
+
+  const legacyList = Array.isArray(legacyImages) ? legacyImages : []
+  for (const raw of legacyList) {
+    const id = cleanText(raw?.id || '')
+    if (!id) continue
+    const meta = metaById.get(id) || null
+    const created = ingestImageEntry({ ...raw, id }, meta)
+    if (created && meta) metaById.delete(id)
+  }
+
+  for (const [id, meta] of metaById.entries()) {
+    ingestImageEntry({ id, ...meta }, meta)
+  }
+
+  const datasetPagesList = Array.isArray(datasetPages) ? datasetPages : []
+  for (const page of datasetPagesList) {
+    const pageUrl = cleanText(page?.pageUrl || page?.url || '')
+    if (!pageUrl) continue
+    const product = upsertProduct(productMap, pageUrl)
+    if (!product.pageUrl) product.pageUrl = pageUrl
+    if (!product.title && page?.title) product.title = cleanText(page.title)
+    if (page?.firstSeen && (!product.firstSeen || page.firstSeen < product.firstSeen)) {
+      product.firstSeen = page.firstSeen
+    }
+    if (page?.lastSeen && (!product.lastSeen || page.lastSeen > product.lastSeen)) {
+      product.lastSeen = page.lastSeen
+    }
+    if (Array.isArray(page?.images)) {
+      for (const img of page.images) {
+        const image = ingestImageEntry({ ...img, pageUrl }, { pageUrl, host: page.host })
+        if (image) {
+          mergeProducts(product, image, {
+            firstSeen: image.firstSeen,
+            lastSeen: image.lastSeen,
+          })
+        }
+      }
     }
   }
 
   if (Array.isArray(legacyProducts)) {
     for (const legacy of legacyProducts) {
-      const product = upsertProduct(productMap, legacy?.pageUrl || '')
+      const pageUrl = cleanText(legacy?.pageUrl || '')
+      const product = upsertProduct(productMap, pageUrl)
       if (!product) continue
       if (!product.title && legacy?.title) product.title = cleanText(legacy.title)
       if (!product.firstSeen || (legacy?.firstSeen && legacy.firstSeen < product.firstSeen)) {
@@ -712,9 +820,13 @@ function buildAggregates({ itemsMeta, legacyImages, legacyProducts, summaryItems
       }
       if (Array.isArray(legacy?.images)) {
         for (const img of legacy.images) {
-          const normalized = upsertImage(imageMap, { ...img, pageUrl: legacy.pageUrl })
-          if (!normalized) continue
-          mergeProducts(product, normalized, img)
+          const image = ingestImageEntry({ ...img, pageUrl }, legacy)
+          if (image) {
+            mergeProducts(product, image, {
+              firstSeen: image.firstSeen,
+              lastSeen: image.lastSeen,
+            })
+          }
         }
       }
       if (legacy?.cache && !product.cache) product.cache = deepClean(legacy.cache)
@@ -749,43 +861,39 @@ function buildAggregates({ itemsMeta, legacyImages, legacyProducts, summaryItems
   const hostStats = (() => {
     const map = new Map()
     const ensure = (host) => {
-      if (!map.has(host)) {
-        map.set(host, {
-          host,
+      const key = host || ''
+      if (!map.has(key)) {
+        map.set(key, {
+          host: key,
           images: 0,
           uniqueImages: 0,
           duplicates: 0,
+          deprecated: 0,
           products: 0,
           pages: new Set(),
         })
       }
-      return map.get(host)
-    }
-    const hostOfUrl = (value) => {
-      try {
-        return new URL(value).host
-      } catch {
-        return ''
-      }
+      return map.get(key)
     }
     for (const image of allImages) {
-      const host = image.host || hostOfUrl(image.pageUrl)
+      const host = image.host || hostFromUrl(image.pageUrl)
       if (!host) continue
       const stats = ensure(host)
       stats.images++
       if (image.duplicateOf) stats.duplicates++
       else stats.uniqueImages++
+      if (image.isDeprecated) stats.deprecated++
       if (image.pageUrl) stats.pages.add(image.pageUrl)
     }
     for (const product of allProducts) {
-      const host = hostOfUrl(product.pageUrl)
+      const host = hostFromUrl(product.pageUrl)
       if (!host) continue
       const stats = ensure(host)
       stats.products++
       if (product.pageUrl) stats.pages.add(product.pageUrl)
     }
     for (const meta of Object.values(itemsMeta || {})) {
-      const host = hostOfUrl(meta?.pageUrl)
+      const host = hostFromUrl(meta?.pageUrl)
       if (!host) continue
       const stats = ensure(host)
       if (meta?.pageUrl) stats.pages.add(meta.pageUrl)
@@ -797,6 +905,7 @@ function buildAggregates({ itemsMeta, legacyImages, legacyProducts, summaryItems
         images: entry.images,
         uniqueImages: entry.uniqueImages,
         duplicates: entry.duplicates,
+        deprecated: entry.deprecated,
         products: entry.products,
         pages: entry.pages.size,
       }))
@@ -809,6 +918,8 @@ function buildAggregates({ itemsMeta, legacyImages, legacyProducts, summaryItems
     images: allImages.length,
     uniqueImages: allImages.filter((img) => !img.duplicateOf).length,
     duplicateImages: allImages.filter((img) => !!img.duplicateOf).length,
+    deprecatedImages: allImages.filter((img) => img.isDeprecated).length,
+    activeImages: allImages.filter((img) => !img.isDeprecated).length,
     products: allProducts.length,
     hosts: hostStats.length,
   }
@@ -841,7 +952,36 @@ function buildAggregates({ itemsMeta, legacyImages, legacyProducts, summaryItems
     }
   })()
 
-  return { allImages, allProducts, duplicates, hostStats, topProducts, totals, itemsMetrics }
+  return {
+    allImages,
+    allProducts,
+    duplicates,
+    hostStats,
+    topProducts,
+    totals,
+    itemsMetrics,
+  }
+}
+
+function buildDateBuckets(images, limit = 12) {
+  const counts = new Map()
+  for (const image of images || []) {
+    const stamp = (image?.lastSeen || image?.firstSeen || '').slice(0, 7)
+    if (!stamp) continue
+    counts.set(stamp, (counts.get(stamp) || 0) + 1)
+  }
+  const ordered = Array.from(counts.entries()).sort((a, b) => b[0].localeCompare(a[0]))
+  return ordered.slice(0, limit).map(([key, count]) => {
+    let label = key
+    const [year, month] = key.split('-')
+    if (year && month) {
+      try {
+        label = new Intl.DateTimeFormat('en', { month: 'short', year: 'numeric' })
+          .format(new Date(`${year}-${month}-01T00:00:00Z`))
+      } catch {}
+    }
+    return { key, label, count }
+  })
 }
 
 function paginateItems(items, size = 60) {
@@ -879,62 +1019,185 @@ function paginateItems(items, size = 60) {
   return { size: pageSize, totalItems, pageCount: pages.length, pages }
 }
 
-function buildPagination(sectionMap) {
-  const entries = Object.entries(sectionMap || {})
-  if (entries.length === 0) {
-    return { sections: {}, pages: [{ pageNumber: 0, pageCount: 1, sections: {} }] }
+const REPORT_BASE = '/lv/report/'
+
+function makeSectionHref(slug, pageIndex = 0) {
+  if (!slug) return REPORT_BASE
+  const normalized = slug.replace(/^\/+|\/+$/g, '')
+  if (!normalized) return REPORT_BASE
+  if (pageIndex <= 0) return `${REPORT_BASE}${normalized}/`
+  return `${REPORT_BASE}${normalized}/page/${pageIndex + 1}/`
+}
+
+function formatRangeLabel(from, to, total) {
+  if (!total) return '0 entries'
+  if (!from && !to) return `${total} entries`
+  if (from === to) return `#${from}`
+  return `${from || 0}–${to || from || 0}`
+}
+
+function annotateHosts(section) {
+  if (!section?.items?.length) {
+    section.hosts = []
+    return section
   }
-
-  const sectionMeta = {}
-  let globalPageCount = 0
-
-  for (const [key, config] of entries) {
-    const { title = key, items = [], size = 60 } = config || {}
-    const data = paginateItems(items, size)
-    sectionMeta[key] = { title, ...data }
-    globalPageCount = Math.max(globalPageCount, data.pageCount)
+  const hosts = new Set()
+  for (const item of section.items) {
+    if (item?.host) hosts.add(item.host)
   }
+  section.hosts = Array.from(hosts).sort((a, b) => a.localeCompare(b))
+  return section
+}
 
-  if (globalPageCount === 0) globalPageCount = 1
-
+function buildSectionIndex(sectionConfigs, { overviewSections = null } = {}) {
+  const sectionsMeta = {}
+  const navigation = []
   const pages = []
-  for (let pageNumber = 0; pageNumber < globalPageCount; pageNumber++) {
-    const sections = {}
-    for (const [key, meta] of Object.entries(sectionMeta)) {
-      const pageEntry = meta.pages[pageNumber] || meta.pages[meta.pages.length - 1] || {
-        pageNumber,
-        pageCount: meta.pageCount,
-        totalItems: meta.totalItems,
-        from: 0,
-        to: 0,
-        size: meta.size,
-        items: [],
-      }
-      sections[key] = {
-        title: meta.title,
-        pageNumber: pageEntry.pageNumber,
-        pageCount: pageEntry.pageCount,
-        totalItems: pageEntry.totalItems,
+  let globalIndex = 0
+
+  const pushPage = (page) => {
+    const record = { ...page, pageNumber: globalIndex++ }
+    pages.push(record)
+    return record
+  }
+
+  const overviewSection = overviewSections || {
+    key: 'overview',
+    title: 'Overview',
+    pageNumber: 0,
+    pageCount: 1,
+    totalItems: 0,
+    from: 0,
+    to: 0,
+    size: 0,
+    items: [],
+  }
+
+  const overviewPage = pushPage({
+    key: 'overview',
+    slug: '',
+    permalink: REPORT_BASE,
+    metaTitle: 'LV Image Atlas — Report',
+    label: 'Overview',
+    rangeLabel: 'Overview',
+    primarySection: 'overview',
+    sections: { overview: overviewSection },
+  })
+
+  navigation.push({
+    key: 'overview',
+    title: 'Overview',
+    slug: '',
+    totalItems: 0,
+    pageCount: 1,
+    pages: [{ index: 0, href: overviewPage.permalink, label: 'Overview', from: 0, to: 0 }],
+  })
+
+  for (const config of sectionConfigs || []) {
+    if (!config || typeof config !== 'object') continue
+    const {
+      key,
+      title = key || 'Section',
+      slug = key || '',
+      items = [],
+      size = 60,
+      enhanceSection = null,
+    } = config
+    if (!key) continue
+
+    const paginated = paginateItems(items, size)
+    sectionsMeta[key] = {
+      title,
+      slug,
+      size: paginated.size,
+      totalItems: paginated.totalItems,
+      pageCount: paginated.pageCount,
+    }
+
+    const navPages = []
+    paginated.pages.forEach((pageEntry, sectionIndex) => {
+      const permalink = makeSectionHref(slug, sectionIndex)
+      const rangeLabel = paginated.pageCount === 1
+        ? title
+        : formatRangeLabel(pageEntry.from, pageEntry.to, paginated.totalItems)
+      const section = {
+        key,
+        title,
+        slug,
+        pageNumber: sectionIndex,
+        pageCount: paginated.pageCount,
+        totalItems: paginated.totalItems,
         from: pageEntry.from,
         to: pageEntry.to,
-        size: pageEntry.size,
+        size: paginated.size,
         items: pageEntry.items,
       }
-    }
-    pages.push({ pageNumber, pageCount: globalPageCount, sections })
+      if (typeof enhanceSection === 'function') enhanceSection(section)
+      annotateHosts(section)
+
+      const displayTitle = paginated.pageCount === 1
+        ? title
+        : `${title} — ${formatRangeLabel(pageEntry.from, pageEntry.to, paginated.totalItems)}`
+
+      pushPage({
+        key,
+        slug,
+        permalink,
+        metaTitle: `LV Image Atlas — Report — ${displayTitle}`,
+        label: title,
+        rangeLabel,
+        primarySection: key,
+        sections: { [key]: section },
+      })
+
+      navPages.push({
+        index: sectionIndex,
+        href: permalink,
+        label: rangeLabel,
+        from: pageEntry.from,
+        to: pageEntry.to,
+      })
+    })
+
+    navigation.push({
+      key,
+      title,
+      slug,
+      totalItems: paginated.totalItems,
+      pageCount: paginated.pageCount,
+      pages: navPages,
+    })
   }
 
-  const sections = {}
-  for (const [key, meta] of Object.entries(sectionMeta)) {
-    sections[key] = {
-      title: meta.title,
-      size: meta.size,
-      totalItems: meta.totalItems,
-      pageCount: meta.pageCount,
+  const pageByHref = new Map(pages.map((page) => [page.permalink, page]))
+  for (const entry of navigation) {
+    entry.pages.forEach((navPage, index) => {
+      const target = pageByHref.get(navPage.href)
+      if (!target) return
+      target.sectionNav = {
+        index,
+        count: entry.pages.length,
+        previous: entry.pages[index - 1]?.href || null,
+        next: entry.pages[index + 1]?.href || null,
+        title: entry.title,
+      }
+    })
+  }
+
+  for (const entry of navigation) {
+    if (!entry?.key) continue
+    const meta = sectionsMeta[entry.key]
+    if (meta) {
+      meta.href = entry.pages[0]?.href || null
+      meta.labels = entry.pages.map((page) => ({
+        index: page.index,
+        label: page.label,
+        href: page.href,
+      }))
     }
   }
 
-  return { sections, pages }
+  return { sectionsMeta, navigation, pages }
 }
 
 function makeBreakdown(counts, meta, total) {
@@ -1296,23 +1559,108 @@ async function generateReport() {
     })
   }
 
+  const datasetPayload = datasetReport?.payload || {}
   const aggregates = buildAggregates({
     itemsMeta,
+    datasetImages: Array.isArray(datasetPayload.allImages) ? datasetPayload.allImages : [],
+    datasetPages: Array.isArray(datasetPayload.pages) ? datasetPayload.pages : [],
     legacyImages: Array.isArray(legacyAllImages) ? legacyAllImages : [],
     legacyProducts: Array.isArray(legacyAllProducts) ? legacyAllProducts : [],
     summaryItems: summary?.items || {},
   })
 
-  const { sections: paginationSections, pages } = buildPagination({
-    sitemaps: { title: 'Sitemaps', items: sitemaps, size: 60 },
-    docs: { title: 'Cached documents', items: docs, size: 40 },
-    robots: { title: 'Robots.txt', items: robots, size: 50 },
-    duplicates: { title: 'Duplicate images', items: aggregates.duplicates, size: 40 },
-    topProducts: { title: 'Top products', items: aggregates.topProducts, size: 30 },
-    hostStats: { title: 'Host statistics', items: aggregates.hostStats, size: 40 },
+  const imageById = new Map(aggregates.allImages.map((img) => [img.id, img]))
+
+  const freshnessSorted = [...aggregates.allImages].sort((a, b) => {
+    const keyA = (a?.lastSeen || a?.firstSeen || '')
+    const keyB = (b?.lastSeen || b?.firstSeen || '')
+    if (keyA === keyB) return a.id.localeCompare(b.id)
+    return keyB.localeCompare(keyA)
+  })
+  const latestImages = freshnessSorted.slice(0, 18)
+
+  const galleryPageSizes = [25, 50, 100, 200]
+  const galleryPagination = paginateItems(freshnessSorted, galleryPageSizes[0])
+  const galleryPreview = galleryPagination.pages[0] || {
+    pageNumber: 0,
+    pageCount: galleryPagination.pageCount,
+    from: 0,
+    to: 0,
+    totalItems: galleryPagination.totalItems,
+    items: [],
+  }
+  const galleryHosts = aggregates.hostStats.map((entry) => ({
+    host: entry.host,
+    images: entry.images,
+    duplicates: entry.duplicates,
+    deprecated: entry.deprecated,
+    pages: entry.pages,
+  }))
+  const highlightHosts = galleryHosts.slice(0, 10)
+  const dateBuckets = buildDateBuckets(freshnessSorted, 18)
+
+  const duplicateClusters = aggregates.duplicates.map((entry) => {
+    const canonical = entry.canonical || imageById.get(entry.canonicalId) || null
+    const members = [canonical, ...(entry.duplicates || [])].filter(Boolean)
+    const firstSeen = members
+      .map((item) => item.firstSeen)
+      .filter(Boolean)
+      .sort((a, b) => a.localeCompare(b))[0] || ''
+    const lastSeen = members
+      .map((item) => item.lastSeen)
+      .filter(Boolean)
+      .sort((a, b) => b.localeCompare(a))[0] || ''
+    return {
+      canonicalId: entry.canonicalId,
+      canonical,
+      duplicates: entry.duplicates || [],
+      members,
+      count: members.length,
+      firstSeen,
+      lastSeen,
+    }
   })
 
-  for (const [index, image] of aggregates.allImages.slice(0, 400).entries()) {
+  const duplicateSummary = {
+    clusters: duplicateClusters.length,
+    duplicateImages: aggregates.totals.duplicateImages,
+  }
+
+  const productEntries = aggregates.allProducts.map((product, index) => {
+    const images = Array.isArray(product.images) ? product.images : []
+    let unique = 0
+    let duplicateCount = 0
+    let deprecated = 0
+    for (const ref of images) {
+      const image = imageById.get(ref.id)
+      if (!image) continue
+      if (image.duplicateOf) duplicateCount++
+      else unique++
+      if (image.isDeprecated) deprecated++
+    }
+    return {
+      id: product.pageUrl || `page-${index + 1}`,
+      title: product.title || product.pageUrl || `Page ${index + 1}`,
+      pageUrl: product.pageUrl || '',
+      host: hostFromUrl(product.pageUrl),
+      totalImages: images.length,
+      uniqueImages: unique,
+      duplicateImages: duplicateCount,
+      deprecatedImages: deprecated,
+      firstSeen: product.firstSeen || '',
+      lastSeen: product.lastSeen || '',
+    }
+  })
+
+  const navigation = [
+    { key: 'overview', title: 'Overview', href: '#overview', totalItems: 0 },
+    { key: 'gallery', title: 'Gallery', href: '#gallery', totalItems: aggregates.totals.images },
+    { key: 'duplicates', title: 'Duplicates', href: '#duplicates', totalItems: duplicateClusters.length },
+    { key: 'pages', title: 'Pages', href: '#pages', totalItems: productEntries.length },
+    { key: 'robots', title: 'Robots', href: '#robots', totalItems: robots.length },
+  ]
+
+  for (const [index, image] of freshnessSorted.slice(0, 400).entries()) {
     pushSearchDoc(searchDocuments, {
       id: `image-${index}`,
       section: 'images',
@@ -1325,17 +1673,16 @@ async function generateReport() {
     })
   }
 
-  for (const duplicate of aggregates.duplicates.slice(0, 120)) {
+  for (const duplicate of duplicateClusters.slice(0, 120)) {
     pushSearchDoc(searchDocuments, {
       id: `duplicate-${duplicate.canonicalId}`,
       section: 'duplicates',
       title: duplicate.canonical?.title || duplicate.canonical?.basename || duplicate.canonicalId,
-      description: duplicate.canonical?.pageUrl || duplicate.canonical?.src
-        || duplicate.canonicalId,
+      description: duplicate.canonical?.pageUrl || duplicate.canonical?.src || duplicate.canonicalId,
       href: duplicate.canonical?.pageUrl || duplicate.canonical?.src || '',
-      badge: `×${duplicate.duplicates.length + 1}`,
+      badge: `×${duplicate.count}`,
       tags: ['duplicate'],
-      meta: { duplicateCount: duplicate.duplicates.length },
+      meta: { duplicateCount: duplicate.count - 1 },
     })
   }
 
@@ -1499,25 +1846,41 @@ async function generateReport() {
   return {
     baseHref,
     summary: summary || {},
+    navigation: deepClean(navigation),
+    totals: aggregates.totals,
+    dataset,
+    metrics: { robots: robotsMetrics, docs: docsMetrics, items: aggregates.itemsMetrics },
+    runsHistory: runsHistoryClean,
     sitemaps,
     docs,
     robots,
     sample: await sampleItems(ITEMS_DIR, 60),
-    metrics: { robots: robotsMetrics, docs: docsMetrics, items: aggregates.itemsMetrics },
-    allImages: aggregates.allImages,
-    allProducts: aggregates.allProducts,
-    duplicates: aggregates.duplicates,
-    hostStats: aggregates.hostStats,
-    topProducts: aggregates.topProducts,
-    totals: aggregates.totals,
-    dataset,
-    runsHistory: runsHistoryClean,
-    pagination: deepClean(paginationSections),
-    pages: pages.map((page) => ({
-      pageNumber: page.pageNumber,
-      pageCount: page.pageCount,
-      sections: deepClean(page.sections),
-    })),
+    gallery: {
+      pageSize: galleryPagination.size,
+      pageCount: galleryPagination.pageCount,
+      totalItems: galleryPagination.totalItems,
+      datasetHref: `${baseHref}lvreport.dataset.json`,
+      preview: deepClean(galleryPreview),
+      hosts: deepClean(galleryHosts),
+      dateBuckets: deepClean(dateBuckets),
+      pageSizes: galleryPageSizes,
+    },
+    highlights: {
+      latestImages: deepClean(latestImages),
+      hosts: deepClean(highlightHosts),
+      deprecatedCount: aggregates.totals.deprecatedImages,
+      duplicateCount: aggregates.totals.duplicateImages,
+    },
+    duplicates: {
+      summary: duplicateSummary,
+      clusters: deepClean(duplicateClusters),
+    },
+    pagesReport: {
+      total: productEntries.length,
+      items: deepClean(productEntries),
+    },
+    hostStats: deepClean(aggregates.hostStats),
+    topProducts: deepClean(aggregates.topProducts),
     search,
   }
 }
