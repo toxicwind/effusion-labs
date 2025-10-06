@@ -207,14 +207,17 @@ export default function(eleventyConfig) {
         return (tree) => {
           const sanitize = (value) => {
             if (typeof value !== 'string') return ''
-            return value.trim().replace(/^['"]+/, '').replace(/['"]+$/, '')
+            return value.trim().replace(/^["']+/, '').replace(/["']+$/, '')
           }
 
           const markRemote = (node, attr) => {
             const raw = node?.attrs?.[attr]
             if (typeof raw !== 'string') return node
             const normalized = sanitize(raw)
-            if (/^https?:\/\//i.test(normalized) || /^\/\//.test(normalized) || normalized.startsWith('data:')) {
+            if (
+              /^https?:\/\//i.test(normalized) || /^\/\//.test(normalized)
+              || normalized.startsWith('data:')
+            ) {
               node.attrs ||= {}
               node.attrs[attr] = normalized
               if (!('eleventy:ignore' in node.attrs)) {

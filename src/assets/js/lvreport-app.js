@@ -14,6 +14,7 @@ const sections = payload.page?.sections || {}
 const sectionKeys = Object.keys(sections)
 
 const fuseConfigs = {
+  images: { keys: ['title', 'basename', 'pageUrl', 'host'], threshold: 0.32, ignoreLocation: true },
   sitemaps: { keys: ['host', 'url', 'type', 'status'], threshold: 0.35, ignoreLocation: true },
   robots: {
     keys: ['host', 'statusLabel', 'httpLabel', 'preview'],
@@ -33,6 +34,8 @@ const fuseConfigs = {
 const fuseInstances = new Map()
 const filters = {}
 const originalSummary = {}
+const IMAGE_DEFAULT_PAGE_SIZE = 25
+let imageLazyLoader = null
 
 function initFuseEngines() {
   for (const key of sectionKeys) {
@@ -62,11 +65,327 @@ function updateSummary(section, total, visible) {
   }
 }
 
+function updateImageSummary({ total, filtered, visible, pageSize }) {
+  const el = document.querySelector('[data-image-pagination-summary]')
+  if (!el) return
+  ensureSummaryCache('images')
+  const base = originalSummary.images || el.textContent.trim()
+  const state = filters.images || {}
+  const details = []
+  details.push(`${visible} visible`)
+  if (filtered !== visible) details.push(`${filtered} match`)
+  details.push(`${total} on page`)
+  if (pageSize && pageSize !== IMAGE_DEFAULT_PAGE_SIZE) {
+    details.push(`page size ${pageSize}`)
+  }
+  if (state.host) {
+    details.push(`host ${state.host}`)
+  }
+  if (state.includeDeprecated) {
+    details.push('deprecated included')
+  }
+  if (state.mode && state.mode !== 'all') {
+    details.push(state.mode)
+  }
+  if (
+    !state.query
+    && !state.host
+    && !state.includeDeprecated
+    && (state.mode === 'all' || !state.mode)
+    && (pageSize === IMAGE_DEFAULT_PAGE_SIZE || !pageSize)
+    && filtered === total
+    && visible === total
+  ) {
+    el.textContent = base
+    return
+  }
+  el.textContent = `${base} • ${details.join(' • ')}`
+}
+
 function updateRowVisibility(section, visibleIds) {
   const rows = document.querySelectorAll(`[data-section-row="${section}"]`)
   rows.forEach(row => {
     const id = row.dataset.entryId
-    row.hidden = !visibleIds.has(id)
+    const isVisible = visibleIds.has(id)
+    row.hidden = !isVisible
+    if (section === 'images' && imageLazyLoader) {
+      imageLazyLoader.setActive(row, isVisible)
+    }
+  })
+}
+
+function renderImageActiveFilters() {
+  if (!sectionKeys.includes('images')) return
+  const container = document.querySelector('[data-image-active-filters]')
+  if (!container) return
+  const state = filters.images
+  if (!state) {
+    container.innerHTML = ''
+    return
+  }
+  const chips = []
+  const mode = state.mode || 'all'
+  if (mode !== 'all') {
+    chips.push({
+      label: `Mode: ${mode}`,
+      action: () => {
+        state.mode = 'all'
+        applyFilters('images')
+      },
+    })
+  }
+  if (state.host) {
+    chips.push({
+      label: `Host: ${state.host}`,
+      action: () => {
+        state.host = null
+        applyFilters('images')
+      },
+    })
+  }
+  if (state.includeDeprecated) {
+    chips.push({
+      label: 'Deprecated shown',
+      action: () => {
+        state.includeDeprecated = false
+        const toggle = document.querySelector('[data-image-include-deprecated]')
+        if (toggle) toggle.checked = false
+        applyFilters('images')
+      },
+    })
+  }
+  const query = (state.query || '').trim()
+  if (query) {
+    chips.push({
+      label: `Search: ${query}`,
+      action: () => {
+        state.query = ''
+        const input = document.querySelector('[data-search-input="images"]')
+        if (input) input.value = ''
+        applyFilters('images')
+      },
+    })
+  }
+  container.innerHTML = ''
+  if (!chips.length) {
+    container.classList.add('opacity-0')
+    container.setAttribute('aria-hidden', 'true')
+    return
+  }
+  container.classList.remove('opacity-0')
+  container.removeAttribute('aria-hidden')
+  for (const chip of chips) {
+    const button = document.createElement('button')
+    button.type = 'button'
+    button.className =
+      'btn btn-xs btn-outline rounded-full border-base-content/30 text-[11px] uppercase tracking-[0.2em] text-base-content/70 hover:border-secondary/60 hover:text-secondary'
+    button.textContent = chip.label
+    button.addEventListener('click', () => {
+      chip.action()
+      renderImageActiveFilters()
+      updateHostButtons()
+    })
+    container.append(button)
+  }
+  const clear = document.createElement('button')
+  clear.type = 'button'
+  clear.className =
+    'btn btn-xs btn-ghost text-[11px] uppercase tracking-[0.2em] text-base-content/60 hover:text-secondary'
+  clear.textContent = 'Clear filters'
+  clear.addEventListener('click', () => {
+    resetImageFilters()
+  })
+  container.append(clear)
+}
+
+function updateHostButtons() {
+  if (!sectionKeys.includes('images')) return
+  const state = filters.images
+  const activeHost = state?.host || ''
+  document.querySelectorAll('[data-image-host]').forEach(button => {
+    const hostValue = (button.dataset.imageHost || '').trim()
+    const isActive = activeHost && hostValue === activeHost
+    button.classList.toggle('btn-secondary', isActive)
+    button.classList.toggle('btn-ghost', !isActive)
+    button.classList.toggle('bg-secondary/20', isActive)
+    button.classList.toggle('border-secondary/60', isActive)
+    button.classList.toggle('text-secondary-content', isActive)
+    button.classList.toggle('text-base-content/70', !isActive)
+  })
+}
+
+function resetImageFilters() {
+  if (!sectionKeys.includes('images')) return
+  const state = filters.images
+  if (!state) return
+  state.mode = 'all'
+  state.host = null
+  state.includeDeprecated = false
+  state.pageSize = IMAGE_DEFAULT_PAGE_SIZE
+  state.query = ''
+  const searchInput = document.querySelector('[data-search-input="images"]')
+  if (searchInput) searchInput.value = ''
+  const deprecatedToggle = document.querySelector('[data-image-include-deprecated]')
+  if (deprecatedToggle) deprecatedToggle.checked = false
+  const pageSizeSelect = document.querySelector('[data-image-page-size]')
+  if (pageSizeSelect) pageSizeSelect.value = String(IMAGE_DEFAULT_PAGE_SIZE)
+  document.querySelectorAll('[data-image-mode]').forEach(button => {
+    const mode = button.dataset.imageMode || 'all'
+    const isActive = mode === 'all'
+    button.classList.toggle('btn-primary', isActive)
+    button.classList.toggle('btn-outline', !isActive)
+  })
+  applyFilters('images')
+  renderImageActiveFilters()
+  updateHostButtons()
+}
+
+function hookImageHostFilters() {
+  if (!sectionKeys.includes('images')) return
+  const state = filters.images
+  if (!state) return
+  document.querySelectorAll('[data-image-host]').forEach(button => {
+    const hostValue = (button.dataset.imageHost || '').trim()
+    if (!hostValue) return
+    button.addEventListener('click', () => {
+      state.host = state.host === hostValue ? null : hostValue
+      applyFilters('images')
+    })
+  })
+}
+
+function hookImagePageSize() {
+  if (!sectionKeys.includes('images')) return
+  const select = document.querySelector('[data-image-page-size]')
+  if (!select) return
+  const state = filters.images
+  if (!state) return
+  const initial = Number(state.pageSize) || IMAGE_DEFAULT_PAGE_SIZE
+  select.value = String(initial)
+  select.addEventListener('change', () => {
+    const value = Math.max(1, Number(select.value) || IMAGE_DEFAULT_PAGE_SIZE)
+    state.pageSize = value
+    applyFilters('images')
+  })
+}
+
+function createImageLazyLoader() {
+  const records = new Map()
+  const queue = []
+  let active = 0
+  const LIMIT = 6
+  const observer = new IntersectionObserver(entries => {
+    for (const entry of entries) {
+      const record = records.get(entry.target)
+      if (!record) continue
+      if (entry.isIntersecting) {
+        enqueue(record)
+      }
+    }
+  }, { rootMargin: '200px 0px' })
+
+  function register(card) {
+    if (!card || records.has(card)) return
+    const img = card.querySelector('[data-image-src]')
+    const fallback = card.querySelector('[data-image-fallback]')
+    records.set(card, {
+      card,
+      img,
+      fallback,
+      loading: false,
+      loaded: false,
+      hidden: card.hidden,
+    })
+    if (!card.hidden) {
+      observer.observe(card)
+    }
+  }
+
+  function setActive(card, shouldShow) {
+    if (!card) return
+    if (!records.has(card)) register(card)
+    const record = records.get(card)
+    if (!record) return
+    record.hidden = !shouldShow
+    if (record.hidden) {
+      observer.unobserve(card)
+    } else if (!record.loaded) {
+      observer.observe(card)
+    }
+  }
+
+  function enqueue(record) {
+    if (record.hidden || record.loading || record.loaded) return
+    if (!queue.includes(record)) queue.push(record)
+    flush()
+  }
+
+  function flush() {
+    while (active < LIMIT && queue.length) {
+      const record = queue.shift()
+      if (!record || record.hidden || record.loading || record.loaded) continue
+      start(record)
+    }
+  }
+
+  function start(record) {
+    const { img, fallback } = record
+    const src = img?.dataset?.imageSrc
+    if (!img || !src) {
+      record.loaded = true
+      return
+    }
+    record.loading = true
+    active += 1
+    const cleanup = () => {
+      record.loading = false
+      record.loaded = true
+      active = Math.max(0, active - 1)
+      flush()
+    }
+    img.addEventListener('load', () => {
+      img.classList.remove('hidden')
+      fallback?.classList.add('hidden')
+      cleanup()
+    }, { once: true })
+    img.addEventListener('error', () => {
+      img.classList.add('hidden')
+      fallback?.classList.remove('hidden')
+      cleanup()
+    }, { once: true })
+    requestAnimationFrame(() => {
+      img.src = src
+    })
+  }
+
+  function refresh() {
+    flush()
+  }
+
+  return { register, setActive, refresh }
+}
+
+function bootstrapImageLazyLoader() {
+  if (!sectionKeys.includes('images')) return
+  imageLazyLoader = createImageLazyLoader()
+  const cards = document.querySelectorAll('[data-image-card]')
+  cards.forEach(card => {
+    imageLazyLoader.register(card)
+  })
+  requestAnimationFrame(() => {
+    const state = filters.images || {}
+    const limit = Math.max(1, Number(state.pageSize) || IMAGE_DEFAULT_PAGE_SIZE)
+    let gridIndex = 0
+    cards.forEach(card => {
+      if (card.hasAttribute('data-image-fresh')) {
+        imageLazyLoader.setActive(card, !card.hidden)
+        return
+      }
+      const shouldShow = !card.hidden && gridIndex < limit
+      imageLazyLoader.setActive(card, shouldShow)
+      if (!card.hidden) gridIndex += 1
+    })
+    imageLazyLoader.refresh()
   })
 }
 
@@ -96,6 +415,37 @@ function applyFilters(section) {
   }
   if ((section === 'robots' || section === 'docs') && filterState.issuesOnly) {
     results = results.filter(item => item.isIssue)
+  }
+  if (section === 'images') {
+    const mode = filterState.mode || 'all'
+    if (mode === 'unique') {
+      results = results.filter(item => !item.duplicateOf)
+    } else if (mode === 'duplicates') {
+      results = results.filter(item => !!item.duplicateOf)
+    }
+    if (filterState.host) {
+      const hostMatch = filterState.host
+      results = results.filter(item => (item.host || '').toLowerCase() === hostMatch)
+    }
+    if (!filterState.includeDeprecated) {
+      results = results.filter(item => !item.isDeprecated)
+    }
+    const pageSize = Math.max(1, Number(filterState.pageSize) || IMAGE_DEFAULT_PAGE_SIZE)
+    const limited = results.slice(0, pageSize)
+    filters[section].last = results
+    filters[section].visible = limited
+    const visibleIds = new Set(limited.map(item => item.id))
+    updateRowVisibility(section, visibleIds)
+    updateImageSummary({
+      total: items.length,
+      filtered: results.length,
+      visible: limited.length,
+      pageSize,
+    })
+    renderImageActiveFilters()
+    updateHostButtons()
+    imageLazyLoader?.refresh()
+    return
   }
 
   filters[section].last = results
@@ -182,6 +532,41 @@ function hookTypeChips() {
   })
 }
 
+function hookImageModeButtons() {
+  if (!sectionKeys.includes('images')) return
+  const group = document.querySelector('[data-image-mode-group]')
+  if (!group) return
+  const buttons = Array.from(group.querySelectorAll('[data-image-mode]'))
+  buttons.forEach(button => {
+    button.addEventListener('click', () => {
+      const mode = button.dataset.imageMode || 'all'
+      const state = filters.images
+      if (!state) return
+      if (state.mode === mode) return
+      state.mode = mode
+      buttons.forEach(btn => {
+        const active = btn.dataset.imageMode === mode
+        btn.classList.toggle('btn-primary', active)
+        btn.classList.toggle('btn-outline', !active)
+      })
+      applyFilters('images')
+    })
+  })
+}
+
+function hookImageDeprecatedToggle() {
+  if (!sectionKeys.includes('images')) return
+  const toggle = document.querySelector('[data-image-include-deprecated]')
+  if (!toggle) return
+  const state = filters.images
+  if (!state) return
+  toggle.checked = !!state.includeDeprecated
+  toggle.addEventListener('change', event => {
+    state.includeDeprecated = event.target.checked
+    applyFilters('images')
+  })
+}
+
 function csvEscape(value = '') {
   const str = String(value ?? '')
   const needsQuote = /[\n",]/.test(str)
@@ -204,6 +589,37 @@ function downloadCsv(filename, rows) {
 }
 
 const exportSchemas = {
+  images: {
+    name: 'lv-images.csv',
+    headers: [
+      'ID',
+      'Image URL',
+      'Title',
+      'Basename',
+      'Host',
+      'Page URL',
+      'First Seen',
+      'Last Seen',
+      'Cluster Size',
+      'Duplicate Of',
+      'Deprecated',
+      'Removed At',
+    ],
+    map: item => [
+      item.id || '',
+      item.src || '',
+      item.title || '',
+      item.basename || '',
+      item.host || '',
+      item.pageUrl || '',
+      item.firstSeen || '',
+      item.lastSeen || '',
+      item.clusterSize ?? (item.duplicateOf ? 2 : 1),
+      item.duplicateOf || '',
+      item.isDeprecated ? 'yes' : 'no',
+      item.removedAt || '',
+    ],
+  },
   sitemaps: {
     name: 'lv-sitemaps.csv',
     headers: ['Host', 'Type', 'Images', 'Status', 'URL', 'Cached'],
@@ -299,7 +715,14 @@ function initialiseFilters() {
       issuesOnly: false,
       types: null,
       statuses: null,
+      mode: 'all',
+      includeDeprecated: false,
       last: items,
+    }
+    if (key === 'images') {
+      filters[key].pageSize = IMAGE_DEFAULT_PAGE_SIZE
+      filters[key].host = null
+      filters[key].visible = items.slice(0, IMAGE_DEFAULT_PAGE_SIZE)
     }
     if (key === 'sitemaps') {
       const allTypes = new Set(items.map(item => item.type || 'other'))
@@ -328,8 +751,15 @@ function initLocalFiltering() {
   hookIssueToggles()
   hookStatusChips()
   hookTypeChips()
+  hookImageModeButtons()
+  hookImageDeprecatedToggle()
+  hookImagePageSize()
+  hookImageHostFilters()
   hookExports()
   sectionKeys.forEach(applyFilters)
+  renderImageActiveFilters()
+  updateHostButtons()
+  bootstrapImageLazyLoader()
 }
 
 /* --------------------

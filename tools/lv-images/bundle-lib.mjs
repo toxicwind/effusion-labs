@@ -35,7 +35,8 @@ const summaryPath = path.join(lvDir, 'summary.json')
 
 const CANONICAL_BUNDLE = {
   commit: '499f568f2973f5eba7ae80e61d49720390137847',
-  url: 'https://raw.githubusercontent.com/toxicwind/effusion-labs/499f568f2973f5eba7ae80e61d49720390137847/src/content/projects/lv-images/generated/lv.bundle.tgz',
+  url:
+    'https://raw.githubusercontent.com/toxicwind/effusion-labs/499f568f2973f5eba7ae80e61d49720390137847/src/content/projects/lv-images/generated/lv.bundle.tgz',
   sha256: '49a2e64a98d0c4c39257b1ba211c0406c730894873892d82dcdfe2b9d18d1c93',
 }
 
@@ -85,7 +86,9 @@ async function updateProvenance({
   extra = {},
 } = {}) {
   const existing = (await loadProvenance()) || {}
-  const datasetRecord = datasetStatsValue ? buildDatasetRecord(datasetStatsValue) : existing.dataset || null
+  const datasetRecord = datasetStatsValue
+    ? buildDatasetRecord(datasetStatsValue)
+    : existing.dataset || null
   const archiveRecord = archiveStat ? buildArchiveRecord(archiveStat) : existing.archive || null
   const nowIso = new Date().toISOString()
 
