@@ -24,6 +24,7 @@
   ],
   "ignoreDependencies": [
     "@tailwindcss/forms",
-    "lru-cache"
+    "lru-cache",
+    "tar-stream"
   ]
 }

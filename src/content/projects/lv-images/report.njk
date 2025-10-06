@@ -50,13 +50,22 @@ metaDisable: true
 {% set datasetFlags = dataset.flags or [] %}
 {% set datasetCapture = dataset.capture or [] %}
 {% set summaryTotals = dataset.summaryTotals or summary.totals or {} %}
+{% set lazyPlaceholder = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==' %}
 <script type="application/json" id="lvreport-data">{{ clientPayloadJson | safe }}</script>
 <script type="module" src="/assets/js/lvreport-app.js"></script>
 {%
   set warningCopy = {
     "missing-archive": "Bundle archive missing — run <code>npm run lv-images:sync</code> before shipping.",
     "missing-manifest": "Bundle manifest missing — rebuild via <code>npm run lv-images:bundle</code>.",
-    "empty-dataset": "Dataset is empty — crawl with <code>npm run lv-images:sync</code> to populate generated/lv/. "
+    "empty-dataset": "Dataset is empty — crawl with <code>npm run lv-images:sync</code> to populate generated/lv/. ",
+    "bundle-lfs-pointer": "Bundle is a Git LFS pointer — run <code>git lfs pull</code> to download lv.bundle.tgz before building.",
+    "bundle-warning": "Bundle parse warning — inspect Eleventy build logs for detailed diagnostics.",
+    "summary-json-error": "summary.json failed to parse — KPI totals may be incomplete.",
+    "urlmeta-json-error": "cache/urlmeta.json failed to parse — cached document links may be missing.",
+    "items-meta-json-error": "items-meta.json failed to parse — image metadata may be incomplete.",
+    "all-images-json-error": "all-images.json failed to parse — using NDJSON samples as fallback.",
+    "all-products-json-error": "all-products.json failed to parse — top products panel may be degraded.",
+    "runs-history-json-error": "runs-history.json failed to parse — history timeline unavailable."
   }
 %}
 {%
@@ -731,6 +740,21 @@ metaDisable: true
     </p>
   {% endif %}
   {% if sitemaps | length %}
+    <div class="flex flex-wrap items-center gap-3 text-xs text-base-content/70">
+      <div class="join shadow-sm">
+        <button type="button" class="btn btn-xs btn-outline join-item" data-page-prev="sitemaps">Prev</button>
+        <span class="join-item px-3" data-page-status="sitemaps">Page 1 / 1</span>
+        <button type="button" class="btn btn-xs btn-outline join-item" data-page-next="sitemaps">Next</button>
+      </div>
+      <label class="flex items-center gap-2">
+        <span>Rows</span>
+        <select class="select select-bordered select-xs" data-page-size="sitemaps">
+          {% for size in [25, 50, 100, 200] %}
+            <option value="{{ size }}">{{ size }}</option>
+          {% endfor %}
+        </select>
+      </label>
+    </div>
     <div class="overflow-x-auto rounded-box border border-base-content/10 mt-4">
       <table class="table table-zebra table-sm" id="sitemapsTable">
         <thead>
@@ -872,6 +896,21 @@ metaDisable: true
     </p>
   {% endif %}
   {% if duplicates and (duplicates | length) %}
+    <div class="flex flex-wrap items-center gap-3 text-xs text-base-content/70">
+      <div class="join shadow-sm">
+        <button type="button" class="btn btn-xs btn-outline join-item" data-page-prev="duplicates">Prev</button>
+        <span class="join-item px-3" data-page-status="duplicates">Page 1 / 1</span>
+        <button type="button" class="btn btn-xs btn-outline join-item" data-page-next="duplicates">Next</button>
+      </div>
+      <label class="flex items-center gap-2">
+        <span>Rows</span>
+        <select class="select select-bordered select-xs" data-page-size="duplicates">
+          {% for size in [25, 50, 100, 200] %}
+            <option value="{{ size }}">{{ size }}</option>
+          {% endfor %}
+        </select>
+      </label>
+    </div>
     <div class="overflow-x-auto rounded-box border border-base-content/10 mt-4">
       <table class="table table-zebra table-xs" id="duplicatesTable">
         <thead>
@@ -888,11 +927,17 @@ metaDisable: true
           {% for d in duplicates %}
             <tr data-section-row="duplicates" data-entry-id="{{ d.id }}">
               <td>
-                <a href="{{ d.src }}" target="_blank" rel="noreferrer"><img
-                    src="{{ d.src }}"
+                <a href="{{ d.src }}" target="_blank" rel="noreferrer" class="group block">
+                  <img
+                    src="{{ lazyPlaceholder }}"
+                    data-lv-lazy-src="{{ d.src }}"
+                    loading="lazy"
+                    decoding="async"
+                    fetchpriority="low"
                     alt=""
-                    class="w-12 h-12 object-cover rounded-box border border-base-content/10"
-                  /></a>
+                    class="w-12 h-12 rounded-box border border-base-content/10 object-cover opacity-0 transition duration-500 group-hover:scale-[1.03]"
+                  />
+                </a>
               </td>
               <td>{{ d.count - 1 }}</td>
               <td>{{ d.basename or '' }}</td>
@@ -964,6 +1009,21 @@ metaDisable: true
     </p>
   {% endif %}
   {% if topProducts and (topProducts | length) %}
+    <div class="flex flex-wrap items-center gap-3 text-xs text-base-content/70">
+      <div class="join shadow-sm">
+        <button type="button" class="btn btn-xs btn-outline join-item" data-page-prev="topProducts">Prev</button>
+        <span class="join-item px-3" data-page-status="topProducts">Page 1 / 1</span>
+        <button type="button" class="btn btn-xs btn-outline join-item" data-page-next="topProducts">Next</button>
+      </div>
+      <label class="flex items-center gap-2">
+        <span>Rows</span>
+        <select class="select select-bordered select-xs" data-page-size="topProducts">
+          {% for size in [25, 50, 100, 200] %}
+            <option value="{{ size }}">{{ size }}</option>
+          {% endfor %}
+        </select>
+      </label>
+    </div>
     <div class="overflow-x-auto rounded-box border border-base-content/10 mt-4">
       <table class="table table-zebra table-xs" id="productsTable">
         <thead>
@@ -1046,6 +1106,21 @@ metaDisable: true
     </p>
   {% endif %}
   {% if hostStats and (hostStats | length) %}
+    <div class="flex flex-wrap items-center gap-3 text-xs text-base-content/70">
+      <div class="join shadow-sm">
+        <button type="button" class="btn btn-xs btn-outline join-item" data-page-prev="hosts">Prev</button>
+        <span class="join-item px-3" data-page-status="hosts">Page 1 / 1</span>
+        <button type="button" class="btn btn-xs btn-outline join-item" data-page-next="hosts">Next</button>
+      </div>
+      <label class="flex items-center gap-2">
+        <span>Rows</span>
+        <select class="select select-bordered select-xs" data-page-size="hosts">
+          {% for size in [25, 50, 100, 200] %}
+            <option value="{{ size }}">{{ size }}</option>
+          {% endfor %}
+        </select>
+      </label>
+    </div>
     <div class="overflow-x-auto rounded-box border border-base-content/10 mt-4">
       <table class="table table-zebra table-xs" id="hostsTable">
         <thead>
@@ -1061,7 +1136,13 @@ metaDisable: true
         <tbody>
           {% for h in hostStats %}
             <tr data-section-row="hosts" data-entry-id="{{ h.id }}">
-              <td>{{ h.host or '—' }}</td>
+              <td>
+                {% if h.host %}
+                  <a class="link link-primary" href="https://{{ h.host }}" target="_blank" rel="noreferrer">{{ h.host }}</a>
+                {% else %}
+                  —
+                {% endif %}
+              </td>
               <td>{{ h.images }}</td>
               <td>{{ h.uniqueImages }}</td>
               <td>{{ h.duplicates }}</td>
@@ -1139,6 +1220,21 @@ metaDisable: true
     </p>
   {% endif %}
   {% if robots | length %}
+    <div class="flex flex-wrap items-center gap-3 text-xs text-base-content/70">
+      <div class="join shadow-sm">
+        <button type="button" class="btn btn-xs btn-outline join-item" data-page-prev="robots">Prev</button>
+        <span class="join-item px-3" data-page-status="robots">Page 1 / 1</span>
+        <button type="button" class="btn btn-xs btn-outline join-item" data-page-next="robots">Next</button>
+      </div>
+      <label class="flex items-center gap-2">
+        <span>Rows</span>
+        <select class="select select-bordered select-xs" data-page-size="robots">
+          {% for size in [25, 50, 100, 200] %}
+            <option value="{{ size }}">{{ size }}</option>
+          {% endfor %}
+        </select>
+      </label>
+    </div>
     <div class="overflow-x-auto rounded-box border border-base-content/10 mt-4">
       <table class="table table-zebra table-xs" id="robotsTable">
         <thead>
@@ -1354,6 +1450,21 @@ metaDisable: true
     </p>
   {% endif %}
   {% if docs | length %}
+    <div class="flex flex-wrap items-center gap-3 text-xs text-base-content/70">
+      <div class="join shadow-sm">
+        <button type="button" class="btn btn-xs btn-outline join-item" data-page-prev="docs">Prev</button>
+        <span class="join-item px-3" data-page-status="docs">Page 1 / 1</span>
+        <button type="button" class="btn btn-xs btn-outline join-item" data-page-next="docs">Next</button>
+      </div>
+      <label class="flex items-center gap-2">
+        <span>Rows</span>
+        <select class="select select-bordered select-xs" data-page-size="docs">
+          {% for size in [25, 50, 100, 200] %}
+            <option value="{{ size }}">{{ size }}</option>
+          {% endfor %}
+        </select>
+      </label>
+    </div>
     <div class="overflow-x-auto rounded-box border border-base-content/10 mt-4">
       <table class="table table-zebra table-xs" id="docsTable">
         <thead>
@@ -1441,34 +1552,48 @@ metaDisable: true
   {% endif %}
 </section>
 
-{# Sample images grid #}
+{# Fresh arrivals gallery #}
 <section id="sample" class="space-y-4 mt-12">
-  <h2 class="text-3xl font-semibold">Image Sample</h2>
+  <h2 class="text-3xl font-semibold">Fresh arrivals</h2>
   <p class="text-sm opacity-70">
-    A quick glance at NDJSON shards. Click any tile to open the source.
+    Latest NDJSON shard previews — hover for quick context, click to launch the source.
   </p>
   {% if sample | length %}
-    <div class="grid gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 mt-4">
+    <div class="mt-4 grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-6" data-lv-gallery>
       {% for i in sample %}
         <a
-          class="relative block aspect-square overflow-hidden rounded-box border border-base-content/10 hover:shadow-md transition"
+          class="group relative block overflow-hidden rounded-2xl border border-base-content/10 bg-base-200/60 shadow-sm transition-all duration-500 hover:-translate-y-1 hover:border-secondary/60 hover:shadow-xl"
           href="{{ i.pageUrl or i.src }}"
           target="_blank"
-          title="{{ i.title or i.src }}"
+          title="{{ i.title or i.pageUrl or i.src }}"
           rel="noreferrer"
-          data-original-image="{{ i.src }}"
         >
+          <span class="absolute left-3 top-3 inline-flex items-center gap-1 rounded-full bg-base-100/85 px-2 py-1 text-[10px] font-semibold uppercase tracking-widest text-base-content/80 shadow-lg">
+            <span class="inline-block h-2 w-2 rounded-full bg-accent"></span>
+            Fresh
+          </span>
           <img
+            src="{{ lazyPlaceholder }}"
+            data-lv-lazy-src="{{ i.src }}"
             loading="lazy"
-            src="{{ i.src }}"
-            data-original-src="{{ i.src }}"
+            decoding="async"
+            fetchpriority="low"
             alt=""
-            class="h-full w-full object-cover"
+            class="h-full w-full object-cover opacity-0 transition duration-500 ease-out group-hover:scale-[1.05]"
           />
+          <div class="absolute inset-0 bg-gradient-to-t from-base-300/70 via-base-200/10 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100"></div>
+          <div class="absolute inset-x-3 bottom-3 space-y-1 rounded-xl bg-base-100/90 px-3 py-2 text-[11px] leading-tight text-base-content shadow-lg backdrop-blur">
+            <p class="font-semibold truncate">
+              {{ i.title or i.basename or i.pageUrl or i.src }}
+            </p>
+            {% set hostLabel = i.host or (i.pageUrl and i.pageUrl | replace('https://', '') | replace('http://', '')) %}
+            {% if hostLabel %}<p class="truncate opacity-70">{{ hostLabel }}</p>{% endif %}
+            <p class="truncate text-[10px] opacity-60">{{ i.pageUrl or i.src }}</p>
+          </div>
         </a>
       {% endfor %}
     </div>
-    <p class="text-sm opacity-70 mt-2">Showing {{ sample | length }} sample images.</p>
+    <p class="mt-2 text-sm opacity-70">Showing {{ sample | length }} arrivals from NDJSON shards.</p>
   {% else %}
     <div class="alert alert-info mt-4">
       <span>No image samples were found in <code>items/*.ndjson</code>.</span>

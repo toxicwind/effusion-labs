@@ -2,33 +2,23 @@
 
 import fs from 'node:fs/promises'
 import path from 'node:path'
-import { fileURLToPath, pathToFileURL } from 'node:url'
+import { fileURLToPath } from 'node:url'
 
 import MiniSearch from 'minisearch'
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url))
-const projectRoot = path.resolve(__dirname, '..', '..')
-const LV_BASE = path.resolve(__dirname, '../content/projects/lv-images/generated/lv')
-const GENERATED_DIR = path.resolve(LV_BASE, '..')
-const DATASET_ROOT_HREF = '/content/projects/lv-images/'
-const CACHE_DIR = path.join(LV_BASE, 'cache')
-const ROBOTS_DIR = path.join(CACHE_DIR, 'robots')
-const SITEMAPS_DIR = path.join(CACHE_DIR, 'sitemaps')
-const ITEMS_DIR = path.join(LV_BASE, 'items')
+import {
+  buildDocsArray,
+  collectRobotsEntries,
+  normalizeUrlmetaMap,
+  readBundleDataset,
+} from '../lib/lv/bundle-reader.mjs'
 
-const SUMMARY_JSON = path.join(LV_BASE, 'summary.json')
-const URLMETA_JSON = path.join(CACHE_DIR, 'urlmeta.json')
-const ITEMS_META_JSON = path.join(LV_BASE, 'items-meta.json')
-const ALL_IMAGES_JSON = path.join(LV_BASE, 'all-images.json')
-const ALL_PRODUCTS_JSON = path.join(LV_BASE, 'all-products.json')
-const RUNS_HISTORY_JSON = path.join(LV_BASE, 'runs-history.json')
-const BUNDLE_MANIFEST_JSON = path.join(GENERATED_DIR, 'lv.bundle.json')
-const BUNDLE_ARCHIVE_PATH = path.join(GENERATED_DIR, 'lv.bundle.tgz')
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
+const LV_BASE = path.resolve(__dirname, '../content/projects/lv-images/generated/lv')
+const DATASET_ROOT_HREF = '/content/projects/lv-images/'
 export const DATASET_REPORT_FILE = path.join(LV_BASE, 'lvreport.dataset.json')
 
-const bundleLibUrl = pathToFileURL(path.join(projectRoot, 'tools', 'lv-images', 'bundle-lib.mjs')).href
-
-let datasetReadyPromise = null
+const BANNED_HOSTS = new Set(['www.olyv.co.in', 'app.urlgeni.us'])
 
 const MINI_SEARCH_OPTIONS = {
   fields: ['title', 'description', 'tags'],
@@ -45,108 +35,6 @@ function toDatasetHref(relPath) {
   const normalized = String(relPath).trim().replace(/^\.\/?/, '').replace(/^\/+/, '')
   if (!normalized) return ''
   return `${DATASET_ROOT_HREF}${normalized}`
-}
-
-async function ensureDatasetReady() {
-  if (!datasetReadyPromise) {
-    datasetReadyPromise = (async () => {
-      try {
-        await fs.access(SUMMARY_JSON)
-        return false
-      } catch (error) {
-        if (error?.code !== 'ENOENT') throw error
-      }
-
-      const module = await import(bundleLibUrl)
-      if (typeof module?.hydrateDataset !== 'function') {
-        throw new Error('hydrateDataset export missing in bundle-lib.mjs')
-      }
-      const result = await module.hydrateDataset({ force: false, quiet: true })
-      if (!result?.hydrated) {
-        const reason = result?.reason || 'unknown'
-        throw new Error(`LV dataset hydrate failed (${reason})`)
-      }
-      return true
-    })().catch((error) => {
-      datasetReadyPromise = null
-      throw error
-    })
-  }
-  return datasetReadyPromise
-}
-
-async function loadJSON(p, fb) {
-  try {
-    return JSON.parse(await fs.readFile(p, 'utf8'))
-  } catch {
-    return fb
-  }
-}
-async function pathExists(p) {
-  try {
-    await fs.access(p)
-    return true
-  } catch {
-    return false
-  }
-}
-async function loadDecodedRobots(host) {
-  const decodedPath = path.join(ROBOTS_DIR, `${host}.json`)
-  try {
-    return JSON.parse(await fs.readFile(decodedPath, 'utf8'))
-  } catch {
-    return null
-  }
-}
-
-function buildReverseUrlmeta(urlmeta) {
-  const m = new Map()
-  for (const [u, v] of Object.entries(urlmeta || {})) {
-    if (v?.path) {
-      m.set(path.resolve(v.path), {
-        url: u,
-        status: v.status ?? '',
-        contentType: v.contentType || '',
-      })
-    }
-  }
-  return m
-}
-
-async function* walk(dir) {
-  try {
-    const entries = await fs.readdir(dir, { withFileTypes: true })
-    for (const e of entries) {
-      const p = path.join(dir, e.name)
-      if (e.isDirectory()) yield* walk(p)
-      else yield p
-    }
-  } catch {}
-}
-
-async function sampleItems(dir, max = 60) {
-  const out = []
-  try {
-    const names = (await fs.readdir(dir)).filter((n) => n.endsWith('.ndjson')).sort()
-    for (const name of names) {
-      const full = path.join(dir, name)
-      const fd = await fs.open(full, 'r')
-      const stat = await fd.stat()
-      const len = Math.min(stat.size, 1_500_000)
-      const buf = Buffer.alloc(len)
-      await fd.read(buf, 0, len, 0)
-      await fd.close()
-      const lines = buf.toString('utf8').split(/\r?\n/).filter(Boolean)
-      for (const line of lines) {
-        try {
-          const obj = JSON.parse(line)
-          if (obj?.src) out.push(obj)
-          if (out.length >= max) return out
-        } catch {}
-      }
-    }
-  } catch {}
-  return out
 }
 
 // Fallback minimal parser for robots.txt (used only if no decoded JSON exists)
@@ -212,6 +100,40 @@ function classifySitemap(url) {
   if (u.includes('sitemap-catalog')) return 'catalog'
   if (u.endsWith('/sitemap.xml') || /\/sitemap[^/]*\.xml(\.gz)?$/.test(u)) return 'index'
   return 'other'
+}
+
+function normalizeHost(value) {
+  if (value == null) return ''
+  const text = cleanText(value).toLowerCase()
+  if (!text) return ''
+  try {
+    const url = text.includes('://') ? new URL(text) : new URL(`https://${text}`)
+    return url.host.toLowerCase()
+  } catch {
+    const stripped = text.replace(/^https?:\/\//, '').split('/')[0]
+    return stripped.toLowerCase()
+  }
+}
+
+function stripWww(host) {
+  if (!host) return ''
+  return host.startsWith('www.') ? host.slice(4) : host
+}
+
+function isBannedHost(value) {
+  const host = normalizeHost(value)
+  if (!host) return false
+  if (BANNED_HOSTS.has(host)) return true
+  const bare = stripWww(host)
+  return BANNED_HOSTS.has(bare) || BANNED_HOSTS.has(`www.${bare}`)
+}
+
+function hostFromCandidates(...values) {
+  for (const value of values) {
+    const host = normalizeHost(value)
+    if (host) return host
+  }
+  return ''
 }
 
 const STATUS_NAME = {
@@ -546,7 +468,9 @@ function truncatePreview(text, max = 320) {
 function cleanText(value) {
   if (value == null) return ''
   let text = String(value).replace(/\s+/g, ' ').trim()
-  if ((text.startsWith('"') && text.endsWith('"')) || (text.startsWith("'") && text.endsWith("'"))) {
+  if (
+    (text.startsWith('"') && text.endsWith('"')) || (text.startsWith("'") && text.endsWith("'"))
+  ) {
     text = text.slice(1, -1).trim()
   }
   if (text.startsWith('"') && text.includes('://')) {
@@ -629,6 +553,12 @@ function upsertImage(map, entry) {
     updated.basename = cleanText(path.basename(withoutQuery))
   }
 
+  const host = hostFromCandidates(updated.host, updated.pageUrl, updated.src)
+  if (host && isBannedHost(host)) {
+    map.delete(id)
+    return null
+  }
+
   map.set(id, updated)
   return updated
 }
@@ -673,6 +603,7 @@ function buildAggregates({ itemsMeta, legacyImages, legacyProducts, summaryItems
     if (!metaEntries) return
     for (const [id, meta] of Object.entries(metaEntries)) {
       if (!meta || meta.removedAt) continue
+      if (isBannedHost(hostFromCandidates(meta.host, meta.pageUrl))) continue
       const image = upsertImage(imageMap, { ...meta, id })
       if (!image) continue
       const product = upsertProduct(productMap, meta.pageUrl || '')
@@ -684,6 +615,7 @@ function buildAggregates({ itemsMeta, legacyImages, legacyProducts, summaryItems
 
   if (Array.isArray(legacyImages)) {
     for (const entry of legacyImages) {
+      if (isBannedHost(hostFromCandidates(entry?.host, entry?.pageUrl, entry?.src))) continue
       const image = upsertImage(imageMap, entry)
       if (!image) continue
       const product = upsertProduct(productMap, entry?.pageUrl || '')
@@ -693,6 +625,7 @@ function buildAggregates({ itemsMeta, legacyImages, legacyProducts, summaryItems
 
   if (Array.isArray(legacyProducts)) {
     for (const legacy of legacyProducts) {
+      if (isBannedHost(hostFromCandidates(legacy?.pageUrl))) continue
       const product = upsertProduct(productMap, legacy?.pageUrl || '')
       if (!product) continue
       if (!product.title && legacy?.title) product.title = cleanText(legacy.title)
@@ -716,11 +649,16 @@ function buildAggregates({ itemsMeta, legacyImages, legacyProducts, summaryItems
     }
   }
 
-  const allImages = Array.from(imageMap.values()).sort((a, b) => a.id.localeCompare(b.id))
-  const allProducts = Array.from(productMap.values()).map((product) => ({
+  let allImages = Array.from(imageMap.values()).sort((a, b) => a.id.localeCompare(b.id))
+  allImages = allImages.filter((image) =>
+    !isBannedHost(hostFromCandidates(image.host, image.pageUrl, image.src))
+  )
+
+  let allProducts = Array.from(productMap.values()).map((product) => ({
     ...product,
     images: product.images.sort((a, b) => a.id.localeCompare(b.id)),
   })).sort((a, b) => (b.images.length - a.images.length) || a.pageUrl.localeCompare(b.pageUrl))
+  allProducts = allProducts.filter((product) => !isBannedHost(hostFromCandidates(product.pageUrl)))
 
   const duplicatesMap = new Map()
   for (const image of allImages) {
@@ -753,16 +691,9 @@ function buildAggregates({ itemsMeta, legacyImages, legacyProducts, summaryItems
       }
       return map.get(host)
     }
-    const hostOfUrl = (value) => {
-      try {
-        return new URL(value).host
-      } catch {
-        return ''
-      }
-    }
     for (const image of allImages) {
-      const host = image.host || hostOfUrl(image.pageUrl)
-      if (!host) continue
+      const host = hostFromCandidates(image.host, image.pageUrl, image.src)
+      if (!host || isBannedHost(host)) continue
       const stats = ensure(host)
       stats.images++
       if (image.duplicateOf) stats.duplicates++
@@ -770,15 +701,15 @@ function buildAggregates({ itemsMeta, legacyImages, legacyProducts, summaryItems
       if (image.pageUrl) stats.pages.add(image.pageUrl)
     }
     for (const product of allProducts) {
-      const host = hostOfUrl(product.pageUrl)
-      if (!host) continue
+      const host = hostFromCandidates(product.pageUrl)
+      if (!host || isBannedHost(host)) continue
       const stats = ensure(host)
       stats.products++
       if (product.pageUrl) stats.pages.add(product.pageUrl)
     }
     for (const meta of Object.values(itemsMeta || {})) {
-      const host = hostOfUrl(meta?.pageUrl)
-      if (!host) continue
+      const host = hostFromCandidates(meta?.pageUrl)
+      if (!host || isBannedHost(host)) continue
       const stats = ensure(host)
       if (meta?.pageUrl) stats.pages.add(meta.pageUrl)
     }
@@ -1037,123 +968,152 @@ function classifyDocContent(filePath, previewText) {
 }
 
 async function generateReport() {
-  await ensureDatasetReady()
-  const [
-    summary,
-    urlmeta,
-    itemsMeta,
-    legacyAllImages,
-    legacyAllProducts,
-    runsHistory,
-    bundleManifest,
-    datasetReport,
-  ] = await Promise.all([
-    loadJSON(SUMMARY_JSON, {}),
-    loadJSON(URLMETA_JSON, {}),
-    loadJSON(ITEMS_META_JSON, {}),
-    loadJSON(ALL_IMAGES_JSON, []),
-    loadJSON(ALL_PRODUCTS_JSON, []),
-    loadJSON(RUNS_HISTORY_JSON, []),
-    loadJSON(BUNDLE_MANIFEST_JSON, null),
-    loadJSON(DATASET_REPORT_FILE, null),
-  ])
-
   const baseHref = '/content/projects/lv-images/generated/lv/'
-  const rev = buildReverseUrlmeta(urlmeta)
-  const searchDocuments = []
+  const bundle = await readBundleDataset()
 
-  // Sitemaps table rows (summary.sitemaps now contains {host,url,itemCount})
+  if (!bundle.ok || !bundle.dataset) {
+    const reason = bundle.reason || 'missing-bundle'
+    const warningCode = reason === 'lfs-pointer' ? 'bundle-lfs-pointer' : 'missing-archive'
+    const fallbackDataset = {
+      manifest: null,
+      manifestHref: '',
+      archiveHref: '/content/projects/lv-images/generated/lv.bundle.tgz',
+      archiveExists: false,
+      totals: {},
+      flags: [],
+      capture: [],
+      summaryTotals: null,
+      bundleLabel: null,
+      runMode: null,
+      warnings: [warningCode],
+      history: null,
+      ndjson: { count: 0, totalBytes: 0, latestShard: null, shards: [] },
+    }
+    return {
+      __lvreportFallbackReason: reason,
+      baseHref,
+      summary: {},
+      sitemaps: [],
+      docs: [],
+      robots: [],
+      sample: [],
+      metrics: {
+        robots: { total: 0, issues: 0, breakdown: [] },
+        docs: { total: 0, issues: 0, breakdown: [] },
+        items: {
+          total: 0,
+          active: 0,
+          duplicates: 0,
+          removed: 0,
+          added: null,
+          purged: null,
+          processed: null,
+          discovered: null,
+          newItems: null,
+          duplicatesThisRun: null,
+        },
+      },
+      allImages: [],
+      allProducts: [],
+      duplicates: [],
+      hostStats: [],
+      topProducts: [],
+      totals: {},
+      dataset: fallbackDataset,
+      runsHistory: [],
+      pagination: {},
+      pages: [{ pageNumber: 0, pageCount: 1, sections: {} }],
+      search: {
+        documents: [],
+        index: null,
+        options: MINI_SEARCH_OPTIONS,
+        datasetHref: `${baseHref}lvreport.dataset.json`,
+        documentCount: 0,
+        error: reason,
+      },
+    }
+  }
+
+  const summary = bundle.dataset.summary || {}
+  const urlmeta = bundle.dataset.urlmeta || {}
+  const itemsMeta = bundle.dataset.itemsMeta || {}
+  const legacyAllImages = Array.isArray(bundle.dataset.allImages) ? bundle.dataset.allImages : []
+  const legacyAllProducts = Array.isArray(bundle.dataset.allProducts)
+    ? bundle.dataset.allProducts
+    : []
+  const runsHistory = Array.isArray(bundle.dataset.runsHistory) ? bundle.dataset.runsHistory : []
+
+  const searchDocuments = []
+  const rev = normalizeUrlmetaMap(urlmeta)
+
   const sitemapsLog = Array.isArray(summary?.sitemaps) ? summary.sitemaps : []
   const sitemaps = sitemapsLog.map((s, index) => {
     const url = cleanText(s.url || '')
     const um = urlmeta[url] || {}
-    const savedPath = um.path
-      ? path.relative(LV_BASE, path.resolve(um.path)).split(path.sep).join('/')
-      : ''
+    const savedPath = um.path ? um.path.replace(/\\/g, '/').replace(/^.*generated\/lv\//, '') : ''
     const id = `sitemap-${index}`
+    const type = classifySitemap(url)
     pushSearchDoc(searchDocuments, {
       id,
       section: 'sitemaps',
       title: cleanText(s.host || url || 'Sitemap'),
       description: url,
       href: savedPath ? `${baseHref}${savedPath}` : url,
-      badge: classifySitemap(url),
-      tags: ['sitemap', classifySitemap(url)].filter(Boolean),
+      badge: type,
+      tags: ['sitemap', type].filter(Boolean),
       meta: { status: um.status ?? '', itemCount: s.itemCount || 0 },
     })
     return {
       id,
       host: s.host || '',
       url,
-      type: classifySitemap(url),
+      type,
       imageCount: s.itemCount || 0,
       status: um.status ?? '',
       savedPath,
     }
   })
 
-  // All cached XML/TXT docs under cache/sitemaps/
   const docs = []
   const docCounts = Object.create(null)
   let docIndex = 0
-  for await (const absPath of walk(SITEMAPS_DIR)) {
-    if (!/\.(xml|txt|gz)$/i.test(absPath)) continue
-    const meta = rev.get(path.resolve(absPath)) || {}
-    const url = meta.url || ''
-    const host = (() => {
-      try {
-        return new URL(url).host
-      } catch {
-        return path.basename(path.dirname(absPath))
-      }
-    })()
-    const relPath = path.relative(LV_BASE, path.resolve(absPath)).split(path.sep).join('/')
-    const kind = /\.xml(\.gz)?$/i.test(absPath) ? 'xml' : /\.txt$/i.test(absPath) ? 'txt' : 'bin'
-
-    let sizeBytes = 0, previewSource = ''
-    if (relPath.endsWith('.gz')) {
-      try {
-        const stat = await fs.stat(absPath)
-        sizeBytes = stat.size
-      } catch {}
-    } else {
-      try {
-        const fh = await fs.open(absPath, 'r')
-        const stat = await fh.stat()
-        const len = Math.min(stat.size, 4096)
-        const buf = Buffer.alloc(len)
-        await fh.read(buf, 0, len, 0)
-        await fh.close()
-        previewSource = buf.toString('utf8')
-        sizeBytes = stat.size
-      } catch {
+  const docsSource = buildDocsArray(bundle.dataset.docs, rev)
+  for (const doc of docsSource) {
+    const relPath = doc.relPath || ''
+    const kind = /\.xml(\.gz)?$/i.test(relPath)
+      ? 'xml'
+      : /\.txt$/i.test(relPath)
+      ? 'txt'
+      : /\.gz$/i.test(relPath)
+      ? 'gz'
+      : 'doc'
+    const host = doc.host
+      || (() => {
         try {
-          const statFallback = await fs.stat(absPath)
-          sizeBytes = statFallback.size
-        } catch {}
-      }
-    }
-
-    const classification = classifyDocContent(relPath, previewSource)
+          return new URL(doc.url || '').host
+        } catch {
+          const parts = relPath.split('/')
+          return parts.length > 1 ? parts[1] : ''
+        }
+      })()
+    const classification = classifyDocContent(relPath, doc.preview)
     docCounts[classification.category] = (docCounts[classification.category] || 0) + 1
-
     const preview = ((t, m = 360) => {
       const trimmed = (t || '').trim()
       if (trimmed.length <= m) return trimmed
       return `${trimmed.slice(0, m).trim()}…`
-    })(previewSource, 360)
-
+    })(doc.preview, 360)
     const record = {
       id: `doc-${docIndex++}`,
       host,
       kind,
-      url,
-      status: meta.status ?? '',
-      contentType: meta.contentType || '',
+      url: doc.url || '',
+      status: doc.status ?? '',
+      contentType: doc.contentType || '',
       savedPath: relPath,
-      fileName: path.basename(absPath),
-      sizeBytes,
-      sizeLabel: formatBytes(sizeBytes),
+      fileName: relPath ? path.posix.basename(relPath) : '',
+      sizeBytes: doc.sizeBytes || 0,
+      sizeLabel: formatBytes(doc.sizeBytes || 0),
       statusCategory: classification.category,
       statusLabel: classification.label,
       statusTone: classification.tone,
@@ -1178,93 +1138,46 @@ async function generateReport() {
   }
   docs.sort((a, b) => a.host.localeCompare(b.host) || a.savedPath.localeCompare(b.savedPath))
 
-  // Robots explorer: union of hosts we know about
+  const robotsSources = collectRobotsEntries(bundle.dataset)
+  const robotsMap = new Map(robotsSources.map((entry) => [entry.host, entry]))
   const robotsHosts = new Set()
-  try {
-    const files = await fs.readdir(ROBOTS_DIR)
-    for (const n of files) if (n.endsWith('.txt')) robotsHosts.add(n.replace(/\.txt$/i, ''))
-  } catch {}
-  for (const r of sitemaps) robotsHosts.add(r.host)
-  for (const d of docs) robotsHosts.add(d.host)
-  const allHosts = Array.from(robotsHosts).filter(Boolean).sort()
+  for (const entry of robotsSources) if (entry.host) robotsHosts.add(entry.host)
+  for (const sitemap of sitemaps) if (sitemap.host) robotsHosts.add(sitemap.host)
+  for (const doc of docs) if (doc.host) robotsHosts.add(doc.host)
+  const allHosts = Array.from(robotsHosts).sort()
 
   const robots = []
   const robotsCounts = Object.create(null)
   let robotIndex = 0
   for (const host of allHosts) {
-    const robotsPath = path.join(ROBOTS_DIR, `${host}.txt`)
-    let rawText = null
-    try {
-      rawText = await fs.readFile(robotsPath, 'utf8')
-    } catch {}
-
-    const decoded = await loadDecodedRobots(host)
-
-    let parsed
-    if (decoded) {
-      const allow = [], disallow = [], noindex = []
-      const sitemaps = decoded.summary?.sitemaps || []
-      let crawlDelay = decoded.summary?.crawlDelay ?? null
-
-      for (const g of decoded.groups || []) {
-        for (const r of g.rules || []) {
-          if (r.type === 'allow') allow.push(r.value)
-          else if (r.type === 'disallow') disallow.push(r.value)
-          else if (r.type === 'noindex') noindex.push(r.value)
-          else if (r.type === 'crawl-delay') {
-            const n = Number(r.value)
-            if (!Number.isNaN(n)) crawlDelay = crawlDelay == null ? n : Math.min(crawlDelay, n)
-          }
-        }
+    const source = robotsMap.get(host) || { text: '', relPath: '', decoded: null, sizeBytes: 0 }
+    const rawText = source.text || ''
+    const decoded = source.decoded || null
+    const parsed = decoded?.parsed
+      ? decoded.parsed
+      : rawText
+      ? parseRobots(rawText)
+      : {
+        groups: [],
+        merged: { allow: [], disallow: [], noindex: [], crawlDelay: null, sitemaps: [] },
+        other: {},
+        hasRules: false,
       }
-
-      // unknown directives
-      const other = {}
-      for (const line of decoded.lines || []) {
-        if (line.type !== 'directive') continue
-        const k = (line.directive || '').toLowerCase()
-        if (
-          !k || ['user-agent', 'allow', 'disallow', 'noindex', 'sitemap', 'crawl-delay'].includes(k)
-        ) continue
-        ;(other[k] ||= []).push(line.value || '')
-      }
-
-      parsed = {
-        groups: decoded.groups || [],
-        merged: { allow, disallow, noindex, crawlDelay, sitemaps },
-        other,
-        hasRules: (allow.length + disallow.length + noindex.length + sitemaps.length) > 0,
-      }
-    } else {
-      parsed = rawText
-        ? parseRobots(rawText)
-        : {
-          groups: [],
-          merged: { allow: [], disallow: [], noindex: [], crawlDelay: null, sitemaps: [] },
-          other: {},
-          hasRules: false,
-        }
-    }
-
     const classification = classifyRobotsResponse(rawText || '', !!rawText)
-
     robotsCounts[classification.category] = (robotsCounts[classification.category] || 0) + 1
-
-    const sizeBytes = rawText ? Buffer.byteLength(rawText, 'utf8') : 0
+    const sizeBytes = source.sizeBytes || (rawText ? Buffer.byteLength(rawText, 'utf8') : 0)
     const record = {
       id: `robot-${robotIndex++}`,
       host,
       hasCached: !!rawText,
-      robotsTxtPath: rawText ? path.relative(LV_BASE, robotsPath).split(path.sep).join('/') : '',
-      rawText: rawText || '',
-      linesTotal: decoded
-        ? (decoded.lines?.length || 0)
-        : (rawText ? rawText.split(/\r?\n/).length : 0),
+      robotsTxtPath: source.relPath || '',
+      rawText,
+      linesTotal: decoded?.lines?.length || (rawText ? rawText.split(/\r?\n/).length : 0),
       parsed,
       blacklisted: !!(summary?.blacklist?.[host]),
       blacklistUntil: summary?.blacklist?.[host]?.untilISO || '',
       blacklistReason: summary?.blacklist?.[host]?.reason || '',
-      fileName: rawText ? path.basename(robotsPath) : '',
+      fileName: source.relPath ? path.posix.basename(source.relPath) : '',
       sizeBytes,
       sizeLabel: formatBytes(sizeBytes),
       statusCategory: classification.category,
@@ -1290,8 +1203,8 @@ async function generateReport() {
 
   const aggregates = buildAggregates({
     itemsMeta,
-    legacyImages: Array.isArray(legacyAllImages) ? legacyAllImages : [],
-    legacyProducts: Array.isArray(legacyAllProducts) ? legacyAllProducts : [],
+    legacyImages: legacyAllImages,
+    legacyProducts: legacyAllProducts,
     summaryItems: summary?.items || {},
   })
 
@@ -1305,6 +1218,7 @@ async function generateReport() {
   })
 
   for (const [index, image] of aggregates.allImages.slice(0, 400).entries()) {
+    if (isBannedHost(hostFromCandidates(image.host, image.pageUrl, image.src))) continue
     pushSearchDoc(searchDocuments, {
       id: `image-${index}`,
       section: 'images',
@@ -1318,6 +1232,12 @@ async function generateReport() {
   }
 
   for (const duplicate of aggregates.duplicates.slice(0, 120)) {
+    const canonicalHost = hostFromCandidates(
+      duplicate.canonical?.host,
+      duplicate.canonical?.pageUrl,
+      duplicate.canonical?.src,
+    )
+    if (isBannedHost(canonicalHost)) continue
     pushSearchDoc(searchDocuments, {
       id: `duplicate-${duplicate.canonicalId}`,
       section: 'duplicates',
@@ -1332,6 +1252,7 @@ async function generateReport() {
   }
 
   for (const [index, product] of aggregates.topProducts.entries()) {
+    if (isBannedHost(hostFromCandidates(product.pageUrl))) continue
     pushSearchDoc(searchDocuments, {
       id: `product-${index}`,
       section: 'products',
@@ -1388,17 +1309,48 @@ async function generateReport() {
       docs.length,
     ),
   }
-  docsMetrics.issuePct = docsMetrics.total
-    ? (docsMetrics.issues / docsMetrics.total) * 100
-    : 0
+  docsMetrics.issuePct = docsMetrics.total ? (docsMetrics.issues / docsMetrics.total) * 100 : 0
 
-  const bundleExists = await pathExists(BUNDLE_ARCHIVE_PATH)
-  const manifestEnriched = enrichManifest(bundleManifest)
+  const ndjsonMeta = bundle.stats?.ndjson
+    || { count: 0, totalBytes: 0, latestShard: null, shards: [] }
+  const datasetManifest = enrichManifest({
+    archive: {
+      size: bundle.archive?.sizeBytes ?? null,
+      sizeBytes: bundle.archive?.sizeBytes ?? null,
+      sizeLabel: bundle.archive?.sizeBytes != null ? formatBytes(bundle.archive.sizeBytes) : null,
+      sha256: bundle.archive?.sha256 || null,
+      shaPreview: bundle.archive?.sha256 ? String(bundle.archive.sha256).slice(0, 16) : null,
+    },
+    dataset: {
+      fileCount: bundle.stats?.fileCount ?? null,
+      totalBytes: bundle.stats?.totalBytes ?? null,
+      sizeLabel: bundle.stats?.totalBytes != null ? formatBytes(bundle.stats.totalBytes) : null,
+      locales: bundle.stats?.locales || [],
+      ndjson: {
+        count: ndjsonMeta.count,
+        totalBytes: ndjsonMeta.totalBytes,
+        latestShard: ndjsonMeta.latestShard,
+        shards: ndjsonMeta.shards,
+        sizeLabel: formatBytes(ndjsonMeta.totalBytes || 0),
+      },
+    },
+  })
+
+  const datasetNdjson = {
+    count: ndjsonMeta.count,
+    totalBytes: ndjsonMeta.totalBytes,
+    sizeLabel: formatBytes(ndjsonMeta.totalBytes || 0),
+    latestShard: ndjsonMeta.latestShard,
+    shards: ndjsonMeta.shards,
+  }
+
+  const datasetWarnings = (bundle.warnings || []).map((warning) => warning.code || 'bundle-warning')
+
   const dataset = {
-    manifest: manifestEnriched,
-    manifestHref: '/content/projects/lv-images/generated/lv.bundle.json',
+    manifest: datasetManifest,
+    manifestHref: '',
     archiveHref: '/content/projects/lv-images/generated/lv.bundle.tgz',
-    archiveExists: bundleExists,
+    archiveExists: true,
     totals: {
       images: aggregates.totals.images,
       uniqueImages: aggregates.totals.uniqueImages,
@@ -1416,25 +1368,18 @@ async function generateReport() {
     summaryTotals: summary?.totals ? deepClean(summary.totals) : null,
     bundleLabel: summary?.bundleLabel || null,
     runMode: summary?.runMode || null,
+    warnings: datasetWarnings,
+    history: null,
+    ndjson: datasetNdjson,
   }
-  if (manifestEnriched?.history) {
-    dataset.history = manifestEnriched.history
+  dataset.cache = {
+    pages: { totalSnapshots: summary?.totals?.pageSnapshots ?? null },
+    images: { totalSnapshots: summary?.totals?.imageSnapshots ?? null },
+    robotsFiles: robots.length,
+    sitemapFiles: sitemaps.length,
+    urlmetaEntries: Object.keys(urlmeta || {}).length,
   }
-  if (manifestEnriched?.dataset?.fileCount != null) {
-    dataset.totals.fileCount = manifestEnriched.dataset.fileCount
-  }
-  if (manifestEnriched?.dataset?.totalBytes != null) {
-    dataset.totals.totalBytes = manifestEnriched.dataset.totalBytes
-  }
-  if (manifestEnriched?.dataset?.sizeLabel) {
-    dataset.totals.sizeLabel = manifestEnriched.dataset.sizeLabel
-  }
-  if (manifestEnriched?.archive?.sizeLabel) {
-    dataset.totals.bundleSizeLabel = manifestEnriched.archive.sizeLabel
-  }
-  if (manifestEnriched?.archive?.shaPreview) {
-    dataset.totals.shaPreview = manifestEnriched.archive.shaPreview
-  }
+
   if (summary?.totals) {
     if (summary.totals.pages != null) dataset.totals.pages = summary.totals.pages
     if (summary.totals.sitemapsProcessed != null) {
@@ -1449,13 +1394,8 @@ async function generateReport() {
       dataset.totals.imageSnapshots = summary.totals.imageSnapshots
     }
   }
-  if (datasetReport?.payload?.totals) {
-    dataset.totals = { ...dataset.totals, ...deepClean(datasetReport.payload.totals) }
-  }
 
-  const runsHistoryClean = Array.isArray(runsHistory)
-    ? runsHistory.map((entry) => deepClean(entry)).slice(0, 10)
-    : []
+  const runsHistoryClean = runsHistory.map((entry) => deepClean(entry)).slice(0, 10)
 
   let searchIndex = null
   let searchError = null
@@ -1476,13 +1416,22 @@ async function generateReport() {
     error: searchError,
   }
 
+  const rawSamples = Array.isArray(bundle.dataset?.samples) ? bundle.dataset.samples : []
+  const sampleItems = rawSamples
+    .filter((item) => !isBannedHost(hostFromCandidates(item?.host, item?.pageUrl, item?.src)))
+    .map((item) => ({
+      ...item,
+      host: item?.host || hostFromCandidates(item?.pageUrl, item?.src) || '',
+    }))
+    .slice(0, 120)
+
   return {
     baseHref,
     summary: summary || {},
     sitemaps,
     docs,
     robots,
-    sample: await sampleItems(ITEMS_DIR, 60),
+    sample: sampleItems,
     metrics: { robots: robotsMetrics, docs: docsMetrics, items: aggregates.itemsMetrics },
     allImages: aggregates.allImages,
     allProducts: aggregates.allProducts,

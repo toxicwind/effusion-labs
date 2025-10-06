@@ -13,6 +13,10 @@ const baseHref = payload.baseHref || ''
 const sections = payload.page?.sections || {}
 const sectionKeys = Object.keys(sections)
 
+const DEFAULT_PAGE_SIZE = 25
+const PAGE_SIZE_OPTIONS = [25, 50, 100, 200]
+const LAZY_MAX_CONCURRENCY = 4
+
 const fuseConfigs = {
   sitemaps: { keys: ['host', 'url', 'type', 'status'], threshold: 0.35, ignoreLocation: true },
   robots: {
@@ -46,20 +50,28 @@ function initFuseEngines() {
 function ensureSummaryCache(section) {
   const el = document.querySelector(`[data-filter-summary="${section}"]`)
   if (el && !originalSummary[section]) {
-    originalSummary[section] = el.textContent.trim()
+    const label = sections[section]?.title || ''
+    const baseline = el.textContent.trim()
+    originalSummary[section] = label || baseline || section
   }
 }
 
-function updateSummary(section, total, visible) {
+function updateSummary(section, total, filtered, startIndex, endIndex, page, pageCount) {
   const el = document.querySelector(`[data-filter-summary="${section}"]`)
   if (!el) return
   ensureSummaryCache(section)
-  if (!originalSummary[section]) return
-  if (visible === total) {
-    el.textContent = originalSummary[section]
-  } else {
-    el.textContent = `${originalSummary[section]} • Filtered ${visible} of ${total}`
+  const label = originalSummary[section] || section
+  if (filtered <= 0) {
+    el.textContent = `${label} • No results (0 of ${total})`
+    return
   }
+  const rangeStart = Math.max(1, startIndex + 1)
+  const rangeEnd = Math.max(rangeStart, endIndex)
+  const parts = [`${label} • Showing ${rangeStart}–${rangeEnd} of ${filtered}`]
+  if (filtered !== total) parts.push(`Filtered from ${total}`)
+  else parts.push(`Total ${total}`)
+  parts.push(`Page ${page} of ${pageCount}`)
+  el.textContent = parts.join(' • ')
 }
 
 function updateRowVisibility(section, visibleIds) {
@@ -70,11 +82,23 @@ function updateRowVisibility(section, visibleIds) {
   })
 }
 
-function applyFilters(section) {
+function updatePaginationControls(section, { filtered, page, pageCount }) {
+  const prev = document.querySelector(`[data-page-prev="${section}"]`)
+  const next = document.querySelector(`[data-page-next="${section}"]`)
+  const status = document.querySelector(`[data-page-status="${section}"]`)
+  if (prev) prev.disabled = page <= 1 || filtered <= 0
+  if (next) next.disabled = filtered <= 0 || page >= pageCount
+  if (status) {
+    status.textContent = filtered <= 0 ? 'No results' : `Page ${page} / ${pageCount}`
+  }
+}
+
+function applyFilters(section, { preservePage = false } = {}) {
   const data = sections[section]
   if (!data) return
   const items = data.items || []
   const filterState = filters[section]
+  if (!filterState) return
   let results = items
 
   const query = (filterState.query || '').trim()
@@ -98,10 +122,35 @@ function applyFilters(section) {
     results = results.filter(item => item.isIssue)
   }
 
-  filters[section].last = results
-  const visibleIds = new Set(results.map(item => item.id))
+  if (!preservePage) filterState.page = 1
+  filterState.last = results
+
+  const totalFiltered = results.length
+  const pageSize = Math.max(1, filterState.pageSize || DEFAULT_PAGE_SIZE)
+  const pageCount = totalFiltered > 0 ? Math.ceil(totalFiltered / pageSize) : 1
+  filterState.pageCount = pageCount
+  if (filterState.page > pageCount) filterState.page = pageCount
+  if (filterState.page < 1) filterState.page = 1
+
+  const startIndex = totalFiltered === 0 ? 0 : (filterState.page - 1) * pageSize
+  const endIndex = totalFiltered === 0 ? 0 : Math.min(totalFiltered, startIndex + pageSize)
+  const visibleIds = new Set(results.slice(startIndex, endIndex).map(item => item.id))
+
   updateRowVisibility(section, visibleIds)
-  updateSummary(section, items.length, visibleIds.size)
+  updateSummary(
+    section,
+    items.length,
+    totalFiltered,
+    startIndex,
+    endIndex,
+    filterState.page,
+    pageCount,
+  )
+  updatePaginationControls(section, { filtered: totalFiltered, page: filterState.page, pageCount })
+
+  requestAnimationFrame(() => {
+    initLazyImageQueue()
+  })
 }
 
 function hookSearchInputs() {
@@ -178,6 +227,66 @@ function hookTypeChips() {
         }
         applyFilters(section)
       })
+    })
+  })
+}
+
+function hookPageSizeSelectors() {
+  const selects = document.querySelectorAll('[data-page-size]')
+  selects.forEach(select => {
+    const section = select.dataset.pageSize
+    if (!sectionKeys.includes(section)) return
+    const state = filters[section]
+    if (!state) return
+    const desired = Math.max(1, state.pageSize || DEFAULT_PAGE_SIZE)
+    const hasOption = Array.from(select.options || []).some(option =>
+      Number(option.value) === desired
+    )
+    if (!hasOption) {
+      PAGE_SIZE_OPTIONS.forEach(size => {
+        if (Array.from(select.options || []).some(option => Number(option.value) === size)) return
+        const option = document.createElement('option')
+        option.value = String(size)
+        option.textContent = `${size}`
+        select.append(option)
+      })
+    }
+    select.value = String(desired)
+    select.addEventListener('change', event => {
+      const value = Number(event.target.value)
+      if (!Number.isFinite(value) || value <= 0) return
+      state.pageSize = value
+      state.page = 1
+      applyFilters(section)
+    })
+  })
+}
+
+function hookPaginationButtons() {
+  const prevButtons = document.querySelectorAll('[data-page-prev]')
+  prevButtons.forEach(button => {
+    const section = button.dataset.pagePrev
+    if (!sectionKeys.includes(section)) return
+    button.addEventListener('click', () => {
+      const state = filters[section]
+      if (!state) return
+      if (state.page <= 1) return
+      state.page = Math.max(1, state.page - 1)
+      applyFilters(section, { preservePage: true })
+    })
+  })
+
+  const nextButtons = document.querySelectorAll('[data-page-next]')
+  nextButtons.forEach(button => {
+    const section = button.dataset.pageNext
+    if (!sectionKeys.includes(section)) return
+    button.addEventListener('click', () => {
+      const state = filters[section]
+      if (!state) return
+      const maxPage = Math.max(1, state.pageCount || 1)
+      if (state.page >= maxPage) return
+      state.page = Math.min(maxPage, state.page + 1)
+      applyFilters(section, { preservePage: true })
     })
   })
 }
@@ -300,6 +409,9 @@ function initialiseFilters() {
       types: null,
       statuses: null,
       last: items,
+      page: 1,
+      pageSize: DEFAULT_PAGE_SIZE,
+      pageCount: Math.max(1, Math.ceil((items.length || 0) / DEFAULT_PAGE_SIZE)),
     }
     if (key === 'sitemaps') {
       const allTypes = new Set(items.map(item => item.type || 'other'))
@@ -317,7 +429,6 @@ function initialiseFilters() {
         .querySelectorAll(`.status-chip[data-section="${key}"]`)
         .forEach(btn => btn.classList.add('btn-active'))
     }
-    updateSummary(key, items.length, items.length)
   }
 }
 
@@ -328,8 +439,10 @@ function initLocalFiltering() {
   hookIssueToggles()
   hookStatusChips()
   hookTypeChips()
+  hookPageSizeSelectors()
+  hookPaginationButtons()
   hookExports()
-  sectionKeys.forEach(applyFilters)
+  sectionKeys.forEach(section => applyFilters(section, { preservePage: true }))
 }
 
 /* --------------------
@@ -473,10 +586,101 @@ function initialiseGlobalSearch() {
 function bootstrap() {
   initLocalFiltering()
   initialiseGlobalSearch()
+  initLazyImageQueue()
 }
 
 if (sectionKeys.length) {
   bootstrap()
+}
+
+function initLazyImageQueue() {
+  const nodes = Array.from(document.querySelectorAll('[data-lv-lazy-src]'))
+  if (!nodes.length) return
+
+  const queue = []
+  let active = 0
+
+  const processQueue = () => {
+    if (!queue.length || active >= LAZY_MAX_CONCURRENCY) return
+    const img = queue.shift()
+    if (!img || img.dataset.lvLazyLoaded) {
+      processQueue()
+      return
+    }
+    const src = img.dataset.lvLazySrc
+    if (!src) {
+      img.dataset.lvLazyLoaded = 'missing'
+      processQueue()
+      return
+    }
+    active++
+    const loader = new Image()
+    loader.decoding = 'async'
+    loader.fetchPriority = 'low'
+    loader.onload = () => {
+      requestAnimationFrame(() => {
+        img.src = src
+        img.dataset.lvLazyLoaded = '1'
+        img.classList.remove('opacity-0')
+        img.classList.add('opacity-100')
+        img.style.opacity = '1'
+      })
+      active--
+      processQueue()
+    }
+    loader.onerror = () => {
+      img.dataset.lvLazyLoaded = 'error'
+      img.classList.remove('opacity-0')
+      img.classList.add('opacity-60')
+      img.style.opacity = '1'
+      active--
+      processQueue()
+    }
+    loader.src = src
+  }
+
+  const enqueue = img => {
+    if (!img || img.dataset.lvLazyQueued) return
+    img.dataset.lvLazyQueued = '1'
+    queue.push(img)
+    processQueue()
+  }
+
+  if (!('IntersectionObserver' in window)) {
+    nodes.forEach(img => {
+      img.loading = 'lazy'
+      img.decoding = 'async'
+      img.fetchPriority = 'low'
+      enqueue(img)
+    })
+    return
+  }
+
+  const observer = new IntersectionObserver(
+    entries => {
+      entries.forEach(entry => {
+        const img = entry.target
+        if (!img || img.dataset.lvLazyLoaded) {
+          observer.unobserve(img)
+          return
+        }
+        if (entry.isIntersecting || entry.intersectionRatio > 0) {
+          observer.unobserve(img)
+          img.loading = 'lazy'
+          img.decoding = 'async'
+          img.fetchPriority = 'low'
+          enqueue(img)
+        }
+      })
+    },
+    { rootMargin: '160px 0px', threshold: 0.01 },
+  )
+
+  nodes.forEach(img => {
+    if (img.dataset.lvLazyBound) return
+    img.dataset.lvLazyBound = '1'
+    observer.observe(img)
+  })
 }
 
 window.Alpine = Alpine

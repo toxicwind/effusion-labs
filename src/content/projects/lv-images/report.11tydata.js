@@ -20,25 +20,16 @@ async function loadReport() {
 
 export default async function() {
   const report = await loadReport()
-  const pages = report?.pages
-  if (!Array.isArray(pages) || pages.length === 0) {
-    const reason = report?.__lvreportFallbackReason || 'missing lvreport.pages'
-    const detail = Array.isArray(pages) ? `length=${pages.length}` : typeof pages
-    throw new Error(`lvreport pagination unavailable (${reason}, pages:${detail})`)
-  }
+  const primaryPage = Array.isArray(report?.pages) && report.pages.length > 0
+    ? report.pages[0]
+    : { pageNumber: 0, pageCount: 1, sections: {} }
 
   return {
     lvreport: report,
-    lvreportPages: pages,
-    pagination: {
-      data: 'lvreportPages',
-      size: 1,
-      alias: 'lvReportPage',
-    },
+    lvReportPage: primaryPage,
     eleventyComputed: {
-      permalink(context) {
-        const pageNumber = context.pagination?.pageNumber ?? 0
-        return pageNumber === 0 ? '/lv/report/' : `/lv/report/page/${pageNumber + 1}/`
+      permalink(_context) {
+        return '/lv/report/'
       },
       title(context) {
         const base = 'LV Image Atlas — Report'
