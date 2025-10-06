@@ -132,6 +132,14 @@ export default function(eleventyConfig) {
   // --- End: Event Handlers ---
   eleventyConfig.setServerPassthroughCopyBehavior('copy')
   eleventyConfig.addPassthroughCopy('public')
+  eleventyConfig.addPassthroughCopy({
+    '.cache/lv-images/index.json': 'assets/data/lvreport/index.json',
+    '.cache/lv-images/meta.json': 'assets/data/lvreport/meta.json',
+    '.cache/lv-images/ingest-metrics.json': 'assets/data/lvreport/ingest-metrics.json',
+    '.cache/lv-images/lvreport.dataset.json': 'assets/data/lvreport/dataset.json',
+    '.cache/lv-images/lvreport.search-index.json': 'assets/data/lvreport/search-index.json',
+    '.cache/lv-images/lvreport.client.json': 'assets/data/lvreport/client.json',
+  })
   eleventyConfig.ignores.add('src/content/docs/**')
   const isTest = process.env.ELEVENTY_ENV === 'test'
 
