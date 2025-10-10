@@ -19,14 +19,17 @@ const ITEMS_DIR = path.join(LV_BASE, 'items')
 const SUMMARY_JSON = path.join(LV_BASE, 'summary.json')
 const URLMETA_JSON = path.join(CACHE_DIR, 'urlmeta.json')
 const ITEMS_META_JSON = path.join(LV_BASE, 'items-meta.json')
-const ALL_IMAGES_JSON = path.join(LV_BASE, 'all-images.json')
+const LEGACY_ALL_IMAGES_JSON = path.join(LV_BASE, 'all-images.json')
 const ALL_PRODUCTS_JSON = path.join(LV_BASE, 'all-products.json')
 const RUNS_HISTORY_JSON = path.join(LV_BASE, 'runs-history.json')
 const BUNDLE_PROVENANCE_JSON = path.join(GENERATED_DIR, 'lv.bundle.provenance.json')
 const BUNDLE_ARCHIVE_PATH = path.join(GENERATED_DIR, 'lv.bundle.tgz')
 export const DATASET_REPORT_FILE = path.join(LV_BASE, 'lvreport.dataset.json')
 
-const bundleLibUrl = pathToFileURL(path.join(projectRoot, 'tools', 'lv-images', 'bundle-lib.mjs')).href
+const bundleLibUrl =
+  pathToFileURL(path.join(projectRoot, 'tools', 'lv-images', 'bundle-lib.mjs')).href
+
+const BANNED_HOSTS = new Set(['www.olyv.co.in', 'app.urlgeni.us'])
 
 let datasetReadyPromise = null
 
@@ -554,7 +557,9 @@ function truncatePreview(text, max = 320) {
 function cleanText(value) {
   if (value == null) return ''
   let text = String(value).replace(/\s+/g, ' ').trim()
-  if ((text.startsWith('"') && text.endsWith('"')) || (text.startsWith("'") && text.endsWith("'"))) {
+  if (
+    (text.startsWith('"') && text.endsWith('"')) || (text.startsWith("'") && text.endsWith("'"))
+  ) {
     text = text.slice(1, -1).trim()
   }
   if (text.startsWith('"') && text.includes('://')) {
@@ -604,6 +609,7 @@ function pushSearchDoc(list, doc) {
 function upsertImage(map, entry) {
   const id = cleanText(entry?.id || '')
   if (!id) return null
+  if (isBannedEntry(entry)) return null
   const existing = map.get(id) || {
     id,
     src: '',
@@ -614,6 +620,8 @@ function upsertImage(map, entry) {
     firstSeen: '',
     lastSeen: '',
     duplicateOf: null,
+    removedAt: '',
+    isDeprecated: false,
   }
 
   const updated = {
@@ -630,6 +638,12 @@ function upsertImage(map, entry) {
       ? entry.lastSeen
       : existing.lastSeen,
     duplicateOf: entry?.duplicateOf ?? existing.duplicateOf ?? null,
+    removedAt: entry?.removedAt ? cleanText(entry.removedAt) : existing.removedAt,
+    isDeprecated: entry?.isDeprecated ?? existing.isDeprecated ?? false,
+  }
+
+  if (updated.removedAt) {
+    updated.isDeprecated = true
   }
 
   if (!updated.basename && updated.src) {
@@ -639,6 +653,25 @@ function upsertImage(map, entry) {
 
   map.set(id, updated)
   return updated
+}
+
+function isBannedEntry(entry) {
+  if (!entry) return false
+  const candidates = []
+  if (entry.host) candidates.push(cleanText(entry.host))
+  if (entry.pageUrl) {
+    try {
+      const url = new URL(entry.pageUrl)
+      candidates.push(cleanText(url.host))
+    } catch {}
+  }
+  if (entry.src) {
+    try {
+      const url = new URL(entry.src)
+      candidates.push(cleanText(url.host))
+    } catch {}
+  }
+  return candidates.some((host) => host && BANNED_HOSTS.has(host.toLowerCase()))
 }
 
 function upsertProduct(map, pageUrl) {
@@ -672,26 +705,24 @@ function mergeProducts(product, image, meta) {
   }
 }
 
-function buildAggregates({ itemsMeta, legacyImages, legacyProducts, summaryItems = {} }) {
+function isImageLikeMeta(meta) {
+  if (!meta || typeof meta !== 'object') return false
+  if (meta.src) return true
+  const type = cleanText(meta.itemType || meta.type || meta.category || '')
+  if (type && type !== 'image') return false
+  const mime = cleanText(meta.mimeType || meta.contentType || '')
+  if (mime && mime.toLowerCase().startsWith('image/')) return true
+  return false
+}
+
+function buildAggregates({ itemsMeta, imageSource, productSource, summaryItems = {} }) {
   const imageMap = new Map()
   const productMap = new Map()
   const summaryItemsSafe = summaryItems && typeof summaryItems === 'object' ? summaryItems : {}
 
-  const addFromMeta = (metaEntries) => {
-    if (!metaEntries) return
-    for (const [id, meta] of Object.entries(metaEntries)) {
-      if (!meta || meta.removedAt) continue
-      const image = upsertImage(imageMap, { ...meta, id })
-      if (!image) continue
-      const product = upsertProduct(productMap, meta.pageUrl || '')
-      mergeProducts(product, image, meta)
-    }
-  }
-
-  addFromMeta(itemsMeta || {})
-
-  if (Array.isArray(legacyImages)) {
-    for (const entry of legacyImages) {
+  const addFromImages = (entries) => {
+    if (!Array.isArray(entries)) return
+    for (const entry of entries) {
       const image = upsertImage(imageMap, entry)
       if (!image) continue
       const product = upsertProduct(productMap, entry?.pageUrl || '')
@@ -699,8 +730,22 @@ function buildAggregates({ itemsMeta, legacyImages, legacyProducts, summaryItems
     }
   }
 
-  if (Array.isArray(legacyProducts)) {
-    for (const legacy of legacyProducts) {
+  const addFromMeta = (metaEntries) => {
+    if (!metaEntries) return
+    for (const [id, meta] of Object.entries(metaEntries)) {
+      if (!meta || !isImageLikeMeta(meta)) continue
+      const image = upsertImage(imageMap, { ...meta, id })
+      if (!image) continue
+      const product = upsertProduct(productMap, meta.pageUrl || '')
+      mergeProducts(product, image, meta)
+    }
+  }
+
+  addFromImages(imageSource)
+  addFromMeta(itemsMeta || {})
+
+  if (Array.isArray(productSource)) {
+    for (const legacy of productSource) {
       const product = upsertProduct(productMap, legacy?.pageUrl || '')
       if (!product) continue
       if (!product.title && legacy?.title) product.title = cleanText(legacy.title)
@@ -725,6 +770,25 @@ function buildAggregates({ itemsMeta, legacyImages, legacyProducts, summaryItems
   }
 
   const allImages = Array.from(imageMap.values()).sort((a, b) => a.id.localeCompare(b.id))
+  const existingIds = new Set(allImages.map((img) => img.id))
+  for (const image of allImages) {
+    if (image.duplicateOf && !existingIds.has(image.duplicateOf)) {
+      image.duplicateOf = null
+    }
+  }
+  const deprecatedImagesCount = allImages.filter((img) => img.isDeprecated).length
+  const activeImagesCount = allImages.length - deprecatedImagesCount
+  const latestImages = allImages
+    .map((image) => ({ ...image }))
+    .sort((a, b) => {
+      const aLast = a.lastSeen || ''
+      const bLast = b.lastSeen || ''
+      if (aLast && bLast && aLast !== bLast) return bLast.localeCompare(aLast)
+      const aFirst = a.firstSeen || ''
+      const bFirst = b.firstSeen || ''
+      if (aFirst && bFirst && aFirst !== bFirst) return bFirst.localeCompare(aFirst)
+      return a.id.localeCompare(b.id)
+    })
   const allProducts = Array.from(productMap.values()).map((product) => ({
     ...product,
     images: product.images.sort((a, b) => a.id.localeCompare(b.id)),
@@ -744,7 +808,22 @@ function buildAggregates({ itemsMeta, legacyImages, legacyProducts, summaryItems
       canonical: imageMap.get(canonicalId) || null,
       duplicates: duplicatesList.sort((a, b) => a.id.localeCompare(b.id)),
     }))
+    .filter((entry) => entry.canonical)
     .sort((a, b) => b.duplicates.length - a.duplicates.length)
+
+  const duplicateClusterSize = new Map()
+  for (const entry of duplicates) {
+    const size = entry.duplicates.length + 1
+    duplicateClusterSize.set(entry.canonicalId, size)
+    for (const dupe of entry.duplicates) duplicateClusterSize.set(dupe.id, size)
+  }
+  for (const image of latestImages) {
+    image.clusterSize = duplicateClusterSize.get(image.id) || 1
+    if (image.removedAt && !image.isDeprecated) {
+      image.isDeprecated = true
+    }
+    image.isDeprecated = Boolean(image.isDeprecated)
+  }
 
   const hostStats = (() => {
     const map = new Map()
@@ -785,6 +864,7 @@ function buildAggregates({ itemsMeta, legacyImages, legacyProducts, summaryItems
       if (product.pageUrl) stats.pages.add(product.pageUrl)
     }
     for (const meta of Object.values(itemsMeta || {})) {
+      if (!meta || isBannedEntry(meta)) continue
       const host = hostOfUrl(meta?.pageUrl)
       if (!host) continue
       const stats = ensure(host)
@@ -811,6 +891,8 @@ function buildAggregates({ itemsMeta, legacyImages, legacyProducts, summaryItems
     duplicateImages: allImages.filter((img) => !!img.duplicateOf).length,
     products: allProducts.length,
     hosts: hostStats.length,
+    activeImages: activeImagesCount,
+    deprecatedImages: deprecatedImagesCount,
   }
 
   const itemsMetrics = (() => {
@@ -819,7 +901,7 @@ function buildAggregates({ itemsMeta, legacyImages, legacyProducts, summaryItems
     let removed = 0
     let duplicatesCount = 0
     for (const meta of Object.values(itemsMeta || {})) {
-      if (!meta) continue
+      if (!meta || isBannedEntry(meta)) continue
       total++
       if (meta.removedAt) removed++
       else active++
@@ -829,6 +911,7 @@ function buildAggregates({ itemsMeta, legacyImages, legacyProducts, summaryItems
       total: summaryItemsSafe.total ?? total,
       active: summaryItemsSafe.active ?? active,
       removed: summaryItemsSafe.removed ?? removed,
+      deprecated: summaryItemsSafe.removed ?? removed,
       duplicates: summaryItemsSafe.duplicatesThisRun
         ?? summaryItemsSafe.duplicates
         ?? duplicatesCount,
@@ -841,7 +924,16 @@ function buildAggregates({ itemsMeta, legacyImages, legacyProducts, summaryItems
     }
   })()
 
-  return { allImages, allProducts, duplicates, hostStats, topProducts, totals, itemsMetrics }
+  return {
+    allImages,
+    latestImages,
+    allProducts,
+    duplicates,
+    hostStats,
+    topProducts,
+    totals,
+    itemsMetrics,
+  }
 }
 
 function paginateItems(items, size = 60) {
@@ -1059,7 +1151,7 @@ async function generateReport() {
     loadJSON(SUMMARY_JSON, {}),
     loadJSON(URLMETA_JSON, {}),
     loadJSON(ITEMS_META_JSON, {}),
-    loadJSON(ALL_IMAGES_JSON, []),
+    loadJSON(LEGACY_ALL_IMAGES_JSON, []),
     loadJSON(ALL_PRODUCTS_JSON, []),
     loadJSON(RUNS_HISTORY_JSON, []),
     loadJSON(BUNDLE_PROVENANCE_JSON, null),
@@ -1296,14 +1388,32 @@ async function generateReport() {
     })
   }
 
+  const datasetPayload = datasetReport?.payload || {}
+  const datasetImages = Array.isArray(datasetPayload.allImages) ? datasetPayload.allImages : []
+  const datasetProductsPrimary = Array.isArray(datasetPayload.products)
+    ? datasetPayload.products
+    : []
+  const datasetProductsFallback = Array.isArray(datasetPayload.allProducts)
+    ? datasetPayload.allProducts
+    : []
+  const imageSource = datasetImages.length
+    ? datasetImages
+    : (Array.isArray(legacyAllImages) ? legacyAllImages : [])
+  const productSource = datasetProductsPrimary.length
+    ? datasetProductsPrimary
+    : (datasetProductsFallback.length
+      ? datasetProductsFallback
+      : (Array.isArray(legacyAllProducts) ? legacyAllProducts : []))
+
   const aggregates = buildAggregates({
     itemsMeta,
-    legacyImages: Array.isArray(legacyAllImages) ? legacyAllImages : [],
-    legacyProducts: Array.isArray(legacyAllProducts) ? legacyAllProducts : [],
+    imageSource,
+    productSource,
     summaryItems: summary?.items || {},
   })
 
   const { sections: paginationSections, pages } = buildPagination({
+    images: { title: 'Image stream', items: aggregates.latestImages, size: 100 },
     sitemaps: { title: 'Sitemaps', items: sitemaps, size: 60 },
     docs: { title: 'Cached documents', items: docs, size: 40 },
     robots: { title: 'Robots.txt', items: robots, size: 50 },
@@ -1312,16 +1422,26 @@ async function generateReport() {
     hostStats: { title: 'Host statistics', items: aggregates.hostStats, size: 40 },
   })
 
-  for (const [index, image] of aggregates.allImages.slice(0, 400).entries()) {
+  for (const [index, image] of aggregates.latestImages.slice(0, 400).entries()) {
+    const badge = image.isDeprecated ? 'deprecated' : image.duplicateOf ? 'duplicate' : 'image'
     pushSearchDoc(searchDocuments, {
       id: `image-${index}`,
       section: 'images',
       title: image.title || image.basename || image.src || image.id,
       description: image.pageUrl || image.src,
       href: image.pageUrl || image.src,
-      badge: image.duplicateOf ? 'duplicate' : 'image',
-      tags: [image.host, image.duplicateOf ? 'duplicate' : 'unique'].filter(Boolean),
-      meta: { firstSeen: image.firstSeen, lastSeen: image.lastSeen },
+      badge,
+      tags: [
+        image.host,
+        image.isDeprecated ? 'deprecated' : '',
+        image.duplicateOf ? 'duplicate' : 'unique',
+      ].filter(Boolean),
+      meta: {
+        firstSeen: image.firstSeen,
+        lastSeen: image.lastSeen,
+        removedAt: image.removedAt || null,
+        isDeprecated: image.isDeprecated || false,
+      },
     })
   }
 
@@ -1415,6 +1535,8 @@ async function generateReport() {
       duplicateImages: aggregates.totals.duplicateImages,
       products: aggregates.totals.products,
       hosts: aggregates.totals.hosts,
+      activeImages: aggregates.totals.activeImages,
+      deprecatedImages: aggregates.totals.deprecatedImages,
     },
     flags: buildFlagSections(summary?.bans || {}),
     capture: summary?.capture && typeof summary.capture === 'object'
@@ -1426,9 +1548,21 @@ async function generateReport() {
     summaryTotals: summary?.totals ? deepClean(summary.totals) : null,
     bundleLabel: summary?.bundleLabel || null,
     runMode: summary?.runMode || null,
+    bannedHosts: Array.from(BANNED_HOSTS),
   }
   if (manifestEnriched?.history) {
     dataset.history = manifestEnriched.history
+  }
+  if (dataset.bannedHosts.length) {
+    dataset.flags.unshift({
+      key: 'manualBans',
+      title: 'Manually excluded hosts',
+      description: 'Removed from gallery to avoid rate-limited or hostile endpoints.',
+      tone: 'warn',
+      count: dataset.bannedHosts.length,
+      items: dataset.bannedHosts,
+      overflow: 0,
+    })
   }
   if (manifestEnriched?.dataset?.fileCount != null) {
     dataset.totals.fileCount = manifestEnriched.dataset.fileCount
