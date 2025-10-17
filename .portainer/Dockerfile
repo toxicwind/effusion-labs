@@ -3,7 +3,7 @@
 ############################
 # deps layer (heavy caching)
 ############################
-FROM node:24-bookworm AS deps
+FROM node:25-bookworm AS deps
 WORKDIR /app
 
 RUN apt-get update && \
@@ -38,7 +38,7 @@ RUN chmod +x bin/install-chromium.sh && \
 ############################
 # build layer (production)
 ############################
-FROM node:24-bookworm AS builder
+FROM node:25-bookworm AS builder
 WORKDIR /app
 
 ARG COMMIT_SHA=unknown
