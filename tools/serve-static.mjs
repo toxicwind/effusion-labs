@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 
+import fs from 'node:fs'
+import fsp from 'node:fs/promises'
 import http from 'node:http'
 import path from 'node:path'
 import { pathToFileURL } from 'node:url'
-import fs from 'node:fs'
-import fsp from 'node:fs/promises'
 
 const args = process.argv.slice(2)
 const options = {
