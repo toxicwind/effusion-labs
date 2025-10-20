@@ -83,7 +83,7 @@
     "@shikijs/markdown-it": "3.12.2",
     "@shikijs/transformers": "3.13.0",
     "@tailwindcss/typography": "0.5.19",
-    "@tailwindcss/vite": "^4.1.14",
+    "@tailwindcss/vite": "^4.1.15",
     "@types/node": "^24.8.1",
     "acorn": "8.15.0",
     "ajv": "8.17.1",
