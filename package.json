@@ -124,7 +124,7 @@
     "jsdom": "^27.0.1",
     "knip": "^5.66.2",
     "libnpmsearch": "9.0.1",
-    "lint-staged": "^16.2.4",
+    "lint-staged": "^16.2.5",
     "lucide": "0.546.0",
     "luxon": "3.7.2",
     "magic-string": "0.30.19",
