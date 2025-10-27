@@ -80,7 +80,7 @@
     "@playwright/test": "1.56.1",
     "@quasibit/eleventy-plugin-schema": "1.11.1",
     "@quasibit/eleventy-plugin-sitemap": "2.2.0",
-    "@shikijs/markdown-it": "3.12.2",
+    "@shikijs/markdown-it": "3.14.0",
     "@shikijs/transformers": "3.13.0",
     "@tailwindcss/typography": "0.5.19",
     "@tailwindcss/vite": "^4.1.15",
