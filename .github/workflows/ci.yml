@@ -60,7 +60,7 @@ jobs:
 
       - name: 📦 Archive build output
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: site
           path: _site/
