@@ -163,7 +163,7 @@
     "shiki": "3.14.0",
     "slugify": "1.6.6",
     "tailwindcss": "4.1.15",
-    "tar": "^7.5.1",
+    "tar": "^7.5.2",
     "tree-cli": "0.6.7",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.46.3",
