@@ -119,7 +119,7 @@
     "gray-matter": "4.0.3",
     "hast-util-select": "6.0.4",
     "husky": "^9.1.7",
-    "iconify-icon": "3.0.1",
+    "iconify-icon": "3.0.2",
     "jscodeshift": "^17.3.0",
     "jsdom": "^27.0.1",
     "knip": "^5.67.1",
