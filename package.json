@@ -138,7 +138,7 @@
     "natural": "8.1.0",
     "node-cache": "5.1.2",
     "nodemon": "3.1.11",
-    "npm-registry-fetch": "19.0.0",
+    "npm-registry-fetch": "19.1.0",
     "nunjucks": "3.2.4",
     "ora": "9.0.0",
     "p-limit": "^7.2.0",
