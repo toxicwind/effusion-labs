@@ -137,7 +137,7 @@
     "micromatch": "4.0.8",
     "natural": "8.1.0",
     "node-cache": "5.1.2",
-    "nodemon": "3.1.10",
+    "nodemon": "3.1.11",
     "npm-registry-fetch": "19.0.0",
     "nunjucks": "3.2.4",
     "ora": "9.0.0",
