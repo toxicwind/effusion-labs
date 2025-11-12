@@ -198,6 +198,12 @@ html {
 /* Utilities            */
 /* -------------------- */
 @layer utilities {
+  .clamp-1 {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
   .clamp-2 {
     display: -webkit-box;
     -webkit-line-clamp: 2;
@@ -956,4 +962,42 @@ html {
 .mschf-specimen strong {
   font-weight: 700;
   color: var(--mschf-ink);
+}
+
+@layer utilities {
+  [x-cloak] {
+    display: none !important;
+  }
+
+  img[data-lazy-src] {
+    transition: opacity 0.35s ease, filter 0.35s ease;
+  }
+
+  img[data-state="idle"],
+  img[data-state="loading"] {
+    opacity: 0;
+    filter: saturate(70%);
+  }
+
+  img[data-state="loaded"] {
+    opacity: 1;
+    filter: none;
+  }
+
+  img[data-state="error"] {
+    opacity: 0;
+  }
+
+  [data-image-fallback] {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  img[data-state="error"] ~ [data-image-fallback] {
+    opacity: 1;
+  }
+
+  img[data-state="loaded"] ~ [data-image-fallback] {
+    opacity: 0;
+  }
 }

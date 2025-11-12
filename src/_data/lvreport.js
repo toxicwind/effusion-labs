@@ -15,6 +15,15 @@ const CACHE_DIR = path.join(LV_BASE, 'cache')
 const ROBOTS_DIR = path.join(CACHE_DIR, 'robots')
 const SITEMAPS_DIR = path.join(CACHE_DIR, 'sitemaps')
 const ITEMS_DIR = path.join(LV_BASE, 'items')
+const BANNED_HOSTS_FILE = path.join(
+  projectRoot,
+  'src',
+  'content',
+  'projects',
+  'lv-images',
+  'config',
+  'hosts.banned.ndjson',
+)
 
 const SUMMARY_JSON = path.join(LV_BASE, 'summary.json')
 const URLMETA_JSON = path.join(CACHE_DIR, 'urlmeta.json')
@@ -26,7 +35,8 @@ const BUNDLE_PROVENANCE_JSON = path.join(GENERATED_DIR, 'lv.bundle.provenance.js
 const BUNDLE_ARCHIVE_PATH = path.join(GENERATED_DIR, 'lv.bundle.tgz')
 export const DATASET_REPORT_FILE = path.join(LV_BASE, 'lvreport.dataset.json')
 
-const bundleLibUrl = pathToFileURL(path.join(projectRoot, 'tools', 'lv-images', 'bundle-lib.mjs')).href
+const bundleLibUrl =
+  pathToFileURL(path.join(projectRoot, 'tools', 'lv-images', 'bundle-lib.mjs')).href
 
 let datasetReadyPromise = null
 
@@ -554,7 +564,9 @@ function truncatePreview(text, max = 320) {
 function cleanText(value) {
   if (value == null) return ''
   let text = String(value).replace(/\s+/g, ' ').trim()
-  if ((text.startsWith('"') && text.endsWith('"')) || (text.startsWith("'") && text.endsWith("'"))) {
+  if (
+    (text.startsWith('"') && text.endsWith('"')) || (text.startsWith("'") && text.endsWith("'"))
+  ) {
     text = text.slice(1, -1).trim()
   }
   if (text.startsWith('"') && text.includes('://')) {
@@ -586,6 +598,51 @@ function deepClean(value) {
   return value
 }
 
+function normalizeHost(value) {
+  if (!value) return ''
+  const text = cleanText(String(value))
+  if (!text) return ''
+  const lowered = text.toLowerCase()
+  if (lowered.includes('://')) {
+    try {
+      const { host } = new URL(lowered)
+      return host.toLowerCase()
+    } catch {
+      return lowered.replace(/^https?:\/\//, '').split('/')[0] || ''
+    }
+  }
+  return lowered.split('/')[0] || ''
+}
+
+function deriveImageHost(image) {
+  if (!image) return ''
+  return (
+    normalizeHost(image.host)
+    || normalizeHost(image.pageUrl)
+    || normalizeHost(image.src)
+  )
+}
+
+async function loadBannedHosts() {
+  let text
+  try {
+    text = await fs.readFile(BANNED_HOSTS_FILE, 'utf8')
+  } catch {
+    return new Set()
+  }
+  const banned = new Set()
+  for (const line of text.split(/\r?\n/)) {
+    const trimmed = line.trim()
+    if (!trimmed) continue
+    try {
+      const record = JSON.parse(trimmed)
+      const host = normalizeHost(record?.host || record?.hostname)
+      if (host) banned.add(host)
+    } catch {}
+  }
+  return banned
+}
+
 function pushSearchDoc(list, doc) {
   if (!list) return
   if (!doc || !doc.id) return
@@ -611,9 +668,12 @@ function upsertImage(map, entry) {
     pageUrl: '',
     title: '',
     host: '',
+    sitemap: '',
     firstSeen: '',
     lastSeen: '',
+    removedAt: '',
     duplicateOf: null,
+    itemType: '',
   }
 
   const updated = {
@@ -623,6 +683,7 @@ function upsertImage(map, entry) {
     pageUrl: entry?.pageUrl ? cleanText(entry.pageUrl) : existing.pageUrl,
     title: entry?.title ? cleanText(entry.title) : existing.title,
     host: entry?.host ? cleanText(entry.host) : existing.host,
+    sitemap: entry?.sitemap ? cleanText(entry.sitemap) : existing.sitemap,
     firstSeen: entry?.firstSeen && (!existing.firstSeen || entry.firstSeen < existing.firstSeen)
       ? entry.firstSeen
       : existing.firstSeen,
@@ -630,6 +691,14 @@ function upsertImage(map, entry) {
       ? entry.lastSeen
       : existing.lastSeen,
     duplicateOf: entry?.duplicateOf ?? existing.duplicateOf ?? null,
+    removedAt: entry?.removedAt ? cleanText(entry.removedAt) : (entry?.removedAt === null
+      ? ''
+      : existing.removedAt || ''),
+    itemType: entry?.itemType ? cleanText(entry.itemType) : existing.itemType,
+  }
+
+  if (!updated.itemType && updated.src) {
+    updated.itemType = 'image'
   }
 
   if (!updated.basename && updated.src) {
@@ -660,7 +729,12 @@ function upsertProduct(map, pageUrl) {
 function mergeProducts(product, image, meta) {
   if (!product || !image) return
   if (!product.images.some((item) => item.id === image.id)) {
-    product.images.push({ id: image.id, src: image.src, duplicateOf: image.duplicateOf })
+    product.images.push({
+      id: image.id,
+      src: image.src,
+      duplicateOf: image.duplicateOf,
+      removedAt: image.removedAt,
+    })
   }
   if (!product.title && image.title) product.title = image.title
   if (!product.pageUrl && image.pageUrl) product.pageUrl = image.pageUrl
@@ -672,26 +746,42 @@ function mergeProducts(product, image, meta) {
   }
 }
 
-function buildAggregates({ itemsMeta, legacyImages, legacyProducts, summaryItems = {} }) {
+function buildAggregates({
+  itemsMeta,
+  imageSnapshots,
+  productSnapshots,
+  summaryItems = {},
+  bannedHosts = new Set(),
+}) {
   const imageMap = new Map()
   const productMap = new Map()
+  const bannedSet = new Set()
+  if (bannedHosts && typeof bannedHosts[Symbol.iterator] === 'function') {
+    for (const host of bannedHosts) {
+      const normalized = normalizeHost(host)
+      if (normalized) bannedSet.add(normalized)
+    }
+  }
   const summaryItemsSafe = summaryItems && typeof summaryItems === 'object' ? summaryItems : {}
 
   const addFromMeta = (metaEntries) => {
-    if (!metaEntries) return
+    if (!metaEntries || typeof metaEntries !== 'object') return
     for (const [id, meta] of Object.entries(metaEntries)) {
-      if (!meta || meta.removedAt) continue
-      const image = upsertImage(imageMap, { ...meta, id })
+      if (!meta) continue
+      const normalized = { ...meta, id }
+      const isNonImage = normalized.itemType && normalized.itemType !== 'image' && !normalized.src
+      if (!normalized.src || isNonImage) continue
+      const image = upsertImage(imageMap, normalized)
       if (!image) continue
-      const product = upsertProduct(productMap, meta.pageUrl || '')
-      mergeProducts(product, image, meta)
+      const product = upsertProduct(productMap, normalized.pageUrl || '')
+      mergeProducts(product, image, normalized)
     }
   }
 
   addFromMeta(itemsMeta || {})
 
-  if (Array.isArray(legacyImages)) {
-    for (const entry of legacyImages) {
+  if (Array.isArray(imageSnapshots)) {
+    for (const entry of imageSnapshots) {
       const image = upsertImage(imageMap, entry)
       if (!image) continue
       const product = upsertProduct(productMap, entry?.pageUrl || '')
@@ -699,8 +789,8 @@ function buildAggregates({ itemsMeta, legacyImages, legacyProducts, summaryItems
     }
   }
 
-  if (Array.isArray(legacyProducts)) {
-    for (const legacy of legacyProducts) {
+  if (Array.isArray(productSnapshots)) {
+    for (const legacy of productSnapshots) {
       const product = upsertProduct(productMap, legacy?.pageUrl || '')
       if (!product) continue
       if (!product.title && legacy?.title) product.title = cleanText(legacy.title)
@@ -725,13 +815,32 @@ function buildAggregates({ itemsMeta, legacyImages, legacyProducts, summaryItems
   }
 
   const allImages = Array.from(imageMap.values()).sort((a, b) => a.id.localeCompare(b.id))
-  const allProducts = Array.from(productMap.values()).map((product) => ({
-    ...product,
-    images: product.images.sort((a, b) => a.id.localeCompare(b.id)),
-  })).sort((a, b) => (b.images.length - a.images.length) || a.pageUrl.localeCompare(b.pageUrl))
+  const allowedImages = bannedSet.size
+    ? allImages.filter((image) => {
+      const host = deriveImageHost(image)
+      return !host || !bannedSet.has(host)
+    })
+    : allImages
+  const allowedImageIds = new Set(allowedImages.map((image) => image.id))
+
+  const productsRaw = Array.from(productMap.values())
+    .map((product) => ({
+      ...product,
+      images: product.images.sort((a, b) => a.id.localeCompare(b.id)),
+    }))
+    .sort((a, b) => (b.images.length - a.images.length) || a.pageUrl.localeCompare(b.pageUrl))
+
+  const allProducts = bannedSet.size
+    ? productsRaw
+      .map((product) => ({
+        ...product,
+        images: product.images.filter((image) => allowedImageIds.has(image.id)),
+      }))
+      .filter((product) => product.images.length > 0)
+    : productsRaw
 
   const duplicatesMap = new Map()
-  for (const image of allImages) {
+  for (const image of allowedImages) {
     if (!image.duplicateOf) continue
     const key = image.duplicateOf
     if (!duplicatesMap.has(key)) duplicatesMap.set(key, [])
@@ -744,6 +853,7 @@ function buildAggregates({ itemsMeta, legacyImages, legacyProducts, summaryItems
       canonical: imageMap.get(canonicalId) || null,
       duplicates: duplicatesList.sort((a, b) => a.id.localeCompare(b.id)),
     }))
+    .filter((entry) => allowedImageIds.has(entry.canonicalId))
     .sort((a, b) => b.duplicates.length - a.duplicates.length)
 
   const hostStats = (() => {
@@ -753,6 +863,8 @@ function buildAggregates({ itemsMeta, legacyImages, legacyProducts, summaryItems
         map.set(host, {
           host,
           images: 0,
+          activeImages: 0,
+          deprecatedImages: 0,
           uniqueImages: 0,
           duplicates: 0,
           products: 0,
@@ -761,32 +873,31 @@ function buildAggregates({ itemsMeta, legacyImages, legacyProducts, summaryItems
       }
       return map.get(host)
     }
-    const hostOfUrl = (value) => {
-      try {
-        return new URL(value).host
-      } catch {
-        return ''
-      }
-    }
-    for (const image of allImages) {
-      const host = image.host || hostOfUrl(image.pageUrl)
-      if (!host) continue
+    const hostOfUrl = (value) => normalizeHost(value)
+    for (const image of allowedImages) {
+      const host = deriveImageHost(image)
+      if (!host || bannedSet.has(host)) continue
       const stats = ensure(host)
       stats.images++
-      if (image.duplicateOf) stats.duplicates++
-      else stats.uniqueImages++
+      if (image.removedAt) {
+        stats.deprecatedImages++
+      } else {
+        stats.activeImages++
+        if (image.duplicateOf) stats.duplicates++
+        else stats.uniqueImages++
+      }
       if (image.pageUrl) stats.pages.add(image.pageUrl)
     }
     for (const product of allProducts) {
       const host = hostOfUrl(product.pageUrl)
-      if (!host) continue
+      if (!host || bannedSet.has(host)) continue
       const stats = ensure(host)
       stats.products++
       if (product.pageUrl) stats.pages.add(product.pageUrl)
     }
     for (const meta of Object.values(itemsMeta || {})) {
-      const host = hostOfUrl(meta?.pageUrl)
-      if (!host) continue
+      const host = normalizeHost(meta?.host || meta?.pageUrl)
+      if (!host || bannedSet.has(host)) continue
       const stats = ensure(host)
       if (meta?.pageUrl) stats.pages.add(meta.pageUrl)
     }
@@ -795,6 +906,8 @@ function buildAggregates({ itemsMeta, legacyImages, legacyProducts, summaryItems
         id: entry.host,
         host: entry.host,
         images: entry.images,
+        activeImages: entry.activeImages,
+        deprecatedImages: entry.deprecatedImages,
         uniqueImages: entry.uniqueImages,
         duplicates: entry.duplicates,
         products: entry.products,
@@ -805,12 +918,16 @@ function buildAggregates({ itemsMeta, legacyImages, legacyProducts, summaryItems
 
   const topProducts = allProducts.slice(0, 25)
 
+  const activeImages = allowedImages.filter((img) => !img.removedAt)
   const totals = {
-    images: allImages.length,
-    uniqueImages: allImages.filter((img) => !img.duplicateOf).length,
-    duplicateImages: allImages.filter((img) => !!img.duplicateOf).length,
+    images: allowedImages.length,
+    activeImages: activeImages.length,
+    deprecatedImages: allowedImages.length - activeImages.length,
+    uniqueImages: activeImages.filter((img) => !img.duplicateOf).length,
+    duplicateImages: activeImages.filter((img) => !!img.duplicateOf).length,
     products: allProducts.length,
     hosts: hostStats.length,
+    filteredImages: allImages.length - allowedImages.length,
   }
 
   const itemsMetrics = (() => {
@@ -820,15 +937,19 @@ function buildAggregates({ itemsMeta, legacyImages, legacyProducts, summaryItems
     let duplicatesCount = 0
     for (const meta of Object.values(itemsMeta || {})) {
       if (!meta) continue
+      const host = normalizeHost(meta.host || meta.pageUrl || meta.src)
+      if (host && bannedSet.has(host)) continue
       total++
       if (meta.removedAt) removed++
       else active++
       if (meta.duplicateOf) duplicatesCount++
     }
+    const removedCount = summaryItemsSafe.removed ?? removed
     return {
       total: summaryItemsSafe.total ?? total,
       active: summaryItemsSafe.active ?? active,
-      removed: summaryItemsSafe.removed ?? removed,
+      removed: removedCount,
+      deprecated: removedCount,
       duplicates: summaryItemsSafe.duplicatesThisRun
         ?? summaryItemsSafe.duplicates
         ?? duplicatesCount,
@@ -841,7 +962,15 @@ function buildAggregates({ itemsMeta, legacyImages, legacyProducts, summaryItems
     }
   })()
 
-  return { allImages, allProducts, duplicates, hostStats, topProducts, totals, itemsMetrics }
+  return {
+    allImages: allowedImages,
+    allProducts,
+    duplicates,
+    hostStats,
+    topProducts,
+    totals,
+    itemsMetrics,
+  }
 }
 
 function paginateItems(items, size = 60) {
@@ -1067,6 +1196,18 @@ async function generateReport() {
   ])
 
   const baseHref = '/content/projects/lv-images/generated/lv/'
+  const datasetPayload = datasetReport && typeof datasetReport.payload === 'object'
+    ? datasetReport.payload
+    : {}
+  const snapshotAllImages = Array.isArray(datasetPayload.allImages)
+    ? datasetPayload.allImages
+    : legacyAllImages
+  const snapshotAllProducts = Array.isArray(datasetPayload.allProducts)
+    ? datasetPayload.allProducts
+    : legacyAllProducts
+  const snapshotPages = datasetPayload.pages && typeof datasetPayload.pages === 'object'
+    ? datasetPayload.pages
+    : null
   const rev = buildReverseUrlmeta(urlmeta)
   const searchDocuments = []
 
@@ -1296,11 +1437,14 @@ async function generateReport() {
     })
   }
 
+  const bannedHosts = await loadBannedHosts()
+
   const aggregates = buildAggregates({
     itemsMeta,
-    legacyImages: Array.isArray(legacyAllImages) ? legacyAllImages : [],
-    legacyProducts: Array.isArray(legacyAllProducts) ? legacyAllProducts : [],
+    imageSnapshots: Array.isArray(snapshotAllImages) ? snapshotAllImages : [],
+    productSnapshots: Array.isArray(snapshotAllProducts) ? snapshotAllProducts : [],
     summaryItems: summary?.items || {},
+    bannedHosts,
   })
 
   const { sections: paginationSections, pages } = buildPagination({
@@ -1313,15 +1457,30 @@ async function generateReport() {
   })
 
   for (const [index, image] of aggregates.allImages.slice(0, 400).entries()) {
+    const badge = image.removedAt
+      ? 'deprecated'
+      : (image.duplicateOf ? 'duplicate' : 'image')
+    const tags = [
+      'image',
+      image.host || null,
+      image.duplicateOf ? 'duplicate' : 'unique',
+      image.removedAt ? 'deprecated' : null,
+    ].filter(Boolean)
     pushSearchDoc(searchDocuments, {
       id: `image-${index}`,
       section: 'images',
       title: image.title || image.basename || image.src || image.id,
       description: image.pageUrl || image.src,
       href: image.pageUrl || image.src,
-      badge: image.duplicateOf ? 'duplicate' : 'image',
-      tags: [image.host, image.duplicateOf ? 'duplicate' : 'unique'].filter(Boolean),
-      meta: { firstSeen: image.firstSeen, lastSeen: image.lastSeen },
+      badge,
+      tags,
+      meta: {
+        firstSeen: image.firstSeen,
+        lastSeen: image.lastSeen,
+        removedAt: image.removedAt,
+        host: image.host,
+        duplicateOf: image.duplicateOf,
+      },
     })
   }
 
@@ -1367,6 +1526,8 @@ async function generateReport() {
       tags: ['host'],
       meta: {
         imageCount: host.images,
+        activeCount: host.activeImages,
+        deprecatedCount: host.deprecatedImages,
         duplicateCount: host.duplicates,
         productCount: host.products,
         pages: host.pages,
@@ -1411,6 +1572,8 @@ async function generateReport() {
     archiveExists: bundleExists,
     totals: {
       images: aggregates.totals.images,
+      activeImages: aggregates.totals.activeImages,
+      deprecatedImages: aggregates.totals.deprecatedImages,
       uniqueImages: aggregates.totals.uniqueImages,
       duplicateImages: aggregates.totals.duplicateImages,
       products: aggregates.totals.products,
@@ -1426,6 +1589,9 @@ async function generateReport() {
     summaryTotals: summary?.totals ? deepClean(summary.totals) : null,
     bundleLabel: summary?.bundleLabel || null,
     runMode: summary?.runMode || null,
+  }
+  if (snapshotPages) {
+    dataset.pages = deepClean(snapshotPages)
   }
   if (manifestEnriched?.history) {
     dataset.history = manifestEnriched.history
