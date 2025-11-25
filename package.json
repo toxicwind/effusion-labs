@@ -122,7 +122,7 @@
     "iconify-icon": "3.0.2",
     "jscodeshift": "^17.3.0",
     "jsdom": "^27.1.0",
-    "knip": "^5.69.0",
+    "knip": "^5.70.2",
     "libnpmsearch": "9.0.1",
     "lint-staged": "^16.2.6",
     "lucide": "0.553.0",
