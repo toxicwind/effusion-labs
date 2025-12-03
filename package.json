@@ -159,7 +159,7 @@
     "remark-smartypants": "^3.0.2",
     "remark-stringify": "11.0.0",
     "rustywind": "^0.24.3",
-    "sass": "^1.94.0",
+    "sass": "^1.94.2",
     "shiki": "3.19.0",
     "slugify": "1.6.6",
     "tailwindcss": "4.1.17",
