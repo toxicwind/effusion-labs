@@ -121,7 +121,7 @@
     "husky": "^9.1.7",
     "iconify-icon": "3.0.2",
     "jscodeshift": "^17.3.0",
-    "jsdom": "^27.1.0",
+    "jsdom": "^27.2.0",
     "knip": "^5.71.0",
     "libnpmsearch": "9.0.1",
     "lint-staged": "^16.2.6",
