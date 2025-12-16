@@ -166,7 +166,7 @@
     "tar": "^7.5.2",
     "tree-cli": "0.6.7",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.49.0",
+    "typescript-eslint": "^8.50.0",
     "undici": "^7.16.0",
     "unified": "11.0.5",
     "vite": "7.2.7",
