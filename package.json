@@ -73,7 +73,7 @@
     "@11ty/eleventy-plugin-vite": "7.0.0",
     "@babel/parser": "7.28.5",
     "@commitlint/cli": "^19.8.1",
-    "@commitlint/config-conventional": "^19.8.1",
+    "@commitlint/config-conventional": "^20.3.0",
     "@eslint/js": "^9.39.1",
     "@mozilla/readability": "0.6.0",
     "@photogabble/eleventy-plugin-interlinker": "1.1.2",
