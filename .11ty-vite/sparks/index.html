@@ -1,0 +1,695 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="en" class="scroll-pt-16" data-theme="hypebrut">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="color-scheme" content="dark light">
+    
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f7f5f3">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#16161a">
+    
+    <meta name="msapplication-TileColor" content="#16161a">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <title>Sparks | Effusion Labs</title>
+
+    
+    
+    
+    
+    
+    
+    
+
+    
+
+    
+    <script>
+    try {
+      const saved = localStorage.getItem('theme')
+      const prefersDark = window.matchMedia
+        && window.matchMedia('(prefers-color-scheme: dark)').matches
+      // Allowed tokens in CSS: 'hypebrut' (dark), 'dim' (alias), 'silk' (light)
+      const initial = saved || (prefersDark ? 'hypebrut' : 'silk')
+      document.documentElement.setAttribute('data-theme', initial)
+    } catch (e) { /* noop */ }
+    </script>
+
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com" eleventy:ignore="">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" eleventy:ignore="">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Manrope:wght@300..800&family=Plus+Jakarta+Sans:wght@400..800&display=swap" rel="stylesheet" eleventy:ignore="">
+
+    
+    <script type="module" src="/assets/js/app.js"></script>
+
+    
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="icon" href="/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <meta name="apple-mobile-web-app-title" content="Effusion Labs">
+    <link rel="manifest" href="/site.webmanifest">
+  </head>
+  <body class="bg-base-100 text-base-content font-body antialiased">
+    
+  
+  
+  
+  
+  
+  <header data-site-header="" class="relative w-full bg-base-100 border-b border-base-content/10">
+    <div class="navbar max-w-screen-xl mx-auto px-6">
+      <!-- Brand -->
+      <div class="flex-1">
+        <a href="/" class="group flex items-center gap-4 no-underline" aria-label="Effusion Labs — home">
+          <span class="hb-logo">
+            
+              <picture><source type="image/avif" srcset="/images/logo-64.avif 64w" sizes="(max-width: 640px) 112px, 160px"><source type="image/webp" srcset="/images/logo-64.webp 64w" sizes="(max-width: 640px) 112px, 160px"><img src="/images/logo-64.png" alt="Effusion Labs logo" width="64" height="64" decoding="async" class="hb-logo-img"></picture>
+            
+          </span>
+          <span class="flex flex-col leading-tight text-base-content">
+            <span class="text-[0.55rem] uppercase tracking-[0.28em] text-base-content/60">
+              Effusion Labs
+            </span>
+            <span class="flex items-center gap-3">
+              <span class="font-heading text-2xl font-black tracking-tight transition-colors duration-150 group-hover:text-primary">
+                Effusion
+                <span class="text-secondary/80">Labs</span>
+              </span>
+              <span class="hb-scanbar hidden h-[6px] w-16 opacity-90 sm:inline-flex"></span>
+            </span>
+            <span class="text-[0.55rem] uppercase tracking-[0.24em] text-secondary/70">
+              Data Garden
+            </span>
+          </span>
+        </a>
+      </div>
+
+      <!-- Mobile nav -->
+      <div class="flex-none lg:hidden">
+        <nav class="dropdown dropdown-end" aria-label="Primary navigation">
+          <label tabindex="0" class="btn btn-ghost btn-square" aria-label="Open menu">
+            
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6" aria-hidden="true"><path d="M4 5h16"></path><path d="M4 12h16"></path><path d="M4 19h16"></path></svg>
+  
+
+          </label>
+          <ul class="menu menu-sm dropdown-content mt-3 z-[100] p-2 shadow bg-base-100 rounded-box w-56">
+    
+  
+    
+    
+    
+    
+    <li>
+      <a href="/" class="link link-hover rounded-sm px-1 py-0.5 link-underline ">
+        <span class="opacity-60">1.</span>
+        <span>SHOWCASE</span>
+      </a>
+      
+    </li>
+  
+    
+    
+    
+    
+    <li>
+      <a href="/sparks/" class="link link-hover rounded-sm px-1 py-0.5 link-underline text-primary underline" aria-current="page" data-active="true">
+        <span class="opacity-60">2.</span>
+        <span>SPARKS</span>
+      </a>
+      
+    </li>
+  
+    
+    
+    
+    
+    <li>
+      <a href="/concepts/" class="link link-hover rounded-sm px-1 py-0.5 link-underline ">
+        <span class="opacity-60">3.</span>
+        <span>CONCEPTS</span>
+      </a>
+      
+    </li>
+  
+    
+    
+    
+    
+    <li>
+      <a href="/projects/" class="link link-hover rounded-sm px-1 py-0.5 link-underline ">
+        <span class="opacity-60">4.</span>
+        <span>PROJECTS</span>
+      </a>
+      
+    </li>
+  
+    
+    
+    
+    
+    <li>
+      <a href="/archives/" class="link link-hover rounded-sm px-1 py-0.5 link-underline ">
+        <span class="opacity-60">5.</span>
+        <span>ARCHIVES</span>
+      </a>
+      
+    </li>
+  
+    
+    
+    
+    
+    <li>
+      <a href="/meta/" class="link link-hover rounded-sm px-1 py-0.5 link-underline ">
+        <span class="opacity-60">6.</span>
+        <span>META</span>
+      </a>
+      
+    </li>
+  
+    
+    
+    
+    
+    <li>
+      <a href="/map/" class="link link-hover rounded-sm px-1 py-0.5 link-underline ">
+        <span class="opacity-60">7.</span>
+        <span>MAP</span>
+      </a>
+      
+    </li>
+  
+    
+    
+    
+    
+    <li>
+      <a href="https://github.com/toxicwind/effusion-labs" class="link link-hover rounded-sm px-1 py-0.5 link-underline " target="_blank" rel="noopener noreferrer">
+        <span class="opacity-60">8.</span>
+        <span>GITHUB</span>
+      </a>
+      
+    </li>
+  
+  </ul>
+        </nav>
+      </div>
+
+      <!-- Desktop nav + theme toggle -->
+      <div class="flex-none flex items-center gap-2">
+        <nav class="hidden lg:block" aria-label="Primary navigation">
+          <ul class="menu menu-horizontal px-1">
+    
+  
+    
+    
+    
+    
+    <li>
+      <a href="/" class="link link-hover rounded-sm px-1 py-0.5 link-underline hover:text-primary ">
+        <span class="opacity-60">1.</span>
+        <span>SHOWCASE</span>
+      </a>
+      
+    </li>
+  
+    
+    
+    
+    
+    <li>
+      <a href="/sparks/" class="link link-hover rounded-sm px-1 py-0.5 link-underline hover:text-primary text-primary underline" aria-current="page" data-active="true">
+        <span class="opacity-60">2.</span>
+        <span>SPARKS</span>
+      </a>
+      
+    </li>
+  
+    
+    
+    
+    
+    <li>
+      <a href="/concepts/" class="link link-hover rounded-sm px-1 py-0.5 link-underline hover:text-primary ">
+        <span class="opacity-60">3.</span>
+        <span>CONCEPTS</span>
+      </a>
+      
+    </li>
+  
+    
+    
+    
+    
+    <li>
+      <a href="/projects/" class="link link-hover rounded-sm px-1 py-0.5 link-underline hover:text-primary ">
+        <span class="opacity-60">4.</span>
+        <span>PROJECTS</span>
+      </a>
+      
+    </li>
+  
+    
+    
+    
+    
+    <li>
+      <a href="/archives/" class="link link-hover rounded-sm px-1 py-0.5 link-underline hover:text-primary ">
+        <span class="opacity-60">5.</span>
+        <span>ARCHIVES</span>
+      </a>
+      
+    </li>
+  
+    
+    
+    
+    
+    <li>
+      <a href="/meta/" class="link link-hover rounded-sm px-1 py-0.5 link-underline hover:text-primary ">
+        <span class="opacity-60">6.</span>
+        <span>META</span>
+      </a>
+      
+    </li>
+  
+    
+    
+    
+    
+    <li>
+      <a href="/map/" class="link link-hover rounded-sm px-1 py-0.5 link-underline hover:text-primary ">
+        <span class="opacity-60">7.</span>
+        <span>MAP</span>
+      </a>
+      
+    </li>
+  
+    
+    
+    
+    
+    <li>
+      <a href="https://github.com/toxicwind/effusion-labs" class="link link-hover rounded-sm px-1 py-0.5 link-underline hover:text-primary " target="_blank" rel="noopener noreferrer">
+        <span class="opacity-60">8.</span>
+        <span>GITHUB</span>
+      </a>
+      
+    </li>
+  
+  </ul>
+        </nav>
+
+        <button id="theme-toggle" class="btn btn-ghost btn-square" type="button" aria-pressed="false" aria-label="Switch theme" title="Toggle theme">
+          <span class="lucide-sun">
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path></svg>
+  
+</span>
+          <span class="lucide-moon hidden">
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6" aria-hidden="true"><path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401"></path></svg>
+  
+</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+
+    
+    
+    
+    
+    
+
+    
+    
+    
+      
+    
+
+    <main id="main" class="min-h-[60vh] max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8" tabindex="-1">
+      
+        <div class=" mt-8 lg:mt-10">
+          <article class="prose max-w-none m-0 ">
+            
+              <header class="mb-6 lg:mb-8">
+                <h1 class="font-heading text-4xl sm:text-5xl md:text-6xl tracking-tight leading-tight">
+                  Sparks
+                </h1>
+              </header>
+            
+            
+
+
+<p class="max-w-prose text-base-content/80">Here you&#39;ll find nascent ideas, quick notes, and experimental fragments that may one day ignite into full concepts or projects.</p>
+<div class="mt-4 flex flex-wrap items-center gap-2 text-sm">
+  <span class="opacity-70">View:</span>
+  <button class="btn btn-xs btn-outline" type="button" data-view="comfort">Comfort</button>
+  <button class="btn btn-xs btn-ghost" type="button" data-view="dense">Dense</button>
+  <span class="ml-3 opacity-70">Sort:</span>
+  <button class="btn btn-xs btn-outline" type="button" data-sort="date">Date</button>
+  <button class="btn btn-xs btn-ghost" type="button" data-sort="title">Title</button>
+</div>
+
+<div id="collection-grid" class="mt-4 grid grid-cols-1 items-stretch gap-6 sm:grid-cols-2 xl:grid-cols-3" data-section="sparks">
+  
+    
+      <div class="group" data-title="George Eastman - A Life in Precision" data-date="2025-07-02">
+        
+  
+  
+
+  <a href="/sparks/george-eastman-obscure/" aria-label="George Eastman - A Life in Precision" class="group block hb-brut-card hb-intensity-lite p-5 sm:p-6 text-left no-underline transition-transform hover:-translate-y-0.5 focus-visible:-translate-y-0.5" data-title="George Eastman - A Life in Precision" data-date="2025-07-02" role="listitem">
+    <div class="flex items-start justify-between gap-3">
+      
+      
+        <time datetime="2025-07-02" class="text-[0.7rem] opacity-80">
+          July 2nd, 2025
+        </time>
+      
+    </div>
+
+    <h3 class="mt-2 font-heading text-lg leading-tight text-base-content group-hover:text-primary transition-colors">
+      George Eastman - A Life in Precision
+    </h3>
+
+    
+
+    <div class="mt-2 flex items-center justify-between text-xs text-base-content/70">
+      <span class="capitalize">[draft]</span>
+    </div>
+  </a>
+
+      </div>
+    
+  
+    
+      <div class="group" data-title="Takashi Murakami - Lithographs, Signed Works, and Small-format Prints: A 2025 Market Topography" data-date="2025-07-02">
+        
+  
+  
+
+  <a href="/sparks/murakami-market-analysis-2025/" aria-label="Takashi Murakami - Lithographs, Signed Works, and Small-format Prints: A 2025 Market Topography" class="group block hb-brut-card hb-intensity-lite p-5 sm:p-6 text-left no-underline transition-transform hover:-translate-y-0.5 focus-visible:-translate-y-0.5" data-title="Takashi Murakami - Lithographs, Signed Works, and Small-format Prints: A 2025 Market Topography" data-date="2025-07-02" role="listitem">
+    <div class="flex items-start justify-between gap-3">
+      
+      
+        <time datetime="2025-07-02" class="text-[0.7rem] opacity-80">
+          July 2nd, 2025
+        </time>
+      
+    </div>
+
+    <h3 class="mt-2 font-heading text-lg leading-tight text-base-content group-hover:text-primary transition-colors">
+      Takashi Murakami - Lithographs, Signed Works, and Small-format Prints: A 2025 Market Topography
+    </h3>
+
+    
+
+    <div class="mt-2 flex items-center justify-between text-xs text-base-content/70">
+      <span class="capitalize">[complete-ongoing]</span>
+    </div>
+  </a>
+
+      </div>
+    
+  
+    
+      <div class="group" data-title="The Semiotic Collapse of a Toasted Request: On the Emotional Thermodynamics of Eggs-on-Bread" data-date="2025-07-12">
+        
+  
+  
+
+  <a href="/sparks/breakfast-eggs/" aria-label="The Semiotic Collapse of a Toasted Request: On the Emotional Thermodynamics of Eggs-on-Bread" class="group block hb-brut-card hb-intensity-lite p-5 sm:p-6 text-left no-underline transition-transform hover:-translate-y-0.5 focus-visible:-translate-y-0.5" data-title="The Semiotic Collapse of a Toasted Request: On the Emotional Thermodynamics of Eggs-on-Bread" data-date="2025-07-12" role="listitem">
+    <div class="flex items-start justify-between gap-3">
+      
+      
+        <time datetime="2025-07-12" class="text-[0.7rem] opacity-80">
+          July 12th, 2025
+        </time>
+      
+    </div>
+
+    <h3 class="mt-2 font-heading text-lg leading-tight text-base-content group-hover:text-primary transition-colors">
+      The Semiotic Collapse of a Toasted Request: On the Emotional Thermodynamics of Eggs-on-Bread
+    </h3>
+
+    
+
+    <div class="mt-2 flex items-center justify-between text-xs text-base-content/70">
+      <span class="capitalize">[Stable]</span>
+    </div>
+  </a>
+
+      </div>
+    
+  
+    
+      <div class="group" data-title="The Illusion of Choice: Engineering Adult Agency in Japan’s Nicotine Market" data-date="2025-07-24">
+        
+  
+  
+
+  <a href="/sparks/illusion-japan-nicotine/" aria-label="The Illusion of Choice: Engineering Adult Agency in Japan’s Nicotine Market" class="group block hb-brut-card hb-intensity-lite p-5 sm:p-6 text-left no-underline transition-transform hover:-translate-y-0.5 focus-visible:-translate-y-0.5" data-title="The Illusion of Choice: Engineering Adult Agency in Japan’s Nicotine Market" data-date="2025-07-24" role="listitem">
+    <div class="flex items-start justify-between gap-3">
+      
+      
+        <time datetime="2025-07-24" class="text-[0.7rem] opacity-80">
+          July 24th, 2025
+        </time>
+      
+    </div>
+
+    <h3 class="mt-2 font-heading text-lg leading-tight text-base-content group-hover:text-primary transition-colors">
+      The Illusion of Choice: Engineering Adult Agency in Japan’s Nicotine Market
+    </h3>
+
+    
+
+    <div class="mt-2 flex items-center justify-between text-xs text-base-content/70">
+      <span class="capitalize">[Stable]</span>
+    </div>
+  </a>
+
+      </div>
+    
+  
+    
+      <div class="group" data-title="The Smoker as Sysadmin: Managing the Self in Japan&#39;s Nicotine Technopoly" data-date="2025-07-24">
+        
+  
+  
+
+  <a href="/sparks/smoker-sysadmin/" aria-label="The Smoker as Sysadmin: Managing the Self in Japan&#39;s Nicotine Technopoly" class="group block hb-brut-card hb-intensity-lite p-5 sm:p-6 text-left no-underline transition-transform hover:-translate-y-0.5 focus-visible:-translate-y-0.5" data-title="The Smoker as Sysadmin: Managing the Self in Japan&#39;s Nicotine Technopoly" data-date="2025-07-24" role="listitem">
+    <div class="flex items-start justify-between gap-3">
+      
+      
+        <time datetime="2025-07-24" class="text-[0.7rem] opacity-80">
+          July 24th, 2025
+        </time>
+      
+    </div>
+
+    <h3 class="mt-2 font-heading text-lg leading-tight text-base-content group-hover:text-primary transition-colors">
+      The Smoker as Sysadmin: Managing the Self in Japan&#39;s Nicotine Technopoly
+    </h3>
+
+    
+
+    <div class="mt-2 flex items-center justify-between text-xs text-base-content/70">
+      <span class="capitalize">[Stable]</span>
+    </div>
+  </a>
+
+      </div>
+    
+  
+    
+      <div class="group" data-title="Vapor-Linked Governance: How Japan Made Tobacco a Civic Utility" data-date="2025-07-24">
+        
+  
+  
+
+  <a href="/sparks/vapor-linked-governance/" aria-label="Vapor-Linked Governance: How Japan Made Tobacco a Civic Utility" class="group block hb-brut-card hb-intensity-lite p-5 sm:p-6 text-left no-underline transition-transform hover:-translate-y-0.5 focus-visible:-translate-y-0.5" data-title="Vapor-Linked Governance: How Japan Made Tobacco a Civic Utility" data-date="2025-07-24" role="listitem">
+    <div class="flex items-start justify-between gap-3">
+      
+      
+        <time datetime="2025-07-24" class="text-[0.7rem] opacity-80">
+          July 24th, 2025
+        </time>
+      
+    </div>
+
+    <h3 class="mt-2 font-heading text-lg leading-tight text-base-content group-hover:text-primary transition-colors">
+      Vapor-Linked Governance: How Japan Made Tobacco a Civic Utility
+    </h3>
+
+    
+
+    <div class="mt-2 flex items-center justify-between text-xs text-base-content/70">
+      <span class="capitalize">[Stable]</span>
+    </div>
+  </a>
+
+      </div>
+    
+  
+    
+      <div class="group" data-title="The Recursive Shadow of Algorithmic Absence: An Archaeological Survey of the Invisible Infrastructure of Contemporary LLM Research" data-date="2025-07-29">
+        
+  
+  
+
+  <a href="/sparks/academic-blindness/" aria-label="The Recursive Shadow of Algorithmic Absence: An Archaeological Survey of the Invisible Infrastructure of Contemporary LLM Research" class="group block hb-brut-card hb-intensity-lite p-5 sm:p-6 text-left no-underline transition-transform hover:-translate-y-0.5 focus-visible:-translate-y-0.5" data-title="The Recursive Shadow of Algorithmic Absence: An Archaeological Survey of the Invisible Infrastructure of Contemporary LLM Research" data-date="2025-07-29" role="listitem">
+    <div class="flex items-start justify-between gap-3">
+      
+      
+        <time datetime="2025-07-29" class="text-[0.7rem] opacity-80">
+          July 29th, 2025
+        </time>
+      
+    </div>
+
+    <h3 class="mt-2 font-heading text-lg leading-tight text-base-content group-hover:text-primary transition-colors">
+      The Recursive Shadow of Algorithmic Absence: An Archaeological Survey of the Invisible Infrastructure of Contemporary LLM Research
+    </h3>
+
+    
+
+    <div class="mt-2 flex items-center justify-between text-xs text-base-content/70">
+      <span class="capitalize">[Stable]</span>
+    </div>
+  </a>
+
+      </div>
+    
+  
+    
+      <div class="group" data-title="How to Manufacture a Legacy: The Pierre Paulin Estate Between Preservation and Product" data-date="2025-08-02">
+        
+  
+  
+
+  <a href="/sparks/paulin-paulin-paulin-marketing/" aria-label="How to Manufacture a Legacy: The Pierre Paulin Estate Between Preservation and Product" class="group block hb-brut-card hb-intensity-lite p-5 sm:p-6 text-left no-underline transition-transform hover:-translate-y-0.5 focus-visible:-translate-y-0.5" data-title="How to Manufacture a Legacy: The Pierre Paulin Estate Between Preservation and Product" data-date="2025-08-02" role="listitem">
+    <div class="flex items-start justify-between gap-3">
+      
+        <span class="pill pill--meta">Analytic-report</span>
+      
+      
+        <time datetime="2025-08-02" class="text-[0.7rem] opacity-80">
+          August 2nd, 2025
+        </time>
+      
+    </div>
+
+    <h3 class="mt-2 font-heading text-lg leading-tight text-base-content group-hover:text-primary transition-colors">
+      How to Manufacture a Legacy: The Pierre Paulin Estate Between Preservation and Product
+    </h3>
+
+    
+
+    <div class="mt-2 flex items-center justify-between text-xs text-base-content/70">
+      <span class="capitalize">[Stable]</span>
+    </div>
+  </a>
+
+      </div>
+    
+  
+    
+  
+</div>
+
+<script>
+;(() => {
+  const grid = document.getElementById('collection-grid')
+  if (!grid) return
+  const items = Array.from(grid.children)
+
+  function sortBy(key) {
+    const s = items.slice().sort((a, b) => {
+      if (key === 'title') return (a.dataset.title || '').localeCompare(b.dataset.title || '')
+      if (key === 'date') {
+        const da = new Date(a.dataset.date || 0).getTime()
+        const db = new Date(b.dataset.date || 0).getTime()
+        return db - da
+      }
+      return 0
+    })
+    s.forEach(el => grid.appendChild(el))
+  }
+
+  function setView(mode) {
+    grid.classList.toggle('gap-6', mode === 'comfort')
+    grid.classList.toggle('gap-3', mode === 'dense')
+    items.forEach(el => {
+      const card = el.firstElementChild // anchor from listItem
+      if (!card) return
+      card.classList.toggle('scale-[0.99]', mode === 'dense')
+      card.classList.toggle('opacity-95', mode === 'dense')
+    })
+  }
+
+  document.querySelectorAll('[data-sort]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('[data-sort]').forEach(b =>
+        b.classList.toggle('btn-outline', b !== btn)
+      )
+      sortBy(btn.dataset.sort)
+    })
+  })
+
+  document.querySelectorAll('[data-view]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('[data-view]').forEach(b =>
+        b.classList.toggle('btn-outline', b !== btn)
+      )
+      setView(btn.dataset.view)
+    })
+  })
+
+  setView('comfort')
+  sortBy('date')
+})()
+</script>
+
+          </article>
+
+          
+        </div>
+      
+    </main>
+
+    
+  <footer class="mt-16 p-8 text-center text-sm text-text/60 border-top border-base-200 bg-base-100/80 backdrop-blur">
+    <span class="block font-mono text-xs tracking-widest mb-2" data-build="">
+      <time datetime=""></time>
+    </span>
+    &copy; 2025 Effusion Labs. A space for creative
+    synthesis.
+    <div class="mt-2"><a href="https://github.com/toxicwind/effusion-labs" class="external-link link link-hover inline-flex items-center gap-1" target="_blank" rel="noopener noreferrer" data-external="true">
+    <span>GitHub</span>
+    <span aria-hidden="true" class="inline-block">
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4" aria-hidden="true"><path d="M15 3h6v6"></path><path d="M10 14 21 3"></path><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path></svg>
+  
+</span>
+    <span class="sr-only">(opens in a new tab)</span>
+  </a></div>
+  </footer>
+
+  </body>
+</html>

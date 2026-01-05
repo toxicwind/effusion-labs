@@ -1,0 +1,564 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="en" class="scroll-pt-16" data-theme="hypebrut">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="color-scheme" content="dark light">
+    
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f7f5f3">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#16161a">
+    
+    <meta name="msapplication-TileColor" content="#16161a">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <title>Best of Luck | Effusion Labs</title>
+
+    
+    
+    
+    
+    
+    
+    
+
+    
+
+    
+    <script>
+    try {
+      const saved = localStorage.getItem('theme')
+      const prefersDark = window.matchMedia
+        && window.matchMedia('(prefers-color-scheme: dark)').matches
+      // Allowed tokens in CSS: 'hypebrut' (dark), 'dim' (alias), 'silk' (light)
+      const initial = saved || (prefersDark ? 'hypebrut' : 'silk')
+      document.documentElement.setAttribute('data-theme', initial)
+    } catch (e) { /* noop */ }
+    </script>
+
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com" eleventy:ignore="">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" eleventy:ignore="">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Manrope:wght@300..800&family=Plus+Jakarta+Sans:wght@400..800&display=swap" rel="stylesheet" eleventy:ignore="">
+
+    
+    <script type="module" src="/assets/js/app.js"></script>
+
+    
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="icon" href="/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <meta name="apple-mobile-web-app-title" content="Effusion Labs">
+    <link rel="manifest" href="/site.webmanifest">
+  </head>
+  <body class="bg-base-100 text-base-content font-body antialiased">
+    
+  
+  
+  
+  
+  
+  <header data-site-header="" class="relative w-full bg-base-100 border-b border-base-content/10">
+    <div class="navbar max-w-screen-xl mx-auto px-6">
+      <!-- Brand -->
+      <div class="flex-1">
+        <a href="/" class="group flex items-center gap-4 no-underline" aria-label="Effusion Labs — home">
+          <span class="hb-logo">
+            
+              <picture><source type="image/avif" srcset="/images/logo-64.avif 64w" sizes="(max-width: 640px) 112px, 160px"><source type="image/webp" srcset="/images/logo-64.webp 64w" sizes="(max-width: 640px) 112px, 160px"><img src="/images/logo-64.png" alt="Effusion Labs logo" width="64" height="64" decoding="async" class="hb-logo-img"></picture>
+            
+          </span>
+          <span class="flex flex-col leading-tight text-base-content">
+            <span class="text-[0.55rem] uppercase tracking-[0.28em] text-base-content/60">
+              Effusion Labs
+            </span>
+            <span class="flex items-center gap-3">
+              <span class="font-heading text-2xl font-black tracking-tight transition-colors duration-150 group-hover:text-primary">
+                Effusion
+                <span class="text-secondary/80">Labs</span>
+              </span>
+              <span class="hb-scanbar hidden h-[6px] w-16 opacity-90 sm:inline-flex"></span>
+            </span>
+            <span class="text-[0.55rem] uppercase tracking-[0.24em] text-secondary/70">
+              Data Garden
+            </span>
+          </span>
+        </a>
+      </div>
+
+      <!-- Mobile nav -->
+      <div class="flex-none lg:hidden">
+        <nav class="dropdown dropdown-end" aria-label="Primary navigation">
+          <label tabindex="0" class="btn btn-ghost btn-square" aria-label="Open menu">
+            
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6" aria-hidden="true"><path d="M4 5h16"></path><path d="M4 12h16"></path><path d="M4 19h16"></path></svg>
+  
+
+          </label>
+          <ul class="menu menu-sm dropdown-content mt-3 z-[100] p-2 shadow bg-base-100 rounded-box w-56">
+    
+  
+    
+    
+    
+    
+    <li>
+      <a href="/" class="link link-hover rounded-sm px-1 py-0.5 link-underline ">
+        <span class="opacity-60">1.</span>
+        <span>SHOWCASE</span>
+      </a>
+      
+    </li>
+  
+    
+    
+    
+    
+    <li>
+      <a href="/sparks/" class="link link-hover rounded-sm px-1 py-0.5 link-underline ">
+        <span class="opacity-60">2.</span>
+        <span>SPARKS</span>
+      </a>
+      
+    </li>
+  
+    
+    
+    
+    
+    <li>
+      <a href="/concepts/" class="link link-hover rounded-sm px-1 py-0.5 link-underline ">
+        <span class="opacity-60">3.</span>
+        <span>CONCEPTS</span>
+      </a>
+      
+    </li>
+  
+    
+    
+    
+    
+    <li>
+      <a href="/projects/" class="link link-hover rounded-sm px-1 py-0.5 link-underline ">
+        <span class="opacity-60">4.</span>
+        <span>PROJECTS</span>
+      </a>
+      
+    </li>
+  
+    
+    
+    
+    
+    <li>
+      <a href="/archives/" class="link link-hover rounded-sm px-1 py-0.5 link-underline ">
+        <span class="opacity-60">5.</span>
+        <span>ARCHIVES</span>
+      </a>
+      
+    </li>
+  
+    
+    
+    
+    
+    <li>
+      <a href="/meta/" class="link link-hover rounded-sm px-1 py-0.5 link-underline ">
+        <span class="opacity-60">6.</span>
+        <span>META</span>
+      </a>
+      
+    </li>
+  
+    
+    
+    
+    
+    <li>
+      <a href="/map/" class="link link-hover rounded-sm px-1 py-0.5 link-underline ">
+        <span class="opacity-60">7.</span>
+        <span>MAP</span>
+      </a>
+      
+    </li>
+  
+    
+    
+    
+    
+    <li>
+      <a href="https://github.com/toxicwind/effusion-labs" class="link link-hover rounded-sm px-1 py-0.5 link-underline " target="_blank" rel="noopener noreferrer">
+        <span class="opacity-60">8.</span>
+        <span>GITHUB</span>
+      </a>
+      
+    </li>
+  
+  </ul>
+        </nav>
+      </div>
+
+      <!-- Desktop nav + theme toggle -->
+      <div class="flex-none flex items-center gap-2">
+        <nav class="hidden lg:block" aria-label="Primary navigation">
+          <ul class="menu menu-horizontal px-1">
+    
+  
+    
+    
+    
+    
+    <li>
+      <a href="/" class="link link-hover rounded-sm px-1 py-0.5 link-underline hover:text-primary ">
+        <span class="opacity-60">1.</span>
+        <span>SHOWCASE</span>
+      </a>
+      
+    </li>
+  
+    
+    
+    
+    
+    <li>
+      <a href="/sparks/" class="link link-hover rounded-sm px-1 py-0.5 link-underline hover:text-primary ">
+        <span class="opacity-60">2.</span>
+        <span>SPARKS</span>
+      </a>
+      
+    </li>
+  
+    
+    
+    
+    
+    <li>
+      <a href="/concepts/" class="link link-hover rounded-sm px-1 py-0.5 link-underline hover:text-primary ">
+        <span class="opacity-60">3.</span>
+        <span>CONCEPTS</span>
+      </a>
+      
+    </li>
+  
+    
+    
+    
+    
+    <li>
+      <a href="/projects/" class="link link-hover rounded-sm px-1 py-0.5 link-underline hover:text-primary ">
+        <span class="opacity-60">4.</span>
+        <span>PROJECTS</span>
+      </a>
+      
+    </li>
+  
+    
+    
+    
+    
+    <li>
+      <a href="/archives/" class="link link-hover rounded-sm px-1 py-0.5 link-underline hover:text-primary ">
+        <span class="opacity-60">5.</span>
+        <span>ARCHIVES</span>
+      </a>
+      
+    </li>
+  
+    
+    
+    
+    
+    <li>
+      <a href="/meta/" class="link link-hover rounded-sm px-1 py-0.5 link-underline hover:text-primary ">
+        <span class="opacity-60">6.</span>
+        <span>META</span>
+      </a>
+      
+    </li>
+  
+    
+    
+    
+    
+    <li>
+      <a href="/map/" class="link link-hover rounded-sm px-1 py-0.5 link-underline hover:text-primary ">
+        <span class="opacity-60">7.</span>
+        <span>MAP</span>
+      </a>
+      
+    </li>
+  
+    
+    
+    
+    
+    <li>
+      <a href="https://github.com/toxicwind/effusion-labs" class="link link-hover rounded-sm px-1 py-0.5 link-underline hover:text-primary " target="_blank" rel="noopener noreferrer">
+        <span class="opacity-60">8.</span>
+        <span>GITHUB</span>
+      </a>
+      
+    </li>
+  
+  </ul>
+        </nav>
+
+        <button id="theme-toggle" class="btn btn-ghost btn-square" type="button" aria-pressed="false" aria-label="Switch theme" title="Toggle theme">
+          <span class="lucide-sun">
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path></svg>
+  
+</span>
+          <span class="lucide-moon hidden">
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6" aria-hidden="true"><path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401"></path></svg>
+  
+</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+
+    
+    
+    
+    
+    
+
+    
+    
+    
+      
+    
+
+    <main id="main" class="min-h-[60vh] max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8" tabindex="-1">
+      
+        <div class="xl:grid xl:grid-cols-[1fr_18rem] xl:gap-10 ">
+          <article class="prose max-w-none m-0 xl:col-span-1">
+            
+            
+
+
+
+
+
+<nav class="breadcrumbs text-sm mb-3 overflow-x-auto whitespace-nowrap" aria-label="Breadcrumb">
+  <ul>
+    <li>
+      <a href="/archives/">Archives</a>
+    </li>
+    <li>
+      
+        <a href="/archives/collectables/designer-toys/pop-mart/">
+          Pop Mart
+        </a>
+      
+    </li>
+    <li>
+      
+        <a href="/archives/collectables/designer-toys/pop-mart/the-monsters/">
+          The Monsters
+        </a>
+      
+    </li>
+    <li class="opacity-70">Best of Luck</li>
+  </ul>
+</nav>
+<div class="mb-6">
+  
+    
+  <a href="/archives/collectables/designer-toys/pop-mart/the-monsters/" class="btn btn-ghost btn-sm gap-1 no-underline focus-visible:ring focus-visible:ring-primary/40" aria-label="Back" title="Back" onclick="try{if(document.referrer && new URL(document.referrer).origin===location.origin){event.preventDefault();history.back();}}catch(_){/* noop */}">
+    <span class="pointer-events-none">
+      
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4" aria-hidden="true"><path d="m12 19-7-7 7-7"></path><path d="M19 12H5"></path></svg>
+  
+
+    </span>
+    <span class="pointer-events-none">Back</span>
+  </a>
+
+  
+</div>
+
+<section class="rounded-box border-2 border-black bg-base-200 p-5 sm:p-7 shadow-[6px_6px_0_rgba(0,0,0,0.85)]">
+  <h1 class="m-0 font-extrabold tracking-tight fluid-title">
+    Best of Luck
+  </h1>
+  <p class="opacity-85 mt-2">
+    Pop Mart
+    ·
+    The Monsters
+  </p>
+  <p class="mt-2 opacity-80">Seeded from initial article; needs confirmation.</p>
+</section>
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+
+
+
+
+
+  <p class="opacity-75 mt-6">No products indexed for this series.</p>
+
+
+          </article>
+
+          
+            
+            
+  <aside class="w-full mt-10 xl:mt-0 xl:pl-6 xl:border-l xl:border-base-content/10 text-sm opacity-90">
+    <div class="xl:sticky xl:top-28 space-y-3">
+      <h2 class="font-heading text-base uppercase tracking-widest opacity-70">Meta</h2>
+      <ul class="space-y-1">
+        
+        
+          <li>
+            <strong>Date:</strong> <time datetime="2026-01-05">January 5th, 2026</time>
+          </li>
+        
+        
+        
+        
+          <li>
+            <strong>Tags:</strong>
+            <div class="mt-1 flex flex-wrap gap-1">
+              
+            </div>
+          </li>
+        
+        
+      </ul>
+    </div>
+  </aside>
+
+          
+        </div>
+      
+    </main>
+
+    
+  <footer class="mt-16 p-8 text-center text-sm text-text/60 border-top border-base-200 bg-base-100/80 backdrop-blur">
+    <span class="block font-mono text-xs tracking-widest mb-2" data-build="">
+      <time datetime=""></time>
+    </span>
+    &copy; 2025 Effusion Labs. A space for creative
+    synthesis.
+    <div class="mt-2"><a href="https://github.com/toxicwind/effusion-labs" class="external-link link link-hover inline-flex items-center gap-1" target="_blank" rel="noopener noreferrer" data-external="true">
+    <span>GitHub</span>
+    <span aria-hidden="true" class="inline-block">
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4" aria-hidden="true"><path d="M15 3h6v6"></path><path d="M10 14 21 3"></path><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path></svg>
+  
+</span>
+    <span class="sr-only">(opens in a new tab)</span>
+  </a></div>
+  </footer>
+
+  </body>
+</html>

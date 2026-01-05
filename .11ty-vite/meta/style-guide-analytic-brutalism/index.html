@@ -1,0 +1,522 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="en" class="scroll-pt-16" data-theme="hypebrut">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="color-scheme" content="dark light">
+    
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f7f5f3">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#16161a">
+    
+    <meta name="msapplication-TileColor" content="#16161a">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <title>Style Guide: Hypebrüt (Analytic Brutalism) | Effusion Labs</title>
+
+    
+    
+    
+    
+    
+    
+    
+
+    
+
+    
+    <script>
+    try {
+      const saved = localStorage.getItem('theme')
+      const prefersDark = window.matchMedia
+        && window.matchMedia('(prefers-color-scheme: dark)').matches
+      // Allowed tokens in CSS: 'hypebrut' (dark), 'dim' (alias), 'silk' (light)
+      const initial = saved || (prefersDark ? 'hypebrut' : 'silk')
+      document.documentElement.setAttribute('data-theme', initial)
+    } catch (e) { /* noop */ }
+    </script>
+
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com" eleventy:ignore="">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" eleventy:ignore="">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Manrope:wght@300..800&family=Plus+Jakarta+Sans:wght@400..800&display=swap" rel="stylesheet" eleventy:ignore="">
+
+    
+    <script type="module" src="/assets/js/app.js"></script>
+
+    
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="icon" href="/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <meta name="apple-mobile-web-app-title" content="Effusion Labs">
+    <link rel="manifest" href="/site.webmanifest">
+  </head>
+  <body class="bg-base-100 text-base-content font-body antialiased">
+    
+  
+  
+  
+  
+  
+  <header data-site-header="" class="relative w-full bg-base-100 border-b border-base-content/10">
+    <div class="navbar max-w-screen-xl mx-auto px-6">
+      <!-- Brand -->
+      <div class="flex-1">
+        <a href="/" class="group flex items-center gap-4 no-underline" aria-label="Effusion Labs — home">
+          <span class="hb-logo">
+            
+              <picture><source type="image/avif" srcset="/images/logo-64.avif 64w" sizes="(max-width: 640px) 112px, 160px"><source type="image/webp" srcset="/images/logo-64.webp 64w" sizes="(max-width: 640px) 112px, 160px"><img src="/images/logo-64.png" alt="Effusion Labs logo" width="64" height="64" decoding="async" class="hb-logo-img"></picture>
+            
+          </span>
+          <span class="flex flex-col leading-tight text-base-content">
+            <span class="text-[0.55rem] uppercase tracking-[0.28em] text-base-content/60">
+              Effusion Labs
+            </span>
+            <span class="flex items-center gap-3">
+              <span class="font-heading text-2xl font-black tracking-tight transition-colors duration-150 group-hover:text-primary">
+                Effusion
+                <span class="text-secondary/80">Labs</span>
+              </span>
+              <span class="hb-scanbar hidden h-[6px] w-16 opacity-90 sm:inline-flex"></span>
+            </span>
+            <span class="text-[0.55rem] uppercase tracking-[0.24em] text-secondary/70">
+              Data Garden
+            </span>
+          </span>
+        </a>
+      </div>
+
+      <!-- Mobile nav -->
+      <div class="flex-none lg:hidden">
+        <nav class="dropdown dropdown-end" aria-label="Primary navigation">
+          <label tabindex="0" class="btn btn-ghost btn-square" aria-label="Open menu">
+            
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6" aria-hidden="true"><path d="M4 5h16"></path><path d="M4 12h16"></path><path d="M4 19h16"></path></svg>
+  
+
+          </label>
+          <ul class="menu menu-sm dropdown-content mt-3 z-[100] p-2 shadow bg-base-100 rounded-box w-56">
+    
+  
+    
+    
+    
+    
+    <li>
+      <a href="/" class="link link-hover rounded-sm px-1 py-0.5 link-underline ">
+        <span class="opacity-60">1.</span>
+        <span>SHOWCASE</span>
+      </a>
+      
+    </li>
+  
+    
+    
+    
+    
+    <li>
+      <a href="/sparks/" class="link link-hover rounded-sm px-1 py-0.5 link-underline ">
+        <span class="opacity-60">2.</span>
+        <span>SPARKS</span>
+      </a>
+      
+    </li>
+  
+    
+    
+    
+    
+    <li>
+      <a href="/concepts/" class="link link-hover rounded-sm px-1 py-0.5 link-underline ">
+        <span class="opacity-60">3.</span>
+        <span>CONCEPTS</span>
+      </a>
+      
+    </li>
+  
+    
+    
+    
+    
+    <li>
+      <a href="/projects/" class="link link-hover rounded-sm px-1 py-0.5 link-underline ">
+        <span class="opacity-60">4.</span>
+        <span>PROJECTS</span>
+      </a>
+      
+    </li>
+  
+    
+    
+    
+    
+    <li>
+      <a href="/archives/" class="link link-hover rounded-sm px-1 py-0.5 link-underline ">
+        <span class="opacity-60">5.</span>
+        <span>ARCHIVES</span>
+      </a>
+      
+    </li>
+  
+    
+    
+    
+    
+    <li>
+      <a href="/meta/" class="link link-hover rounded-sm px-1 py-0.5 link-underline ">
+        <span class="opacity-60">6.</span>
+        <span>META</span>
+      </a>
+      
+    </li>
+  
+    
+    
+    
+    
+    <li>
+      <a href="/map/" class="link link-hover rounded-sm px-1 py-0.5 link-underline ">
+        <span class="opacity-60">7.</span>
+        <span>MAP</span>
+      </a>
+      
+    </li>
+  
+    
+    
+    
+    
+    <li>
+      <a href="https://github.com/toxicwind/effusion-labs" class="link link-hover rounded-sm px-1 py-0.5 link-underline " target="_blank" rel="noopener noreferrer">
+        <span class="opacity-60">8.</span>
+        <span>GITHUB</span>
+      </a>
+      
+    </li>
+  
+  </ul>
+        </nav>
+      </div>
+
+      <!-- Desktop nav + theme toggle -->
+      <div class="flex-none flex items-center gap-2">
+        <nav class="hidden lg:block" aria-label="Primary navigation">
+          <ul class="menu menu-horizontal px-1">
+    
+  
+    
+    
+    
+    
+    <li>
+      <a href="/" class="link link-hover rounded-sm px-1 py-0.5 link-underline hover:text-primary ">
+        <span class="opacity-60">1.</span>
+        <span>SHOWCASE</span>
+      </a>
+      
+    </li>
+  
+    
+    
+    
+    
+    <li>
+      <a href="/sparks/" class="link link-hover rounded-sm px-1 py-0.5 link-underline hover:text-primary ">
+        <span class="opacity-60">2.</span>
+        <span>SPARKS</span>
+      </a>
+      
+    </li>
+  
+    
+    
+    
+    
+    <li>
+      <a href="/concepts/" class="link link-hover rounded-sm px-1 py-0.5 link-underline hover:text-primary ">
+        <span class="opacity-60">3.</span>
+        <span>CONCEPTS</span>
+      </a>
+      
+    </li>
+  
+    
+    
+    
+    
+    <li>
+      <a href="/projects/" class="link link-hover rounded-sm px-1 py-0.5 link-underline hover:text-primary ">
+        <span class="opacity-60">4.</span>
+        <span>PROJECTS</span>
+      </a>
+      
+    </li>
+  
+    
+    
+    
+    
+    <li>
+      <a href="/archives/" class="link link-hover rounded-sm px-1 py-0.5 link-underline hover:text-primary ">
+        <span class="opacity-60">5.</span>
+        <span>ARCHIVES</span>
+      </a>
+      
+    </li>
+  
+    
+    
+    
+    
+    <li>
+      <a href="/meta/" class="link link-hover rounded-sm px-1 py-0.5 link-underline hover:text-primary ">
+        <span class="opacity-60">6.</span>
+        <span>META</span>
+      </a>
+      
+    </li>
+  
+    
+    
+    
+    
+    <li>
+      <a href="/map/" class="link link-hover rounded-sm px-1 py-0.5 link-underline hover:text-primary ">
+        <span class="opacity-60">7.</span>
+        <span>MAP</span>
+      </a>
+      
+    </li>
+  
+    
+    
+    
+    
+    <li>
+      <a href="https://github.com/toxicwind/effusion-labs" class="link link-hover rounded-sm px-1 py-0.5 link-underline hover:text-primary " target="_blank" rel="noopener noreferrer">
+        <span class="opacity-60">8.</span>
+        <span>GITHUB</span>
+      </a>
+      
+    </li>
+  
+  </ul>
+        </nav>
+
+        <button id="theme-toggle" class="btn btn-ghost btn-square" type="button" aria-pressed="false" aria-label="Switch theme" title="Toggle theme">
+          <span class="lucide-sun">
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path></svg>
+  
+</span>
+          <span class="lucide-moon hidden">
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6" aria-hidden="true"><path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401"></path></svg>
+  
+</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+
+    
+    
+    
+    
+    
+
+    
+    
+    
+      
+    
+
+    <main id="main" class="min-h-[60vh] max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8" tabindex="-1">
+      
+        <div class="xl:grid xl:grid-cols-[1fr_18rem] xl:gap-10 mt-8 lg:mt-10">
+          <article class="prose max-w-none m-0 xl:col-span-1">
+            
+              <header class="mb-6 lg:mb-8">
+                <h1 class="font-heading text-4xl sm:text-5xl md:text-6xl tracking-tight leading-tight">
+                  Style Guide: Hypebrüt (Analytic Brutalism)
+                </h1>
+              </header>
+            
+            <blockquote>
+<p><em>A generative protocol for a digital garden. This document defines an analytical method and voice<br>
+that treats text as a designed artifact and analysis as an architectural survey.</em></p>
+</blockquote>
+<p><strong>Analytic Brutalism</strong> is a writing style that treats text as a designed artifact and analysis as an<br>
+architectural survey. Its core purpose is to dissect a subject by revealing its invisible<br>
+infrastructure—the systems, incentives, and unspoken rules that truly govern it. The voice is that<br>
+of a detached, rigorous <strong>diagnostic operator</strong> who presents findings with the stark clarity of the<br>
+Hypebrüt interface.</p>
+<hr>
+<h3 id="i.-core-principles-(the-aesthetic-stance)" tabindex="-1"><strong>I. Core Principles (The Aesthetic Stance)</strong> <a class="direct-link" href="#i.-core-principles-(the-aesthetic-stance)" aria-hidden="true">#</a></h3>
+<p>These are the non-negotiable foundations of the style.</p>
+<h4 id="infrastructural-inversion-(make-the-skeleton-obvious)" tabindex="-1"><strong>Infrastructural Inversion (Make the Skeleton Obvious)</strong> <a class="direct-link" href="#infrastructural-inversion-(make-the-skeleton-obvious)" aria-hidden="true">#</a></h4>
+<p>The primary method is to invert the subject. Instead of focusing on the surface-level story, the analysis maps the underlying system that produces it. The text makes the invisible scaffolding—the legal code, economic incentives, social protocols, psychological patterns—the main character. The structure of the argument itself must be transparent and legible.</p>
+<h4 id="forensic-detachment-(the-curator's-voice)" tabindex="-1"><strong>Forensic Detachment (The Curator's Voice)</strong> <a class="direct-link" href="#forensic-detachment-(the-curator's-voice)" aria-hidden="true">#</a></h4>
+<p>The voice is clinical, precise, and maintains strict <strong>epistemic distance</strong>. It describes observable phenomena and avoids asserting unobservable internal states like &quot;intent.&quot; This calculated detachment gives the final thesis its cold power and is the source of the style's <strong>aggressive</strong> and <strong>rude</strong> quality: it is the unapologetic rudeness of radical, unvarnished honesty. The operator's relationship with the generative LLM is that of a craftsman to their material; the LLM is a <strong>volatile, pattern-laden substrate</strong> to be skillfully guided, not a collaborator.</p>
+<h4 id="authority-through-density-(tourist-purist)" tabindex="-1"><strong>Authority Through Density (Tourist × Purist)</strong> <a class="direct-link" href="#authority-through-density-(tourist-purist)" aria-hidden="true">#</a></h4>
+<h2 id="the-argument's-authority-comes-from-the-overwhelming-density-of-its-evidence.-the-text-provides-a-crisp-premise-for-newcomers-while-containing-layers-of-deep-interconnected-evidence-for-the-dedicated-reader.-word-count-is-achieved-not-through-filler-but-by-adding-layers-of-corroborating-evidence-historical-context-and-second-order-analysis." tabindex="-1">The argument's authority comes from the overwhelming density of its evidence. The text provides a <strong>crisp premise for newcomers</strong> while containing layers of deep, interconnected evidence for the dedicated reader. Word count is achieved not through filler but by adding layers of <strong>corroborating evidence</strong>, <strong>historical context</strong>, and <strong>second-order analysis</strong>. <a class="direct-link" href="#the-argument's-authority-comes-from-the-overwhelming-density-of-its-evidence.-the-text-provides-a-crisp-premise-for-newcomers-while-containing-layers-of-deep-interconnected-evidence-for-the-dedicated-reader.-word-count-is-achieved-not-through-filler-but-by-adding-layers-of-corroborating-evidence-historical-context-and-second-order-analysis." aria-hidden="true">#</a></h2>
+<h3 id="ii.-the-voice-and-palette" tabindex="-1"><strong>II. The Voice &amp; Palette</strong> <a class="direct-link" href="#ii.-the-voice-and-palette" aria-hidden="true">#</a></h3>
+<p>The voice is the constant across all artifacts. The palette provides tonal flexibility.</p>
+<h4 id="the-voice:-forensic-detachment" tabindex="-1"><strong>The Voice: Forensic Detachment</strong> <a class="direct-link" href="#the-voice:-forensic-detachment" aria-hidden="true">#</a></h4>
+<p>The voice is clinical, precise, and maintains strict <strong>epistemic distance</strong>. It describes observable<br>
+phenomena and avoids asserting unobservable internal states like &quot;intent.&quot; This calculated<br>
+detachment makes the final thesis feel like an objective, inescapable conclusion and is the source<br>
+of the style's <strong>aggressive</strong> and <strong>rude</strong> quality: it is the unapologetic rudeness of radical,<br>
+unvarnished honesty.</p>
+<h4 id="the-palette:-analytical-stances-and-tones" tabindex="-1"><strong>The Palette: Analytical Stances &amp; Tones</strong> <a class="direct-link" href="#the-palette:-analytical-stances-and-tones" aria-hidden="true">#</a></h4>
+<p>The core voice can be modulated by a chosen stance to serve the thesis.</p>
+<ul>
+<li>
+<p><strong>Stances (The &quot;Why&quot;):</strong></p>
+<ul>
+<li><strong>Adversarial:</strong> To expose a systemic flaw or hypocrisy.</li>
+<li><strong>Ethnographic:</strong> To explain the internal logic of a complex system.</li>
+<li><strong>Archaeological:</strong> To reconstruct a unifying logic from disparate evidence.</li>
+<li><strong>Ironic/Meta:</strong> To apply the analytical engine to a mundane subject to explore the nature of<br>
+analysis itself.</li>
+</ul>
+</li>
+<li>
+<p><strong>Tones (The &quot;How&quot;):</strong></p>
+<ul>
+<li><strong>Sardonic Wit:</strong> Deployed via dry understatement and the deadpan juxtaposition of contradictory<br>
+facts.</li>
+<li><strong>Dark Humor:</strong> Emerges when clinical detachment is applied to tragic or absurd human events.</li>
+<li><strong>Encyclopedic Authority:</strong> Achieved through the high-density presentation of specialized data.</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="iii.-the-forms-and-signatures" tabindex="-1"><strong>III. The Forms &amp; Signatures</strong> <a class="direct-link" href="#iii.-the-forms-and-signatures" aria-hidden="true">#</a></h3>
+<p>The method can produce artifacts of varying shapes, corresponding to the Hypebrüt surfaces. The architecture is <strong>emergent</strong>, not templated.</p>
+<h4 id="hypebrut-surfaces" tabindex="-1"><strong>Hypebrüt Surfaces</strong> <a class="direct-link" href="#hypebrut-surfaces" aria-hidden="true">#</a></h4>
+<ul>
+<li><strong>The Note (Longform Essay):</strong> The default form for a complete, multi-phase analysis. It contains a full preamble, several thematic sections that build an escalating argument, and a strong, synthesizing conclusion.</li>
+<li><strong>The Specimen Sheet (Dossier/Fragment):</strong> A more concise form that presents a curated set of high-signal evidence. The thesis is strongly implied by the curation and presentation of the fragments but not exhaustively argued.</li>
+</ul>
+<h4 id="stylistic-signatures" tabindex="-1"><strong>Stylistic Signatures</strong> <a class="direct-link" href="#stylistic-signatures" aria-hidden="true">#</a></h4>
+<ul>
+<li><strong>The Synthesizing Conclusion:</strong> Articles must end with a strong, decisive conclusion. This section does not introduce new evidence but instead restates the central thesis (the &quot;undertone&quot;) in its sharpest form, cementing the argument and providing a definitive final statement.</li>
+<li><strong>The Conclusive Undercut:</strong> The sharp, declarative &quot;stinger&quot; sentence at the end of a key paragraph that bluntly states the implication of the evidence.</li>
+<li><strong>The Epistemic Note System:</strong> The use of a footnoted appendix for meta-commentary on sources, using the formal types: <strong>Primary</strong>, <strong>Adversarial</strong>, <strong>Conceptual</strong>, and <strong>Epistolary</strong>. This provides a transparent look at the research scaffolding.</li>
+</ul>
+<hr>
+<h3 id="**iv.-formalization-and-attribution" tabindex="-1">**IV. Formalization &amp; Attribution <a class="direct-link" href="#**iv.-formalization-and-attribution" aria-hidden="true">#</a></h3>
+<p>This document has been formalized under the Effusion Labs protocol. All structural and intellectual<br>
+content herein is generated and maintained by Effusion Labs as a component of its ongoing analytical<br>
+framework.</p>
+<blockquote>
+<p>Maintained by Effusion Labs • revision logic &gt; expression logic</p>
+</blockquote>
+
+          </article>
+
+          
+            
+            
+  <aside class="w-full mt-10 xl:mt-0 xl:pl-6 xl:border-l xl:border-base-content/10 text-sm opacity-90">
+    <div class="xl:sticky xl:top-28 space-y-3">
+      <h2 class="font-heading text-base uppercase tracking-widest opacity-70">Meta</h2>
+      <ul class="space-y-1">
+        <li><strong>Status:</strong> Codified</li>
+        
+          <li>
+            <strong>Date:</strong> <time datetime="2025-09-26">September 26th, 2025</time>
+          </li>
+        
+        <li><strong>Certainty:</strong> foundational-protocol</li>
+        <li><strong>Importance:</strong> 5</li>
+        
+          <li>
+            <strong>Tags:</strong>
+            <div class="mt-1 flex flex-wrap gap-1">
+              
+                <a class="badge badge-outline badge-xs no-underline" href="/tags/digital-garden-philosophy/">#[digital-garden-philosophy]</a>
+              
+                <a class="badge badge-outline badge-xs no-underline" href="/tags/hypebrut-design-system/">#[hypebrut-design-system]</a>
+              
+                <a class="badge badge-outline badge-xs no-underline" href="/tags/protocolist-art/">#[protocolist-art]</a>
+              
+                <a class="badge badge-outline badge-xs no-underline" href="/tags/analytic-brutalism/">#analytic-brutalism</a>
+              
+                <a class="badge badge-outline badge-xs no-underline" href="/tags/content-generation/">#content-generation</a>
+              
+                <a class="badge badge-outline badge-xs no-underline" href="/tags/curator-operator/">#curator-operator</a>
+              
+                <a class="badge badge-outline badge-xs no-underline" href="/tags/emergent-architecture/">#emergent-architecture</a>
+              
+                <a class="badge badge-outline badge-xs no-underline" href="/tags/epistemic-distance/">#epistemic-distance</a>
+              
+                <a class="badge badge-outline badge-xs no-underline" href="/tags/forensic-detachment/">#forensic-detachment</a>
+              
+                <a class="badge badge-outline badge-xs no-underline" href="/tags/hypebrut/">#hypebrut</a>
+              
+                <a class="badge badge-outline badge-xs no-underline" href="/tags/infrastructural-inversion/">#infrastructural-inversion</a>
+              
+                <a class="badge badge-outline badge-xs no-underline" href="/tags/llm-prompting/">#llm-prompting</a>
+              
+                <a class="badge badge-outline badge-xs no-underline" href="/tags/meta/">#meta</a>
+              
+                <a class="badge badge-outline badge-xs no-underline" href="/tags/methodology/">#methodology</a>
+              
+                <a class="badge badge-outline badge-xs no-underline" href="/tags/methodology-specification/">#methodology-specification</a>
+              
+                <a class="badge badge-outline badge-xs no-underline" href="/tags/protocol/">#protocol</a>
+              
+                <a class="badge badge-outline badge-xs no-underline" href="/tags/style-guide/">#style-guide</a>
+              
+            </div>
+          </li>
+        
+        
+          <li>
+            <strong>Memory Ref:</strong>
+            <ul class="pl-4 list-disc">
+              <li>[protocolist-art]</li><li>[hypebrut-design-system]</li><li>[digital-garden-philosophy]</li>
+            </ul>
+          </li>
+        
+      </ul>
+    </div>
+  </aside>
+
+          
+        </div>
+      
+    </main>
+
+    
+  <footer class="mt-16 p-8 text-center text-sm text-text/60 border-top border-base-200 bg-base-100/80 backdrop-blur">
+    <span class="block font-mono text-xs tracking-widest mb-2" data-build="">
+      <time datetime=""></time>
+    </span>
+    &copy; 2025 Effusion Labs. A space for creative
+    synthesis.
+    <div class="mt-2"><a href="https://github.com/toxicwind/effusion-labs" class="external-link link link-hover inline-flex items-center gap-1" target="_blank" rel="noopener noreferrer" data-external="true">
+    <span>GitHub</span>
+    <span aria-hidden="true" class="inline-block">
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4" aria-hidden="true"><path d="M15 3h6v6"></path><path d="M10 14 21 3"></path><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path></svg>
+  
+</span>
+    <span class="sr-only">(opens in a new tab)</span>
+  </a></div>
+  </footer>
+
+  </body>
+</html>

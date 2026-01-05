@@ -1,0 +1,26 @@
+openapi: 3.0.0
+info:
+  title: Effusion Labs Gateway API
+  version: 1.0.0
+paths:
+  /convert:
+    post:
+      summary: Convert URL to Markdown
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                url:
+                  type: string
+      responses:
+        '200':
+          description: Successful conversion
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  markdown:
+                    type: string

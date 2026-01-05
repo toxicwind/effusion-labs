@@ -1,4 +1,4 @@
-import { contentArea } from '../../lib/content-area.mjs'
+import { contentArea } from '../../utils/content-area.mjs'
 
 const base = contentArea('work')
 

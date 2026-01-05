@@ -1,0 +1,102 @@
+{
+  "../src/assets/js/mschf-overlay.js": {
+    "file": "assets/mschf-overlay.DENOLFo-.js",
+    "name": "mschf-overlay",
+    "src": "../src/assets/js/mschf-overlay.js",
+    "isDynamicEntry": true
+  },
+  "_app.BgWGK7HX.css": {
+    "file": "assets/app.BgWGK7HX.css",
+    "src": "_app.BgWGK7HX.css"
+  },
+  "_app.CL1t7Pkj.js": {
+    "file": "assets/app.CL1t7Pkj.js",
+    "name": "app",
+    "dynamicImports": [
+      "../src/assets/js/mschf-overlay.js"
+    ],
+    "css": [
+      "assets/app.BgWGK7HX.css"
+    ]
+  },
+  "_lvreport-app.Dn6rYmj3.js": {
+    "file": "assets/lvreport-app.Dn6rYmj3.js",
+    "name": "lvreport-app"
+  },
+  "content/archives/collectables/designer-toys/index.html": {
+    "file": "assets/index.BynUNpT6.js",
+    "name": "index",
+    "src": "content/archives/collectables/designer-toys/index.html",
+    "isEntry": true,
+    "imports": [
+      "_app.CL1t7Pkj.js"
+    ],
+    "assets": [
+      "assets/logo-64.BFDv5OQO.png"
+    ]
+  },
+  "content/archives/collectables/designer-toys/pop-mart/index.html": {
+    "file": "assets/index.8Dx4-7_B.js",
+    "name": "index",
+    "src": "content/archives/collectables/designer-toys/pop-mart/index.html",
+    "isEntry": true,
+    "imports": [
+      "_app.CL1t7Pkj.js"
+    ],
+    "assets": [
+      "assets/logo-64.BFDv5OQO.png"
+    ]
+  },
+  "content/archives/collectables/index.html": {
+    "file": "assets/index.JsJVNMxS.js",
+    "name": "index",
+    "src": "content/archives/collectables/index.html",
+    "isEntry": true,
+    "imports": [
+      "_app.CL1t7Pkj.js"
+    ],
+    "assets": [
+      "assets/logo-64.BFDv5OQO.png"
+    ]
+  },
+  "content/archives/provenance/index.html": {
+    "file": "assets/index.BI1WOJjE.js",
+    "name": "index",
+    "src": "content/archives/provenance/index.html",
+    "isEntry": true,
+    "imports": [
+      "_app.CL1t7Pkj.js"
+    ],
+    "assets": [
+      "assets/logo-64.BFDv5OQO.png"
+    ]
+  },
+  "images/logo-420.avif": {
+    "file": "assets/logo-420.DNLFBL_u.avif",
+    "src": "images/logo-420.avif"
+  },
+  "images/logo-420.png": {
+    "file": "assets/logo-420.DOzltfSI.png",
+    "src": "images/logo-420.png"
+  },
+  "images/logo-420.webp": {
+    "file": "assets/logo-420.FPQN5cbR.webp",
+    "src": "images/logo-420.webp"
+  },
+  "images/logo-64.png": {
+    "file": "assets/logo-64.BFDv5OQO.png",
+    "src": "images/logo-64.png"
+  },
+  "work/index.html": {
+    "file": "assets/index.D2SO8atk.js",
+    "name": "index",
+    "src": "work/index.html",
+    "isEntry": true,
+    "imports": [
+      "_app.CL1t7Pkj.js"
+    ],
+    "assets": [
+      "assets/logo-64.BFDv5OQO.png"
+    ]
+  }
+}
