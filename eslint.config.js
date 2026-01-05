@@ -170,7 +170,7 @@ export default [
 
     // Net helpers (WIP)
     {
-        files: ['src/lib/net/**/*.{js,mjs,ts}'],
+        files: ['src/utils/net/**/*.{js,mjs,ts}'],
         rules: { 'import/no-unresolved': 'off' }
     },
 

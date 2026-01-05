@@ -158,7 +158,7 @@ Playwright is the canonical verification loop for UI integrity, data discipline,
 ## Repo Search Protocol (concise)
 
 1. List files first: `rg --files` or `fd`.
-2. Inspect in order: `package.json` → `eleventy.config.mjs` → `src/lib/` → `tools/` → `src/content/`
+2. Inspect in order: `package.json` → `eleventy.config.mjs` → `src/utils/` → `tools/` → `src/content/`
    → `public/` → `vite.config.mjs` → `tailwind.config.mjs` → `test/`.
 3. Treat `node_modules/`, `_site/`, `artifacts/`, `logs/`, `lib_content.json` as heavy.
 

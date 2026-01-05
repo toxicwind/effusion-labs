@@ -9,7 +9,7 @@ const safePath = process.env.CURL_SHIM_SAFE_PATH || process.env.PATH || ''
 const args = process.argv.slice(2)
 const here = path.dirname(fileURLToPath(import.meta.url))
 const repoRoot = path.resolve(here, '../..')
-const modulePath = path.join(repoRoot, 'src/lib/net/webpageToMarkdown.mjs')
+const modulePath = path.join(repoRoot, 'src/utils/net/webpageToMarkdown.mjs')
 
 const MARKERS = {
   contentType: '__curl_shim_content_type__',

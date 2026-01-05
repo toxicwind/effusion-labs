@@ -1,4 +1,4 @@
-import { isIndexEntry } from './lib/collections/utils.mjs'
+import { isIndexEntry } from './utils/collections/utils.mjs'
 
 const CORE_AREAS = [
   {

@@ -16,22 +16,22 @@ import schema from '@quasibit/eleventy-plugin-schema'
 import sitemap from '@quasibit/eleventy-plugin-sitemap'
 import tailwindcss from '@tailwindcss/vite'
 import Beasties from 'beasties'
-import localImageTransformPlugin from './src/lib/plugins/local-image-transform.mjs'
+import localImageTransformPlugin from './src/utils/plugins/local-image-transform.mjs'
 
-import registerArchive from './src/lib/archives/index.mjs'
-import { buildArchiveNav } from './src/lib/archives/nav.mjs'
-import { registerCollections } from './src/lib/collections/index.mjs'
-import { getBuildInfo } from './src/lib/data/build-info.mjs'
-import { buildGlobals } from './src/lib/data/build.mjs'
-import { eleventyComputed as computedGlobal } from './src/lib/data/computed.mjs'
-import { buildNav } from './src/lib/data/nav.mjs'
-import { registerFilters } from './src/lib/filters/index.mjs'
-import { createResolvers } from './src/lib/interlinkers/resolvers.mjs'
-import { flushUnresolved } from './src/lib/interlinkers/unresolved-report.mjs'
-import { applyMarkdownExtensions } from './src/lib/markdown/index.mjs'
-import { registerShortcodes } from './src/lib/shortcodes/index.mjs'
-import { dirs } from './src/lib/site.mjs'
-import htmlToMarkdownUnified from './src/lib/transforms/html-to-markdown.mjs'
+import registerArchive from './src/utils/archives/index.mjs'
+import { buildArchiveNav } from './src/utils/archives/nav.mjs'
+import { registerCollections } from './src/utils/collections/index.mjs'
+import { getBuildInfo } from './src/utils/data/build-info.mjs'
+import { buildGlobals } from './src/utils/data/build.mjs'
+import { eleventyComputed as computedGlobal } from './src/utils/data/computed.mjs'
+import { buildNav } from './src/utils/data/nav.mjs'
+import { registerFilters } from './src/utils/filters/index.mjs'
+import { createResolvers } from './src/utils/interlinkers/resolvers.mjs'
+import { flushUnresolved } from './src/utils/interlinkers/unresolved-report.mjs'
+import { applyMarkdownExtensions } from './src/utils/markdown/index.mjs'
+import { registerShortcodes } from './src/utils/shortcodes/index.mjs'
+import { dirs } from './src/utils/site.mjs'
+import htmlToMarkdownUnified from './src/utils/transforms/html-to-markdown.mjs'
 
 const projectRoot = path.dirname(fileURLToPath(import.meta.url))
 const srcDir = path.join(projectRoot, 'src')
@@ -130,6 +130,18 @@ export default function(eleventyConfig) {
   })
 
   // --- End: Event Handlers ---
+  const serverHost = process.env.ELEVENTY_HOST ?? '127.0.0.1'
+  const serverPort = Number.parseInt(process.env.ELEVENTY_PORT ?? '8080', 10)
+  const viteDevHost = process.env.VITE_DEV_HOST ?? serverHost
+  const viteHmrPort = Number.parseInt(process.env.VITE_HMR_PORT ?? '24678', 10)
+
+  eleventyConfig.setServerOptions({
+    host: serverHost,
+    port: Number.isNaN(serverPort) ? 8080 : serverPort,
+    domDiff: false,
+    showVersion: false,
+  })
+
   eleventyConfig.setServerPassthroughCopyBehavior('copy')
   eleventyConfig.addPassthroughCopy('public')
   eleventyConfig.ignores.add('src/content/docs/**')
@@ -150,6 +162,11 @@ export default function(eleventyConfig) {
       server: {
         mode: 'development',
         middlewareMode: true,
+        host: viteDevHost,
+        hmr: {
+          host: viteDevHost,
+          ...(Number.isNaN(viteHmrPort) ? {} : { port: viteHmrPort }),
+        },
         fs: {
           allow: [projectRoot, srcDir],
         },
@@ -233,7 +250,7 @@ export default function(eleventyConfig) {
           return tree
         }
       },
-      { priority: 1 },
+      { priority: -5 },
     )
   }
 
@@ -349,7 +366,7 @@ export default function(eleventyConfig) {
       // better not use "public" as the name of the output folder (see above...)
       output: process.env.ELEVENTY_TEST_OUTPUT || '_site',
       includes: '_includes',
-      layouts: 'layouts',
+      layouts: '_includes/layouts',
       data: '_data',
     },
   }

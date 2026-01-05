@@ -148,7 +148,7 @@ in CI.
 
 ```
 src/content/          → Markdown & Nunjucks content.
-src/lib/              → Filters, data pipelines, Eleventy helpers.
+src/utils/              → Filters, data pipelines, Eleventy helpers.
 tools/                → Build + diagnostics scripts (Chromium checker, LV Images pipeline, patches).
 bin/bin/              → Shimmed CLI utilities for reproducible environments.
 .github/workflows/    → ci.yml, dead.yml, deploy.yml.

@@ -807,7 +807,11 @@ metaDisable: true
             <tr data-section-row="sitemaps" data-entry-id="{{ r.id }}" data-type="{{ r.type }}">
               <td class="font-medium">
                 {% if r.host %}
-                  {% set hostHref = r.host startswith('http') and r.host or 'https://' ~ r.host %}
+                  {# Build an absolute host link, defaulting to https:// when scheme missing #}
+                  {% set hostHref = r.host %}
+                  {% if hostHref and not ('://' in hostHref) %}
+                    {% set hostHref = 'https://' ~ hostHref %}
+                  {% endif %}
                   <a
                     class="link link-hover"
                     href="{{ hostHref }}"
@@ -1262,7 +1266,10 @@ metaDisable: true
             <tr data-section-row="hosts" data-entry-id="{{ h.id }}">
               <td>
                 {% if h.host %}
-                  {% set hostHref = h.host startswith('http') and h.host or 'https://' ~ h.host %}
+                  {% set hostHref = h.host %}
+                  {% if hostHref and not ('://' in hostHref) %}
+                    {% set hostHref = 'https://' ~ hostHref %}
+                  {% endif %}
                   <a
                     class="link link-hover"
                     href="{{ hostHref }}"
@@ -1413,7 +1420,10 @@ metaDisable: true
               <td class="align-top">
                 <div class="flex flex-col gap-1">
                   {% if r.host %}
-                    {% set robotsHostHref = r.host startswith('http') and r.host or 'https://' ~ r.host %}
+                    {% set robotsHostHref = r.host %}
+                    {% if robotsHostHref and not ('://' in robotsHostHref) %}
+                      {% set robotsHostHref = 'https://' ~ robotsHostHref %}
+                    {% endif %}
                     <a
                       class="font-medium link link-hover"
                       href="{{ robotsHostHref }}"
@@ -1512,9 +1522,11 @@ metaDisable: true
                 {% if r.parsed.other and (r.parsed.other | length) %}
                   <div class="mt-1 flex flex-wrap gap-1 text-[11px]">
                     {% for key, vals in r.parsed.other %}
-                      <span class="badge badge-outline badge-xs">{{ key }}: {{
-                          vals | join(' · ')
-                        }}</span>
+                      {% set displayVals = vals %}
+                      {% if displayVals is iterable and not (displayVals is string) %}
+                        {% set displayVals = displayVals | join(' · ') %}
+                      {% endif %}
+                      <span class="badge badge-outline badge-xs">{{ key }}: {{ displayVals }}</span>
                     {% endfor %}
                   </div>
                 {% endif %}
@@ -1677,7 +1689,10 @@ metaDisable: true
               <td class="align-top">
                 <div class="flex flex-col gap-1">
                   {% if d.host %}
-                    {% set docsHostHref = d.host startswith('http') and d.host or 'https://' ~ d.host %}
+                    {% set docsHostHref = d.host %}
+                    {% if docsHostHref and not ('://' in docsHostHref) %}
+                      {% set docsHostHref = 'https://' ~ docsHostHref %}
+                    {% endif %}
                     <a
                       class="font-medium link link-hover"
                       href="{{ docsHostHref }}"
@@ -1766,7 +1781,10 @@ metaDisable: true
         {% set pageHref = i.pageUrl or i.src %}
         {% set titleText = i.title or i.basename or i.src %}
         {% set lowerTitle = (titleText or '') | lower %}
-        {% set tagsCombined = ((i.tags or []) + (i.flags or [])) | join(' ') | lower %}
+        {% set tagsPrimary = (i.tags or []) | join(' ') %}
+        {% set tagsSecondary = (i.flags or []) | join(' ') %}
+        {% set tagsCombinedRaw %}{{ tagsPrimary }} {% if tagsSecondary %}{{ tagsSecondary }}{% endif %}{% endset %}
+        {% set tagsCombined = tagsCombinedRaw | trim | lower %}
         {% set isFresh = 'fresh arrival' in lowerTitle or 'fresh' in tagsCombined %}
         {% set isThumbnail = i.thumbnail and (i.thumbnail != i.src) and (not isFresh) %}
         {% set hostLabel = i.host or (i.pageUrl and i.pageUrl | replace('https://', '') | replace('http://', '') | split('/') | first) or 'sample' %}

@@ -24,7 +24,7 @@ const { ScalableBloomFilter } = pkg
 import { chromium } from 'playwright'
 import { bundleDataset } from '../../../../tools/lv-images/bundle-lib.mjs'
 import { resolveChromium } from '../../../../tools/resolve-chromium.mjs'
-import { htmlFragmentToMarkdown } from '../../../lib/transforms/html-to-markdown.mjs'
+import { htmlFragmentToMarkdown } from '../../../utils/transforms/html-to-markdown.mjs'
 import { decodeRobots } from './robots_decode.mjs'
 
 /* ============================================================
