@@ -1,0 +1,30 @@
+{
+    "name": "Effusion Labs",
+    "short_name": "Effusion",
+    "description": "Digital studio and knowledge base dedicated to the art of creative synthesis.",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#16161a",
+    "theme_color": "#00e0ff",
+    "icons": [
+        {
+            "src": "/favicon.svg",
+            "sizes": "any",
+            "type": "image/svg+xml",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "/apple-touch-icon.png",
+            "sizes": "180x180",
+            "type": "image/png"
+        }
+    ],
+    "screenshots": [
+        {
+            "src": "/images/og-image.png",
+            "sizes": "1200x630",
+            "type": "image/png",
+            "label": "Effusion Labs Home"
+        }
+    ]
+}

@@ -1,0 +1,21 @@
+{# Badge component (linkable) #}
+{% macro badge(text, href, tone='outline') -%}
+  {% set _text = text or '' %}
+  {% set _href = href or '' %}
+  {% if _href and _href[0] == '/' %}
+    {% set _href = _href | url %}
+  {% endif %}
+  {% if _href %}
+    <a
+      href="{{ _href }}"
+      class="
+        badge badge-{{ tone }} badge-sm no-underline transition-colors hover:border-primary hover:text-primary
+        focus:outline-none focus-visible:ring focus-visible:ring-primary/40
+      "
+    >
+      {{ _text }}
+    </a>
+  {% else %}
+    <span class="badge badge-{{ tone }} badge-sm">{{ _text }}</span>
+  {% endif %}
+{%- endmacro %}

@@ -1,0 +1,56 @@
+{
+  "product_id": "LAB014",
+  "brand": "POP MART × Coca-Cola",
+  "line": "The Monsters × Coca-Cola",
+  "character": "Labubu & Zimomo",
+  "series": "Coca-Cola",
+  "product_title": "THE MONSTERS Coca-Cola Series – Vinyl Face Blind Box",
+  "variant_name": "10 standard figures + 1 secret edition (“Labubu Express”)",
+  "form": "Vinyl face blind-box figures",
+  "sku": "6931571026271",
+  "size": {
+    "height_cm": 15.5,
+    "dimensions_cm": "15.5×17 cm",
+    "weight_kg": 0.1,
+    "pendant_height_cm": null,
+    "sitting_height_cm": null
+  },
+  "materials": {
+    "shell": "Polyester/ABS/PVC",
+    "plush": "Plush-textured body",
+    "stuffing": "Polyester/iron wire"
+  },
+  "packaging": {
+    "type": "Blind-box carton",
+    "dimensions_cm": null
+  },
+  "release_info": {
+    "release_date": "2025-01-24",
+    "edition_type": "Blind-box series",
+    "edition_size": null
+  },
+  "pricing": {
+    "original_msrp": {
+      "USD_box": 39.99,
+      "USD_set": 239.94
+    },
+    "current_status": "Sold out",
+    "secondary_market_range": {
+      "USD_box": "60-100",
+      "USD_secret_edition": "3000-5000"
+    }
+  },
+  "availability": {
+    "regions": ["Global", "US", "CN", "SG", "UK", "AU"],
+    "channels": ["POP MART official online store", "in-store EQL drops"],
+    "stock_status": "Sold out"
+  },
+  "designer": "Kasing Lung (龙家升)",
+  "accessories": [
+    "Happy Factor: removable red knitted scarf and Coca-Cola can prop",
+    "Surprise Shake: Christmas hat and Coca-Cola bottle prop",
+    "Secret \"Mysterious Guest\": LABUBU emerging from Coca-Cola can"
+  ],
+  "articulation": "Fixed",
+  "colorway": "Themed ski and winter outfits with Coca-Cola branding"
+}

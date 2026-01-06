@@ -1,0 +1,40 @@
+TAP version 13
+# [@photogabble/wikilinks] WARNING Wikilink (/archives/collectables/designer-toys/pop-mart/the-monsters/products/{{ p.data.product_id }}/) found pointing to to non-existent page in:
+# \\t- ./src/content/sparks/vapor-linked-governance.md
+# [@photogabble/wikilinks] WARNING Wikilink (/archives/collectables/designer-toys/pop-mart/the-monsters/characters/{{ c.data.slug }}/) found pointing to to non-existent page in:
+# \\t- ./src/content/sparks/vapor-linked-governance.md
+# [@photogabble/wikilinks] WARNING Wikilink ([[node-handle]]) found pointing to to non-existent page in:
+# \\t- ./src/content/sparks/vapor-linked-governance.md
+# [@photogabble/wikilinks] WARNING Wikilink ([[bracketed-handle]]) found pointing to to non-existent page in:
+# \\t- ./src/content/sparks/vapor-linked-governance.md
+# [11ty] Copied 77 Wrote 113 files in 1.73 seconds (15.4ms each, v3.1.2)
+# Subtest: homepage work list mixes types
+ok 1 - homepage work list mixes types
+  ---
+  duration_ms: 1831.796446
+  type: 'test'
+  ...
+# [@photogabble/wikilinks] WARNING Wikilink (/archives/collectables/designer-toys/pop-mart/the-monsters/products/{{ p.data.product_id }}/) found pointing to to non-existent page in:
+# \\t- ./src/content/sparks/vapor-linked-governance.md
+# [@photogabble/wikilinks] WARNING Wikilink (/archives/collectables/designer-toys/pop-mart/the-monsters/characters/{{ c.data.slug }}/) found pointing to to non-existent page in:
+# \\t- ./src/content/sparks/vapor-linked-governance.md
+# [@photogabble/wikilinks] WARNING Wikilink ([[node-handle]]) found pointing to to non-existent page in:
+# \\t- ./src/content/sparks/vapor-linked-governance.md
+# [@photogabble/wikilinks] WARNING Wikilink ([[bracketed-handle]]) found pointing to to non-existent page in:
+# \\t- ./src/content/sparks/vapor-linked-governance.md
+# [11ty] Copied 77 Wrote 113 files in 1.76 seconds (15.6ms each, v3.1.2)
+# Subtest: homepage hero and work filters
+ok 2 - homepage hero and work filters
+  ---
+  duration_ms: 1908.982773
+  type: 'test'
+  ...
+1..2
+# tests 2
+# suites 0
+# pass 2
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2984.364948

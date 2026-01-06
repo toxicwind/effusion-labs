@@ -1,0 +1,19 @@
+{# Macro utilities for page metadata #}
+{% macro buildPageTitle(resume, title) -%}
+  {%- if resume and resume.name -%}
+    {{ "Resume — " ~ resume.name }}
+  {%- else -%}
+    {{ title or "Resume" }}
+  {%- endif -%}
+{%- endmacro %}
+
+{% macro buildPageDesc(resume) -%}
+  {%-
+    set base = "Resume — " ~ (resume and resume.name or "—") ~ " — " ~ (resume and resume.title or "LLM Engineering, LLMOps, Data Platforms")
+  -%}
+  {%- if resume and resume.location -%}
+    {{ base ~ " (" ~ resume.location ~ ")" }}
+  {%- else -%}
+    {{ base }}
+  {%- endif -%}
+{%- endmacro %}

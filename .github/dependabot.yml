@@ -1,0 +1,59 @@
+version: 2
+
+updates:
+  - package-ecosystem: npm
+    directory: "/"
+    schedule:
+      interval: daily
+      time: "09:00"
+      timezone: "America/Denver"
+    open-pull-requests-limit: 10
+    labels: ["deps", "npm", "automerge"]
+    groups:
+      security:
+        update-types:
+          - "security"
+          - "version-update:semver-patch"
+          - "version-update:semver-minor"
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: daily
+      time: "09:00"
+      timezone: "America/Denver"
+    open-pull-requests-limit: 10
+    labels: ["deps", "github-actions", "automerge"]
+    groups:
+      security:
+        update-types:
+          - "security"
+          - "version-update:semver-patch"
+          - "version-update:semver-minor"
+  - package-ecosystem: docker
+    directory: "/.portainer"
+    schedule:
+      interval: daily
+      time: "09:00"
+      timezone: "America/Denver"
+    open-pull-requests-limit: 10
+    labels: ["deps", "docker", "automerge"]
+    groups:
+      security:
+        update-types:
+          - "security"
+          - "version-update:semver-patch"
+          - "version-update:semver-minor"
+  - package-ecosystem: docker
+    directory: "/markdown_gateway"
+    schedule:
+      interval: daily
+      time: "09:00"
+      timezone: "America/Denver"
+    open-pull-requests-limit: 10
+    labels: ["deps", "docker", "automerge"]
+    groups:
+      security:
+        update-types:
+          - "security"
+          - "version-update:semver-patch"
+          - "version-update:semver-minor"

@@ -1,0 +1,69 @@
+TAP version 13
+# [@photogabble/wikilinks] WARNING Wikilink (/archives/collectables/designer-toys/pop-mart/the-monsters/products/{{ p.data.product_id }}/) found pointing to to non-existent page in:
+# \\t- ./src/content/sparks/vapor-linked-governance.md
+# [@photogabble/wikilinks] WARNING Wikilink (/archives/collectables/designer-toys/pop-mart/the-monsters/characters/{{ c.data.slug }}/) found pointing to to non-existent page in:
+# \\t- ./src/content/sparks/vapor-linked-governance.md
+# [@photogabble/wikilinks] WARNING Wikilink ([[node-handle]]) found pointing to to non-existent page in:
+# \\t- ./src/content/sparks/vapor-linked-governance.md
+# [@photogabble/wikilinks] WARNING Wikilink ([[bracketed-handle]]) found pointing to to non-existent page in:
+# \\t- ./src/content/sparks/vapor-linked-governance.md
+# [11ty] Copied 76 Wrote 112 files in 2.06 seconds (18.4ms each, v3.1.2)
+# Subtest: homepage hero and sections
+not ok 1 - homepage hero and sections
+  ---
+  duration_ms: 2156.905839
+  type: 'test'
+  location: '/workspace/effusion-labs/test/integration/homepage.spec.mjs:18:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    The expression evaluated to a falsy value:
+    
+      assert(!logo.hasAttribute('width'))
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (file:///workspace/effusion-labs/test/integration/homepage.spec.mjs:34:3)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+# [@photogabble/wikilinks] WARNING Wikilink (/archives/collectables/designer-toys/pop-mart/the-monsters/products/{{ p.data.product_id }}/) found pointing to to non-existent page in:
+# \\t- ./src/content/sparks/vapor-linked-governance.md
+# [@photogabble/wikilinks] WARNING Wikilink (/archives/collectables/designer-toys/pop-mart/the-monsters/characters/{{ c.data.slug }}/) found pointing to to non-existent page in:
+# \\t- ./src/content/sparks/vapor-linked-governance.md
+# [@photogabble/wikilinks] WARNING Wikilink ([[node-handle]]) found pointing to to non-existent page in:
+# \\t- ./src/content/sparks/vapor-linked-governance.md
+# [@photogabble/wikilinks] WARNING Wikilink ([[bracketed-handle]]) found pointing to to non-existent page in:
+# \\t- ./src/content/sparks/vapor-linked-governance.md
+# [11ty] Copied 76 Wrote 112 files in 2.30 seconds (20.5ms each, v3.1.2)
+# Subtest: logo image transforms to avif and webp
+not ok 2 - logo image transforms to avif and webp
+  ---
+  duration_ms: 2378.484125
+  type: 'test'
+  location: '/workspace/effusion-labs/test/integration/logo-image.spec.mjs:8:1'
+  failureType: 'testCodeFailure'
+  error: "null == '(max-width: 640px) 112px, 160px'"
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: '(max-width: 640px) 112px, 160px'
+  actual: ~
+  operator: '=='
+  stack: |-
+    file:///workspace/effusion-labs/test/integration/logo-image.spec.mjs:22:10
+    async TestContext.<anonymous> (file:///workspace/effusion-labs/test/helpers/eleventy-env.mjs:30:14)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+1..2
+# tests 2
+# suites 0
+# pass 0
+# fail 2
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 3514.878404

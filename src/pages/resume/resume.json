@@ -1,0 +1,334 @@
+{
+  "name": "Christopher Ortega",
+  "title": "LLM Engineering • LLMOps • Data Platforms",
+  "location": "Denver, CO",
+  "phoneNote": "Shareable on request via email",
+  "email": "denverchrisortega@gmail.com",
+  "linkedin": "https://linkedin.com/in/denverchrisortega",
+  "website": "https://effusionlabs.com",
+  "github": "https://github.com/toxicwind",
+  "downloadPdf": "/assets/Christopher_Ortega_Resume_2025.pdf",
+  "ogImage": "/images/og/resume-christopher-ortega.png",
+  "updated": "2025-09-06",
+
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Denver",
+    "addressRegion": "CO",
+    "addressCountry": "US"
+  },
+
+  "summary": "Software engineer with 6+ years across backend services and streaming data systems, now centered on LLM applications and LLMOps. Built and operated APIs and pipelines on AWS (EMR, Lambda, Kinesis, S3), containerized services on Kubernetes, and delivered search/analytics with Elasticsearch. Focus areas: retrieval that returns the right context, evaluation gates that block bad releases, and dashboards that surface drift early.",
+
+  "highlights": [
+    {
+      "title": "HackAPrompt 2025",
+      "value": "Top-10 (#7)",
+      "sub": "Adversarial prompt contest"
+    },
+    {
+      "title": "High-throughput data",
+      "value": "10+ TB/day",
+      "sub": "Scala/Spark • Kafka/Kinesis/Lambda"
+    },
+    {
+      "title": "API governance",
+      "value": "RBAC + OpenAPI",
+      "sub": "Spring Security • JWT • versioning"
+    },
+    {
+      "title": "Release hygiene",
+      "value": "CI/CD + K8s",
+      "sub": "GitLab checks • containerized"
+    }
+  ],
+
+  "skills": {
+    "groups": [
+      {
+        "name": "AI / LLM",
+        "items": [
+          {
+            "name": "Prompt design",
+            "hint": "Task/format constraints, system prompting, self-checks"
+          },
+          {
+            "name": "Retrieval / RAG",
+            "hint": "Chunking heuristics, hybrid search, re-ranking, citations"
+          },
+          {
+            "name": "Evaluation / metrics",
+            "hint": "Small gold sets, pass@k, coverage/latency/safety gates"
+          },
+          {
+            "name": "Safety controls",
+            "hint": "Guardrails, allow/deny lists, output sanitization"
+          },
+          { "name": "PyTorch" },
+          { "name": "Transformers" },
+          { "name": "LangChain" },
+          { "name": "Ollama" }
+        ]
+      },
+      {
+        "name": "Backend & Data",
+        "items": [
+          { "name": "Python" },
+          { "name": "Scala (background)" },
+          { "name": "Spark", "hint": "Batch + streaming on EMR" },
+          {
+            "name": "Elasticsearch",
+            "hint": "Index design, aggregations, analyzers"
+          },
+          { "name": "Kafka" },
+          { "name": "Kinesis" },
+          { "name": "pandas" },
+          { "name": "NumPy" }
+        ]
+      },
+      {
+        "name": "Cloud & DevOps",
+        "items": [
+          {
+            "name": "AWS",
+            "hint": "EMR, Lambda, Kinesis, S3, CloudWatch, RDS"
+          },
+          { "name": "Kubernetes" },
+          { "name": "Terraform" },
+          { "name": "Docker" },
+          { "name": "GitLab CI/CD" }
+        ]
+      },
+      {
+        "name": "APIs & Practices",
+        "items": [
+          { "name": "REST" },
+          {
+            "name": "OpenAPI",
+            "hint": "Versioning, schema linting, compatibility checks"
+          },
+          { "name": "JWT/OAuth2" },
+          {
+            "name": "Release checks",
+            "hint": "Quality bars + rollout/rollback playbooks"
+          },
+          { "name": "Observability", "hint": "Metrics, logs, traces, SLOs" },
+          { "name": "Response playbooks" },
+          { "name": "TRDs" },
+          { "name": "BDD acceptance" }
+        ]
+      }
+    ]
+  },
+
+  "tools": [
+    "VS Code",
+    "Git",
+    "GitLab",
+    "OpenAPI Generator",
+    "Postman",
+    "cURL",
+    "jq",
+    "DBeaver",
+    "Markdown / MDX",
+    "Eleventy (11ty)",
+    "Tailwind 4",
+    "Nunjucks"
+  ],
+
+  "experience": [
+    {
+      "company": "Independent Engineering & Security Research",
+      "role": "Engineer / Consultant",
+      "start": "Dec 2023",
+      "end": "",
+      "location": "Denver, CO",
+      "highlights": [
+        "HackAPrompt 2025 — Top-10 (7th): turned jailbreak tactics into repeatable tests and mitigations; added rollout controls for accuracy and safety with shadow and canary runs.",
+        "Authored evaluation suites (200+ prompts) with Positive/Negative/Risk cases; checks for groundedness (“no citation → no claim”), refusal-appropriateness, unsafe-rate, and p50/p95; deltas: +9 accuracy points, p95 ≤1.8s, unsafe probes ~0 on re-tests.",
+        "Patent Intelligence Agent (consulting, private client): constrained Q&A over patent corpora with hybrid semantic + CPC/IPC filtering, claim/abstract parsing, citation-trail review, and landscape digests; outputs include inline citations and limitation mapping; added RBAC, prompt-safety controls, and clear notices.",
+        "Built local LLM workflows with modular orchestration (prompt-rewrite steps, LoRA adapters, graph-style configs) to compare prompts/models offline with reproducible inputs.",
+        "Engineered a modular Eleventy (11ty) 3.x system (Nunjucks, Tailwind 4) with markdown-it extensions, interlinking/navigation plugins, and GitHub Actions for reproducible builds."
+      ],
+      "tags": [
+        "RAG",
+        "Guardrails",
+        "RBAC",
+        "OpenAPI",
+        "Elasticsearch",
+        "LangChain",
+        "PyTorch",
+        "Ollama",
+        "Tailwind 4",
+        "Eleventy 3"
+      ]
+    },
+    {
+      "company": "Charter Communications",
+      "role": "Senior Software Engineer / Platform Tech Lead",
+      "start": "Feb 2019",
+      "end": "Nov 2023",
+      "location": "Denver, CO",
+      "highlights": [
+        "Shaped backend architecture for segmentation/measurement across millions of subscribers; aligned product, SRE, and engineering on release criteria and operational readiness.",
+        "Implemented role-based access with Spring Security + JWT; enforced OpenAPI hygiene and versioning to keep partner integrations stable across releases.",
+        "Built Scala/Spark batch + stream services processing 10+ TB/day; added Kafka·Kinesis·Lambda pathways to support near-real-time activation triggers.",
+        "Drove Elasticsearch indexing/aggregation patterns for complex eligibility queries; containerized on Kubernetes and enforced CI/CD checks in GitLab."
+      ],
+      "tags": [
+        "Scala",
+        "Spark",
+        "Kafka",
+        "Kinesis",
+        "AWS EMR",
+        "Lambda",
+        "Elasticsearch",
+        "Kubernetes",
+        "GitLab CI",
+        "Spring Security",
+        "JWT",
+        "OpenAPI"
+      ]
+    },
+    {
+      "company": "Access Data Consulting (Contract @ Charter)",
+      "role": "Software Engineer (Frontend/Platform)",
+      "start": "Sep 2017",
+      "end": "Feb 2019",
+      "location": "Denver, CO",
+      "highlights": [
+        "Moved legacy interfaces to React + TypeScript; introduced shared components and patterns adopted across internal tools.",
+        "Delivered accessible dashboards tied to real-time targeting APIs; partnered with backend and QA on staged rollouts."
+      ],
+      "tags": [
+        "React",
+        "TypeScript",
+        "Design systems",
+        "Accessibility",
+        "Dashboards",
+        "API integration"
+      ]
+    }
+  ],
+
+  "projects": [
+    {
+      "name": "HackAPrompt Top-10 (7th)",
+      "subtitle": "Jailbreak and prompt‑injection challenge (2025)",
+      "badge": "security",
+      "blurb": "Placed 7th; built reproducible jailbreak tests with shadow and canary rollouts that enforced accuracy and safety thresholds.",
+      "tags": [
+        "LLM Safety",
+        "Prompt Engineering",
+        "Red Teaming",
+        "Guardrails",
+        "Eval Harness",
+        "Retrieval",
+        "Function Calling",
+        "Unicode/Confusables"
+      ],
+      "url": "/projects/hackaprompt-2025/"
+    },
+    {
+      "name": "Patent Intelligence Agent",
+      "badge": "client",
+      "subtitle": "Agentic Q&A over patent corpora",
+      "blurb": "Hybrid search with CPC/IPC filters and citation trails; maps claims and limitations and returns answers with inline citations and scope notes.",
+      "tags": ["RAG", "Guardrails", "RBAC", "Citations"],
+      "url": "/projects/patent-intelligence-agent/"
+    },
+    {
+      "name": "LLM Release Watcher",
+      "badge": "ops",
+      "subtitle": "Safe, measurable LLM releases",
+      "blurb": "Monitors accuracy, latency, and safety metrics with shadow runs, timed canaries, and automatic rollback.",
+      "tags": ["CI/CD gates", "Metrics", "Playbooks"],
+      "url": "/projects/llm-release-watcher/"
+    },
+    {
+      "name": "RAG Quality Kit",
+      "badge": "evals",
+      "subtitle": "Retrieval reliability",
+      "blurb": "Small gold sets and sanity checks for chunking, indexing, and retrieval; scripts to catch regressions early and visualize coverage.",
+      "tags": ["Eval sets", "Chunking", "Index heuristics"],
+      "url": ""
+    },
+    {
+      "name": "Local-LLM Inference Graphs",
+      "badge": "infra",
+      "subtitle": "Reproducible offline A/B",
+      "blurb": "Configurable offline A/B harness for prompts, models, and tools with LoRA adapters and rewrite steps; designed for reproducible experiments.",
+      "tags": ["LoRA", "Offline A/B", "Pipelines"],
+      "url": ""
+    }
+  ],
+
+  "education": [
+    {
+      "school": "Metropolitan State University of Denver",
+      "degree": "B.S., Computer Information Systems",
+      "meta": "",
+      "start": "2012",
+      "end": "2016"
+    },
+    {
+      "school": "Front Range Community College",
+      "degree": "A.S., Business Management",
+      "meta": "",
+      "start": "2010",
+      "end": "2012"
+    }
+  ],
+  "projectPages": {
+    "llm-release-watcher": {
+      "title": "LLM Release Watcher",
+      "badge": "ops",
+      "blurb": "A lightweight guardrail for shipping LLM features: shadow runs, timed canaries, accuracy/safety gates, and automatic rollback.",
+      "highlights": [
+        "Shadow traffic + metric compare (accuracy, latency, safety).",
+        "Timed canary with promotion thresholds.",
+        "Rollback playbooks and post‑release verification."
+      ],
+      "stack": ["Metrics", "Dashboards", "CI/CD gates", "Playbooks"],
+      "status": "Open to share patterns and code snippets on request."
+    },
+    "patent-intelligence-agent": {
+      "title": "Patent Intelligence Agent",
+      "badge": "client",
+      "blurb": "Agentic Q&A over patent corpora with CPC/IPC filters, citation trails, and limitation mapping. Returns scoped answers with inline citations.",
+      "highlights": [
+        "Hybrid search (semantic + CPC/IPC filters + re‑rank).",
+        "Citation trail preview and export.",
+        "Claim/limitation mapping with uncertainty notes.",
+        "RBAC + audit logging; guarded outputs."
+      ],
+      "stack": [
+        "RAG",
+        "Guardrails",
+        "RBAC",
+        "Elasticsearch",
+        "LangChain",
+        "PyTorch"
+      ],
+      "status": "Private client work; demo available upon request."
+    },
+    "lv-images": {
+      "title": "Louis Vuitton Image Atlas",
+      "badge": "lab",
+      "blurb": "Aggregates Louis Vuitton multi-locale image sitemaps into a browsable atlas with filters and dedupe controls.",
+      "highlights": [
+        "Fetches 240 locale sitemaps into a reproducible JSON dataset.",
+        "Faceted explorer with dedupe, search, and lazy grid rendering.",
+        "Updatable via npm run lv-images:update for repeatable snapshots."
+      ],
+      "stack": [
+        "Eleventy",
+        "Vite",
+        "Tailwind CSS",
+        "Node fetch",
+        "fast-xml-parser"
+      ],
+      "status": "Refresh the dataset with npm run lv-images:update before publishing new snapshots."
+    }
+  }
+}

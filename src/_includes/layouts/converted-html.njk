@@ -1,0 +1,113 @@
+---
+layout: base.njk
+showTitle: false
+metaDisable: true
+---
+
+<section class="hb-brut-card rounded-box p-5 sm:p-7">
+  <h1 class="m-0 border-l-8 border-primary pl-3 font-heading text-3xl font-extrabold tracking-tight sm:text-4xl">
+    {{ title or page.fileSlug | title }}
+  </h1>
+  <div class="mt-2 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm opacity-80">
+    <span>Published {{ (page.date or buildTime) | date("yyyy-MM-dd") }}</span>
+    {% set _chars = (content | striptags) | length %}
+    {% set _read = ((_chars / 5) / 240) | round(0, 'ceil') %}
+    {% if not _read or _read < 1 %}
+      {% set _read = 1 %}
+    {% endif %}
+    <span aria-hidden="true">·</span>
+    <span>{{ _read }} min read</span>
+    {% if byline %}
+      <span aria-hidden="true">·</span>
+      <span>by {{ byline }}</span>
+    {% endif %}
+    {% if convertedFromHtml %}
+      <span aria-hidden="true">·</span>
+      <span class="text-info">Auto-converted</span>
+    {% endif %}
+  </div>
+  {% if excerpt %}
+    <p class="mt-2 opacity-90">{{ excerpt }}</p>
+  {% endif %}
+</section>
+<section class="mt-6 grid grid-cols-1 gap-6 sm:gap-8 lg:grid-cols-12">
+  <aside class="order-last space-y-4 lg:order-first lg:col-span-3">
+    <div class="rounded border border-dashed border-primary bg-base-200 p-4">
+      <h2 class="mb-2 text-xs font-bold uppercase text-primary">Contents</h2>
+      <nav id="toc" class="max-h-[50vh] overflow-auto pr-1">
+        <ul id="toc-list" class="menu menu-sm"></ul>
+      </nav>
+      <div class="my-3 divider"></div>
+      <h2 class="mb-2 text-xs font-bold uppercase text-primary">Meta</h2>
+      <dl class="text-sm">
+        <div class="flex justify-between gap-4">
+          <dt class="opacity-70">Date</dt>
+          <dd>{{ (page.date or buildTime) | date("yyyy-MM-dd") }}</dd>
+        </div>
+        <div class="flex justify-between gap-4">
+          <dt class="opacity-70">Read</dt>
+          <dd>{{ _read }} min</dd>
+        </div>
+      </dl>
+      {% set _tags = (tags or []) | filter(t => t != 'all') %}
+      {% if _tags.length %}
+        <div class="mt-3 flex flex-wrap gap-2">
+          {% for t in _tags %}
+            <a
+              href="{{ ('/tags/' + (t | slug) + '/') | url }}"
+              class="badge badge-primary badge-outline no-underline"
+            >#{{ t }}</a>
+          {% endfor %}
+        </div>
+      {% endif %}
+      <div class="pt-3 flex gap-2">
+        <button id="expand-toc" class="btn btn-xs btn-outline">Expand</button>
+        <button id="collapse-toc" class="btn btn-xs btn-ghost">Collapse</button>
+      </div>
+    </div>
+  </aside>
+  <article class="lg:col-span-9">
+    <div class="hb-brut-card rounded-box p-5 sm:p-8">
+      <div id="content-root" class="prose max-w-none dark:prose-invert">{{ content | safe }}</div>
+    </div>
+    <div class="mt-10 flex items-center justify-between text-sm uppercase tracking-wide">
+      {% if pagination and pagination.href and pagination.href.previous %}
+        <a class="link link-hover" href="{{ pagination.href.previous | url }}">← Previous</a>
+      {% else %}
+        <span class="opacity-40">Start</span>
+      {% endif %}
+      {% if pagination and pagination.href and pagination.href.next %}
+        <a class="link link-hover" href="{{ pagination.href.next | url }}">Next →</a>
+      {% else %}
+        <span class="opacity-40">End</span>
+      {% endif %}
+    </div>
+  </article>
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const tocList = document.getElementById('toc-list')
+  const expandBtn = document.getElementById('expand-toc')
+  const collapseBtn = document.getElementById('collapse-toc')
+  const headings = Array.from(document.querySelectorAll('#content-root h2, #content-root h3'))
+
+  const makeSlug = (text) => text.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-')
+
+  tocList.textContent = ''
+  headings.forEach((heading) => {
+    const text = heading.textContent?.trim()
+    if (!text) return
+    if (!heading.id) heading.id = makeSlug(text)
+    const li = document.createElement('li')
+    const link = document.createElement('a')
+    link.href = `#${heading.id}`
+    link.textContent = text
+    li.appendChild(link)
+    tocList.appendChild(li)
+  })
+
+  expandBtn?.addEventListener('click', () => tocList?.classList.remove('hidden'))
+  collapseBtn?.addEventListener('click', () => tocList?.classList.add('hidden'))
+})
+</script>

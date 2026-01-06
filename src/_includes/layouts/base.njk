@@ -1,0 +1,102 @@
+{# src/_includes/layouts/base.njk #}
+{% from "components/header.njk" import header %}
+{% from "components/footer.njk" import footer %}
+{% from "components/meta-aside.njk" import metaAside %}
+{% from "components/icons.njk" import icon %}
+
+<!DOCTYPE html>
+<html lang="en" class="scroll-pt-16" data-theme="hypebrut">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="color-scheme" content="dark light">
+
+    <title>{{ title or 'Untitled' }} | Effusion Labs</title>
+
+    {# ---------------- Social Meta ---------------- #}
+    {% set canon = canonicalUrl or page.url %}
+    {% set siteUrl = metadata.site.url if metadata and metadata.site else '' %}
+    {% set canonicalHref = canon | url | absoluteUrl(siteUrl) if siteUrl else canon %}
+
+    <link rel="canonical" href="{{ canonicalHref }}">
+    <meta property="og:title" content="{{ title }}">
+    <meta property="og:url" content="{{ canonicalHref }}">
+    <meta property="og:site_name" content="Effusion Labs">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ title }}">
+
+    {{ headExtra | safe }}
+
+    {# ---------------- Early theme: prevent FART ---------------- #}
+    <script>
+    try {
+      const saved = localStorage.getItem('theme')
+      const prefersDark = window.matchMedia
+        && window.matchMedia('(prefers-color-scheme: dark)').matches
+      const initial = saved || (prefersDark ? 'hypebrut' : 'silk')
+      document.documentElement.setAttribute('data-theme', initial)
+    } catch (e) {}
+    </script>
+
+    {# ---------------- Fonts ---------------- #}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Manrope:wght@300..800&family=Plus+Jakarta+Sans:wght@400..800&display=swap"
+      rel="stylesheet"
+    >
+
+    {# ---------------- CSS/JS ---------------- #}
+    <link rel="stylesheet" href="{{ '/assets/css/app.css' | url }}">
+    <script type="module" src="{{ '/assets/js/app.js' | url }}"></script>
+
+    {# ---------------- Favicons ---------------- #}
+    <link rel="icon" type="image/svg+xml" href="{{ '/favicon.svg' | url }}">
+    <link rel="manifest" href="{{ '/site.webmanifest' | url }}">
+  </head>
+  <body class="hb-blobs hb-vignette hb-noise">
+    <a href="#main" class="skiplink">Skip to content</a>
+
+    {{ header(nav, page, branding) }}
+
+    {# ---------------- Layout Logic ---------------- #}
+    {% set fullBleed = (fullBleed == true or fullBleed == 'true') %}
+    {% set metaOff = (metaDisable == true or metaDisable == 'true') %}
+    {%
+      set metaEligible = (status or certainty or importance or tags or memory_ref or date or page.date)
+    %}
+    {% set hasMeta = not fullBleed and metaEligible and not metaOff %}
+
+    <main id="main" class="min-h-[70vh] w-full" tabindex="-1">
+      {% if fullBleed %}
+        {{ content | safe }}
+      {% else %}
+        <div class="max-w-screen-xl mx-auto px-gutter py-space-l">
+          <div
+            class="{% if hasMeta %}sidebar{% else %}stack{% endif %}"
+            style="--side-w: 18rem; --space: var(--space-xl)"
+          >
+            {% if hasMeta %}
+              {% set d = date or page.date %}
+              {{ metaAside(status, d, certainty, importance, tags, memory_ref) }}
+            {% endif %}
+
+            <article class="prose stack" style="--space: var(--space-m)">
+              {% if showTitle != false %}
+                <header class="stack" style="--space: var(--space-xs)">
+                  <h1 class="text-h1">{{ title }}</h1>
+                  {% if description %}<p class="text-lg opacity-70">{{ description }}</p>{% endif %}
+                </header>
+              {% endif %}
+
+              {{ content | safe }}
+            </article>
+          </div>
+        </div>
+      {% endif %}
+    </main>
+
+    {{ footer(buildTime) }}
+  </body>
+</html>

@@ -1,0 +1,12 @@
+{# Feed section wrapper #}
+{% from "components/section.njk" import section %}
+{% from "components/feed-entry.njk" import feedEntry %}
+{% macro feedSection(title, url, items) -%}
+  {% call section(title, url) %}
+    <ul class="space-y-4">
+      {% for item in items %}
+        {{ feedEntry(item) }}
+      {% endfor %}
+    </ul>
+  {% endcall %}
+{%- endmacro %}

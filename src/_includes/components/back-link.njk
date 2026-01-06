@@ -1,0 +1,16 @@
+{# src/_includes/components/back-link.njk #}
+{% from "components/icons.njk" import icon %}
+{% macro backLink(label='Back', fallback='/' ) %}
+  <a
+    href="{{ fallback }}"
+    class="btn btn-ghost btn-sm gap-1 no-underline focus-visible:ring focus-visible:ring-primary/40"
+    aria-label="{{ label }}"
+    title="{{ label }}"
+    onclick="try{if(document.referrer && new URL(document.referrer).origin===location.origin){event.preventDefault();history.back();}}catch(_){/* noop */}"
+  >
+    <span class="pointer-events-none">
+      {{ icon('arrow-left', { class: 'w-4 h-4', 'aria-hidden': 'true' }) }}
+    </span>
+    <span class="pointer-events-none">{{ label }}</span>
+  </a>
+{% endmacro %}

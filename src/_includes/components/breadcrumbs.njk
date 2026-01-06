@@ -1,0 +1,30 @@
+{# src/_includes/components/breadcrumbs.njk #}
+{% from "components/icons.njk" import icon %}
+
+{% macro breadcrumbs(items) %}
+  <nav class="text-xs font-mono mb-space-m" aria-label="Breadcrumb">
+    <ol
+      class="cluster list-none p-0 m-0 opacity-40 uppercase tracking-widest"
+      style="--space: var(--space-xs)"
+    >
+      <li class="cluster" style="--space: var(--space-xs)">
+        <a href="/" class="hover:text-primary transition-colors inline-flex items-center gap-1">
+          {{ icon('home', { class: 'w-3 h-3' }) }} Home
+        </a>
+        <span aria-hidden="true">/</span>
+      </li>
+      {% for item in items %}
+        <li class="cluster" style="--space: var(--space-xs)">
+          {% if item.url %}
+            <a href="{{ item.url | url }}" class="hover:text-primary transition-colors">{{
+              item.text
+            }}</a>
+          {% else %}
+            <span class="text-secondary font-black" aria-current="page">{{ item.text }}</span>
+          {% endif %}
+          {% if not loop.last %}<span aria-hidden="true">/</span>{% endif %}
+        </li>
+      {% endfor %}
+    </ol>
+  </nav>
+{% endmacro %}

@@ -1,0 +1,49 @@
+{
+  "product_id": "LAB011",
+  "brand": "POP MART × Pronounce",
+  "line": "The Monsters × Pronounce",
+  "character": "Labubu",
+  "series": "Wings of Fortune",
+  "product_title": "Wings of Fortune Vinyl Plush Hanging Card",
+  "variant_name": "Yellow fur with silver metallic wings, pearl crown, star motif",
+  "form": "Vinyl plush hanging card (pendant)",
+  "sku": "1584",
+  "size": {
+    "height_cm": 22,
+    "dimensions_cm": "11×8×22",
+    "weight_kg": 0.2
+  },
+  "materials": {
+    "shell": "66% polyester, 25% PVC, 9% ABS",
+    "plush": null,
+    "stuffing": "95% polyester, 5% iron wire"
+  },
+  "packaging": {
+    "type": "Blister card with hanging peg",
+    "dimensions_cm": "20×12×9"
+  },
+  "release_info": {
+    "release_date": "2024-10-04",
+    "edition_type": "Collaboration limited",
+    "edition_size": null
+  },
+  "pricing": {
+    "original_msrp": {
+      "USD": 43.99,
+      "SGD": 39.9
+    },
+    "current_status": "Out of stock",
+    "secondary_market_range": {
+      "USD": "65-90"
+    }
+  },
+  "availability": {
+    "regions": ["Global"],
+    "channels": ["POP MART US", "Global"],
+    "stock_status": "Out of stock"
+  },
+  "designer": "Kasing Lung (龙家升)",
+  "accessories": ["Hanging loop hardware"],
+  "articulation": "Fixed",
+  "colorway": "Pastel yellow with silver accents"
+}

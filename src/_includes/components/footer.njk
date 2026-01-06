@@ -1,0 +1,82 @@
+{# src/_includes/components/footer.njk #}
+{% from "components/icons.njk" import icon %}
+
+{% macro footer(buildTime) %}
+  <footer class="mt-space-3xl border-t border-base-content/10 bg-base-100/40 backdrop-blur-md">
+    <div class="max-w-screen-xl mx-auto px-gutter py-space-xl">
+      <div class="switcher" style="--threshold: 40rem; --space: var(--space-xl)">
+        <!-- Brand / Build -->
+        <div class="stack" style="--space: var(--space-s)">
+          <div class="cluster items-center" style="--space: var(--space-xs)">
+            <span class="hb-logo !w-8 !h-8 !p-1 shadow-sm">
+              <span class="hb-logo-core !text-[0.6rem] !tracking-normal">EL</span>
+            </span>
+            <span class="font-heading font-black tracking-tight text-lg">Effusion Labs</span>
+          </div>
+          <p class="text-sm opacity-60 leading-relaxed max-w-sm">
+            Digital studio and knowledge base dedicated to the art of creative synthesis and
+            technical excellence.
+          </p>
+          <div class="stack" style="--space: var(--space-3xs)">
+            <span class="text-[0.6rem] uppercase tracking-widest opacity-40 font-mono"
+            >Current Build</span>
+            <time class="text-xs font-mono opacity-60" datetime="{{ buildTime }}">{{
+              buildTime
+            }}</time>
+          </div>
+        </div>
+
+        <!-- Links Grid -->
+        <div class="grid-auto" style="--grid-min: 10rem; --space: var(--space-l)">
+          <div class="stack" style="--space: var(--space-xs)">
+            <h3 class="text-xs uppercase tracking-widest font-bold opacity-40">Network</h3>
+            <ul class="list-none p-0 m-0 stack" style="--space: var(--space-2xs)">
+              <li>
+                <a
+                  href="https://github.com/toxicwind/effusion-labs"
+                  class="text-sm hover:text-primary transition-colors inline-flex items-center gap-2"
+                >
+                  {{ icon('github', { class: 'w-4 h-4' }) }} GitHub
+                </a>
+              </li>
+              <li>
+                <a
+                  href="{{ '/feed.xml' | url }}"
+                  class="text-sm hover:text-primary transition-colors inline-flex items-center gap-2"
+                >
+                  {{ icon('rss', { class: 'w-4 h-4' }) }} RSS Feed
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div class="stack" style="--space: var(--space-xs)">
+            <h3 class="text-xs uppercase tracking-widest font-bold opacity-40">Internal</h3>
+            <ul class="list-none p-0 m-0 stack" style="--space: var(--space-2xs)">
+              <li>
+                <a href="{{ '/about' | url }}" class="text-sm hover:text-primary transition-colors"
+                >About</a>
+              </li>
+              <li>
+                <a
+                  href="{{ '/projects' | url }}"
+                  class="text-sm hover:text-primary transition-colors"
+                >Projects</a>
+              </li>
+              <li>
+                <a
+                  href="{{ '/sitemap.xml' | url }}"
+                  class="text-sm hover:text-primary transition-colors"
+                >Sitemap</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-space-xl pt-space-m border-t border-base-content/5 cluster justify-between text-[0.65rem] uppercase tracking-[0.2em] opacity-40 font-mono">
+        <span>© {{ (buildTime or '2025') | date('yyyy') }} Effusion Labs</span>
+        <span>Crafted with Eleventy & Vite</span>
+      </div>
+    </div>
+  </footer>
+{% endmacro %}

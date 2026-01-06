@@ -1,0 +1,33 @@
+{
+  "type": "product",
+  "product_id": "pop-mart--the-monsters--labubu--happy-halloween-party-sitting-pumpkin--pendant--sitting-pumpkin--20241025",
+  "brand": "pop-mart",
+  "line": "the-monsters",
+  "character": "labubu",
+  "series": "happy-halloween-party-sitting-pumpkin",
+  "form": "pendant",
+  "variant": "sitting-pumpkin",
+  "edition": {
+    "kind": "core"
+  },
+  "distribution": {
+    "region_lock": false,
+    "markets": ["AU"]
+  },
+  "release_date": "2024-10-25",
+  "market_listings": [
+    {
+      "market": "AU",
+      "currency": "AUD",
+      "price": 50
+    }
+  ],
+  "availability": {
+    "limited": false,
+    "unit_count": null
+  },
+  "images": [],
+  "provenance_ref": "/content/archives/collectables/designer-toys/pop-mart/the-monsters/provenance/pop-mart--the-monsters--labubu--happy-halloween-party-sitting-pumpkin--pendant--sitting-pumpkin--20241025.jsonl",
+  "confidence": 0.45,
+  "notes": "Seeded from initial article; requires re-research."
+}

@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+. "$(cd "$(dirname "$0")" && pwd)/_lib.sh"
+retry_exec "$@" --   "$REPO_ROOT/node_modules/.bin/tree"   "$TOOLS_DIR/tree/tree"   tree
+echo "❌ tree not found." >&2
+exit 127

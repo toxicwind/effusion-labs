@@ -1,0 +1,220 @@
+TAP version 13
+# Subtest: GitHub workflows use latest action versions
+not ok 1 - GitHub workflows use latest action versions
+  ---
+  duration_ms: 2.126268
+  type: 'test'
+  location: '/workspace/effusion-labs/test/unit/workflow-actions.test.mjs:14:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    The input was expected to not match the regular expression /actions\/checkout@v[0-3]/. Input:
+    
+    'name: Build and Deploy to GHCR\n' +
+      '\n' +
+      'on:\n' +
+      '  push:\n' +
+      '    branches: [main]\n' +
+      '  workflow_dispatch:\n' +
+      '\n' +
+      'permissions:\n' +
+      '  contents: read\n' +
+      '  packages: write  # ← Enables write access for GHCR\n' +
+      '\n' +
+      'jobs:\n' +
+      '  tests:\n' +
+      '    runs-on: ubuntu-latest\n' +
+      '    steps:\n' +
+      '      - uses: actions/checkout@v3\n' +
+      '      - uses: actions/setup-node@v4\n' +
+      '        with:\n' +
+      "          node-version: '20'\n" +
+      "          cache: 'npm'\n" +
+      '      - run: npm ci\n' +
+      '      - run: |\n' +
+      '          NODE_OPTIONS=--import=./test/setup/http.mjs npm test 2>&1 | tee test.log\n' +
+      '      - run: utils/scripts/validation/warn-gate.sh test.log\n' +
+      '      - uses: actions/upload-artifact@v3\n' +
+      '        with:\n' +
+      '          name: coverage\n' +
+      '          path: coverage/lcov.info\n' +
+      '\n' +
+      '  build:\n' +
+      '    needs: tests\n' +
+      '    runs-on: ubuntu-latest\n' +
+      '    env:\n' +
+      '      DOCKER_BUILDKIT: 1\n' +
+      '\n' +
+      '    steps:\n' +
+      '      - name: Checkout repo\n' +
+      '        uses: actions/checkout@v3\n' +
+      '\n' +
+      '      - name: Setup Node.js\n' +
+      '        uses: actions/setup-node@v3\n' +
+      '        with:\n' +
+      "          node-version: '20'\n" +
+      '\n' +
+      '      - name: Install dependencies\n' +
+      '        run: npm ci\n' +
+      '\n' +
+      '      - name: Build Eleventy static files\n' +
+      '        run: npx @11ty/eleventy\n' +
+      '\n' +
+      '      - name: Log in to GitHub Container Registry\n' +
+      '        uses: docker/login-action@v3\n' +
+      '        with:\n' +
+      '          registry: ghcr.io\n' +
+      '          username: ${{ github.actor }}\n' +
+      '          password: ${{ secrets.GITHUB_TOKEN }}\n' +
+      '\n' +
+      '      - name: Set up Buildx\n' +
+      '        uses: docker/setup-buildx-action@v3\n' +
+      '\n' +
+      '      - name: Build and push effusion-labs\n' +
+      '        env:\n' +
+      '          IMAGE_ID: ghcr.io/${{ github.actor }}/effusion-labs:latest\n' +
+      '        run: |\n' +
+      '          docker buildx build --cache-to type=inline --cache-from type=registry,ref=$IMAGE_ID -t "$IMAGE_ID" -f .portainer/Dockerfile . --push\n' +
+      '\n' +
+      '      - name: Build and push markdown_gateway\n' +
+      '        env:\n' +
+      '          IMAGE_ID: ghcr.io/${{ github.actor }}/markdown_gateway:latest\n' +
+      '        run: |\n' +
+      '          docker buildx build --cache-to type=inline --cache-from type=registry,ref=$IMAGE_ID -t "$IMAGE_ID" markdown_gateway --push\n' +
+      '\n' +
+      '      - name: Trigger effusion-labs redeploy\n' +
+      '        run: |\n' +
+      '          curl -f -X POST http://effusionlabs.com:9000/api/stacks/webhooks/d85d48d6-a407-4ac0-8683-a7962bfbb9d3\n' +
+      '      # Disabled for now since markdown_gateway does not have a webhook set up\n' +
+      '      # - name: Trigger markdown_gateway redeploy\n' +
+      '      #   run: |\n' +
+      '      #     curl -f -X POST http://effusionlabs.com:9000/api/stacks/webhooks/00000000-0000-0000-0000-000000000000\n' +
+      '\n' +
+      '  browser-checks:\n' +
+      "    if: github.event_name == 'workflow_dispatch'\n" +
+      '    runs-on: ubuntu-latest\n' +
+      '    container: mcr.microsoft.com/playwright:v1.45.2-jammy\n' +
+      '    steps:\n' +
+      '      - uses: actions/checkout@v3\n' +
+      '      - uses: actions/setup-node@v4\n' +
+      '        with:\n' +
+      "          node-version: '20'\n" +
+      "          cache: 'npm'\n" +
+      '      - run: npm ci\n' +
+      '      - run: NODE_OPTIONS=--import=./test/setup/http.mjs npm run test:browser\n'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  actual: |-
+    name: Build and Deploy to GHCR
+    
+    on:
+      push:
+        branches: [main]
+      workflow_dispatch:
+    
+    permissions:
+      contents: read
+      packages: write  # ← Enables write access for GHCR
+    
+    jobs:
+      tests:
+        runs-on: ubuntu-latest
+        steps:
+          - uses: actions/checkout@v3
+          - uses: actions/setup-node@v4
+            with:
+              node-version: '20'
+              cache: 'npm'
+          - run: npm ci
+          - run: |
+              NODE_OPTIONS=--import=./test/setup/http.mjs npm test 2>&1 | tee test.log
+          - run: utils/scripts/validation/warn-gate.sh test.log
+          - uses: actions/upload-artifact@v3
+            with:
+              name: coverage
+              path: coverage/lcov.info
+    
+      build:
+        needs: tests
+        runs-on: ubuntu-latest
+        env:
+          DOCKER_BUILDKIT: 1
+    
+        steps:
+          - name: Checkout repo
+            uses: actions/checkout@v3
+    
+          - name: Setup Node.js
+            uses: actions/setup-node@v3
+            with:
+              node-version: '20'
+    
+          - name: Install dependencies
+            run: npm ci
+    
+          - name: Build Eleventy static files
+            run: npx @11ty/eleventy
+    
+          - name: Log in to GitHub Container Registry
+            uses: docker/login-action@v3
+            with:
+              registry: ghcr.io
+              username: ${{ github.actor }}
+              password: ${{ secrets.GITHUB_TOKEN }}
+    
+          - name: Set up Buildx
+            uses: docker/setup-buildx-action@v3
+    
+          - name: Build and push effusion-labs
+            env:
+              IMAGE_ID: ghcr.io/${{ github.actor }}/effusion-labs:latest
+            run: |
+              docker buildx build --cache-to type=inline --cache-from type=registry,ref=$IMAGE_ID -t "$IMAGE_ID" -f .portainer/Dockerfile . --push
+    
+          - name: Build and push markdown_gateway
+            env:
+              IMAGE_ID: ghcr.io/${{ github.actor }}/markdown_gateway:latest
+            run: |
+              docker buildx build --cache-to type=inline --cache-from type=registry,ref=$IMAGE_ID -t "$IMAGE_ID" markdown_gateway --push
+    
+          - name: Trigger effusion-labs redeploy
+            run: |
+              curl -f -X POST http://effusionlabs.com:9000/api/stacks/webhooks/d85d48d6-a407-4ac0-8683-a7962bfbb9d3
+          # Disabled for now since markdown_gateway does not have a webhook set up
+          # - name: Trigger markdown_gateway redeploy
+          #   run: |
+          #     curl -f -X POST http://effusionlabs.com:9000/api/stacks/webhooks/00000000-0000-0000-0000-000000000000
+    
+      browser-checks:
+        if: github.event_name == 'workflow_dispatch'
+        runs-on: ubuntu-latest
+        container: mcr.microsoft.com/playwright:v1.45.2-jammy
+        steps:
+          - uses: actions/checkout@v3
+          - uses: actions/setup-node@v4
+            with:
+              node-version: '20'
+              cache: 'npm'
+          - run: npm ci
+          - run: NODE_OPTIONS=--import=./test/setup/http.mjs npm run test:browser
+    
+  operator: 'doesNotMatch'
+  stack: |-
+    assertNoLegacyActions (file:///workspace/effusion-labs/test/unit/workflow-actions.test.mjs:9:10)
+    Array.forEach (<anonymous>)
+    TestContext.<anonymous> (file:///workspace/effusion-labs/test/unit/workflow-actions.test.mjs:15:23)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.start (node:internal/test_runner/test:944:17)
+    startSubtestAfterBootstrap (node:internal/test_runner/harness:296:17)
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 0
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 128.869975

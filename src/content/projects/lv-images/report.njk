@@ -1,0 +1,1850 @@
+---
+layout: base.njk
+fullBleed: true
+metaDisable: true
+---
+# dprint-ignore-file
+{#
+  This template renders a comprehensive, data‑driven report for the LV image atlas
+  crawl.  It takes the summarized crawl information provided via the `lvreport`
+  data file and presents it with modern daisyUI v5 components.  The layout
+  emphasises key metrics using the Stats and Radial Progress components, while
+  retaining interactive filtering for each table.  Sections are clearly
+  delineated with headings and concise descriptions.  Feel free to adjust
+  colours via themes (see base.njk) or customise individual elements further.
+#}
+
+{% set lv       = lvreport.lvreport or lvreport or {} %}
+{% set baseHref = lv.baseHref or '/content/projects/lv-images/generated/lv/' %}
+{% set summary  = lv.summary  or {} %}
+{% set tablePageSizes = [25, 50, 100, 200] %}
+{% set lazyPlaceholder = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==' %}
+{# Pull global totals from the top level (lv.totals) first, falling back to summary.totals if not present.  The crawler exposes unique image and page counts via lv.totals. #}
+{% set totals   = lv.totals or summary.totals or {} %}
+{% set paginationSections = lv.pagination or {} %}
+{% set pageSections = lvReportPage and lvReportPage.sections or {} %}
+{% set sitemapsPage = pageSections.sitemaps or {} %}
+{% set docsPage = pageSections.docs or {} %}
+{% set robotsPage = pageSections.robots or {} %}
+{% set duplicatesPage = pageSections.duplicates or {} %}
+{% set topProductsPage = pageSections.topProducts or {} %}
+{% set hostStatsPage = pageSections.hostStats or {} %}
+{% set sitemaps = sitemapsPage.items or [] %}
+{% set docs     = docsPage.items or [] %}
+{% set robots   = robotsPage.items or [] %}
+{% set duplicates = duplicatesPage.items or [] %}
+{% set topProducts = topProductsPage.items or [] %}
+{% set hostStats = hostStatsPage.items or [] %}
+{% set sample   = lv.sample   or [] %}
+{% set metrics  = lv.metrics  or {} %}
+{% set robotsMetrics = metrics.robots or {} %}
+{% set docsMetrics   = metrics.docs   or {} %}
+{% set itemsMetrics  = metrics.items or {} %}
+{% set dataset = lv.dataset or {} %}
+{% set datasetTotals = dataset.totals or {} %}
+{% set manifest = dataset.manifest or {} %}
+{% set manifestDataset = manifest.dataset or {} %}
+{% set manifestArchive = manifest.archive or {} %}
+{% set manifestSummary = manifest.summary or {} %}
+{% set datasetWarnings = dataset.warnings or [] %}
+{% set datasetHistory = dataset.history or {} %}
+{% set historyEntries = datasetHistory.entries or [] %}
+{% set datasetFlags = dataset.flags or [] %}
+{% set datasetCapture = dataset.capture or [] %}
+{% set summaryTotals = dataset.summaryTotals or summary.totals or {} %}
+<script type="application/json" id="lvreport-data">{{ clientPayloadJson | safe }}</script>
+<script type="module" src="/assets/js/lvreport-app.js"></script>
+{%
+  set warningCopy = {
+    "missing-archive": "Bundle archive missing — run <code>npm run lv-images:sync</code> before shipping.",
+    "missing-manifest": "Bundle manifest missing — rebuild via <code>npm run lv-images:bundle</code>.",
+    "empty-dataset": "Dataset is empty — crawl with <code>npm run lv-images:sync</code> to populate generated/lv/. "
+  }
+%}
+{%
+  set toneBadge = {
+    "error": "badge-error",
+    "warn": "badge-warning",
+    "ok": "badge-success",
+    "info": "badge-info"
+  }
+%}
+{%
+  set toneChip = {
+    "error": "bg-error/15 text-error",
+    "warn": "bg-warning/20 text-warning-content",
+    "ok": "bg-success/15 text-success",
+    "info": "bg-info/15 text-info"
+  }
+%}
+
+{# Compute flagged percentages for radial progress indicators.  The logical
+   short‑circuit ensures we avoid division by zero when there are no items. #}
+
+<section class="relative overflow-hidden rounded-box bg-gradient-to-br from-primary via-secondary to-accent p-8 text-primary-content shadow-xl">
+  <div class="absolute inset-0 pointer-events-none opacity-30 mix-blend-screen bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.45),_transparent_60%)]">
+  </div>
+  <div class="relative grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,360px)] items-start">
+    <div>
+      <h1 class="text-4xl font-bold tracking-tight">{{ title }}</h1>
+      <p class="mt-3 max-w-2xl text-sm md:text-base opacity-80">
+        Atlas of {{ totals.hosts or 0 }} hosts capturing sitemaps, robots directives, cached
+        payloads, and NDJSON shards ready for offline builds.
+      </p>
+      <div class="mt-6 flex flex-wrap gap-3">
+        {% if baseHref %}
+          <a
+            href="{{ baseHref }}"
+            class="btn btn-sm md:btn-md btn-primary shadow-md"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Browse generated/lv
+          </a>
+        {% endif %}
+        {% if dataset.archiveHref %}
+          <a
+            href="{{ dataset.archiveHref }}"
+            class="btn btn-sm md:btn-md btn-outline border-primary/50 text-primary-content/90"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Download bundle
+          </a>
+        {% endif %}
+        {% if dataset.manifestHref %}
+          <a
+            href="{{ dataset.manifestHref }}"
+            class="btn btn-sm md:btn-md btn-outline border-primary/30 text-primary-content/80"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Manifest JSON
+          </a>
+        {% endif %}
+        {% if dataset.history.manifestHref %}
+          <a
+            href="{{ dataset.history.manifestHref }}"
+            class="btn btn-sm md:btn-md btn-outline border-primary/20 text-primary-content/70"
+            target="_blank"
+            rel="noreferrer"
+          >
+            History manifest
+          </a>
+        {% endif %}
+      </div>
+      {% if datasetWarnings | length %}
+        <div class="alert alert-warning mt-6 max-w-xl shadow-lg">
+          <span class="font-semibold text-sm uppercase tracking-wide">Snapshot warnings</span>
+          <ul class="mt-2 space-y-1 text-xs text-warning-content/80">
+            {% for code in datasetWarnings %}
+              <li>{{ warningCopy[code] | safe }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
+      <div
+        x-data="globalSearch()"
+        x-init="init()"
+        class="mt-6 space-y-3"
+      >
+        <div class="flex flex-wrap items-center gap-3">
+          <button type="button" class="btn btn-sm md:btn-md btn-outline" @click="openPanel()">
+            <span class="font-semibold">Global dataset search</span>
+            <span class="hidden sm:inline opacity-70">⌘K / Ctrl K</span>
+          </button>
+          <p class="text-xs opacity-70">
+            Search across sitemaps, cached documents, robots, hosts, duplicates, and products.
+          </p>
+        </div>
+        <template x-if="open">
+          <div
+            class="fixed inset-0 z-[90] flex items-start justify-center bg-base-100/90 backdrop-blur"
+            @keydown.window.escape="closePanel()"
+            @click.self="closePanel()"
+          >
+            <div class="mt-16 w-full max-w-3xl rounded-box border border-base-content/10 bg-base-200/95 shadow-2xl">
+              <div class="flex items-center gap-3 border-b border-base-content/10 px-4 py-3">
+                <input
+                  x-model="query"
+                  @input.debounce.120ms="search()"
+                  @keydown.down.prevent="move(1)"
+                  @keydown.up.prevent="move(-1)"
+                  @keydown.enter.prevent="selectActive"
+                  autofocus
+                  type="search"
+                  class="input input-bordered input-sm md:input-md flex-1"
+                  placeholder="Search the LV dataset…"
+                />
+                <button type="button" class="btn btn-sm btn-ghost" @click="closePanel()">
+                  Esc
+                </button>
+              </div>
+              <div
+                class="max-h-80 overflow-y-auto divide-y divide-base-content/10"
+                x-show="results.length"
+                x-transition
+              >
+                <template x-for="(result, idx) in results" :key="result.id">
+                  <button
+                    type="button"
+                    class="flex w-full items-start gap-3 px-4 py-3 text-left hover:bg-base-300/40 focus:bg-base-300/50"
+                    :class="{ 'bg-base-300/50': activeIndex === idx }"
+                    @mouseenter="setActive(idx)"
+                    @click="openResult(result)"
+                  >
+                    <div class="mt-1">
+                      <span class="badge badge-sm" x-text="result.badge"></span>
+                    </div>
+                    <div class="flex-1 space-y-1">
+                      <p class="font-semibold" x-text="result.title"></p>
+                      <p class="text-xs opacity-70" x-text="result.description"></p>
+                    </div>
+                  </button>
+                </template>
+              </div>
+              <div class="px-4 py-3 text-xs opacity-60" x-show="!results.length">
+                Start typing to surface sitemaps, cached XML, robots directives, duplicate clusters,
+                hosts, and high-volume products.
+              </div>
+            </div>
+          </div>
+        </template>
+      </div>
+    </div>
+    <div
+      id="lvreport-empty"
+      hidden
+      class="alert alert-warning mt-6 shadow-lg"
+      data-unlock-on-hydrate="true"
+    >
+      <div>
+        <h3 class="font-semibold">Baked LV index unavailable</h3>
+        <p class="text-xs opacity-80" data-lvreport-empty-detail>
+          Serving pre-rendered snapshot only; interactive data may be limited until the baked
+          index is restored.
+        </p>
+      </div>
+    </div>
+    <div class="space-y-4">
+      {% set shaPreview = manifestArchive.shaPreview or manifestArchive.sha256 %}
+      <div class="card glass border border-white/30 bg-base-100/10 shadow-lg backdrop-blur">
+        <div class="card-body space-y-3">
+          <h2 class="card-title text-sm uppercase tracking-[0.2em] text-primary-content/80">
+            Snapshot digest
+          </h2>
+          <dl class="grid grid-cols-1 gap-3 text-sm">
+            <div>
+              <dt class="text-xs uppercase opacity-60">Generated</dt>
+              <dd class="font-semibold">
+                {{ summary.generatedAt or manifest.generatedAt or '—' }}
+              </dd>
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <dt class="text-xs uppercase opacity-60">Version</dt>
+                <dd class="font-semibold">
+                  {{ summary.version or manifestSummary.version or '—' }}
+                </dd>
+              </div>
+              <div>
+                <dt class="text-xs uppercase opacity-60">Hosts</dt>
+                <dd class="font-semibold">{{ totals.hosts or 0 }}</dd>
+              </div>
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <dt class="text-xs uppercase opacity-60">Mode</dt>
+                <dd class="font-semibold">
+                  {{ manifest.mode or (summary.capture and summary.capture.pages and 'pages' or 'metadata') }}
+                </dd>
+              </div>
+              <div>
+                <dt class="text-xs uppercase opacity-60">Bundle label</dt>
+                <dd class="font-semibold">{{ manifest.runLabel or '—' }}</dd>
+              </div>
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <dt class="text-xs uppercase opacity-60">Files</dt>
+                <dd class="font-semibold">
+                  {{ datasetTotals.fileCount or manifestDataset.fileCount or 0 }}
+                </dd>
+              </div>
+              <div>
+                <dt class="text-xs uppercase opacity-60">Payload</dt>
+                <dd class="font-semibold">
+                  {{
+                    datasetTotals.sizeLabel or manifestDataset.sizeLabel or manifestArchive.sizeLabel or '—'
+                  }}
+                </dd>
+              </div>
+            </div>
+            <div>
+              <dt class="text-xs uppercase opacity-60">Bundle SHA (16)</dt>
+              <dd class="font-mono text-xs">{{ shaPreview or '—' }}</dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+      {% if historyEntries | length %}
+        <div class="card border border-base-content/10 bg-base-100/30 shadow-md backdrop-blur">
+          <div class="card-body space-y-4">
+            <h2 class="card-title text-sm uppercase tracking-[0.18em] text-primary-content/80">
+              Archive history
+            </h2>
+            <ul class="space-y-3 text-sm">
+              {% for entry in historyEntries | slice(0, 3) %}
+                <li class="flex items-start justify-between gap-3">
+                  <div class="space-y-1">
+                    <p class="font-semibold leading-tight">
+                      {{ entry.generatedAt or entry.name or 'Snapshot' }}
+                    </p>
+                    <p class="text-xs opacity-70">
+                      {{ entry.label or entry.mode or '—' }}
+                    </p>
+                  </div>
+                  <div class="text-right text-xs space-y-1">
+                    {% if entry.sizeLabel %}<span class="font-semibold">{{ entry.sizeLabel }}</span>{% endif %}
+                    {% if entry.shaPreview %}<span class="font-mono text-[11px] opacity-70">{{ entry.shaPreview }}</span>{% endif %}
+                    {% if entry.href %}
+                      <a
+                        class="link link-hover"
+                        href="{{ entry.href }}"
+                        target="_blank"
+                        rel="noreferrer"
+                      >Download</a>
+                    {% endif %}
+                  </div>
+                </li>
+              {% endfor %}
+            </ul>
+            <div class="flex items-center justify-between text-[11px] opacity-70">
+              {% if historyEntries | length > 3 %}
+                <span>+{{ historyEntries | length - 3 }} more snapshots preserved.</span>
+              {% endif %}
+              <div class="space-x-3">
+                {% if datasetHistory.directoryHref %}
+                  <a
+                    class="link link-hover"
+                    href="{{ datasetHistory.directoryHref }}"
+                    target="_blank"
+                    rel="noreferrer"
+                  >Browse archives</a>
+                {% endif %}
+                {% if datasetHistory.manifestHref %}
+                  <a
+                    class="link link-hover"
+                    href="{{ datasetHistory.manifestHref }}"
+                    target="_blank"
+                    rel="noreferrer"
+                  >Manifest JSON</a>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{% if pagination and pagination.hrefs and (pagination.hrefs | length) > 1 %}
+  <nav class="mt-6 flex flex-wrap items-center justify-center gap-2">
+    {% for href in pagination.hrefs %}
+      {% set pageIndex = loop.index0 %}
+      {% set isCurrent = pageIndex == pagination.pageNumber %}
+      <a
+        href="{{ href }}"
+        class="btn btn-sm md:btn-md {{ 'btn-primary' if isCurrent else 'btn-outline' }}"
+      >
+        Page {{ pageIndex + 1 }}
+      </a>
+    {% endfor %}
+  </nav>
+{% endif %}
+
+{% if (datasetFlags | length) or (datasetCapture | length) %}
+  {% set captureCount = datasetCapture | length %}
+  <section id="dataset-intel" class="mt-10 space-y-4">
+    <h2 class="text-3xl font-semibold">Dataset intelligence</h2>
+    <p class="text-sm opacity-70">
+      Run metadata, safeguards, and capture switches surfaced from the baked index snapshot.
+    </p>
+    <div
+      class="grid gap-6 {{ 'lg:grid-cols-[minmax(0,260px)_minmax(0,1fr)]' if captureCount else 'lg:grid-cols-1' }}"
+    >
+      {% if captureCount %}
+        <div class="card border border-base-content/15 bg-base-200/80 shadow-sm">
+          <div class="card-body space-y-4">
+            <h3 class="card-title text-lg">Capture profile</h3>
+            <ul class="space-y-2 text-sm">
+              {% for capture in datasetCapture %}
+                <li class="flex items-center justify-between gap-3">
+                  <span class="capitalize">{{ capture.key }}</span>
+                  <span
+                    class="badge {{ 'badge-success' if capture.enabled else 'badge-outline' }}"
+                  >{{ 'enabled' if capture.enabled else 'off' }}</span>
+                </li>
+              {% endfor %}
+            </ul>
+            <div class="text-xs opacity-70 space-y-1">
+              {% if dataset.bundleLabel %}
+                <p>Bundle label: <span class="font-semibold">{{ dataset.bundleLabel }}</span></p>
+              {% endif %}
+              {% if dataset.runMode %}
+                <p>Mode: <span class="font-semibold capitalize">{{ dataset.runMode }}</span></p>
+              {% endif %}
+              {% if summaryTotals.itemsFound %}
+                <p>Total items discovered: {{ summaryTotals.itemsFound }}</p>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      {% endif %}
+      <div class="space-y-4">
+        {% if datasetFlags | length %}
+          <div class="grid gap-4 md:grid-cols-2">
+            {% for flag in datasetFlags %}
+              <div class="card border border-base-content/15 bg-base-200/80 shadow-sm">
+                <div class="card-body space-y-3">
+                  <div class="flex items-start justify-between gap-3">
+                    <h3 class="card-title text-base leading-tight">{{ flag.title }}</h3>
+                    <span class="badge {{ toneBadge[flag.tone] or 'badge-outline' }}">
+                      {{ flag.count }}
+                    </span>
+                  </div>
+                  <p class="text-xs opacity-70">{{ flag.description }}</p>
+                  {% if flag.items and (flag.items | length) %}
+                    <details class="collapse collapse-arrow bg-base-300/30 rounded-box text-xs">
+                      <summary class="collapse-title font-semibold">
+                        View {{ flag.items | length }} host{% if flag.items | length != 1 %}s{% endif %}
+                        {% if flag.overflow %} ({{ flag.overflow }} more){% endif %}
+                      </summary>
+                      <div class="collapse-content">
+                        <ul class="max-h-40 overflow-y-auto space-y-1">
+                          {% for host in flag.items %}
+                            <li class="truncate">{{ host }}</li>
+                          {% endfor %}
+                          {% if flag.overflow %}
+                            <li class="text-[11px] opacity-60">
+                              … {{ flag.overflow }} additional entries omitted for brevity.
+                            </li>
+                          {% endif %}
+                        </ul>
+                      </div>
+                    </details>
+                  {% endif %}
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        {% else %}
+          <div class="alert alert-success shadow-sm">
+            <span>No ban candidates or safeguards triggered in this snapshot.</span>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </section>
+{% endif %}
+
+<section class="mt-12 space-y-10">
+  <div class="grid gap-6 lg:grid-cols-3">
+    <div class="card border border-base-content/15 bg-base-200/70 shadow-sm">
+      <div class="card-body space-y-4">
+        <h2 class="card-title text-lg">Atlas totals</h2>
+        <div class="grid grid-cols-2 gap-3 text-sm">
+          <div>
+            <p class="text-xs uppercase opacity-60">Unique images</p>
+            <p class="text-2xl font-semibold">{{ totals.images or 0 }}</p>
+          </div>
+          <div>
+            <p class="text-xs uppercase opacity-60">Unique pages</p>
+            <p class="text-2xl font-semibold">{{ totals.pages or 0 }}</p>
+          </div>
+          <div>
+            <p class="text-xs uppercase opacity-60">NDJSON shards</p>
+            <p class="text-xl font-semibold">{{ dataset.ndjson and dataset.ndjson.count or 0 }}</p>
+          </div>
+          <div>
+            <p class="text-xs uppercase opacity-60">Sample tiles</p>
+            <p class="text-xl font-semibold">{{ sample | length }}</p>
+          </div>
+          <div>
+            <p class="text-xs uppercase opacity-60">Sitemaps processed</p>
+            <p class="text-xl font-semibold">{{ totals.sitemapsProcessed or 0 }}</p>
+          </div>
+          <div>
+            <p class="text-xs uppercase opacity-60">Items ingested</p>
+            <p class="text-xl font-semibold">{{ totals.itemsFound or totals.images or 0 }}</p>
+          </div>
+          <div>
+            <p class="text-xs uppercase opacity-60">Cached page snapshots</p>
+            <p class="text-xl font-semibold">{{ dataset.cache.pages.totalSnapshots or 0 }}</p>
+          </div>
+          <div>
+            <p class="text-xs uppercase opacity-60">Cached image snapshots</p>
+            <p class="text-xl font-semibold">{{ dataset.cache.images.totalSnapshots or 0 }}</p>
+          </div>
+        </div>
+        {% if dataset.ndjson and dataset.ndjson.latestShard %}
+          <p class="text-xs opacity-70">
+            Latest shard: <a
+              class="link link-hover"
+              href="{{ baseHref }}{{ dataset.ndjson.latestShard }}"
+              target="_blank"
+              rel="noreferrer"
+            >{{ dataset.ndjson.latestShard }}</a>
+          </p>
+        {% endif %}
+      </div>
+    </div>
+    <div class="card border border-base-content/15 bg-base-200/70 shadow-sm">
+      <div class="card-body space-y-4">
+        <h2 class="card-title text-lg">Lifecycle (current run)</h2>
+        <div class="grid grid-cols-2 gap-3 text-sm">
+          <div>
+            <p class="text-xs uppercase opacity-60">New</p>
+            <p class="text-2xl font-semibold">{{ itemsMetrics.added or 0 }}</p>
+          </div>
+          <div>
+            <p class="text-xs uppercase opacity-60">Removed</p>
+            <p class="text-2xl font-semibold">{{ itemsMetrics.removed or 0 }}</p>
+          </div>
+          <div>
+            <p class="text-xs uppercase opacity-60">Active</p>
+            <p class="text-2xl font-semibold">
+              {{ itemsMetrics.active or summary.items and summary.items.active or 0 }}
+            </p>
+          </div>
+          <div>
+            <p class="text-xs uppercase opacity-60">Total tracked</p>
+            <p class="text-2xl font-semibold">
+              {{ itemsMetrics.total or summary.items and summary.items.total or 0 }}
+            </p>
+          </div>
+          <div>
+            <p class="text-xs uppercase opacity-60">Duplicates</p>
+            <p class="text-2xl font-semibold">{{ itemsMetrics.duplicates or 0 }}</p>
+          </div>
+          <div>
+            <p class="text-xs uppercase opacity-60">Purged</p>
+            <p class="text-2xl font-semibold">{{ itemsMetrics.purged or 0 }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card border border-base-content/15 bg-base-200/70 shadow-sm">
+      <div class="card-body space-y-4">
+        <h2 class="card-title text-lg">Cache & transport</h2>
+        <div class="grid grid-cols-2 gap-3 text-sm">
+          <div>
+            <p class="text-xs uppercase opacity-60">Robots cached</p>
+            <p class="text-xl font-semibold">
+              {{ dataset.cache and dataset.cache.robotsFiles or 0 }}
+            </p>
+          </div>
+          <div>
+            <p class="text-xs uppercase opacity-60">Sitemaps cached</p>
+            <p class="text-xl font-semibold">
+              {{ dataset.cache and dataset.cache.sitemapFiles or 0 }}
+            </p>
+          </div>
+          <div>
+            <p class="text-xs uppercase opacity-60">URL meta entries</p>
+            <p class="text-xl font-semibold">
+              {{ dataset.cache and dataset.cache.urlmetaEntries or 0 }}
+            </p>
+          </div>
+          <div>
+            <p class="text-xs uppercase opacity-60">Bundle files</p>
+            <p class="text-xl font-semibold">
+              {{ datasetTotals.fileCount or manifestDataset.fileCount or 0 }}
+            </p>
+          </div>
+          <div>
+            <p class="text-xs uppercase opacity-60">Robots issues</p>
+            <p class="text-sm font-semibold">
+              {{ robotsMetrics.issues or 0 }} / {{ robotsMetrics.total or 0 }}
+            </p>
+          </div>
+          <div>
+            <p class="text-xs uppercase opacity-60">Docs issues</p>
+            <p class="text-sm font-semibold">
+              {{ docsMetrics.issues or 0 }} / {{ docsMetrics.total or 0 }}
+            </p>
+          </div>
+        </div>
+        <p class="text-xs opacity-70">
+          Use <code>npm run lv-images:verify</code> before CI to confirm archive integrity.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div class="card shadow bg-base-200/80 border border-base-content/10">
+      <div class="card-body">
+        <h2 class="card-title">Robots Health</h2>
+        <p class="text-sm opacity-70">{{ robotsMetrics.total or 0 }} hosts analysed</p>
+        <div class="flex items-center gap-6 mt-4">
+          <div
+            class="radial-progress text-error"
+            style="--value: {{ robotsMetrics.issuePct | round(1) }}; --size: 4rem; --thickness: 4px"
+          >
+            {{ robotsMetrics.issuePct | round(1) }}%
+          </div>
+          <div>
+            <p class="text-2xl font-bold">{{ robotsMetrics.issues or 0 }}</p>
+            <p class="text-sm opacity-70">Flagged</p>
+          </div>
+        </div>
+        <div class="mt-4 flex flex-wrap gap-2">
+          {% for seg in robotsMetrics.breakdown or [] %}
+            {% set c = toneChip[seg.tone] or 'bg-base-300/20 text-base-content' %}
+            <span class="badge {{ c }}">{{ seg.label }} • {{ seg.count }} ({{ seg.pct }}%)</span>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+    <div class="card shadow bg-base-200/80 border border-base-content/10">
+      <div class="card-body">
+        <h2 class="card-title">Documents Health</h2>
+        <p class="text-sm opacity-70">{{ docsMetrics.total or 0 }} files analysed</p>
+        <div class="flex items-center gap-6 mt-4">
+          <div
+            class="radial-progress text-error"
+            style="--value: {{ docsMetrics.issuePct | round(1) }}; --size: 4rem; --thickness: 4px"
+          >
+            {{ docsMetrics.issuePct | round(1) }}%
+          </div>
+          <div>
+            <p class="text-2xl font-bold">{{ docsMetrics.issues or 0 }}</p>
+            <p class="text-sm opacity-70">Flagged</p>
+          </div>
+        </div>
+        <div class="mt-4 flex flex-wrap gap-2">
+          {% for seg in docsMetrics.breakdown or [] %}
+            {% set c = toneChip[seg.tone] or 'bg-base-300/20 text-base-content' %}
+            <span class="badge {{ c }}">{{ seg.label }} • {{ seg.count }} ({{ seg.pct }}%)</span>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% if dataset.directories and (dataset.directories | length) %}
+  <section id="snapshot-map" class="mt-12 space-y-4">
+    <h2 class="text-3xl font-semibold">Generated snapshot map</h2>
+    <p class="text-sm opacity-70">
+      Top level directories inside <code>generated/lv/</code> with quick links into cached assets.
+    </p>
+    <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+      {% for dir in dataset.directories %}
+        <div class="card border border-base-content/10 bg-base-200/70 hover:border-secondary/60 hover:shadow-lg transition">
+          <div class="card-body space-y-3">
+            <div class="flex items-center justify-between gap-4">
+              <h3 class="card-title text-lg">{{ dir.label }}</h3>
+              <span class="badge badge-outline badge-primary">{{ dir.fileCount }} files</span>
+            </div>
+            <p class="text-xs font-mono opacity-70 break-all">{{ dir.pathLabel }}</p>
+            <dl class="grid grid-cols-2 gap-3 text-sm">
+              <div>
+                <dt class="text-xs uppercase opacity-60">Bytes</dt>
+                <dd class="font-semibold">{{ dir.sizeLabel }}</dd>
+              </div>
+              <div>
+                <dt class="text-xs uppercase opacity-60">Browse</dt>
+                <dd>
+                  <a class="link link-hover" href="{{ dir.href }}" target="_blank" rel="noreferrer"
+                  >Open</a>
+                </dd>
+              </div>
+            </dl>
+            {% if dir.examples and (dir.examples | length) %}
+              <div>
+                <p class="text-xs uppercase opacity-60">Examples</p>
+                <ul class="mt-1 space-y-1 text-xs font-mono">
+                  {% for example in dir.examples %}
+                    <li class="truncate">
+                      <a
+                        class="link link-hover"
+                        href="{{ baseHref }}{{ example }}"
+                        target="_blank"
+                        rel="noreferrer"
+                      >{{ example }}</a>
+                    </li>
+                  {% endfor %}
+                </ul>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </section>
+{% endif %}
+
+{# Sitemaps Section #}
+<section id="sitemaps" class="space-y-4 mt-12">
+  <h2 class="text-3xl font-semibold">Sitemaps</h2>
+  <p class="text-sm opacity-70">Every sitemap crawl attempt with cached artifacts.</p>
+  <div class="flex flex-wrap gap-3 items-center mt-4">
+    <label class="input input-bordered flex items-center gap-2 w-full sm:w-72">
+      <span class="opacity-60">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-4 w-4"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <circle cx="11" cy="11" r="8"></circle>
+          <path d="m21 21-3.5-3.5"></path>
+        </svg>
+      </span>
+      <input
+        id="sitemapFilter"
+        type="search"
+        class="grow"
+        placeholder="Filter host or URL…"
+        autocomplete="off"
+        data-search-input="sitemaps"
+      />
+    </label>
+    <div id="typeChips" class="join" data-filter-chips="sitemaps">
+      {% for type in ['image', 'product', 'catalog', 'content', 'index', 'other'] %}
+        <button
+          type="button"
+          class="btn btn-xs btn-outline"
+          data-section="sitemaps"
+          data-type="{{ type }}"
+        >
+          {{ type }}
+        </button>
+      {% endfor %}
+    </div>
+    <button
+      class="btn btn-sm btn-outline"
+      id="exportSitemaps"
+      type="button"
+      data-export-section="sitemaps"
+    >
+      Export CSV
+    </button>
+  </div>
+  {% if sitemapsPage.totalItems %}
+    <div class="mt-2 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+      <p
+        class="text-xs opacity-70"
+        data-filter-summary="sitemaps"
+        data-summary-label="sitemaps"
+      >
+        Showing {{ sitemapsPage.from }}–{{ sitemapsPage.to }} of {{ sitemapsPage.totalItems }}
+        sitemaps (page {{ (pagination.pageNumber or 0) + 1 }} of {{
+          paginationSections.sitemaps.pageCount or 1
+        }}).
+      </p>
+      <div class="flex flex-wrap items-center gap-2 text-xs">
+        <label class="flex items-center gap-2">
+          <span class="opacity-70">Page size</span>
+          <select
+            class="select select-bordered select-xs"
+            data-page-size="sitemaps"
+          >
+            {% for size in tablePageSizes %}
+              <option value="{{ size }}"{% if (sitemapsPage.size or 25) == size %} selected{% endif %}>{{ size }}</option>
+            {% endfor %}
+          </select>
+        </label>
+        <div class="join">
+          <button
+            type="button"
+            class="btn btn-xs join-item"
+            data-page-prev="sitemaps"
+            aria-label="Previous sitemaps page"
+          >
+            Prev
+          </button>
+          <span
+            class="join-item px-3 text-[11px] font-medium uppercase tracking-wide opacity-70"
+            data-page-indicator="sitemaps"
+          >
+            Page {{ (pagination.pageNumber or 0) + 1 }}
+          </span>
+          <button
+            type="button"
+            class="btn btn-xs join-item"
+            data-page-next="sitemaps"
+            aria-label="Next sitemaps page"
+          >
+            Next
+          </button>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+  {% if sitemaps | length %}
+    <div class="overflow-x-auto rounded-box border border-base-content/10 mt-4">
+      <table class="table table-zebra table-sm" id="sitemapsTable" data-section-table="sitemaps">
+        <thead>
+          <tr>
+            <th>Host</th>
+            <th>Type</th>
+            <th>Images</th>
+            <th>Status</th>
+            <th>Live</th>
+            <th>Cached</th>
+          </tr>
+        </thead>
+        <tbody data-section-body="sitemaps">
+          {% for r in sitemaps %}
+            <tr data-section-row="sitemaps" data-entry-id="{{ r.id }}" data-type="{{ r.type }}">
+              <td class="font-medium">
+                {% if r.host %}
+                  {# Build an absolute host link, defaulting to https:// when scheme missing #}
+                  {% set hostHref = r.host %}
+                  {% if hostHref and not ('://' in hostHref) %}
+                    {% set hostHref = 'https://' ~ hostHref %}
+                  {% endif %}
+                  <a
+                    class="link link-hover"
+                    href="{{ hostHref }}"
+                    target="_blank"
+                    rel="noreferrer"
+                  >{{ r.host }}</a>
+                {% else %}
+                  —
+                {% endif %}
+              </td>
+              <td><span class="badge badge-outline capitalize">{{ r.type or 'other' }}</span></td>
+              <td>{{ r.imageCount or 0 }}</td>
+              <td>{{ r.status or '—' }}</td>
+              <td>
+                {% if r.url %}<a
+                    href="{{ r.url }}"
+                    class="link link-primary"
+                    target="_blank"
+                    rel="noreferrer"
+                  >{{ r.url }}</a>{% else %}—{% endif %}
+              </td>
+              <td>
+                {% if r.savedPath %}<a
+                    href="{{ baseHref }}{{ r.savedPath }}"
+                    class="link"
+                    target="_blank"
+                    rel="noreferrer"
+                  >open</a>{% else %}—{% endif %}
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <div class="alert alert-info mt-4">
+      <span>No sitemap activity yet. Run the crawler to populate this section.</span>
+    </div>
+  {% endif %}
+</section>
+
+{# Runs history timeline #}
+<section id="history" class="space-y-4 mt-12">
+  <h2 class="text-3xl font-semibold">Runs History</h2>
+  <p class="text-sm opacity-70">
+    Overview of the last {{ lv.runsHistory and lv.runsHistory | length or 0 }} runs with lifecycle
+    metrics.
+  </p>
+  {% if lv.runsHistory and (lv.runsHistory | length) %}
+    <div class="overflow-x-auto rounded-box border border-base-content/10 mt-4">
+      <table class="table table-zebra table-xs" id="historyTable">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Added</th>
+            <th>Removed</th>
+            <th>Active</th>
+            <th>Total</th>
+            <th>Duplicates</th>
+            <th>Purged</th>
+            <th>Images</th>
+            <th>Pages</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for run in lv.runsHistory | reverse %}
+            <tr>
+              <td>{{ run.timestamp }}</td>
+              <td>{{ run.metrics.added or 0 }}</td>
+              <td>{{ run.metrics.removed or 0 }}</td>
+              <td>{{ run.metrics.active or 0 }}</td>
+              <td>{{ run.metrics.total or 0 }}</td>
+              <td>{{ run.metrics.duplicates or 0 }}</td>
+              <td>{{ run.metrics.purged or 0 }}</td>
+              <td>{{ run.totals.images or 0 }}</td>
+              <td>{{ run.totals.pages or 0 }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <div class="alert alert-info mt-4"><span>No run history available.</span></div>
+  {% endif %}
+</section>
+
+{# Duplicate images section #}
+<section id="duplicates-section" class="space-y-4 mt-12">
+  <h2 class="text-3xl font-semibold">Duplicate Images</h2>
+  <p class="text-sm opacity-70">
+    Canonical images with one or more duplicates. The count reflects duplicate occurrences beyond
+    the canonical image.
+  </p>
+  <div class="flex flex-wrap gap-3 items-end mt-4">
+    <label class="input input-bordered flex items-center gap-2 w-full sm:w-72">
+      <span class="opacity-60">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-4 w-4"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <circle cx="11" cy="11" r="8"></circle>
+          <path d="m21 21-3.5-3.5"></path>
+        </svg>
+      </span>
+      <input
+        id="duplicatesFilter"
+        type="search"
+        class="grow"
+        placeholder="Search basename, title or page…"
+        autocomplete="off"
+        data-search-input="duplicates"
+      />
+    </label>
+    <button
+      class="btn btn-sm btn-outline"
+      id="exportDuplicates"
+      type="button"
+      data-export-section="duplicates"
+    >
+      Export CSV
+    </button>
+  </div>
+  {% if duplicatesPage.totalItems %}
+    <div class="mt-2 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+      <p
+        class="text-xs opacity-70"
+        data-filter-summary="duplicates"
+        data-summary-label="duplicate groups"
+      >
+        Showing {{ duplicatesPage.from }}–{{ duplicatesPage.to }} of {{ duplicatesPage.totalItems }}
+        duplicate groups.
+      </p>
+      <div class="flex flex-wrap items-center gap-2 text-xs">
+        <label class="flex items-center gap-2">
+          <span class="opacity-70">Page size</span>
+          <select class="select select-bordered select-xs" data-page-size="duplicates">
+            {% for size in tablePageSizes %}
+              <option value="{{ size }}"{% if (duplicatesPage.size or 25) == size %} selected{% endif %}>{{ size }}</option>
+            {% endfor %}
+          </select>
+        </label>
+        <div class="join">
+          <button
+            type="button"
+            class="btn btn-xs join-item"
+            data-page-prev="duplicates"
+            aria-label="Previous duplicate group page"
+          >
+            Prev
+          </button>
+          <span
+            class="join-item px-3 text-[11px] font-medium uppercase tracking-wide opacity-70"
+            data-page-indicator="duplicates"
+          >
+            Page {{ duplicatesPage.pageNumber + 1 if duplicatesPage.pageNumber is defined else 1 }}
+          </span>
+          <button
+            type="button"
+            class="btn btn-xs join-item"
+            data-page-next="duplicates"
+            aria-label="Next duplicate group page"
+          >
+            Next
+          </button>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+  {% if duplicates and (duplicates | length) %}
+    <div class="overflow-x-auto rounded-box border border-base-content/10 mt-4">
+      <table class="table table-zebra table-xs" id="duplicatesTable" data-section-table="duplicates">
+        <thead>
+          <tr>
+            <th class="min-w-[80px]">Image</th>
+            <th class="min-w-[80px]">Dupes</th>
+            <th>Basename</th>
+            <th class="min-w-[260px]">Page</th>
+            <th>First Seen</th>
+            <th>Last Seen</th>
+          </tr>
+        </thead>
+        <tbody data-section-body="duplicates">
+          {% for d in duplicates %}
+            <tr data-section-row="duplicates" data-entry-id="{{ d.id }}">
+              <td>
+                {% if d.src %}
+                  <a href="{{ d.src }}" target="_blank" rel="noreferrer" class="relative block">
+                    <img
+                      src="{{ lazyPlaceholder }}"
+                      data-lazy-src="{{ d.src }}"
+                      alt="Duplicate image preview"
+                      loading="lazy"
+                      class="w-12 h-12 object-cover rounded-box border border-base-content/10"
+                    />
+                  </a>
+                {% else %}
+                  <span class="text-xs opacity-60">No image</span>
+                {% endif %}
+              </td>
+              <td>{{ d.count - 1 }}</td>
+              <td>{{ d.basename or '' }}</td>
+              <td>
+                {% if d.pageUrl %}<a
+                    class="link link-primary"
+                    href="{{ d.pageUrl }}"
+                    target="_blank"
+                    rel="noreferrer"
+                  >{{ d.pageUrl }}</a>{% else %}—{% endif %}
+              </td>
+              <td>{{ d.firstSeen }}</td>
+              <td>{{ d.lastSeen }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <div class="alert alert-info mt-4"><span>No duplicates found.</span></div>
+  {% endif %}
+</section>
+
+{# Top products section #}
+<section id="products-section" class="space-y-4 mt-12">
+  <h2 class="text-3xl font-semibold">Top Products</h2>
+  <p class="text-sm opacity-70">
+    Pages with the most cached images. Review {{ topProductsPage.totalItems or 0 }} products, paged
+    for easier browsing.
+  </p>
+  <div class="flex flex-wrap gap-3 items-end mt-4">
+    <label class="input input-bordered flex items-center gap-2 w-full sm:w-72">
+      <span class="opacity-60">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-4 w-4"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+        >
+          <circle cx="11" cy="11" r="8"></circle>
+          <path d="m21 21-3.5-3.5"></path>
+        </svg>
+      </span>
+      <input
+        id="productsFilter"
+        type="search"
+        class="grow"
+        placeholder="Search page or title…"
+        autocomplete="off"
+        data-search-input="topProducts"
+      />
+    </label>
+    <button
+      class="btn btn-sm btn-outline"
+      id="exportProducts"
+      type="button"
+      data-export-section="topProducts"
+    >
+      Export CSV
+    </button>
+  </div>
+  {% if topProductsPage.totalItems %}
+    <div class="mt-2 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+      <p
+        class="text-xs opacity-70"
+        data-filter-summary="topProducts"
+        data-summary-label="products"
+      >
+        Showing {{ topProductsPage.from }}–{{ topProductsPage.to }} of {{
+          topProductsPage.totalItems
+        }} products.
+      </p>
+      <div class="flex flex-wrap items-center gap-2 text-xs">
+        <label class="flex items-center gap-2">
+          <span class="opacity-70">Page size</span>
+          <select class="select select-bordered select-xs" data-page-size="topProducts">
+            {% for size in tablePageSizes %}
+              <option value="{{ size }}"{% if (topProductsPage.size or 25) == size %} selected{% endif %}>{{ size }}</option>
+            {% endfor %}
+          </select>
+        </label>
+        <div class="join">
+          <button
+            type="button"
+            class="btn btn-xs join-item"
+            data-page-prev="topProducts"
+            aria-label="Previous products page"
+          >
+            Prev
+          </button>
+          <span
+            class="join-item px-3 text-[11px] font-medium uppercase tracking-wide opacity-70"
+            data-page-indicator="topProducts"
+          >
+            Page {{ topProductsPage.pageNumber + 1 if topProductsPage.pageNumber is defined else 1 }}
+          </span>
+          <button
+            type="button"
+            class="btn btn-xs join-item"
+            data-page-next="topProducts"
+            aria-label="Next products page"
+          >
+            Next
+          </button>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+  {% if topProducts and (topProducts | length) %}
+    <div class="overflow-x-auto rounded-box border border-base-content/10 mt-4">
+      <table class="table table-zebra table-xs" id="productsTable" data-section-table="topProducts">
+        <thead>
+          <tr>
+            <th class="min-w-[240px]">Page</th>
+            <th>Total Images</th>
+            <th>Unique Images</th>
+            <th>First Seen</th>
+            <th>Last Seen</th>
+          </tr>
+        </thead>
+        <tbody data-section-body="topProducts">
+          {% for p in topProducts %}
+            <tr data-section-row="topProducts" data-entry-id="{{ p.id }}">
+              <td>
+                {% if p.pageUrl %}<a
+                    href="{{ p.pageUrl }}"
+                    class="link link-primary"
+                    target="_blank"
+                    rel="noreferrer"
+                  >{{ p.title }}</a>{% else %}{{ p.title }}{% endif %}
+              </td>
+              <td>{{ p.totalImages }}</td>
+              <td>{{ p.uniqueImages }}</td>
+              <td>{{ p.firstSeen }}</td>
+              <td>{{ p.lastSeen }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <div class="alert alert-info mt-4"><span>No products found.</span></div>
+  {% endif %}
+</section>
+
+{# Hosts overview section #}
+<section id="hosts-section" class="space-y-4 mt-12">
+  <h2 class="text-3xl font-semibold">Hosts Overview</h2>
+  <p class="text-sm opacity-70">
+    Summary of total and unique images, duplicates and pages per host.
+  </p>
+  <div class="flex flex-wrap gap-3 items-end mt-4">
+    <label class="input input-bordered flex items-center gap-2 w-full sm:w-72">
+      <span class="opacity-60">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-4 w-4"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+        >
+          <circle cx="11" cy="11" r="8"></circle>
+          <path d="m21 21-3.5-3.5"></path>
+        </svg>
+      </span>
+      <input
+        id="hostsFilter"
+        type="search"
+        class="grow"
+        placeholder="Search host…"
+        autocomplete="off"
+        data-search-input="hosts"
+      />
+    </label>
+    <button
+      class="btn btn-sm btn-outline"
+      id="exportHosts"
+      type="button"
+      data-export-section="hosts"
+    >
+      Export CSV
+    </button>
+  </div>
+  {% if hostStatsPage.totalItems %}
+    <div class="mt-2 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+      <p
+        class="text-xs opacity-70"
+        data-filter-summary="hosts"
+        data-summary-label="hosts"
+      >
+        Showing {{ hostStatsPage.from }}–{{ hostStatsPage.to }} of {{ hostStatsPage.totalItems }}
+        hosts.
+      </p>
+      <div class="flex flex-wrap items-center gap-2 text-xs">
+        <label class="flex items-center gap-2">
+          <span class="opacity-70">Page size</span>
+          <select class="select select-bordered select-xs" data-page-size="hosts">
+            {% for size in tablePageSizes %}
+              <option value="{{ size }}"{% if (hostStatsPage.size or 25) == size %} selected{% endif %}>{{ size }}</option>
+            {% endfor %}
+          </select>
+        </label>
+        <div class="join">
+          <button
+            type="button"
+            class="btn btn-xs join-item"
+            data-page-prev="hosts"
+            aria-label="Previous hosts page"
+          >
+            Prev
+          </button>
+          <span
+            class="join-item px-3 text-[11px] font-medium uppercase tracking-wide opacity-70"
+            data-page-indicator="hosts"
+          >
+            Page {{ hostStatsPage.pageNumber + 1 if hostStatsPage.pageNumber is defined else 1 }}
+          </span>
+          <button
+            type="button"
+            class="btn btn-xs join-item"
+            data-page-next="hosts"
+            aria-label="Next hosts page"
+          >
+            Next
+          </button>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+  {% if hostStats and (hostStats | length) %}
+    <div class="overflow-x-auto rounded-box border border-base-content/10 mt-4">
+      <table class="table table-zebra table-xs" id="hostsTable" data-section-table="hosts">
+        <thead>
+          <tr>
+            <th class="min-w-[200px]">Host</th>
+            <th>Total Images</th>
+            <th>Unique Images</th>
+            <th>Duplicates</th>
+            <th>Products</th>
+            <th>Pages</th>
+          </tr>
+        </thead>
+        <tbody data-section-body="hosts">
+          {% for h in hostStats %}
+            <tr data-section-row="hosts" data-entry-id="{{ h.id }}">
+              <td>
+                {% if h.host %}
+                  {% set hostHref = h.host %}
+                  {% if hostHref and not ('://' in hostHref) %}
+                    {% set hostHref = 'https://' ~ hostHref %}
+                  {% endif %}
+                  <a
+                    class="link link-hover"
+                    href="{{ hostHref }}"
+                    target="_blank"
+                    rel="noreferrer"
+                  >{{ h.host }}</a>
+                {% else %}
+                  —
+                {% endif %}
+              </td>
+              <td>{{ h.images }}</td>
+              <td>{{ h.uniqueImages }}</td>
+              <td>{{ h.duplicates }}</td>
+              <td>{{ h.products }}</td>
+              <td>{{ h.pages }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <div class="alert alert-info mt-4"><span>No host data available.</span></div>
+  {% endif %}
+</section>
+
+{# Robots Section #}
+<section id="robots" class="space-y-4 mt-12">
+  <h2 class="text-3xl font-semibold">Robots Explorer</h2>
+  <p class="text-sm opacity-70">
+    Classified view of cached <code>robots.txt</code> responses with live mirrors, cached filenames,
+    and directive counts.
+  </p>
+  <div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:flex-wrap mt-4">
+    <label class="input input-bordered flex items-center gap-2 w-full sm:w-72">
+      <span class="opacity-60">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-4 w-4"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+        >
+          <circle cx="11" cy="11" r="8"></circle>
+          <path d="m21 21-3.5-3.5"></path>
+        </svg>
+      </span>
+      <input
+        id="robotsFilter"
+        type="search"
+        class="grow"
+        placeholder="Search host, directive, or status…"
+        autocomplete="off"
+        data-search-input="robots"
+      />
+    </label>
+    <div id="robotsStatusFilters" class="flex flex-wrap gap-2">
+      {% for seg in robotsMetrics.breakdown or [] %}
+        {% set badgeClass = toneBadge[seg.tone] or 'badge-outline' %}
+        <button
+          type="button"
+          class="btn btn-xs btn-ghost status-chip"
+          data-section="robots"
+          data-status="{{ seg.key }}"
+        >
+          <span class="badge {{ badgeClass }} badge-xs">{{ seg.label }}</span>
+          <span class="text-xs opacity-60">{{ seg.count }}</span>
+        </button>
+      {% endfor %}
+    </div>
+    <label class="flex items-center gap-2 text-sm mt-2 sm:mt-0">
+      <input
+        id="robotsIssuesOnly"
+        type="checkbox"
+        class="checkbox checkbox-sm"
+        data-issues-toggle="robots"
+      />
+      <span>Show issues only</span>
+    </label>
+  </div>
+  {% if robotsPage.totalItems %}
+    <div class="mt-2 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+      <p
+        class="text-xs opacity-70"
+        data-filter-summary="robots"
+        data-summary-label="robots snapshots"
+      >
+        Showing {{ robotsPage.from }}–{{ robotsPage.to }} of {{ robotsPage.totalItems }} robots
+        snapshots.
+      </p>
+      <div class="flex flex-wrap items-center gap-2 text-xs">
+        <label class="flex items-center gap-2">
+          <span class="opacity-70">Page size</span>
+          <select class="select select-bordered select-xs" data-page-size="robots">
+            {% for size in tablePageSizes %}
+              <option value="{{ size }}"{% if (robotsPage.size or 25) == size %} selected{% endif %}>{{ size }}</option>
+            {% endfor %}
+          </select>
+        </label>
+        <div class="join">
+          <button
+            type="button"
+            class="btn btn-xs join-item"
+            data-page-prev="robots"
+            aria-label="Previous robots page"
+          >
+            Prev
+          </button>
+          <span
+            class="join-item px-3 text-[11px] font-medium uppercase tracking-wide opacity-70"
+            data-page-indicator="robots"
+          >
+            Page {{ robotsPage.pageNumber + 1 if robotsPage.pageNumber is defined else 1 }}
+          </span>
+          <button
+            type="button"
+            class="btn btn-xs join-item"
+            data-page-next="robots"
+            aria-label="Next robots page"
+          >
+            Next
+          </button>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+  {% if robots | length %}
+    <div class="overflow-x-auto rounded-box border border-base-content/10 mt-4">
+      <table class="table table-zebra table-xs" id="robotsTable" data-section-table="robots">
+        <thead>
+          <tr>
+            <th class="min-w-[220px]">Host</th>
+            <th class="min-w-[160px]">Status</th>
+            <th class="min-w-[160px]">Cache</th>
+            <th class="min-w-[200px]">Directives</th>
+            <th class="min-w-[260px]">Preview</th>
+          </tr>
+        </thead>
+        <tbody data-section-body="robots">
+          {% for r in robots %}
+            <tr
+              data-section-row="robots"
+              data-entry-id="{{ r.id }}"
+              data-host="{{ r.host }}"
+              data-status="{{ r.statusCategory }}"
+              data-issue="{% if r.isIssue %}1{% else %}0{% endif %}"
+            >
+              <td class="align-top">
+                <div class="flex flex-col gap-1">
+                  {% if r.host %}
+                    {% set robotsHostHref = r.host %}
+                    {% if robotsHostHref and not ('://' in robotsHostHref) %}
+                      {% set robotsHostHref = 'https://' ~ robotsHostHref %}
+                    {% endif %}
+                    <a
+                      class="font-medium link link-hover"
+                      href="{{ robotsHostHref }}"
+                      target="_blank"
+                      rel="noreferrer"
+                    >{{ r.host }}</a>
+                  {% else %}
+                    <span class="font-medium">—</span>
+                  {% endif %}
+                  <div class="flex flex-wrap items-center gap-2 text-xs">
+                    <a
+                      class="link link-primary"
+                      href="https://{{ r.host }}/robots.txt"
+                      target="_blank"
+                      rel="noreferrer"
+                    >Live robots.txt</a>
+                    {% if r.robotsTxtPath %}
+                      <span class="opacity-40">·</span>
+                      <a
+                        class="link"
+                        href="{{ baseHref }}{{ r.robotsTxtPath }}"
+                        target="_blank"
+                        rel="noreferrer"
+                      >Cached</a>
+                    {% endif %}
+                    {% if r.blacklisted %}
+                      <span class="badge badge-error badge-outline">Blacklisted{%
+                          if r.blacklistReason
+                        %}
+                          · {{ r.blacklistReason }}{% endif %}</span>
+                    {% endif %}
+                  </div>
+                  {% if r.blacklisted and r.blacklistUntil %}
+                    <span class="text-[11px] opacity-60">Active until {{ r.blacklistUntil }}</span>
+                  {% endif %}
+                </div>
+              </td>
+              <td class="align-top">
+                <div class="flex flex-col gap-1">
+                  {% set badgeClass = toneBadge[r.statusTone] or 'badge-outline' %}
+                  <span class="badge {{ badgeClass }} badge-sm">{{ r.statusLabel }}</span>
+                  {% if r.httpLabel %}<span class="badge badge-outline badge-xs">{{
+                      r.httpLabel
+                    }}</span>{% endif %}
+                  <span class="text-[11px] opacity-60">{{ r.linesTotal }} lines</span>
+                </div>
+              </td>
+              <td class="align-top">
+                {% if r.robotsTxtPath %}
+                  <div class="flex flex-col gap-1 text-xs">
+                    <a
+                      class="link link-hover"
+                      href="{{ baseHref }}{{ r.robotsTxtPath }}"
+                      target="_blank"
+                      rel="noreferrer"
+                    >{{ r.fileName }}</a>
+                    <span class="opacity-60">{{ r.sizeLabel }} · cached</span>
+                  </div>
+                {% else %}
+                  <span class="text-xs opacity-60">No cache</span>
+                {% endif %}
+              </td>
+              <td class="align-top">
+                {% set allowCount   = r.parsed.merged.allow.length %}
+                {% set disallowCount= r.parsed.merged.disallow.length %}
+                {% set noindexCount = r.parsed.merged.noindex.length %}
+                {% set sitemapCount= r.parsed.merged.sitemaps.length %}
+                <div class="flex flex-wrap gap-1 text-[11px]">
+                  {% if allowCount %}<span class="badge badge-outline badge-xs">Allow {{
+                        allowCount
+                      }}</span>{% endif %}
+                  {% if disallowCount %}<span class="badge badge-outline badge-xs">Disallow {{
+                        disallowCount
+                      }}</span>{% endif %}
+                  {% if noindexCount %}<span class="badge badge-outline badge-xs">Noindex {{
+                        noindexCount
+                      }}</span>{% endif %}
+                  {% if r.parsed.merged.crawlDelay is not none %}<span
+                      class="badge badge-outline badge-xs"
+                    >Delay {{ r.parsed.merged.crawlDelay }}</span>{% endif %}
+                  {% if sitemapCount %}<span class="badge badge-outline badge-xs">Sitemaps {{
+                        sitemapCount
+                      }}</span>{% endif %}
+                </div>
+                {% if sitemapCount %}
+                  <div class="mt-1 space-y-1 text-[11px]">
+                    {% for u in r.parsed.merged.sitemaps | slice(0, 3) %}
+                      <a class="link link-hover" href="{{ u }}" target="_blank" rel="noreferrer">{{
+                        u
+                      }}</a>
+                    {% endfor %}
+                    {% if r.parsed.merged.sitemaps.length > 3 %}<span class="opacity-60"
+                      >+{{ r.parsed.merged.sitemaps.length - 3 }} more…</span>{% endif %}
+                  </div>
+                {% endif %}
+                {% if r.parsed.other and (r.parsed.other | length) %}
+                  <div class="mt-1 flex flex-wrap gap-1 text-[11px]">
+                    {% for key, vals in r.parsed.other %}
+                      {% set displayVals = vals %}
+                      {% if displayVals is iterable and not (displayVals is string) %}
+                        {% set displayVals = displayVals | join(' · ') %}
+                      {% endif %}
+                      <span class="badge badge-outline badge-xs">{{ key }}: {{ displayVals }}</span>
+                    {% endfor %}
+                  </div>
+                {% endif %}
+              </td>
+              <td class="align-top w-80">
+                {% if r.preview %}
+                  <pre class="bg-base-100 border border-base-content/10 rounded-box p-3 text-xs leading-5 whitespace-pre-wrap max-h-36 overflow-auto">{{ r.preview | escape }}</pre>
+                  {% if r.robotsTxtPath %}<a
+                      class="link link-hover text-xs"
+                      href="{{ baseHref }}{{ r.robotsTxtPath }}"
+                      target="_blank"
+                      rel="noreferrer"
+                    >Open full raw</a>{% endif %}
+                {% elif r.hasCached %}
+                  <a
+                    class="link link-hover text-xs"
+                    href="{{ baseHref }}{{ r.robotsTxtPath }}"
+                    target="_blank"
+                    rel="noreferrer"
+                  >Open cached file</a>
+                {% else %}
+                  <span class="text-xs opacity-60">No cache captured</span>
+                {% endif %}
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <div class="alert alert-info mt-4">
+      <span>No robots have been cached yet.</span>
+    </div>
+  {% endif %}
+</section>
+
+{# Docs Section #}
+<section id="docs" class="space-y-4 mt-12">
+  <h2 class="text-3xl font-semibold">Cached Documents</h2>
+  <p class="text-sm opacity-70">Inventory of saved sitemap payloads and text resources.</p>
+  <p class="text-xs opacity-60">
+    Use the status filters to surface errors, HTML payloads and gzip archives.
+  </p>
+  <div class="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-end mt-4">
+    <label class="input input-bordered flex items-center gap-2 w-full sm:w-72">
+      <span class="opacity-60">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-4 w-4"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+        >
+          <circle cx="11" cy="11" r="8"></circle>
+          <path d="m21 21-3.5-3.5"></path>
+        </svg>
+      </span>
+      <input
+        id="docsFilter"
+        type="search"
+        class="grow"
+        placeholder="Search host, filename, or status…"
+        autocomplete="off"
+        data-search-input="docs"
+      />
+    </label>
+    <div id="docsStatusFilters" class="flex flex-wrap gap-2">
+      {% for seg in docsMetrics.breakdown or [] %}
+        {% set badgeClass = toneBadge[seg.tone] or 'badge-outline' %}
+        <button
+          type="button"
+          class="btn btn-xs btn-ghost status-chip"
+          data-section="docs"
+          data-status="{{ seg.key }}"
+        >
+          <span class="badge {{ badgeClass }} badge-xs">{{ seg.label }}</span>
+          <span class="text-xs opacity-60">{{ seg.count }}</span>
+        </button>
+      {% endfor %}
+    </div>
+    <label class="flex items-center gap-2 text-sm mt-2 sm:mt-0">
+      <input
+        id="docsIssuesOnly"
+        type="checkbox"
+        class="checkbox checkbox-sm"
+        data-issues-toggle="docs"
+      />
+      <span>Show issues only</span>
+    </label>
+    <button class="btn btn-sm btn-outline" id="exportDocs" type="button" data-export-section="docs">
+      Export CSV
+    </button>
+  </div>
+  {% if docsPage.totalItems %}
+    <div class="mt-2 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+      <p
+        class="text-xs opacity-70"
+        data-filter-summary="docs"
+        data-summary-label="cached documents"
+      >
+        Showing {{ docsPage.from }}–{{ docsPage.to }} of {{ docsPage.totalItems }} cached documents.
+      </p>
+      <div class="flex flex-wrap items-center gap-2 text-xs">
+        <label class="flex items-center gap-2">
+          <span class="opacity-70">Page size</span>
+          <select class="select select-bordered select-xs" data-page-size="docs">
+            {% for size in tablePageSizes %}
+              <option value="{{ size }}"{% if (docsPage.size or 25) == size %} selected{% endif %}>{{ size }}</option>
+            {% endfor %}
+          </select>
+        </label>
+        <div class="join">
+          <button
+            type="button"
+            class="btn btn-xs join-item"
+            data-page-prev="docs"
+            aria-label="Previous documents page"
+          >
+            Prev
+          </button>
+          <span
+            class="join-item px-3 text-[11px] font-medium uppercase tracking-wide opacity-70"
+            data-page-indicator="docs"
+          >
+            Page {{ docsPage.pageNumber + 1 if docsPage.pageNumber is defined else 1 }}
+          </span>
+          <button
+            type="button"
+            class="btn btn-xs join-item"
+            data-page-next="docs"
+            aria-label="Next documents page"
+          >
+            Next
+          </button>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+  {% if docs | length %}
+    <div class="overflow-x-auto rounded-box border border-base-content/10 mt-4">
+      <table class="table table-zebra table-xs" id="docsTable" data-section-table="docs">
+        <thead>
+          <tr>
+            <th class="min-w-[200px]">Host</th>
+            <th class="min-w-[220px]">File</th>
+            <th class="min-w-[160px]">Status</th>
+            <th class="min-w-[160px]">Meta</th>
+            <th class="min-w-[320px]">Preview</th>
+          </tr>
+        </thead>
+        <tbody data-section-body="docs">
+          {% for d in docs %}
+            <tr
+              data-section-row="docs"
+              data-entry-id="{{ d.id }}"
+              data-status="{{ d.statusCategory }}"
+              data-issue="{% if d.isIssue %}1{% else %}0{% endif %}"
+            >
+              <td class="align-top">
+                <div class="flex flex-col gap-1">
+                  {% if d.host %}
+                    {% set docsHostHref = d.host %}
+                    {% if docsHostHref and not ('://' in docsHostHref) %}
+                      {% set docsHostHref = 'https://' ~ docsHostHref %}
+                    {% endif %}
+                    <a
+                      class="font-medium link link-hover"
+                      href="{{ docsHostHref }}"
+                      target="_blank"
+                      rel="noreferrer"
+                    >{{ d.host }}</a>
+                  {% else %}
+                    <span class="font-medium">—</span>
+                  {% endif %}
+                  {% if d.url %}<a
+                      class="link link-primary text-xs"
+                      href="{{ d.url }}"
+                      target="_blank"
+                      rel="noreferrer"
+                    >Live document</a>{% endif %}
+                </div>
+              </td>
+              <td class="align-top">
+                <div class="flex flex-col gap-1 text-xs">
+                  {% if d.savedPath %}
+                    <a
+                      class="link link-hover"
+                      href="{{ baseHref }}{{ d.savedPath }}"
+                      target="_blank"
+                      rel="noreferrer"
+                    >{{ d.fileName }}</a>
+                    <span class="opacity-60">{{ d.savedPath }}</span>
+                  {% endif %}
+                  <span class="badge badge-outline badge-xs capitalize">{{ d.kind or '—' }}</span>
+                </div>
+              </td>
+              <td class="align-top">
+                {% set badgeClass = toneBadge[d.statusTone] or 'badge-outline' %}
+                <div class="flex flex-col gap-1">
+                  <span class="badge {{ badgeClass }} badge-sm">{{ d.statusLabel }}</span>
+                  {% if d.httpLabel %}<span class="badge badge-outline badge-xs">{{
+                      d.httpLabel
+                    }}</span>{% endif %}
+                  {% if d.status %}<span class="text-[11px] opacity-60">Fetch status {{
+                        d.status
+                      }}</span>{% endif %}
+                </div>
+              </td>
+              <td class="align-top text-xs">
+                <div class="space-y-1">
+                  <span class="opacity-70">{{ d.sizeLabel }}</span>
+                  {% if d.contentType %}<span class="opacity-60">{{ d.contentType }}</span>{%
+                    endif
+                  %}
+                  {% if d.statusCategory == 'gzip' %}<span class="opacity-60"
+                    >Compressed (.gz)</span>{% endif %}
+                </div>
+              </td>
+              <td class="align-top w-[360px]">
+                {% if d.preview %}
+                  <pre class="bg-base-100 border border-base-content/10 rounded-box p-3 text-xs leading-5 whitespace-pre-wrap max-h-40 overflow-auto">{{ d.preview | escape }}</pre>
+                {% elif d.statusCategory == 'gzip' %}
+                  <span class="text-xs opacity-60">Gzip archive — download to inspect.</span>
+                {% else %}
+                  <span class="text-xs opacity-60">No preview available.</span>
+                {% endif %}
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <div class="alert alert-info mt-4">
+      <span>No cached documents on disk.</span>
+    </div>
+  {% endif %}
+</section>
+
+{# Sample images grid #}
+<section id="sample" class="space-y-4 mt-12">
+  <h2 class="text-3xl font-semibold">Image Sample</h2>
+  <p class="text-sm opacity-70">
+    A quick glance at NDJSON shards. Click any tile to open the source.
+  </p>
+  {% if sample | length %}
+    <div class="grid gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 mt-4">
+      {% for i in sample %}
+        {% set previewSrc = i.preview or i.thumbnail or i.src %}
+        {% set imageHref = i.src %}
+        {% set pageHref = i.pageUrl or i.src %}
+        {% set titleText = i.title or i.basename or i.src %}
+        {% set lowerTitle = (titleText or '') | lower %}
+        {% set tagsPrimary = (i.tags or []) | join(' ') %}
+        {% set tagsSecondary = (i.flags or []) | join(' ') %}
+        {% set tagsCombinedRaw %}{{ tagsPrimary }} {% if tagsSecondary %}{{ tagsSecondary }}{% endif %}{% endset %}
+        {% set tagsCombined = tagsCombinedRaw | trim | lower %}
+        {% set isFresh = 'fresh arrival' in lowerTitle or 'fresh' in tagsCombined %}
+        {% set isThumbnail = i.thumbnail and (i.thumbnail != i.src) and (not isFresh) %}
+        {% set hostLabel = i.host or (i.pageUrl and i.pageUrl | replace('https://', '') | replace('http://', '') | split('/') | first) or 'sample' %}
+        <figure
+          class="group relative aspect-square overflow-hidden rounded-box border border-base-content/10 bg-base-200 shadow-sm transition hover:shadow-lg"
+          data-sample-card
+        >
+          <img
+            src="{{ lazyPlaceholder }}"
+            data-lazy-src="{{ previewSrc }}"
+            data-full-src="{{ imageHref }}"
+            data-page-href="{{ pageHref }}"
+            alt="{{ titleText }}"
+            loading="lazy"
+            class="h-full w-full object-cover"
+            data-lazy-group="sample"
+          />
+          <div class="pointer-events-none absolute inset-0 flex flex-col justify-between bg-gradient-to-t from-base-content/70 via-base-content/10 to-base-content/60 opacity-0 transition-opacity group-hover:opacity-100">
+            <div class="flex items-start justify-between gap-2 p-2 text-[11px] text-base-100">
+              <span class="line-clamp-2 font-semibold leading-tight">{{ titleText }}</span>
+              <div class="flex flex-col items-end gap-1">
+                {% if isFresh %}
+                  <span class="badge badge-success badge-xs uppercase tracking-wide">Fresh arrival</span>
+                {% endif %}
+                {% if isThumbnail %}
+                  <span class="badge badge-warning badge-xs uppercase tracking-wide">Thumbnail</span>
+                {% endif %}
+              </div>
+            </div>
+            <div class="flex flex-wrap items-center justify-between gap-2 p-2 text-xs">
+              <a
+                class="btn btn-xs btn-primary"
+                href="{{ pageHref }}"
+                target="_blank"
+                rel="noreferrer"
+              >
+                View page
+              </a>
+              <a
+                class="btn btn-xs btn-outline"
+                href="{{ imageHref }}"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Open image
+              </a>
+            </div>
+          </div>
+          <figcaption class="pointer-events-none absolute bottom-2 left-2 rounded-full bg-base-100/85 px-2 py-0.5 text-[10px] font-medium uppercase tracking-wide text-base-content/80 shadow">
+            {{ hostLabel }}
+          </figcaption>
+        </figure>
+      {% endfor %}
+    </div>
+    <p class="text-sm opacity-70 mt-2">Showing {{ sample | length }} sample images.</p>
+  {% else %}
+    <div class="alert alert-info mt-4">
+      <span>No image samples were found in <code>items/*.ndjson</code>.</span>
+    </div>
+  {% endif %}
+</section>
+
+</section>

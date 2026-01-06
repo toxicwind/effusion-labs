@@ -1,0 +1,35 @@
+diff --git a/node_modules/tree-cli/tree.js b/node_modules/tree-cli/tree.js
+index affd065..502298d 100644
+--- a/node_modules/tree-cli/tree.js
++++ b/node_modules/tree-cli/tree.js
+@@ -114,13 +114,28 @@ var Promise = require('bluebird'),
+     }
+   },
+ 
++
++  _isInteractive = function () {
++    try {
++      return process && process.stdout && process.stdout.isTTY;
++    } catch (e) {
++      return false;
++    }
++  },
++
+   _spinnerOn = function () {
++    if (!_isInteractive()) return;
+     _spinner.setSpinnerString(9);
+     _spinner.start();
+   },
+-
+   _spinnerOff = function () {
+-    _spinner.stop(true);
++    try {
++      if (_isInteractive()) {
++        _spinner.stop(true);
++      }
++    } catch (e) {
++      // Swallow EPIPE or similar stream errors when piping output
++    }
+   },
+ 
+   _debug = function () {

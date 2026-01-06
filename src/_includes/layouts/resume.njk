@@ -1,0 +1,108 @@
+---
+layout: base.njk
+showTitle: false
+---
+{% from "components/icons.njk" import icon %}
+
+<article class="stack" style="--space: var(--space-2xl)">
+  {# --- Resume Header --- #}
+  <header
+    class="switcher items-end border-b-4 border-base-content/10 pb-space-l"
+    style="--threshold: 60rem; --space: var(--space-xl)"
+  >
+    <div class="stack" style="--space: var(--space-xs)">
+      <h1 class="text-[clamp(3.5rem,8vw,5.5rem)] font-black leading-[0.85] tracking-tighter uppercase hb-ink">
+        Resume<span class="text-primary">.</span>
+      </h1>
+      <p class="text-xl font-bold opacity-70 tracking-tight">
+        Technical Architecture & Agentic Systems Design
+      </p>
+    </div>
+
+    <div class="stack" style="--space: var(--space-2xs)">
+      <div class="cluster justify-end" style="--space: var(--space-xs)">
+        <a
+          href="mailto:{{ metadata.author.email }}"
+          class="btn btn-sm btn-ghost lowercase font-mono opacity-80 decoration-primary/30 underline-offset-4 hover:underline"
+        >
+          {{ icon('mail', { class: 'w-3 h-3' }) }} effusion.labs@proton.me
+        </a>
+      </div>
+      <div class="cluster justify-end" style="--space: var(--space-xs)">
+        <span class="text-xs uppercase tracking-widest font-black opacity-30"
+        >Location: Denver, CO [Remote]</span>
+      </div>
+    </div>
+  </header>
+
+  {# --- Body Switcher (Sidebar Pattern) --- #}
+  <div class="sidebar" style="--side-w: 22rem; --space: var(--space-2xl); --side: right">
+    {# Main Content #}
+    <div class="stack" style="--space: var(--space-xl)">
+      {# Experience #}
+      <section class="stack" style="--space: var(--space-l)">
+        <h2 class="text-xs uppercase tracking-[0.4em] font-black opacity-30 flex items-center gap-4">
+          Professional Trajectory
+          <span class="h-px bg-base-content/10 grow"></span>
+        </h2>
+
+        <div class="stack" style="--space: var(--space-xl)">
+          {% for job in resume.experience %}
+            <div class="stack" style="--space: var(--space-xs)">
+              <div class="cluster justify-between items-baseline">
+                <h3 class="text-2xl font-black hb-ink">{{ job.role }}</h3>
+                <span class="text-xs font-mono opacity-40">{{ job.period }}</span>
+              </div>
+              <p class="text-sm font-bold text-primary italic">{{ job.company }}</p>
+              <div class="prose prose-sm opacity-80 mt-space-xs">
+                {{ job.description | safe if job.description else '' }}
+                <ul class="list-none p-0 m-0 stack" style="--space: var(--space-2xs)">
+                  {% for point in job.points %}
+                    <li class="border-l-2 border-primary/20 pl-4 py-1">{{ point }}</li>
+                  {% endfor %}
+                </ul>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </section>
+    </div>
+
+    {# Aside Rails #}
+    <aside class="stack" style="--space: var(--space-xl)">
+      {# Skills #}
+      <div class="hb-accent p-space-l hb-inlay stack" style="--space: var(--space-m)">
+        <h2 class="text-xs uppercase tracking-[0.3em] font-black opacity-30">Stack & Expertise</h2>
+
+        {% for category in resume.skills.groups %}
+          <div class="stack" style="--space: var(--space-xs)">
+            <h3 class="text-[0.6rem] uppercase tracking-widest font-black opacity-50">
+              {{ category.name }}
+            </h3>
+            <div class="cluster" style="--space: var(--space-2xs)">
+              {% for skill in category.items %}
+                <span
+                  class="badge badge-outline badge-sm rounded-none border-base-content/20 font-mono opacity-80"
+                  {%- if skill.hint -%}
+                    title="{{ skill.hint }}"
+                  {% endif %}
+                >{{ skill.name }}</span>
+              {% endfor %}
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+
+      {# Education / Certs #}
+      <div class="hb-brut-card p-space-m stack" style="--space: var(--space-s)">
+        <h2 class="text-xs uppercase tracking-[0.3em] font-black opacity-30">Knowledge Base</h2>
+        {% for item in resume.education %}
+          <div class="stack" style="--space: 0">
+            <span class="text-sm font-black">{{ item.degree }}</span>
+            <span class="text-xs opacity-60">{{ item.school }}</span>
+          </div>
+        {% endfor %}
+      </div>
+    </aside>
+  </div>
+</article>

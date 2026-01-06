@@ -1,0 +1,54 @@
+# Eleventy build
+_site/
+.cache/
+.tools/
+
+# Dependencies
+node_modules/
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Reports & Analysis
+coverage/
+.dead-links.json
+.knip-report.*
+.knip-report.json
+.dead-links.json
+.knip-report.json
+.knip-report.md
+.knip-report.codeclimate.json
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lfs_missing_refs.log
+summary.log
+
+# Environment & Secrets
+.env
+.llm-bash-env
+
+# OS / Editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Misc Temp
+tmp/
+out.json
+lib_content.json
+broken_files.json
+intelligent_lskindv2.sh
+
+# HYPEBRUT sidecars
+.hb-logs/
+
+# Platform
+.netlify/
+
+# Project Specific
+artifacts/reports/interlinker-unresolved.json
+src/content/projects/lv-images/generated/
+public/lvreport/report.json

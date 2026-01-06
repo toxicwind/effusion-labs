@@ -1,0 +1,62 @@
+{# src/_includes/components/tabs.njk #}
+{% macro tabs(id, items) %}
+  <div class="tabs-wrapper stack" id="{{ id }}" style="--space: var(--space-m)">
+    <div class="cluster border-b border-base-content/10" role="tablist" style="--space: 0">
+      {% for item in items %}
+        <button
+          class="tab-trigger px-space-m py-space-xs text-sm font-black uppercase tracking-widest opacity-40 hover:opacity-100 transition-all border-b-2 border-transparent aria-selected:border-primary aria-selected:opacity-100"
+          role="tab"
+          aria-selected="{{ 'true' if loop.first else 'false' }}"
+          aria-controls="{{ id }}-panel-{{ loop.index }}"
+          id="{{ id }}-tab-{{ loop.index }}"
+          data-index="{{ loop.index }}"
+        >
+          {{ item.label }}
+        </button>
+      {% endfor %}
+    </div>
+
+    <div class="tabs-panels relative">
+      {% for item in items %}
+        <div
+          class="tab-panel {{ '' if loop.first else 'hidden' }} hb-anim"
+          id="{{ id }}-panel-{{ loop.index }}"
+          role="tabpanel"
+          aria-labelledby="{{ id }}-tab-{{ loop.index }}"
+          tabindex="0"
+        >
+          <div class="stack" style="--space: var(--space-s)">
+            {{ item.content | safe }}
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <script>
+  ;(() => {
+  const wrapper = document.getElementById('{{ id }}')
+  if (!wrapper) return
+  const triggers = wrapper.querySelectorAll('.tab-trigger')
+  const panels = wrapper.querySelectorAll('.tab-panel')
+
+  triggers.forEach(trigger => {
+    trigger.addEventListener('click', () => {
+      const index = trigger.dataset.index
+
+      triggers.forEach(t => {
+        t.setAttribute('aria-selected', 'false')
+      })
+      trigger.setAttribute('aria-selected', 'true')
+
+      panels.forEach((p, i) => {
+        p.classList.toggle('hidden', (i + 1) != index)
+        if ((i + 1) == index) {
+          p.classList.add('animate-fade-in')
+        }
+      })
+    })
+  })
+})()
+  </script>
+{% endmacro %}

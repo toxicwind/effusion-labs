@@ -1,0 +1,100 @@
+---
+layout: base.njk
+showTitle: false
+metaDisable: true
+eleventyComputed:
+  slug: "{{ projectSlug or page.fileSlug }}"
+  proj: "{{ resume and resume.projectPages and resume.projectPages[slug] }}"
+  title: "{{ (proj and proj.title) or title or (page.fileSlug | title) }}"
+---
+{% from "components/breadcrumbs.njk" import breadcrumbs %}
+{% from "components/icons.njk" import icon %}
+
+<article class="stack" style="--space: var(--space-xl)">
+  {{ breadcrumbs([{ text: 'Projects', url: '/projects/' }, { text: title }]) }}
+
+  <!-- Hero Header -->
+  <header class="hb-accent p-space-l hb-inlay stack" style="--space: var(--space-m)">
+    <div class="cluster justify-between items-start" style="--space: var(--space-m)">
+      <div class="stack" style="--space: var(--space-xs)">
+        <h1 class="text-h1 font-black underline decoration-primary/30 underline-offset-8">
+          {{ title }}
+        </h1>
+        {% if proj and proj.blurb %}
+          <p class="text-xl opacity-80 max-w-prose leading-relaxed">{{ proj.blurb }}</p>
+        {% endif %}
+      </div>
+      {% if proj and proj.badge %}
+        <span class="badge badge-primary badge-lg uppercase tracking-widest font-mono">{{
+          proj.badge
+        }}</span>
+      {% endif %}
+    </div>
+
+    {% if proj and (proj.repo or proj.demo) %}
+      <div class="cluster" style="--space: var(--space-s)">
+        {% if proj.repo %}
+          <a href="{{ proj.repo }}" class="btn btn-primary hb-shadow-brut">
+            {{ icon('github', { class: 'w-4 h-4' }) }} Repository
+          </a>
+        {% endif %}
+        {% if proj.demo %}
+          <a href="{{ proj.demo }}" class="btn btn-secondary hb-shadow-brut">
+            {{ icon('external-link', { class: 'w-4 h-4' }) }} Live Demo
+          </a>
+        {% endif %}
+      </div>
+    {% endif %}
+  </header>
+
+  <!-- Info Switcher -->
+  <div class="switcher" style="--threshold: 50rem; --space: var(--space-l)">
+    <div class="hb-brut-card p-space-m stack" style="--space: var(--space-s)">
+      <h2 class="text-xs uppercase tracking-[0.2em] font-bold opacity-40">Highlights</h2>
+      {% if proj and proj.highlights %}
+        <ul class="list-none p-0 m-0 stack" style="--space: var(--space-xs)">
+          {% for item in proj.highlights %}
+            <li class="cluster items-start" style="--space: var(--space-xs)">
+              <span class="text-primary mt-1">{{
+                icon('check-circle', { class: 'w-4 h-4' })
+              }}</span>
+              <span class="text-sm opacity-90">{{ item }}</span>
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p class="text-sm opacity-40 italic">No highlights recorded.</p>
+      {% endif %}
+    </div>
+
+    <div class="stack" style="--space: var(--space-l)">
+      <div class="hb-brut-card p-space-m stack" style="--space: var(--space-s)">
+        <h2 class="text-xs uppercase tracking-[0.2em] font-bold opacity-40">The Stack</h2>
+        <div class="cluster" style="--space: var(--space-2xs)">
+          {% for t in (proj and proj.stack) or [] %}
+            <span class="badge badge-outline badge-sm font-mono opacity-80">{{ t }}</span>
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="hb-brut-card p-space-m stack" style="--space: var(--space-s)">
+        <h2 class="text-xs uppercase tracking-[0.2em] font-bold opacity-40">Current Status</h2>
+        <div class="cluster" style="--space: var(--space-s)">
+          <span class="text-sm font-semibold hb-ink">{{
+            (proj and proj.status) or 'Active Development'
+          }}</span>
+          {% if proj and proj.when %}
+            <span class="text-xs opacity-40 font-mono">{{ proj.when }}</span>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Content Layer -->
+  {% if content | trim %}
+    <div class="prose max-w-none mt-space-xl hb-accent p-space-l bg-base-100/30 rounded-lg">
+      {{ content | safe }}
+    </div>
+  {% endif %}
+</article>

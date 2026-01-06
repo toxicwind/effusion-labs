@@ -1,0 +1,59 @@
+{# src/_includes/components/accordion.njk #}
+{% from "components/icons.njk" import icon %}
+
+{% macro accordion(id, items) %}
+  <div class="accordion-wrapper stack" id="{{ id }}" style="--space: var(--space-2xs)">
+    {% for item in items %}
+      <div class="accordion-item hb-brut-card hb-intensity-lite overflow-hidden">
+        <button
+          class="accordion-trigger w-full px-space-m py-space-s cluster justify-between hover:bg-base-200/50 transition-colors"
+          aria-expanded="false"
+          aria-controls="{{ id }}-content-{{ loop.index }}"
+          id="{{ id }}-header-{{ loop.index }}"
+          data-index="{{ loop.index }}"
+        >
+          <span class="text-sm font-black uppercase tracking-widest text-left">{{
+            item.label
+          }}</span>
+          <span class="icon-wrapper transition-transform duration-300">
+            {{ icon('chevron-down', { class: 'w-4 h-4' }) }}
+          </span>
+        </button>
+        <div
+          class="accordion-content hidden px-space-m pb-space-m pt-space-3xs border-t border-base-content/5 hb-anim"
+          id="{{ id }}-content-{{ loop.index }}"
+          role="region"
+          aria-labelledby="{{ id }}-header-{{ loop.index }}"
+        >
+          <div class="prose prose-sm opacity-80 stack" style="--space: var(--space-s)">
+            {{ item.content | safe }}
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+
+  <script>
+  ;(() => {
+  const wrapper = document.getElementById('{{ id }}')
+  if (!wrapper) return
+  const triggers = wrapper.querySelectorAll('.accordion-trigger')
+
+  triggers.forEach(trigger => {
+    trigger.addEventListener('click', () => {
+      const isExpanded = trigger.getAttribute('aria-expanded') === 'true'
+      const content = wrapper.querySelector('#' + trigger.getAttribute('aria-controls'))
+      const icon = trigger.querySelector('.icon-wrapper')
+
+      trigger.setAttribute('aria-expanded', !isExpanded)
+      content.classList.toggle('hidden')
+      if (icon) icon.style.transform = isExpanded ? 'rotate(0deg)' : 'rotate(180deg)'
+
+      if (!isExpanded) {
+        content.classList.add('animate-fade-in')
+      }
+    })
+  })
+})()
+  </script>
+{% endmacro %}

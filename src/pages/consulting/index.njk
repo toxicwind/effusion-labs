@@ -1,0 +1,86 @@
+---
+permalink: "/consulting/"
+layout: "consulting.njk"
+title: "Consulting"
+metaDescription: "Top-10 global AI safety specialist. We eliminate hallucinations, prevent data leaks, and install fail-safe systems for enterprise LLM deployments."
+ogTitle: "Effusion Labs Consulting"
+ogDescription: "Bulletproof AI systems with hallucination elimination, jailbreak defense, and rapid containment."
+---
+
+{# Page content is now handled by the consulting.njk layout which consumes consulting.js data. 
+   Additional custom section can be added here if needed. #}
+
+<section id="contact" class="py-space-3xl stack" style="--space: var(--space-xl)">
+  <div class="max-w-screen-md mx-auto w-full stack" style="--space: var(--space-l)">
+    <div class="stack text-center" style="--space: var(--space-3xs)">
+      <h2 class="text-h2 font-black tracking-tighter">Request Emergency Assessment</h2>
+      <p class="text-lg opacity-60">
+        This is not a discovery call. This is immediate threat assessment and triage.
+      </p>
+    </div>
+
+    <form
+      name="consulting-contact"
+      method="post"
+      data-netlify="true"
+      netlify
+      class="hb-brut-card p-space-l stack bg-base-100/50"
+      style="--space: var(--space-m)"
+      action="/success/"
+    >
+      <input type="hidden" name="form-name" value="consulting-contact">
+
+      <div class="grid-auto" style="--grid-min: 15rem; --space: var(--space-m)">
+        <div class="form-control stack" style="--space: var(--space-3xs)">
+          <label
+            for="name"
+            class="text-[0.6rem] uppercase tracking-widest font-black opacity-40 px-2"
+          >Operator Name</label>
+          <input
+            id="name"
+            type="text"
+            name="name"
+            placeholder="IDENTIFY..."
+            class="input input-bordered hb-shadow-brut rounded-none"
+            required
+          >
+        </div>
+        <div class="form-control stack" style="--space: var(--space-3xs)">
+          <label
+            for="email"
+            class="text-[0.6rem] uppercase tracking-widest font-black opacity-40 px-2"
+          >Comms Channel</label>
+          <input
+            id="email"
+            type="email"
+            name="email"
+            placeholder="EMAIL@DOMAIN.COM"
+            class="input input-bordered hb-shadow-brut rounded-none"
+            required
+          >
+        </div>
+      </div>
+
+      <div class="form-control stack" style="--space: var(--space-3xs)">
+        <label
+          for="context"
+          class="text-[0.6rem] uppercase tracking-widest font-black opacity-40 px-2"
+        >Threat Context</label>
+        <textarea
+          id="context"
+          name="context"
+          placeholder="DESCRIBE CURRENT AI FAILURES (HALLUCINATIONS, DATA LEAKS, PROMPT INJECTIONS)..."
+          class="textarea textarea-bordered h-32 hb-shadow-brut rounded-none"
+          aria-describedby="context-help"
+        ></textarea>
+      </div>
+
+      <button
+        type="submit"
+        class="btn btn-primary btn-lg hb-shadow-brut uppercase font-black tracking-widest mt-space-s"
+      >
+        Begin Triage Protocol
+      </button>
+    </form>
+  </div>
+</section>

@@ -1,0 +1,84 @@
+{# src/_includes/components/meta-aside.njk #}
+{% macro metaAside(status, date, certainty, importance, tags, memory_ref) %}
+  <aside class="w-full xl:min-w-[18rem] xl:max-w-[20rem]">
+    <div class="xl:sticky xl:top-24 stack" style="--space: var(--space-m)">
+      <div class="hb-accent p-space-s hb-inlay stack" style="--space: var(--space-s)">
+        <h2 class="text-xs uppercase tracking-[0.3em] font-bold opacity-50 flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+          Metadata
+        </h2>
+
+        <div class="stack" style="--space: var(--space-xs)">
+          {% if status %}
+            <div class="stack" style="--space: var(--space-3xs)">
+              <span class="text-[0.6rem] uppercase tracking-widest opacity-40 font-mono"
+              >Status</span>
+              <span class="text-sm font-semibold hb-ink">{{ status }}</span>
+            </div>
+          {% endif %}
+
+          {% if date %}
+            <div class="stack" style="--space: var(--space-3xs)">
+              <span class="text-[0.6rem] uppercase tracking-widest opacity-40 font-mono"
+              >Published</span>
+              <time class="text-sm font-semibold hb-ink" datetime="{{ date | htmlDateString }}">
+                {{ date | readableDate }}
+              </time>
+            </div>
+          {% endif %}
+
+          {% if certainty %}
+            <div class="stack" style="--space: var(--space-3xs)">
+              <span class="text-[0.6rem] uppercase tracking-widest opacity-40 font-mono"
+              >Certainty</span>
+              <div class="w-full bg-base-300 h-1.5 rounded-full overflow-hidden">
+                <div class="bg-secondary h-full certainty-bar" data-width="{{ certainty }}"></div>
+              </div>
+            </div>
+          {% endif %}
+        </div>
+
+        {% if tags %}
+          <div
+            class="stack border-t border-base-content/5 pt-space-xs"
+            style="--space: var(--space-xs)"
+          >
+            <span class="text-[0.6rem] uppercase tracking-widest opacity-40 font-mono">Tags</span>
+            <div class="cluster" style="--space: var(--space-3xs)">
+              {% for tag in tags %}
+                <a
+                  class="btn btn-outline btn-xs lowercase font-mono opacity-80 hover:opacity-100 no-underline"
+                  href="{{ '/tags/' | url }}{{ tag | slugify }}/"
+                >#{{ tag }}</a>
+              {% endfor %}
+            </div>
+          </div>
+        {% endif %}
+      </div>
+
+      {% if memory_ref %}
+        <div
+          class="hb-accent p-space-s bg-base-200/50 rounded-lg stack"
+          style="--space: var(--space-xs)"
+        >
+          <h3 class="text-[0.6rem] uppercase tracking-widest font-bold opacity-50">
+            Memory References
+          </h3>
+          <ul class="list-none p-0 m-0 stack" style="--space: var(--space-2xs)">
+            {% for ref in memory_ref %}
+              <li class="text-xs opacity-70 border-l-2 border-primary/30 pl-3 py-1 bg-primary/5 rounded-r">
+                {{ ref }}
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
+    </div>
+  </aside>
+
+  <script>
+  document.querySelectorAll('.certainty-bar[data-width]').forEach(el => {
+  el.style.width = el.dataset.width
+})
+  </script>
+{% endmacro %}
