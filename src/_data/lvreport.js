@@ -4,9 +4,9 @@ import { createHash } from 'node:crypto'
 import { createReadStream } from 'node:fs'
 import fs from 'node:fs/promises'
 import path from 'node:path'
+import { pipeline } from 'node:stream/promises'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 import { createGunzip } from 'node:zlib'
-import { pipeline } from 'node:stream/promises'
 
 import MiniSearch from 'minisearch'
 
@@ -223,7 +223,7 @@ async function loadBakedArtifact() {
       await pipeline(
         createReadStream(gzPath),
         createGunzip(),
-        async function* (source) {
+        async function (source) {
           for await (const chunk of source) {
             chunks.push(chunk)
           }
