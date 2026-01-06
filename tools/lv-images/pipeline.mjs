@@ -139,7 +139,8 @@ async function runUpdate(
   if (keepWorkdir) args.push('--keep-workdir')
   const labelMsg = label ? ` label=${label}` : ''
   logStep(
-    `Refreshing dataset via Playwright (mode=${mode}${labelMsg}${skipBundle ? ' skip-bundle' : ''}${keepWorkdir ? ' keep-workdir' : ''
+    `Refreshing dataset via Playwright (mode=${mode}${labelMsg}${skipBundle ? ' skip-bundle' : ''}${
+      keepWorkdir ? ' keep-workdir' : ''
     })`,
   )
   await spawnNodeScript(updateScript, args)
@@ -232,8 +233,7 @@ async function runReportBuild({ reason = 'manual' } = {}) {
   } catch (error) {
     if ((await pathExists(BAKED_REPORT_PATH)) || (await pathExists(`${BAKED_REPORT_PATH}.gz`))) {
       logStep(
-        `Warning: Report rebuild failed (${error.message
-        }), but baked report exists. Continuing using baked artifact.`,
+        `Warning: Report rebuild failed (${error.message}), but baked report exists. Continuing using baked artifact.`,
       )
       return
     }
