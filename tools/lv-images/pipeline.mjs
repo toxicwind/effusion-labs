@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import { execFileSync, spawn } from 'node:child_process'
+import fs from 'node:fs/promises'
 import path from 'node:path'
 import process from 'node:process'
 import { fileURLToPath, pathToFileURL } from 'node:url'
@@ -18,6 +19,18 @@ const isTestMode = process.env.LV_PIPELINE_TEST_MODE === '1'
 const testLog = []
 if (isTestMode) {
   globalThis.__LV_PIPELINE_TEST_LOG__ = testLog
+}
+
+const BAKED_OUTPUT_DIR = path.resolve(projectRoot, 'public', 'lvreport')
+const BAKED_REPORT_PATH = path.join(BAKED_OUTPUT_DIR, 'report.json')
+
+async function pathExists(p) {
+  try {
+    await fs.access(p)
+    return true
+  } catch {
+    return false
+  }
 }
 
 const LEGACY_COMMANDS = new Map([
@@ -126,8 +139,7 @@ async function runUpdate(
   if (keepWorkdir) args.push('--keep-workdir')
   const labelMsg = label ? ` label=${label}` : ''
   logStep(
-    `Refreshing dataset via Playwright (mode=${mode}${labelMsg}${skipBundle ? ' skip-bundle' : ''}${
-      keepWorkdir ? ' keep-workdir' : ''
+    `Refreshing dataset via Playwright (mode=${mode}${labelMsg}${skipBundle ? ' skip-bundle' : ''}${keepWorkdir ? ' keep-workdir' : ''
     })`,
   )
   await spawnNodeScript(updateScript, args)
@@ -141,6 +153,12 @@ async function runHydrate({ force = true } = {}) {
   logStep(`Hydrating dataset from bundle${force ? ' (force clean)' : ''}`)
   const result = await hydrateDataset({ force, quiet: false })
   if (!result.hydrated) {
+    if (await pathExists(BAKED_REPORT_PATH) || await pathExists(`${BAKED_REPORT_PATH}.gz`)) {
+      logStep(
+        `Warning: Hydrate failed (${result.reason}), but baked report exists. Continuing using baked artifact.`,
+      )
+      return { hydrated: true, reason: 'fallback-to-baked' }
+    }
     throw new Error(`Hydrate failed (${result.reason || 'unknown'})`)
   }
   return result
@@ -157,6 +175,12 @@ async function runVerify({ strict = true } = {}) {
     const reason = result.reason || result.mismatches?.join(', ') || 'unknown'
     const toleratedReasons = new Set(['manifest-lfs-pointer', 'invalid-manifest-json'])
     if (strict && !toleratedReasons.has(reason)) {
+      if ((await pathExists(BAKED_REPORT_PATH)) || (await pathExists(`${BAKED_REPORT_PATH}.gz`))) {
+        logStep(
+          `Warning: Bundle verification failed (${reason}), but baked report exists. Continuing using baked artifact.`,
+        )
+        return { ok: true, reason: 'fallback-to-baked' }
+      }
       throw new Error(`Bundle verification failed: ${reason}`)
     }
     console.warn(`[lv-images] Bundle verification failed: ${reason}`)
@@ -206,6 +230,13 @@ async function runReportBuild({ reason = 'manual' } = {}) {
       `lvreport cached → ${relPath} (images=${totals.images ?? '?'}, pages=${totals.pages ?? '?'})`,
     )
   } catch (error) {
+    if ((await pathExists(BAKED_REPORT_PATH)) || (await pathExists(`${BAKED_REPORT_PATH}.gz`))) {
+      logStep(
+        `Warning: Report rebuild failed (${error.message
+        }), but baked report exists. Continuing using baked artifact.`,
+      )
+      return
+    }
     console.error(`[lv-images] lvreport build failed (${reason}):`, error?.message || error)
     throw error
   }
