@@ -14,7 +14,7 @@
     "prebuild": "node bin/quality.mjs apply",
     "build": "npm run build:site",
     "prebuild:site": "node bin/quality.mjs apply",
-    "build:site": "NODE_ENV=production npx @11ty/eleventy",
+    "build:site": "NODE_OPTIONS='--max-old-space-size=8192' NODE_ENV=production npx @11ty/eleventy",
     "prebuild:offline": "node bin/quality.mjs apply",
     "build:offline": "node tools/lv-images/pipeline.mjs build",
     "build:ci": "node bin/quality.mjs check --soft && NODE_ENV=production npx @11ty/eleventy",

@@ -38,7 +38,7 @@ RUN chmod +x bin/install-chromium.sh && \
 ############################
 # build layer (production)
 ############################
-FROM node:24-bookworm AS builder
+FROM deps AS builder
 WORKDIR /app
 
 ARG COMMIT_SHA=unknown
@@ -55,10 +55,6 @@ ENV NODE_ENV=production \
     PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1 \
     PUPPETEER_EXECUTABLE_PATH=/usr/local/bin/chromium \
     PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1
-
-COPY --from=deps /usr/local/bin/chromium /usr/local/bin/chromium
-COPY --from=deps /usr/local/bin/chromium-browser /usr/local/bin/chromium-browser
-COPY --from=deps /app/node_modules /app/node_modules
 COPY package*.json ./
 COPY tools ./tools
 COPY bin ./bin
