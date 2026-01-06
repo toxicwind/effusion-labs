@@ -10,8 +10,8 @@
 <header class="hero relative mx-auto w-full hb-neon hb-intensity-bold">
   <div class="container-fluid px-4 sm:px-6 lg:px-8 py-[clamp(3rem,8vh,9rem)]">
     <div class="hb-inlay mx-auto max-w-[min(100rem,92vw)] px-8 sm:px-12 py-10 text-center">
-      {% if hasBrand %}
-        {% set _logoSrc = (branding.logoSrc or '') | url %}
+      {% set _logoSrc = (branding.logoSrc or '') | url if hasBrand else '' %}
+      {% if hasBrand and _logoSrc %}
         {% set _logoAlt = branding.logoAlt or 'Logo' %}
         {% set _logoSizes = branding.logoSizes or '' %}
         <img
