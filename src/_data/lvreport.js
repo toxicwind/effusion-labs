@@ -5,6 +5,8 @@ import { createReadStream } from 'node:fs'
 import fs from 'node:fs/promises'
 import path from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
+import { createGunzip } from 'node:zlib'
+import { pipeline } from 'node:stream/promises'
 
 import MiniSearch from 'minisearch'
 
@@ -214,7 +216,24 @@ function buildStatsPayload(report, meta) {
 async function loadBakedArtifact() {
   if (bakedArtifactCache) return bakedArtifactCache
   try {
-    const raw = await fs.readFile(BAKED_REPORT_PATH, 'utf8')
+    const gzPath = `${BAKED_REPORT_PATH}.gz`
+    let raw
+    if (await pathExists(gzPath)) {
+      const chunks = []
+      await pipeline(
+        createReadStream(gzPath),
+        createGunzip(),
+        async function* (source) {
+          for await (const chunk of source) {
+            chunks.push(chunk)
+          }
+        },
+      )
+      raw = Buffer.concat(chunks).toString('utf8')
+    } else {
+      raw = await fs.readFile(BAKED_REPORT_PATH, 'utf8')
+    }
+
     if (!raw) return null
     const parsed = JSON.parse(raw)
     if (!parsed || typeof parsed !== 'object') return null
@@ -318,7 +337,7 @@ async function* walk(dir) {
       if (e.isDirectory()) yield* walk(p)
       else yield p
     }
-  } catch {}
+  } catch { }
 }
 
 async function sampleItems(dir, max = 60) {
@@ -348,10 +367,10 @@ async function sampleItems(dir, max = 60) {
           }
           out.push(deepClean(record))
           if (out.length >= max) return out
-        } catch {}
+        } catch { }
       }
     }
-  } catch {}
+  } catch { }
   return out
 }
 
@@ -386,7 +405,7 @@ function parseRobots(text) {
       ruleCount++
     } else {
       const nk = key.replace(/[^\da-z]+/gi, '_')
-      ;(other[nk] ||= []).push(val)
+        ; (other[nk] ||= []).push(val)
     }
   }
 
@@ -556,7 +575,7 @@ function extractHttpStatus(text) {
         const reason = obj.error || obj.message || STATUS_NAME[code] || ''
         return { code, reason: normalizeReason(reason) }
       }
-    } catch {}
+    } catch { }
   }
   const titleMatch = trimmed.match(/<title>\s*(\d{3})\s*([^<]*)/i)
   if (titleMatch) return { code: Number(titleMatch[1]), reason: normalizeReason(titleMatch[2]) }
@@ -1338,7 +1357,7 @@ async function generateReport() {
       try {
         const stat = await fs.stat(absPath)
         sizeBytes = stat.size
-      } catch {}
+      } catch { }
     } else {
       try {
         const fh = await fs.open(absPath, 'r')
@@ -1353,7 +1372,7 @@ async function generateReport() {
         try {
           const statFallback = await fs.stat(absPath)
           sizeBytes = statFallback.size
-        } catch {}
+        } catch { }
       }
     }
 
@@ -1412,7 +1431,7 @@ async function generateReport() {
       const host = n.replace(/\.txt$/i, '')
       if (!isBannedHost(host)) robotsHosts.add(host)
     }
-  } catch {}
+  } catch { }
   for (const r of sitemaps) if (!isBannedHost(r.host)) robotsHosts.add(r.host)
   for (const d of docs) if (!isBannedHost(d.host)) robotsHosts.add(d.host)
   const allHosts = Array.from(robotsHosts).filter(Boolean).sort()
@@ -1426,7 +1445,7 @@ async function generateReport() {
     let rawText = null
     try {
       rawText = await fs.readFile(robotsPath, 'utf8')
-    } catch {}
+    } catch { }
 
     const decoded = await loadDecodedRobots(host)
 
@@ -1456,7 +1475,7 @@ async function generateReport() {
         if (
           !k || ['user-agent', 'allow', 'disallow', 'noindex', 'sitemap', 'crawl-delay'].includes(k)
         ) continue
-        ;(other[k] ||= []).push(line.value || '')
+          ; (other[k] ||= []).push(line.value || '')
       }
 
       parsed = {
@@ -1775,8 +1794,7 @@ export async function buildAndPersistReport({ log = null } = {}) {
       const rel = path.relative(path.resolve(__dirname, '..'), DATASET_REPORT_FILE)
       const totals = payload?.totals || {}
       log(
-        `lvreport dataset saved → ${rel || DATASET_REPORT_FILE} (images=${
-          totals.images ?? '?'
+        `lvreport dataset saved → ${rel || DATASET_REPORT_FILE} (images=${totals.images ?? '?'
         }, pages=${totals.pages ?? '?'})`,
       )
     }
@@ -1789,7 +1807,7 @@ export async function buildAndPersistReport({ log = null } = {}) {
   return { file: DATASET_REPORT_FILE, payload, generatedAt }
 }
 
-export default async function() {
+export default async function () {
   const artifact = await ensureBakedArtifact()
   return attachBakedMetadata(artifact.report, artifact.meta)
 }

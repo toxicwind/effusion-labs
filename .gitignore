@@ -52,3 +52,4 @@ intelligent_lskindv2.sh
 artifacts/reports/interlinker-unresolved.json
 src/content/projects/lv-images/generated/
 public/lvreport/report.json
+!public/lvreport/report.json.gz
