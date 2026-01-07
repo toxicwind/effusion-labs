@@ -38,7 +38,7 @@ const srcDir = path.join(projectRoot, 'src')
 const criticalPages = ['index.html', '404.html']
 const outputDir = path.join(projectRoot, dirs.output)
 
-export default function(eleventyConfig) {
+export default function (eleventyConfig) {
   // --- Start: Event Handlers ---
   eleventyConfig.on('eleventy.before', async () => {
     // Clean Vite temp to avoid stale-dir issues
@@ -213,161 +213,166 @@ export default function(eleventyConfig) {
       .replace(/(src|href)=["']{2}(https?:\/\/)/g, '$1="$2')
       .replace(/(src|href)=["']{2}(\/\/)/g, '$1="$2')
       .replace(/(src|href)=["']{2}(data:)/g, '$1="$2')
-  })
 
-  if (eleventyConfig.htmlTransformer?.addPosthtmlPlugin) {
-    // Ensure remote image URLs are passed through untouched — the Eleventy image
-    // transform plugin eagerly attempts to download external assets otherwise.
-    eleventyConfig.htmlTransformer.addPosthtmlPlugin(
-      'html',
-      function remoteImagePassthrough() {
-        return (tree) => {
-          const sanitize = (value) => {
-            if (typeof value !== 'string') return ''
-            return value.trim().replace(/^["']+/, '').replace(/["']+$/, '')
-          }
-
-          const markRemote = (node, attr) => {
-            const raw = node?.attrs?.[attr]
-            if (typeof raw !== 'string') return node
-            const normalized = sanitize(raw)
-            if (
-              /^https?:\/\//i.test(normalized) || /^\/\//.test(normalized)
-              || normalized.startsWith('data:')
-            ) {
-              node.attrs ||= {}
-              node.attrs[attr] = normalized
-              if (!('eleventy:ignore' in node.attrs)) {
-                node.attrs['eleventy:ignore'] = ''
-              }
-            }
-            return node
-          }
-
-          tree.match({ tag: 'img' }, (node) => markRemote(node, 'src'))
-          tree.match({ tag: 'link' }, (node) => markRemote(node, 'href'))
-
-          return tree
-        }
-      },
-      { priority: -5 },
-    )
-  }
-
-  const enableImagePlugin = (
-    !isTest || process.env.ELEVENTY_TEST_ENABLE_IMAGES === '1'
-  ) && process.env.BUILD_OFFLINE !== '1'
-
-  if (enableImagePlugin) {
-    eleventyConfig.addPlugin(localImageTransformPlugin, {
-      urlPath: '/images/',
-      outputDir: path.join(dirs.output, 'images/'),
-      formats: ['avif', 'webp', 'auto'],
-      widths: [320, 640, 960, 1200, 1800, 'auto'],
-      filenameFormat: (id, src, width, format) => {
-        const { name } = path.parse(src)
-        const s = String(name || '')
-          .toLowerCase()
-          .replace(/[^\da-z]+/g, '-')
-        return `${s}-${width}.${format}`
-      },
-      cacheOptions: {
-        directory: path.join(projectRoot, '.cache', 'eleventy-img'),
-        removeUrlQueryParams: false,
-        duration: '6w',
-      },
+    eleventyConfig.addTransform('scrub-empty-attributes', (content, outputPath) => {
+      if (!outputPath || !outputPath.endsWith('.html')) return content
+      // BRUTEFORCE FIX: Remove empty src/href attributes to prevent Vite EISDIR errors
+      return content.replace(/\s(src|href)=["']{2}/g, '')
     })
-  }
 
-  if (!enableImagePlugin) {
-    eleventyConfig.addPassthroughCopy({ 'src/images': 'images' })
-  }
+    if (eleventyConfig.htmlTransformer?.addPosthtmlPlugin) {
+      // Ensure remote image URLs are passed through untouched — the Eleventy image
+      // transform plugin eagerly attempts to download external assets otherwise.
+      eleventyConfig.htmlTransformer.addPosthtmlPlugin(
+        'html',
+        function remoteImagePassthrough() {
+          return (tree) => {
+            const sanitize = (value) => {
+              if (typeof value !== 'string') return ''
+              return value.trim().replace(/^["']+/, '').replace(/["']+$/, '')
+            }
 
-  // --- End: Plugins ---
-  eleventyConfig.addShortcode('year', () => `${new Date().getFullYear()}`)
-  // --- Start: Libraries & Custom Functions ---
-  // Customize Markdown library and settings:
-  let markdownLibrary = markdownIt({
-    html: true,
-    breaks: true,
-    linkify: true,
-  }).use(markdownItAnchor, {
-    permalink: markdownItAnchor.permalink.ariaHidden({
-      placement: 'after',
-      class: 'direct-link',
-      symbol: '#',
-      level: [1, 2, 3, 4],
-    }),
-    slugify: eleventyConfig.getFilter('slug'),
-  })
-  eleventyConfig.setLibrary('md', markdownLibrary)
+            const markRemote = (node, attr) => {
+              const raw = node?.attrs?.[attr]
+              if (typeof raw !== 'string') return node
+              const normalized = sanitize(raw)
+              if (
+                /^https?:\/\//i.test(normalized) || /^\/\//.test(normalized)
+                || normalized.startsWith('data:')
+              ) {
+                node.attrs ||= {}
+                node.attrs[attr] = normalized
+                if (!('eleventy:ignore' in node.attrs)) {
+                  node.attrs['eleventy:ignore'] = ''
+                }
+              }
+              return node
+            }
 
-  // Nunjucks DX
-  eleventyConfig.setNunjucksEnvironmentOptions({
-    trimBlocks: false,
-    lstripBlocks: false,
-    noCache: true,
-    throwOnUndefined: false,
-  })
-  eleventyConfig.addNunjucksFilter('ternary', (val, a, b) => (val ? a : b))
+            tree.match({ tag: 'img' }, (node) => markRemote(node, 'src'))
+            tree.match({ tag: 'link' }, (node) => markRemote(node, 'href'))
 
-  // Markdown
-  eleventyConfig.amendLibrary('md', md => {
-    eleventyConfig.markdownLibrary = md
-    return applyMarkdownExtensions(md)
-  })
-
-  // Filters, shortcodes, collections, archives from your /lib folder
-  registerFilters(eleventyConfig)
-  registerShortcodes(eleventyConfig)
-  registerCollections(eleventyConfig)
-  registerArchive(eleventyConfig)
-  // Layouts
-  eleventyConfig.addLayoutAlias('base', 'base.njk')
-  // Programmatic Global Data
-  eleventyConfig.addGlobalData('eleventyComputed', computedGlobal)
-  eleventyConfig.addGlobalData('nav', buildNav())
-  eleventyConfig.addGlobalData('archivesNav', buildArchiveNav())
-  eleventyConfig.addGlobalData('build', async () => {
-    const meta = getBuildInfo()
-    const fx = await buildGlobals()
-    return {
-      ...fx,
-      builtAtIso: meta.iso,
-      env: meta.env,
-      fullHash: meta.fullHash,
-      branch: meta.branch,
+            return tree
+          }
+        },
+        { priority: -5 },
+      )
     }
-  })
 
-  // HTML → Markdown importer for raw HTML inside content tree
-  htmlToMarkdownUnified(eleventyConfig, {
-    rootDir: 'src/content',
-    dumpMarkdownTo: null,
-    pageTitlePrefix: '',
-    defaultLayout: 'converted-html.njk',
-    frontMatterExtra: { source: 'html-import' },
-    smartTypography: false, // keep MD diffs clean; flip to true if you want curly quotes baked in
-  })
+    const enableImagePlugin = (
+      !isTest || process.env.ELEVENTY_TEST_ENABLE_IMAGES === '1'
+    ) && process.env.BUILD_OFFLINE !== '1'
 
-  // --- End: Libraries & Custom Functions ---
-  // Copy/pass-through files
-  eleventyConfig.addPassthroughCopy('src/assets/js')
-  eleventyConfig.addPassthroughCopy({
-    'src/content/projects/lv-images/generated': 'content/projects/lv-images/generated',
-  })
+    if (enableImagePlugin) {
+      eleventyConfig.addPlugin(localImageTransformPlugin, {
+        urlPath: '/images/',
+        outputDir: path.join(dirs.output, 'images/'),
+        formats: ['avif', 'webp', 'auto'],
+        widths: [320, 640, 960, 1200, 1800, 'auto'],
+        filenameFormat: (id, src, width, format) => {
+          const { name } = path.parse(src)
+          const s = String(name || '')
+            .toLowerCase()
+            .replace(/[^\da-z]+/g, '-')
+          return `${s}-${width}.${format}`
+        },
+        cacheOptions: {
+          directory: path.join(projectRoot, '.cache', 'eleventy-img'),
+          removeUrlQueryParams: false,
+          duration: '6w',
+        },
+      })
+    }
 
-  return {
-    templateFormats: ['md', 'njk', 'html', 'liquid', '11ty.js'],
-    htmlTemplateEngine: 'njk',
-    passthroughFileCopy: true,
-    dir: {
-      input: 'src',
-      // better not use "public" as the name of the output folder (see above...)
-      output: process.env.ELEVENTY_TEST_OUTPUT || '_site',
-      includes: '_includes',
-      layouts: '_includes/layouts',
-      data: '_data',
-    },
+    if (!enableImagePlugin) {
+      eleventyConfig.addPassthroughCopy({ 'src/images': 'images' })
+    }
+
+    // --- End: Plugins ---
+    eleventyConfig.addShortcode('year', () => `${new Date().getFullYear()}`)
+    // --- Start: Libraries & Custom Functions ---
+    // Customize Markdown library and settings:
+    let markdownLibrary = markdownIt({
+      html: true,
+      breaks: true,
+      linkify: true,
+    }).use(markdownItAnchor, {
+      permalink: markdownItAnchor.permalink.ariaHidden({
+        placement: 'after',
+        class: 'direct-link',
+        symbol: '#',
+        level: [1, 2, 3, 4],
+      }),
+      slugify: eleventyConfig.getFilter('slug'),
+    })
+    eleventyConfig.setLibrary('md', markdownLibrary)
+
+    // Nunjucks DX
+    eleventyConfig.setNunjucksEnvironmentOptions({
+      trimBlocks: false,
+      lstripBlocks: false,
+      noCache: true,
+      throwOnUndefined: false,
+    })
+    eleventyConfig.addNunjucksFilter('ternary', (val, a, b) => (val ? a : b))
+
+    // Markdown
+    eleventyConfig.amendLibrary('md', md => {
+      eleventyConfig.markdownLibrary = md
+      return applyMarkdownExtensions(md)
+    })
+
+    // Filters, shortcodes, collections, archives from your /lib folder
+    registerFilters(eleventyConfig)
+    registerShortcodes(eleventyConfig)
+    registerCollections(eleventyConfig)
+    registerArchive(eleventyConfig)
+    // Layouts
+    eleventyConfig.addLayoutAlias('base', 'base.njk')
+    // Programmatic Global Data
+    eleventyConfig.addGlobalData('eleventyComputed', computedGlobal)
+    eleventyConfig.addGlobalData('nav', buildNav())
+    eleventyConfig.addGlobalData('archivesNav', buildArchiveNav())
+    eleventyConfig.addGlobalData('build', async () => {
+      const meta = getBuildInfo()
+      const fx = await buildGlobals()
+      return {
+        ...fx,
+        builtAtIso: meta.iso,
+        env: meta.env,
+        fullHash: meta.fullHash,
+        branch: meta.branch,
+      }
+    })
+
+    // HTML → Markdown importer for raw HTML inside content tree
+    htmlToMarkdownUnified(eleventyConfig, {
+      rootDir: 'src/content',
+      dumpMarkdownTo: null,
+      pageTitlePrefix: '',
+      defaultLayout: 'converted-html.njk',
+      frontMatterExtra: { source: 'html-import' },
+      smartTypography: false, // keep MD diffs clean; flip to true if you want curly quotes baked in
+    })
+
+    // --- End: Libraries & Custom Functions ---
+    // Copy/pass-through files
+    eleventyConfig.addPassthroughCopy('src/assets/js')
+    eleventyConfig.addPassthroughCopy({
+      'src/content/projects/lv-images/generated': 'content/projects/lv-images/generated',
+    })
+
+    return {
+      templateFormats: ['md', 'njk', 'html', 'liquid', '11ty.js'],
+      htmlTemplateEngine: 'njk',
+      passthroughFileCopy: true,
+      dir: {
+        input: 'src',
+        // better not use "public" as the name of the output folder (see above...)
+        output: process.env.ELEVENTY_TEST_OUTPUT || '_site',
+        includes: '_includes',
+        layouts: '_includes/layouts',
+        data: '_data',
+      },
+    }
   }
-}
