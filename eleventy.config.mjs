@@ -145,6 +145,9 @@ export default function (eleventyConfig) {
   eleventyConfig.setServerPassthroughCopyBehavior('copy')
   eleventyConfig.addPassthroughCopy('public')
   eleventyConfig.ignores.add('src/content/docs/**')
+  // Quarantining content causing Vite EISDIR errors
+  eleventyConfig.ignores.add('src/content/meta/**')
+  eleventyConfig.ignores.add('src/content/sparks/**')
   const isTest = process.env.ELEVENTY_ENV === 'test'
 
   // Plugins

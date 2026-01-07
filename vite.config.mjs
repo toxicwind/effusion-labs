@@ -5,6 +5,7 @@
 
 import { defineConfig } from 'vite'
 import { fileURLToPath, URL } from 'node:url'
+import { resolve } from 'node:path'
 import tailwindcss from '@tailwindcss/vite'
 import react from '@vitejs/plugin-react'
 
@@ -30,11 +31,16 @@ export default defineConfig({
     // Handy in dev; leave build sourcemaps at defaults unless you know you need them
     devSourcemap: true,
   },
+  // Let @11ty/eleventy-plugin-vite discover entries from HTML; do not hardcode build.input
+  // Standalone mode: Explicit input required
   build: {
     target: 'esnext',
+    rollupOptions: {
+      input: resolve(__dirname, 'src/assets/js/app.js'),
+    },
+    outDir: '_site',
+    emptyOutDir: false, // Don't wipe Eleventy's work
   },
-
-  // Let @11ty/eleventy-plugin-vite discover entries from HTML; do not hardcode build.input
 
   // Vite 7’s defaults already target “baseline widely available” browsers;
   // no need to set build.target unless you have special requirements.
