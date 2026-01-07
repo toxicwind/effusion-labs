@@ -127,14 +127,13 @@
     </script>
     
     <!-- Three.js & Hero Scene -->
-    <div id="hero-background" class="fixed inset-0 pointer-events-none -z-10"></div>
-    <script type="module">
-        import { HeroScene } from '/assets/js/hero-scene.js';
-        
-        // Only run on non-mobile and if container exists
-        if (window.matchMedia('(min-width: 768px)').matches) {
-            new HeroScene('hero-background');
-        }
-    </script>
+    <div id="hero-background" class="fixed inset-0 z-0 pointer-events-none"></div>
+  <div id="react-overlay" class="fixed inset-0 z-10 pointer-events-none"></div>
+
+  <!-- Hero Scene (Vanilla/Three.js) -->
+  <script type="module" src="/src/assets/js/hero-scene.js"></script>
+  
+  <!-- React Fiber Overlay -->
+  <script type="module" src="/src/assets/js/canvas-overlay.jsx"></script>
   </body>
 </html>

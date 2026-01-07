@@ -87,3 +87,8 @@ export class HeroScene {
         this.renderer.render(this.scene, this.camera);
     }
 }
+
+// Auto-init if container exists
+if (document.getElementById('hero-background') && window.matchMedia('(min-width: 768px)').matches) {
+    new HeroScene('hero-background');
+}

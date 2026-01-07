@@ -81,3 +81,19 @@ services:
     ports:
       - "6379:6379"
 
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: effusion-postgres
+    environment:
+      POSTGRES_USER: effusion
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: effusion_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
+
+

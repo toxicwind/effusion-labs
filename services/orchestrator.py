@@ -62,6 +62,10 @@ async def lifespan(app: FastAPI):
     # Startup
     logger.info("Orchestrator Service Initialized")
     
+    # Initialize DB
+    from services.db import init_db
+    await init_db()
+
     # Connect Event Bus and Redis
     await event_bus.connect()
     

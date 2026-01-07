@@ -17,3 +17,7 @@ numpy
 seaborn
 matplotlib
 folium
+asyncpg
+sqlmodel
+greenlet
+pgvector
