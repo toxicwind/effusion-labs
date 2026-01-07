@@ -62,7 +62,8 @@ COPY . .
 
 RUN node tools/check-chromium.mjs && \
     npm run tools:check-patches && \
-    NODE_OPTIONS='--max-old-space-size=8192' npm run build:site
+    NODE_OPTIONS='--max-old-space-size=8192' npm run build:offline && \
+    npx vite build
 
 ############################
 # runtime (tiny, static)

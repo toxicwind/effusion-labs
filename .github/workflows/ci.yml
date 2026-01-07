@@ -70,6 +70,9 @@ jobs:
       - name: 🏗️ npm run build:offline
         run: npm run build:offline
 
+      - name: 🎨 npx vite build
+        run: npx vite build
+
       - name: 📦 Archive build output
         if: always()
         uses: actions/upload-artifact@v4
