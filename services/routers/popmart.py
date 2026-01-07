@@ -72,9 +72,21 @@ async def start_recon(req: ReconRequest, background_tasks: BackgroundTasks):
     task_id = f"task_{dt.datetime.utcnow().timestamp()}"
     tasks[task_id] = ReconStatus(task_id=task_id, status="queued", progress=0.0)
     
-    # In a real expanded version, we would call the actual scraper logic here
-    # For now, using a mock to ensure API contract validation
-    background_tasks.add_task(mock_recon_task, task_id, req)
+    from services.scrapers.popmart import PopmartScraper
+    
+    async def run_scraper_task(tid, request_params):
+        tasks[tid].status = "running"
+        scraper = PopmartScraper()
+        try:
+            results = await scraper.run_recon_task(request_params.dict())
+            tasks[tid].results = results["items"]
+            tasks[tid].progress = 1.0
+            tasks[tid].status = "completed"
+        except Exception as e:
+            tasks[tid].status = "failed"
+            # In real app store error
+    
+    background_tasks.add_task(run_scraper_task, task_id, req)
     
     return tasks[task_id]
 

@@ -8,14 +8,31 @@ from arq import cron
 from arq.connections import RedisSettings
 import os
 
+from services.scrapers.weedmaps import WeedmapsScraper
+from services.scrapers.popmart import PopmartScraper
+
 async def scrape_weedmaps_denver(ctx: dict[str, Any]) -> str:
     """
     Background job to scrape Weedmaps Denver dispensaries
     """
     print("Starting Weedmaps Denver scrape...")
-    # TODO: Implement actual scraping logic
-    await asyncio.sleep(5)  # Simulate work
-    return "Scrape completed"
+    scraper = WeedmapsScraper()
+    data = await scraper.scrape_denver()
+    
+    # In a real app, we would save 'data' to database here
+    # ctx['redis'] might be used to store results
+    
+    return f"Scrape completed: {len(data)} dispensaries found"
+
+async def scrape_popmart_recon(ctx: dict[str, Any]) -> str:
+    """
+    Background job for Popmart Recon
+    """
+    print("Starting Popmart Recon...")
+    scraper = PopmartScraper()
+    results = await scraper.run_recon_task({})
+    
+    return f"Popmart Recon completed: {results['summary']['discovered']} items found"
 
 async def generate_cannabis_report(ctx: dict[str, Any], report_type: str = "daily") -> str:
     """
@@ -47,11 +64,13 @@ class WorkerSettings:
     
     functions = [
         scrape_weedmaps_denver,
+        scrape_popmart_recon,
         generate_cannabis_report,
     ]
     
     cron_jobs = [
         cron(scrape_weedmaps_denver, hour=2, minute=0),  # Daily at 2 AM
+        cron(scrape_popmart_recon, hour=4, minute=0),    # Daily at 4 AM
     ]
     
     on_startup = startup
