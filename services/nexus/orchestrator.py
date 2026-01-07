@@ -23,7 +23,7 @@ from datetime import datetime
 from enum import Enum
 import os
 import logging
-from services.worker import BackgroundWorker
+from services.nexus.worker import BackgroundWorker
 
 logger = logging.getLogger("orchestrator")
 logging.basicConfig(level=logging.INFO)
@@ -55,7 +55,7 @@ trace.set_tracer_provider(trace_provider)
 tracer = trace.get_tracer(__name__)
 
 from contextlib import asynccontextmanager
-from services.events import event_bus
+from services.nexus.events import event_bus
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -63,7 +63,7 @@ async def lifespan(app: FastAPI):
     logger.info("Orchestrator Service Initialized")
     
     # Initialize DB
-    from services.db import init_db
+    from services.nexus.db import init_db
     await init_db()
 
     # Connect Event Bus and Redis
@@ -101,15 +101,26 @@ app = FastAPI(
 )
 
 # Import and mount sub-services
-from services.routers.cannabis import router as cannabis_router
-from services.routers.popmart import router as popmart_router
-from services.routers.resume import router as resume_router
-from services.pipeline_service import router as pipeline_router
+from services.nexus.routers.cannabis import router as cannabis_router
+from services.nexus.routers.popmart import router as popmart_router
+from services.nexus.routers.resume import router as resume_router
+from services.nexus.routers.pipeline_router import router as pipeline_router
 
 app.include_router(cannabis_router, prefix="/api")
 app.include_router(popmart_router, prefix="/api")
 app.include_router(resume_router, prefix="/api")
 app.include_router(pipeline_router, prefix="/api")
+
+# Brain Interface
+from services.nexus.brain import brain, Thought
+from typing import List
+
+@app.get("/api/brain/recall", response_model=List[Thought])
+async def brain_recall(query: str):
+    """
+    Direct interface to the Nexus Brain.
+    """
+    return await brain.recall(query)
 
 if __name__ == "__main__":
     import uvicorn

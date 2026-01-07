@@ -2,10 +2,10 @@
 import asyncio
 import logging
 import os
-from services.db import init_db
-from services.vector import VectorStore, DocumentChunk
+from services.nexus.db import init_db
+from services.nexus.vector import VectorStore, DocumentChunk
 from sqlmodel import select
-from services.db import engine
+from services.nexus.db import engine
 from sqlmodel import Session
 
 logging.basicConfig(level=logging.INFO)
@@ -15,7 +15,7 @@ async def check():
     logger.info("--- Vector Store Verification ---")
     try:
         # Import models so they are registered
-        import services.vector 
+        import services.nexus.vector 
         
         await init_db()
         

@@ -72,7 +72,7 @@ async def start_recon(req: ReconRequest, background_tasks: BackgroundTasks):
     task_id = f"task_{dt.datetime.utcnow().timestamp()}"
     tasks[task_id] = ReconStatus(task_id=task_id, status="queued", progress=0.0)
     
-    from services.scrapers.popmart import PopmartScraper
+    from services.nexus.scrapers.popmart import PopmartScraper
     
     async def run_scraper_task(tid, request_params):
         tasks[tid].status = "running"

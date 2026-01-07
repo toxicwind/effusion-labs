@@ -3,7 +3,7 @@ from typing import List, Optional
 from sqlmodel import SQLModel, Field, Session, select
 from pgvector.sqlalchemy import Vector
 from sqlalchemy import Column
-from services.db import engine
+from services.nexus.db import engine
 import logging
 
 logger = logging.getLogger("vector_store")

@@ -18,7 +18,7 @@ from datetime import datetime
 
 router = APIRouter(prefix="/pipeline", tags=["pipeline"])
 
-PIPELINE_SCRIPT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "tools/lv-images/pipeline.mjs"))
+PIPELINE_SCRIPT = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../tools/lv-images/pipeline.mjs"))
 
 class TaskStatus(BaseModel):
     id: str

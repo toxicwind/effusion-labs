@@ -1,0 +1,702 @@
+.
+├── artifacts
+│   └── reports
+│       └── interlinker-unresolved.json
+├── bin
+│   ├── bin
+│   │   ├── bat
+│   │   ├── chromium
+│   │   ├── curl
+│   │   ├── fd
+│   │   ├── fdplain
+│   │   ├── jq
+│   │   ├── _lib.sh
+│   │   ├── rg
+│   │   ├── rgplain
+│   │   ├── sd
+│   │   ├── tree
+│   │   └── yq
+│   ├── install-chromium.sh
+│   ├── lint-soft.sh
+│   ├── quality.mjs
+│   └── resolve-chromium.sh
+├── coverage
+│   └── tmp
+│       ├── coverage-627331-1759516630367-0.json
+│       ├── coverage-627332-1759516629077-0.json
+│       ├── coverage-627349-1759516630357-0.json
+│       └── coverage-627360-1759516630344-0.json
+├── docs
+│   └── remote-assets-audit.md
+├── infra
+│   ├── hot.yml
+│   └── lock.yml
+├── patches
+│   ├── @photogabble+eleventy-plugin-interlinker+1.1.0.patch
+│   ├── rustywind+0.24.3.patch
+│   └── tree-cli+0.6.7.patch
+├── prometheus
+│   └── prometheus.yml
+├── public
+│   ├── icons
+│   │   ├── 96x96.png
+│   │   ├── icon-192.png
+│   │   └── icon-512.png
+│   ├── images
+│   │   └── logo.png
+│   ├── lvreport
+│   │   ├── report.json
+│   │   ├── report.json.gz
+│   │   └── stats.json
+│   ├── apple-touch-icon.png
+│   ├── favicon.ico
+│   ├── favicon.svg
+│   └── site.webmanifest
+├── schema
+│   ├── character.schema.json
+│   ├── completed-seeds.schema.json
+│   ├── product.schema.json
+│   └── series.schema.json
+├── services
+│   ├── data
+│   │   ├── cannabis_denver.py
+│   │   └── __init__.py
+│   ├── db
+│   │   └── init.sql
+│   ├── markdown-gateway
+│   │   ├── app.py
+│   │   ├── docker-compose.yml
+│   │   ├── Dockerfile
+│   │   └── requirements.txt
+│   ├── mcp-stack
+│   │   ├── ci
+│   │   ├── docs
+│   │   ├── gateway
+│   │   ├── profiles
+│   │   ├── scripts
+│   │   ├── servers
+│   │   ├── sidecars
+│   │   ├── test
+│   │   ├── tests
+│   │   └── README.md
+│   ├── nexus
+│   │   ├── routers
+│   │   ├── scrapers
+│   │   ├── brain.py
+│   │   ├── db.py
+│   │   ├── events.py
+│   │   ├── __init__.py
+│   │   ├── orchestrator.py
+│   │   ├── requirements.txt
+│   │   ├── vector.py
+│   │   └── worker.py
+│   ├── routers
+│   ├── scrapers
+│   ├── dayz_api_client.py
+│   ├── Dockerfile.orchestrator
+│   ├── oneoff_cell.py
+│   ├── oneoff_popmart.py
+│   ├── openapi.yaml
+│   └── README.md
+├── _site
+│   ├── archives
+│   │   ├── character
+│   │   ├── collectables
+│   │   └── series
+│   ├── assets
+│   │   ├── js
+│   │   ├── 404._2ne236B.js.map
+│   │   ├── app.aj45mTs7.js
+│   │   ├── app.aj45mTs7.js.map
+│   │   ├── app.Cm3Hv2jn.css
+│   │   ├── index.0m083FL_.js.map
+│   │   ├── index.2aqBsvJQ.js.map
+│   │   ├── index._2ne236B.js.map
+│   │   ├── index.2TG5Y-Te.js.map
+│   │   ├── index.31QexAlm.js.map
+│   │   ├── index.366kG8Qm.js.map
+│   │   ├── index.4EwV-1k4.js.map
+│   │   ├── index.4mAQsAqX.js.map
+│   │   ├── index.4sEXVl96.js.map
+│   │   ├── index.4uaa0JAq.js.map
+│   │   ├── index.5grtfz4E.js.map
+│   │   ├── index.5wHca7rI.js.map
+│   │   ├── index.7E40WhTY.js.map
+│   │   ├── index.87tikK8n.js.map
+│   │   ├── index.8MTWdQy6.js.map
+│   │   ├── index.9xFSCoIj.js.map
+│   │   ├── index.a1OmkLQu.js.map
+│   │   ├── index.A5vQWLsD.js.map
+│   │   ├── index.aNebYDPY.js.map
+│   │   ├── index.B0vPzG52.js.map
+│   │   ├── index.B18CX2Uz.js.map
+│   │   ├── index.B197NbBZ.js.map
+│   │   ├── index.B1C_Xaoa.js.map
+│   │   ├── index.B1EeD7W1.js.map
+│   │   ├── index.B2HGPADd.js.map
+│   │   ├── index.B2jCLJ_0.js.map
+│   │   ├── index.B2-r_8b-.js.map
+│   │   ├── index.B3bKWkUE.js.map
+│   │   ├── index.B479dTeg.js
+│   │   ├── index.B479dTeg.js.map
+│   │   ├── index.B4Sj-NAp.js.map
+│   │   ├── index.B5n6qqko.js.map
+│   │   ├── index.B8znoZ3u.js
+│   │   ├── index.B8znoZ3u.js.map
+│   │   ├── index.B9J96hL2.js.map
+│   │   ├── index.BArsfbDB.js.map
+│   │   ├── index.BavDl15w.js.map
+│   │   ├── index.Bbhhw_K8.js.map
+│   │   ├── index.bBJMJRwr.js.map
+│   │   ├── index.BbT3hkkh.js.map
+│   │   ├── index.BByibU3d.js.map
+│   │   ├── index.Bc9Bg8AQ.js.map
+│   │   ├── index.BdEEzb6J.js.map
+│   │   ├── index.BDgDp3bD.js.map
+│   │   ├── index.BDlsCDIL.js.map
+│   │   ├── index.BeV-Go8X.js.map
+│   │   ├── index.BewNSvE6.js
+│   │   ├── index.BewNSvE6.js.map
+│   │   ├── index.BEX_JY17.js.map
+│   │   ├── index.Bfj_lpJ8.js.map
+│   │   ├── index.BFyCb0q2.js.map
+│   │   ├── index.BgiuOWZO.js.map
+│   │   ├── index.Bhiknjg3.js.map
+│   │   ├── index.BHITJSnt.js.map
+│   │   ├── index.Bhm53Mpq.js.map
+│   │   ├── index.BhVXEA9v.js.map
+│   │   ├── index.Bi9U6URF.js.map
+│   │   ├── index.BJl9FoO2.js.map
+│   │   ├── index.BJM87hlt.js.map
+│   │   ├── index.BJTN5dol.js.map
+│   │   ├── index.BJX5OK0e.js.map
+│   │   ├── index.BKat0h6c.js.map
+│   │   ├── index.BLe9bxlR.js.map
+│   │   ├── index.BLEA34Zi.js.map
+│   │   ├── index.BlW30nGM.js.map
+│   │   ├── index.BLX3-4jf.js.map
+│   │   ├── index.Bm3GD9Pz.js.map
+│   │   ├── index.Bm-FyYBn.js.map
+│   │   ├── index.BNgPoPUw.js.map
+│   │   ├── index.BoyBBKcT.js.map
+│   │   ├── index.BPDF7UVr.js.map
+│   │   ├── index.BpjB05mO.js.map
+│   │   ├── index.BpMBDYM8.js.map
+│   │   ├── index.BPx4PAqF.js.map
+│   │   ├── index.Bq5zzRIn.js.map
+│   │   ├── index.BQlYU1h8.js.map
+│   │   ├── index.BqvEBJpg.js.map
+│   │   ├── index.Br7MoX0m.js.map
+│   │   ├── index.BrnQsiLg.js.map
+│   │   ├── index.BrteVXw3.js.map
+│   │   ├── index.B_rY53f8.js.map
+│   │   ├── index.BsLzR2k9.js.map
+│   │   ├── index.BTdrnBL9.js.map
+│   │   ├── index.BtF08cPm.js.map
+│   │   ├── index.BtNaBoFx.js.map
+│   │   ├── index.BToZLMvt.js.map
+│   │   ├── index.Bv5nEuNH.js.map
+│   │   ├── index.BVcGrsqL.js.map
+│   │   ├── index.BW0XPJpm.js.map
+│   │   ├── index.bWP7kZDH.js.map
+│   │   ├── index.BXLSSEY5.js.map
+│   │   ├── index.BXQmmef2.js.map
+│   │   ├── index.BYCrpgTL.js.map
+│   │   ├── index.BY_QRi0y.js.map
+│   │   ├── index.BzbOmEqu.js.map
+│   │   ├── index.C0rwEASO.js.map
+│   │   ├── index.C2bkOukS.js.map
+│   │   ├── index.C2hvY-8W.js.map
+│   │   ├── index.C3kZ988i.js.map
+│   │   ├── index.C3Lfallo.js.map
+│   │   ├── index.C3wScZRn.js.map
+│   │   ├── index.C6Kfwj0f.js.map
+│   │   ├── index.C6o0OogN.js.map
+│   │   ├── index.C7-36Bba.js.map
+│   │   ├── index.C7xI9S7E.js.map
+│   │   ├── index.C9BKxjbr.js.map
+│   │   ├── index.C9gBfcPp.js.map
+│   │   ├── index.CaydwZWt.js.map
+│   │   ├── index.CB7e0G1s.js.map
+│   │   ├── index.CBcQU1_m.js.map
+│   │   ├── index.CBlT-tL9.js.map
+│   │   ├── index.cBwJd6el.js.map
+│   │   ├── index.CbxubTmu.js.map
+│   │   ├── index.C-Cm8nUz.js.map
+│   │   ├── index.CD2ZokWV.js.map
+│   │   ├── index.Cd6VfYCb.js.map
+│   │   ├── index.CdHn_4Ve.js.map
+│   │   ├── index.CDRXgqdM.js
+│   │   ├── index.CDRXgqdM.js.map
+│   │   ├── index.CdY9NKKK.js.map
+│   │   ├── index.CdzdBYHg.js.map
+│   │   ├── index.CeTX7cI0.js.map
+│   │   ├── index.CF9AQGJh.js.map
+│   │   ├── index.CgckvyM4.js.map
+│   │   ├── index.CG-E_6cy.js.map
+│   │   ├── index.CGq4gNV2.js.map
+│   │   ├── index.CGQjD8hL.js.map
+│   │   ├── index.CgvyCwnY.js.map
+│   │   ├── index.Cgz8Nkpw.js.map
+│   │   ├── index.CH7lUKRv.js.map
+│   │   ├── index.CHTqUNY4.js.map
+│   │   ├── index._c_HwgYJ.js.map
+│   │   ├── index.C__hXfVD.js.map
+│   │   ├── index.ChxJWkuu.js.map
+│   │   ├── index.Ciqueart.js.map
+│   │   ├── index.CJi68FD6.js.map
+│   │   ├── index.CjL559AQ.js.map
+│   │   ├── index.CjuaYY7O.js.map
+│   │   ├── index.CjzyiW70.js.map
+│   │   ├── index.Ck-oeo2G.js.map
+│   │   ├── index.C-kTCQnG.js.map
+│   │   ├── index.CkZV1tQl.js.map
+│   │   ├── index.CLnHE4lT.js.map
+│   │   ├── index.Cm7WXIQT.js.map
+│   │   ├── index.CMdZLoFS.js.map
+│   │   ├── index.CME30htS.js.map
+│   │   ├── index.Cn0J4DNs.js.map
+│   │   ├── index.CNXXQVs6.js.map
+│   │   ├── index.Co3khJx2.js.map
+│   │   ├── index.C_OFQ6xj.js.map
+│   │   ├── index.CpIdLwG_.js.map
+│   │   ├── index.CPwVdNd8.js.map
+│   │   ├── index.C_qMWtX9.js.map
+│   │   ├── index.CQqlEws9.js.map
+│   │   ├── index.C-r8yf7e.js.map
+│   │   ├── index.CrBx0qcc.js.map
+│   │   ├── index.CrK8c_q9.js.map
+│   │   ├── index.CrkJrHRd.js.map
+│   │   ├── index.CRVo4bEq.js.map
+│   │   ├── index.CSP6885b.js.map
+│   │   ├── index.CtA2qip1.js.map
+│   │   ├── index.CTDwfa3v.js.map
+│   │   ├── index.CtGJK4uI.js.map
+│   │   ├── index.CtlahaP1.js.map
+│   │   ├── index.CTpmzqwt.js.map
+│   │   ├── index.cUgfkYBD.js.map
+│   │   ├── index.CUrhHBhB.js.map
+│   │   ├── index.Cv6jpa7e.js.map
+│   │   ├── index.CVNrv6Qv.js.map
+│   │   ├── index.CVO9eUeL.js.map
+│   │   ├── index.Cvoo5Eeb.js.map
+│   │   ├── index.CVqUnnWr.js.map
+│   │   ├── index.CVyF17lU.js.map
+│   │   ├── index.CwrcQ409.js.map
+│   │   ├── index.CwzQMOC5.js.map
+│   │   ├── index.CX47NEog.js.map
+│   │   ├── index.CxEsVI5d.js.map
+│   │   ├── index.CXFbNcTm.js.map
+│   │   ├── index.CXFP1Ny4.js.map
+│   │   ├── index.CXk9A9TJ.js.map
+│   │   ├── index.CY23v3B-.js.map
+│   │   ├── index.CYEhR-aW.js.map
+│   │   ├── index.CYWTszvV.js.map
+│   │   ├── index.CzByIcsM.js.map
+│   │   ├── index.Cz_EP6iy.js.map
+│   │   ├── index.CzvUnGY7.js.map
+│   │   ├── index.D0Ik22CK.js.map
+│   │   ├── index.D0XidlfY.js.map
+│   │   ├── index.D1nNiEpm.js.map
+│   │   ├── index.D1P8I628.js.map
+│   │   ├── index.D2Hroxei.js.map
+│   │   ├── index.D2Mncdf4.js.map
+│   │   ├── index.D3DdfnYK.js.map
+│   │   ├── index.D3hessX0.js.map
+│   │   ├── index.D3Snq6oa.js.map
+│   │   ├── index.D4qHlGOP.js.map
+│   │   ├── index.D5-MRipr.js.map
+│   │   ├── index.D5v6idxg.js.map
+│   │   ├── index.D7viozeU.js.map
+│   │   ├── index.D8GD9fUH.js.map
+│   │   ├── index.D9pXXLRN.js.map
+│   │   ├── index.D9usNnAG.js.map
+│   │   ├── index.DA81GO4v.js.map
+│   │   ├── index.DAMr3WNl.js.map
+│   │   ├── index.Dbfklowy.js.map
+│   │   ├── index.DcLSHSv4.js.map
+│   │   ├── index.DcxhRE-4.js.map
+│   │   ├── index.Dcz5Mphg.js.map
+│   │   ├── index.DDC8yKZp.js.map
+│   │   ├── index.DdMueNP-.js.map
+│   │   ├── index.DDPc__D0.js.map
+│   │   ├── index.De6zaQ6y.js.map
+│   │   ├── index.DeKOY8d2.js.map
+│   │   ├── index.DfDmgIzE.js.map
+│   │   ├── index.DFlZl34Z.js.map
+│   │   ├── index.DG4tb6yK.js.map
+│   │   ├── index.DgoWChaD.js.map
+│   │   ├── index.Dh1IYLD4.js.map
+│   │   ├── index.DJ92iN4I.js.map
+│   │   ├── index.Djh7Qkbv.js.map
+│   │   ├── index.DJIwct3A.js.map
+│   │   ├── index.D_knM-gU.js.map
+│   │   ├── index.DLAhmBNF.js.map
+│   │   ├── index.DLcQaTfW.js.map
+│   │   ├── index.DLdDKZRb.js.map
+│   │   ├── index.DLItre3G.js.map
+│   │   ├── index.DLmastc1.js.map
+│   │   ├── index.DLuMR-Ec.js.map
+│   │   ├── index.DluNbxp_.js.map
+│   │   ├── index.DlXx7i3S.js.map
+│   │   ├── index.DMDkFP2G.js.map
+│   │   ├── index.DMJJkA0z.js.map
+│   │   ├── index.DMmERef6.js.map
+│   │   ├── index.Dmo2ZJoy.js.map
+│   │   ├── index.DMSugbgb.js.map
+│   │   ├── index.DmwUSJyC.js.map
+│   │   ├── index.DngA2WD1.js.map
+│   │   ├── index.DnhGcEs6.js.map
+│   │   ├── index.Do2WQfVq.js.map
+│   │   ├── index.DP2rzg_V.js.map
+│   │   ├── index.DPmDaHRO.js.map
+│   │   ├── index.Dpoic2Z-.js.map
+│   │   ├── index.DPRyNoOF.js.map
+│   │   ├── index.DQ84zxf6.js.map
+│   │   ├── index.DrB4GfIb.js.map
+│   │   ├── index.DRfodwE9.js.map
+│   │   ├── index.DrkfVEJM.js.map
+│   │   ├── index.DRX3er9g.js.map
+│   │   ├── index.D_steSHN.js.map
+│   │   ├── index.DsVGVXJg.js.map
+│   │   ├── index.D-tGRLmr.js.map
+│   │   ├── index.Dt-OHSNc.js.map
+│   │   ├── index.DtPxQBMr.js.map
+│   │   ├── index.DTTSKgxw.js.map
+│   │   ├── index.DTVbZmK7.js.map
+│   │   ├── index.Dub9m7ZZ.js.map
+│   │   ├── index.DU-qJ-_i.js.map
+│   │   ├── index.DUy7VI8y.js.map
+│   │   ├── index.DvevFANX.js.map
+│   │   ├── index.DvMV73c6.js.map
+│   │   ├── index.DW0ueRfS.js.map
+│   │   ├── index.Dw6hiIJ5.js
+│   │   ├── index.Dw6hiIJ5.js.map
+│   │   ├── index.DXhCCRum.js.map
+│   │   ├── index.DY3uRFHr.js.map
+│   │   ├── index.DY4RYl_K.js.map
+│   │   ├── index.D-YUu7Ct.js.map
+│   │   ├── index.DzXs_RWF.js.map
+│   │   ├── index.eixsJNwf.js.map
+│   │   ├── index.F5o-y0hV.js.map
+│   │   ├── index.FkgK8yrS.js.map
+│   │   ├── index.G1Y4Gnez.js.map
+│   │   ├── index.H8_v-ZO1.js.map
+│   │   ├── index._HcQH6ka.js.map
+│   │   ├── index.HNApLybY.js.map
+│   │   ├── index.hucrAZIp.js.map
+│   │   ├── index.hw7uv5hP.js.map
+│   │   ├── index.IJCz_2a1.js.map
+│   │   ├── index.J0cS2Swe.js.map
+│   │   ├── index.JxyaHuzr.js.map
+│   │   ├── index.K1hw0I_L.js.map
+│   │   ├── index.K6Dvbx-E.js.map
+│   │   ├── index.KB_HDLxh.js.map
+│   │   ├── index.KjUzFbmV.js.map
+│   │   ├── index.KN1XTy9r.js.map
+│   │   ├── index.l0sNRNKZ.js.map
+│   │   ├── index.MXwm_7pE.js.map
+│   │   ├── index.MzFmLIxa.js.map
+│   │   ├── index.NK6qiLwT.js.map
+│   │   ├── index.ol3CyKEZ.js.map
+│   │   ├── index.p_jsMPWn.js.map
+│   │   ├── index.q0sattMr.js.map
+│   │   ├── index.Q77F-Wmp.js.map
+│   │   ├── index.Q7EyNYzB.js.map
+│   │   ├── index.QNNWykBh.js.map
+│   │   ├── index.qOLINuWi.js.map
+│   │   ├── index.R2eXSzR4.js.map
+│   │   ├── index.rHGVNRq9.js.map
+│   │   ├── index.rNfDX98m.js.map
+│   │   ├── index.rO9vrvoO.js.map
+│   │   ├── index.snmMOH77.js.map
+│   │   ├── index.sNQH_1rD.js.map
+│   │   ├── index.SQht4FVD.js.map
+│   │   ├── index.t4hqHlal.js.map
+│   │   ├── index.TRUP7UbG.js.map
+│   │   ├── index.ttYoqqvc.js.map
+│   │   ├── index.ud3SpvB8.js.map
+│   │   ├── index.UdSmHP8u.js.map
+│   │   ├── index.uj-7GtUM.js.map
+│   │   ├── index.vouOk_dw.js.map
+│   │   ├── index.VWEUgpaY.js.map
+│   │   ├── index.v-wxtk0X.js.map
+│   │   ├── index.WtDUQGk7.js.map
+│   │   ├── index.xBcLzNFT.js.map
+│   │   ├── index.xkldgbBf.js.map
+│   │   ├── index.XU5iTIto.js.map
+│   │   ├── index.xW73t1z0.js.map
+│   │   ├── index.yFKV26P_.js.map
+│   │   ├── index.yfX9FeNS.js.map
+│   │   ├── index.zm4E2MqP.js.map
+│   │   ├── index.ZZ5t9RnX.js.map
+│   │   ├── logo-420.DNLFBL_u.avif
+│   │   ├── logo-420.DOzltfSI.png
+│   │   ├── logo-420.FPQN5cbR.webp
+│   │   ├── logo-64.BFDv5OQO.png
+│   │   ├── lvreport-app.Dn6rYmj3.js
+│   │   ├── lvreport-app.Dn6rYmj3.js.map
+│   │   ├── mschf-overlay.DENOLFo-.js
+│   │   └── mschf-overlay.DENOLFo-.js.map
+│   ├── cannabis
+│   │   ├── denver
+│   │   └── index.html
+│   ├── concepts
+│   │   ├── aesthetic-inquiry
+│   │   ├── atlas-process
+│   │   ├── autocatalytic-system
+│   │   ├── compliant-spire
+│   │   ├── ghost-byline
+│   │   ├── ghost-engine
+│   │   ├── parroting-mimicry
+│   │   ├── readers-journey
+│   │   ├── rhizomatic-protocol
+│   │   ├── the-workshop-and-the-weather
+│   │   ├── three-studies-sensory
+│   │   ├── verification-is-an-ecology
+│   │   ├── workshop-weather
+│   │   └── index.html
+│   ├── consulting
+│   │   └── index.html
+│   ├── content
+│   │   ├── archives
+│   │   └── flower_reports_showcase
+│   ├── icons
+│   │   ├── 96x96.png
+│   │   ├── icon-192.png
+│   │   └── icon-512.png
+│   ├── images
+│   │   ├── logo-64.avif
+│   │   ├── logo-64.png
+│   │   ├── logo-64.webp
+│   │   └── logo.png
+│   ├── lv
+│   │   └── report
+│   ├── lvreport
+│   │   ├── report.json
+│   │   └── stats.json
+│   ├── map
+│   │   └── index.html
+│   ├── meta
+│   │   ├── case-study-naming-the-protocol
+│   │   ├── colophon
+│   │   ├── content-architecture
+│   │   ├── core-protocol
+│   │   ├── generative-protocol
+│   │   ├── protocolist-framework
+│   │   ├── style-guide-analytic-brutalism
+│   │   ├── unified-referencing-syntax
+│   │   └── index.html
+│   ├── ops
+│   │   └── command
+│   ├── pages
+│   │   └── feed
+│   ├── pipeline
+│   │   └── index.html
+│   ├── popmart
+│   │   ├── compare
+│   │   ├── dashboard
+│   │   └── index.html
+│   ├── projects
+│   │   ├── llm-release-watcher
+│   │   ├── patent-intelligence-agent
+│   │   ├── project-dandelion
+│   │   └── index.html
+│   ├── public
+│   │   ├── icons
+│   │   ├── images
+│   │   ├── lvreport
+│   │   ├── apple-touch-icon.png
+│   │   ├── favicon.ico
+│   │   ├── favicon.svg
+│   │   └── site.webmanifest
+│   ├── resume
+│   │   └── index.html
+│   ├── sparks
+│   │   ├── academic-blindness
+│   │   ├── breakfast-eggs
+│   │   ├── george-eastman-obscure
+│   │   ├── illusion-japan-nicotine
+│   │   ├── murakami-market-analysis-2025
+│   │   ├── paulin-paulin-paulin-marketing
+│   │   ├── smoker-sysadmin
+│   │   ├── vapor-linked-governance
+│   │   └── index.html
+│   ├── work
+│   │   ├── 1
+│   │   ├── 2
+│   │   ├── block-ledger
+│   │   ├── drop
+│   │   ├── latest
+│   │   └── index.html
+│   ├── 404.html
+│   ├── apple-touch-icon.png
+│   ├── concept-map.json
+│   ├── favicon.ico
+│   ├── favicon.svg
+│   ├── index.html
+│   ├── _redirects
+│   └── site.webmanifest
+├── src
+│   ├── assets
+│   │   ├── css
+│   │   └── js
+│   ├── content
+│   │   ├── archives
+│   │   ├── concepts
+│   │   ├── docs
+│   │   ├── flower_reports_showcase
+│   │   ├── meta
+│   │   ├── projects
+│   │   ├── sparks
+│   │   └── work
+│   ├── _data
+│   │   ├── branding.js
+│   │   ├── consulting.js
+│   │   ├── lvreport.js
+│   │   ├── popmart.js
+│   │   ├── resume.js
+│   │   ├── sections.js
+│   │   ├── site.js
+│   │   └── test.js
+│   ├── images
+│   │   └── logo.png
+│   ├── _includes
+│   │   ├── components
+│   │   ├── layouts
+│   │   └── macros
+│   ├── nexus
+│   ├── pages
+│   │   ├── cannabis
+│   │   ├── consulting
+│   │   ├── ops
+│   │   ├── pipeline
+│   │   ├── popmart
+│   │   ├── resume
+│   │   ├── 404.njk
+│   │   ├── concept-map.json.njk
+│   │   ├── feed.njk
+│   │   └── map.njk
+│   ├── utils
+│   │   ├── archives
+│   │   ├── build
+│   │   ├── cache
+│   │   ├── collections
+│   │   ├── data
+│   │   ├── filters
+│   │   ├── interlinkers
+│   │   ├── markdown
+│   │   ├── net
+│   │   ├── plugins
+│   │   ├── shortcodes
+│   │   ├── transforms
+│   │   ├── content-area.mjs
+│   │   └── site.mjs
+│   ├── favicon.ico
+│   ├── index.11tydata.js
+│   ├── index.njk
+│   ├── _redirects
+│   ├── redirects.11ty.js
+│   ├── service-worker.js
+│   ├── site.webmanifest
+│   └── sw.js
+├── test
+│   └── integration
+│       ├── ci-correction.spec.mjs
+│       └── runner.spec.mjs
+├── tests
+│   └── playwright
+│       ├── icons-fonts.spec.mjs
+│       └── lv-report.spec.mjs
+├── tmp
+│   ├── daisyui-css
+│   │   ├── archives
+│   │   ├── assets
+│   │   ├── concepts
+│   │   ├── consulting
+│   │   ├── content
+│   │   ├── icons
+│   │   ├── meta
+│   │   ├── pages
+│   │   ├── projects
+│   │   ├── sparks
+│   │   ├── test
+│   │   ├── work
+│   │   ├── 404.html
+│   │   ├── apple-touch-icon.png
+│   │   ├── favicon.ico
+│   │   ├── favicon.svg
+│   │   ├── index.html
+│   │   └── site.webmanifest
+│   └── runner-spec
+│       ├── archives
+│       ├── assets
+│       ├── concepts
+│       ├── consulting
+│       ├── content
+│       ├── icons
+│       ├── meta
+│       ├── pages
+│       ├── projects
+│       ├── sparks
+│       ├── test
+│       ├── work
+│       ├── 404.html
+│       ├── apple-touch-icon.png
+│       ├── favicon.ico
+│       ├── favicon.svg
+│       ├── index.html
+│       └── site.webmanifest
+├── tools
+│   ├── dev
+│   │   ├── dir-to-json.mjs
+│   │   ├── eleventy-with-codeframes.mjs
+│   │   └── link-local-chrome-shims.mjs
+│   ├── filters
+│   │   └── hb_filter.cjs
+│   ├── lv-images
+│   │   ├── bundle-lib.mjs
+│   │   ├── bundle.mjs
+│   │   ├── pipeline.mjs
+│   │   └── pipeline.spec.mjs
+│   ├── shims
+│   │   └── curl-to-markdown.mjs
+│   ├── apply-patches.mjs
+│   ├── check-chromium.mjs
+│   ├── doctor.mjs
+│   ├── generate-remote-assets-report.mjs
+│   ├── npm-utils.js
+│   ├── offline-network-shim.cjs
+│   ├── resolve-chromium.mjs
+│   ├── run-if-network.mjs
+│   └── serve-static.mjs
+├── AGENTS.md
+├── build_full.log
+├── check_vector.py
+├── check_worker.py
+├── commitlint.config.js
+├── docker-compose.dev.yml
+├── docker-compose-orchestrator.yml
+├── docker-compose.yml
+├── dprint.json
+├── eleventy.config.mjs
+├── eslint.config.js
+├── _GIT_STATE.txt
+├── knip.json
+├── LICENSE
+├── netlify.toml
+├── package.json
+├── package-lock.json
+├── playwright.config.mjs
+├── postcss.config.js.bak
+├── README.md
+├── _REPO_MAP.txt
+├── requirements.txt
+├── setup.sh
+├── _SIGNATURES.txt
+├── SYMBIOTE_PROTOCOL.md
+├── SYSTEM.md
+├── TREE.txt
+└── vite.config.mjs
+
+185 directories, 515 files
