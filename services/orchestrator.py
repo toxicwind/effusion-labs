@@ -22,6 +22,11 @@ import httpx
 from datetime import datetime
 from enum import Enum
 import os
+import logging
+from services.worker import BackgroundWorker
+
+logger = logging.getLogger("orchestrator")
+logging.basicConfig(level=logging.INFO)
 
 # OpenTelemetry tracing
 from opentelemetry import trace
@@ -59,6 +64,11 @@ async def lifespan(app: FastAPI):
     
     # Connect Event Bus and Redis
     await event_bus.connect()
+    
+    # Start Background Worker
+    worker = BackgroundWorker(event_bus)
+    await worker.start()
+    
     app.state.redis = event_bus.redis # Reuse connection if possible or create new
     
     # If EventBus manages its own redis, we might still want a separate one or just access it
@@ -75,6 +85,7 @@ async def lifespan(app: FastAPI):
     
     # Shutdown
     await event_bus.publish("system", "SYSTEM_SHUTDOWN", {})
+    await worker.stop()
     await event_bus.disconnect()
     logger.info("Orchestrator Service Shutdown")
 

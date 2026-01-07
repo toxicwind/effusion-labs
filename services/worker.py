@@ -1,86 +1,83 @@
-"""
-Arq Worker Configuration for Background Jobs
-"""
+
 import asyncio
-from typing import Any
+import logging
+import uuid
+import json
+from typing import Dict, Any, Callable
+from .events import EventBus
 
-from arq import cron
-from arq.connections import RedisSettings
-import os
+logger = logging.getLogger("worker")
 
-from services.scrapers.weedmaps import WeedmapsScraper
-from services.scrapers.popmart import PopmartScraper
+class BackgroundWorker:
+    """
+    Background worker that consumes events from Redis Streams.
+    Replaces legacy Arq worker with native EventBus consumption.
+    """
+    
+    def __init__(self, event_bus: EventBus):
+        self.event_bus = event_bus
+        self.running = False
+        self.consumer_name = f"worker-{str(uuid.uuid4())[:8]}"
+        self.group_name = "orchestrator_workers"
+        self.stream_name = "system"
+        self._task = None
+        
+    async def start(self):
+        """Start the background worker"""
+        self.running = True
+        
+        # Ensure group exists
+        await self.event_bus.create_group(self.stream_name, self.group_name)
+        
+        self._task = asyncio.create_task(self._run_loop())
+        logger.info(f"BackgroundWorker started: {self.consumer_name}")
+        
+    async def stop(self):
+        """Stop the background worker"""
+        self.running = False
+        if self._task:
+            self._task.cancel()
+            try:
+                await self._task
+            except asyncio.CancelledError:
+                pass
+        logger.info("BackgroundWorker stopped")
+            
+    async def _run_loop(self):
+        """Main consumption loop"""
+        logger.info(f"Worker loop starting for stream: {self.stream_name}")
+        while self.running:
+            try:
+                # Consume messages
+                await self.event_bus.consume(
+                    stream=self.stream_name,
+                    group=self.group_name,
+                    consumer=self.consumer_name,
+                    handler=self.handle_event,
+                    count=5
+                )
+                await asyncio.sleep(0.1) # Prevent tight loop
+            except Exception as e:
+                logger.error(f"Worker loop error: {e}")
+                await asyncio.sleep(1)
 
-async def scrape_weedmaps_denver(ctx: dict[str, Any]) -> str:
-    """
-    Background job to scrape Weedmaps Denver dispensaries
-    """
-    print("Starting Weedmaps Denver scrape...")
-    scraper = WeedmapsScraper()
-    data = await scraper.scrape_denver()
-    
-    # In a real app, we would save 'data' to database here
-    # ctx['redis'] might be used to store results
-    
-    return f"Scrape completed: {len(data)} dispensaries found"
-
-async def scrape_popmart_recon(ctx: dict[str, Any]) -> str:
-    """
-    Background job for Popmart Recon
-    """
-    print("Starting Popmart Recon...")
-    scraper = PopmartScraper()
-    results = await scraper.run_recon_task({})
-    
-    count = results['summary']['discovered']
-    if count > 0:
-        print(f"🚨 ALERT: {count} new Popmart items discovered! Sending notifications...")
-        # Here we would trigger Discord/Email notifications
-    
-    return f"Popmart Recon completed: {count} items found"
-
-async def generate_cannabis_report(ctx: dict[str, Any], report_type: str = "daily") -> str:
-    """
-    Background job to generate cannabis market reports
-    """
-    print(f"Generating {report_type} cannabis report...")
-    await asyncio.sleep(3)
-    return f"{report_type} report generated"
-
-async def startup(ctx: dict[str, Any]) -> None:
-    """
-    Startup function that runs when worker starts
-    """
-    print("Arq worker started")
-
-async def shutdown(ctx: dict[str, Any]) -> None:
-    """
-    Shutdown function that runs when worker stops
-    """
-    print("Arq worker shutting down")
-
-class WorkerSettings:
-    """
-    Arq worker settings
-    """
-    redis_settings = RedisSettings.from_dsn(
-        os.getenv("REDIS_URL", "redis://localhost:6379/0")
-    )
-    
-    functions = [
-        scrape_weedmaps_denver,
-        scrape_popmart_recon,
-        generate_cannabis_report,
-    ]
-    
-    cron_jobs = [
-        cron(scrape_weedmaps_denver, hour=2, minute=0),  # Daily at 2 AM
-        cron(scrape_popmart_recon, hour=4, minute=0),    # Daily at 4 AM
-    ]
-    
-    on_startup = startup
-    on_shutdown = shutdown
-    
-    max_jobs = 10
-    job_timeout = 300  # 5 minutes
-    keep_result = 3600  # Keep results for 1 hour
+    async def handle_event(self, msg_id: str, data: Dict[str, Any]):
+        """Process a single event"""
+        event_type = data.get("type", "UNKNOWN")
+        payload = data.get("payload", {})
+        
+        logger.info(f"⚡ [WORKER] Processing {event_type} ({msg_id})")
+        
+        if event_type == "SYSTEM_STARTUP":
+            await self.handle_system_startup(payload)
+        elif event_type == "SYSTEM_SHUTDOWN":
+            await self.handle_system_shutdown(payload)
+        elif event_type == "TRIGGER_DEPLOY":
+            logger.info("🚀 Deployment trigger received! Initiating sequence...")
+        
+    async def handle_system_startup(self, payload: Dict):
+        logger.info(f"System Startup Procedure: Verifying payload: {payload}")
+        # Could trigger initial cache warming here
+        
+    async def handle_system_shutdown(self, payload: Dict):
+        logger.info("System Shutdown Procedure: Cleaning up resources...")
