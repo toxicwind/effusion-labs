@@ -18,7 +18,7 @@ async function loadReport() {
   return report
 }
 
-export default async function() {
+export default async function () {
   const report = await loadReport()
   const pages = report?.pages
   if (!Array.isArray(pages) || pages.length === 0) {
@@ -32,7 +32,7 @@ export default async function() {
     lvreportPages: pages,
     pagination: {
       data: 'lvreportPages',
-      size: 1,
+      size: 25,
       alias: 'lvReportPage',
     },
     eleventyComputed: {

@@ -30,6 +30,9 @@ export default defineConfig({
     // Handy in dev; leave build sourcemaps at defaults unless you know you need them
     devSourcemap: true,
   },
+  build: {
+    target: 'esnext',
+  },
 
   // Let @11ty/eleventy-plugin-vite discover entries from HTML; do not hardcode build.input
 

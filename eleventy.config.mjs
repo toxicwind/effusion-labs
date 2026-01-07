@@ -151,50 +151,50 @@ export default function (eleventyConfig) {
   eleventyConfig.addPlugin(EleventyPluginNavigation)
   eleventyConfig.addPlugin(EleventyPluginRss)
   eleventyConfig.addPlugin(EleventyPluginSyntaxhighlight)
-  eleventyConfig.addPlugin(EleventyVitePlugin, {
-    tempFolderName: '.11ty-vite', // Default name of the temp folder
+  // eleventyConfig.addPlugin(EleventyVitePlugin, {
+  //   tempFolderName: '.11ty-vite', // Default name of the temp folder
 
-    // Vite options (equal to vite.config.js inside project root)
-    viteOptions: {
-      publicDir: 'public',
-      clearScreen: false,
-      plugins: [tailwindcss()],
-      server: {
-        mode: 'development',
-        middlewareMode: true,
-        host: viteDevHost,
-        hmr: {
-          host: viteDevHost,
-          ...(Number.isNaN(viteHmrPort) ? {} : { port: viteHmrPort }),
-        },
-        fs: {
-          allow: [projectRoot, srcDir],
-        },
-      },
-      appType: 'custom',
-      assetsInclude: ['**/*.xml', '**/*.txt'],
-      resolve: {
-        alias: {
-          '@': srcDir,
-          '/src': srcDir,
-          '/assets': path.join(srcDir, 'assets'),
-        },
-      },
-      build: {
-        mode: 'production',
-        sourcemap: 'true',
-        manifest: true,
-        // This puts CSS and JS in subfolders – remove if you want all of it to be in /assets instead
-        rollupOptions: {
-          output: {
-            assetFileNames: 'assets/[name].[hash][extname]',
-            chunkFileNames: 'assets/[name].[hash].js',
-            entryFileNames: 'assets/[name].[hash].js',
-          },
-        },
-      },
-    },
-  })
+  //   // Vite options (equal to vite.config.js inside project root)
+  //   viteOptions: {
+  //     publicDir: 'public',
+  //     clearScreen: false,
+  //     plugins: [tailwindcss()],
+  //     server: {
+  //       mode: 'development',
+  //       middlewareMode: true,
+  //       host: viteDevHost,
+  //       hmr: {
+  //         host: viteDevHost,
+  //         ...(Number.isNaN(viteHmrPort) ? {} : { port: viteHmrPort }),
+  //       },
+  //       fs: {
+  //         allow: [projectRoot, srcDir],
+  //       },
+  //     },
+  //     appType: 'custom',
+  //     assetsInclude: ['**/*.xml', '**/*.txt'],
+  //     resolve: {
+  //       alias: {
+  //         '@': srcDir,
+  //         '/src': srcDir,
+  //         '/assets': path.join(srcDir, 'assets'),
+  //       },
+  //     },
+  //     build: {
+  //       mode: 'production',
+  //       sourcemap: 'true',
+  //       manifest: true,
+  //       // This puts CSS and JS in subfolders – remove if you want all of it to be in /assets instead
+  //       rollupOptions: {
+  //         output: {
+  //           assetFileNames: 'assets/[name].[hash][extname]',
+  //           chunkFileNames: 'assets/[name].[hash].js',
+  //           entryFileNames: 'assets/[name].[hash].js',
+  //         },
+  //       },
+  //     },
+  //   },
+  // })
 
   eleventyConfig.addPlugin(interlinker, {
     defaultLayout: 'embed.njk',
