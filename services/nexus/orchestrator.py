@@ -111,6 +111,14 @@ app.include_router(popmart_router, prefix="/api")
 app.include_router(resume_router, prefix="/api")
 app.include_router(pipeline_router, prefix="/api")
 
+# Rate Limiting
+from services.nexus.middleware import RateLimitMiddleware
+app.add_middleware(RateLimitMiddleware, limit=100, window=60)
+
+# Telemetry
+from services.nexus.telemetry import setup_telemetry
+setup_telemetry(app)
+
 # Brain Interface
 from services.nexus.brain import brain, Thought
 from typing import List

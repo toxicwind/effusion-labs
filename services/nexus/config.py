@@ -13,6 +13,7 @@ class Settings(BaseSettings):
     # External APIs
     mcp_gateway_url: str = "http://localhost:37100"
     openai_api_key: str = ""
+    otlp_endpoint: str = "http://localhost:4317" # Default URL for Jaeger/Honeycomb
     
     # Feature Flags
     enable_brain: bool = True
