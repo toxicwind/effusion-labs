@@ -23,11 +23,43 @@ from datetime import datetime
 from enum import Enum
 import os
 
+# OpenTelemetry tracing
+from opentelemetry import trace
+from opentelemetry.sdk.trace import TracerProvider
+from opentelemetry.sdk.trace.export import BatchSpanProcessor
+from opentelemetry.exporter.jaeger.thrift import JaegerExporter
+from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
+from opentelemetry.sdk.resources import Resource
+
+# Prometheus metrics
+from prometheus_fastapi_instrumentator import Instrumentator
+
+# Redis for pub/sub
+import redis.asyncio as redis
+from fastapi_websocket_pubsub import PubSubEndpoint
+
+# Configure OpenTelemetry
+resource = Resource.create({"service.name": "effusion-orchestrator"})
+jaeger_exporter = JaegerExporter(
+    agent_host_name=os.getenv("JAEGER_AGENT_HOST", "localhost"),
+    agent_port=int(os.getenv("JAEGER_AGENT_PORT", "6831")),
+)
+trace_provider = TracerProvider(resource=resource)
+trace_provider.add_span_processor(BatchSpanProcessor(jaeger_exporter))
+trace.set_tracer_provider(trace_provider)
+tracer = trace.get_tracer(__name__)
+
 app = FastAPI(
     title="Effusion Labs API Orchestrator",
-    version="1.0.0",
-    description="Unified API gateway coordinating all backend services"
+    version="2.0.0",
+    description="Unified API gateway with distributed tracing and real-time pub/sub"
 )
+
+# OpenTelemetry instrumentation
+FastAPIInstrumentor.instrument_app(app)
+
+# Prometheus metrics
+Instrumentator().instrument(app).expose(app, endpoint="/metrics")
 
 # CORS middleware
 app.add_middleware(
@@ -41,6 +73,11 @@ app.add_middleware(
 # Service configuration
 MCP_GATEWAY_URL = os.getenv("MCP_GATEWAY_URL", "http://localhost:3000")
 MARKDOWN_GATEWAY_URL = os.getenv("MARKDOWN_GATEWAY_URL", "http://localhost:8000")
+REDIS_URL = os.getenv("REDIS_URL", "redis://localhost:6379/0")
+DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://effusion:effusion_dev_pass@localhost:5432/effusion_labs")
+
+# Redis client (initialized on startup)
+redis_client: Optional[redis.Redis] = None
 
 class ServiceStatus(str, Enum):
     HEALTHY = "healthy"
@@ -71,9 +108,12 @@ class WebsocketMessage(BaseModel):
     payload: Dict[str, Any]
     timestamp: datetime = Field(default_factory=datetime.utcnow)
 
-# In-memory event bus (replace with Redis/RabbitMQ for production)
+# Redis-backed event bus
 event_subscribers: Dict[str, List[WebSocket]] = {}
 service_health_cache: Dict[str, ServiceHealth] = {}
+
+# PubSub endpoint (configured on startup)
+pubsub_endpoint: Optional[PubSubEndpoint] = None
 
 async def get_http_client():
     """Dependency for HTTP client"""
@@ -317,10 +357,35 @@ async def event_stream():
     return StreamingResponse(event_generator(), media_type="text/event-stream")
 
 
+# Startup/shutdown events
+@app.on_event("startup")
+async def startup_event():
+    """Initialize connections on startup"""
+    global redis_client, pubsub_endpoint
+    
+    # Initialize Redis
+    redis_client = await redis.from_url(REDIS_URL, decode_responses=True)
+    
+    # Initialize PubSub endpoint
+    pubsub_endpoint = PubSubEndpoint(broker=redis_client)
+    
+    print(f"✓ Connected to Redis: {REDIS_URL}")
+    print(f"✓ Jaeger tracing enabled: {os.getenv('JAEGER_AGENT_HOST', 'localhost')}:{os.getenv('JAEGER_AGENT_PORT', '6831')}")
+    print(f"✓ Prometheus metrics exposed at /metrics")
+
+@app.on_event("shutdown")
+async def shutdown_event():
+    """Cleanup on shutdown"""
+    global redis_client
+    
+    if redis_client:
+        await redis_client.close()
+        print("✓ Redis connection closed")
+
+# Import and mount sub-services
 from services.cannabis_service import router as cannabis_router
 from services.pipeline_service import router as pipeline_router
 
-# Mount sub-services
 app.include_router(cannabis_router)
 app.include_router(pipeline_router)
 

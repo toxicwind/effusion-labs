@@ -1,0 +1,157 @@
+version: '3.9'
+
+services:
+  # Redis - Pub/Sub, Caching, Job Queue
+  redis:
+    image: redis:7.2-alpine
+    container_name: effusion_redis
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    networks:
+      - orchestrator_net
+
+  # PostgreSQL - Persistent Data
+  postgres:
+    image: postgres:16-alpine
+    container_name: effusion_postgres
+    environment:
+      POSTGRES_DB: effusion_labs
+      POSTGRES_USER: effusion
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-effusion_dev_pass}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./services/db/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U effusion" ]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    networks:
+      - orchestrator_net
+
+  # Jaeger - Distributed Tracing
+  jaeger:
+    image: jaegertracing/all-in-one:1.52
+    container_name: effusion_jaeger
+    environment:
+      COLLECTOR_ZIPKIN_HOST_PORT: ":9411"
+      COLLECTOR_OTLP_ENABLED: "true"
+    ports:
+      - "5775:5775/udp"
+      - "6831:6831/udp"
+      - "6832:6832/udp"
+      - "5778:5778"
+      - "16686:16686" # Jaeger UI
+      - "14268:14268"
+      - "14250:14250"
+      - "9411:9411"
+      - "4317:4317" # OTLP gRPC
+      - "4318:4318" # OTLP HTTP
+    networks:
+      - orchestrator_net
+
+  # Prometheus - Metrics Collection
+  prometheus:
+    image: prom/prometheus:v2.48.1
+    container_name: effusion_prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      - '--web.console.templates=/usr/share/prometheus/consoles'
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    networks:
+      - orchestrator_net
+    depends_on:
+      - orchestrator
+
+  # Grafana - Metrics Visualization
+  grafana:
+    image: grafana/grafana:10.2.3
+    container_name: effusion_grafana
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_PASSWORD:-admin}
+      GF_INSTALL_PLUGINS: "redis-datasource"
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning
+      - ./grafana/dashboards:/var/lib/grafana/dashboards
+    networks:
+      - orchestrator_net
+    depends_on:
+      - prometheus
+
+  # Orchestrator API (FastAPI)
+  orchestrator:
+    build:
+      context: ./services
+      dockerfile: Dockerfile.orchestrator
+    container_name: effusion_orchestrator
+    environment:
+      DATABASE_URL: postgresql://effusion:${POSTGRES_PASSWORD:-effusion_dev_pass}@postgres:5432/effusion_labs
+      REDIS_URL: redis://redis:6379/0
+      JAEGER_AGENT_HOST: jaeger
+      JAEGER_AGENT_PORT: 6831
+      OTEL_EXPORTER_JAEGER_ENDPOINT: http://jaeger:14268/api/traces
+      ENVIRONMENT: development
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./services:/app/services
+    command: uvicorn orchestrator:app --host 0.0.0.0 --port 8000 --reload
+    depends_on:
+      redis:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+      jaeger:
+        condition: service_started
+    networks:
+      - orchestrator_net
+
+  # Arq Worker (Background Jobs)
+  arq_worker:
+    build:
+      context: ./services
+      dockerfile: Dockerfile.orchestrator
+    container_name: effusion_arq_worker
+    environment:
+      DATABASE_URL: postgresql://effusion:${POSTGRES_PASSWORD:-effusion_dev_pass}@postgres:5432/effusion_labs
+      REDIS_URL: redis://redis:6379/0
+    command: arq services.worker.WorkerSettings
+    volumes:
+      - ./services:/app/services
+    depends_on:
+      redis:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+    networks:
+      - orchestrator_net
+
+volumes:
+  redis_data:
+  postgres_data:
+  prometheus_data:
+  grafana_data:
+
+
+networks:
+  orchestrator_net:
+    driver: bridge
