@@ -98,5 +98,24 @@
     </main>
 
     {{ footer(buildTime) }}
+    
+    <script type="module">
+      import { initCursor } from '/assets/js/cursor.js';
+      if (window.matchMedia('(min-width: 768px)').matches) {
+        initCursor();
+      }
+    </script>
+    <script src="https://unpkg.com/quicklink@2.3.0/dist/quicklink.umd.js"></script>
+    <script>
+      window.addEventListener('load', () => {
+        quicklink.listen();
+        
+        if ('serviceWorker' in navigator) {
+          navigator.serviceWorker.register('/service-worker.js')
+            .then(reg => console.log('SW registered!', reg.scope))
+            .catch(err => console.log('SW failed:', err));
+        }
+      });
+    </script>
   </body>
 </html>

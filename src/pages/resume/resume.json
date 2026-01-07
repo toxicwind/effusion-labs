@@ -9,17 +9,14 @@
   "github": "https://github.com/toxicwind",
   "downloadPdf": "/assets/Christopher_Ortega_Resume_2025.pdf",
   "ogImage": "/images/og/resume-christopher-ortega.png",
-  "updated": "2025-09-06",
-
+  "updated": "2026-01-07",
   "address": {
     "@type": "PostalAddress",
     "addressLocality": "Denver",
     "addressRegion": "CO",
     "addressCountry": "US"
   },
-
   "summary": "Software engineer with 6+ years across backend services and streaming data systems, now centered on LLM applications and LLMOps. Built and operated APIs and pipelines on AWS (EMR, Lambda, Kinesis, S3), containerized services on Kubernetes, and delivered search/analytics with Elasticsearch. Focus areas: retrieval that returns the right context, evaluation gates that block bad releases, and dashboards that surface drift early.",
-
   "highlights": [
     {
       "title": "HackAPrompt 2025",
@@ -42,7 +39,6 @@
       "sub": "GitLab checks • containerized"
     }
   ],
-
   "skills": {
     "groups": [
       {
@@ -64,26 +60,49 @@
             "name": "Safety controls",
             "hint": "Guardrails, allow/deny lists, output sanitization"
           },
-          { "name": "PyTorch" },
-          { "name": "Transformers" },
-          { "name": "LangChain" },
-          { "name": "Ollama" }
+          {
+            "name": "PyTorch"
+          },
+          {
+            "name": "Transformers"
+          },
+          {
+            "name": "LangChain"
+          },
+          {
+            "name": "Ollama"
+          }
         ]
       },
       {
         "name": "Backend & Data",
         "items": [
-          { "name": "Python" },
-          { "name": "Scala (background)" },
-          { "name": "Spark", "hint": "Batch + streaming on EMR" },
+          {
+            "name": "Python"
+          },
+          {
+            "name": "Scala (background)"
+          },
+          {
+            "name": "Spark",
+            "hint": "Batch + streaming on EMR"
+          },
           {
             "name": "Elasticsearch",
             "hint": "Index design, aggregations, analyzers"
           },
-          { "name": "Kafka" },
-          { "name": "Kinesis" },
-          { "name": "pandas" },
-          { "name": "NumPy" }
+          {
+            "name": "Kafka"
+          },
+          {
+            "name": "Kinesis"
+          },
+          {
+            "name": "pandas"
+          },
+          {
+            "name": "NumPy"
+          }
         ]
       },
       {
@@ -93,34 +112,54 @@
             "name": "AWS",
             "hint": "EMR, Lambda, Kinesis, S3, CloudWatch, RDS"
           },
-          { "name": "Kubernetes" },
-          { "name": "Terraform" },
-          { "name": "Docker" },
-          { "name": "GitLab CI/CD" }
+          {
+            "name": "Kubernetes"
+          },
+          {
+            "name": "Terraform"
+          },
+          {
+            "name": "Docker"
+          },
+          {
+            "name": "GitLab CI/CD"
+          }
         ]
       },
       {
         "name": "APIs & Practices",
         "items": [
-          { "name": "REST" },
+          {
+            "name": "REST"
+          },
           {
             "name": "OpenAPI",
             "hint": "Versioning, schema linting, compatibility checks"
           },
-          { "name": "JWT/OAuth2" },
+          {
+            "name": "JWT/OAuth2"
+          },
           {
             "name": "Release checks",
             "hint": "Quality bars + rollout/rollback playbooks"
           },
-          { "name": "Observability", "hint": "Metrics, logs, traces, SLOs" },
-          { "name": "Response playbooks" },
-          { "name": "TRDs" },
-          { "name": "BDD acceptance" }
+          {
+            "name": "Observability",
+            "hint": "Metrics, logs, traces, SLOs"
+          },
+          {
+            "name": "Response playbooks"
+          },
+          {
+            "name": "TRDs"
+          },
+          {
+            "name": "BDD acceptance"
+          }
         ]
       }
     ]
   },
-
   "tools": [
     "VS Code",
     "Git",
@@ -135,7 +174,6 @@
     "Tailwind 4",
     "Nunjucks"
   ],
-
   "experience": [
     {
       "company": "Independent Engineering & Security Research",
@@ -210,7 +248,6 @@
       ]
     }
   ],
-
   "projects": [
     {
       "name": "HackAPrompt Top-10 (7th)",
@@ -234,7 +271,12 @@
       "badge": "client",
       "subtitle": "Agentic Q&A over patent corpora",
       "blurb": "Hybrid search with CPC/IPC filters and citation trails; maps claims and limitations and returns answers with inline citations and scope notes.",
-      "tags": ["RAG", "Guardrails", "RBAC", "Citations"],
+      "tags": [
+        "RAG",
+        "Guardrails",
+        "RBAC",
+        "Citations"
+      ],
       "url": "/projects/patent-intelligence-agent/"
     },
     {
@@ -242,7 +284,11 @@
       "badge": "ops",
       "subtitle": "Safe, measurable LLM releases",
       "blurb": "Monitors accuracy, latency, and safety metrics with shadow runs, timed canaries, and automatic rollback.",
-      "tags": ["CI/CD gates", "Metrics", "Playbooks"],
+      "tags": [
+        "CI/CD gates",
+        "Metrics",
+        "Playbooks"
+      ],
       "url": "/projects/llm-release-watcher/"
     },
     {
@@ -250,7 +296,11 @@
       "badge": "evals",
       "subtitle": "Retrieval reliability",
       "blurb": "Small gold sets and sanity checks for chunking, indexing, and retrieval; scripts to catch regressions early and visualize coverage.",
-      "tags": ["Eval sets", "Chunking", "Index heuristics"],
+      "tags": [
+        "Eval sets",
+        "Chunking",
+        "Index heuristics"
+      ],
       "url": ""
     },
     {
@@ -258,11 +308,14 @@
       "badge": "infra",
       "subtitle": "Reproducible offline A/B",
       "blurb": "Configurable offline A/B harness for prompts, models, and tools with LoRA adapters and rewrite steps; designed for reproducible experiments.",
-      "tags": ["LoRA", "Offline A/B", "Pipelines"],
+      "tags": [
+        "LoRA",
+        "Offline A/B",
+        "Pipelines"
+      ],
       "url": ""
     }
   ],
-
   "education": [
     {
       "school": "Metropolitan State University of Denver",
@@ -289,7 +342,12 @@
         "Timed canary with promotion thresholds.",
         "Rollback playbooks and post‑release verification."
       ],
-      "stack": ["Metrics", "Dashboards", "CI/CD gates", "Playbooks"],
+      "stack": [
+        "Metrics",
+        "Dashboards",
+        "CI/CD gates",
+        "Playbooks"
+      ],
       "status": "Open to share patterns and code snippets on request."
     },
     "patent-intelligence-agent": {

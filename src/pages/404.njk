@@ -1,24 +1,63 @@
 ---
-layout: "base.njk"
-title: "Lost in the Lab"
-permalink: 404.html
+layout: base.njk
+title: 404 - Lost in Space
+permalink: /404.html
+eleventyExcludeFromCollections: true
 ---
 
-<section class="min-h-screen flex flex-col items-center justify-center text-center px-6">
-  <div class="animate-bounce">
-    <h1 class="font-heading text-8xl md:text-9xl text-error tracking-tight">404</h1>
-  </div>
-  <p class="mt-6 text-xl md:text-2xl max-w-xl">
-    You tripped a wire and fell into the void.
-    <br>
-    This page doesn’t exist—<span class="font-bold text-warning">yet</span>.
-  </p>
-  <div class="mt-10 flex flex-col sm:flex-row gap-4">
-    <a href="/" class="btn btn-primary btn-lg">Back to Safety</a>
-    <a href="/work/latest" class="btn btn-ghost btn-lg">Show me something experimental →</a>
-  </div>
-  <div class="mt-16 opacity-50 text-sm font-mono">
-    <p>[ Effusion Labs · Error Handler v0.404 ]</p>
-    <p class="mt-1">If you can read this, you are the experiment.</p>
-  </div>
-</section>
+<div class="min-h-screen flex items-center justify-center relative overflow-hidden bg-black">
+    <!-- Starfield/Canvas Background would go here, using CSS for now -->
+    <div class="absolute inset-0 z-0">
+        <div class="stars-static"></div>
+    </div>
+
+    <div class="text-center z-10 relative hb-glass-card p-12 max-w-2xl mx-4 border-emerald-500/30 shadow-[0_0_50px_rgba(16,185,129,0.2)]">
+        <h1 class="text-9xl font-black text-transparent bg-clip-text bg-gradient-to-b from-emerald-400 to-cyan-600 hb-text-glow glitch-text" data-text="404">404</h1>
+        
+        <h2 class="text-3xl font-bold text-white mt-4 mb-8">System Malfunction: Coordinates Invalid</h2>
+        
+        <p class="text-gray-400 text-lg mb-10">
+            The requested trajectory led to a void sector. Initiation failure sequence...
+        </p>
+
+        <a href="/" class="group relative px-8 py-3 bg-emerald-600/20 text-emerald-400 font-bold rounded border border-emerald-500 hover:bg-emerald-500 hover:text-black transition-all duration-300">
+            <span class="absolute inset-0 w-full h-full bg-emerald-500/20 blur opacity-0 group-hover:opacity-100 transition-opacity"></span>
+            Return to Base
+        </a>
+    </div>
+</div>
+
+<style>
+.glitch-text {
+    position: relative;
+}
+.glitch-text::before,
+.glitch-text::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+.glitch-text::before {
+    left: 2px;
+    text-shadow: -1px 0 #ff00c1;
+    clip: rect(44px, 450px, 56px, 0);
+    animation: glitch-anim 5s infinite linear alternate-reverse;
+}
+.glitch-text::after {
+    left: -2px;
+    text-shadow: -1px 0 #00fff9;
+    clip: rect(44px, 450px, 56px, 0);
+    animation: glitch-anim2 5s infinite linear alternate-reverse;
+}
+@keyframes glitch-anim {
+    0% { clip: rect(30px, 9999px, 10px, 0); }
+    100% { clip: rect(70px, 9999px, 90px, 0); }
+}
+@keyframes glitch-anim2 {
+    0% { clip: rect(10px, 9999px, 80px, 0); }
+    100% { clip: rect(90px, 9999px, 10px, 0); }
+}
+</style>
