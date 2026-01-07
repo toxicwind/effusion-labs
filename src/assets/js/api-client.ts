@@ -113,6 +113,11 @@ class APIClient {
         return res.json()
     }
 
+    async getCannabisMap(): Promise<string> {
+        const res = await fetch(`${this.baseURL}/cannabis/map/demo`)
+        return res.text()
+    }
+
     // Pipeline Manager
     async runPipeline(params: { command?: string; mode?: string; label?: string }): Promise<{ task_id: string; status: string }> {
         const res = await fetch(`${this.baseURL}/pipeline/lv-images/run`, {

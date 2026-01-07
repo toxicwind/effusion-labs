@@ -15,13 +15,19 @@ eleventyNavigation:
         @click="activeTab = 'report'" 
         :class="{'bg-emerald-600 text-white': activeTab === 'report', 'bg-gray-700 text-gray-300': activeTab !== 'report'}"
         class="px-4 py-2 rounded-lg font-medium transition-colors">
-        Full Report
+        Analysis Report
+      </button>
+      <button 
+        @click="activeTab = 'map'" 
+        :class="{'bg-emerald-600 text-white': activeTab === 'map', 'bg-gray-700 text-gray-300': activeTab !== 'map'}"
+        class="px-4 py-2 rounded-lg font-medium transition-colors">
+        Dispensary Map
       </button>
       <button 
         @click="activeTab = 'dashboard'" 
         :class="{'bg-emerald-600 text-white': activeTab === 'dashboard', 'bg-gray-700 text-gray-300': activeTab !== 'dashboard'}"
         class="px-4 py-2 rounded-lg font-medium transition-colors">
-        Live Dashboard
+        Live Ticker
       </button>
     </div>
   </div>
@@ -29,7 +35,7 @@ eleventyNavigation:
   <!-- Loading State -->
   <div x-show="loading" class="text-center py-20">
     <div class="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-emerald-500 mx-auto mb-4"></div>
-    <p class="text-gray-400">Generating analysis with synthetic intelligence...</p>
+    <p class="text-gray-400">Loading market intelligence...</p>
   </div>
 
   <!-- Report View -->
@@ -41,7 +47,16 @@ eleventyNavigation:
     </iframe>
   </div>
 
-  <!-- Dashboard View (Placeholder for future React/D3 integration) -->
+  <!-- Map View -->
+  <div x-show="!loading && activeTab === 'map'" class="bg-gray-800 rounded-xl overflow-hidden shadow-2xl min-h-[800px] relative">
+      <iframe 
+      :srcdoc="mapHtml" 
+      class="w-full h-[800px] border-none"
+      title="Dispensary Map">
+    </iframe>
+  </div>
+
+  <!-- Dashboard View (Placeholder) -->
   <div x-show="!loading && activeTab === 'dashboard'" class="grid grid-cols-1 md:grid-cols-2 gap-8">
     <div class="bg-gray-800 p-6 rounded-xl border border-gray-700">
       <h3 class="text-xl font-bold text-white mb-4">Real-time Ticker</h3>
@@ -62,11 +77,16 @@ eleventyNavigation:
     Alpine.data('cannabisApp', () => ({
       async init() {
         try {
-          // Fetch the full HTML report from the orchestrator
-          this.reportHtml = await api.getCannabisReport()
+          // Fetch the full HTML report and Map from the orchestrator
+          const [report, map] = await Promise.all([
+             api.getCannabisReport(),
+             api.getCannabisMap()
+          ])
+          this.reportHtml = report
+          this.mapHtml = map
         } catch (error) {
-          console.error('Failed to load report:', error)
-          this.reportHtml = '<div class="p-8 text-red-500">Failed to load analysis report. API may be down.</div>'
+          console.error('Failed to load market intelligence:', error)
+          this.reportHtml = '<div class="p-8 text-red-500">Failed to load data. API may be down.</div>'
         } finally {
           this.loading = false
         }
