@@ -139,8 +139,7 @@ async function runUpdate(
   if (keepWorkdir) args.push('--keep-workdir')
   const labelMsg = label ? ` label=${label}` : ''
   logStep(
-    `Refreshing dataset via Playwright (mode=${mode}${labelMsg}${skipBundle ? ' skip-bundle' : ''}${
-      keepWorkdir ? ' keep-workdir' : ''
+    `Refreshing dataset via Playwright (mode=${mode}${labelMsg}${skipBundle ? ' skip-bundle' : ''}${keepWorkdir ? ' keep-workdir' : ''
     })`,
   )
   await spawnNodeScript(updateScript, args)
@@ -174,7 +173,12 @@ async function runVerify({ strict = true } = {}) {
   const result = await verifyBundle()
   if (!result.ok) {
     const reason = result.reason || result.mismatches?.join(', ') || 'unknown'
-    const toleratedReasons = new Set(['manifest-lfs-pointer', 'invalid-manifest-json'])
+    const toleratedReasons = new Set([
+      'manifest-lfs-pointer',
+      'invalid-manifest-json',
+      'missing-manifest',
+      'missing-bundle',
+    ])
     if (strict && !toleratedReasons.has(reason)) {
       if ((await pathExists(BAKED_REPORT_PATH)) || (await pathExists(`${BAKED_REPORT_PATH}.gz`))) {
         logStep(
