@@ -1,0 +1,76 @@
+---
+layout: layouts/base.njk
+title: Cannabis Price Analysis
+permalink: /cannabis/
+eleventyNavigation:
+  key: Cannabis
+  order: 4
+---
+
+<div class="container mx-auto px-4 py-8" x-data="{ reportHtml: '', loading: true, activeTab: 'report' }">
+  <div class="flex items-center justify-between mb-8">
+    <h1 class="text-4xl font-bold text-white">Cannabis Market Analysis</h1>
+    <div class="flex space-x-4">
+      <button 
+        @click="activeTab = 'report'" 
+        :class="{'bg-emerald-600 text-white': activeTab === 'report', 'bg-gray-700 text-gray-300': activeTab !== 'report'}"
+        class="px-4 py-2 rounded-lg font-medium transition-colors">
+        Full Report
+      </button>
+      <button 
+        @click="activeTab = 'dashboard'" 
+        :class="{'bg-emerald-600 text-white': activeTab === 'dashboard', 'bg-gray-700 text-gray-300': activeTab !== 'dashboard'}"
+        class="px-4 py-2 rounded-lg font-medium transition-colors">
+        Live Dashboard
+      </button>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div x-show="loading" class="text-center py-20">
+    <div class="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-emerald-500 mx-auto mb-4"></div>
+    <p class="text-gray-400">Generating analysis with synthetic intelligence...</p>
+  </div>
+
+  <!-- Report View -->
+  <div x-show="!loading && activeTab === 'report'" class="bg-white rounded-xl overflow-hidden shadow-2xl min-h-[800px]">
+    <iframe 
+      :srcdoc="reportHtml" 
+      class="w-full h-[1200px] border-none"
+      title="Analysis Report">
+    </iframe>
+  </div>
+
+  <!-- Dashboard View (Placeholder for future React/D3 integration) -->
+  <div x-show="!loading && activeTab === 'dashboard'" class="grid grid-cols-1 md:grid-cols-2 gap-8">
+    <div class="bg-gray-800 p-6 rounded-xl border border-gray-700">
+      <h3 class="text-xl font-bold text-white mb-4">Real-time Ticker</h3>
+      <p class="text-gray-400">Connecting to WebSocket stream...</p>
+    </div>
+    <div class="bg-gray-800 p-6 rounded-xl border border-gray-700">
+      <h3 class="text-xl font-bold text-white mb-4">Market Depth</h3>
+      <p class="text-gray-400">Waiting for data...</p>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+  import { api } from '/assets/js/api-client.ts'
+  import Alpine from 'alpinejs'
+
+  document.addEventListener('alpine:init', () => {
+    Alpine.data('cannabisApp', () => ({
+      async init() {
+        try {
+          // Fetch the full HTML report from the orchestrator
+          this.reportHtml = await api.getCannabisReport()
+        } catch (error) {
+          console.error('Failed to load report:', error)
+          this.reportHtml = '<div class="p-8 text-red-500">Failed to load analysis report. API may be down.</div>'
+        } finally {
+          this.loading = false
+        }
+      }
+    }))
+  })
+</script>

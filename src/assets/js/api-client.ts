@@ -92,6 +92,38 @@ class APIClient {
         return res.json()
     }
 
+
+    // Cannabis Analysis
+    async getCannabisReport(): Promise<string> {
+        const res = await fetch(`${this.baseURL}/cannabis/report/demo`)
+        return res.text()
+    }
+
+    async getCannabisData(): Promise<any[]> {
+        const res = await fetch(`${this.baseURL}/cannabis/data/synthetic`)
+        return res.json()
+    }
+
+    // Pipeline Manager
+    async runPipeline(params: { command?: string; mode?: string; label?: string }): Promise<{ task_id: string; status: string }> {
+        const res = await fetch(`${this.baseURL}/pipeline/lv-images/run`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(params),
+        })
+        return res.json()
+    }
+
+    async getPipelineTasks(): Promise<PipelineTask[]> {
+        const res = await fetch(`${this.baseURL}/pipeline/tasks`)
+        return res.json()
+    }
+
+    async getPipelineTask(taskId: string): Promise<PipelineTask> {
+        const res = await fetch(`${this.baseURL}/pipeline/tasks/${taskId}`)
+        return res.json()
+    }
+
     // WebSocket Real-time Channels
     connectWebSocket(
         channel: 'popmart' | 'mcp' | 'system' | 'health',

@@ -1,0 +1,138 @@
+---
+layout: layouts/base.njk
+title: Pipeline Manager
+permalink: /pipeline/
+eleventyNavigation:
+  key: Pipeline
+  order: 5
+---
+
+<div class="container mx-auto px-4 py-8" x-data="pipelineApp">
+  <div class="flex items-center justify-between mb-8">
+    <h1 class="text-4xl font-bold text-white">Pipeline Operation Center</h1>
+    <div class="flex space-x-2">
+      <span class="px-3 py-1 bg-gray-800 rounded text-sm text-gray-400" x-text="'Orchestrator: ' + (status === 'connected' ? 'Online' : 'Offline')"></span>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    
+    <!-- Controls -->
+    <div class="lg:col-span-1 space-y-6">
+      <div class="bg-gray-800 p-6 rounded-xl border border-gray-700">
+        <h2 class="text-xl font-bold text-white mb-4">LV Images Pipeline</h2>
+        <div class="space-y-4">
+          <div>
+            <label class="block text-sm text-gray-400 mb-1">Command</label>
+            <select x-model="command" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-white">
+              <option value="crawl">Crawl (Playwright)</option>
+              <option value="build">Build (Offline)</option>
+              <option value="doctor">Doctor (Diagnostics)</option>
+            </select>
+          </div>
+          
+          <div x-show="command === 'crawl'">
+             <label class="block text-sm text-gray-400 mb-1">Mode</label>
+             <select x-model="mode" class="w-full bg-gray-900 border border-gray-600 rounded p-2 text-white">
+               <option value="pages">Pages Only</option>
+               <option value="pages-images">Pages & Images</option>
+               <option value="metadata">Metadata Only</option>
+             </select>
+          </div>
+
+          <button 
+            @click="runPipeline"
+            :disabled="running"
+            class="w-full bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white font-bold py-3 rounded-lg transition-colors flex items-center justify-center">
+            <span x-show="!running">Run Pipeline</span>
+            <span x-show="running" class="flex items-center">
+               <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                 <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+               </svg>
+               Executing...
+            </span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Live Logs -->
+    <div class="lg:col-span-2">
+      <div class="bg-gray-900 rounded-xl border border-gray-700 overflow-hidden flex flex-col h-[600px]">
+        <div class="bg-gray-800 px-4 py-3 border-b border-gray-700 flex justify-between items-center">
+          <h3 class="font-mono text-sm text-gray-300">Terminal Output</h3>
+          <span class="text-xs text-gray-500" x-text="activeTaskId || 'Idle'"></span>
+        </div>
+        <div class="flex-1 p-4 overflow-y-auto font-mono text-sm text-gray-300 space-y-1" id="log-container">
+          <template x-for="log in logs" :key="log">
+            <div x-text="log" class="break-all"></div>
+          </template>
+          <div x-show="logs.length === 0" class="text-gray-600 italic text-center mt-20">
+            Ready to execute tasks. Output will appear here.
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script type="module">
+  import { api } from '/assets/js/api-client.ts'
+  import Alpine from 'alpinejs'
+
+  document.addEventListener('alpine:init', () => {
+    Alpine.data('pipelineApp', () => ({
+      command: 'crawl',
+      mode: 'pages',
+      running: false,
+      status: 'connected',
+      activeTaskId: null,
+      logs: [],
+      pollInterval: null,
+
+      async runPipeline() {
+        this.running = true
+        this.logs = ['Initializing task...']
+        
+        try {
+          const res = await api.runPipeline({
+            command: this.command,
+            mode: this.command === 'crawl' ? this.mode : undefined
+          })
+          
+          this.activeTaskId = res.task_id
+          this.startPolling(res.task_id)
+          
+        } catch (e) {
+          this.logs.push(`Error starting pipeline: ${e.message}`)
+          this.running = false
+        }
+      },
+
+      startPolling(taskId) {
+        if (this.pollInterval) clearInterval(this.pollInterval)
+        
+        this.pollInterval = setInterval(async () => {
+          try {
+            const task = await api.getPipelineTask(taskId)
+            this.logs = task.logs
+            
+            // Auto-scroll
+            const container = document.getElementById('log-container')
+            if (container) container.scrollTop = container.scrollHeight
+
+            if (task.status !== 'running') {
+              clearInterval(this.pollInterval)
+              this.running = false
+              this.logs.push(`\n[Process ${task.status === 'completed' ? 'exited successfully' : 'failed'}]`)
+            }
+          } catch (e) {
+            console.error('Poll error', e)
+          }
+        }, 1000)
+      }
+    }))
+  })
+</script>

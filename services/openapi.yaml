@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: Effusion Labs Unified API
-  version: 2.0.0
+  version: 2.1.0
   description: |
     Unified API Gateway orchestrating all Effusion Labs microservices.
     
@@ -12,7 +12,8 @@ info:
     - MCP gateway proxy
     - Markdown conversion
     - Popmart recon automation
-    - DayZ server management (future)
+    - Cannabis price analysis
+    - Pipeline management
   contact:
     name: Effusion Labs
     url: https://effusionlabs.com
@@ -32,6 +33,10 @@ tags:
     description: URL to Markdown conversion
   - name: popmart
     description: Popmart recon automation
+  - name: cannabis
+    description: Medical flower price analysis
+  - name: pipeline
+    description: Background task pipeline manager
   - name: websocket
     description: Real-time WebSocket channels
 
@@ -44,19 +49,6 @@ paths:
       responses:
         "200":
           description: API metadata and endpoint discovery
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  name:
-                    type: string
-                  version:
-                    type: string
-                  endpoints:
-                    type: object
-                    additionalProperties:
-                      type: string
 
   /health:
     get:
@@ -65,106 +57,65 @@ paths:
       responses:
         "200":
           description: Orchestrator is healthy
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
-                    type: string
-                    enum: [healthy]
-                  timestamp:
-                    type: string
-                    format: date-time
-                  services_monitored:
-                    type: integer
 
   /services/health:
     get:
       summary: Aggregate Service Health
-      description: Health status of all backend services
       tags: [health]
       responses:
         "200":
           description: List of service health statuses
+
+  # --- Cannabis Analysis ---
+  /cannabis/report/demo:
+    get:
+      summary: Get Demo Analysis Report
+      description: Generates a full HTML report using synthetic data
+      tags: [cannabis]
+      responses:
+        "200":
+          description: HTML report
+          content:
+            text/html:
+              schema:
+                type: string
+
+  /cannabis/data/synthetic:
+    get:
+      summary: Get Synthetic Data
+      description: Get raw JSON data for frontend visualization
+      tags: [cannabis]
+      responses:
+        "200":
+          description: Array of product data
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/ServiceHealth"
+                  type: object
 
-  /mcp/servers:
-    get:
-      summary: List MCP Servers
-      description: Get available MCP servers from gateway
-      tags: [mcp]
-      responses:
-        "200":
-          description: List of MCP servers
-          content:
-            application/json:
-              schema:
-                type: object
-        "502":
-          description: MCP Gateway unavailable
-
-  /mcp/send:
+  # --- Pipeline Manager ---
+  /pipeline/lv-images/run:
     post:
-      summary: Send MCP Request
-      description: Forward request to specific MCP server
-      tags: [mcp]
+      summary: Run LV Images Pipeline
+      tags: [pipeline]
       requestBody:
-        required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/MCPRequest"
+              type: object
+              properties:
+                command:
+                  type: string
+                  default: crawl
+                mode:
+                  type: string
+                label:
+                  type: string
       responses:
         "200":
-          description: MCP response
-        "502":
-          description: MCP Gateway error
-
-  /markdown/convert:
-    post:
-      summary: Convert URL to Markdown
-      description: Extract and convert webpage to markdown
-      tags: [markdown]
-      parameters:
-        - name: url
-          in: query
-          required: true
-          schema:
-            type: string
-            format: uri
-      responses:
-        "200":
-          description: Markdown conversion successful
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  markdown:
-                    type: string
-        "502":
-          description: Markdown Gateway error
-
-  /popmart/recon:
-    post:
-      summary: Trigger Popmart Recon
-      description: Start asynchronous popmart recon scan
-      tags: [popmart]
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/PopmartReconRequest"
-      responses:
-        "200":
-          description: Recon task queued
+          description: Task started
           content:
             application/json:
               schema:
@@ -174,88 +125,63 @@ paths:
                     type: string
                   status:
                     type: string
-                    enum: [queued]
-                  message:
-                    type: string
 
-  /ws/{channel}:
+  /pipeline/tasks:
     get:
-      summary: WebSocket Channel
-      description: Real-time bidirectional communication channel
-      tags: [websocket]
+      summary: List Pipeline Tasks
+      tags: [pipeline]
+      responses:
+        "200":
+          description: List of all tasks
+
+  /pipeline/tasks/{task_id}:
+    get:
+      summary: Get Task Details
+      tags: [pipeline]
       parameters:
-        - name: channel
+        - name: task_id
           in: path
           required: true
           schema:
             type: string
-            enum: [popmart, mcp, system, health]
+      responses:
+        "200":
+          description: Task status and logs
+
+  # --- Existing Endpoints ---
+  /mcp/servers:
+    get:
+      tags: [mcp]
+      responses:
+        "200":
+          description: List of MCP servers
+  /mcp/send:
+    post:
+      tags: [mcp]
+      responses:
+        "200":
+          description: MCP response
+  /markdown/convert:
+    post:
+      tags: [markdown]
+      responses:
+        "200":
+          description: Markdown conversion successful
+  /popmart/recon:
+    post:
+      tags: [popmart]
+      responses:
+        "200":
+          description: Recon task queued
+  /ws/{channel}:
+    get:
+      tags: [websocket]
       responses:
         "101":
           description: WebSocket connection established
-
   /events/stream:
     get:
-      summary: Server-Sent Events
-      description: SSE stream for real-time server events
       tags: [websocket]
       responses:
         "200":
           description: Event stream
-          content:
-            text/event-stream:
-              schema:
-                type: string
-
-components:
-  schemas:
-    ServiceHealth:
-      type: object
-      required: [name, status, last_check]
-      properties:
-        name:
-          type: string
-        status:
-          type: string
-          enum: [healthy, degraded, down]
-        latency_ms:
-          type: number
-          nullable: true
-        last_check:
-          type: string
-          format: date-time
-
-    MCPRequest:
-      type: object
-      required: [server, payload]
-      properties:
-        server:
-          type: string
-          description: Name of MCP server
-        payload:
-          type: object
-          description: JSON-RPC request payload
-
-    PopmartReconRequest:
-      type: object
-      properties:
-        id_start:
-          type: integer
-          minimum: 1
-          default: 3450
-        id_end:
-          type: integer
-          maximum: 10000
-          default: 3650
-        scan_collections:
-          type: boolean
-          default: false
-        scan_brandip:
-          type: boolean
-          default: false
-        scan_popnow:
-          type: boolean
-          default: false
-        probe_cdn:
-          type: boolean
-          default: false
