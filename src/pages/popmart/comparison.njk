@@ -1,0 +1,53 @@
+---
+layout: base.njk
+title: Popmart Comparison
+permalink: /popmart/compare/
+eleventyNavigation:
+  key: Compare
+  parent: Popmart
+  order: 2
+---
+
+<div class="container mx-auto px-4 py-8" x-data="{ items: [], term1: '', term2: '' }">
+  <h1 class="text-4xl font-bold text-center mb-10 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500 hb-text-glow">Series Comparison</h1>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <!-- Left Side -->
+      <div class="hb-glass-card p-6">
+          <input type="text" x-model="term1" placeholder="Search Series A (e.g. Labubu)" class="w-full bg-black/30 border border-gray-600 rounded-lg px-4 py-2 text-white mb-6 focus:border-blue-500 outline-none">
+          
+          <div class="space-y-4">
+              <div class="bg-gray-800/50 p-4 rounded-lg">
+                  <h3 class="font-bold text-xl text-blue-400">Labubu The Monsters</h3>
+                  <div class="mt-4 space-y-2 text-sm text-gray-300">
+                      <div class="flex justify-between"><span>Release Date</span> <span>Oct 2023</span></div>
+                      <div class="flex justify-between"><span>Retail Price</span> <span>$15.00</span></div>
+                      <div class="flex justify-between"><span>Resale Avg</span> <span class="text-green-400">$28.50</span></div>
+                      <div class="flex justify-between"><span>Stock Status</span> <span class="text-red-400">Sold Out</span></div>
+                  </div>
+              </div>
+          </div>
+      </div>
+
+      <!-- Right Side -->
+      <div class="hb-glass-card p-6">
+          <input type="text" x-model="term2" placeholder="Search Series B (e.g. Dimoo)" class="w-full bg-black/30 border border-gray-600 rounded-lg px-4 py-2 text-white mb-6 focus:border-purple-500 outline-none">
+           
+          <div class="space-y-4">
+              <div class="bg-gray-800/50 p-4 rounded-lg">
+                  <h3 class="font-bold text-xl text-purple-400">Dimoo Retro Series</h3>
+                  <div class="mt-4 space-y-2 text-sm text-gray-300">
+                      <div class="flex justify-between"><span>Release Date</span> <span>Nov 2023</span></div>
+                      <div class="flex justify-between"><span>Retail Price</span> <span>$16.00</span></div>
+                      <div class="flex justify-between"><span>Resale Avg</span> <span class="text-yellow-400">$18.00</span></div>
+                      <div class="flex justify-between"><span>Stock Status</span> <span class="text-green-400">Available</span></div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+  
+  <div class="mt-10 text-center">
+      <button class="px-8 py-3 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full font-bold text-white shadow-lg hover:shadow-cyan-500/50 transition-all">Generate Analysis Report</button>
+  </div>
+</div>

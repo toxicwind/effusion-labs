@@ -32,7 +32,12 @@ async def scrape_popmart_recon(ctx: dict[str, Any]) -> str:
     scraper = PopmartScraper()
     results = await scraper.run_recon_task({})
     
-    return f"Popmart Recon completed: {results['summary']['discovered']} items found"
+    count = results['summary']['discovered']
+    if count > 0:
+        print(f"🚨 ALERT: {count} new Popmart items discovered! Sending notifications...")
+        # Here we would trigger Discord/Email notifications
+    
+    return f"Popmart Recon completed: {count} items found"
 
 async def generate_cannabis_report(ctx: dict[str, Any], report_type: str = "daily") -> str:
     """
