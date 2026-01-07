@@ -1,6 +1,7 @@
 
 from typing import List, Optional
-from sqlmodel import SQLModel, Field, Session, select
+from sqlmodel import SQLModel, Field, select
+from sqlalchemy.ext.asyncio import AsyncSession
 from pgvector.sqlalchemy import Vector
 from sqlalchemy import Column
 from services.nexus.db import engine
@@ -21,7 +22,7 @@ class VectorStore:
     
     async def add_documents(self, documents: List[str], embeddings: List[List[float]], metadatas: List[dict] = None):
         """Add documents and embeddings to store"""
-        async with Session(engine) as session:
+        async with AsyncSession(engine) as session:
             for i, doc in enumerate(documents):
                 meta = str(metadatas[i]) if metadatas else "{}"
                 chunk = DocumentChunk(
@@ -35,8 +36,8 @@ class VectorStore:
 
     async def search(self, query_embedding: List[float], limit: int = 5) -> List[DocumentChunk]:
         """Semantic search using vector similarity (L2 distance)"""
-        async with Session(engine) as session:
+        async with AsyncSession(engine) as session:
             # Order by L2 distance ( <-> operator )
             statement = select(DocumentChunk).order_by(DocumentChunk.embedding.l2_distance(query_embedding)).limit(limit)
-            results = await session.exec(statement)
-            return results.all()
+            results = await session.execute(statement)
+            return results.scalars().all()
