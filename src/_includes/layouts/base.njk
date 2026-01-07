@@ -115,7 +115,26 @@
             .then(reg => console.log('SW registered!', reg.scope))
             .catch(err => console.log('SW failed:', err));
         }
+      window.addEventListener('load', () => {
+        quicklink.listen();
+        
+        if ('serviceWorker' in navigator) {
+          navigator.serviceWorker.register('/service-worker.js')
+            .then(reg => console.log('SW registered!', reg.scope))
+            .catch(err => console.log('SW failed:', err));
+        }
       });
+    </script>
+    
+    <!-- Three.js & Hero Scene -->
+    <div id="hero-background" class="fixed inset-0 pointer-events-none -z-10"></div>
+    <script type="module">
+        import { HeroScene } from '/assets/js/hero-scene.js';
+        
+        // Only run on non-mobile and if container exists
+        if (window.matchMedia('(min-width: 768px)').matches) {
+            new HeroScene('hero-background');
+        }
     </script>
   </body>
 </html>
