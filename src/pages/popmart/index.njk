@@ -19,13 +19,15 @@ tags:
     <div class="cluster justify-between items-center">
       <div class="stack" style="--space: var(--space-2xs)">
         <h1 class="text-h1">Pop Mart Recon Dashboard</h1>
-        <p class="text-lg opacity-70">Multi-region product discovery & dev environment enumeration</p>
+        <p class="text-lg opacity-70">
+          Multi-region product discovery & dev environment enumeration
+        </p>
       </div>
       {% if popmart.timestamp %}
-      <div class="badge badge-outline badge-lg">
-        {{ icon('clock', { class: 'w-4 h-4 mr-1' }) }}
-        {{ popmart.timestamp }}
-      </div>
+        <div class="badge badge-outline badge-lg">
+          {{ icon('clock', { class: 'w-4 h-4 mr-1' }) }}
+          {{ popmart.timestamp }}
+        </div>
       {% endif %}
     </div>
   </header>
@@ -52,121 +54,141 @@ tags:
 
   <!-- Context Breakdown -->
   {% if popmart.byContext %}
-  <section class="stack" style="--space: var(--space-m)">
-    <h2 class="text-h2">Context Breakdown</h2>
-    <div class="grid-auto" style="--grid-min: 18rem; --space: var(--space-m)">
-      {% for context, records in popmart.byContext %}
-      <div class="hb-accent p-space-m hb-inlay stack" style="--space: var(--space-s)">
-        <div class="cluster justify-between items-center">
-          <h3 class="text-lg font-black uppercase">{{ context }}</h3>
-          <span class="badge badge-sm">{{ records.length }}</span>
-        </div>
-        <div class="cluster" style="--space: var(--space-xs)">
-          <span class="text-xs opacity-60">Live: {{ records | selectattr('http_status', 'equalto', 200) | list | length }}</span>
-          <span class="text-xs opacity-60">•</span>
-          <span class="text-xs opacity-60">Errors: {{ records | rejectattr('http_status', 'equalto', 200) | list | length }}</span>
-        </div>
+    <section class="stack" style="--space: var(--space-m)">
+      <h2 class="text-h2">Context Breakdown</h2>
+      <div class="grid-auto" style="--grid-min: 18rem; --space: var(--space-m)">
+        {% for context, records in popmart.byContext %}
+          <div class="hb-accent p-space-m hb-inlay stack" style="--space: var(--space-s)">
+            <div class="cluster justify-between items-center">
+              <h3 class="text-lg font-black uppercase">{{ context }}</h3>
+              <span class="badge badge-sm">{{ records.length }}</span>
+            </div>
+            <div class="cluster" style="--space: var(--space-xs)">
+              <span class="text-xs opacity-60">Live: {{
+                  records | selectattr('http_status', 'equalto', 200) | list | length
+                }}</span>
+              <span class="text-xs opacity-60">•</span>
+              <span class="text-xs opacity-60">Errors: {{
+                  records | rejectattr('http_status', 'equalto', 200) | list | length
+                }}</span>
+            </div>
+          </div>
+        {% endfor %}
       </div>
-      {% endfor %}
-    </div>
-  </section>
+    </section>
   {% endif %}
 
   <!-- Interesting Finds -->
   {% if popmart.interestingRecords and popmart.interestingRecords.length > 0 %}
-  <section class="stack" style="--space: var(--space-m)">
-    <div class="cluster justify-between items-center">
-      <h2 class="text-h2">🔥 Interesting Finds</h2>
-      <span class="text-sm opacity-60">{{ popmart.interestingRecords.length }} results</span>
-    </div>
-    <div class="stack" style="--space: var(--space-s)">
-      {% for record in popmart.interestingRecords | slice(0, 50) %}
-      <div class="hb-brut-card p-space-s stack group" style="--space: var(--space-2xs)">
-        <div class="cluster justify-between items-start" style="--space: var(--space-xs)">
-          <div class="stack flex-1" style="--space: var(--space-3xs)">
-            <div class="cluster" style="--space: var(--space-xs)">
-              <span class="badge badge-sm badge-outline">{{ record.context }}</span>
-              {% if record.has_chinese %}
-              <span class="badge badge-sm badge-primary">CN</span>
-              {% endif %}
-              {% if record.dev_yace %}
-              <span class="badge badge-sm badge-error">压测</span>
-              {% endif %}
-            </div>
-            {% if record.title or record.og_title %}
-            <p class="font-bold text-sm">{{ record.title or record.og_title }}</p>
-            {% endif %}
-            {% if record.launch_hint %}
-            <p class="text-xs opacity-70">
-              {{ icon('calendar', { class: 'w-3 h-3 inline mr-1' }) }}
-              Launch: {{ record.launch_hint }}
-            </p>
-            {% endif %}
-            {% if record.found_price %}
-            <p class="text-xs opacity-70">
-              {{ icon('dollar-sign', { class: 'w-3 h-3 inline mr-1' }) }}
-              {{ record.found_price }}
-            </p>
-            {% endif %}
-            {% if record.jsonld_names and record.jsonld_names.length > 0 %}
-            <p class="text-xs opacity-70">
-              {{ icon('tag', { class: 'w-3 h-3 inline mr-1' }) }}
-              {{ record.jsonld_names | join(', ') }}
-            </p>
-            {% endif %}
-          </div>
-          <span class="badge badge-sm badge-success">{{ record.http_status }}</span>
-        </div>
-        <a href="{{ record.url }}" target="_blank" rel="noopener" class="text-xs font-mono opacity-40 hover:opacity-100 truncate">
-          {{ record.url }}
-        </a>
+    <section class="stack" style="--space: var(--space-m)">
+      <div class="cluster justify-between items-center">
+        <h2 class="text-h2">🔥 Interesting Finds</h2>
+        <span class="text-sm opacity-60">{{ popmart.interestingRecords.length }} results</span>
       </div>
-      {% endfor %}
-    </div>
-  </section>
+      <div class="stack" style="--space: var(--space-s)">
+        {% for record in popmart.interestingRecords | slice(0, 50) %}
+          <div class="hb-brut-card p-space-s stack group" style="--space: var(--space-2xs)">
+            <div class="cluster justify-between items-start" style="--space: var(--space-xs)">
+              <div class="stack flex-1" style="--space: var(--space-3xs)">
+                <div class="cluster" style="--space: var(--space-xs)">
+                  <span class="badge badge-sm badge-outline">{{ record.context }}</span>
+                  {% if record.has_chinese %}
+                    <span class="badge badge-sm badge-primary">CN</span>
+                  {% endif %}
+                  {% if record.dev_yace %}
+                    <span class="badge badge-sm badge-error">压测</span>
+                  {% endif %}
+                </div>
+                {% if record.title or record.og_title %}
+                  <p class="font-bold text-sm">{{ record.title or record.og_title }}</p>
+                {% endif %}
+                {% if record.launch_hint %}
+                  <p class="text-xs opacity-70">
+                    {{ icon('calendar', { class: 'w-3 h-3 inline mr-1' }) }}
+                    Launch: {{ record.launch_hint }}
+                  </p>
+                {% endif %}
+                {% if record.found_price %}
+                  <p class="text-xs opacity-70">
+                    {{ icon('dollar-sign', { class: 'w-3 h-3 inline mr-1' }) }}
+                    {{ record.found_price }}
+                  </p>
+                {% endif %}
+                {% if record.jsonld_names and record.jsonld_names.length > 0 %}
+                  <p class="text-xs opacity-70">
+                    {{ icon('tag', { class: 'w-3 h-3 inline mr-1' }) }}
+                    {{ record.jsonld_names | join(', ') }}
+                  </p>
+                {% endif %}
+              </div>
+              <span class="badge badge-sm badge-success">{{ record.http_status }}</span>
+            </div>
+            <a
+              href="{{ record.url }}"
+              target="_blank"
+              rel="noopener"
+              class="text-xs font-mono opacity-40 hover:opacity-100 truncate"
+            >
+              {{ record.url }}
+            </a>
+          </div>
+        {% endfor %}
+      </div>
+    </section>
   {% endif %}
 
   <!-- All Records (Collapsed) -->
   {% if popmart.records and popmart.records.length > 0 %}
-  <details class="stack" style="--space: var(--space-m)">
-    <summary class="cursor-pointer text-h3 hover:text-primary">
-      📋 All Records ({{ popmart.records.length }})
-    </summary>
-    <div class="overflow-x-auto">
-      <table class="table table-zebra table-sm">
-        <thead>
-          <tr>
-            <th>Status</th>
-            <th>Context</th>
-            <th>Title</th>
-            <th>URL</th>
-            <th>Signals</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for record in popmart.records | slice(0, 200) %}
-          <tr>
-            <td>
-              <span class="badge badge-sm {{ 'badge-success' if record.http_status == 200 else 'badge-error' }}">
-                {{ record.http_status }}
-              </span>
-            </td>
-            <td><span class="badge badge-sm badge-outline">{{ record.context }}</span></td>
-            <td class="max-w-xs truncate">{{ record.title or record.og_title or '—' }}</td>
-            <td class="max-w-sm truncate"><a href="{{ record.url }}" target="_blank" class="link">{{ record.url }}</a></td>
-            <td>
-              <div class="cluster" style="--space: var(--space-3xs)">
-                {% if record.has_chinese %}<span class="badge badge-xs badge-primary">CN</span>{% endif %}
-                {% if record.found_price %}<span class="badge badge-xs badge-success">$</span>{% endif %}
-                {% if record.launch_hint %}<span class="badge badge-xs badge-warning">🗓</span>{% endif %}
-                {% if record.dev_yace %}<span class="badge badge-xs badge-error">压测</span>{% endif %}
-              </div>
-            </td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    </div>
-  </details>
+    <details class="stack" style="--space: var(--space-m)">
+      <summary class="cursor-pointer text-h3 hover:text-primary">
+        📋 All Records ({{ popmart.records.length }})
+      </summary>
+      <div class="overflow-x-auto">
+        <table class="table table-zebra table-sm">
+          <thead>
+            <tr>
+              <th>Status</th>
+              <th>Context</th>
+              <th>Title</th>
+              <th>URL</th>
+              <th>Signals</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for record in popmart.records | slice(0, 200) %}
+              <tr>
+                <td>
+                  <span
+                    class="badge badge-sm {{ 'badge-success' if record.http_status == 200 else 'badge-error' }}"
+                  >
+                    {{ record.http_status }}
+                  </span>
+                </td>
+                <td><span class="badge badge-sm badge-outline">{{ record.context }}</span></td>
+                <td class="max-w-xs truncate">{{ record.title or record.og_title or '—' }}</td>
+                <td class="max-w-sm truncate">
+                  <a href="{{ record.url }}" target="_blank" class="link">{{ record.url }}</a>
+                </td>
+                <td>
+                  <div class="cluster" style="--space: var(--space-3xs)">
+                    {% if record.has_chinese %}<span class="badge badge-xs badge-primary"
+                      >CN</span>{% endif %}
+                    {% if record.found_price %}<span class="badge badge-xs badge-success">$</span>{%
+                      endif
+                    %}
+                    {% if record.launch_hint %}<span class="badge badge-xs badge-warning">🗓</span>{%
+                      endif
+                    %}
+                    {% if record.dev_yace %}<span class="badge badge-xs badge-error">压测</span>{%
+                      endif
+                    %}
+                  </div>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </details>
   {% endif %}
 </div>
