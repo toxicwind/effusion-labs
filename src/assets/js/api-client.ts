@@ -34,6 +34,16 @@ interface WebSocketMessage {
     timestamp: string
 }
 
+interface PipelineTask {
+    id: string
+    command: string
+    status: 'running' | 'completed' | 'failed'
+    start_time: string
+    end_time?: string
+    exit_code?: number
+    logs: string[]
+}
+
 class APIClient {
     private baseURL: string
     private wsURL: string
@@ -91,7 +101,6 @@ class APIClient {
         })
         return res.json()
     }
-
 
     // Cannabis Analysis
     async getCannabisReport(): Promise<string> {
@@ -193,4 +202,4 @@ class APIClient {
 export const api = new APIClient()
 
 // Export types
-export type { ServiceHealth, MCPRequest, PopmartReconParams, WebSocketMessage }
+export type { ServiceHealth, MCPRequest, PopmartReconParams, WebSocketMessage, PipelineTask }
