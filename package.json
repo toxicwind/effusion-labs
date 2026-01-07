@@ -163,7 +163,7 @@
     "tree-cli": "0.6.7",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.45.0",
-    "undici": "^7.16.0",
+    "undici": "^7.18.2",
     "unified": "11.0.5",
     "vite": "7.1.9",
     "yaml": "2.8.1",
