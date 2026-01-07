@@ -316,6 +316,14 @@ async def event_stream():
     
     return StreamingResponse(event_generator(), media_type="text/event-stream")
 
+
+from services.cannabis_service import router as cannabis_router
+from services.pipeline_service import router as pipeline_router
+
+# Mount sub-services
+app.include_router(cannabis_router)
+app.include_router(pipeline_router)
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(
