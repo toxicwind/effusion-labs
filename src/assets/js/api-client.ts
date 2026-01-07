@@ -118,6 +118,11 @@ class APIClient {
         return res.text()
     }
 
+    async getDenverData(): Promise<any[]> {
+        const res = await fetch(`${this.baseURL}/api/cannabis/denver`)
+        return res.json()
+    }
+
     // Pipeline Manager
     async runPipeline(params: { command?: string; mode?: string; label?: string }): Promise<{ task_id: string; status: string }> {
         const res = await fetch(`${this.baseURL}/pipeline/lv-images/run`, {

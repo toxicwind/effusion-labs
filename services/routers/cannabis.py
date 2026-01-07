@@ -289,3 +289,10 @@ async def get_synthetic_data():
     """Get raw synthetic data for frontend visualization"""
     dispensaries = generate_synthetic_dispensaries()
     return [d.dict() for d in dispensaries]
+
+from services.data.cannabis_denver import generate_denver_dispensaries
+
+@router.get("/denver")
+async def get_denver_data():
+    """Get Denver-specific dispensary data"""
+    return generate_denver_dispensaries()

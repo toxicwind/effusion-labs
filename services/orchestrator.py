@@ -139,6 +139,7 @@ async def root():
     }
 
 @app.get("/health")
+@app.get("/api/health")
 async def health_check():
     """Orchestrator health check"""
     return {
@@ -364,12 +365,15 @@ async def startup_event():
     global redis_client, pubsub_endpoint
     
     # Initialize Redis
-    redis_client = await redis.from_url(REDIS_URL, decode_responses=True)
+    try:
+        redis_client = await redis.from_url(REDIS_URL, decode_responses=True)
+        # Initialize PubSub endpoint
+        pubsub_endpoint = PubSubEndpoint(broker=redis_client)
+        print(f"✓ Connected to Redis: {REDIS_URL}")
+    except Exception as e:
+        print(f"⚠ Redis connection failed: {e}")
     
-    # Initialize PubSub endpoint
-    pubsub_endpoint = PubSubEndpoint(broker=redis_client)
-    
-    print(f"✓ Connected to Redis: {REDIS_URL}")
+    # Configure Tracing
     print(f"✓ Jaeger tracing enabled: {os.getenv('JAEGER_AGENT_HOST', 'localhost')}:{os.getenv('JAEGER_AGENT_PORT', '6831')}")
     print(f"✓ Prometheus metrics exposed at /metrics")
 
@@ -383,16 +387,20 @@ async def shutdown_event():
         print("✓ Redis connection closed")
 
 # Import and mount sub-services
-from services.cannabis_service import router as cannabis_router
+from services.routers.cannabis import router as cannabis_router
+from services.routers.popmart import router as popmart_router
+from services.routers.resume import router as resume_router
 from services.pipeline_service import router as pipeline_router
 
-app.include_router(cannabis_router)
-app.include_router(pipeline_router)
+app.include_router(cannabis_router, prefix="/api")
+app.include_router(popmart_router, prefix="/api")
+app.include_router(resume_router, prefix="/api")
+app.include_router(pipeline_router, prefix="/api")
 
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(
-        "orchestrator:app",
+        "services.orchestrator:app",
         host="0.0.0.0",
         port=8000,
         reload=True,

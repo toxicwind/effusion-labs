@@ -56,3 +56,28 @@ services:
     restart: unless-stopped
     stdin_open: true
     tty: true
+
+  orchestrator-dev:
+    image: python:3.11-slim
+    container_name: effusion-orchestrator-dev
+    working_dir: /app
+    command: sh -c "pip install -r services/requirements-orchestrator.txt && uvicorn services.orchestrator:app --host 0.0.0.0 --port 8000 --reload"
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./services:/app/services:cached
+    environment:
+      - REDIS_URL=redis://redis:6379/0
+      - MCP_GATEWAY_URL=http://host.docker.internal:37100
+      - PYTHONUNBUFFERED=1
+    depends_on:
+      - redis
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  redis:
+    image: redis:7-alpine
+    container_name: effusion-redis
+    ports:
+      - "6379:6379"
+
