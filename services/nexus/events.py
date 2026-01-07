@@ -6,7 +6,8 @@ from datetime import datetime
 from typing import Dict, Any, Optional, List, Callable
 import asyncio
 from redis import asyncio as aioredis
-import os
+from redis.asyncio import Redis
+from services.nexus.config import settings
 
 logger = logging.getLogger("event_bus")
 
@@ -17,8 +18,8 @@ class EventBus:
     """
     
     def __init__(self, redis_url: str = None):
-        self.redis_url = redis_url or os.getenv("REDIS_URL", "redis://localhost:6379/0")
-        self.redis: aioredis.Redis = None
+        self.redis_url = redis_url or settings.redis_url
+        self.redis: Redis = None
         self.max_len = 10000 # Keep stream size manageable
         
     async def connect(self):
