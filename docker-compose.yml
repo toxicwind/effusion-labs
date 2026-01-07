@@ -1,4 +1,4 @@
-version: "3.8"
+version: '3.9'
 
 services:
   effusion-labs:
@@ -7,3 +7,8 @@ services:
     restart: unless-stopped
     ports:
       - "18400:80"
+    volumes:
+      # Bind mount pre-generated artifacts from server filesystem
+      - /opt/effusion-artifacts/lv-images:/usr/share/nginx/html/content/projects/lv-images/generated:ro
+    environment:
+      - NGINX_ENTRYPOINT_QUIET_LOGS=1

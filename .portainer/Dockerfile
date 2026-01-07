@@ -60,6 +60,15 @@ COPY tools ./tools
 COPY bin ./bin
 COPY . .
 
+# Download pre-generated artifacts (if available)
+RUN mkdir -p /tmp/artifacts && \
+    curl -L "https://github.com/toxicwind/effusion_labs_final/releases/latest/download/lv-bundle.tar.gz" \
+    -o /tmp/lv-bundle.tar.gz 2>/dev/null || echo "No artifacts found, using baked" && \
+    if [ -f /tmp/lv-bundle.tar.gz ]; then \
+    mkdir -p src/content/projects/lv-images/generated && \
+    tar -xzf /tmp/lv-bundle.tar.gz -C src/content/projects/lv-images/generated/ 2>/dev/null || true; \
+    fi
+
 RUN node tools/check-chromium.mjs && \
     npm run tools:check-patches && \
     NODE_OPTIONS='--max-old-space-size=8192' npm run build:offline && \
