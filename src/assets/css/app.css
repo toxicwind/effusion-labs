@@ -1177,3 +1177,142 @@ html {
   font-weight: 700;
   color: var(--mschf-ink);
 }
+
+/* ----------------------------------------------------------------
+   Glassmorphism & Neon Glow Utilities (Enhanced Resume Readability)
+   ---------------------------------------------------------------- */
+@layer utilities {
+  /* Glass Card - Frosted glass effect for cards */
+  .hb-glass-card {
+    border-radius: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.05) 0%,
+      rgba(255, 255, 255, 0.02) 100%
+    );
+    backdrop-filter: blur(20px) saturate(150%);
+    -webkit-backdrop-filter: blur(20px) saturate(150%);
+    box-shadow:
+      0 8px 32px rgba(0, 0, 0, 0.25),
+      0 0 0 1px rgba(255, 255, 255, 0.05) inset;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .hb-glass-card:hover {
+    transform: translateY(-2px);
+    box-shadow:
+      0 12px 40px rgba(0, 0, 0, 0.3),
+      0 0 0 1px rgba(255, 255, 255, 0.08) inset;
+  }
+
+  /* Neon Text Glow */
+  .hb-text-glow {
+    text-shadow:
+      0 0 10px var(--spec-a),
+      0 0 20px color-mix(in oklab, var(--spec-a), transparent 50%),
+      0 0 40px color-mix(in oklab, var(--spec-a), transparent 75%);
+  }
+
+  .hb-text-glow-magenta {
+    text-shadow:
+      0 0 10px var(--spec-c),
+      0 0 20px color-mix(in oklab, var(--spec-c), transparent 50%),
+      0 0 40px color-mix(in oklab, var(--spec-c), transparent 75%);
+  }
+
+  .hb-text-glow-lime {
+    text-shadow:
+      0 0 10px var(--spec-b),
+      0 0 20px color-mix(in oklab, var(--spec-b), transparent 50%),
+      0 0 40px color-mix(in oklab, var(--spec-b), transparent 75%);
+  }
+
+  /* Enhanced Title Glow for Resume */
+  .title-glow {
+    text-shadow:
+      0 2px 4px rgba(0, 0, 0, 0.4),
+      0 0 20px color-mix(in oklab, oklch(var(--p)), transparent 70%);
+  }
+
+  /* Glass Sidebar for Resume */
+  .hb-glass-sidebar {
+    background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.03) 0%,
+      rgba(0, 0, 0, 0.1) 100%
+    );
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-left: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  /* Chip/Badge Enhancement */
+  .chip-elevated {
+    background: color-mix(in oklab, oklch(var(--b2)), transparent 20%);
+    backdrop-filter: blur(8px);
+    border-color: rgba(255, 255, 255, 0.12);
+    transition: all 0.15s ease;
+  }
+
+  .chip-elevated:hover {
+    background: color-mix(in oklab, oklch(var(--b3)), transparent 10%);
+    border-color: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 0 12px color-mix(in oklab, oklch(var(--p)), transparent 60%);
+  }
+
+  /* Bar Underline for Navbar */
+  .bar-underline::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--spec-a), var(--spec-c), var(--spec-b));
+    opacity: 0.5;
+  }
+
+  /* Print Utilities for Resume */
+  @media print {
+    .no-print {
+      display: none !important;
+    }
+
+    .hb-glass-card,
+    .hb-brut-card,
+    .hb-inlay {
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+      background: white !important;
+      color: black !important;
+      box-shadow: none !important;
+      border-color: #ccc !important;
+    }
+
+    .title-glow,
+    .hb-text-glow,
+    .hb-text-glow-magenta,
+    .hb-text-glow-lime {
+      text-shadow: none !important;
+    }
+
+    body {
+      background: white !important;
+    }
+  }
+
+  /* High Contrast Mode for Better Readability */
+  .hb-high-contrast {
+    --bc: 98% 0.01 270;
+  }
+
+  /* Resume Layout Sheet */
+  .hb-sheet {
+    max-width: var(--page-w);
+    margin-inline: auto;
+    position: relative;
+    z-index: 1;
+  }
+}
+
