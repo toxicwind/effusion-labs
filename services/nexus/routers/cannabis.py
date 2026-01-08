@@ -296,3 +296,39 @@ from services.data.cannabis_denver import generate_denver_dispensaries
 async def get_denver_data():
     """Get Denver-specific dispensary data"""
     return generate_denver_dispensaries()
+
+@router.get("/")
+async def get_cannabis_summary():
+    """Unified cannabis market summary"""
+    dispensaries = generate_denver_dispensaries(count=10)
+    
+    # Extract "deals" (e.g., lowest price per oz)
+    deals = []
+    for d in dispensaries:
+        # Pydantic models have .products, but generate_denver_dispensaries might return dicts
+        # Based on weedmaps.py, it uses generate_denver_dispensaries
+        products = d.get('products', [])
+        if products:
+            best_deal = min(products, key=lambda p: p['price_per_g_cents'])
+            deals.append({
+                "dispensary": d['name'],
+                "product": best_deal['name'],
+                "price_per_g": best_deal['price_per_g_cents'] / 100,
+                "category": best_deal['category']
+            })
+
+    return {
+        "last_scrape_time": datetime.utcnow().isoformat(),
+        "dispensaries_count": len(dispensaries),
+        "dispensaries": [
+            {
+                "id": d['id'],
+                "name": d['name'],
+                "address": d['address'],
+                "rating": d['rating'],
+                "lat": d['lat'],
+                "lon": d['lon']
+            } for d in dispensaries
+        ],
+        "deals": sorted(deals, key=lambda x: x['price_per_g'])[:5]
+    }

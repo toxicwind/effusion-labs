@@ -111,6 +111,20 @@ app.include_router(popmart_router, prefix="/api")
 app.include_router(resume_router, prefix="/api")
 app.include_router(pipeline_router, prefix="/api")
 
+@app.get("/api/health")
+async def health_check():
+    health = {
+        "status": "healthy",
+        "timestamp": datetime.utcnow().isoformat(),
+        "version": "2.0.0"
+    }
+    # Check for artifact marker
+    marker_path = "/app/artifacts/.artifact_git_sha"
+    if os.path.exists(marker_path):
+        with open(marker_path, "r") as f:
+            health["artifact_git_sha"] = f.read().strip()
+    return health
+
 # Rate Limiting
 from services.nexus.middleware import RateLimitMiddleware
 app.add_middleware(RateLimitMiddleware, limit=100, window=60)

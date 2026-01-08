@@ -114,7 +114,8 @@ services:
       - "8000:8000"
     volumes:
       - ./services:/app/services
-    command: uvicorn orchestrator:app --host 0.0.0.0 --port 8000 --reload
+      - lv_artifacts:/app/artifacts:ro
+    command: uvicorn services.nexus.orchestrator:app --host 0.0.0.0 --port 8000 --reload
     depends_on:
       redis:
         condition: service_healthy
@@ -122,6 +123,8 @@ services:
         condition: service_healthy
       jaeger:
         condition: service_started
+      artifact-sync:
+        condition: service_completed_successfully
     networks:
       - orchestrator_net
 
@@ -145,11 +148,25 @@ services:
     networks:
       - orchestrator_net
 
+  # Artifact Sync (One-shot)
+  artifact-sync:
+    image: alpine:3.18
+    container_name: effusion_artifact_sync
+    volumes:
+      - lv_artifacts:/artifacts
+      - ./services/orchestrator/artifact_sync.sh:/usr/local/bin/artifact_sync.sh:ro
+    environment:
+      GITHUB_TOKEN: ${GITHUB_TOKEN}
+    command: /bin/sh -c "apk add --no-cache curl jq tar zstd && /usr/local/bin/artifact_sync.sh"
+    networks:
+      - orchestrator_net
+
 volumes:
   redis_data:
   postgres_data:
   prometheus_data:
   grafana_data:
+  lv_artifacts:
 
 
 networks:
