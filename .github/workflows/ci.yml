@@ -84,7 +84,7 @@ jobs:
         if: github.ref == 'refs/heads/main'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PORTAINER_WEBHOOK: ${{ secrets.PORTAINER_WEBHOOK }}
+          PORTAINER_WEBHOOK: ${{ secrets.PORTAINER_WEBHOOK_EFFUSION }}
         run: |
           chmod +x tools/generate-artifacts.sh tools/upload-artifacts.sh tools/sync-to-production.sh
           ./tools/sync-to-production.sh
