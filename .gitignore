@@ -1,6 +1,7 @@
 # Eleventy build
 _site/
 .cache/
+.11ty-vite/
 .tools/
 
 # Dependencies
@@ -8,6 +9,13 @@ node_modules/
 package-lock.json
 yarn.lock
 pnpm-lock.yaml
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
 
 # Reports & Analysis
 coverage/
@@ -25,6 +33,7 @@ summary.log
 
 # Environment & Secrets
 .env
+.env.deploy
 .llm-bash-env
 
 # OS / Editor
@@ -32,6 +41,9 @@ summary.log
 Thumbs.db
 .vscode/
 .idea/
+*.swp
+*.swo
+*~
 
 # Misc Temp
 tmp/
