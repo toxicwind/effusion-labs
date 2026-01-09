@@ -1,0 +1,31 @@
+{
+    "vector_ops": {
+        "origin_sha": "6b2f51eb",
+        "complexity": 8,
+        "capabilities": [
+            "vector_store_init",
+            "semantic_search",
+            "embedding_generation"
+        ],
+        "usage_pattern": "VectorOps.search(query, limit=5)"
+    },
+    "cannabis_ops": {
+        "origin_sha": "6b2f51eb",
+        "complexity": 5,
+        "capabilities": [
+            "synthetic_data_generation",
+            "market_analysis"
+        ],
+        "usage_pattern": "CannabisOps.generate_market_data(count=50)"
+    },
+    "dayz_ops": {
+        "origin_sha": "6b2f51eb",
+        "complexity": 12,
+        "capabilities": [
+            "server_management",
+            "player_tracking",
+            "rcon_command"
+        ],
+        "usage_pattern": "DayZOps(api_token).restart_server(server_id)"
+    }
+}

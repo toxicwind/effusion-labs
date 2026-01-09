@@ -14,8 +14,6 @@ coverage/
 .dead-links.json
 .knip-report.*
 .knip-report.json
-.dead-links.json
-.knip-report.json
 .knip-report.md
 .knip-report.codeclimate.json
 *.log

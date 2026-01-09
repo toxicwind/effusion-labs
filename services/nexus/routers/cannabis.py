@@ -290,23 +290,25 @@ async def get_synthetic_data():
     dispensaries = generate_synthetic_dispensaries()
     return [d.dict() for d in dispensaries]
 
-from services.data.cannabis_denver import generate_denver_dispensaries
+from services.nexus.scrapers.weedmaps import WeedmapsScraper
 
 @router.get("/denver")
 async def get_denver_data():
-    """Get Denver-specific dispensary data"""
-    return generate_denver_dispensaries()
+    """Get Denver-specific dispensary data via Scraper"""
+    scraper = WeedmapsScraper()
+    return await scraper.scrape_denver()
 
 @router.get("/")
 async def get_cannabis_summary():
     """Unified cannabis market summary"""
-    dispensaries = generate_denver_dispensaries(count=10)
+    scraper = WeedmapsScraper()
+    dispensaries = await scraper.scrape_denver()
     
     # Extract "deals" (e.g., lowest price per oz)
     deals = []
     for d in dispensaries:
         # Pydantic models have .products, but generate_denver_dispensaries might return dicts
-        # Based on weedmaps.py, it uses generate_denver_dispensaries
+        # Based on weedmaps.py, it uses generate_denver_dispensaries which returns dicts
         products = d.get('products', [])
         if products:
             best_deal = min(products, key=lambda p: p['price_per_g_cents'])
