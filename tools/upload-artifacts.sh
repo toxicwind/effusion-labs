@@ -2,7 +2,8 @@
 set -euo pipefail
 
 # CHRONOS FORGE :: Artifact Uploader
-# Uploads the latest artifact bundle to GitHub Releases
+# Uploads the bundle pointed to by artifacts/LATEST_BUNDLE to GitHub Releases.
+# Tag: artifacts-latest (Floating tag strategy)
 
 LOG_TAG="[artifact-upload]"
 REPO="toxicwind/effusion_labs_final"
@@ -16,36 +17,45 @@ log() {
 cd "$(git rev-parse --show-toplevel)"
 
 if [ ! -f "artifacts/LATEST_BUNDLE" ]; then
-    log "ERROR: No artifact found to upload. Run tools/generate-artifacts.sh first."
+    log "ERROR: artifacts/LATEST_BUNDLE marker not found. Run tools/generate-artifacts.sh first."
     exit 1
 fi
 
 BUNDLE_PATH=$(cat artifacts/LATEST_BUNDLE)
+if [ ! -f "$BUNDLE_PATH" ]; then
+    log "ERROR: Bundle file $BUNDLE_PATH does not exist."
+    exit 1
+fi
+
 BUNDLE_NAME=$(basename "$BUNDLE_PATH")
 
 if [ -z "${GITHUB_TOKEN:-}" ]; then
-    log "ERROR: GITHUB_TOKEN is not set. Cannot upload artifact."
+    log "ERROR: GITHUB_TOKEN is not set."
     exit 1
 fi
 
 if ! command -v gh >/dev/null 2>&1; then
-    log "ERROR: gh CLI not found. Please install it or use the GitHub API directly."
+    log "ERROR: gh CLI not found."
     exit 1
 fi
 
 log "Targeting repository: ${REPO}"
 log "Uploading ${BUNDLE_NAME} to release tag: ${TAG}"
 
-# Ensure release exists (idempotent)
+# Ensure release exists
 if ! gh release view "$TAG" --repo "$REPO" >/dev/null 2>&1; then
     log "Release ${TAG} not found. Creating it..."
-    gh release create "$TAG" --repo "$REPO" --title "Artifacts Bundle" --notes "Latest automated artifact bundles." || true
+    gh release create "$TAG" --repo "$REPO" --title "Artifacts Bundle (Latest)" --notes "Automated artifact bundle." --prerelease || true
 fi
 
-# Upload asset (overwrite if exists)
+# Upload asset (clobber existing)
 log "Uploading asset..."
 gh release upload "$TAG" "$BUNDLE_PATH" --repo "$REPO" --clobber
 
+# Also upload SHA256 if present
+if [ -f "${BUNDLE_PATH}.sha256" ]; then
+    log "Uploading checksum..."
+    gh release upload "$TAG" "${BUNDLE_PATH}.sha256" --repo "$REPO" --clobber
+fi
+
 log "Upload complete: https://github.com/${REPO}/releases/tag/${TAG}"
-echo "$TAG" > artifacts/LATEST_TAG
-echo "$REPO" > artifacts/LATEST_REPO

@@ -1,43 +1,30 @@
 #!/bin/bash
 set -euo pipefail
 
-echo "🚀 Syncing local artifacts to production..."
+# CHRONOS FORGE :: Sync to Production
+# Orchestrator script: Generates artifacts (if missing), uploads them, and triggers Portainer.
 
-# Configuration
-BUNDLE_NAME="lv-bundle-$(date +%Y%m%d).tar.gz"
-TAG="artifacts-$(date +%Y%m%d)"
-BUNDLE_PATH="artifacts/$BUNDLE_NAME"
+echo "🚀 Syncing to Production..."
 
-# Check if bundle exists
-if [ ! -f "$BUNDLE_PATH" ]; then
-  echo "❌ Bundle not found: $BUNDLE_PATH"
-  echo "Run ./tools/generate-artifacts.sh first"
-  exit 1
+# 1. Generate Artifacts if needed
+if [ ! -f "artifacts/LATEST_BUNDLE" ]; then
+    echo "⚙️  Generating artifacts..."
+    ./tools/generate-artifacts.sh
+else
+    echo "ℹ️  Using existing artifacts (run generate-artifacts.sh to refresh)"
 fi
 
-# 1. Create GitHub Release
-echo "📤 Uploading to GitHub Releases..."
-gh release create "$TAG" "$BUNDLE_PATH" \
-  --title "LV Artifacts $(date +%Y-%m-%d)" \
-  --notes "Generated artifacts from local crawl on $(hostname) at $(date)" \
-  --repo toxicwind/effusion_labs_final
+# 2. Upload Artifacts
+echo "u001b[34m📤 Uploading artifacts...\u001b[0m"
+./tools/upload-artifacts.sh
 
-echo "✅ Uploaded to: https://github.com/toxicwind/effusion_labs_final/releases/tag/$TAG"
-
-# 2. Trigger Portainer redeploy (optional)
+# 3. Trigger Portainer
 if [[ -n "${PORTAINER_WEBHOOK:-}" ]]; then
-  echo "🔄 Triggering Portainer redeploy..."
+  echo "u001b[35m🔄 Triggering Portainer redeploy...\u001b[0m"
   curl --fail --retry 3 --retry-delay 2 -X POST "$PORTAINER_WEBHOOK"
   echo "✅ Portainer redeploy triggered"
 else
-  echo "⚠️  PORTAINER_WEBHOOK not set"
-  echo "Set it with: export PORTAINER_WEBHOOK='https://...'"
-  echo "Or manually redeploy via Portainer UI"
+  echo "⚠️  PORTAINER_WEBHOOK not set. Skipping trigger."
 fi
 
-echo "🎉 Sync complete!"
-echo ""
-echo "Next steps:"
-echo "1. Wait for GitHub Actions to rebuild Docker image"
-echo "2. Portainer will pull new image automatically"
-echo "3. Verify deployment at your production URL"
+echo "🎉 Sync flow complete."

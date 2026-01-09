@@ -41,15 +41,13 @@ jobs:
           node-version-file: .nvmrc
           cache: 'npm'
 
-      - name: ♻️ Restore Build Cache
+      - name: ♻️ Restore Generated Data Cache
         uses: actions/cache@v4
         with:
-          path: |
-            .cache
-            node_modules/.vite
-          key: ${{ runner.os }}-build-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('**/*.mjs') }}
+          path: src/content/projects/lv-images/generated
+          key: ${{ runner.os }}-lv-generated-${{ github.run_id }} # Reset per run or use daily key?
           restore-keys: |
-            ${{ runner.os }}-build-${{ hashFiles('**/package-lock.json') }}-
+            ${{ runner.os }}-lv-generated-
 
       - name: 📦 Install dependencies
         run: npm ci --no-audit --no-fund
