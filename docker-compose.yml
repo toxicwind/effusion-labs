@@ -1,14 +1,71 @@
 version: '3.9'
 
 services:
-  effusion-labs:
+  effusion:
+    build:
+      context: .
+      dockerfile: services/Dockerfile.orchestrator # Placeholder if we use same image or separate
     image: ghcr.io/toxicwind/effusion-labs:latest
     container_name: effusion
     restart: unless-stopped
     ports:
-      - "18400:80"
+      - "43000:80"
     volumes:
-      # Bind mount pre-generated artifacts from server filesystem
-      - /opt/effusion-artifacts/lv-images:/usr/share/nginx/html/content/projects/lv-images/generated:ro
+      - ./:/app
+      - /app/node_modules
     environment:
-      - NGINX_ENTRYPOINT_QUIET_LOGS=1
+      - NODE_ENV=production
+
+  orchestrator:
+    build:
+      context: .
+      dockerfile: services/Dockerfile.orchestrator
+    container_name: nexus-orchestrator
+    restart: unless-stopped
+    ports:
+      - "43001:8000"
+    environment:
+      - DATABASE_URL=postgresql://user:pass@postgres:5432/nexus
+      - REDIS_URL=redis://redis:6379/0
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://jaeger:4317
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  redis:
+    image: redis:7-alpine
+    container_name: nexus-redis
+    ports:
+      - "43002:6379"
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: nexus-postgres
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=pass
+      - POSTGRES_DB=nexus
+    volumes:
+      - nexus-data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U user -d nexus" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    container_name: nexus-jaeger
+    ports:
+      - "43003:16686"
+      - "43004:4317"
+
+volumes:
+  nexus-data:

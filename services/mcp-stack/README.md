@@ -1,48 +1,68 @@
-## mcp-stack — SSE Gateway for stdio MCP Servers
+# 📡 MCP-STACK | SSE GATEWAY
+> **ARCHITECTURE: STDIO MULTIPLEXER** | **PROTOCOL: MCP v1.0**
 
-This subproject provides a canonical Server-Sent Events (SSE) gateway that multiplexes multiple
-stdio-based MCP servers behind a single HTTP surface, with discovery, profiles, sidecar resolution,
-and basic observability.
+---
 
-### Transport Surface
+## 🟥 TRANSPORT BREAKDOWN (3X NON-BASELINE)
 
-- `GET /servers` — JSON by default; simple HTML when `Accept: text/html`.
-- `GET /servers/:name/info` — per-server info/state.
-- `GET /servers/:name/sse` — SSE stream; lazy-spawns the stdio server on first connect.
-- `POST /servers/:name/send` — send a JSON line to the stdio server stdin (client→server).
-- `GET /.well-known/mcp-servers.json` — live discovery manifest.
-- `GET /healthz`, `GET /readyz` — observability endpoints.
+### 1. THE SSE BRIDGE [STATUS: ACTIVE]
+The **MCP-STACK** is the canonical gateway for multiplexing multiple stdio-based Model Context Protocol (MCP) servers behind a single HTTP surface. It provides high-fidelity streaming, discovery, and sidecar resolution.
 
-### Included Servers (registry entries)
+*   **PROTOCOL:** Server-Sent Events (SSE) for downstream / HTTP POST for upstream.
+*   **CORE MISSION:** Bridging the gap between isolated stdio processes and remote/agentic HTTP clients.
+*   **SURFACE:** `GET /servers` (Discovery) | `GET /sse` (Stream) | `POST /send` (Command).
 
-filesystem, readweb, screenshot, playwright, curl (with FlareSolverr), searxng. These entries are
-present in the registry; most are disabled by default unless configured. A demo server (`demo`) is
-provided for smoke testing.
+### 2. SERVER REGISTRY Matrix
+| SERVER | MISSION | CAPABILITY |
+| :--- | :--- | :--- |
+| **filesystem** | I/O | Secure local file access and tree mapping. |
+| **readweb**     | SCRAPE | Content extraction with Readability.js. |
+| **playwright** | BROWSE | Full-headed/headless automation. |
+| **curl**       | FETCH | FlareSolverr-backed request routing. |
+| **searxng**    | SEARCH | Aggregated metasearch orchestration. |
 
-### Configuration
+### 3. SIDECAR ORCHESTRATION
+*   **FlareSolverr:** Integrated into the `curl` server to bypass anti-bot challenges.
+*   **SearXNG:** Private search engine backend for autonomous intelligence gathering.
+*   **Discovery:** Live manifest at `/.well-known/mcp-servers.json`.
 
-- `PROFILE`: `dev` (default) or `prod`
-- `PORT_HTTP`: fixed port for HTTP/SSE
-- `PORT_RANGE_START` / `PORT_RANGE_END`: probe for free port in range
-- `SEARXNG_ENGINE_URL`, `FLARESOLVERR_URL`: sidecar resolution
-- `WORKSPACE_ALLOWLIST`: comma-separated patterns passed to servers (future)
-- `MAX_CONCURRENCY`: numeric, per-server soft limit (future)
-- `LOG_LEVEL`: `debug|info|warn|error` (default `info`)
-- `HEALTH_TIMEOUT_MS`: health probe timeout (default `10000`)
+---
 
-### Quick start
+## 🚀 API ENDPOINTS
 
+| ENDPOINT | METHOD | DESCRIPTION |
+| :--- | :--- | :--- |
+| `/servers` | `GET` | JSON discovery manifest (accepts text/html for humans). |
+| `/servers/:name/sse`| `GET` | **Lazy-spawn** SSE stream for designated server. |
+| `/servers/:name/send`| `POST` | Send JSON-RPC payloads to server stdin. |
+| `/healthz` | `GET` | Readiness and liveness probes. |
+
+---
+
+## 🛠️ USAGE & SETUP
+
+### Launch Gateway
 ```bash
-node mcp-stack/gateway/server.mjs
-# or
-PROFILE=dev PORT_HTTP=0 node mcp-stack/gateway/server.mjs
-
-# Visit the printed URL, or e.g.:
-curl -N http://localhost:<port>/servers/demo/sse
+node gateway/server.mjs
+# Env opts: PROFILE=prod PORT_HTTP=3000
 ```
 
-### Tests
-
+### Smoke Test
 ```bash
-node mcp-stack/tests/smoke.mjs
+node tests/smoke.mjs
 ```
+
+### Direct Interrogation
+```bash
+curl -N http://localhost:3000/servers/demo/sse
+```
+
+---
+
+## 🔒 SECURITY GATE
+*   **Profiles:** `dev` (verbose/permissive) vs `prod` (restricted).
+*   **Observability:** Integrated health checks and JSON-line logging.
+*   **Future:** Workspace-level allowlists and per-server concurrency limits.
+
+---
+*Unified MCP Framework | Managed by Chronos-Forge.*

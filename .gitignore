@@ -47,6 +47,18 @@ Thumbs.db
 
 # Misc Temp
 tmp/
+artifacts/
+invocations/
+out.json
+lib_content.json
+broken_files.json
+intelligent_lskindv2.sh
+
+# HYPEBRUT sidecars
+.hb-logs/
+
+# Platform
+.netlify/
 out.json
 lib_content.json
 broken_files.json
