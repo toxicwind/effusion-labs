@@ -139,7 +139,7 @@
     "ora": "9.0.0",
     "p-limit": "^7.2.0",
     "p-queue": "8.1.1",
-    "p-retry": "7.0.0",
+    "p-retry": "7.1.1",
     "picocolors": "1.1.1",
     "playwright-extra": "4.3.6",
     "postcss": "^8.5.6",
