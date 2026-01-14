@@ -123,7 +123,7 @@
     "lint-staged": "^16.2.1",
     "lucide": "0.544.0",
     "luxon": "3.7.2",
-    "magic-string": "0.30.19",
+    "magic-string": "0.30.21",
     "markdown-it": "14.1.0",
     "markdown-it-anchor": "9.2.0",
     "markdown-it-attrs": "4.3.1",
