@@ -3,7 +3,7 @@ import asyncio
 import logging
 import os
 from redis.asyncio import Redis
-from services.nexus.circuit import CircuitBreaker, CircuitBreakerOpen
+from services.mildlyawesome.circuit import CircuitBreaker, CircuitBreakerOpen
 
 # Setup logging
 logging.basicConfig(level=logging.INFO)

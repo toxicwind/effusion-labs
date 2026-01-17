@@ -144,6 +144,9 @@ export default function (eleventyConfig) {
 
   eleventyConfig.setServerPassthroughCopyBehavior('copy')
   eleventyConfig.addPassthroughCopy('public')
+  // EXPLICIT ASSET PIPELINE FOR LIQUID GLASS AESTHETIC
+  eleventyConfig.addPassthroughCopy('src/assets')
+
   eleventyConfig.ignores.add('src/content/docs/**')
   // Quarantining content causing Vite EISDIR errors
   eleventyConfig.ignores.add('src/content/meta/**')
@@ -154,50 +157,50 @@ export default function (eleventyConfig) {
   eleventyConfig.addPlugin(EleventyPluginNavigation)
   eleventyConfig.addPlugin(EleventyPluginRss)
   eleventyConfig.addPlugin(EleventyPluginSyntaxhighlight)
-  // eleventyConfig.addPlugin(EleventyVitePlugin, {
-  //   tempFolderName: '.11ty-vite', // Default name of the temp folder
 
-  //   // Vite options (equal to vite.config.js inside project root)
-  //   viteOptions: {
-  //     publicDir: 'public',
-  //     clearScreen: false,
-  //     plugins: [tailwindcss()],
-  //     server: {
-  //       mode: 'development',
-  //       middlewareMode: true,
-  //       host: viteDevHost,
-  //       hmr: {
-  //         host: viteDevHost,
-  //         ...(Number.isNaN(viteHmrPort) ? {} : { port: viteHmrPort }),
-  //       },
-  //       fs: {
-  //         allow: [projectRoot, srcDir],
-  //       },
-  //     },
-  //     appType: 'custom',
-  //     assetsInclude: ['**/*.xml', '**/*.txt'],
-  //     resolve: {
-  //       alias: {
-  //         '@': srcDir,
-  //         '/src': srcDir,
-  //         '/assets': path.join(srcDir, 'assets'),
-  //       },
-  //     },
-  //     build: {
-  //       mode: 'production',
-  //       sourcemap: 'true',
-  //       manifest: true,
-  //       // This puts CSS and JS in subfolders – remove if you want all of it to be in /assets instead
-  //       rollupOptions: {
-  //         output: {
-  //           assetFileNames: 'assets/[name].[hash][extname]',
-  //           chunkFileNames: 'assets/[name].[hash].js',
-  //           entryFileNames: 'assets/[name].[hash].js',
-  //         },
-  //       },
-  //     },
-  //   },
-  // })
+  // CUTTING EDGE 2026: Vite + Tailwind 4 (Optimized Layer)
+  eleventyConfig.addPlugin(EleventyVitePlugin, {
+    tempFolderName: '.11ty-vite',
+    viteOptions: {
+      publicDir: 'public',
+      clearScreen: false,
+      plugins: [tailwindcss()],
+      server: {
+        mode: 'development',
+        middlewareMode: true,
+        host: viteDevHost,
+        hmr: { host: viteDevHost, port: viteHmrPort },
+        fs: {
+          strict: true,
+          allow: [projectRoot],
+        },
+      },
+      appType: 'custom',
+      assetsInclude: ['**/*.xml', '**/*.txt', '**/*.svg', '**/*.png', '**/*.jpg', '**/*.jpeg', '**/*.webp'],
+      resolve: {
+        alias: {
+          '@': srcDir,
+          '/src': srcDir,
+          '/assets': path.join(srcDir, 'assets'),
+        },
+      },
+
+      build: {
+        mode: 'production',
+        manifest: true,
+        rollupOptions: {
+          input: path.resolve(srcDir, 'assets/js/app.js'),
+          output: {
+            assetFileNames: 'assets/[name].[hash][extname]',
+            chunkFileNames: 'assets/[name].[hash].js',
+            entryFileNames: 'assets/[name].[hash].js',
+          },
+        },
+      },
+    },
+  })
+
+
 
   eleventyConfig.addPlugin(interlinker, {
     defaultLayout: 'embed.njk',

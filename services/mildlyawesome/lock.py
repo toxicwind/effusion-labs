@@ -3,7 +3,7 @@ from redis.asyncio import Redis
 from contextlib import asynccontextmanager
 import logging
 
-logger = logging.getLogger("nexus.lock")
+logger = logging.getLogger("mildlyawesome.lock")
 
 @asynccontextmanager
 async def distributed_lock(redis: Redis, name: str, timeout: int = 10, blocking_timeout: int = 2):

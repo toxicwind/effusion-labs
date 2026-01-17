@@ -23,7 +23,7 @@ from datetime import datetime
 from enum import Enum
 import os
 import logging
-from services.nexus.worker import BackgroundWorker
+from services.mildlyawesome.worker import BackgroundWorker
 
 logger = logging.getLogger("orchestrator")
 logging.basicConfig(level=logging.INFO)
@@ -55,7 +55,7 @@ trace.set_tracer_provider(trace_provider)
 tracer = trace.get_tracer(__name__)
 
 from contextlib import asynccontextmanager
-from services.nexus.events import event_bus
+from services.mildlyawesome.events import event_bus
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -63,7 +63,7 @@ async def lifespan(app: FastAPI):
     logger.info("Orchestrator Service Initialized")
     
     # Initialize DB
-    from services.nexus.db import init_db
+    from services.mildlyawesome.db import init_db
     await init_db()
 
     # Connect Event Bus and Redis
@@ -101,10 +101,10 @@ app = FastAPI(
 )
 
 # Import and mount sub-services
-from services.nexus.routers.cannabis import router as cannabis_router
-from services.nexus.routers.popmart import router as popmart_router
-from services.nexus.routers.resume import router as resume_router
-from services.nexus.routers.pipeline_router import router as pipeline_router
+from services.mildlyawesome.routers.cannabis import router as cannabis_router
+from services.mildlyawesome.routers.popmart import router as popmart_router
+from services.mildlyawesome.routers.resume import router as resume_router
+from services.mildlyawesome.routers.pipeline_router import router as pipeline_router
 
 app.include_router(cannabis_router, prefix="/api")
 app.include_router(popmart_router, prefix="/api")
@@ -126,21 +126,21 @@ async def health_check():
     return health
 
 # Rate Limiting
-from services.nexus.middleware import RateLimitMiddleware
+from services.mildlyawesome.middleware import RateLimitMiddleware
 app.add_middleware(RateLimitMiddleware, limit=100, window=60)
 
 # Telemetry
-from services.nexus.telemetry import setup_telemetry
+from services.mildlyawesome.telemetry import setup_telemetry
 setup_telemetry(app)
 
 # Brain Interface
-from services.nexus.brain import brain, Thought
+from services.mildlyawesome.brain import brain, Thought
 from typing import List
 
 @app.get("/api/brain/recall", response_model=List[Thought])
 async def brain_recall(query: str):
     """
-    Direct interface to the Nexus Brain.
+    Direct interface to the MildlyAwesome Brain.
     """
     return await brain.recall(query)
 

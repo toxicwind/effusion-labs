@@ -1,7 +1,7 @@
 
 import asyncio
 import logging
-from services.nexus.brain import brain
+from services.mildlyawesome.brain import brain
 
 # Setup concise logging
 logging.basicConfig(level=logging.WARNING)
@@ -10,7 +10,7 @@ async def main():
     print("🧠 Testing Brain Service (Semantic Recall)...")
     try:
         # recall uses dummy embedding, so it relies on existing vectors in DB
-        thoughts = await brain.recall("verify nexus", limit=3)
+        thoughts = await brain.recall("verify mildlyawesome", limit=3)
         print(f"✅ Recall executed successfully. Retrieved {len(thoughts)} thoughts.")
         
         if thoughts:

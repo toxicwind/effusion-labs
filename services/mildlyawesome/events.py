@@ -7,7 +7,7 @@ from typing import Dict, Any, Optional, List, Callable
 import asyncio
 from redis import asyncio as aioredis
 from redis.asyncio import Redis
-from services.nexus.config import settings
+from services.mildlyawesome.config import settings
 
 logger = logging.getLogger("event_bus")
 

@@ -2,7 +2,7 @@
 import asyncio
 import logging
 import os
-from services.nexus.orchestrator import lifespan
+from services.mildlyawesome.orchestrator import lifespan
 from fastapi import FastAPI
 
 # Configure logging to show up in stdout

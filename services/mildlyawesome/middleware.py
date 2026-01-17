@@ -4,9 +4,9 @@ import logging
 from typing import Callable
 from fastapi import Request, Response
 from starlette.middleware.base import BaseHTTPMiddleware
-from services.nexus.events import event_bus
+from services.mildlyawesome.events import event_bus
 
-logger = logging.getLogger("nexus.middleware")
+logger = logging.getLogger("mildlyawesome.middleware")
 
 class RateLimitMiddleware(BaseHTTPMiddleware):
     def __init__(self, app, limit: int = 100, window: int = 60):

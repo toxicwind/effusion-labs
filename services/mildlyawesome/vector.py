@@ -4,7 +4,7 @@ from sqlmodel import SQLModel, Field, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from pgvector.sqlalchemy import Vector
 from sqlalchemy import Column
-from services.nexus.db import engine
+from services.mildlyawesome.db import engine
 import logging
 
 logger = logging.getLogger("vector_store")

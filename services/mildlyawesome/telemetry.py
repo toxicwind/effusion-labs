@@ -5,10 +5,10 @@ from opentelemetry.sdk.trace.export import BatchSpanProcessor, ConsoleSpanExport
 from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
 from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
 from opentelemetry.sdk.resources import Resource
-from services.nexus.config import settings
+from services.mildlyawesome.config import settings
 import logging
 
-logger = logging.getLogger("nexus.telemetry")
+logger = logging.getLogger("mildlyawesome.telemetry")
 
 def setup_telemetry(app):
     """

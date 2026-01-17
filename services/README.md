@@ -5,8 +5,8 @@
 
 ## 🟥 SERVICES BREAKDOWN (3X NON-BASELINE)
 
-### 1. THE API NEXUS [STATUS: ONLINE]
-All data flows through a unified **Orchestrator** nexus. This Backend-for-Frontend (BFF) pattern decouples the UX from complex sidecar services and protocol-specific bridges.
+### 1. THE API MILDLYAWESOME [STATUS: ONLINE]
+All data flows through a unified **Orchestrator** mildlyawesome. This Backend-for-Frontend (BFF) pattern decouples the UX from complex sidecar services and protocol-specific bridges.
 
 *   **ORCHESTRATOR:** `orchestrator.py` (FastAPI @ Port 8000)
 *   **PROTOCOL:** HTTP / WebSockets / SSE

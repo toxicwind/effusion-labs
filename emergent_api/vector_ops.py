@@ -1,15 +1,15 @@
 import logging
 import asyncio
 from typing import List, Dict, Any, Optional
-from services.nexus.vector import VectorStore, DocumentChunk
-from services.nexus.db import init_db
+from services.mildlyawesome.vector import VectorStore, DocumentChunk
+from services.mildlyawesome.db import init_db
 
 logger = logging.getLogger("emergent_api.vector_ops")
 
 class VectorOps:
     """
     Exhumed Vector Operations Logic
-    Origin: check_vector.py, services/nexus/vector.py
+    Origin: check_vector.py, services/mildlyawesome/vector.py
     """
     
     def __init__(self):

@@ -79,7 +79,7 @@
 │   │   ├── test
 │   │   ├── tests
 │   │   └── README.md
-│   ├── nexus
+│   ├── mildlyawesome
 │   │   ├── routers
 │   │   ├── scrapers
 │   │   ├── brain.py
@@ -565,7 +565,7 @@
 │   │   ├── components
 │   │   ├── layouts
 │   │   └── macros
-│   ├── nexus
+│   ├── mildlyawesome
 │   ├── pages
 │   │   ├── cannabis
 │   │   ├── consulting

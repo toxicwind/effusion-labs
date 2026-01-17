@@ -78,7 +78,6 @@ not ok 1 - deploy workflow does not trigger on pull_request
             env:
               IMAGE_ID: ghcr.io/${{ github.actor }}/effusion-labs:latest
             run: |
-              docker buildx build --cache-to type=inline --cache-from type=registry,ref=$IMAGE_ID -t "$IMAGE_ID" -f .portainer/Dockerfile . --push
     
           - name: Build and push markdown_gateway
             env:

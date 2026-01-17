@@ -1,5 +1,5 @@
 
-from services.nexus.events import EventBus, event_bus
+from services.mildlyawesome.events import EventBus, event_bus
 
 # Export EventBus for easier imports
 __all__ = ["EventBus", "event_bus"]

@@ -73,7 +73,6 @@ not ok 1 - GitHub workflows use latest action versions
       '        env:\n' +
       '          IMAGE_ID: ghcr.io/${{ github.actor }}/effusion-labs:latest\n' +
       '        run: |\n' +
-      '          docker buildx build --cache-to type=inline --cache-from type=registry,ref=$IMAGE_ID -t "$IMAGE_ID" -f .portainer/Dockerfile . --push\n' +
       '\n' +
       '      - name: Build and push markdown_gateway\n' +
       '        env:\n' +
@@ -170,7 +169,6 @@ not ok 1 - GitHub workflows use latest action versions
             env:
               IMAGE_ID: ghcr.io/${{ github.actor }}/effusion-labs:latest
             run: |
-              docker buildx build --cache-to type=inline --cache-from type=registry,ref=$IMAGE_ID -t "$IMAGE_ID" -f .portainer/Dockerfile . --push
     
           - name: Build and push markdown_gateway
             env:

@@ -45,22 +45,22 @@ elif role=="SURGEON":
     write("A","SURGEON/A\nMutation Cluster: Explode ghost surface → sidecars + explicit contracts + tests. Goal: turn entropy into typed boundaries.")
     write("B","SURGEON/B\nMutation Cluster: Parallelize repo brain → repo-local taskgraph + tmux panes per task. Goal: emergence by concurrency.")
     write("C","SURGEON/C\nMutation Cluster: Router-first refactor → add routing layer that selects handlers by pattern. Goal: explicit expert routing in code.")
-elif role=="NEXUS":
-    # Emergent Recovery: Call nexus_audit with auto-discovery
-    subprocess.run(["bash","-lc", f'python3 "{chronos_base}/nexus_audit.py" --repo "{root}" --vectors "DISCORD_TOKEN|Credits" "ezstreet|Legacy" --stage "/tmp/nexus_stage" >/dev/null 2>&1 || true'], cwd=root)
-    stage=pathlib.Path("/tmp/nexus_stage")
+elif role=="MILDLYAWESOME":
+    # Emergent Recovery: Call mildlyawesome_audit with auto-discovery
+    subprocess.run(["bash","-lc", f'python3 "{chronos_base}/mildlyawesome_audit.py" --repo "{root}" --vectors "DISCORD_TOKEN|Credits" "ezstreet|Legacy" --stage "/tmp/mildlyawesome_stage" >/dev/null 2>&1 || true'], cwd=root)
+    stage=pathlib.Path("/tmp/mildlyawesome_stage")
     discoveries=[]
     if stage.exists():
         for p in stage.glob("**/*"):
             if p.is_file(): discoveries.append(str(p.relative_to(stage)))
-    write("A","NEXUS/A\nDeep Recovery Vectors: " + ", ".join(discoveries[:10]))
-    write("B","NEXUS/B\nPotential " + str(len(discoveries)) + " lost segments exhumed to /tmp/nexus_stage.")
-    write("C","NEXUS/C\nStrategy: Cross-reference recovered blobs with current entropy map to reconstruct lost interfaces.")
+    write("A","MILDLYAWESOME/A\nDeep Recovery Vectors: " + ", ".join(discoveries[:10]))
+    write("B","MILDLYAWESOME/B\nPotential " + str(len(discoveries)) + " lost segments exhumed to /tmp/mildlyawesome_stage.")
+    write("C","MILDLYAWESOME/C\nStrategy: Cross-reference recovered blobs with current entropy map to reconstruct lost interfaces.")
 elif role=="SYNTH":
     build_rc = subprocess.run(["bash","-lc", "npm run build -- --help >/dev/null 2>&1 && npm run build >/dev/null 2>&1 || exit 0"], cwd=root).returncode
     write("A",f"SYNTH/A\nBuild Integrity: {'PASSED' if build_rc==0 else 'FAILED'}")
     write("B","SYNTH/B\nRouter scoring: concreteness + buildability + entropy. SURGEON takes priority on build failure.")
-    write("C","SYNTH/C\nAggregation policy: favor NEXUS when ENTROPY > 5.0.")
+    write("C","SYNTH/C\nAggregation policy: favor MILDLYAWESOME when ENTROPY > 5.0.")
 else:
     write("A",f"{role}/A\nnoop"); write("B",f"{role}/B\nnoop"); write("C",f"{role}/C\nnoop")
 print("DONE", role, cycle)

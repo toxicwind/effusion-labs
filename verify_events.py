@@ -1,7 +1,7 @@
 
 import asyncio
 import logging
-from services.nexus.events import event_bus
+from services.mildlyawesome.events import event_bus
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("verify_events")
@@ -14,7 +14,7 @@ async def verify():
     
     stream_key = "test:stream"
     event_type = "VERIFY_EVENT"
-    payload = {"message": "Hello Nexus"}
+    payload = {"message": "Hello MildlyAwesome"}
     
     try:
         # Correct Signature: stream, event_type, payload, source

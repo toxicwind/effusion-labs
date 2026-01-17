@@ -1,11 +1,11 @@
 
 from typing import List, Optional
 from pydantic import BaseModel
-from services.nexus.vector import VectorStore
-# from services.nexus.db import engine # Not directly used here yet
+from services.mildlyawesome.vector import VectorStore
+# from services.mildlyawesome.db import engine # Not directly used here yet
 import logging
 
-logger = logging.getLogger("nexus.brain")
+logger = logging.getLogger("mildlyawesome.brain")
 
 class Thought(BaseModel):
     context: str

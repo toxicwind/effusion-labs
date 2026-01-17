@@ -49,9 +49,9 @@ Deno
 
 See example setup of daisyUI and Tailwind CSS on different frameworks and build tools.
 
-![daisyUI store](https://img.daisyui.com/images/store/nexus.webp)
+![daisyUI store](https://img.daisyui.com/images/store/mildlyawesome.webp)
 
-NEXUS\
+MILDLYAWESOME\
 Official daisyUI Dashboard Template
 
 ---

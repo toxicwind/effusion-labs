@@ -2,7 +2,7 @@
 import asyncio
 import logging
 from redis.asyncio import Redis
-from services.nexus.lock import distributed_lock
+from services.mildlyawesome.lock import distributed_lock
 import os
 
 logging.basicConfig(level=logging.INFO)

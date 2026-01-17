@@ -24,4 +24,4 @@
 ?? _REPO_MAP.txt
 ?? _SIGNATURES.txt
 ?? infra/
-?? services/nexus/
+?? services/mildlyawesome/

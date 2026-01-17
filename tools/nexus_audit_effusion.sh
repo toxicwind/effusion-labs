@@ -1,7 +1,7 @@
 #!/bin/bash
-# FLUIDPRISM OP: NEXUS_AUDIT_V5 (Effusion Labs Edition)
+# FLUIDPRISM OP: MILDLYAWESOME_AUDIT_V5 (Effusion Labs Edition)
 # Purpose: Deep recovery scan for effusion_labs_final repo
-# Usage: chmod +x nexus_audit_effusion.sh && ./nexus_audit_effusion.sh
+# Usage: chmod +x mildlyawesome_audit_effusion.sh && ./mildlyawesome_audit_effusion.sh
 
 REPO_ROOT="/home/toxic/development/effusion_labs_final"
 
@@ -14,7 +14,7 @@ MAGENTA='\033[0;35m'
 GREY='\033[0;90m'
 NC='\033[0m'
 
-echo -e "${BLUE}>>> 🛑 NEXUS AUDIT: EFFUSION LABS FINAL${NC}"
+echo -e "${BLUE}>>> 🛑 MILDLYAWESOME AUDIT: EFFUSION LABS FINAL${NC}"
 echo ">>> TARGET: $REPO_ROOT"
 
 if [ ! -d "$REPO_ROOT" ]; then

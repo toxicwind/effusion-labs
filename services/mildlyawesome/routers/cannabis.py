@@ -290,7 +290,7 @@ async def get_synthetic_data():
     dispensaries = generate_synthetic_dispensaries()
     return [d.dict() for d in dispensaries]
 
-from services.nexus.scrapers.weedmaps import WeedmapsScraper
+from services.mildlyawesome.scrapers.weedmaps import WeedmapsScraper
 
 @router.get("/denver")
 async def get_denver_data():

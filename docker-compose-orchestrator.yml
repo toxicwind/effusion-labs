@@ -115,7 +115,7 @@ services:
     volumes:
       - ./services:/app/services
       - lv_artifacts:/app/artifacts:ro
-    command: uvicorn services.nexus.orchestrator:app --host 0.0.0.0 --port 8000 --reload
+    command: uvicorn services.mildlyawesome.orchestrator:app --host 0.0.0.0 --port 8000 --reload
     depends_on:
       redis:
         condition: service_healthy

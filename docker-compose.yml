@@ -20,12 +20,12 @@ services:
     build:
       context: .
       dockerfile: services/Dockerfile.orchestrator
-    container_name: nexus-orchestrator
+    container_name: mildlyawesome-orchestrator
     restart: unless-stopped
     ports:
       - "43001:8000"
     environment:
-      - DATABASE_URL=postgresql://user:pass@postgres:5432/nexus
+      - DATABASE_URL=postgresql://user:pass@postgres:5432/mildlyawesome
       - REDIS_URL=redis://redis:6379/0
       - OTEL_EXPORTER_OTLP_ENDPOINT=http://jaeger:4317
     depends_on:
@@ -36,7 +36,7 @@ services:
 
   redis:
     image: redis:7-alpine
-    container_name: nexus-redis
+    container_name: mildlyawesome-redis
     ports:
       - "43002:6379"
     healthcheck:
@@ -47,25 +47,25 @@ services:
 
   postgres:
     image: postgres:16-alpine
-    container_name: nexus-postgres
+    container_name: mildlyawesome-postgres
     environment:
       - POSTGRES_USER=user
       - POSTGRES_PASSWORD=pass
-      - POSTGRES_DB=nexus
+      - POSTGRES_DB=mildlyawesome
     volumes:
-      - nexus-data:/var/lib/postgresql/data
+      - mildlyawesome-data:/var/lib/postgresql/data
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U user -d nexus" ]
+      test: [ "CMD-SHELL", "pg_isready -U user -d mildlyawesome" ]
       interval: 10s
       timeout: 5s
       retries: 5
 
   jaeger:
     image: jaegertracing/all-in-one:latest
-    container_name: nexus-jaeger
+    container_name: mildlyawesome-jaeger
     ports:
       - "43003:16686"
       - "43004:4317"
 
 volumes:
-  nexus-data:
+  mildlyawesome-data:

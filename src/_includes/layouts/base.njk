@@ -54,8 +54,15 @@
     {# ---------------- Favicons ---------------- #}
     <link rel="icon" type="image/svg+xml" href="{{ '/favicon.svg' | url }}">
     <link rel="manifest" href="{{ '/site.webmanifest' | url }}">
+    <link rel="stylesheet" href="/assets/css/liquid-glass.css">
+    {% block head %}{% endblock %}
   </head>
-  <body class="hb-blobs hb-vignette hb-noise">
+  <body class="antialiased text-slate-400 bg-slate-900">
+    <div id="hud-layer">
+        <div class="hud-scanner"></div>
+        <div class="hud-status">SYS.OP: NORMAL<br>LOC: EFFUSION_LABS</div>
+    </div>
+    {% include "partials/navigation.njk" %}
     <a href="#main" class="skiplink">Skip to content</a>
 
     {{ header(nav, page, branding) }}
@@ -109,15 +116,6 @@
     <script>
       window.addEventListener('load', () => {
         quicklink.listen();
-        
-        if ('serviceWorker' in navigator) {
-          navigator.serviceWorker.register('/service-worker.js')
-            .then(reg => console.log('SW registered!', reg.scope))
-            .catch(err => console.log('SW failed:', err));
-        }
-      window.addEventListener('load', () => {
-        quicklink.listen();
-        
         if ('serviceWorker' in navigator) {
           navigator.serviceWorker.register('/service-worker.js')
             .then(reg => console.log('SW registered!', reg.scope))
@@ -125,6 +123,7 @@
         }
       });
     </script>
+
     
     <!-- Three.js & Hero Scene -->
     <div id="hero-background" class="fixed inset-0 z-0 pointer-events-none"></div>
@@ -135,5 +134,6 @@
   
   <!-- React Fiber Overlay -->
   {# <script type="module" src="/src/assets/js/canvas-overlay.jsx"></script> #}
+    <script type="module" src="/assets/js/hud.js"></script>
   </body>
 </html>

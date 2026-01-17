@@ -4,7 +4,7 @@ from redis.asyncio import Redis
 from typing import Callable, Any
 from functools import wraps
 
-logger = logging.getLogger("nexus.circuit")
+logger = logging.getLogger("mildlyawesome.circuit")
 
 class CircuitBreakerOpen(Exception):
     pass
