@@ -136,7 +136,7 @@
     "nodemon": "3.1.11",
     "npm-registry-fetch": "19.0.0",
     "nunjucks": "3.2.4",
-    "ora": "9.0.0",
+    "ora": "9.1.0",
     "p-limit": "^7.2.0",
     "p-queue": "8.1.1",
     "p-retry": "7.1.1",
