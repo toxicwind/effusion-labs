@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /* src/styles/app.tailwind.css */
 @config "../../tailwind.config.mjs";
 @import "./tokens.css";
@@ -30,10 +31,26 @@
   .heading-anchor { @apply mr-2 no-underline text-gray-400; }
 
   pre.shiki,
+=======
+@config "../../tailwind.config.cjs";
+@import "./tokens.css";
+@import "tailwindcss";
+@plugin "daisyui";
+@plugin "@tailwindcss/typography";
+@import "prismjs/themes/prism-tomorrow.css";
+@import "./home.css";
+
+@layer base {
+  h1 { @apply font-heading text-[clamp(2rem,4vw+1rem,3rem)]; }
+  h2 { @apply font-heading text-[clamp(1.5rem,3vw+0.75rem,2.25rem)]; }
+
+  pre[class*="language-"],
+>>>>>>> broken/codex/add-dark-mode-as-default-with-light-mode-option
   :not(pre) > code {
     background-color: rgb(var(--color-code-bg));
     color: rgb(var(--color-code-text));
   }
+<<<<<<< HEAD
 
   .shiki { counter-reset: line; }
   .shiki .line { display: block; }
@@ -53,12 +70,18 @@
   html[data-theme='dark'] .shiki span {
     color: var(--shiki-dark);
   }
+=======
+>>>>>>> broken/codex/add-dark-mode-as-default-with-light-mode-option
 }
 
 @layer components {
   .skip-link { @apply sr-only focus:not-sr-only fixed top-2 left-2 z-50 rounded bg-primary text-text px-4 py-2; }
 }
 
+<<<<<<< HEAD
+=======
+/* ——— Small utility cluster (unchanged names) ——— */
+>>>>>>> broken/codex/add-dark-mode-as-default-with-light-mode-option
 @layer components {
   .spec-note-soft     { @apply italic text-gray-500 border-b border-dotted border-gray-300 cursor-help; }
   .spec-note-subtle   { @apply text-gray-400 border-b border-dashed border-gray-300 cursor-help; }
@@ -69,6 +92,10 @@
   .rotate-90 { @apply transform rotate-90 origin-top-left block; } .mirror-x { @apply transform -scale-x-100 block; }
   .flicker { @apply animate-pulse; } .audio-embed { @apply my-4 block; } .qr-code { @apply my-4 block w-32 h-32; }
 
+<<<<<<< HEAD
+=======
+  /* color signifiers retained */
+>>>>>>> broken/codex/add-dark-mode-as-default-with-light-mode-option
   .slate{ @apply text-slate-500;} .gray{ @apply text-gray-500;} .zinc{ @apply text-zinc-500;} .neutral{ @apply text-neutral-500;}
   .stone{ @apply text-stone-500;} .red{ @apply text-red-500;} .orange{ @apply text-orange-500;} .amber{ @apply text-amber-500;}
   .yellow{ @apply text-yellow-500;} .lime{ @apply text-lime-500;} .green{ @apply text-green-500;} .emerald{ @apply text-emerald-500;}
@@ -77,7 +104,11 @@
   .pink{ @apply text-pink-500;} .rose{ @apply text-rose-500;} .blackout{ @apply text-black bg-black; }
 }
 
+<<<<<<< HEAD
 /* Inline footnote popover (theme-aware) */
+=======
+/* ——— Inline footnote popover (theme-aware) ——— */
+>>>>>>> broken/codex/add-dark-mode-as-default-with-light-mode-option
 @layer components {
   .annotation-ref { @apply relative inline-block; }
   .annotation-anchor {
@@ -89,8 +120,12 @@
 
   .annotation-popup {
     @apply absolute -translate-x-1/2 left-1/2 top-7 z-50 max-w-sm rounded-xl p-4 text-sm leading-relaxed
+<<<<<<< HEAD
            border shadow-xl opacity-0 pointer-events-none transition-all duration-200 ease-in-out translate-y-1
            text-left overflow-y-auto max-h-72 block;
+=======
+           border shadow-xl opacity-0 pointer-events-none transition-all duration-200 ease-in-out translate-y-1;
+>>>>>>> broken/codex/add-dark-mode-as-default-with-light-mode-option
     background-color: hsl(var(--b1)/.95);
     backdrop-filter: blur(6px);
     border-color: hsl(var(--bc)/.12);
@@ -120,11 +155,19 @@
   }
 
   @media (max-width:640px){
+<<<<<<< HEAD
     .annotation-popup { @apply fixed inset-x-4 bottom-4 mx-auto translate-x-0 transform-none max-w-[90vw] max-h-[70vh]; }
   }
 }
 
 /* Targeting / scroll affordances */
+=======
+    .annotation-popup { @apply fixed inset-x-4 bottom-4 mx-auto translate-x-0 transform-none max-w-[90vw]; }
+  }
+}
+
+/* ——— Targeting / scroll affordances (works with sticky headers) ——— */
+>>>>>>> broken/codex/add-dark-mode-as-default-with-light-mode-option
 @layer components {
   :root { --header-height: 5rem; }
   [id^="fn"],[id^="fnref"],.footnote-item,.annotation-anchor,.footnote-local,.footnote-enhanced,.footnote-ref{
@@ -132,6 +175,7 @@
   }
   html{ scroll-behavior: smooth; }
 
+<<<<<<< HEAD
   .footnote-highlight{
     background-color: hsl(var(--p)/.15);
     border-radius: .375rem;
@@ -144,6 +188,11 @@
   [id^="fn"]:target,[id^="fnref"]:target{
     border-radius:.375rem;
     box-shadow: 0 0 0 2px hsl(var(--in)/.45);
+=======
+  [id^="fn"]:target,[id^="fnref"]:target{
+    border-radius:.375rem;
+    box-shadow: 0 0 0 2px hsl(var(--in)/.45); /* info color ring */
+>>>>>>> broken/codex/add-dark-mode-as-default-with-light-mode-option
     animation: footnote-highlight 2.2s ease-in-out;
   }
   @keyframes footnote-highlight{
@@ -164,7 +213,11 @@
   }
 }
 
+<<<<<<< HEAD
 /* Footnote card */
+=======
+/* ——— Footnote card (daisyUI theme + Typography tolerance + Prism-safe) ——— */
+>>>>>>> broken/codex/add-dark-mode-as-default-with-light-mode-option
 @layer components {
   .footnote-aside{
     @apply block w-full my-6 rounded-lg border p-4 text-[0.95rem] leading-relaxed;
@@ -183,6 +236,10 @@
   }
   .footnote-aside .footnote-backref:hover{ color: hsl(var(--bc)); }
 
+<<<<<<< HEAD
+=======
+  /* Explanation: full-width, calm rhythm */
+>>>>>>> broken/codex/add-dark-mode-as-default-with-light-mode-option
   .footnote-aside .footnote-explanation{
     @apply block w-full clear-both mt-2 pl-4;
     border-left: 1px solid hsl(var(--bc)/.18);
@@ -203,17 +260,29 @@
     color: hsl(var(--bc)/.7);
   }
 
+<<<<<<< HEAD
+=======
+  /* If someone forgets `not-prose`, still resist Typography defaults */
+>>>>>>> broken/codex/add-dark-mode-as-default-with-light-mode-option
   .prose .footnote-aside .footnote-explanation{
     margin-top: .5rem;
     padding-left: 1rem;
     border-left: 1px solid hsl(var(--bc)/.18);
     color: hsl(var(--bc)/.9);
+<<<<<<< HEAD
     font-style: normal;
+=======
+    font-style: normal; /* prevent forced italics */
+>>>>>>> broken/codex/add-dark-mode-as-default-with-light-mode-option
     background: transparent;
   }
 }
 
+<<<<<<< HEAD
 /* Optional compact variant */
+=======
+/* ——— Optional compact variant (keeps your existing name) ——— */
+>>>>>>> broken/codex/add-dark-mode-as-default-with-light-mode-option
 @layer components {
   .footnote-aside--compact{ @apply border-0 bg-transparent p-0 my-6; }
   .footnote-aside--compact .footnote-local{ @apply mb-2 bg-transparent px-0 py-0; }
@@ -223,7 +292,11 @@
   }
 }
 
+<<<<<<< HEAD
 /* Standard footnote list */
+=======
+/* ——— Standard footnote list (hybrid compat) ——— */
+>>>>>>> broken/codex/add-dark-mode-as-default-with-light-mode-option
 @layer components {
   .footnotes-hybrid{ @apply mt-8 pt-6 border-t; border-color: hsl(var(--bc)/.14); }
   .footnote-enhanced{ @apply mb-3 text-sm leading-relaxed; color: hsl(var(--bc)); }
@@ -234,12 +307,21 @@
   .footnote-ref a:hover{ color: hsl(var(--pf)); }
 }
 
+<<<<<<< HEAD
 /* Prism interop */
 @layer components {
   .footnote-aside pre.shiki,
   .annotation-popup pre.shiki{
     @apply rounded-md p-3 overflow-x-auto text-xs leading-6;
     background-color: hsl(var(--b2));
+=======
+/* ——— Prism interop (code readability inside footnotes/popup) ——— */
+@layer components {
+  .footnote-aside pre[class*="language-"],
+  .annotation-popup pre[class*="language-"]{
+    @apply rounded-md p-3 overflow-x-auto text-xs leading-6;
+    background-color: hsl(var(--b2)); /* keeps Prism theme legible on both themes */
+>>>>>>> broken/codex/add-dark-mode-as-default-with-light-mode-option
     border: 1px solid hsl(var(--bc)/.12);
     color: hsl(var(--bc));
   }
@@ -251,6 +333,7 @@
   }
 }
 
+<<<<<<< HEAD
 /* Link affordances */
 @layer components {
   .interlink::before{ content:"⇢ "; margin-right:.15rem; color:currentColor; font-size:.9em; }
@@ -330,3 +413,11 @@
 
 /* Tailwind v4 content discovery */
 @source "../**/*.{njk,md,html,js}";
+=======
+/* ——— Link affordances (unchanged names) ——— */
+@layer components {
+  .interlink::before{ content:"↗ "; margin-right:.15rem; color:currentColor; font-size:.9em; }
+  .external-link{ @apply underline transition-colors; color: hsl(var(--p)); }
+  .external-link:hover{ color: hsl(var(--pf)); }
+}
+>>>>>>> broken/codex/add-dark-mode-as-default-with-light-mode-option

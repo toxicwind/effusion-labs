@@ -1,0 +1,287 @@
+---
+title: "Effusion Labs: Concept Map"
+layout: "layout.njk"
+status: stable
+date: 2025-07-01
+certainty: high
+importance: structural
+maintainer: Effusion Labs (via language model collaboration)
+tags:
+  - visualization
+  - digitalgarden
+  - graph
+  - connections
+  - metadata-mapping
+aliases:
+  - Concept Graph
+  - Effusion Overview Map
+  - Map of Ideas
+memory_ref:
+  - [[Effusion Labs: Style Guide]]
+  - [[methodology]]
+  - [[core-concept]]
+---
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  body {
+    font-family: 'Inter', sans-serif;
+  }
+  .map-container-wrapper {
+    background: #111;
+    border-radius: 8px;
+    padding: 1rem;
+    border: 1px solid #2a2a2a;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  }
+  #concept-map-container {
+    height: 80vh;
+    width: 100%;
+    background-color: transparent;
+  }
+</style>
+
+<div class="map-intro">
+  <p>This interactive map visualizes how <strong>Sparks</strong>, <strong>Concepts</strong>, <strong>Projects</strong>, and <strong>Meta</strong> documents relate to one another across the Effusion Labs knowledge base. Use it to explore how fragments evolve into ideas and converge into projects.</p>
+</div>
+
+<div class="map-container-wrapper">
+  <div id="concept-map-container"></div>
+</div>
+
+<script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+<script type="text/javascript">
+const allNodesData = {{ collections.nodes | jsonify | safe }};
+const nodes = [];
+const edges = [];
+const linkRegex = /\[\[([^|\]#]+)/g;
+const connectionCount = {};
+
+const categoryGlyphs = {
+  Projects: '📁',
+  Concepts: '📘',
+  Sparks: '💡',
+  Meta: '⚙️'
+};
+
+// Color mapping for document nodes
+function getNodeVisualProps(url, tags = []) {
+  const lowerUrl = url.toLowerCase();
+  const categoryMatch =
+    (lowerUrl.includes('/projects') || tags.includes('projects')) ? 'Projects' :
+    (lowerUrl.includes('/concepts') || tags.includes('concepts')) ? 'Concepts' :
+    (lowerUrl.includes('/sparks') || tags.includes('sparks')) ? 'Sparks' :
+    (lowerUrl.includes('/meta') || tags.includes('meta')) ? 'Meta' : null;
+
+  const glyph = categoryGlyphs[categoryMatch] || '';
+  const baseColor = {
+    Projects: '#89f0cb',
+    Concepts: '#89bcf0',
+    Sparks: '#f0d889',
+    Meta: '#aaaaaa'
+  }[categoryMatch] || '#666666';
+
+  const shape = {
+    Projects: 'diamond',
+    Concepts: 'hexagon',
+    Sparks: 'star',
+    Meta: 'triangleDown'
+  }[categoryMatch] || 'dot';
+
+  return {
+    labelPrefix: glyph,
+    borderColor: baseColor,
+    shape
+  };
+}
+
+// Create document nodes with glyph and styling
+allNodesData.forEach(page => {
+  const { labelPrefix, borderColor, shape } = getNodeVisualProps(page.url, page.data.tags);
+  nodes.push({
+    id: page.url,
+    label: `${labelPrefix} ${page.data.title || page.fileSlug}`,
+    title: `Connections: 0`,
+    shape,
+font: {
+  face: 'Inter',
+  size: 14,
+  color: '#DDD',
+  background: 'rgba(40,40,40,0.7)',  // dark semi-transparent fill
+
+  align: 'center'
+},
+    color: {
+      background: '#1a1a1a',
+      border: borderColor,
+      highlight: { background: '#252525', border: borderColor },
+      hover: { background: '#1a1a1a', border: borderColor }
+    }
+  });
+  connectionCount[page.url] = 0;
+});
+
+// Add category nodes
+['Projects', 'Concepts', 'Sparks', 'Meta'].forEach(cat => {
+  nodes.push({
+    id: `category:${cat.toLowerCase()}`,
+    label: `${categoryGlyphs[cat]} ${cat}`,
+    shape: 'box',
+    value: 42,
+    scaling: {
+      min: 10,
+      max: 50,
+      label: { enabled: true, min: 14, max: 30 }
+    },
+    title: `Category: ${cat}`,
+    font: {
+      face: 'Inter',
+      size: 18,
+      color: '#CCCCCC',
+      strokeWidth: 0
+    },
+    color: {
+      background: '#1a1a1a',
+      border: '#89f0cb',
+      highlight: { background: '#1a1a1a', border: '#89f0cb' },
+      hover: { background: '#1a1a1a', border: '#89f0cb' }
+    },
+    mass: 1,
+    physics: true
+  });
+  connectionCount[`category:${cat.toLowerCase()}`] = 0;
+});
+
+// Edges for internal links and category clustering
+allNodesData.forEach(page => {
+  const content = page.inputContent;
+  const url = page.url.toLowerCase();
+  const tags = page.data.tags || [];
+
+  if (content) {
+    let match;
+    while ((match = linkRegex.exec(content)) !== null) {
+      const linkIdentifier = match[1].trim();
+      const targetPage = allNodesData.find(p =>
+        (p.fileSlug && p.fileSlug.toLowerCase() === linkIdentifier.toLowerCase()) ||
+        (p.data.title && p.data.title.toLowerCase() === linkIdentifier.toLowerCase()) ||
+        (p.data.aliases && p.data.aliases.map(a => a.toLowerCase()).includes(linkIdentifier.toLowerCase()))
+      );
+      if (targetPage) {
+        edges.push({ from: page.url, to: targetPage.url });
+        connectionCount[page.url]++;
+        connectionCount[targetPage.url]++;
+      }
+    }
+  }
+
+  if (url.includes('/projects') || tags.includes('projects')) {
+    edges.push({ from: `category:projects`, to: page.url });
+    connectionCount[`category:projects`]++;
+    connectionCount[page.url]++;
+  } else if (url.includes('/concepts') || tags.includes('concepts')) {
+    edges.push({ from: `category:concepts`, to: page.url });
+    connectionCount[`category:concepts`]++;
+    connectionCount[page.url]++;
+  } else if (url.includes('/sparks') || tags.includes('sparks')) {
+    edges.push({ from: `category:sparks`, to: page.url });
+    connectionCount[`category:sparks`]++;
+    connectionCount[page.url]++;
+  } else if (url.includes('/meta') || tags.includes('meta')) {
+    edges.push({ from: `category:meta`, to: page.url });
+    connectionCount[`category:meta`]++;
+    connectionCount[page.url]++;
+  }
+});
+
+// Scale node values based on connection count
+nodes.forEach(node => {
+  const count = connectionCount[node.id] || 0;
+  node.value = count;
+  node.title = `${node.label}\nConnections: ${count}`;
+});
+
+// Render network
+const container = document.getElementById('concept-map-container');
+const data = { nodes, edges };
+const options = {
+  nodes: {
+    scaling: { min: 8, max: 30 },
+    font: { face: 'Inter', size: 14, color: '#DDD', strokeWidth: 0 },
+    borderWidth: 1,
+    shadow: { enabled: false }
+  },
+  edges: {
+    width: 1,
+    color: {
+      color: '#444',
+      highlight: '#89f0cb',
+      hover: '#aaaaaa',
+      inherit: 'from',
+      opacity: 0.8
+    },
+    arrows: { to: { enabled: true, scaleFactor: 0.4 } },
+    smooth: { type: 'continuous' }
+  },
+  interaction: {
+    hover: true,
+    tooltipDelay: 200,
+    navigationButtons: true,
+    keyboard: true
+  },
+  physics: {
+    enabled: true,
+    barnesHut: {
+      gravitationalConstant: -3500,
+      centralGravity: 0.05,
+      springLength: 180,
+      springConstant: 0.04,
+      damping: 0.12,
+      avoidOverlap: 0.5
+    },
+    stabilization: {
+      enabled: true,
+      iterations: 1000,
+      updateInterval: 25
+    }
+  }
+};
+const network = new vis.Network(container, data, options);
+
+// Highlight behavior
+network.on("hoverNode", function (params) {
+  const nodeId = params.node;
+  const connectedNodes = network.getConnectedNodes(nodeId);
+  const allNodeIds = network.body.data.nodes.getIds();
+
+  network.body.data.nodes.update(allNodeIds.map(id => ({
+    id,
+    color: { background: '#333', border: '#555' },
+    font: { color: '#666' }
+  })));
+
+  network.body.data.nodes.update([nodeId, ...connectedNodes].map(id => ({
+    id,
+    color: { background: '#1a1a1a', border: '#89f0cb' },
+    font: { color: '#fff' }
+  })));
+});
+
+network.on("blurNode", function () {
+  const allNodeIds = network.body.data.nodes.getIds();
+  network.body.data.nodes.update(allNodeIds.map(id => ({
+    id,
+    color: { background: '#1a1a1a', border: '#444' },
+    font: { color: '#DDD' }
+  })));
+});
+
+network.on("click", function (params) {
+  if (params.nodes.length > 0) {
+    const nodeId = params.nodes[0];
+    if (!nodeId.startsWith("category:")) {
+      window.location.href = nodeId;
+    }
+  }
+});
+</script>

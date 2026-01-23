@@ -1,0 +1,40 @@
+{
+  "type": "product",
+  "product_id": "pop-mart--the-monsters--labubu--hide-and-seek-in-singapore--figure--std--17.5cm--reg-sg",
+  "brand": "pop-mart",
+  "line": "the-monsters",
+  "character": "labubu",
+  "series": "hide-and-seek-in-singapore",
+  "form": "figure",
+  "variant": "std",
+  "edition": {
+    "kind": "regional"
+  },
+  "distribution": {
+    "region_lock": true,
+    "markets": [
+      "SG"
+    ]
+  },
+  "size": {
+    "unit": "cm",
+    "h": 17.5,
+    "w": 10,
+    "d": 10
+  },
+  "market_listings": [
+    {
+      "market": "SG",
+      "currency": "SGD",
+      "price": 37.9
+    }
+  ],
+  "availability": {
+    "limited": false,
+    "unit_count": null
+  },
+  "images": [],
+  "provenance_ref": "/content/archives/collectables/designer-toys/pop-mart/the-monsters/provenance/pop-mart--the-monsters--labubu--hide-and-seek-in-singapore--figure--std--17.5cm--reg-sg.jsonl",
+  "confidence": 0.2,
+  "notes": "Network fetch failed; pending verification."
+}

@@ -2,6 +2,7 @@
   "name": "effusion_labs_final",
   "version": "1.0.0",
   "description": "This is a digital studio and knowledge base for Effusion Labs, built with Eleventy and the powerful `@photogabble/eleventy-plugin-interlinker`.",
+<<<<<<< HEAD
   "keywords": [],
   "license": "ISC",
   "author": "",
@@ -197,3 +198,56 @@
     "react-dom": "^19.2.3"
   }
 }
+=======
+  "main": "index.js",
+  "scripts": {
+    "test": "node --test",
+    "build": "npx @11ty/eleventy",
+    "dev": "npx @11ty/eleventy --serve",
+    "web2md": "node webpage-to-markdown.js",
+    "docs:archive": "node tools/archive-docs.js",
+    "docs:validate": "node tools/validate-docs.js",
+    "docs:reindex": "node tools/build-vendor-index.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@11ty/eleventy": "^3.1.2",
+    "@11ty/eleventy-navigation": "^1.0.4",
+    "@11ty/eleventy-plugin-rss": "^2.0.4",
+    "@mozilla/readability": "^0.6.0",
+    "@photogabble/eleventy-plugin-interlinker": "^1.1.0",
+    "jsdom": "^26.1.0",
+    "lucide": "^0.534.0",
+    "luxon": "^3.6.1",
+    "markdown-it": "^14.1.0",
+    "markdown-it-footnote": "^4.0.0",
+    "turndown": "^7.2.0"
+  },
+  "devDependencies": {
+    "@11ty/eleventy-img": "^6.0.4",
+    "@11ty/eleventy-plugin-syntaxhighlight": "^5.0.1",
+    "@playwright/test": "^1.54.2",
+    "@quasibit/eleventy-plugin-sitemap": "^2.2.0",
+    "@tailwindcss/postcss": "^4.1.11",
+    "@tailwindcss/typography": "^0.5.16",
+    "ajv": "^8.17.1",
+    "ajv-formats": "^3.0.1",
+    "daisyui": "^5.0.50",
+    "jsdom": "^26.1.0",
+    "markdown-it-attrs": "^4.3.1",
+    "playwright-extra": "^4.3.6",
+    "postcss": "^8.5.6",
+    "prettier": "^3.3.3",
+    "prism-themes": "^1.9.0",
+    "prismjs": "^1.30.0",
+    "puppeteer-extra-plugin-stealth": "^2.11.2",
+    "tailwindcss": "^4.1.11"
+  }
+}
+>>>>>>> broken/codex/add-dark-mode-as-default-with-light-mode-option

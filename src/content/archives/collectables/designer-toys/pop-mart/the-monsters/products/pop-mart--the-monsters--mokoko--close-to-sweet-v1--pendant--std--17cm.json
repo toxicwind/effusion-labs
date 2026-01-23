@@ -12,7 +12,13 @@
   },
   "distribution": {
     "region_lock": false,
+<<<<<<< HEAD
     "markets": ["CN"]
+=======
+    "markets": [
+      "CN"
+    ]
+>>>>>>> broken/codex/add-dark-mode-as-default-with-light-mode-option
   },
   "size": {
     "unit": "cm",

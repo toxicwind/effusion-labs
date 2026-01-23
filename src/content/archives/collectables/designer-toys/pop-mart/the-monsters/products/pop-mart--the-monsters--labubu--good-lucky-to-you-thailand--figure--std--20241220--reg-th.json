@@ -1,0 +1,35 @@
+{
+  "type": "product",
+  "product_id": "pop-mart--the-monsters--labubu--good-lucky-to-you-thailand--figure--std--20241220--reg-th",
+  "brand": "pop-mart",
+  "line": "the-monsters",
+  "character": "labubu",
+  "series": "good-lucky-to-you-thailand",
+  "form": "figure",
+  "variant": "std",
+  "edition": {
+    "kind": "regional"
+  },
+  "distribution": {
+    "region_lock": true,
+    "markets": [
+      "TH"
+    ]
+  },
+  "release_date": "2024-12-20",
+  "market_listings": [
+    {
+      "market": "TH",
+      "currency": "THB",
+      "price": 1050
+    }
+  ],
+  "availability": {
+    "limited": false,
+    "unit_count": null
+  },
+  "images": [],
+  "provenance_ref": "/content/archives/collectables/designer-toys/pop-mart/the-monsters/provenance/pop-mart--the-monsters--labubu--good-lucky-to-you-thailand--figure--std--20241220--reg-th.jsonl",
+  "confidence": 0.45,
+  "notes": "Seeded from initial article; requires re-research."
+}

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 version: '3.9'
 
 services:
@@ -5,10 +6,17 @@ services:
     build:
       context: .
       dockerfile: services/Dockerfile.orchestrator # Placeholder if we use same image or separate
+=======
+version: "3.8"
+
+services:
+  effusion-labs:
+>>>>>>> broken/codex/add-dark-mode-as-default-with-light-mode-option
     image: ghcr.io/toxicwind/effusion-labs:latest
     container_name: effusion
     restart: unless-stopped
     ports:
+<<<<<<< HEAD
       - "43000:80"
     volumes:
       - ./:/app
@@ -69,3 +77,6 @@ services:
 
 volumes:
   mildlyawesome-data:
+=======
+      - "18400:80"
+>>>>>>> broken/codex/add-dark-mode-as-default-with-light-mode-option

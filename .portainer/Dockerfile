@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # syntax=docker/dockerfile:1.7
 
 ############################
@@ -87,3 +88,29 @@ COPY --from=builder /app/_site/ /usr/share/nginx/html/
 EXPOSE 80
 HEALTHCHECK --interval=30s --timeout=3s --start-period=10s \
     CMD curl --fail --silent --show-error http://127.0.0.1/ >/dev/null 2>&1 || exit 1
+=======
+# ─── Build stage ──────────────────────────────────────────────────────────────
+FROM node:20-alpine AS builder
+
+WORKDIR /app
+
+# Log: node version and env context
+RUN node -v && npm -v && echo "🐳 STARTING ELEVENTY BUILD CONTEXT"
+
+# Install deps
+COPY package*.json ./
+RUN npm ci
+
+# Copy project files
+COPY . .
+
+# Run Eleventy build (with Tailwind plugin)
+RUN echo "⚙️ Building site with Eleventy..." \
+ && npx @11ty/eleventy
+
+# ─── Runtime stage ─────────────────────────────────────────────────────────────
+FROM nginx:stable-alpine
+
+COPY --from=builder /app/_site/ /usr/share/nginx/html/
+COPY .portainer/nginx.conf /etc/nginx/conf.d/default.conf
+>>>>>>> broken/codex/add-dark-mode-as-default-with-light-mode-option
