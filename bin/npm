@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+set -euo pipefail
+DIR="$(cd "$(dirname "$0")" && pwd)"
+PATH_TRIMMED="$(printf "%s" "$PATH" | sed -e "s|${DIR}:||g" -e "s|:${DIR}||g")"
+NPM_BIN="$(PATH="$PATH_TRIMMED" command -v npm || true)"
+if [[ -z "${NPM_BIN}" ]]; then echo "# npm shim: real npm not found" >&2; exit 127; fi
+hb_run "${NPM_BIN}" "$@"
