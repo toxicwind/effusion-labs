@@ -102,6 +102,19 @@ function runCommand(command, args, { capture = false } = {}) {
       });
     }
 
+    // Handle spawned process errors (e.g., ENOENT when binary not installed)
+    child.on('error', err => {
+      const errText = err && err.stack ? err.stack.toString() : String(err);
+      if (capture) {
+        stderr += errText;
+        process.stderr.write(errText);
+      } else {
+        process.stderr.write(errText);
+      }
+      // Use 127 to indicate command not found, but return control to caller so 'soft' can work.
+      resolve({ code: 127, stdout, stderr });
+    });
+
     child.on('close', code => {
       resolve({ code: code ?? 0, stdout, stderr });
     });
