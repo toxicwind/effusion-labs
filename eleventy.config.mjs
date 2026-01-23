@@ -1,385 +1,175 @@
-// Monolithic Eleventy config (ESM, Eleventy 3.x, Node 24+)
-import markdownIt from 'markdown-it'
-import markdownItAnchor from 'markdown-it-anchor'
-import fs from 'node:fs'
-import fsp from 'node:fs/promises'
-import path from 'node:path'
-import { fileURLToPath } from 'node:url'
+// eleventy.config.mjs (root)
+import register from "./lib/eleventy/register.mjs";
+import { dirs } from "./lib/config.js";
+import seeded from "./lib/seeded.js";
+import registerArchive from "./lib/eleventy/archives.mjs";
+import { getBuildInfo } from "./lib/build-info.js";
+import fs from "node:fs";
+import MarkdownIt from "markdown-it";
+import markdownItFootnote from "markdown-it-footnote";
 
-import EleventyVitePlugin from '@11ty/eleventy-plugin-vite'
+// tiny local slugger (keeps filters resilient)
+const slug = (s) =>
+  String(s ?? "")
+    .normalize("NFKD")
+    .toLowerCase()
+    .replace(/[^\w\s-]/g, "")
+    .trim()
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-");
 
-import EleventyPluginNavigation from '@11ty/eleventy-navigation'
-import EleventyPluginRss from '@11ty/eleventy-plugin-rss'
-import EleventyPluginSyntaxhighlight from '@11ty/eleventy-plugin-syntaxhighlight'
-import interlinker from '@photogabble/eleventy-plugin-interlinker'
-import schema from '@quasibit/eleventy-plugin-schema'
-import sitemap from '@quasibit/eleventy-plugin-sitemap'
-import tailwindcss from '@tailwindcss/vite'
-import Beasties from 'beasties'
-import localImageTransformPlugin from './src/utils/plugins/local-image-transform.mjs'
-
-import registerArchive from './src/utils/archives/index.mjs'
-import { buildArchiveNav } from './src/utils/archives/nav.mjs'
-import { registerCollections } from './src/utils/collections/index.mjs'
-import { getBuildInfo } from './src/utils/data/build-info.mjs'
-import { buildGlobals } from './src/utils/data/build.mjs'
-import { eleventyComputed as computedGlobal } from './src/utils/data/computed.mjs'
-import { buildNav } from './src/utils/data/nav.mjs'
-import { registerFilters } from './src/utils/filters/index.mjs'
-import { createResolvers } from './src/utils/interlinkers/resolvers.mjs'
-import { flushUnresolved } from './src/utils/interlinkers/unresolved-report.mjs'
-import { applyMarkdownExtensions } from './src/utils/markdown/index.mjs'
-import { registerShortcodes } from './src/utils/shortcodes/index.mjs'
-import { dirs } from './src/utils/site.mjs'
-import htmlToMarkdownUnified from './src/utils/transforms/html-to-markdown.mjs'
-
-const projectRoot = path.dirname(fileURLToPath(import.meta.url))
-const srcDir = path.join(projectRoot, 'src')
-const criticalPages = ['index.html', '404.html']
-const outputDir = path.join(projectRoot, dirs.output)
+// minimal HTML escaper for shortcode args
+const escapeHtml = (str) =>
+  String(str ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;");
 
 export default function (eleventyConfig) {
-  // --- Start: Event Handlers ---
-  eleventyConfig.on('eleventy.before', async () => {
-    // Clean Vite temp to avoid stale-dir issues
-    const viteTemp = path.join(projectRoot, '.11ty-vite')
-    if (fs.existsSync(viteTemp)) {
-      await fsp.rm(viteTemp, { recursive: true, force: true })
-    }
-  })
+  const buildTime = new Date().toISOString();
 
-  // After build: write unresolved interlinker report (log-only) and inline critical CSS
-  eleventyConfig.on('eleventy.after', async () => {
-    try {
-      const payload = flushUnresolved()
-      console.log(`Interlinker unresolved (logged only): ${payload.count}`)
-    } catch (e) {
-      console.error(String(e?.message || e))
-    }
+  // Core project wiring (markdown, assets, images, etc.)
+  register(eleventyConfig);
 
-    if (process.env.ELEVENTY_ENV === 'test') {
-      return
-    }
+  // 🔐 Load JSON archives → stable collections + helpers
+  // Exposes: collections.archiveProducts / archiveCharacters / archiveSeries
+  // and filters: byLine, byCompany, byLocale, uniqueBy (+ global archiveCompanies, archiveLines)
+  registerArchive(eleventyConfig);
 
-    const beasties = new Beasties({
-      path: outputDir,
-      publicPath: '/',
-      preload: 'swap',
-      inlineFonts: true,
-      compress: true,
-      pruneSource: false,
-      logLevel: 'warn',
-    })
+  // ---- Site-specific collections (unchanged semantics) ----
+  eleventyConfig.addCollection("featured", (api) =>
+    api.getAll().filter((p) => p.data?.featured === true).sort((a, b) => b.date - a.date)
+  );
 
-    const wait = (ms) =>
-      new Promise((resolve) => {
-        setTimeout(resolve, ms)
+  eleventyConfig.addCollection("interactive", (api) =>
+    api
+      .getAll()
+      .filter((p) => {
+        const tags = p.data.tags || [];
+        return tags.includes("prototype") || p.data.interactive === true;
       })
+      .sort((a, b) => b.date - a.date)
+  );
 
-    const ensurePageOutput = async (targetPath, { attempts = 10, backoff = 100 } = {}) => {
-      for (let index = 0; index < attempts; index++) {
-        try {
-          await fsp.access(targetPath, fs.constants.F_OK)
-          return true
-        } catch {
-          await wait(backoff * (index + 1))
-        }
+  eleventyConfig.addCollection("recentAll", (api) => {
+    const items = api.getAll().filter((p) => p.data.type);
+    items.sort((a, b) => b.date - a.date);
+    items.take = (n) => items.slice(0, n);
+    return items;
+  });
+
+  // ---- Filters that play nicely with archive data ----
+  // Match products by character (accepts name or slug)
+  eleventyConfig.addFilter("byCharacter", (items, id) => {
+    const target = slug(id);
+    return (items ?? []).filter((p) => slug(p?.data?.charSlug ?? p?.data?.character) === target);
+  });
+
+  // Match products by series (accepts title or slug)
+  eleventyConfig.addFilter("bySeries", (items, id) => {
+    const target = slug(id);
+    return (items ?? []).filter((p) => slug(p?.data?.seriesSlug ?? p?.data?.series) === target);
+  });
+
+  // Sort helpers (non-mutating)
+  eleventyConfig.addFilter("sortByReleaseDate", (items, dir = "asc") => {
+    const arr = [...(items ?? [])];
+    arr.sort((a, b) =>
+      String(a?.data?.release_date ?? "").localeCompare(String(b?.data?.release_date ?? ""))
+    );
+    return dir === "desc" ? arr.reverse() : arr;
+  });
+
+  eleventyConfig.addFilter("seededShuffle", (arr, seed) => seeded.seededShuffle(arr, seed));
+
+  // ---------- unified callout shortcode ----------
+  const calloutShortcode = function (content, opts = {}) {
+    const md = eleventyConfig.markdownLibrary || MarkdownIt().use(markdownItFootnote);
+    const isObj = opts && typeof opts === 'object' && !Array.isArray(opts);
+    const {
+      title = '',
+      kicker = '',
+      variant = 'neutral',
+      position = 'center',
+      icon = '',
+      headingLevel = 3,
+    } = isObj ? opts : { title: opts };
+    const envEscape = this?.env?.filters?.escape ?? escapeHtml;
+    const safeTitle = envEscape(title);
+    const safeKicker = kicker ? envEscape(kicker) : '';
+    const safeVariant = String(variant).toLowerCase().replace(/[^\w-]/g, '');
+    const safePosition = String(position).toLowerCase().replace(/[^\w-]/g, '');
+    const clampedLevel = Math.min(6, Math.max(2, Number(headingLevel) || 3));
+    const tag = `h${clampedLevel}`;
+    const id = `callout-${title ? slug(title) : Date.now()}`;
+    const safeId = envEscape(id);
+    const classes = ['callout', `callout--${safeVariant}`, `callout--dock-${safePosition}`].join(' ');
+    const iconMarkup =
+      icon && /^<svg[\s>]/.test(String(icon))
+        ? String(icon)
+        : icon
+          ? `<span class="callout-icon" aria-hidden="true">${envEscape(icon)}</span>`
+          : '';
+    const footnotes = (() => {
+      try {
+        const txt = fs.readFileSync(this.page.inputPath, 'utf8');
+        return (
+          txt.match(/\n\[\^[^\n]*?\]:.*?(?=\n\n|$)/gs) || []
+        ).join('\n');
+      } catch {
+        return '';
       }
+    })();
+    const rendered = md.render(`${content}\n${footnotes}`);
+    const body = rendered.replace(/<section class="footnotes"[\s\S]*<\/section>/, '');
 
-      return false
-    }
+    return `
+<aside class="${classes}" role="note" aria-labelledby="${safeId}">
+  <div class="callout-head">
+    <${tag} id="${safeId}" class="callout-title">${iconMarkup}${safeTitle}</${tag}>
+    ${safeKicker ? `<p class="callout-kicker">${safeKicker}</p>` : ''}
+  </div>
+  <div class="callout-body">
+    ${body.trim()}
+  </div>
+</aside><!-- -->
+`.trim();
+  };
 
-    await Promise.all(
-      criticalPages.map(async (page) => {
-        const targetPath = path.join(outputDir, page)
+  eleventyConfig.addPairedShortcode('callout', calloutShortcode);
 
-        const hasInitialOutput = await ensurePageOutput(targetPath)
-
-        if (!hasInitialOutput) {
-          console.warn(
-            `Beasties inline skipped for ${page}: missing file at ${targetPath}`,
-          )
-          return
-        }
-
-        const maxAttempts = 5
-
-        for (let attempt = 0; attempt < maxAttempts; attempt++) {
-          try {
-            const html = await fsp.readFile(targetPath, 'utf8')
-            const inlined = await beasties.process(html)
-            await fsp.writeFile(targetPath, inlined)
-            return
-          } catch (error) {
-            if (error?.code === 'ENOENT' && error?.path === targetPath) {
-              await wait(200 * (attempt + 1))
-              await ensurePageOutput(targetPath, { attempts: 1 })
-              continue
-            }
-
-            console.error(`Beasties inline failed for ${page}:`, String(error?.message || error))
-            return
-          }
-        }
-
-        console.warn(
-          `Beasties inline skipped for ${page}: ${targetPath} unavailable after retries`,
-        )
-      }),
-    )
-  })
-
-  // --- End: Event Handlers ---
-  const serverHost = process.env.ELEVENTY_HOST ?? '127.0.0.1'
-  const serverPort = Number.parseInt(process.env.ELEVENTY_PORT ?? '8080', 10)
-  const viteDevHost = process.env.VITE_DEV_HOST ?? serverHost
-  const viteHmrPort = Number.parseInt(process.env.VITE_HMR_PORT ?? '24678', 10)
-
-  eleventyConfig.setServerOptions({
-    host: serverHost,
-    port: Number.isNaN(serverPort) ? 8080 : serverPort,
-    domDiff: false,
-    showVersion: false,
-  })
-
-  eleventyConfig.setServerPassthroughCopyBehavior('copy')
-  eleventyConfig.addPassthroughCopy('public')
-  // EXPLICIT ASSET PIPELINE FOR LIQUID GLASS AESTHETIC
-  eleventyConfig.addPassthroughCopy('src/assets')
-
-  eleventyConfig.ignores.add('src/content/docs/**')
-  // Quarantining content causing Vite EISDIR errors
-  eleventyConfig.ignores.add('src/content/meta/**')
-  eleventyConfig.ignores.add('src/content/sparks/**')
-  const isTest = process.env.ELEVENTY_ENV === 'test'
-
-  // Plugins
-  eleventyConfig.addPlugin(EleventyPluginNavigation)
-  eleventyConfig.addPlugin(EleventyPluginRss)
-  eleventyConfig.addPlugin(EleventyPluginSyntaxhighlight)
-
-  // CUTTING EDGE 2026: Vite + Tailwind 4 (Optimized Layer)
-  eleventyConfig.addPlugin(EleventyVitePlugin, {
-    tempFolderName: '.11ty-vite',
-    viteOptions: {
-      publicDir: 'public',
-      clearScreen: false,
-      plugins: [tailwindcss()],
-      server: {
-        mode: 'development',
-        middlewareMode: true,
-        host: viteDevHost,
-        hmr: { host: viteDevHost, port: viteHmrPort },
-        fs: {
-          strict: true,
-          allow: [projectRoot],
-        },
-      },
-      appType: 'custom',
-      assetsInclude: ['**/*.xml', '**/*.txt', '**/*.svg', '**/*.png', '**/*.jpg', '**/*.jpeg', '**/*.webp'],
-      resolve: {
-        alias: {
-          '@': srcDir,
-          '/src': srcDir,
-          '/assets': path.join(srcDir, 'assets'),
-        },
-      },
-
-      build: {
-        mode: 'production',
-        manifest: true,
-        rollupOptions: {
-          input: path.resolve(srcDir, 'assets/js/app.js'),
-          output: {
-            assetFileNames: 'assets/[name].[hash][extname]',
-            chunkFileNames: 'assets/[name].[hash].js',
-            entryFileNames: 'assets/[name].[hash].js',
-          },
-        },
-      },
-    },
-  })
+  // ---- Legacy aliases ----
+  eleventyConfig.addPairedShortcode('failbox', function (content, titleOrOpts, kicker) {
+    const opts =
+      titleOrOpts && typeof titleOrOpts === 'object' && !Array.isArray(titleOrOpts)
+        ? { ...titleOrOpts }
+        : { title: titleOrOpts, kicker };
+    return calloutShortcode.call(this, content, opts);
+  });
+  eleventyConfig.addPairedShortcode('failitem', (content) => content);
 
 
-
-  eleventyConfig.addPlugin(interlinker, {
-    defaultLayout: 'embed.njk',
-    resolvingFns: createResolvers(),
-    deadLinkReport: 'json',
-  })
-
-  eleventyConfig.addPlugin(sitemap, {
-    sitemap: { hostname: 'https://effusionlabs.com' },
-  })
-  eleventyConfig.addPlugin(schema)
-
-  eleventyConfig.addTransform('normalize-remote-urls', (content, outputPath) => {
-    if (!outputPath || !outputPath.endsWith('.html')) return content
-    return content
-      .replace(/(src|href)=["']{2}(https?:\/\/)/g, '$1="$2')
-      .replace(/(src|href)=["']{2}(\/\/)/g, '$1="$2')
-      .replace(/(src|href)=["']{2}(data:)/g, '$1="$2')
-  })
-
-  eleventyConfig.addTransform('scrub-empty-attributes', (content, outputPath) => {
-    if (!outputPath || !outputPath.endsWith('.html')) return content
-    // BRUTEFORCE FIX: Remove empty src/href attributes to prevent Vite EISDIR errors
-    return content.replace(/\s(src|href)=["']{2}/g, '')
-  })
-
-  if (eleventyConfig.htmlTransformer?.addPosthtmlPlugin) {
-    // Ensure remote image URLs are passed through untouched — the Eleventy image
-    // transform plugin eagerly attempts to download external assets otherwise.
-    eleventyConfig.htmlTransformer.addPosthtmlPlugin(
-      'html',
-      function remoteImagePassthrough() {
-        return (tree) => {
-          const sanitize = (value) => {
-            if (typeof value !== 'string') return ''
-            return value.trim().replace(/^["']+/, '').replace(/["']+$/, '')
-          }
-
-          const markRemote = (node, attr) => {
-            const raw = node?.attrs?.[attr]
-            if (typeof raw !== 'string') return node
-            const normalized = sanitize(raw)
-            if (
-              /^https?:\/\//i.test(normalized) || /^\/\//.test(normalized)
-              || normalized.startsWith('data:')
-            ) {
-              node.attrs ||= {}
-              node.attrs[attr] = normalized
-              if (!('eleventy:ignore' in node.attrs)) {
-                node.attrs['eleventy:ignore'] = ''
-              }
-            }
-            return node
-          }
-
-          tree.match({ tag: 'img' }, (node) => markRemote(node, 'src'))
-          tree.match({ tag: 'link' }, (node) => markRemote(node, 'href'))
-
-          return tree
-        }
-      },
-      { priority: -5 },
-    )
-  }
-
-  const enableImagePlugin = (
-    !isTest || process.env.ELEVENTY_TEST_ENABLE_IMAGES === '1'
-  ) && process.env.BUILD_OFFLINE !== '1'
-
-  if (enableImagePlugin) {
-    eleventyConfig.addPlugin(localImageTransformPlugin, {
-      urlPath: '/images/',
-      outputDir: path.join(dirs.output, 'images/'),
-      formats: ['avif', 'webp', 'auto'],
-      widths: [320, 640, 960, 1200, 1800, 'auto'],
-      filenameFormat: (id, src, width, format) => {
-        const { name } = path.parse(src)
-        const s = String(name || '')
-          .toLowerCase()
-          .replace(/[^\da-z]+/g, '-')
-        return `${s}-${width}.${format}`
-      },
-      cacheOptions: {
-        directory: path.join(projectRoot, '.cache', 'eleventy-img'),
-        removeUrlQueryParams: false,
-        duration: '6w',
-      },
-    })
-  }
-
-  if (!enableImagePlugin) {
-    eleventyConfig.addPassthroughCopy({ 'src/images': 'images' })
-  }
-
-  // --- End: Plugins ---
-  eleventyConfig.addShortcode('year', () => `${new Date().getFullYear()}`)
-  // --- Start: Libraries & Custom Functions ---
-  // Customize Markdown library and settings:
-  let markdownLibrary = markdownIt({
-    html: true,
-    breaks: true,
-    linkify: true,
-  }).use(markdownItAnchor, {
-    permalink: markdownItAnchor.permalink.ariaHidden({
-      placement: 'after',
-      class: 'direct-link',
-      symbol: '#',
-      level: [1, 2, 3, 4],
-    }),
-    slugify: eleventyConfig.getFilter('slug'),
-  })
-  eleventyConfig.setLibrary('md', markdownLibrary)
-
-  // Nunjucks DX
-  eleventyConfig.setNunjucksEnvironmentOptions({
-    trimBlocks: false,
-    lstripBlocks: false,
-    noCache: true,
-    throwOnUndefined: false,
-  })
-  eleventyConfig.addNunjucksFilter('ternary', (val, a, b) => (val ? a : b))
-
-  // Markdown
-  eleventyConfig.amendLibrary('md', md => {
-    eleventyConfig.markdownLibrary = md
-    return applyMarkdownExtensions(md)
-  })
-
-  // Filters, shortcodes, collections, archives from your /lib folder
-  registerFilters(eleventyConfig)
-  registerShortcodes(eleventyConfig)
-  registerCollections(eleventyConfig)
-  registerArchive(eleventyConfig)
-  // Layouts
-  eleventyConfig.addLayoutAlias('base', 'base.njk')
-  // Programmatic Global Data
-  eleventyConfig.addGlobalData('eleventyComputed', computedGlobal)
-  eleventyConfig.addGlobalData('nav', buildNav())
-  eleventyConfig.addGlobalData('archivesNav', buildArchiveNav())
-  eleventyConfig.addGlobalData('build', async () => {
-    const meta = getBuildInfo()
-    const fx = await buildGlobals()
-    return {
-      ...fx,
-      builtAtIso: meta.iso,
-      env: meta.env,
-      fullHash: meta.fullHash,
-      branch: meta.branch,
-    }
-  })
-
-  // HTML → Markdown importer for raw HTML inside content tree
-  htmlToMarkdownUnified(eleventyConfig, {
-    rootDir: 'src/content',
-    dumpMarkdownTo: null,
-    pageTitlePrefix: '',
-    defaultLayout: 'converted-html.njk',
-    frontMatterExtra: { source: 'html-import' },
-    smartTypography: false, // keep MD diffs clean; flip to true if you want curly quotes baked in
-  })
-
-  // --- End: Libraries & Custom Functions ---
-  // Copy/pass-through files
-  eleventyConfig.addPassthroughCopy('src/assets/js')
-  eleventyConfig.addPassthroughCopy({
-    'src/content/projects/lv-images/generated': 'content/projects/lv-images/generated',
-  })
+// ---- Global data ----
+  eleventyConfig.addGlobalData("buildTime", buildTime);
+  eleventyConfig.addGlobalData("dailySeed", seeded.dailySeed);
+  eleventyConfig.addGlobalData("homepageCaps", {
+    featured: 3,
+    today: 3,
+    tryNow: [1, 3],
+    pathways: 3,
+    questions: 3,
+    notebook: 3,
+  });
+  const build = getBuildInfo();
+  eleventyConfig.addGlobalData("build", build);
 
   return {
-    templateFormats: ['md', 'njk', 'html', 'liquid', '11ty.js'],
-    htmlTemplateEngine: 'njk',
-    passthroughFileCopy: true,
-    dir: {
-      input: 'src',
-      // better not use "public" as the name of the output folder (see above...)
-      output: process.env.ELEVENTY_TEST_OUTPUT || '_site',
-      includes: '_includes',
-      layouts: '_includes/layouts',
-      data: '_data',
-    },
-  }
+    dir: dirs,
+    markdownTemplateEngine: "njk",
+    htmlTemplateEngine: "njk",
+    templateFormats: ["md", "njk", "html", "11ty.js"],
+    pathPrefix: "/",
+  };
 }
