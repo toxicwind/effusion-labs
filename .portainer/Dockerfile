@@ -4,7 +4,7 @@
 ############################
 # deps layer (heavy caching)
 ############################
-FROM node:24-bookworm AS deps
+FROM node:25-bookworm AS deps
 WORKDIR /app
 
 RUN apt-get update && \
@@ -90,7 +90,7 @@ HEALTHCHECK --interval=30s --timeout=3s --start-period=10s \
     CMD curl --fail --silent --show-error http://127.0.0.1/ >/dev/null 2>&1 || exit 1
 =======
 # ─── Build stage ──────────────────────────────────────────────────────────────
-FROM node:20-alpine AS builder
+FROM node:25-alpine AS builder
 
 WORKDIR /app
 
