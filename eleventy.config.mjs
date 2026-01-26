@@ -13,7 +13,7 @@ const slug = (s) =>
   String(s ?? "")
     .normalize("NFKD")
     .toLowerCase()
-    .replace(/[^\w\s-]/g, "")
+    .replace(/[^\s\w-]/g, "")
     .trim()
     .replace(/\s+/g, "-")
     .replace(/-+/g, "-");
@@ -50,6 +50,12 @@ export default function (eleventyConfig) {
         const tags = p.data.tags || [];
         return tags.includes("prototype") || p.data.interactive === true;
       })
+      .sort((a, b) => b.date - a.date)
+  );
+
+  eleventyConfig.addCollection("eleventy", (api) =>
+    api
+      .getFilteredByGlob("src/content/docs/eleventy/**/*.md")
       .sort((a, b) => b.date - a.date)
   );
 
@@ -116,14 +122,14 @@ export default function (eleventyConfig) {
       try {
         const txt = fs.readFileSync(this.page.inputPath, 'utf8');
         return (
-          txt.match(/\n\[\^[^\n]*?\]:.*?(?=\n\n|$)/gs) || []
+          txt.match(/\n\[\^[^\n]*?]:.*?(?=\n\n|$)/gs) || []
         ).join('\n');
       } catch {
         return '';
       }
     })();
     const rendered = md.render(`${content}\n${footnotes}`);
-    const body = rendered.replace(/<section class="footnotes"[\s\S]*<\/section>/, '');
+    const body = rendered.replace(/<section class="footnotes"[\S\s]*<\/section>/, '');
 
     return `
 <aside class="${classes}" role="note" aria-labelledby="${safeId}">

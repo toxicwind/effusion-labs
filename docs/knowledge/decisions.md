@@ -23,3 +23,4 @@
 - Added initial POP MART 'The Monsters' archive scaffolding with record-per-product model. Used local HTML for provenance due to Node fetch network limitations.
 - Seeded POP MART “The Monsters” products from placeholder seed article; bulk records initialized.
 - Network connectivity failed; marked selected POP MART products as low-confidence pending verification.
+- Added Eleventy capture tooling (`tools/eleventy/*`) to generate Effusion Labs Markdown pages with consistent frontmatter and tags.
