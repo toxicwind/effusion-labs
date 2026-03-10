@@ -1,42 +1,38 @@
 {
-  "type": "product",
-  "product_id": "pop-mart--the-monsters--mokoko--close-to-sweet-v1--pendant--std--17cm",
-  "brand": "pop-mart",
-  "line": "the-monsters",
-  "character": "mokoko",
-  "series": "close-to-sweet-v1",
-  "form": "pendant",
-  "variant": "std",
-  "edition": {
-    "kind": "core"
-  },
-  "distribution": {
-    "region_lock": false,
-<<<<<<< HEAD
-    "markets": ["CN"]
-=======
-    "markets": [
-      "CN"
-    ]
->>>>>>> broken/codex/add-dark-mode-as-default-with-light-mode-option
-  },
-  "size": {
-    "unit": "cm",
-    "h": 17
-  },
-  "market_listings": [
-    {
-      "market": "CN",
-      "currency": "CNY",
-      "price": 159
-    }
-  ],
   "availability": {
     "limited": false,
     "unit_count": null
   },
-  "images": [],
-  "provenance_ref": "/content/archives/collectables/designer-toys/pop-mart/the-monsters/provenance/pop-mart--the-monsters--mokoko--close-to-sweet-v1--pendant--std--17cm.jsonl",
+  "brand": "pop-mart",
+  "character": "mokoko",
   "confidence": 0.2,
-  "notes": "Network fetch failed; pending verification."
+  "distribution": {
+    "markets": [
+      "CN"
+    ],
+    "region_lock": false
+  },
+  "edition": {
+    "kind": "core"
+  },
+  "form": "pendant",
+  "images": [],
+  "line": "the-monsters",
+  "market_listings": [
+    {
+      "currency": "CNY",
+      "market": "CN",
+      "price": 159
+    }
+  ],
+  "notes": "Network fetch failed; pending verification.",
+  "product_id": "pop-mart--the-monsters--mokoko--close-to-sweet-v1--pendant--std--17cm",
+  "provenance_ref": "/content/archives/collectables/designer-toys/pop-mart/the-monsters/provenance/pop-mart--the-monsters--mokoko--close-to-sweet-v1--pendant--std--17cm.jsonl",
+  "series": "close-to-sweet-v1",
+  "size": {
+    "h": 17,
+    "unit": "cm"
+  },
+  "type": "product",
+  "variant": "std"
 }

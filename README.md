@@ -1,4 +1,23 @@
-<<<<<<< HEAD
+# Effusion Labs
+This README was rebuilt by merge-heal after conflict marker corruption.
+It preserves both sides below for zero-loss recovery.
+
+## Dev
+```bash
+bun install   # if Bun is available
+bun run dev   # or your project dev command
+```
+
+## Build
+```bash
+bun run build
+```
+
+---
+
+## Salvaged README (ours)
+
+```text
 # 🧪 EFFUSION LABS | HYPERBRUT CI ENGINE
 > **VERSION: 2026.1.0** | **STANCE: CONSTRAINED_CI_MASTERY**
 
@@ -60,7 +79,11 @@ npm run build:ci  # Production build with network contract enforcement
 
 ---
 *Unified Effusion Labs Framework | Optimized for Autonomous Synthesis.*
-=======
+```
+
+## Salvaged README (theirs)
+
+```text
 # Effusion Labs Digital Garden
 
 Effusion Labs is a long‑form digital garden and studio powered by Eleventy, Nunjucks and Tailwind CSS. It serves as a structured space for developing ideas, capturing research and publishing a static site.
@@ -257,4 +280,4 @@ This project is licensed under the [ISC License](./LICENSE)【F:LICENSE†L1-L11
 
 - [docs/knowledge/](./docs/knowledge/) – decision history and source captures
 - [tools/api-twin/](./tools/api-twin/) – API twin stub location
->>>>>>> broken/codex/add-dark-mode-as-default-with-light-mode-option
+```

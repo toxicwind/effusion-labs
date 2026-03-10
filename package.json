@@ -5,7 +5,6 @@
   "keywords": [],
   "license": "ISC",
   "author": "",
-  "type": "module",
   "scripts": {
     "start": "bun run dev",
     "dev": "bun x @11ty/eleventy --serve",
@@ -46,8 +45,7 @@
     "eleventy:meta": "bun tools/eleventy/emit-meta.mjs",
     "mcp:start": "bun services/mcp-stack/gateway/server.mjs",
     "mcp:integration": "bun services/mcp-stack/tests/integration.mjs",
-    "mcp:test": "bun services/mcp-stack/tests/smoke.mjs",
-    "postinstall": "bun tools/apply-patches.mjs"
+    "mcp:test": "bun services/mcp-stack/tests/smoke.mjs"
   },
   "lint-staged": {
     "package.json": [
@@ -199,6 +197,7 @@
     "lru-cache": "11.2.4",
     "minisearch": "7.2.0",
     "react": "^19.2.3",
-    "react-dom": "^19.2.3"
+    "react-dom": "^19.2.3",
+    "turndown": "^7.2.2"
   }
 }

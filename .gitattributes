@@ -1,2 +1,5 @@
 src/content/projects/lv-images/generated/**/*.json filter=lfs diff=lfs merge=lfs -text
 src/content/projects/lv-images/generated/lv.bundle.tgz filter=lfs diff=lfs merge=lfs -text
+
+*.json merge=hbjson
+*.jsonl merge=hbjsonl

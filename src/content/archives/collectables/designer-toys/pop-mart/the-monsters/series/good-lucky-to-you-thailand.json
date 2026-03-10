@@ -1,17 +1,11 @@
 {
-  "type": "series",
   "brand": "pop-mart",
-  "line": "the-monsters",
-  "slug": "good-lucky-to-you-thailand",
-  "title": "GOOD LUCKY TO YOU (Thailand)",
-<<<<<<< HEAD
-  "character_slugs": ["labubu"],
-  "notes": "Seeded from initial article; needs confirmation."
-}
-=======
   "character_slugs": [
     "labubu"
   ],
-  "notes": "Seeded from initial article; needs confirmation."
+  "line": "the-monsters",
+  "notes": "Seeded from initial article; needs confirmation.",
+  "slug": "good-lucky-to-you-thailand",
+  "title": "GOOD LUCKY TO YOU (Thailand)",
+  "type": "series"
 }
->>>>>>> broken/codex/add-dark-mode-as-default-with-light-mode-option
