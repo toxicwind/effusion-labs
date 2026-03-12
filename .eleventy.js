@@ -5,6 +5,7 @@ const registerArchiveCollections = require("./lib/eleventy/archive-collections")
 
 module.exports = function (eleventyConfig) {
   register(eleventyConfig);
+  eleventyConfig.ignores.add('src/layouts/**');
   eleventyConfig.ignores.add('src/content/docs/**');
   eleventyConfig.ignores.add('src/content/docs/**/*.html');
   eleventyConfig.ignores.add('src/content/docs/knowledge/**/*.html');

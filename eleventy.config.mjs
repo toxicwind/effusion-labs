@@ -32,6 +32,7 @@ export default function (eleventyConfig) {
 
   // Core project wiring (markdown, assets, images, etc.)
   register(eleventyConfig);
+  eleventyConfig.ignores.add('src/layouts/**');
 
   // 🔐 Load JSON archives → stable collections + helpers
   // Exposes: collections.archiveProducts / archiveCharacters / archiveSeries

@@ -1,67 +1,19 @@
 {
-  "name": "effusion_labs_final",
-  "version": "1.0.0",
-  "description": "This is a digital studio and knowledge base for Effusion Labs, built with Eleventy and the powerful `@photogabble/eleventy-plugin-interlinker`.",
-  "keywords": [],
-  "license": "ISC",
   "author": "",
-  "scripts": {
-    "start": "bun run dev",
-    "dev": "eleventy --serve",
-    "serve": "eleventy --serve",
-    "serve:playwright": "bun tools/serve-static.mjs",
-    "build": "bun run build:site",
-    "build:site": "NODE_OPTIONS='--max-old-space-size=8192' NODE_ENV=production eleventy",
-    "build:offline": "bun tools/lv-images/pipeline.mjs build",
-    "build:ci": "bun bin/quality.mjs check --soft && NODE_ENV=production eleventy",
-    "clean": "del-cli _site",
-    "quality": "bun bin/quality.mjs",
-    "quality:apply": "bun bin/quality.mjs apply",
-    "quality:check": "bun bin/quality.mjs check",
-    "quality:ci": "bun bin/quality.mjs check --soft",
-    "quality:report": "bun bin/quality.mjs check --soft --knip-report",
-    "lint": "bun run quality:check",
-    "lint:ci": "bun run quality:ci",
-    "format": "bun run quality:apply",
-    "test": "bun tools/check-chromium.mjs && c8 bun test/integration/runner.spec.mjs",
-    "test:watch": "bun tools/check-chromium.mjs && bun --watch test/integration/runner.spec.mjs",
-    "test:playwright": "bun tools/check-chromium.mjs && bunx playwright test",
-    "check": "bun run doctor && bun run quality:check && bun run test",
-    "doctor": "bun tools/doctor.mjs",
-    "tools:apply-patches": "bun tools/apply-patches.mjs --verbose",
-    "tools:check-patches": "bun tools/apply-patches.mjs --check",
-    "crawl:pages": "bun tools/lv-images/pipeline.mjs crawl --mode=pages",
-    "crawl:full": "bun tools/lv-images/pipeline.mjs crawl-pages-images",
-    "crawl:web": "bun tools/lv-images/pipeline.mjs crawl-pages",
-    "hydrate": "bun tools/lv-images/pipeline.mjs hydrate-build",
-    "cycle": "bun tools/lv-images/pipeline.mjs cycle-pages",
-    "links:check": "bun tools/run-if-network.mjs markdown-link-check -c oneoff/link-check.config.json README.md",
-    "links:ci": "bun tools/run-if-network.mjs markdown-link-check -c oneoff/link-check.config.json README.md || true",
-    "lint:dead": "bun run quality:report",
-    "eleventy:capture": "bun tools/eleventy/emit.mjs",
-    "eleventy:spark": "bun tools/eleventy/emit-spark.mjs",
-    "eleventy:concept": "bun tools/eleventy/emit-concept.mjs",
-    "eleventy:project": "bun tools/eleventy/emit-project.mjs",
-    "eleventy:meta": "bun tools/eleventy/emit-meta.mjs",
-    "mcp:start": "bun services/mcp-stack/gateway/server.mjs",
-    "mcp:integration": "bun services/mcp-stack/tests/integration.mjs",
-    "mcp:test": "bun services/mcp-stack/tests/smoke.mjs"
+  "dependencies": {
+    "@react-three/drei": "^10.7.7",
+    "@react-three/fiber": "^9.5.0",
+    "@vitejs/plugin-react": "^5.1.2",
+    "alpinejs": "3.15.4",
+    "fuse.js": "7.1.0",
+    "gsap": "^3.14.2",
+    "lru-cache": "11.2.6",
+    "minisearch": "7.2.0",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
+    "turndown": "^7.2.2"
   },
-  "lint-staged": {
-    "package.json": [
-      "dprint fmt -c dprint.json --allow-no-files"
-    ],
-    "*.{js,mjs,ts,tsx}": [
-      "eslint --fix --cache --cache-location .cache/eslint",
-      "dprint fmt -c dprint.json --allow-no-files"
-    ],
-    "*.{njk,html,js,jsx,ts,tsx}": [
-      "rustywind --write"
-    ],
-    "*.{json,html,njk,yml,yaml}": [
-      "dprint fmt -c dprint.json --allow-no-files"
-    ]
-  },
+  "description": "This is a digital studio and knowledge base for Effusion Labs, built with Eleventy and the powerful `@photogabble/eleventy-plugin-interlinker`.",
   "devDependencies": {
     "@11ty/eleventy": "3.1.2",
     "@11ty/eleventy-fetch": "5.1.1",
@@ -176,29 +128,77 @@
   "engines": {
     "node": ">=22.19.0"
   },
+  "keywords": [],
+  "license": "ISC",
+  "lint-staged": {
+    "*.{js,mjs,ts,tsx}": [
+      "eslint --fix --cache --cache-location .cache/eslint",
+      "dprint fmt -c dprint.json --allow-no-files"
+    ],
+    "*.{json,html,njk,yml,yaml}": [
+      "dprint fmt -c dprint.json --allow-no-files"
+    ],
+    "*.{njk,html,js,jsx,ts,tsx}": [
+      "rustywind --write"
+    ],
+    "package.json": [
+      "dprint fmt -c dprint.json --allow-no-files"
+    ]
+  },
+  "name": "effusion_labs_final",
   "overrides": {
-    "rustywind": {
-      "https-proxy-agent": "5.0.1"
-    },
     "patch-package": {
       "glob": "^10.4.5",
       "rimraf": "^5.0.9"
     },
     "rimraf": {
       "glob": "^10.4.5"
+    },
+    "rustywind": {
+      "https-proxy-agent": "5.0.1"
     }
   },
-  "dependencies": {
-    "@react-three/drei": "^10.7.7",
-    "@react-three/fiber": "^9.5.0",
-    "@vitejs/plugin-react": "^5.1.2",
-    "alpinejs": "3.15.4",
-    "fuse.js": "7.1.0",
-    "gsap": "^3.14.2",
-    "lru-cache": "11.2.6",
-    "minisearch": "7.2.0",
-    "react": "^19.2.3",
-    "react-dom": "^19.2.3",
-    "turndown": "^7.2.2"
-  }
+  "scripts": {
+    "build": "bun run build:site",
+    "build:ci": "bun bin/quality.mjs check --soft && NODE_ENV=production eleventy",
+    "build:offline": "bun tools/lv-images/pipeline.mjs build",
+    "build:site": "NODE_OPTIONS='--max-old-space-size=8192' NODE_ENV=production eleventy",
+    "check": "bun run doctor && bun run quality:check && bun run test",
+    "clean": "del-cli _site",
+    "crawl:full": "bun tools/lv-images/pipeline.mjs crawl-pages-images",
+    "crawl:pages": "bun tools/lv-images/pipeline.mjs crawl --mode=pages",
+    "crawl:web": "bun tools/lv-images/pipeline.mjs crawl-pages",
+    "cycle": "bun tools/lv-images/pipeline.mjs cycle-pages",
+    "dev": "eleventy --serve",
+    "doctor": "bun tools/doctor.mjs",
+    "eleventy:capture": "bun tools/eleventy/emit.mjs",
+    "eleventy:concept": "bun tools/eleventy/emit-concept.mjs",
+    "eleventy:meta": "bun tools/eleventy/emit-meta.mjs",
+    "eleventy:project": "bun tools/eleventy/emit-project.mjs",
+    "eleventy:spark": "bun tools/eleventy/emit-spark.mjs",
+    "format": "bun run quality:apply",
+    "hydrate": "bun tools/lv-images/pipeline.mjs hydrate-build",
+    "links:check": "bun tools/run-if-network.mjs markdown-link-check -c oneoff/link-check.config.json README.md",
+    "links:ci": "bun tools/run-if-network.mjs markdown-link-check -c oneoff/link-check.config.json README.md || true",
+    "lint": "bun run quality:check",
+    "lint:ci": "bun run quality:ci",
+    "lint:dead": "bun run quality:report",
+    "mcp:integration": "bun services/mcp-stack/tests/integration.mjs",
+    "mcp:start": "bun services/mcp-stack/gateway/server.mjs",
+    "mcp:test": "bun services/mcp-stack/tests/smoke.mjs",
+    "quality": "bun bin/quality.mjs",
+    "quality:apply": "bun bin/quality.mjs apply",
+    "quality:check": "bun bin/quality.mjs check",
+    "quality:ci": "bun bin/quality.mjs check --soft",
+    "quality:report": "bun bin/quality.mjs check --soft --knip-report",
+    "serve": "eleventy --serve",
+    "serve:playwright": "bun tools/serve-static.mjs",
+    "start": "bun run dev",
+    "test": "bun tools/check-chromium.mjs && c8 bun test/integration/runner.spec.mjs",
+    "test:playwright": "bun tools/check-chromium.mjs && bunx playwright test",
+    "test:watch": "bun tools/check-chromium.mjs && bun --watch test/integration/runner.spec.mjs",
+    "tools:apply-patches": "bun tools/apply-patches.mjs --verbose",
+    "tools:check-patches": "bun tools/apply-patches.mjs --check"
+  },
+  "version": "1.0.0"
 }
