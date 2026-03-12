@@ -1,4 +1,4 @@
-import { gsap } from "gsap";
+import { gsap } from 'https://esm.sh/gsap@3.14.2';
 
 /**
  * HYPEBRÜT HUD ENGINE

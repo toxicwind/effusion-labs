@@ -10,6 +10,10 @@ RUN apt-get update && \
     apt-get install -y --no-install-recommends build-essential python3 ca-certificates git && \
     rm -rf /var/lib/apt/lists/*
 
+RUN curl -fsSL https://bun.sh/install | bash && \
+    ln -sf /root/.bun/bin/bun /usr/local/bin/bun && \
+    bun --version
+
 ENV npm_config_fund=false \
     npm_config_audit=false \
     npm_config_proxy= \
@@ -21,13 +25,13 @@ ENV npm_config_fund=false \
     PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1 \
     PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1
 
-COPY package*.json ./
+COPY package.json bun.lock bunfig.toml ./
 COPY patches/ ./patches/
 # postinstall needs the patch runner available during dependency install
 COPY tools/apply-patches.mjs ./tools/apply-patches.mjs
 COPY tools/resolve-chromium.mjs ./tools/resolve-chromium.mjs
 COPY bin/install-chromium.sh ./bin/install-chromium.sh
-RUN npm ci --no-audit --no-fund
+RUN bun install --frozen-lockfile
 RUN chmod +x bin/install-chromium.sh && \
     mkdir -p /usr/local/bin && \
     PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=0 ./bin/install-chromium.sh >/tmp/chromium-path && \
@@ -55,7 +59,7 @@ ENV NODE_ENV=production \
     PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1 \
     PUPPETEER_EXECUTABLE_PATH=/usr/local/bin/chromium \
     PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1
-COPY package*.json ./
+COPY package.json bun.lock bunfig.toml ./
 COPY tools ./tools
 COPY bin ./bin
 COPY . .
@@ -69,10 +73,10 @@ RUN mkdir -p /tmp/artifacts && \
     tar -xzf /tmp/lv-bundle.tar.gz -C src/content/projects/lv-images/generated/ 2>/dev/null || true; \
     fi
 
-RUN node tools/check-chromium.mjs && \
-    npm run tools:check-patches && \
-    NODE_OPTIONS='--max-old-space-size=8192' npm run build:offline && \
-    npx vite build
+RUN bun tools/check-chromium.mjs && \
+    bun run tools:check-patches && \
+    NODE_OPTIONS='--max-old-space-size=8192' bun run build:offline && \
+    NODE_OPTIONS='--max-old-space-size=8192' NODE_ENV=production bun run build:site
 
 ############################
 # runtime (tiny, static)

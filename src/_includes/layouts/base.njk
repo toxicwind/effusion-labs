@@ -54,7 +54,7 @@
     {# ---------------- Favicons ---------------- #}
     <link rel="icon" type="image/svg+xml" href="{{ '/favicon.svg' | url }}">
     <link rel="manifest" href="{{ '/site.webmanifest' | url }}">
-    <link rel="stylesheet" href="/assets/css/liquid-glass.css">
+    <link rel="stylesheet" href="{{ '/assets/css/liquid-glass.css' | url }}">
     {% block head %}{% endblock %}
   </head>
   <body class="antialiased text-slate-400 bg-slate-900">
@@ -107,33 +107,21 @@
     {{ footer(buildTime) }}
     
     <script type="module">
-      import { initCursor } from '/assets/js/cursor.js';
+      import { initCursor } from '{{ '/assets/js/cursor.js' | url }}';
       if (window.matchMedia('(min-width: 768px)').matches) {
         initCursor();
       }
     </script>
-    <script src="https://unpkg.com/quicklink@2.3.0/dist/quicklink.umd.js"></script>
-    <script>
-      window.addEventListener('load', () => {
-        quicklink.listen();
-        if ('serviceWorker' in navigator) {
-          navigator.serviceWorker.register('/service-worker.js')
-            .then(reg => console.log('SW registered!', reg.scope))
-            .catch(err => console.log('SW failed:', err));
-        }
-      });
-    </script>
-
     
     <!-- Three.js & Hero Scene -->
     <div id="hero-background" class="fixed inset-0 z-0 pointer-events-none"></div>
   <div id="react-overlay" class="fixed inset-0 z-10 pointer-events-none"></div>
 
   <!-- Hero Scene (Vanilla/Three.js) -->
-  <script type="module" src="/src/assets/js/hero-scene.js"></script>
+  <script type="module" src="{{ '/assets/js/hero-scene.js' | url }}"></script>
   
   <!-- React Fiber Overlay -->
   {# <script type="module" src="/src/assets/js/canvas-overlay.jsx"></script> #}
-    <script type="module" src="/assets/js/hud.js"></script>
+    <script type="module" src="{{ '/assets/js/hud.js' | url }}"></script>
   </body>
 </html>
