@@ -2,6 +2,7 @@
 layout: base.njk
 fullBleed: true
 metaDisable: true
+eleventyExcludeFromCollections: true
 ---
 # dprint-ignore-file
 {#
@@ -52,7 +53,7 @@ metaDisable: true
 {% set datasetFlags = dataset.flags or [] %}
 {% set datasetCapture = dataset.capture or [] %}
 {% set summaryTotals = dataset.summaryTotals or summary.totals or {} %}
-<script type="application/json" id="lvreport-data">{{ clientPayloadJson | safe }}</script>
+<script type="text/plain" id="lvreport-data" data-encoding="base64">{{ clientPayloadB64 }}</script>
 <script type="module" src="/assets/js/lvreport-app.js"></script>
 {%
   set warningCopy = {

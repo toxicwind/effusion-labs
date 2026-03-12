@@ -1,0 +1,105 @@
+---
+layout: base.njk
+showTitle: false
+---
+{% from "components/icons.njk" import icon %}
+
+<article class="stack" style="--space: var(--space-2xl)">
+  {# --- Consulting Hero --- #}
+  <header
+    class="hb-neon p-space-xl hb-intensity-bold rounded-2xl relative overflow-hidden stack items-center text-center"
+    style="--space: var(--space-m)"
+  >
+    <div class="absolute inset-0 opacity-10 hb-grid"></div>
+    <div class="z-10 stack" style="--space: var(--space-s)">
+      <span class="text-xs font-black uppercase tracking-[0.4em] text-primary"
+      >Strategic Partnership</span>
+      <h1 class="text-[clamp(3rem,7vw,5rem)] font-black leading-tight tracking-tighter uppercase hb-ink">
+        Creative Technical Consulting<span class="text-secondary">_</span>
+      </h1>
+      <p class="text-xl opacity-80 max-w-2xl mx-auto leading-relaxed">
+        Bridging the gap between conceptual architecture and industrial-grade agentic systems
+        implementation.
+      </p>
+    </div>
+    <div class="z-10 cluster justify-center mt-space-m" style="--space: var(--space-s)">
+      <a
+        href="#contact"
+        class="btn btn-primary px-10 hb-shadow-brut uppercase font-black tracking-widest"
+      >Inquire</a>
+      <a
+        href="/work/"
+        class="btn btn-ghost uppercase border-2 border-base-content/20 font-black tracking-widest"
+      >Case Studies</a>
+    </div>
+  </header>
+
+  {# --- Services Grid --- #}
+  <section class="max-w-screen-xl mx-auto w-full stack" style="--space: var(--space-xl)">
+    <div class="stack" style="--space: var(--space-3xs)">
+      <h2 class="text-xs uppercase tracking-[0.3em] font-black opacity-30">Specializations</h2>
+      <p class="text-h2 font-black">Core Competencies</p>
+    </div>
+
+    <div class="grid-auto" style="--grid-min: 18rem; --space: var(--space-l)">
+      {% for service in consulting.services %}
+        <div
+          class="hb-brut-card p-space-m stack group transition-all"
+          style="--space: var(--space-m)"
+        >
+          <div class="cluster justify-between items-center">
+            <div class="p-3 bg-primary/10 rounded-lg text-primary group-hover:bg-primary group-hover:text-base-100 transition-colors">
+              {{ icon(service.icon or 'activity', { class: 'w-6 h-6' }) }}
+            </div>
+            <span class="text-[0.6rem] font-mono opacity-20">0{{ loop.index }}</span>
+          </div>
+          <h3 class="text-xl font-black hb-ink">{{ service.title }}</h3>
+          <p class="text-sm opacity-60 leading-relaxed">{{ service.description }}</p>
+          <ul class="list-none p-0 m-0 stack" style="--space: var(--space-2xs)">
+            {% for feature in service.features %}
+              <li class="text-xs font-mono opacity-40 flex items-center gap-2">
+                <span class="w-1 h-1 bg-primary/40 rounded-full"></span>
+                {{ feature }}
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endfor %}
+    </div>
+  </section>
+
+  {# --- Engagement Model --- #}
+  <section class="bg-base-200/50 py-space-3xl border-y border-base-content/5">
+    <div
+      class="max-w-screen-xl mx-auto px-gutter switcher"
+      style="--threshold: 50rem; --space: var(--space-2xl)"
+    >
+      <div class="stack" style="--space: var(--space-m)">
+        <h2 class="text-h2 font-black tracking-tight">How we work.</h2>
+        <p class="text-lg opacity-70 leading-relaxed">
+          We specialize in short-cycle, high-intensity sprints designed to stabilize legacy
+          infrastructures while prototyping next-generation agentic layers.
+        </p>
+        <div class="hb-accent p-space-m hb-inlay stack" style="--space: var(--space-s)">
+          <span class="text-[0.6rem] uppercase tracking-widest font-black text-secondary"
+          >Operational Mode</span>
+          <p class="text-sm font-bold opacity-90 italic">
+            Direct-to-Engineer Synthesis • Asynchronous First • Documentation-Driven
+          </p>
+        </div>
+      </div>
+
+      <div class="stack" style="--space: var(--space-m)">
+        {% for phase in consulting.process %}
+          <div class="cluster items-start" style="--space: var(--space-m)">
+            <span class="text-2xl font-black hb-num-outline opacity-30">{{ loop.index }}</span>
+            <div class="stack" style="--space: var(--space-3xs)">
+              <h3 class="text-base font-black hb-ink">{{ phase.title }}</h3>
+              <p class="text-sm opacity-60">{{ phase.summary }}</p>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+</article>

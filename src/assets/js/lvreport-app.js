@@ -8,7 +8,32 @@ const payloadSource = (() => {
   if (datasetEl.tagName === 'TEMPLATE') return datasetEl.innerHTML
   return datasetEl.textContent
 })()
-const payload = payloadSource ? JSON.parse(payloadSource) : {}
+function decodeB64Utf8(value) {
+  try {
+    const binary = atob(value)
+    const bytes = new Uint8Array(binary.length)
+    for (let index = 0; index < binary.length; index++) {
+      bytes[index] = binary.charCodeAt(index)
+    }
+    return new TextDecoder('utf-8').decode(bytes)
+  } catch {
+    return ''
+  }
+}
+
+const payload = (() => {
+  if (!payloadSource) return {}
+  try {
+    const encoding = datasetEl?.dataset?.encoding || ''
+    if (encoding.toLowerCase() === 'base64') {
+      const decoded = decodeB64Utf8(payloadSource.trim())
+      return decoded ? JSON.parse(decoded) : {}
+    }
+    return JSON.parse(payloadSource)
+  } catch {
+    return {}
+  }
+})()
 const baseHref = payload.baseHref || ''
 const sections = payload.page?.sections || {}
 const sectionKeys = Object.keys(sections)

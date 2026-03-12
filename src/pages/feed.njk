@@ -18,14 +18,14 @@ json:
     <atom:link href="{{ permalink | htmlBaseUrl(metadata.base) }}" rel="self" type="application/rss+xml" />
     <description>{{ metadata.description }}</description>
     <language>{{ metadata.language }}</language>
-    <lastBuildDate>{{ build.date | dateToRfc822 }}</lastBuildDate>
+    <lastBuildDate>{{ (build.date or page.date) | date("EEE, dd LLL yyyy HH:mm:ss 'GMT'") }}</lastBuildDate>
     {%- for post in posts %}
     {%- set absUrl = post.url | htmlBaseUrl(metadata.base) %}
     <item>
       <title>{{ post.data.title }}</title>
       <link>{{ absUrl }}</link>
       <description>{{ post.content | renderTransforms(post.data.page, metadata.base) }}</description>
-      <pubDate>{{ post.date | dateToRfc822 }}</pubDate>
+      <pubDate>{{ post.date | date("EEE, dd LLL yyyy HH:mm:ss 'GMT'") }}</pubDate>
       <guid>{{ absUrl }}</guid>
     </item>
     {%- endfor %}

@@ -61,7 +61,7 @@ title: "{{ (proj and proj.title) or title or (page.fileSlug | title) }}"
   </article>
 </section>
 
-{% if content | trim %}
+{% if (content or '') | trim %}
   <section class="mt-8 space-y-8">
     {{ content | safe }}
   </section>

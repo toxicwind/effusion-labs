@@ -764,8 +764,17 @@ function buildFlagSections(bans) {
 function truncatePreview(text, max = 320) {
   if (!text) return ''
   const trimmed = text.trim()
-  if (trimmed.length <= max) return trimmed
-  return `${trimmed.slice(0, max).trim()}…`
+  const clipped = trimmed.length <= max ? trimmed : `${trimmed.slice(0, max).trim()}…`
+  return neutralizeTemplateTokens(clipped)
+}
+
+function neutralizeTemplateTokens(text) {
+  if (!text) return ''
+  return String(text)
+    .replace(/\[\[/g, '[\u200b[')
+    .replace(/\]\]/g, ']\u200b]')
+    .replace(/\{\{/g, '{\u200b{')
+    .replace(/\}\}/g, '}\u200b}')
 }
 
 function cleanText(value) {
@@ -1379,11 +1388,7 @@ async function generateReport() {
     const classification = classifyDocContent(relPath, previewSource)
     docCounts[classification.category] = (docCounts[classification.category] || 0) + 1
 
-    const preview = ((t, m = 360) => {
-      const trimmed = (t || '').trim()
-      if (trimmed.length <= m) return trimmed
-      return `${trimmed.slice(0, m).trim()}…`
-    })(previewSource, 360)
+    const preview = truncatePreview(previewSource, 360)
 
     if (isBannedHost(host) || isBannedHost(url)) continue
 

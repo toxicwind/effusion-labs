@@ -18,6 +18,56 @@ async function loadReport() {
   return report
 }
 
+function buildClientPayload(context) {
+  const payload = {
+    baseHref: context.lvreport?.baseHref || '/content/projects/lv-images/generated/lv/',
+    totals: context.lvreport?.totals || {},
+    dataset: {
+      ndjson: context.lvreport?.dataset?.ndjson || {},
+      cache: context.lvreport?.dataset?.cache || {},
+      warnings: context.lvreport?.dataset?.warnings || [],
+      history: context.lvreport?.dataset?.history || null,
+      flags: context.lvreport?.dataset?.flags || [],
+      capture: context.lvreport?.dataset?.capture || [],
+      summaryTotals: context.lvreport?.dataset?.summaryTotals || null,
+      bundleLabel: context.lvreport?.dataset?.bundleLabel || null,
+      runMode: context.lvreport?.dataset?.runMode || null,
+    },
+    page: {
+      number: context.lvReportPage?.pageNumber ?? 0,
+      count: context.lvReportPage?.pageCount ?? 1,
+      sections: context.lvReportPage?.sections || {},
+    },
+    search: context.lvreport?.search || {},
+  }
+
+  payload.meta = context.lvreport?.meta || {}
+  const baked = context.lvreport?.baked || {}
+  payload.baked = {
+    indexHref:
+      baked.indexHref
+      || context.lvreport?.dataset?.indexHref
+      || '/lvreport/report.json',
+    statsHref:
+      baked.statsHref
+      || context.lvreport?.dataset?.statsHref
+      || '/lvreport/stats.json',
+    generatedAt: baked.generatedAt || payload.meta.generatedAt || null,
+    version: baked.version || payload.meta.version || null,
+  }
+
+  return payload
+}
+
+function serializePayload(payload) {
+  return JSON.stringify(payload)
+    .replace(/</g, '\\u003c')
+    .replace(/>/g, '\\u003e')
+    .replace(/&/g, '\\u0026')
+    .replace(/\u2028/g, '\\u2028')
+    .replace(/\u2029/g, '\\u2029')
+}
+
 export default async function () {
   const report = await loadReport()
   const pages = report?.pages
@@ -47,47 +97,11 @@ export default async function () {
         return pageNumber === 0 ? base : `${base} (Page ${pageNumber + 1} of ${total})`
       },
       clientPayloadJson(context) {
-        const payload = {
-          baseHref: context.lvreport?.baseHref || '/content/projects/lv-images/generated/lv/',
-          totals: context.lvreport?.totals || {},
-          dataset: {
-            ndjson: context.lvreport?.dataset?.ndjson || {},
-            cache: context.lvreport?.dataset?.cache || {},
-            warnings: context.lvreport?.dataset?.warnings || [],
-            history: context.lvreport?.dataset?.history || null,
-            flags: context.lvreport?.dataset?.flags || [],
-            capture: context.lvreport?.dataset?.capture || [],
-            summaryTotals: context.lvreport?.dataset?.summaryTotals || null,
-            bundleLabel: context.lvreport?.dataset?.bundleLabel || null,
-            runMode: context.lvreport?.dataset?.runMode || null,
-          },
-          page: {
-            number: context.lvReportPage?.pageNumber ?? 0,
-            count: context.lvReportPage?.pageCount ?? 1,
-            sections: context.lvReportPage?.sections || {},
-          },
-          search: context.lvreport?.search || {},
-        }
-        payload.meta = context.lvreport?.meta || {}
-        const baked = context.lvreport?.baked || {}
-        payload.baked = {
-          indexHref:
-            baked.indexHref
-            || context.lvreport?.dataset?.indexHref
-            || '/lvreport/report.json',
-          statsHref:
-            baked.statsHref
-            || context.lvreport?.dataset?.statsHref
-            || '/lvreport/stats.json',
-          generatedAt: baked.generatedAt || payload.meta.generatedAt || null,
-          version: baked.version || payload.meta.version || null,
-        }
-        return JSON.stringify(payload)
-          .replace(/</g, '\\u003c')
-          .replace(/>/g, '\\u003e')
-          .replace(/&/g, '\\u0026')
-          .replace(/\u2028/g, '\\u2028')
-          .replace(/\u2029/g, '\\u2029')
+        return serializePayload(buildClientPayload(context))
+      },
+      clientPayloadB64(context) {
+        const payloadJson = serializePayload(buildClientPayload(context))
+        return Buffer.from(payloadJson, 'utf8').toString('base64')
       },
     },
   }
