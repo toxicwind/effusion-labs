@@ -10,7 +10,7 @@
     "lru-cache": "11.2.6",
     "minisearch": "7.2.0",
     "react": "^19.2.3",
-    "react-dom": "^19.2.3",
+    "react-dom": "^19.2.4",
     "turndown": "^7.2.2"
   },
   "description": "This is a digital studio and knowledge base for Effusion Labs, built with Eleventy and the powerful `@photogabble/eleventy-plugin-interlinker`.",
