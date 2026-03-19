@@ -15,7 +15,7 @@
   },
   "description": "This is a digital studio and knowledge base for Effusion Labs, built with Eleventy and the powerful `@photogabble/eleventy-plugin-interlinker`.",
   "devDependencies": {
-    "@11ty/eleventy": "3.1.2",
+    "@11ty/eleventy": "3.1.5",
     "@11ty/eleventy-fetch": "5.1.2",
     "@11ty/eleventy-img": "6.0.4",
     "@11ty/eleventy-navigation": "1.0.5",
