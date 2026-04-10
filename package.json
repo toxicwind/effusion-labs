@@ -95,7 +95,7 @@
     "ora": "9.3.0",
     "p-limit": "^7.3.0",
     "p-queue": "9.1.2",
-    "p-retry": "7.1.1",
+    "p-retry": "8.0.0",
     "picocolors": "1.1.1",
     "playwright-extra": "4.3.6",
     "postcss": "^8.5.9",
