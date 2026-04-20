@@ -101,7 +101,7 @@
     "postcss": "^8.5.10",
     "postcss-nesting": "^14.0.0",
     "proxy-chain": "2.7.1",
-    "puppeteer": "^24.41.0",
+    "puppeteer": "^24.42.0",
     "recast": "0.23.11",
     "rehype-parse": "9.0.1",
     "rehype-remark": "10.0.1",
