@@ -74,7 +74,7 @@
     "iconify-icon": "3.0.1",
     "jscodeshift": "^17.3.0",
     "jsdom": "^27.4.0",
-    "knip": "^5.88.1",
+    "knip": "^6.6.1",
     "libnpmsearch": "9.0.1",
     "lint-staged": "^16.4.0",
     "lucide": "0.577.0",
