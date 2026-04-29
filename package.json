@@ -2,7 +2,7 @@
   "author": "",
   "dependencies": {
     "@react-three/drei": "^10.7.7",
-    "@react-three/fiber": "^9.6.0",
+    "@react-three/fiber": "^9.6.1",
     "@vitejs/plugin-react": "^5.1.2",
     "alpinejs": "3.15.11",
     "fuse.js": "7.3.0",
