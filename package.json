@@ -66,7 +66,7 @@
     "fast-xml-parser": "^4.5.3",
     "fd-find": "1.2.0",
     "focus-visible": "^5.2.1",
-    "fs-extra": "11.3.4",
+    "fs-extra": "11.3.5",
     "globals": "^17.6.0",
     "gray-matter": "4.0.3",
     "hast-util-select": "6.0.4",
