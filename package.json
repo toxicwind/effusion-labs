@@ -73,7 +73,7 @@
     "husky": "^9.1.7",
     "iconify-icon": "3.0.1",
     "jscodeshift": "^17.3.0",
-    "jsdom": "^27.4.0",
+    "jsdom": "^29.1.1",
     "knip": "^5.88.1",
     "libnpmsearch": "9.0.1",
     "lint-staged": "^16.4.0",
