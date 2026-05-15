@@ -31,7 +31,7 @@
     "@playwright/test": "1.60.0",
     "@quasibit/eleventy-plugin-schema": "1.13.0",
     "@quasibit/eleventy-plugin-sitemap": "2.2.0",
-    "@shikijs/markdown-it": "3.21.0",
+    "@shikijs/markdown-it": "4.0.2",
     "@shikijs/transformers": "3.21.0",
     "@tailwindcss/postcss": "^4.3.0",
     "@tailwindcss/typography": "0.5.19",
