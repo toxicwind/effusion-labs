@@ -21,7 +21,7 @@
     "@11ty/eleventy-navigation": "1.0.5",
     "@11ty/eleventy-plugin-rss": "2.0.4",
     "@11ty/eleventy-plugin-syntaxhighlight": "^5.0.2",
-    "@11ty/eleventy-plugin-vite": "^7.1.1",
+    "@11ty/eleventy-plugin-vite": "^8.0.0",
     "@babel/parser": "7.29.3",
     "@commitlint/cli": "^19.8.1",
     "@commitlint/config-conventional": "^20.5.3",
