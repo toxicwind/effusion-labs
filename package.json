@@ -50,7 +50,7 @@
     "cssnano": "^7.1.9",
     "cssremedy": "^0.1.0-beta.2",
     "daisyui": "5.5.20",
-    "date-fns": "4.3.0",
+    "date-fns": "4.4.0",
     "del-cli": "^7.0.0",
     "depcheck": "^1.4.7",
     "dprint": "^0.53.2",
