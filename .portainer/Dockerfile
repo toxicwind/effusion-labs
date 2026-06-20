@@ -3,7 +3,7 @@
 ############################
 # deps layer (heavy caching)
 ############################
-FROM node:24-bookworm AS deps
+FROM node:26-bookworm AS deps
 WORKDIR /app
 
 RUN apt-get update && \
