@@ -33,7 +33,7 @@
     "@quasibit/eleventy-plugin-sitemap": "2.2.0",
     "@shikijs/markdown-it": "3.21.0",
     "@shikijs/transformers": "3.21.0",
-    "@tailwindcss/postcss": "^4.3.2",
+    "@tailwindcss/postcss": "^4.3.3",
     "@tailwindcss/typography": "0.5.20",
     "@tailwindcss/vite": "^4.3.3",
     "@types/node": "^25.9.3",
