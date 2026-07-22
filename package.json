@@ -110,7 +110,7 @@
     "remark-math": "6.0.0",
     "remark-smartypants": "^3.0.2",
     "remark-stringify": "11.0.0",
-    "rustywind": "^0.25.2",
+    "rustywind": "^0.26.0",
     "sass": "^1.101.3",
     "shiki": "3.21.0",
     "slugify": "1.6.9",
