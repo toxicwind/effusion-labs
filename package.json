@@ -112,7 +112,7 @@
     "remark-stringify": "11.0.0",
     "rustywind": "^0.26.0",
     "sass": "^1.101.7",
-    "shiki": "3.21.0",
+    "shiki": "4.3.1",
     "slugify": "1.6.9",
     "tailwindcss": "^4.3.3",
     "tar": "^7.5.21",
