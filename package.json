@@ -99,7 +99,7 @@
     "picocolors": "1.1.1",
     "playwright-extra": "4.3.6",
     "postcss": "^8.5.22",
-    "postcss-nesting": "^14.0.0",
+    "postcss-nesting": "^14.0.1",
     "proxy-chain": "2.7.1",
     "puppeteer": "^24.43.1",
     "recast": "0.23.12",
