@@ -90,7 +90,7 @@
     "natural": "8.1.1",
     "node-cache": "5.1.2",
     "nodemon": "3.1.14",
-    "npm-registry-fetch": "19.0.0",
+    "npm-registry-fetch": "20.0.1",
     "nunjucks": "3.2.4",
     "ora": "9.4.1",
     "p-limit": "^7.3.1",
