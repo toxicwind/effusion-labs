@@ -1,0 +1,6 @@
+[submodule "vendor/frizz"]
+	path = vendor/frizz
+	url = https://github.com/colinhacks/frizz.git
+[submodule "vendor/git-peek"]
+	path = vendor/git-peek
+	url = https://github.com/jarred-sumner/git-peek.git
