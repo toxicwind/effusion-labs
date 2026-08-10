@@ -17,10 +17,10 @@ LINKS_LOG=""
 LINKS_STATUS=0
 if [[ -n "$SUMMARY_FILE" ]]; then
   LINKS_LOG="$TMP_DIR/links-ci.log"
-  npm run --if-present links:ci | tee "$LINKS_LOG"
+  bun run --if-present links:ci | tee "$LINKS_LOG"
   LINKS_STATUS=${PIPESTATUS[0]}
 else
-  npm run --if-present links:ci
+  bun run --if-present links:ci
   LINKS_STATUS=$?
 fi
 

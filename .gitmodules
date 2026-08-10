@@ -7,3 +7,6 @@
 [submodule "tools/syncpack"]
 	path = tools/syncpack
 	url = https://github.com/JamieMason/syncpack.git
+[submodule "tools/turbo"]
+	path = tools/turbo
+	url = https://github.com/vercel/turbo.git
