@@ -23,14 +23,14 @@ mkdir -p "$TARGET_DIR"
 echo "📸 Checking pre-requisites..."
 if [ ! -d "src/content/projects/lv-images/generated" ]; then
   echo "⚠️  No generated images found. Running crawl..."
-  npm run crawl:pages
+  bun run crawl:pages
 fi
 
 echo "🏗️  Ensuring site build..."
-# We assume 'npm run build:site' or 'build:offline' has run.
+# We assume 'bun run build:site' or 'build:offline' has run.
 # But let's run a safe build to be sure we have _site
 if [ ! -d "_site" ]; then
-    npm run build:offline
+    bun run build:offline
 fi
 
 # 3. Assemble Artifacts
