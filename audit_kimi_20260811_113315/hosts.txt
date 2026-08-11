@@ -1,7 +1,0 @@
-127.0.0.1 localhost 018974aa
-172.29.160.117 kimi-api-sandbox.msh.team
-172.29.160.117 agent-gw.kimi.com
-172.29.160.117 kimi.kimi.team
-140.82.121.4 github.com
-140.82.121.4 api.github.com
-140.82.121.4 raw.githubusercontent.com
