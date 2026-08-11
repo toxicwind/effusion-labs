@@ -87,3 +87,4 @@ public/lvreport/report.json
 # JetBrains
 
 # Misc
+*.tmp.*
