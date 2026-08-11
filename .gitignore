@@ -88,3 +88,8 @@ public/lvreport/report.json
 
 # Misc
 *.tmp.*
+
+# Lock files disabled
+bun.lock
+bun.lockb
+package-lock.json

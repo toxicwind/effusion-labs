@@ -1,19 +1,12 @@
 name: "CI Build"
-
 on:
   push:
     branches: [main]
-
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          submodules: recursive
       - uses: oven-sh/setup-bun@v2
-        with:
-          bun-version: latest
-      - run: bun install
+      - run: bun install --no-save
       - run: bun run build
-      - run: bun run test || true
