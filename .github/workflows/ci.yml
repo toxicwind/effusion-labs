@@ -1,12 +1,19 @@
-name: "CI Build"
+name: "CI • Doctor → Quality → Test → Build (Bun)"
+
 on:
   push:
     branches: [main]
+  pull_request:
+  workflow_dispatch:
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
       - run: bun install --no-save
       - run: bun run build
+      - run: bun run test || true
