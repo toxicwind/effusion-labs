@@ -38,7 +38,7 @@ jobs:
 
       - name: 🏷️ Docker metadata
         id: meta
-        uses: docker/metadata-action@v5
+        uses: docker/metadata-action@v6
         with:
           images: ${{ env.WEB_IMAGE }}
           tags: |
@@ -102,7 +102,7 @@ jobs:
       - name: 🏷️ Docker metadata
         if: steps.changes.outputs.gateway == 'true'
         id: gateway-meta
-        uses: docker/metadata-action@v5
+        uses: docker/metadata-action@v6
         with:
           images: ${{ env.GATEWAY_IMAGE }}
           tags: |
