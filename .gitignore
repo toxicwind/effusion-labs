@@ -87,9 +87,3 @@ public/lvreport/report.json
 # JetBrains
 
 # Misc
-*.tmp.*
-
-# Lock files disabled
-bun.lock
-bun.lockb
-package-lock.json

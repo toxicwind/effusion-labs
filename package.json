@@ -119,9 +119,9 @@
     "tree-cli": "0.6.7",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.65.0",
-    "undici": "^7.24.7",
+    "undici": "^7.5.0",
     "unified": "11.0.5",
-    "vite": "7.3.1",
+    "vite": "^6.2.0",
     "yaml": "2.9.0",
     "yargs": "18.1.0"
   },
