@@ -10,3 +10,6 @@
 [submodule "tools/turbo"]
 	path = tools/turbo
 	url = https://github.com/vercel/turbo.git
+[submodule ".github/bun-workflows"]
+	path = .github/bun-workflows
+	url = https://github.com/juunini/github-workflows.git

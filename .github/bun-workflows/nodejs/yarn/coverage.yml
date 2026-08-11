@@ -1,0 +1,35 @@
+name: Coverage
+
+on:
+  pull_request:
+    branches:
+      - '**'
+
+jobs:
+  coverage:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
+          cache: yarn
+
+      - uses: actions/cache@v3
+        id: yarn-cache
+        with:
+          path: ./node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: ${{ runner.os }}-node-
+
+      - run: yarn --prefer-offline
+        if: ${{ steps.yarn-cache.outputs.cache-hit != 'true' }}
+
+      - run: yarn test:cov
+
+      # If you use codecov
+      #- name: Upload coverage to Codecov
+      #  uses: codecov/codecov-action@v1
+      #  with:
+      #    token: ${{ secrets.CODECOV_TOKEN }}

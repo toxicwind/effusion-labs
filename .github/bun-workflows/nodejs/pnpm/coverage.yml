@@ -1,0 +1,35 @@
+name: Coverage
+
+on:
+  pull_request:
+    branches:
+      - '**'
+
+jobs:
+  coverage:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 6.0.2
+          node-version: 16.x
+
+      - uses: actions/cache@v3
+        id: pnpm-cache
+        with:
+          path: ./node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: ${{ runner.os }}-node-
+
+      - run: pnpm install
+        if: ${{ steps.pnpm-cache.outputs.cache-hit != 'true' }}
+
+      - run: pnpm test:cov
+
+      # If you use codecov
+      #- name: Upload coverage to Codecov
+      #  uses: codecov/codecov-action@v1
+      #  with:
+      #    token: ${{ secrets.CODECOV_TOKEN }}

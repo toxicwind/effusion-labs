@@ -31,8 +31,8 @@ const nodeRequired = '22.19.0'
 const nodeOk = compareVersions(nodeVersion, nodeRequired) >= 0
 results.push({ name: 'node', version: nodeVersion, ok: nodeOk, note: `>= ${nodeRequired}` })
 
-const npmVersion = safeExec('npm', ['--version'])
-results.push({ name: 'npm', version: npmVersion, ok: Boolean(npmVersion) })
+const npmVersion = safeExec("bun", ["--version"])
+results.push({ name: "bun", version: npmVersion, ok: Boolean(npmVersion) })
 
 let chromiumVersion = null
 let chromiumPath = null
@@ -64,7 +64,7 @@ for (const { name, version, ok, note } of results) {
 console.log(`CI environment: ${ciState}`)
 
 if (!chromiumOk) {
-  console.error('\nChromium runtime missing; run ./bin/install-chromium.sh or npm run setup.')
+  console.error('\nChromium runtime missing; run ./bin/install-chromium.sh or bun run setup.')
   process.exit(1)
 }
 

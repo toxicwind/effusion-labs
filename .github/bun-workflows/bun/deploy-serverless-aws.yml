@@ -1,0 +1,36 @@
+name: Deploy Serverless AWS
+
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  deploy-serverless-aws:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: antongolub/action-setup-bun@v1
+        with:
+          bun-version: 0.2.2
+          bun-config: '{"install": {"production": false}}'
+          cache: true
+          cache-bin: true
+
+      - uses: actions/cache@v3
+        id: bun-cache
+        with:
+          path: ./node_modules
+          key: ${{ runner.os }}-bun-${{ hashFiles('**/bun.lockb') }}
+          restore-keys: ${{ runner.os }}-bun-
+
+      - run: bun install
+        if: ${{ steps.bun-cache.outputs.cache-hit != 'true' }}
+
+      - run: bun run build
+      - run: bun serverless deploy --stage production -c serverless.yml"
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}

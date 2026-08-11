@@ -1,0 +1,55 @@
+name: Deploy S3
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy-s3:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        region: [ap-northeast-2] # your region
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: antongolub/action-setup-bun@v1
+        with:
+          bun-version: 0.2.2
+          bun-config: '{"install": {"production": false}}'
+          cache: true
+          cache-bin: true
+
+      - uses: actions/cache@v3
+        id: bun-cache
+        with:
+          path: ./node_modules
+          key: ${{ runner.os }}-bun-${{ hashFiles('**/bun.lockb') }}
+          restore-keys: ${{ runner.os }}-bun-
+
+      - run: bun install
+        if: ${{ steps.bun-cache.outputs.cache-hit != 'true' }}
+
+      - run: bun run build
+
+      - name: Deploy S3
+        uses: jakejarvis/s3-sync-action@master
+        with:
+          args: --acl public-read --follow-symlinks --delete
+        env:
+          AWS_S3_BUCKET: ${{ secrets.DEV_AWS_S3_BUCKET }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ${{ matrix.region }}
+          SOURCE_DIR: 'dist' # build generated folder
+
+      - name: invalidate
+        uses: chetan/invalidate-cloudfront-action@v2
+        env:
+          DISTRIBUTION: ${{ secrets.AWS_DISTRIBUTION }}
+          PATHS: '/*' # invalidate path
+          AWS_REGION: ${{ matrix.region }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}

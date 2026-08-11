@@ -1,0 +1,37 @@
+name: Deploy gh-pages
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy-gh-pages:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
+          cache: yarn
+
+      - uses: actions/cache@v3
+        id: yarn-cache
+        with:
+          path: ./node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: ${{ runner.os }}-node-
+
+      - run: yarn --prefer-offline
+        if: ${{ steps.yarn-cache.outputs.cache-hit != 'true' }}
+
+      - run: yarn build
+      - run: touch dist/.nojekyll
+
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@4.1.5
+        with:
+          branch: gh-pages # branch name
+          folder: dist # generated folder name after build
+          clean: true
