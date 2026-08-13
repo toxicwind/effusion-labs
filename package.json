@@ -102,7 +102,7 @@
     "postcss-nesting": "^14.0.1",
     "proxy-chain": "2.7.1",
     "puppeteer": "^24.43.1",
-    "recast": "0.23.19",
+    "recast": "0.24.0",
     "rehype-parse": "9.0.1",
     "rehype-remark": "10.0.1",
     "rehype-sanitize": "6.0.0",
