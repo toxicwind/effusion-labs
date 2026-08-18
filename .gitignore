@@ -87,3 +87,5 @@ public/lvreport/report.json
 # JetBrains
 
 # Misc
+_git/
+.git/
