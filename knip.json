@@ -1,0 +1,29 @@
+{
+  "$schema": "https://unpkg.com/knip@latest/schema.json",
+  "entry": [
+    "eleventy.config.mjs",
+    "src/**/*.11ty.{js,ts}",
+    "src/**/*.11tydata.{js,ts}",
+    "src/_data/**/*.{js,ts}",
+    "src/assets/js/app.js",
+    "mcp-stack/**/*.mjs",
+    "tools/**/*.mjs"
+  ],
+  "project": [
+    "src/**/*.{js,mjs,ts,tsx}",
+    "mcp-stack/**/*.mjs",
+    "tools/**/*.mjs"
+  ],
+  "ignore": [
+    "_site/**",
+    "dist/**",
+    ".11ty-vite/**",
+    "coverage/**",
+    "public/vite/**",
+    ".conda/**"
+  ],
+  "ignoreDependencies": [
+    "@tailwindcss/forms",
+    "lru-cache"
+  ]
+}

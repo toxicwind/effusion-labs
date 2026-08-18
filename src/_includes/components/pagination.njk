@@ -1,0 +1,23 @@
+{# DaisyUI-styled pagination #}
+{% macro pager(pagination) %}
+  <nav
+    class="flex items-center justify-between gap-4 mt-12 text-sm font-mono"
+    aria-label="Pagination"
+  >
+    {% if pagination.href.previous %}
+      <a href="{{ pagination.href.previous | url }}" class="btn btn-sm btn-ghost gap-2">← Newer</a>
+    {% else %}
+      <span class="opacity-30">← Newer</span>
+    {% endif %}
+
+    <span class="px-4 py-2 rounded-box bg-base-200 text-base-content/70">
+      Page {{ pagination.pageNumber + 1 }} of {{ pagination.pages.length }}
+    </span>
+
+    {% if pagination.href.next %}
+      <a href="{{ pagination.href.next | url }}" class="btn btn-sm btn-ghost gap-2">Older →</a>
+    {% else %}
+      <span class="opacity-30">Older →</span>
+    {% endif %}
+  </nav>
+{% endmacro %}

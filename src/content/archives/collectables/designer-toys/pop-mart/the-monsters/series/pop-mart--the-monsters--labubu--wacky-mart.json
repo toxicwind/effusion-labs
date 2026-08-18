@@ -1,0 +1,53 @@
+{
+  "product_id": "LAB026",
+  "brand": "POP MART",
+  "line": "The Monsters",
+  "character": "Labubu",
+  "series": "Wacky Mart",
+  "product_title": "Wacky Mart",
+  "variant_name": null,
+  "form": "Vinyl-plush",
+  "sku": null,
+  "size": {
+    "height_cm": 15,
+    "dimensions_cm": null,
+    "weight_kg": null,
+    "pendant_height_cm": 17,
+    "sitting_height_cm": null
+  },
+  "materials": {
+    "shell": "polyester/plush body; face: PVC/ABS",
+    "plush": null,
+    "stuffing": null
+  },
+  "packaging": {
+    "type": "Convenience store-themed packaging resembling snack boxes",
+    "dimensions_cm": null
+  },
+  "release_info": {
+    "release_date": "2025-06-12",
+    "edition_type": "Pop-up store exclusive",
+    "edition_size": null
+  },
+  "pricing": {
+    "original_msrp": {
+      "CNY": 199
+    },
+    "current_status": "In stock (at pop-up)",
+    "secondary_market_range": "Minimal premiums (~20–50%)",
+    "pendant_msrp": null
+  },
+  "availability": {
+    "regions": ["China"],
+    "channels": ["Wacky Mart pop-up locations"],
+    "stock_status": "Available at pop-up locations"
+  },
+  "designer": "Kasing Lung",
+  "accessories": [
+    "Keychain hardware",
+    "collectible receipt-style authentication card",
+    "collectible poster map"
+  ],
+  "articulation": null,
+  "colorway": "Multiple variants themed after snack/drink brands"
+}

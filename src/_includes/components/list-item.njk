@@ -1,0 +1,64 @@
+{# components/list-item.njk #}
+{% from "components/icons.njk" import icon %}
+
+{% macro listItem(item) %}
+  {% set t = (item.data.type or item.type or 'meta') | lower %}
+
+  <a
+    href="{{ item.url | url }}"
+    class="hb-brut-card hb-anim p-space-m no-underline group stack overflow-hidden"
+    style="--space: var(--space-s)"
+    data-title="{{ item.data.title }}"
+    {% if item.date %}
+      data-date="{{ item.date | date('yyyy-MM-dd') }}"
+    {% endif %}
+  >
+    <!-- Visual Kicker -->
+    <div class="cluster justify-between items-center" style="--space: var(--space-xs)">
+      <div class="cluster" style="--space: var(--space-2xs)">
+        <span class="w-1.5 h-1.5 rounded-full bg-primary hb-plasma shadow-none"></span>
+        <span class="text-[0.6rem] uppercase tracking-widest font-black opacity-40 font-mono">{{
+          t
+        }}</span>
+      </div>
+      {% if item.date %}
+        <time
+          datetime="{{ item.date | htmlDateString }}"
+          class="text-[0.6rem] font-mono opacity-40"
+        >
+          {{ item.date | readableDate }}
+        </time>
+      {% endif %}
+    </div>
+
+    <!-- Title Layer -->
+    <h3 class="text-lg font-black tracking-tight leading-snug hb-ink group-hover:text-primary transition-colors underline decoration-transparent group-hover:decoration-primary/30 underline-offset-4">
+      {{ item.data.title }}
+    </h3>
+
+    <!-- Description Layer -->
+    {% if item.data.description %}
+      <p class="text-sm opacity-70 leading-relaxed clamp-2 hb-ink-soft">
+        {{ item.data.description }}
+      </p>
+    {% endif %}
+
+    <!-- Footer Cluster -->
+    <div class="mt-auto pt-space-xs border-t border-base-content/5 cluster justify-between items-center">
+      <div class="cluster" style="--space: var(--space-2xs)">
+        {% for tag in item.data.tags | slice(0, 3) %}
+          {% if tag != "projects" and tag != "concepts" and tag != section %}
+            <span class="text-[0.55rem] font-mono opacity-30">#{{ tag }}</span>
+          {% endif %}
+        {% endfor %}
+      </div>
+      <span class="opacity-0 group-hover:opacity-100 transition-opacity text-primary">
+        {{ icon('arrow-right', { class: 'w-4 h-4' }) }}
+      </span>
+    </div>
+
+    <!-- Accent Overlay -->
+    <div class="absolute inset-0 bg-gradient-to-tr from-primary/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+    </div>
+  </a>
+{% endmacro %}

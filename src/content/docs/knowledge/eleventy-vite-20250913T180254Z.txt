@@ -1,0 +1,516 @@
+   #[1]Eleventy Blog [2]Eleventy Firehose [3]Eleventy Documentation
+   [4]Eleventy
+
+   [5]Skip to navigation [6]Skip to main content
+
+     * [7]11ty
+     * [8]Get Started
+     * [9]Blog
+     * [10]Community
+     * Versions
+          + [11]v3 Stable
+          + [12]v2
+          + [13]v1
+          + [14]v0
+          + [15]History
+     * Search ____________________ (BUTTON) Search
+     * [16]GitHub
+     * [17]YouTube
+     * [18]Mastodon
+     * [19]Bluesky
+     * [20]Discord
+     * [21]Font Awesome
+
+   [22]
+   The possum is Eleventy’s mascot
+
+   [23]Blog
+   [24]Eleventy, 2024 in Review
+   [25]Versions
+
+   Stable
+          [26]3.1.2
+
+   Canary
+          [27]4.0.0-alpha.4
+
+     * Introduction
+          + [28]Get Started
+          + [29]Why Eleventy?
+               o [30]Performance
+          + Learn
+               o [31]Glossary
+               o [32]Opening a Terminal
+               o [33]Installing JavaScript
+               o [34]CommonJS vs. ESM
+          + [35]Starter Projects
+          + [36]Tutorials
+               o [37]Quick Tips
+     * Community
+          + [38]How can I contribute?
+          + [39]Code of Conduct
+          + [40]Blog
+          + [41]Firehose
+          + [42]11ty Bundle
+          + [43]Leaderboards
+          + [44]Eleventy Meetup
+          + [45]11ty Conference
+     * [46]GuideGuide
+          + [47]Get Started
+          + [48]Command Line Usage
+          + [49]Add a Configuration File
+          + [50]Copy Files to Output
+          + [51]Add CSS, JS, Fonts
+          + [52]Importing Content
+          + [53]Configure Templates with Data
+               o [54]Permalinks
+               o [55]Layouts
+               o [56]Collections
+                    # [57]Collections API
+               o [58]Content Dates
+               o [59]Create Pages From Data
+                    # [60]Pagination
+                    # [61]Pagination Navigation
+          + [62]Using Data in Templates
+               o [63]Eleventy Supplied Data
+               o [64]Data Cascade
+                    # [65]Front Matter Data
+                         @ [66]Custom Front Matter
+                    # [67]Template & Directory Data Files
+                    # [68]Global Data Files
+                    # [69]Config Global Data
+                    # [70]Computed Data
+               o [71]JavaScript Data Files
+               o [72]Custom Data File Formats
+               o [73]Validate Data
+          + [74]Template Languages
+               o [75]HTML
+               o [76]Markdown
+                    # [77]MDX
+               o [78]JavaScript
+                    # [79]JSX
+                    # [80]TypeScript
+               o [81]Custom
+               o [82]WebC
+               o [83]Nunjucks
+               o [84]Liquid
+               o [85]Handlebars
+               o [86]Mustache
+               o [87]EJS
+               o [88]HAML
+               o [89]Pug
+               o [90]Sass
+               o [91]Virtual Templates
+               o [92]Overriding Languages
+          + Template Features
+               o [93]Ignore Files
+               o [94]Preprocess Content
+               o [95]Postprocess Content
+               o [96]Filters
+                    # [97]url
+                    # [98]slugify
+                    # [99]log
+                    # [100]get*CollectionItem
+                    # [101]inputPathToUrl
+               o [102]Shortcodes
+                    # [103]getBundle
+                    # [104]getBundleFileUrl
+          + [105]Environment Variables
+          + [106]Internationalization (i18n)
+          + [107]Development Servers
+               o [108]Eleventy Dev Server
+               o [109]Vite
+          + [110]Common Pitfalls
+          + [111]Advanced
+               o [112]Release History
+               o [113]Programmatic API
+               o [114]Configuration Events
+               o [115]Order of Operations
+     * [116]PluginsPlugins
+          + [117]Create or use Plugins
+          + [118]Image
+          + [119]Fetch
+          + [120]<is-land>
+          + [121]Render
+          + [122]Internationalization (i18n)
+          + [123]RSS
+          + [124]Upgrade Helper
+          + [125]Syntax Highlighting
+          + [126]InputPath to URL
+          + [127]Navigation
+          + [128]HTML <base>
+          + [129]Bundle
+          + [130]Id Attribute
+          + [131]Community Plugins
+          + [132]Retired Plugins
+     * [133]ServicesServices
+          + [134]Deployment & Hosting
+          + [135]Using a CMS
+          + [136]Runtime APIs
+               o [137]Screenshots
+               o [138]OpenGraph Image
+               o [139]IndieWeb Avatar
+               o [140]Generator Image
+               o [141]Hosting Image
+               o [142]Sparklines
+
+   Breadcrumbs:
+     * [143]Eleventy Documentation
+     * [144]Guide
+     * [145]Development Servers
+
+Vite Favicon for v1.indieweb-avatar.11ty.dev/https%3A%2F%2Fvite.dev%2F
+
+   On this page
+     * [146]Related
+     * [147]Installation
+
+     * [148]eleventy-plugin-vite on GitHub
+
+   A plugin to use [149]Vite with Eleventy 2.0+.
+     * Runs Vite as Middleware in [150]Eleventy Dev Server (try with
+       Eleventy’s --incremental)
+     * Runs Vite build to postprocess your Eleventy build output
+
+   [151]Play Video: Eleventy Vite Plugin (Weekly №5) [152]Eleventy Vite
+   Plugin (Weekly №5) ▶1m36s
+
+Related
+
+     * [153]slinkity by @Holben888: a much deeper and more comprehensive
+       integration with Vite! Offers partial hydration and can use
+       shortcodes to render framework components in Eleventy!
+     * [154]vite-plugin-eleventy by @Snugug: uses Eleventy as Middleware
+       in Vite (instead of the post-processing approach used here)
+
+Installation
+
+npm install @11ty/eleventy-plugin-vite
+
+   eleventy.config.js
+   [155]ESM [156]CommonJS
+import EleventyVitePlugin from "@11ty/eleventy-plugin-vite";
+export default function (eleventyConfig) {
+        eleventyConfig.addPlugin(EleventyVitePlugin);
+};
+
+const EleventyVitePlugin = require("@11ty/eleventy-plugin-vite");
+module.exports = function (eleventyConfig) {
+        eleventyConfig.addPlugin(EleventyVitePlugin);
+};
+
+   Expand for full list of options
+
+   View the [157]full list of Vite Configuration options.
+   eleventy.config.js
+   [158]ESM [159]CommonJS
+import EleventyVitePlugin from "@11ty/eleventy-plugin-vite";
+export default function (eleventyConfig) {
+        eleventyConfig.addPlugin(EleventyVitePlugin, {
+    tempFolderName: ".11ty-vite", // Default name of the temp folder
+    // Options passed to the Eleventy Dev Server
+    // e.g. domdiff, enabled, etc.
+    // Added in Vite plugin v2.0.0
+    serverOptions: {},
+    // Defaults are shown:
+    viteOptions: {
+      clearScreen: false,
+      appType: "mpa", // New in v2.0.0
+      server: {
+        mode: "development",
+        middlewareMode: true,
+      },
+      build: {
+        mode: "production",
+      },
+      // New in v2.0.0
+      resolve: {
+        alias: {
+          // Allow references to `node_modules` folder directly
+          "/node_modules": path.resolve(".", "node_modules"),
+        },
+      },
+    },
+  });
+};
+
+const EleventyVitePlugin = require("@11ty/eleventy-plugin-vite");
+module.exports = function (eleventyConfig) {
+        eleventyConfig.addPlugin(EleventyVitePlugin, {
+    tempFolderName: ".11ty-vite", // Default name of the temp folder
+    // Options passed to the Eleventy Dev Server
+    // e.g. domdiff, enabled, etc.
+    // Added in Vite plugin v2.0.0
+    serverOptions: {},
+    // Defaults are shown:
+    viteOptions: {
+      clearScreen: false,
+      appType: "mpa", // New in v2.0.0
+      server: {
+        mode: "development",
+        middlewareMode: true,
+      },
+      build: {
+        mode: "production",
+      },
+      // New in v2.0.0
+      resolve: {
+        alias: {
+          // Allow references to `node_modules` folder directly
+          "/node_modules": path.resolve(".", "node_modules"),
+        },
+      },
+    },
+  });
+};
+
+   See the full list of [160]serverOptions on the Dev Server
+   documentation.
+     __________________________________________________________________
+
+Other pages in Watch and Serve
+
+     * [161]Eleventy Dev Server
+     * [162]Vite
+
+     * [163]Read the Blog
+     * [164]Follow on Mastodon
+     * [165]Follow on Bluesky
+     * [166]Subscribe to the Newsletter
+     * [167]Watch on YouTube
+     * [168]Star on GitHub
+     * [169]Chat on Discord
+     * [DEL: Twitter :DEL]
+
+Gold Sponsors
+
+   [170]CloudCannon
+
+Silver Sponsors
+
+   [171]Open Collective Avatar for nejlepsiceskacasina.com [172]Open
+   Collective Avatar for Pintura [173]Open Collective Avatar for
+   slovenskeonlinecasino.com [174]Open Collective Avatar for Nathan Smith
+   [175]Open Collective Avatar for Steady [176]Open Collective Avatar for
+   Playfortuneforfun.com [177]Open Collective Avatar for Scire [178]Open
+   Collective Avatar for Monarch Air Group [179]Open Collective Avatar for
+   Fast Payout Casinos [180]Open Collective Avatar for Antithesis
+   [181]Open Collective Avatar for Unabridged Software [182]Open
+   Collective Avatar for Ігрові автомати [183]Open Collective Avatar for
+   ESLint [184]Open Collective Avatar for Guidebook.BetWinner
+
+Supporters
+
+   [185]18.8k [186]Star Eleventy on GitHub! This is an easy way to support
+   our underrated project and help boost our rank on both GitHub and
+   [187]jamstack.org’s list of site generators.
+
+     * Built with Eleventy v4.0.0
+     * [188]Font Awesome
+     * [189]Edit this page
+     * [190]Accessibility
+
+     * [191]Credits
+     * [192]Firehose
+     * [193]Style Guide
+     * [194]18.8k Stars
+     * 13.8M Downloads
+     * [195]GitHub Avatar for zachleat
+
+References
+
+   1. file:///blog/feed.xml
+   2. file:///firehose/firehose.rss
+   3. file:///docs/feed.xml
+   4. file:///opensearch.xml
+   5. file:///workspace/effusion-labs/src/content/docs/knowledge/eleventy-vite-20250913T180254Z.html#skip-nav
+   6. file:///workspace/effusion-labs/src/content/docs/knowledge/eleventy-vite-20250913T180254Z.html#skip-content
+   7. file:///
+   8. file:///docs/
+   9. file:///blog/
+  10. file:///docs/community/
+  11. file:///docs/
+  12. https://v2.11ty.dev/docs/
+  13. https://v1.11ty.dev/docs/
+  14. https://v0.11ty.dev/docs/
+  15. file:///docs/versions/
+  16. https://github.com/11ty/eleventy/
+  17. https://www.youtube.com/c/EleventyVideo
+  18. https://neighborhood.11ty.dev/@11ty
+  19. https://bsky.app/profile/11ty.dev
+  20. file:///blog/discord/
+  21. https://fontawesome.com/
+  22. file:///blog/mascot-david/
+  23. file:///blog/
+  24. file:///blog/review-2024/
+  25. file:///docs/versions/
+  26. https://github.com/11ty/eleventy/releases/tag/v3.1.2
+  27. https://github.com/11ty/eleventy/releases/tag/v4.0.0-alpha.4
+  28. file:///docs/
+  29. file:///#why-should-you-use-eleventy
+  30. file:///docs/performance/
+  31. file:///docs/glossary/
+  32. file:///docs/terminal-window/
+  33. file:///docs/javascript-runtime/
+  34. file:///docs/cjs-esm/
+  35. file:///docs/starter/
+  36. file:///docs/tutorials/
+  37. file:///docs/quicktips/
+  38. file:///docs/community/
+  39. file:///docs/code-of-conduct/
+  40. file:///blog/
+  41. file:///firehose/
+  42. https://11tybundle.dev/
+  43. file:///speedlify/
+  44. https://11tymeetup.dev/
+  45. https://conf.11ty.dev/
+  46. file:///docs/projects/
+  47. file:///docs/
+  48. file:///docs/usage/
+  49. file:///docs/config/
+  50. file:///docs/copy/
+  51. file:///docs/assets/
+  52. file:///docs/migrate/
+  53. file:///docs/data-configuration/
+  54. file:///docs/permalinks/
+  55. file:///docs/layouts/
+  56. file:///docs/collections/
+  57. file:///docs/collections-api/
+  58. file:///docs/dates/
+  59. file:///docs/pages-from-data/
+  60. file:///docs/pagination/
+  61. file:///docs/pagination/nav/
+  62. file:///docs/data/
+  63. file:///docs/data-eleventy-supplied/
+  64. file:///docs/data-cascade/
+  65. file:///docs/data-frontmatter/
+  66. file:///docs/data-frontmatter-customize/
+  67. file:///docs/data-template-dir/
+  68. file:///docs/data-global/
+  69. file:///docs/data-global-custom/
+  70. file:///docs/data-computed/
+  71. file:///docs/data-js/
+  72. file:///docs/data-custom/
+  73. file:///docs/data-validate/
+  74. file:///docs/languages/
+  75. file:///docs/languages/html/
+  76. file:///docs/languages/markdown/
+  77. file:///docs/languages/mdx/
+  78. file:///docs/languages/javascript/
+  79. file:///docs/languages/jsx/
+  80. file:///docs/languages/typescript/
+  81. file:///docs/languages/custom/
+  82. file:///docs/languages/webc/
+  83. file:///docs/languages/nunjucks/
+  84. file:///docs/languages/liquid/
+  85. file:///docs/languages/handlebars/
+  86. file:///docs/languages/mustache/
+  87. file:///docs/languages/ejs/
+  88. file:///docs/languages/haml/
+  89. file:///docs/languages/pug/
+  90. file:///docs/languages/sass/
+  91. file:///docs/virtual-templates/
+  92. file:///docs/template-overrides/
+  93. file:///docs/ignores/
+  94. file:///docs/config-preprocessors/
+  95. file:///docs/transforms/
+  96. file:///docs/filters/
+  97. file:///docs/filters/url/
+  98. file:///docs/filters/slugify/
+  99. file:///docs/filters/log/
+ 100. file:///docs/filters/collection-items/
+ 101. file:///docs/filters/inputpath-to-url/
+ 102. file:///docs/shortcodes/
+ 103. file:///docs/plugins/bundle/
+ 104. file:///docs/plugins/bundle/
+ 105. file:///docs/environment-vars/
+ 106. file:///docs/i18n/
+ 107. file:///docs/watch-serve/
+ 108. file:///docs/dev-server/
+ 109. file:///docs/server-vite/
+ 110. file:///docs/pitfalls/
+ 111. file:///docs/advanced/
+ 112. file:///docs/versions/
+ 113. file:///docs/programmatic/
+ 114. file:///docs/events/
+ 115. file:///docs/advanced-order/
+ 116. file:///docs/plugins/
+ 117. file:///docs/create-plugin/
+ 118. file:///docs/plugins/image/
+ 119. file:///docs/plugins/fetch/
+ 120. file:///docs/plugins/is-land/
+ 121. file:///docs/plugins/render/
+ 122. file:///docs/plugins/i18n/
+ 123. file:///docs/plugins/rss/
+ 124. file:///docs/plugins/upgrade-help/
+ 125. file:///docs/plugins/syntaxhighlight/
+ 126. file:///docs/plugins/inputpath-to-url/
+ 127. file:///docs/plugins/navigation/
+ 128. file:///docs/plugins/html-base/
+ 129. file:///docs/plugins/bundle/
+ 130. file:///docs/plugins/id-attribute/
+ 131. file:///docs/plugins/community/
+ 132. file:///docs/plugins/retired/
+ 133. file:///docs/services/
+ 134. file:///docs/deployment/
+ 135. file:///docs/cms/
+ 136. file:///docs/api-services/
+ 137. file:///docs/services/screenshots/
+ 138. file:///docs/services/opengraph/
+ 139. file:///docs/services/indieweb-avatar/
+ 140. file:///docs/services/generator/
+ 141. file:///docs/services/builtwith/
+ 142. file:///docs/services/sparklines/
+ 143. file:///docs/
+ 144. file:///docs/projects/
+ 145. file:///docs/watch-serve/
+ 146. file:///workspace/effusion-labs/src/content/docs/knowledge/eleventy-vite-20250913T180254Z.html#related
+ 147. file:///workspace/effusion-labs/src/content/docs/knowledge/eleventy-vite-20250913T180254Z.html#installation
+ 148. https://github.com/11ty/eleventy-plugin-vite
+ 149. https://vite.dev/
+ 150. file:///docs/dev-server/
+ 151. https://youtube.com/watch?v=f0LsgyPV7j0
+ 152. https://youtube.com/watch?v=f0LsgyPV7j0&t=96
+ 153. https://slinkity.dev/
+ 154. https://www.npmjs.com/package/vite-plugin-eleventy
+ 155. file:///workspace/effusion-labs/src/content/docs/knowledge/eleventy-vite-20250913T180254Z.html#tab-id-150-jsesm
+ 156. file:///workspace/effusion-labs/src/content/docs/knowledge/eleventy-vite-20250913T180254Z.html#tab-id-150-jscjs
+ 157. https://vite.dev/config/
+ 158. file:///workspace/effusion-labs/src/content/docs/knowledge/eleventy-vite-20250913T180254Z.html#tab-id-151-jsesm
+ 159. file:///workspace/effusion-labs/src/content/docs/knowledge/eleventy-vite-20250913T180254Z.html#tab-id-151-jscjs
+ 160. file:///docs/dev-server/
+ 161. file:///docs/dev-server/
+ 162. file:///docs/server-vite/
+ 163. file:///blog/
+ 164. https://neighborhood.11ty.dev/@11ty
+ 165. https://bsky.app/profile/11ty.dev
+ 166. https://buttondown.email/11ty
+ 167. https://www.youtube.com/c/EleventyVideo
+ 168. https://github.com/11ty/eleventy
+ 169. file:///blog/discord/
+ 170. https://cloudcannon.com/eleventy-cms/?utm_campaign=11ty-partner&utm_source=official-sponsor
+ 171. https://nejlepsiceskacasina.com/
+ 172. https://pqina.nl/pintura/
+ 173. https://slovenskeonlinecasino.com/
+ 174. https://sonspring.com/
+ 175. https://opencollective.com/steady
+ 176. https://playfortuneforfun.com/
+ 177. https://scire.au/
+ 178. https://monarchairgroup.com/
+ 179. https://payid-pokies.net/fast-payout/
+ 180. https://antithesis.com/
+ 181. https://www.unabridgedsoftware.com/
+ 182. https://casino.ua/casino/slots/
+ 183. https://eslint.org/
+ 184. https://guidebook.betwinner.com/
+ 185. https://github.com/11ty/eleventy
+ 186. https://github.com/11ty/eleventy
+ 187. https://jamstack.org/generators/
+ 188. https://fontawesome.com/
+ 189. https://github.com/11ty/11ty-website/tree/main/src/docs/server-vite.md
+ 190. file:///docs/accessibility/
+ 191. file:///docs/credits/
+ 192. file:///firehose/
+ 193. file:///styleguide/
+ 194. https://github.com/11ty/eleventy/
+ 195. https://zachleat.com/

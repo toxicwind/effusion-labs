@@ -1,0 +1,9 @@
+version: "3.8"
+
+services:
+  effusion-labs:
+    image: ghcr.io/toxicwind/effusion-labs:latest
+    container_name: effusion
+    restart: unless-stopped
+    ports:
+      - "18400:80"

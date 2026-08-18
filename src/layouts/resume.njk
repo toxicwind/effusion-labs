@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-pt-16" data-theme="dim">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="dark light" />
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f7f5f3" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#2a303c" />
+    <meta name="msapplication-TileColor" content="#2a303c" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+    {% set siteUrl = 'https://effusionlabs.com' %}
+    {% set canonicalPath = page and page.url or '/' %}
+    {% set canonicalHref = canonicalUrl or (siteUrl + (canonicalPath | url)) %}
+    {% set description = metaDescription or description or '' %}
+    {% set ogTitle = ogTitle or title or 'Resume' %}
+    {% set ogDescription = ogDescription or description %}
+    {% set ogImageRel = ogImage or (resume and resume.ogImage) %}
+    {% if ogImageRel %}
+      {% set ogImageHref = ogImageRel %}
+      {% if '://' not in ogImageHref %}
+        {% set ogImageHref = siteUrl + (ogImageRel | url) %}
+      {% endif %}
+    {% endif %}
+
+    <title>{{ (title or 'Resume') }} — Effusion Labs</title>
+    {% if description %}
+      <meta name="description" content="{{ description }}" />
+    {% endif %}
+    <link rel="canonical" href="{{ canonicalHref }}" />
+
+    <meta property="og:type" content="profile" />
+    <meta property="og:site_name" content="Effusion Labs" />
+    <meta property="og:title" content="{{ ogTitle }}" />
+    {% if ogDescription %}
+      <meta property="og:description" content="{{ ogDescription }}" />
+    {% endif %}
+    <meta property="og:url" content="{{ canonicalHref }}" />
+    {% if ogImageHref %}
+      <meta property="og:image" content="{{ ogImageHref }}" />
+    {% endif %}
+
+    <meta name="twitter:card" content="{{ ogImageHref and 'summary_large_image' or 'summary' }}" />
+    <meta name="twitter:title" content="{{ ogTitle }}" />
+    {% if ogDescription %}
+      <meta name="twitter:description" content="{{ ogDescription }}" />
+    {% endif %}
+    {% if ogImageHref %}
+      <meta name="twitter:image" content="{{ ogImageHref }}" />
+    {% endif %}
+
+    {{ headExtra | safe }}
+
+    <script type="module" src="{{ '/assets/js/app.js' | url }}"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Manrope:wght@300..800&family=Plus+Jakarta+Sans:wght@400..800&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="icon" type="image/png" href="{{ '/favicon.ico' | url }}" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="{{ '/favicon.svg' | url }}" />
+    <link rel="shortcut icon" href="{{ '/favicon.ico' | url }}" />
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ '/apple-touch-icon.png' | url }}" />
+    <meta name="apple-mobile-web-app-title" content="Effusion Labs" />
+    <link rel="manifest" href="{{ '/site.webmanifest' | url }}" />
+  </head>
+
+  <body class="bg-base-100 text-base-content font-body antialiased">
+    <main id="main" class="min-h-[60vh]">
+      {{ content | safe }}
+    </main>
+  </body>
+</html>

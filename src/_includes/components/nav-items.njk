@@ -1,0 +1,35 @@
+{# src/_includes/components/nav-items.njk #}
+{# Expected nav shape:
+   [{ title, url, order?, external?, children?: [...] }]
+#}
+{% macro navItems(nav, pageUrl, linkClass='') -%}
+  {% set current = (pageUrl or '/') | url %}
+  {% for n in nav %}
+    {% set href = (n.url or '#') | url %}
+    {% set isExternal = n.external or (n.url and n.url[0] != '/') %}
+    {% set finalHref = href %}{% if isExternal %}{% set finalHref = n.url %}{% endif %}
+    {% set isActive = finalHref == current %}
+    <li>
+      <a
+        href="{{ finalHref }}"
+        class="link link-hover rounded-sm px-1 py-0.5 {{ linkClass }} {% if isActive %}text-primary underline{% endif %}"
+        {% if isExternal %}
+          target="_blank"
+          rel="noopener noreferrer"
+        {% endif %}
+        {% if isActive %}
+          aria-current="page"
+          data-active="true"
+        {% endif %}
+      >
+        {% if n.order %}<span class="opacity-60">{{ n.order }}.</span>{% endif %}
+        <span>{{ n.title | shout }}</span>
+      </a>
+      {% if n.children and (n.children | length) %}
+        <ul class="menu menu-sm pl-3 mt-1">
+          {{ navItems(n.children, pageUrl, linkClass) }}
+        </ul>
+      {% endif %}
+    </li>
+  {% endfor %}
+{%- endmacro %}

@@ -1,0 +1,233 @@
+[
+  {
+    "title": "ANGEL IN CLOUDS (v2) ",
+    "release_date": "2024-10-25",
+    "msrp_currency": "USD",
+    "msrp": 289.99,
+    "brand": null,
+    "line": null,
+    "character": null,
+    "series": null,
+    "variant_name": null,
+    "form": null,
+    "product_id": null,
+    "size": null,
+    "weight": null,
+    "materials": null,
+    "finish": null,
+    "articulation": null,
+    "deltas": []
+  },
+  {
+    "title": "I FOUND YOU (v1) ",
+    "release_date": "2023-12-15",
+    "msrp_currency": "USD",
+    "msrp": 179.99,
+    "brand": null,
+    "line": null,
+    "character": null,
+    "series": null,
+    "variant_name": null,
+    "form": null,
+    "product_id": null,
+    "size": null,
+    "weight": null,
+    "materials": null,
+    "finish": null,
+    "articulation": null,
+    "deltas": []
+  },
+  {
+    "title": "PRONOUNCE — Wings of Fantasy (plush)",
+    "release_date": "2024-10-04",
+    "msrp_currency": "USD",
+    "msrp": 119.99,
+    "brand": "POP MART × Pronounce",
+    "line": "The Monsters",
+    "character": "Labubu",
+    "series": "Wings of Fantasy",
+    "variant_name": "Lavender fur with translucent butterfly wings, golden crown, star-patterned vest",
+    "form": "Vinyl plush doll",
+    "product_id": "SKU 1580",
+    "size": "22×11×8 cm (including wings and crown)",
+    "weight": null,
+    "materials": "Shell: 66% polyester, 25% PVC, 9% ABS; Stuffing: 95% polyester, 5% iron wire",
+    "finish": "Soft flocked plush with translucent vinyl wings",
+    "articulation": "Fixed figure",
+    "deltas": []
+  },
+  {
+    "title": "Best of Luck（海外限定）",
+    "release_date": "2023-12-30",
+    "msrp_currency": "CNY",
+    "msrp": 499,
+    "brand": "POP MART",
+    "line": "The Monsters × Pronounce",
+    "character": "Labubu",
+    "series": "Be Fancy Now",
+    "variant_name": "Purple fur with gold rope motifs, yellow toes, starry face accents, fashion week inspired outfit",
+    "form": "Vinyl plush doll",
+    "product_id": "SKU 1505",
+    "size": "38 cm height",
+    "weight": 1.5,
+    "materials": "Shell-40% Cotton, 20% PVC, 15% Polyester, 15% ABS, 10% TPR; Filling-100% Polyester",
+    "finish": "Flocked plush body with vinyl face",
+    "articulation": "None",
+    "deltas": []
+  },
+  {
+    "title": "PRONOUNCE — Wings of Fortune (hanging card)",
+    "release_date": "2024-10-04",
+    "msrp_currency": "USD",
+    "msrp": 43.99,
+    "brand": "POP MART",
+    "line": "The Monsters",
+    "character": "Labubu",
+    "series": "7 total; secret Chestnut Cocoa",
+    "variant_name": "6 standard (Soymilk; Lychee Berry; Green Grape; Sea Salt Coconut; Toffee; Sesame Bean) + 1 secret (Chestnut Cocoa)",
+    "form": "Vinyl face blind-box pendant",
+    "product_id": "SKU 675 (US) / SKU 1789 (alternate)",
+    "size": "6–7 cm pendant",
+    "weight": 30,
+    "materials": "Shell: PVC; Stuffing: Polyester; Hardware: metal chain",
+    "finish": "Flocked plush face",
+    "articulation": "None",
+    "deltas": []
+  },
+  {
+    "title": "Walk by Fortune (CNY)",
+    "release_date": "2023-12-29",
+    "msrp_currency": "CNY",
+    "msrp": 499,
+    "brand": "POP MART",
+    "line": "The Monsters",
+    "character": "Labubu",
+    "series": "POP MART seasonal exclusives",
+    "variant_name": "Chinese New Year theme with traditional red outfit, sitting pose",
+    "form": "Vinyl plush doll",
+    "product_id": "Unknown",
+    "size": "Approximately 15.75 inches / 40cm height",
+    "weight": null,
+    "materials": "PLUSH+PVC",
+    "finish": "Soft plush body with vinyl face",
+    "articulation": "Unknown",
+    "deltas": []
+  },
+  {
+    "title": "Let’s Checkmate (Hanging Card)",
+    "release_date": "2022-10-31",
+    "msrp_currency": "USD",
+    "msrp": 114.99,
+    "brand": "POP MART",
+    "line": "The Monsters",
+    "character": "Labubu",
+    "series": "POP MART The Monsters collection",
+    "variant_name": "Pastel yellow fur with crown, pink ribbon heart, yellow dress with blue bow and pink heart details",
+    "form": "Vinyl plush doll (40cm) and keychain pendant (17cm)",
+    "product_id": "Unknown",
+    "size": "Plush: 20×15×40cm; Pendant: 17cm height",
+    "weight": 2,
+    "materials": "FABRIC: 42% Cotton, 18% PVC, 15% ABS, 13% Polyester Fiber, 12% TPR; FILLING: 90% Polyester Fiber, 10% PE Pellets",
+    "finish": "Soft plush body with vinyl face and accessories",
+    "articulation": "Posable hands, removable hat and clothing",
+    "deltas": [
+      {
+        "field": "variant_name",
+        "from": "Cozy denim dungarees and pastel blue top, relaxed pose",
+        "to": "Galaxy grey coat with bomber jacket, cargo pants, and boots",
+        "source": "COMPLETED SEEDS"
+      },
+      {
+        "field": "title",
+        "from": "Time to Chill",
+        "to": "Dress be Latte",
+        "source": "COMPLETED SEEDS"
+      },
+      {
+        "field": "variant_name",
+        "from": "Galaxy grey coat with bomber jacket, cargo pants, and boots",
+        "to": "Khaki bucket hat, denim overalls with \"LOVE BOO\" buckles, orange boots, flower accessory",
+        "source": "COMPLETED SEEDS"
+      },
+      {
+        "field": "form",
+        "from": "Vinyl plush doll",
+        "to": "Vinyl plush doll (40cm) and keychain pendant (17cm)",
+        "source": "COMPLETED SEEDS"
+      },
+      {
+        "field": "size",
+        "from": "37cm height, 20×15×37cm overall",
+        "to": "Plush: 20×15×40cm; Pendant: 17cm height",
+        "source": "COMPLETED SEEDS"
+      },
+      {
+        "field": "materials",
+        "from": "Cotton, PVC, polyester, ABS, TPR; polyester, cotton, vinyl",
+        "to": "FABRIC: 42% Cotton, 18% PVC, 15% ABS, 13% Polyester Fiber, 12% TPR; FILLING: 90% Polyester Fiber, 10% PE Pellets",
+        "source": "COMPLETED SEEDS"
+      },
+      {
+        "field": "finish",
+        "from": "Soft plush body with vinyl face",
+        "to": "Soft plush body with vinyl face and accessories",
+        "source": "COMPLETED SEEDS"
+      },
+      {
+        "field": "articulation",
+        "from": "Movable eyes and articulated features",
+        "to": "Posable hands, removable hat and clothing",
+        "source": "COMPLETED SEEDS"
+      },
+      {
+        "field": "title",
+        "from": "Dress be Latte",
+        "to": "Let’s Checkmate (Doll)",
+        "source": "COMPLETED SEEDS"
+      },
+      {
+        "field": "msrp",
+        "from": 69.99,
+        "to": 114.99,
+        "source": "COMPLETED SEEDS"
+      },
+      {
+        "field": "variant_name",
+        "from": "Khaki bucket hat, denim overalls with \"LOVE BOO\" buckles, orange boots, flower accessory",
+        "to": "Brown fur with crown, white ruffle collar, red cape with white fur trim, holding ring box",
+        "source": "COMPLETED SEEDS"
+      },
+      {
+        "field": "title",
+        "from": "Let’s Checkmate (Doll)",
+        "to": "Let’s Checkmate (Hanging Card)",
+        "source": "COMPLETED SEEDS"
+      },
+      {
+        "field": "variant_name",
+        "from": "Brown fur with crown, white ruffle collar, red cape with white fur trim, holding ring box",
+        "to": "Pastel yellow fur with crown, pink ribbon heart, yellow dress with blue bow and pink heart details",
+        "source": "COMPLETED SEEDS"
+      }
+    ]
+  },
+  {
+    "title": "Time to Chill ",
+    "release_date": "2022-10-31",
+    "msrp_currency": "USD",
+    "msrp": 69.99,
+    "brand": null,
+    "line": null,
+    "character": null,
+    "series": null,
+    "variant_name": null,
+    "form": null,
+    "product_id": null,
+    "size": null,
+    "weight": null,
+    "materials": null,
+    "finish": null,
+    "articulation": null,
+    "deltas": []
+  }
+]

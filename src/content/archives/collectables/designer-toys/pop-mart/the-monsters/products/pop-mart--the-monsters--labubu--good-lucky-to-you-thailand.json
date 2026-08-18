@@ -1,0 +1,119 @@
+{
+  "type": "product",
+  "product_id": "pop-mart--the-monsters--labubu--good-lucky-to-you-thailand--figure--std--20241220--reg-th",
+  "brand": "pop-mart",
+  "line": "the-monsters",
+  "character": "labubu",
+  "series": "GOOD LUCKY TO YOU (Thailand)",
+  "form": "Pendant",
+  "variant": "std",
+  "edition": {
+    "kind": "regional"
+  },
+  "distribution": {
+    "region_lock": true,
+    "markets": ["TH"]
+  },
+  "release_date": "2024-12-20",
+  "market_listings": [
+    {
+      "market": "TH",
+      "currency": "THB",
+      "price": 1050
+    }
+  ],
+  "availability": {
+    "limited": false,
+    "unit_count": null
+  },
+  "images": [],
+  "provenance_ref": "/content/archives/collectables/designer-toys/pop-mart/the-monsters/provenance/pop-mart--the-monsters--labubu--good-lucky-to-you-thailand--figure--std--20241220--reg-th.jsonl",
+  "confidence": 0.45,
+  "notes": "Seeded from initial article; requires re-research.",
+  "product_title": "GOOD LUCKY TO YOU (Thailand)",
+  "size": {
+    "height_cm": 18,
+    "dimensions_cm": "10×10×18 cm",
+    "weight_kg": null,
+    "pendant_height_cm": null,
+    "sitting_height_cm": null
+  },
+  "materials": {
+    "shell": "PVC/ABS face",
+    "plush": "Polyester plush body",
+    "stuffing": null
+  },
+  "packaging": {
+    "type": "Festive packaging with Thai motifs",
+    "dimensions_cm": null
+  },
+  "release_info": {
+    "release_date": "2024-12-20",
+    "edition_type": "Regional exclusive",
+    "edition_size": null
+  },
+  "pricing": {
+    "original_msrp": {
+      "THB": 1050
+    },
+    "current_status": "Sold out",
+    "secondary_market_range": "THB 1,200–2,000",
+    "pendant_msrp": null
+  },
+  "designer": "Kasing Lung",
+  "accessories": [
+    "Keychain attachment",
+    "mini canvas tote in some pre-order bundles"
+  ],
+  "colorway": "Brown fur with gold accents reflecting Thai prosperity symbols",
+  "Deltas": [
+    {
+      "field": "product_id",
+      "from": "pop-mart--the-monsters--labubu--good-lucky-to-you-thailand--figure--std--20241220--reg-th",
+      "to": "pop-mart--the-monsters--labubu--good-lucky-to-you-thailand--figure--std--20241220--reg-th",
+      "reason": "kept-existing"
+    },
+    {
+      "field": "brand",
+      "from": "pop-mart",
+      "to": "pop-mart",
+      "reason": "kept-existing"
+    },
+    {
+      "field": "line",
+      "from": "the-monsters",
+      "to": "the-monsters",
+      "reason": "kept-existing"
+    },
+    {
+      "field": "character",
+      "from": "labubu",
+      "to": "labubu",
+      "reason": "kept-existing"
+    },
+    {
+      "field": "series",
+      "from": "good-lucky-to-you-thailand",
+      "to": "GOOD LUCKY TO YOU (Thailand)",
+      "reason": "specificity"
+    },
+    {
+      "field": "form",
+      "from": "figure",
+      "to": "Pendant",
+      "reason": "specificity"
+    },
+    {
+      "field": "availability",
+      "from": {
+        "limited": false,
+        "unit_count": null
+      },
+      "to": {
+        "limited": false,
+        "unit_count": null
+      },
+      "reason": "same"
+    }
+  ]
+}

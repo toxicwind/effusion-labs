@@ -1,0 +1,603 @@
+{
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "source": {
+      "type": "string"
+    },
+    "Deltas": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "field": {
+            "type": "string"
+          },
+          "from": {
+            "type": ["string", "null"]
+          },
+          "to": {
+            "type": ["string", "null"]
+          },
+          "source": {
+            "type": "string"
+          }
+        },
+        "required": ["field", "from", "to", "source"]
+      }
+    },
+    "brand": {
+      "type": "string"
+    },
+    "line": {
+      "type": "string"
+    },
+    "character": {
+      "type": "string"
+    },
+    "series": {
+      "type": "string"
+    },
+    "product_title_(marketing_title_+_normalized_title)": {
+      "type": "string"
+    },
+    "variant_name_(colorway,_pose,_outfit)": {
+      "type": "string"
+    },
+    "form": {
+      "type": "string"
+    },
+    "deterministic_product_id_components": {
+      "type": "string"
+    },
+    "aliases_\\&_search_tokens_(en/中文;_common_misspellings)": {
+      "type": "string"
+    },
+    "parent/child_relations_(reissue,_seasonal_of_core,_collab_of_core)": {
+      "type": "string"
+    },
+    "size_(h/w/d_in_cm)": {
+      "type": "string"
+    },
+    "weight_(grams)": {
+      "type": "string"
+    },
+    "materials": {
+      "type": "string"
+    },
+    "finish_(matte,_flocked,_metallic,_translucent)": {
+      "type": "string"
+    },
+    "articulation/motion": {
+      "type": "string"
+    },
+    "accessories_in_box": {
+      "type": "string"
+    },
+    "colorway_notes": {
+      "type": "string"
+    },
+    "packaging_type": {
+      "type": "string"
+    },
+    "packaging_dimensions_\\&_weight": {
+      "type": "string"
+    },
+    "box_contents_bill": {
+      "type": "string"
+    },
+    "authenticity/anti-counterfeit_marker": {
+      "type": "string"
+    },
+    "factory/qa_code": {
+      "type": "string"
+    },
+    "edition.kind": {
+      "type": "string"
+    },
+    "edition_size_(unit_count)": {
+      "type": "string"
+    },
+    "chase/rarity_ratio": {
+      "type": "string"
+    },
+    "staff/member_perks": {
+      "type": "string"
+    },
+    "original_designer/artist_(en_\\&_中文)": {
+      "type": "string"
+    },
+    "sculpt/model_credits": {
+      "type": "string"
+    },
+    "collaboration_partner": {
+      "type": "string"
+    },
+    "licensing_owner": {
+      "type": "string"
+    },
+    "announced_date": {
+      "type": "string"
+    },
+    "release_date_(authoritative;_log_deltas_if_contradicted)": {
+      "type": "string"
+    },
+    "drop_windows_(channels)": {
+      "type": "string"
+    },
+    "purchase_limits": {
+      "type": "string"
+    },
+    "queues/mechanics": {
+      "type": "string"
+    },
+    "restock/second_wave_dates": {
+      "type": "string"
+    },
+    "end-of-life_or_“sold_out”_date": {
+      "type": "string"
+    },
+    "region_lock_(true/false;_explanation)": {
+      "type": "string"
+    },
+    "regional_codes_involved": {
+      "type": "string"
+    },
+    "packaging/regulatory_differences": {
+      "type": "string"
+    },
+    "region_code": {
+      "type": "string"
+    },
+    "channel": {
+      "type": "string"
+    },
+    "launch_msrp_(currency_+_numeric)": {
+      "type": "string"
+    },
+    "subsequent_official_price_changes": {
+      "type": "string"
+    },
+    "stock_status_snapshots": {
+      "type": "string"
+    },
+    "purchase_limit_at_listing": {
+      "type": "string"
+    },
+    "age_rating": {
+      "type": "string"
+    },
+    "warnings": {
+      "type": "string"
+    },
+    "compliance_marks": {
+      "type": "string"
+    },
+    "hs/customs_category": {
+      "type": "string"
+    },
+    "sku/model_code": {
+      "type": "string"
+    },
+    "barcode/ean/upc": {
+      "type": "string"
+    },
+    "shipping_box_info": {
+      "type": "string"
+    },
+    "return_policy_excerpt": {
+      "type": "string"
+    },
+    "warranty/support_link": {
+      "type": "string"
+    },
+    "hero_image(s)": {
+      "type": "string"
+    },
+    "orthographic_angles": {
+      "type": "string"
+    },
+    "packaging_flats": {
+      "type": "string"
+    },
+    "icon/thumb": {
+      "type": "string"
+    },
+    "videos": {
+      "type": "string"
+    },
+    "image_rights_note": {
+      "type": "string"
+    },
+    "asset_hashes": {
+      "type": "string"
+    },
+    "primary_sources_used": {
+      "type": "string"
+    },
+    "secondary_sources_used": {
+      "type": "string"
+    },
+    "capture_artifacts_(retrieved_at,_hash)": {
+      "type": "string"
+    },
+    "contradiction_log_(deltas)": {
+      "type": "string"
+    },
+    "query_ledger_(top_6–10_queries)": {
+      "type": "string"
+    },
+    "localized_titles": {
+      "type": "string"
+    },
+    "transliteration_notes": {
+      "type": "string"
+    },
+    "per-locale_notes": {
+      "type": "string"
+    },
+    "predecessor/successor": {
+      "type": "string"
+    },
+    "lateral_variants": {
+      "type": "string"
+    },
+    "same_sculpt/different_finish": {
+      "type": "string"
+    },
+    "shared_collab_capsule": {
+      "type": "string"
+    },
+    "series_hub_link": {
+      "type": "string"
+    },
+    "official_price_history_timeline": {
+      "type": "string"
+    },
+    "secondary_market_range_snapshots": {
+      "type": "string"
+    },
+    "scarcity_signals": {
+      "type": "string"
+    },
+    "https": {
+      "type": "string"
+    },
+    "deltas": {
+      "type": "string"
+    },
+    "<div_style=\"text-align": {
+      "type": "string"
+    },
+    "end-of-life_or_\"sold_out\"_date": {
+      "type": "string"
+    },
+    "product_title_(marketing_+_normalized)": {
+      "type": "string"
+    },
+    "aliases_\\&_search_tokens_(en/中文)": {
+      "type": "string"
+    },
+    "parent/child_relations": {
+      "type": "string"
+    },
+    "size_(h/w/d)": {
+      "type": "string"
+    },
+    "weight": {
+      "type": "string"
+    },
+    "finish": {
+      "type": "string"
+    },
+    "authenticity_marker": {
+      "type": "string"
+    },
+    "edition_size": {
+      "type": "string"
+    },
+    "designer/artist": {
+      "type": "string"
+    },
+    "sculpt/model": {
+      "type": "string"
+    },
+    "release_date": {
+      "type": "string"
+    },
+    "drop_windows": {
+      "type": "string"
+    },
+    "restock_dates": {
+      "type": "string"
+    },
+    "end-of-life": {
+      "type": "string"
+    },
+    "region_lock": {
+      "type": "string"
+    },
+    "regions": {
+      "type": "string"
+    },
+    "packaging_differences": {
+      "type": "string"
+    },
+    "region": {
+      "type": "string"
+    },
+    "subsequent_price_changes": {
+      "type": "string"
+    },
+    "stock_snapshots": {
+      "type": "string"
+    },
+    "purchase_limit": {
+      "type": "string"
+    },
+    "hs_category": {
+      "type": "string"
+    },
+    "sku": {
+      "type": "string"
+    },
+    "barcode/ean": {
+      "type": "string"
+    },
+    "shipping_box": {
+      "type": "string"
+    },
+    "return_policy": {
+      "type": "string"
+    },
+    "warranty/support": {
+      "type": "string"
+    },
+    "hero_image": {
+      "type": "string"
+    },
+    "orthographics": {
+      "type": "string"
+    },
+    "image_rights": {
+      "type": "string"
+    },
+    "primary": {
+      "type": "string"
+    },
+    "secondary": {
+      "type": "string"
+    },
+    "retrieved": {
+      "type": "string"
+    },
+    "queries": {
+      "type": "string"
+    },
+    "localized_title": {
+      "type": "string"
+    },
+    "transliteration": {
+      "type": "string"
+    },
+    "graph_hub": {
+      "type": "string"
+    },
+    "price_history": {
+      "type": "string"
+    },
+    "secondary_range": {
+      "type": "string"
+    },
+    "scarcity": {
+      "type": "string"
+    },
+    "variant_name": {
+      "type": "string"
+    },
+    "deterministic_id": {
+      "type": "string"
+    },
+    "aliases/search_tokens": {
+      "type": "string"
+    },
+    "parent/child": {
+      "type": "string"
+    },
+    "size": {
+      "type": "string"
+    },
+    "articulation": {
+      "type": "string"
+    },
+    "accessories": {
+      "type": "string"
+    },
+    "dimensions": {
+      "type": "string"
+    },
+    "contents": {
+      "type": "string"
+    },
+    "marker": {
+      "type": "string"
+    },
+    "factory_code": {
+      "type": "string"
+    },
+    "chase/rarity": {
+      "type": "string"
+    },
+    "perks": {
+      "type": "string"
+    },
+    "designer": {
+      "type": "string"
+    },
+    "collaboration": {
+      "type": "string"
+    },
+    "sculpt": {
+      "type": "string"
+    },
+    "license": {
+      "type": "string"
+    },
+    "announced": {
+      "type": "string"
+    },
+    "release": {
+      "type": "string"
+    },
+    "channels": {
+      "type": "string"
+    },
+    "limits": {
+      "type": "string"
+    },
+    "mechanics": {
+      "type": "string"
+    },
+    "restocks": {
+      "type": "string"
+    },
+    "sold_out": {
+      "type": "string"
+    },
+    "lock": {
+      "type": "string"
+    },
+    "differences": {
+      "type": "string"
+    },
+    "price_changes": {
+      "type": "string"
+    },
+    "stock": {
+      "type": "string"
+    },
+    "age": {
+      "type": "string"
+    },
+    "category": {
+      "type": "string"
+    },
+    "barcode": {
+      "type": "string"
+    },
+    "shipping": {
+      "type": "string"
+    },
+    "warranty": {
+      "type": "string"
+    },
+    "hero_images": {
+      "type": "string"
+    },
+    "rights": {
+      "type": "string"
+    },
+    "predecessor": {
+      "type": "string"
+    },
+    "successor": {
+      "type": "string"
+    },
+    "hub": {
+      "type": "string"
+    },
+    "secondary_snapshot": {
+      "type": "string"
+    },
+    "product_title": {
+      "type": "string"
+    },
+    "aliases_\\&_tokens": {
+      "type": "string"
+    },
+    "box_contents": {
+      "type": "string"
+    },
+    "original_designer/artist": {
+      "type": "string"
+    },
+    "mechanic": {
+      "type": "string"
+    },
+    "restock": {
+      "type": "string"
+    },
+    "stock_status": {
+      "type": "string"
+    },
+    "secondary_market": {
+      "type": "string"
+    },
+    "dimensions_\\&_weight": {
+      "type": "string"
+    },
+    "compliance": {
+      "type": "string"
+    },
+    "returns": {
+      "type": "string"
+    },
+    "companion": {
+      "type": "string"
+    },
+    "aliases_\\&_tokens_(en/中文)": {
+      "type": "string"
+    },
+    "size_(h)": {
+      "type": "string"
+    },
+    "regional_codes": {
+      "type": "string"
+    },
+    "us_blind_box": {
+      "type": "string"
+    },
+    "set_of_6": {
+      "type": "string"
+    },
+    "series_size": {
+      "type": "string"
+    },
+    "odds_table": {
+      "type": "string"
+    },
+    "checklist": {
+      "type": "string"
+    },
+    "primary_sources": {
+      "type": "string"
+    },
+    "secondary_sources": {
+      "type": "string"
+    },
+    "retrieved_at": {
+      "type": "string"
+    },
+    "query_ledger": {
+      "type": "string"
+    },
+    "official_price_history": {
+      "type": "string"
+    },
+    "secondary_market_range": {
+      "type": "string"
+    },
+    "anti-counterfeit": {
+      "type": "string"
+    },
+    "licensing": {
+      "type": "string"
+    },
+    "cn": {
+      "type": "string"
+    }
+  },
+  "required": ["title", "source", "Deltas"]
+}

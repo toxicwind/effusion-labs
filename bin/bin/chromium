@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+. "$(cd "$(dirname "$0")" && pwd)/_lib.sh"
+
+if [[ -n "${PUPPETEER_EXECUTABLE_PATH:-}" && -x "$PUPPETEER_EXECUTABLE_PATH" ]]; then
+  exec "$PUPPETEER_EXECUTABLE_PATH" "$@"
+fi
+
+if ! CHROMIUM_PATH="$(node "$REPO_ROOT/tools/resolve-chromium.mjs" 2>/dev/null)"; then
+  echo "❌ Chromium not found. Install via apt (chromium) or adjust paths." >&2
+  exit 127
+fi
+
+if [[ -z "$CHROMIUM_PATH" || ! -x "$CHROMIUM_PATH" ]]; then
+  echo "❌ Chromium not executable at: $CHROMIUM_PATH" >&2
+  exit 127
+fi
+
+exec "$CHROMIUM_PATH" "$@"

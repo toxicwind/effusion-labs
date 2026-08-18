@@ -1,0 +1,99 @@
+version: "3.9"
+
+services:
+  effusion-dev:
+    image: node:22-slim
+    container_name: effusion-labs-dev
+    working_dir: /app
+    command: sh -c "npm install && npm run dev"
+    ports:
+      - "8080:8080" # Eleventy dev server
+      - "24678:24678" # Vite HMR
+    environment:
+      - NODE_ENV=development
+      - CHOKIDAR_USEPOLLING=true
+      - WATCHPACK_POLLING=true
+      - ELEVENTY_HOST=0.0.0.0
+      - ELEVENTY_PORT=8080
+      - VITE_DEV_HOST=0.0.0.0
+      - VITE_HMR_PORT=24678
+      - npm_config_audit=false
+      - npm_config_fund=false
+    volumes:
+      - ./src:/app/src:delegated
+      - ./public:/app/public:delegated
+      - ./eleventy.config.mjs:/app/eleventy.config.mjs:delegated
+      - ./package.json:/app/package.json:delegated
+      - ./package-lock.json:/app/package-lock.json:delegated
+      - ./.nvmrc:/app/.nvmrc:delegated
+      - ./dprint.json:/app/dprint.json:delegated
+      - ./tailwind.config.js:/app/tailwind.config.js:delegated
+      - ./vite.config.mjs:/app/vite.config.mjs:delegated
+      - ./playwright.config.mjs:/app/playwright.config.mjs:delegated
+      - ./tsconfig.json:/app/tsconfig.json:ro
+      - ./.gitignore:/app/.gitignore:ro
+      # Exclude node_modules from host
+      - /app/node_modules
+      # Build output
+      - ./_site:/app/_site:cached
+    develop:
+      watch:
+        - action: sync
+          path: ./src
+          target: /app/src
+          ignore:
+            - node_modules/
+        - action: sync
+          path: ./public
+          target: /app/public
+        - action: sync
+          path: ./eleventy.config.mjs
+          target: /app/eleventy.config.mjs
+        - action: rebuild
+          path: ./package.json
+        - action: rebuild
+          path: ./package-lock.json
+    restart: unless-stopped
+    stdin_open: true
+    tty: true
+
+  orchestrator-dev:
+    image: python:3.11-slim
+    container_name: effusion-orchestrator-dev
+    working_dir: /app
+    command: sh -c "pip install -r services/requirements-orchestrator.txt && uvicorn services.orchestrator:app --host 0.0.0.0 --port 8000 --reload"
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./services:/app/services:cached
+    environment:
+      - REDIS_URL=redis://redis:6379/0
+      - MCP_GATEWAY_URL=http://host.docker.internal:37100
+      - PYTHONUNBUFFERED=1
+    depends_on:
+      - redis
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  redis:
+    image: redis:7-alpine
+    container_name: effusion-redis
+    ports:
+      - "6379:6379"
+
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: effusion-postgres
+    environment:
+      POSTGRES_USER: effusion
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: effusion_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
+
+

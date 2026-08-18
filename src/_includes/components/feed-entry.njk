@@ -1,0 +1,38 @@
+{# Feed entry: daisyUI-flavored card link #}
+{% macro feedEntry(item) -%}
+  {% set t = (item.type or item.data.type) | lower %}
+  <li data-type="{{ t }}">
+    <a
+      href="{{ item.url | url }}"
+      class="group block h-full hb-tile with-rail p-5 sm:p-6 transition-colors text-left no-underline"
+      data-title="{{ item.data.title }}"
+      data-date="{{ item.date | date('yyyy-MM-dd') }}"
+    >
+      <div>
+        {% set typeClass = 'pill--meta' %}
+        {% if t == 'project' %}{% set typeClass = 'pill--project' %}{% elif t == 'concept' %}{%
+            set typeClass = 'pill--concept'
+          %}
+        {% elif t == 'spark' %}{% set typeClass = 'pill--spark' %}{% elif t == 'meta' %}{%
+            set typeClass = 'pill--meta'
+          %}{% endif %}
+        <div class="flex items-start justify-between">
+          <span class="pill {{ typeClass }}">{{ (item.type or item.data.type) | capitalize }}</span>
+          {% if item.date %}
+            <time datetime="{{ item.date | htmlDateString }}" class="text-[0.7rem] opacity-90">
+              {{ item.date | readableDate }}
+            </time>
+          {% endif %}
+        </div>
+        <h3 class="font-heading text-base-content text-lg leading-tight group-hover:text-primary transition-colors">
+          {{ item.data.title }}
+        </h3>
+        {% if item.data.description %}
+          <p class="text-sm text-base-content/90 line-clamp-2">
+            {{ item.data.description | truncate(140) }}
+          </p>
+        {% endif %}
+      </div>
+    </a>
+  </li>
+{%- endmacro %}

@@ -1,0 +1,121 @@
+/* HYPEBRÜT LIQUID GLASS CORE */
+:root {
+    --glass-surface: rgba(255, 255, 255, 0.05);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --glass-highlight: rgba(255, 255, 255, 0.2);
+    --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    --neon-void: #00ff00;
+    --brutalist-bg: #0a0a0a;
+    --font-mono: "Courier New", Courier, monospace;
+}
+
+body {
+    background-color: var(--brutalist-bg);
+    color: #eee;
+    font-family: var(--font-mono);
+    margin: 0;
+    overflow-x: hidden;
+    cursor: crosshair;
+}
+
+/* UTIL: LIQUID GLASS PANEL */
+.liquid-glass {
+    background: var(--glass-surface);
+    backdrop-filter: blur(12px) saturate(180%);
+    -webkit-backdrop-filter: blur(12px) saturate(180%);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+    border-radius: 4px; /* Brutalist edge */
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.liquid-glass::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -50%; width: 200%; height: 100%;
+    background: linear-gradient(
+        to right,
+        transparent 0%,
+        var(--glass-highlight) 50%,
+        transparent 100%
+    );
+    transform: skewX(-25deg) translateX(-150%);
+    transition: transform 0.5s;
+    pointer-events: none;
+}
+
+.liquid-glass:hover::before {
+    transform: skewX(-25deg) translateX(150%);
+    transition: transform 0.7s;
+}
+
+.liquid-glass:hover {
+    box-shadow: 0 0 15px var(--neon-void), inset 0 0 20px rgba(0, 255, 0, 0.1);
+    border-color: var(--neon-void);
+}
+
+/* COMPONENT: HUD OVERLAY */
+#hud-layer {
+    position: fixed;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    pointer-events: none;
+    z-index: 9999;
+    mix-blend-mode: exclusion;
+}
+
+.hud-reticle {
+    position: absolute;
+    width: 20px; height: 20px;
+    border: 1px solid var(--neon-void);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    transition: width 0.2s, height 0.2s;
+}
+
+.hud-status {
+    position: absolute;
+    bottom: 2rem;
+    right: 2rem;
+    text-align: right;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+.hud-scanner {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 2px;
+    background: var(--neon-void);
+    opacity: 0.3;
+    animation: scanline 4s linear infinite;
+}
+
+@keyframes scanline {
+    0% { top: 0%; opacity: 0; }
+    10% { opacity: 0.5; }
+    90% { opacity: 0.5; }
+    100% { top: 100%; opacity: 0; }
+}
+
+/* TYPOGRAPHY */
+h1, h2, h3 {
+    font-weight: 100;
+    text-transform: uppercase;
+    letter-spacing: -0.05em;
+}
+
+.glitch-text {
+    position: relative;
+    display: inline-block;
+}
+
+/* UTILS: LAYOUT */
+.grid-brutalist {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 1rem;
+    padding: 2rem;
+}

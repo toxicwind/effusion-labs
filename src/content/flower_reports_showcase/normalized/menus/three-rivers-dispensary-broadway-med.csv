@@ -1,0 +1,80 @@
+name,brand,size_label,weight_g,price,price_per_oz,report_category,is_bundle
+Ingrid,,1 g,1.0,5.95,166.6,Flower,False
+Ingrid,,1/8 oz,3.5,12.95,103.6,Flower,False
+Ingrid,,1/4 oz,7.0,22.95,91.8,Flower,False
+Ingrid,,1/2 oz,14.0,44.95,89.9,Flower,False
+Ingrid,,1 oz,28.0,59.0,59.0,Flower,False
+Pillow Factory,,1 g,1.0,5.95,166.6,Flower,False
+Pillow Factory,,1/8 oz,3.5,12.95,103.6,Flower,False
+Pillow Factory,,1/4 oz,7.0,22.95,91.8,Flower,False
+Pillow Factory,,1/2 oz,14.0,44.95,89.9,Flower,False
+Pillow Factory,,1 oz,28.0,59.0,59.0,Flower,False
+Super Lemon Haze,,1 g,1.0,5.95,166.6,Flower,False
+Super Lemon Haze,,1/8 oz,3.5,12.95,103.6,Flower,False
+Super Lemon Haze,,1/4 oz,7.0,22.95,91.8,Flower,False
+Super Lemon Haze,,1/2 oz,14.0,44.95,89.9,Flower,False
+Super Lemon Haze,,1 oz,28.0,59.0,59.0,Flower,False
+Apple Pie,,1 g,1.0,6.95,194.6,Flower,False
+Apple Pie,,1/8 oz,3.5,14.95,119.6,Flower,False
+Apple Pie,,1/4 oz,7.0,24.95,99.8,Flower,False
+Apple Pie,,1/2 oz,14.0,49.95,99.9,Flower,False
+Apple Pie,,1 oz,28.0,79.0,79.0,Flower,False
+Buttermilk Biscuits,,1 g,1.0,6.95,194.6,Flower,False
+Buttermilk Biscuits,,1/8 oz,3.5,14.95,119.6,Flower,False
+Buttermilk Biscuits,,1/4 oz,7.0,24.95,99.8,Flower,False
+Buttermilk Biscuits,,1/2 oz,14.0,49.95,99.9,Flower,False
+Buttermilk Biscuits,,1 oz,28.0,72.6,72.6,Flower,False
+Don Shula,,1 g,1.0,6.95,194.6,Flower,False
+Don Shula,,1/8 oz,3.5,14.95,119.6,Flower,False
+Don Shula,,1/4 oz,7.0,24.95,99.8,Flower,False
+Don Shula,,1/2 oz,14.0,49.95,99.9,Flower,False
+Don Shula,,1 oz,28.0,72.6,72.6,Flower,False
+Gummies,,1 g,1.0,6.95,194.6,Flower,False
+Gummies,,1/8 oz,3.5,14.95,119.6,Flower,False
+Gummies,,1/4 oz,7.0,24.95,99.8,Flower,False
+Gummies,,1/2 oz,14.0,49.95,99.9,Flower,False
+Gummies,,1 oz,28.0,79.0,79.0,Flower,False
+Lemon Meringue,,1 g,1.0,6.95,194.6,Flower,False
+Lemon Meringue,,1/8 oz,3.5,14.95,119.6,Flower,False
+Lemon Meringue,,1/4 oz,7.0,24.95,99.8,Flower,False
+Lemon Meringue,,1/2 oz,14.0,49.95,99.9,Flower,False
+Lemon Meringue,,1 oz,28.0,79.0,79.0,Flower,False
+Red Runtz,,1 g,1.0,6.95,194.6,Flower,False
+Red Runtz,,1/8 oz,3.5,14.95,119.6,Flower,False
+Red Runtz,,1/4 oz,7.0,24.95,99.8,Flower,False
+Red Runtz,,1/2 oz,14.0,49.95,99.9,Flower,False
+Red Runtz,,1 oz,28.0,79.0,79.0,Flower,False
+Blue Garlic,,1 g,1.0,7.95,222.6,Flower,False
+Blue Garlic,,1/8 oz,3.5,19.95,159.6,Flower,False
+Blue Garlic,,1/4 oz,7.0,34.95,139.8,Flower,False
+Blue Garlic,,1/2 oz,14.0,54.95,109.9,Flower,False
+Blue Garlic,,1 oz,28.0,99.0,99.0,Flower,False
+Glueball,,1 g,1.0,7.95,222.6,Flower,False
+Glueball,,1/8 oz,3.5,19.95,159.6,Flower,False
+Glueball,,1/4 oz,7.0,34.95,139.8,Flower,False
+Glueball,,1/2 oz,14.0,54.95,109.9,Flower,False
+Glueball,,1 oz,28.0,99.0,99.0,Flower,False
+Kush Mints,,1 g,1.0,7.95,222.6,Flower,False
+Kush Mints,,1/8 oz,3.5,19.95,159.6,Flower,False
+Kush Mints,,1/4 oz,7.0,34.95,139.8,Flower,False
+Kush Mints,,1/2 oz,14.0,54.95,109.9,Flower,False
+Kush Mints,,1 oz,28.0,99.0,99.0,Flower,False
+Pancake Syrup,,1 g,1.0,7.95,222.6,Flower,False
+Pancake Syrup,,1/8 oz,3.5,19.95,159.6,Flower,False
+Pancake Syrup,,1/4 oz,7.0,34.95,139.8,Flower,False
+Pancake Syrup,,1/2 oz,14.0,54.95,109.9,Flower,False
+Pancake Syrup,,1 oz,28.0,99.0,99.0,Flower,False
+Purple Punch Breath,,1 g,1.0,7.95,222.6,Flower,False
+Purple Punch Breath,,1/8 oz,3.5,19.95,159.6,Flower,False
+Purple Punch Breath,,1/4 oz,7.0,34.95,139.8,Flower,False
+Purple Punch Breath,,1/2 oz,14.0,54.95,109.9,Flower,False
+Purple Punch Breath,,1 oz,28.0,99.0,99.0,Flower,False
+Grape Drink,,1 g,1.0,9.95,278.59999999999997,Flower,False
+Grape Drink,,1/8 oz,3.5,24.95,199.6,Flower,False
+Grape Drink,,1/4 oz,7.0,39.95,159.8,Flower,False
+Grape Drink,,1/2 oz,14.0,69.95,139.9,Flower,False
+Grape Drink,,1 oz,28.0,114.88,114.87999999999998,Flower,False
+$59/oz OTD Indoor Flower,,1 oz,28.0,54.05,54.05,Flower,False
+$59/oz OTD High Quality Indoor Flower,,1 oz,28.0,72.6,72.6,Flower,False
+$79/oz OTD Premium Indoor Flower,,1 oz,28.0,90.98,90.98,Flower,False
+$99/oz OTD Ultra Premium Flower,,1 oz,28.0,114.88,114.87999999999998,Flower,False

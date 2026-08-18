@@ -1,0 +1,139 @@
+{
+  "type": "product",
+  "product_id": "pop-mart--the-monsters--labubu--time-to-chill--plush--std--20221031",
+  "brand": "pop-mart",
+  "line": "the-monsters",
+  "character": "labubu",
+  "series": "time-to-chill",
+  "form": "Vinyl plush doll",
+  "variant": "std",
+  "edition": {
+    "kind": "core"
+  },
+  "distribution": {
+    "region_lock": false,
+    "markets": ["US"]
+  },
+  "size": {
+    "unit": "cm",
+    "h": 37,
+    "w": 20,
+    "d": 15
+  },
+  "release_date": "2022-10-31",
+  "market_listings": [
+    {
+      "market": "US",
+      "currency": "USD",
+      "price": 69.99
+    }
+  ],
+  "availability": {
+    "limited": false,
+    "unit_count": null
+  },
+  "images": [],
+  "provenance_ref": "/content/archives/collectables/designer-toys/pop-mart/the-monsters/provenance/pop-mart--the-monsters--labubu--time-to-chill--plush--std--20221031.jsonl",
+  "confidence": 0.45,
+  "notes": "Seeded from initial article; updated with dimensions from follow-up research.",
+  "product_title": "Time to Chill Vinyl Plush Doll",
+  "variant_name": "Cozy denim dungarees and pastel blue top, relaxed pose",
+  "materials": {
+    "shell": "PP/Polyester/Cotton mixture",
+    "plush": "95% Polyester Fiber, 5% Cotton",
+    "stuffing": "90% Polyester Fiber, 10% PP particles"
+  },
+  "packaging": {
+    "type": "Color box",
+    "dimensions_cm": "20×16.4×37.5"
+  },
+  "release_info": {
+    "release_date": "2022-10-31",
+    "edition_type": "Standard edition",
+    "edition_size": null
+  },
+  "pricing": {
+    "original_msrp": {
+      "USD": 69.99
+    },
+    "current_status": "Sold out",
+    "secondary_market_range": {
+      "USD": "760-7399"
+    }
+  },
+  "designer": "Kasing Lung (龙家升)",
+  "accessories": [
+    "Cozy denim dungarees",
+    "pastel blue top",
+    "authentication card",
+    "original packaging"
+  ],
+  "articulation": "Movable eyes and articulated features",
+  "colorway": "Blue denim with pastel accents",
+  "Deltas": [
+    {
+      "field": "product_id",
+      "from": "pop-mart--the-monsters--labubu--time-to-chill--plush--std--20221031",
+      "to": "pop-mart--the-monsters--labubu--time-to-chill--plush--std--20221031",
+      "reason": "kept-existing"
+    },
+    {
+      "field": "brand",
+      "from": "pop-mart",
+      "to": "pop-mart",
+      "reason": "kept-existing"
+    },
+    {
+      "field": "line",
+      "from": "the-monsters",
+      "to": "the-monsters",
+      "reason": "kept-existing"
+    },
+    {
+      "field": "character",
+      "from": "labubu",
+      "to": "labubu",
+      "reason": "kept-existing"
+    },
+    {
+      "field": "series",
+      "from": "time-to-chill",
+      "to": "time-to-chill",
+      "reason": "kept-existing"
+    },
+    {
+      "field": "form",
+      "from": "plush",
+      "to": "Vinyl plush doll",
+      "reason": "specificity"
+    },
+    {
+      "field": "size",
+      "from": {
+        "unit": "cm",
+        "h": 37,
+        "w": 20,
+        "d": 15
+      },
+      "to": {
+        "unit": "cm",
+        "h": 37,
+        "w": 20,
+        "d": 15
+      },
+      "reason": "same"
+    },
+    {
+      "field": "availability",
+      "from": {
+        "limited": false,
+        "unit_count": null
+      },
+      "to": {
+        "limited": false,
+        "unit_count": null
+      },
+      "reason": "same"
+    }
+  ]
+}

@@ -1,0 +1,99 @@
+---
+layout: base.njk
+eleventyComputed:
+  companySlug: "pop-mart"
+  lineSlug: "the-monsters"
+  title: "POP MART — The Monsters"
+showTitle: false
+---
+
+{% from "components/back-link.njk" import backLink %}
+{% from "components/tile.njk" import tile %}
+{%
+  set lineProducts = collections.archiveProducts   | byCompany(companySlug) | byLine(lineSlug) | byLocale('en')
+%}
+{%
+  set lineCharacters = collections.archiveCharacters | byCompany(companySlug) | byLine(lineSlug) | byLocale('en')
+%}
+{%
+  set lineSeries = collections.archiveSeries     | byCompany(companySlug) | byLine(lineSlug) | byLocale('en')
+%}
+{% set productsAll = collections.archiveProducts   | byCompany(companySlug) | byLine(lineSlug) %}
+<nav class="breadcrumbs text-sm mb-2 overflow-x-auto whitespace-nowrap" aria-label="Breadcrumb">
+  <ul>
+    <li>
+      <a href="{{ '/archives/' | url }}">Archives</a>
+    </li>
+    <li>
+      <a href="{{ '/archives/collectables/designer-toys/' | url }}">Designer Toys</a>
+    </li>
+    <li>
+      <a href="{{ ('/archives/collectables/designer-toys/' + companySlug + '/') | url }}"
+      >POP MART</a>
+    </li>
+    <li class="opacity-70">{{ lineSlug | replace('-', ' ') | title }}</li>
+  </ul>
+</nav>
+<div class="mb-6">
+  {{ backLink('Back', ('/archives/collectables/designer-toys/' + companySlug + '/') | url) }}
+</div>
+<section class="rounded-box border-2 border-black bg-base-200 p-5 sm:p-7 shadow-[6px_6px_0_rgba(0,0,0,0.85)]">
+  <h1 class="m-0 font-extrabold tracking-tight fluid-title text-primary">
+    POP MART — {{ lineSlug | replace('-', ' ') | title }}
+  </h1>
+  <p class="mt-2 opacity-85">Explore products, characters, and series.</p>
+</section>
+<section class="mt-8">
+  <h2 class="text-xl font-semibold mb-3">
+    Products <span class="opacity-60">({{ lineProducts | length }})</span>
+  </h2>
+  {% if lineProducts.length %}
+    <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {% for p in lineProducts %}<li>{{ tile(p) }}</li>{% endfor %}
+    </ul>
+  {% else %}
+    <p class="opacity-75">No products yet indexed for this line.</p>
+  {% endif %}
+</section>
+<section class="mt-10">
+  <h2 class="text-xl font-semibold mb-3">
+    Characters <span class="opacity-60">({{ lineCharacters | length }})</span>
+  </h2>
+  {% if lineCharacters.length %}
+    <ul class="flex flex-wrap gap-2">
+      {% for c in lineCharacters %}
+        {% set countForChar = (productsAll | byCharacter(c.data.charSlug)) | length %}
+        <li>
+          <a
+            class="badge badge-outline hover:badge-info transition"
+            href="{{ c.data.url | url }}"
+          >{{ c.data.name or c.data.slug or c.data.charSlug }}</a>
+          <span class="badge badge-ghost badge-xs">{{ countForChar }}</span>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p class="opacity-75">No characters indexed for this line.</p>
+  {% endif %}
+</section>
+{% if lineSeries and lineSeries.length %}
+  <section class="mt-10">
+    <h2 class="text-xl font-semibold mb-3">
+      Series <span class="opacity-60">({{ lineSeries | length }})</span>
+    </h2>
+    <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {% for s in lineSeries %}
+        <li class="card bg-base-100 border hover:shadow-xl hover:border-primary/50 transition">
+          <a class="card-body p-4 sm:p-5 block no-underline" href="{{ s.url | url }}">
+            <h3 class="card-title text-base m-0">{{ s.data.title or s.data.seriesSlug }}</h3>
+            {% if s.data.notes %}<p class="mt-1 opacity-80">{{ s.data.notes }}</p>{% endif %}
+            {% set seriesCount = (productsAll | bySeries(s.data.seriesSlug)) | length %}
+            <div class="mt-3 flex flex-wrap gap-2">
+              <span class="badge badge-outline badge-xs">products: {{ seriesCount }}</span>
+            </div>
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+  </section>
+{% endif %}

@@ -1,0 +1,33 @@
+{
+  "type": "product",
+  "product_id": "pop-mart--the-monsters--labubu--pronounce-wings-of-fantasy--plush--std--20241004",
+  "brand": "pop-mart",
+  "line": "the-monsters",
+  "character": "labubu",
+  "series": "pronounce-wings-of-fantasy",
+  "form": "plush",
+  "variant": "std",
+  "edition": {
+    "kind": "collab"
+  },
+  "distribution": {
+    "region_lock": false,
+    "markets": ["US"]
+  },
+  "release_date": "2024-10-04",
+  "market_listings": [
+    {
+      "market": "US",
+      "currency": "USD",
+      "price": 119.99
+    }
+  ],
+  "availability": {
+    "limited": false,
+    "unit_count": null
+  },
+  "images": [],
+  "provenance_ref": "/content/archives/collectables/designer-toys/pop-mart/the-monsters/provenance/pop-mart--the-monsters--labubu--pronounce-wings-of-fantasy--plush--std--20241004.jsonl",
+  "confidence": 0.45,
+  "notes": "Seeded from initial article; requires re-research."
+}

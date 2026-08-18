@@ -1,0 +1,36 @@
+{# components/work-feed.njk #}
+{% from "components/feed-entry.njk" import feedEntry %}
+<section aria-labelledby="work-heading" class="space-y-4">
+  <h2 id="work-heading" class="text-2xl font-heading hb-ink">Work</h2>
+
+  <div class="hb-inlay p-3 sm:p-4" role="toolbar" aria-label="Filter work">
+    <div class="filters flex flex-wrap gap-2">
+      <button class="btn btn-primary btn-sm" data-filter="all" aria-pressed="true">All</button>
+      <button class="btn btn-tone tone-project btn-sm" data-filter="project" aria-pressed="false">
+        Projects
+      </button>
+      <button class="btn btn-tone tone-concept btn-sm" data-filter="concept" aria-pressed="false">
+        Concepts
+      </button>
+      <button class="btn btn-tone tone-spark btn-sm" data-filter="spark" aria-pressed="false">
+        Sparks
+      </button>
+      <button class="btn btn-tone tone-meta btn-sm" data-filter="meta" aria-pressed="false">
+        Meta
+      </button>
+    </div>
+  </div>
+
+  <ul
+    id="work-list"
+    class="list-none grid gap-4 md:gap-6 lg:gap-8 auto-rows-[1fr] items-stretch grid-cols-[repeat(auto-fit,minmax(22rem,1fr))]"
+  >
+    {% for item in work %}
+      {{ feedEntry(item) }}
+    {% endfor %}
+  </ul>
+
+  <div class="more">
+    <a class="btn btn-primary" href="{{ '/work' | url }}">Browse all work</a>
+  </div>
+</section>
