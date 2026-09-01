@@ -4,6 +4,41 @@ const seeded = require("./lib/seeded");
 const registerArchiveCollections = require("./lib/eleventy/archive-collections");
 
 module.exports = function (eleventyConfig) {
+
+  // === Agentic Lens-First: AST pipeline integration (2026-09-01) ===
+  const { ASTEngine } = require('./lib/ast-engine');
+  const astEngine = new ASTEngine();
+
+  eleventyConfig.on('eleventy.after', async ({ results }) => {
+    if (process.env.LENS_ENABLED !== 'true') return;
+    console.log('[ast] Running post-build AST annotation pipeline...');
+    const allContent = results || [];
+    const astManifest = { generated: new Date().toISOString(), items: [] };
+
+    for (const item of allContent) {
+      if (!item.content) continue;
+      try {
+        const { results: lensResults, annotations } = await astEngine.transform(item.content, ['stylometric', 'osint', 'cryptographic', 'semantic']);
+        astManifest.items.push({
+          path: item.inputPath,
+          title: item.data?.title,
+          annotations: annotations.slice(0, 50), // cap per file
+          topology: annotations.filter(a => a.type === 'heading').map(a => ({
+            depth: a.lensResults?.semantic?.depth,
+            text: a.lensResults?.semantic?.text
+          }))
+        });
+      } catch (e) {
+        console.warn(`[ast] Failed to process ${item.inputPath}: ${e.message}`);
+      }
+    }
+
+    const outPath = require('path').resolve(__dirname, './src/_data/astManifest.json');
+    await require('fs').promises.mkdir(require('path').dirname(outPath), { recursive: true });
+    await require('fs').promises.writeFile(outPath, JSON.stringify(astManifest, null, 2));
+    console.log(`[ast] Wrote AST manifest: ${outPath}`);
+  });
+
   register(eleventyConfig);
 
   // === Agentic Lens-First: lens system hooks (2026-09-01) ===
