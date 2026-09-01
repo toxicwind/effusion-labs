@@ -5,6 +5,21 @@ const registerArchiveCollections = require("./lib/eleventy/archive-collections")
 
 module.exports = function (eleventyConfig) {
   register(eleventyConfig);
+
+  // === Agentic Lens-First: lens system hooks (2026-09-01) ===
+  const { LensOrchestrator } = require('./lib/lens-orchestrator');
+  const lensOrchestrator = new LensOrchestrator();
+
+  eleventyConfig.on('eleventy.before', async ({ runMode, outputMode }) => {
+    if (process.env.LENS_ENABLED !== 'true') return;
+    await lensOrchestrator.discover();
+    console.log('[lens] Build pipeline active —', runMode, outputMode);
+  });
+
+  eleventyConfig.addShortcode('lens', (lensName, content) => {
+    return `<lens-output data-lens="${lensName}" data-timestamp="${Date.now()}">${lensName}</lens-output>`;
+  });
+
   eleventyConfig.ignores.add('src/layouts/**');
   eleventyConfig.ignores.add('src/content/docs/**');
   eleventyConfig.ignores.add('src/content/docs/**/*.html');
