@@ -51,3 +51,32 @@ The tectonic lens treats the toxicwind ecosystem as a geological formation - sev
 - **Ecosystem Health Score**: Composite 0-100 metric
 
 This lens runs daily via CI and feeds the synthesis agent with actionable sync recommendations.
+
+## AST Layer: Abstract Syntax Tree as First-Class Perception
+
+The AST engine transforms every piece of content from raw text into a navigable tree. Each lens becomes a visitor that traverses specific node types. This is not post-processing. This is how the system sees.
+
+### Node Types
+
+- `heading` - Document structure and hierarchy
+- `paragraph` - Prose content for stylometric analysis
+- `code` - Executable blocks for dependency extraction
+- `link` - Infrastructure indicators for OSINT
+- `list` - Structured data for semantic topology
+- `text` - Linguistic material for cryptographic scanning
+
+### Visitor Pattern
+
+Each lens registers as a visitor function: `(node, meta) => result | null`. The AST engine walks the tree, applies all visitors in parallel via the swarm DAG, and attaches results as node annotations. The annotated tree is then serialized into `astManifest.json` for template consumption.
+
+### AST MCP Server
+
+External agents can parse, query, annotate, and extract topology via four tools:
+- `ast_parse` - Convert Markdown to AST
+- `ast_query` - Select nodes by CSS-like selector
+- `ast_annotate` - Run lens visitors and return annotations
+- `ast_topology` - Extract heading/code/list structure
+
+### AST Dependency Lens
+
+The `ast_dependency` lens parses code blocks in Markdown to extract import/require statements, build a dependency graph, and detect circular dependencies. This turns documentation into living architecture diagrams.
