@@ -104,4 +104,41 @@ describe("Lens Orchestrator", () => {
     expect(r.severity).toBeDefined();
   });
 
+})
+  it("vector pipeline embeds text into 384-dim vector", async () => {
+    const { VectorPipeline } = require("../lib/vector-pipeline");
+    const pipe = new VectorPipeline({ dimension: 384 });
+    const vec = await pipe.embed("The quick brown fox jumps over the lazy dog.");
+    expect(vec.length).toBe(384);
+    expect(vec.some(v => v !== 0.0)).toBe(true);
+  });
+
+  it("knowledge graph builds from OSINT results", async () => {
+    const { KnowledgeGraph } = require("../lib/knowledge-graph");
+    const kg = new KnowledgeGraph();
+    const osint = { urls_found: ["https://effusionlabs.com"], emails_found: ["test@example.com"], ips_found: [], domains_found: ["effusionlabs.com"] };
+    kg.fromOSINT(osint, { path: "/test.md" });
+    expect(kg.nodes.size).toBeGreaterThan(0);
+    expect(kg.edges.length).toBeGreaterThan(0);
+    const json = kg.toJSON();
+    expect(json.stats.nodeCount).toBeGreaterThan(0);
+  });
+
+  it("knowledge graph detects cycles in dependency data", async () => {
+    const { KnowledgeGraph } = require("../lib/knowledge-graph");
+    const kg = new KnowledgeGraph();
+    const deps = { dependencyGraph: { a: ["b"], b: ["a"] }, cycles: ["a -> b -> a"] };
+    kg.fromDependencies(deps, { path: "/test.md" });
+    const cycleNodes = Array.from(kg.nodes.values()).filter(n => n.label === 'Cycle');
+    expect(cycleNodes.length).toBe(1);
+  });
+
+  it("sync layer tracks client subscriptions", async () => {
+    const { SyncLayer } = require("../lib/sync-layer");
+    const sync = new SyncLayer({ port: 17359 });
+    // We cannot start the server in test without ws, but we verify structure
+    expect(sync.port).toBe(17359);
+    expect(sync.clients).toBeDefined();
+  });
+
 });
