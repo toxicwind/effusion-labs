@@ -12,6 +12,7 @@ spec:
     - osint
     - cryptographic
     - ast_dependency
+    - strata_debt
   triggers:
     - type: build
       condition: lens_drift_detected
