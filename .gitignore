@@ -89,3 +89,22 @@ public/lvreport/report.json
 # Misc
 _git/
 .git/
+
+# === Agentic Lens-First additions (2026-09-01) ===
+# Secrets — never commit
+.env
+.env.local
+.env.*.local
+
+# Agent runtime artifacts
+agents/.runtime/
+agents/.cache/
+lens-results/
+swarm-logs/
+
+# Ophel vault (local only)
+ophel-vault/
+*.lancedb
+
+# Modelbeats cache
+.modelbeats-cache/
