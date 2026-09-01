@@ -1,0 +1,30 @@
+# Perception Agent — Autonomous content analysis loop
+# Runs every 6 hours via CI cron or Zedra daemon trigger
+apiVersion: effusion.io/v1
+kind: Agent
+metadata:
+  name: perception-agent
+  namespace: effusion-labs
+spec:
+  schedule: "0 */6 * * *"
+  lenses:
+    - stylometric
+    - osint
+    - cryptographic
+  triggers:
+    - type: build
+      condition: lens_drift_detected
+      action: swarm_reanalysis
+    - type: commit
+      condition: auto_commit_enabled
+      branch: main
+  outputs:
+    - path: src/_data/lensManifest.json
+    - path: docs/competitive-intel/latest.md
+  env:
+    - name: GITHUB_TOKEN
+      valueFrom: env
+    - name: LENS_ENABLED
+      value: "true"
+    - name: LENS_SWARM_CONCURRENCY
+      value: "16"
