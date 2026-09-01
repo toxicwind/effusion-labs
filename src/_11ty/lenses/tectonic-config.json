@@ -1,0 +1,31 @@
+{
+  "repos": [
+    "effusion-labs",
+    "additional-lens-profiles",
+    "sovereign-skills",
+    "zedra",
+    "ophel",
+    "modelbeats",
+    "musepool",
+    "agent-chat-ui",
+    "sovereign-swap",
+    "omp-extensions",
+    "huh",
+    "sovereign-scripts",
+    "infra-recon",
+    "neo-osint",
+    "public-research",
+    "python-sdk-auditor",
+    "tinker-cookbook"
+  ],
+  "driftThresholds": {
+    "critical": 10,
+    "warning": 1,
+    "minor": 0
+  },
+  "cadenceWindowDays": {
+    "fresh": 7,
+    "aging": 30,
+    "stale": 90
+  }
+}
