@@ -11,10 +11,14 @@ spec:
     - stylometric
     - osint
     - cryptographic
+    - ast_dependency
   triggers:
     - type: build
       condition: lens_drift_detected
       action: swarm_reanalysis
+    - type: ast
+      condition: circular_dependency_detected
+      action: alert_and_block
     - type: commit
       condition: auto_commit_enabled
       branch: main
