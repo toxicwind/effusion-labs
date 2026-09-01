@@ -11,7 +11,8 @@
     "minisearch": "7.2.0",
     "react": "^19.2.3",
     "react-dom": "^19.2.8",
-    "turndown": "^7.2.4"
+    "turndown": "^7.2.4",
+    "ws": "^8.18.0"
   },
   "description": "This is a digital studio and knowledge base for Effusion Labs, built with Eleventy and the powerful `@photogabble/eleventy-plugin-interlinker`.",
   "devDependencies": {
