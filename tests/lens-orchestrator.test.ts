@@ -40,4 +40,45 @@ describe("Lens Orchestrator", () => {
     expect(r.healthScore).toBeDefined();
   });
 
+})
+  it("AST engine parses Markdown into tree", async () => {
+    const { ASTEngine } = require("../lib/ast-engine");
+    const engine = new ASTEngine();
+    const tree = await engine.parse("# Hello\n\nThis is a test.");
+    expect(tree.type).toBe("root");
+    expect(tree.children.length).toBeGreaterThan(0);
+  });
+
+  it("AST stylometric visitor annotates text nodes", async () => {
+    const { ASTEngine } = require("../lib/ast-engine");
+    const engine = new ASTEngine();
+    const { visitor } = require("../lib/ast-visitors/stylometric");
+    engine.registerVisitor("stylometric", visitor);
+    const tree = await engine.parse("The quick brown fox jumps over the lazy dog.");
+    const results = await engine.applyVisitor(tree, "stylometric");
+    expect(results.length).toBeGreaterThan(0);
+    expect(results[0].result.wordCount).toBeGreaterThan(0);
+  });
+
+  it("AST dependency lens detects circular imports", async () => {
+    const orch = new LensOrchestrator({ lensDir: "./src/_11ty/lenses" });
+    await orch.discover();
+    const codeBlocks = [
+      { id: "a", lang: "js", code: "import { b } from './b';" },
+      { id: "b", lang: "js", code: "import { a } from './a';" }
+    ];
+    const r = await orch.analyze("ast_dependency", { codeBlocks });
+    expect(r.lens).toBe("ast_dependency");
+    expect(r.hasCycles).toBe(true);
+    expect(r.cycles.length).toBeGreaterThan(0);
+  });
+
+  it("AST engine queries nodes by selector", async () => {
+    const { ASTEngine } = require("../lib/ast-engine");
+    const engine = new ASTEngine();
+    const tree = await engine.parse("# H1\n## H2\n\nSome text.");
+    const headings = engine.queryNodes(tree, "heading");
+    expect(headings.length).toBe(2);
+  });
+
 });
