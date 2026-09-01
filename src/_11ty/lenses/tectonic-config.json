@@ -26,6 +26,7 @@
   "cadenceWindowDays": {
     "fresh": 7,
     "aging": 30,
-    "stale": 90
+    "stale": 90,
+    "strataDebtThreshold": 40
   }
 }
