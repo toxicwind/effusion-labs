@@ -141,4 +141,42 @@ describe("Lens Orchestrator", () => {
     expect(sync.clients).toBeDefined();
   });
 
+})
+  it("consensus engine detects outliers in multi-agent results", async () => {
+    const { ConsensusEngine } = require("../lib/consensus-engine");
+    const engine = new ConsensusEngine({ quorumRatio: 0.67, outlierThreshold: 2.0 });
+    const results = [
+      { confidence: 0.9 }, { confidence: 0.88 }, { confidence: 0.91 },
+      { confidence: 0.87 }, { confidence: 0.3 }
+    ];
+    const r = await engine.analyze({ results }, {});
+    expect(r.lens).toBe("consensus");
+    expect(r.outlierCount).toBeGreaterThan(0);
+    expect(r.status).toBe("dissent");
+    expect(r.quorumConfidence).toBeGreaterThan(0.5);
+  });
+
+  it("self-modification layer records telemetry and generates suggestions", async () => {
+    const { SelfModificationLayer } = require("../lib/self-modification");
+    const mod = new SelfModificationLayer({ threshold: 0.5 });
+    mod.record("stylometric", { confidence: 0.3 }, 100, true);
+    mod.record("stylometric", { confidence: 0.25 }, 120, true);
+    mod.record("cryptographic", { confidence: 0.95 }, 50, true);
+    const report = mod.analyzePerformance();
+    expect(report.length).toBeGreaterThan(0);
+    const needy = report.filter(r => r.needsImprovement);
+    expect(needy.length).toBeGreaterThan(0);
+  });
+
+  it("quantum superposition lens collapses multi-state probabilities", async () => {
+    const lens = require("../src/_11ty/lenses/lens_quantum_superposition");
+    const text = "This API endpoint returns a JSON object with parameters and types. The vulnerability was patched in CVE-2026-1234.";
+    const r = await lens.analyze(text, {});
+    expect(r.lens).toBe("quantum_superposition");
+    expect(r.states.length).toBeGreaterThan(0);
+    expect(r.dominantState).toBeDefined();
+    expect(r.coherence).toBeGreaterThan(0);
+    expect(r.entropy).toBeGreaterThan(0);
+  });
+
 });
