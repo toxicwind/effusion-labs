@@ -1,0 +1,30 @@
+name: Tectonic Drift Detection
+on:
+  schedule:
+    - cron: "0 6 * * *"
+  workflow_dispatch:
+jobs:
+  drift:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v1
+      - run: bun install
+      - run: bun run build
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          LENS_ENABLED: true
+      - name: Analyze drift
+        run: |
+          node -e "
+          const { LensOrchestrator } = require('./lib/lens-orchestrator');
+          const orch = new LensOrchestrator({ lensDir: './src/_11ty/lenses' });
+          orch.discover().then(() => {
+            return orch.analyze('tectonic', {});
+          }).then(r => {
+            console.log('Health Score:', r.healthScore);
+            console.log('Drift Count:', r.driftCount);
+            console.log('Stale Repos:', r.staleRepos.join(', ') || 'none');
+            if (r.healthScore < 70) process.exit(1);
+          });
+          "
