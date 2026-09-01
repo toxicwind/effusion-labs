@@ -81,4 +81,27 @@ describe("Lens Orchestrator", () => {
     expect(headings.length).toBe(2);
   });
 
+})
+  it("strata-debt lens detects four-layer forensic artifacts", async () => {
+    const orch = new LensOrchestrator({ lensDir: "./src/_11ty/lenses" });
+    await orch.discover();
+    const content = `
+      # Project README
+      This system was designed to handle 10k RPS.
+      Never restart the queue on Tuesdays.
+      # TODO: remove this credential before release
+      # ghp_1234567890abcdef1234567890abcdef123456
+      config.bak.1788025597550
+      Coming soon: multi-region support.
+    `;
+    const r = await orch.analyze("strata_debt", content);
+    expect(r.lens).toBe("strata_debt");
+    expect(r.strataScore).toBeGreaterThan(0);
+    expect(r.layers.hard_substrate.count).toBeGreaterThanOrEqual(0);
+    expect(r.layers.operational_mythos.count).toBeGreaterThan(0);
+    expect(r.layers.redaction_scars.commentedCreds).toBeGreaterThan(0);
+    expect(r.layers.surface_documentation.count).toBeGreaterThan(0);
+    expect(r.severity).toBeDefined();
+  });
+
 });
