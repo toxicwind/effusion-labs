@@ -13,6 +13,8 @@ spec:
     - cryptographic
     - ast_dependency
     - strata_debt
+    - temporal_drift
+    - probabilistic
   triggers:
     - type: build
       condition: lens_drift_detected
@@ -20,6 +22,12 @@ spec:
     - type: ast
       condition: circular_dependency_detected
       action: alert_and_block
+    - type: temporal
+      condition: major_drift_detected
+      action: notify_and_snapshot
+    - type: probabilistic
+      condition: brittleness_high
+      action: flag_for_review
     - type: commit
       condition: auto_commit_enabled
       branch: main
