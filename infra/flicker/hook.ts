@@ -95,7 +95,9 @@ Bun.serve({
   port: PORT,
   async fetch(req) {
     const url = new URL(req.url);
-    if (url.pathname !== "/effusion-hook") return new Response("not found", { status: 404 });
+    // funnel strips the /effusion-hook mount prefix, so the hook sees /;
+    // direct local hits use /effusion-hook
+    if (url.pathname !== "/effusion-hook" && url.pathname !== "/") return new Response("not found", { status: 404 });
     if (req.method === "GET") return Response.json({ ok: true, service: "effusion-hook" });
     if (req.method !== "POST") return new Response("method not allowed", { status: 405 });
 

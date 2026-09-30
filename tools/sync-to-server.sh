@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # Dedicated Server Artifact Sync
-# Syncs locally-generated artifacts to dedicated server for Portainer deployment
+# Syncs locally-generated artifacts to dedicated server (deploy via flicker; see DEPLOY.md)
 
 echo "🚀 Syncing artifacts to dedicated server..."
 
@@ -28,15 +28,7 @@ rsync -avz --delete \
 
 echo "✅ Artifacts synced successfully"
 
-# 2. Trigger Portainer stack update (optional)
-if [[ -n "${PORTAINER_WEBHOOK:-}" ]]; then
-  echo "🔄 Triggering Portainer redeploy..."
-  curl --fail --retry 3 --retry-delay 2 -X POST "$PORTAINER_WEBHOOK"
-  echo "✅ Portainer redeploy triggered"
-else
-  echo "⚠️  PORTAINER_WEBHOOK not set"
-  echo ""
-  echo "Manual redeploy steps:"
+Manual redeploy steps:"
   echo "1. SSH to server: ssh ${SERVER_USER}@${SERVER_HOST}"
   echo "2. Navigate to stack: cd /opt/effusion-labs"
   echo "3. Restart stack: docker-compose up -d --force-recreate"

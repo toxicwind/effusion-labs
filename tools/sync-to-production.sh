@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # CHRONOS FORGE :: Sync to Production
-# Orchestrator script: Generates artifacts (if missing), uploads them, and triggers Portainer.
+# Orchestrator script: Generates artifacts (if missing), uploads them. (Deploy via flicker; see DEPLOY.md.)
 
 echo "🚀 Syncing to Production..."
 
@@ -17,14 +17,5 @@ fi
 # 2. Upload Artifacts
 echo "u001b[34m📤 Uploading artifacts...\u001b[0m"
 ./tools/upload-artifacts.sh
-
-# 3. Trigger Portainer
-if [[ -n "${PORTAINER_WEBHOOK:-}" ]]; then
-  echo "u001b[35m🔄 Triggering Portainer redeploy...\u001b[0m"
-  curl --fail --retry 3 --retry-delay 2 -X POST "$PORTAINER_WEBHOOK"
-  echo "✅ Portainer redeploy triggered"
-else
-  echo "⚠️  PORTAINER_WEBHOOK not set. Skipping trigger."
-fi
 
 echo "🎉 Sync flow complete."
