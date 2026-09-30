@@ -9,4 +9,5 @@ module.exports = [
   { title: "Showcase", url: "/" },
   ...areaLinks,
   { title: "Map", url: "/map/" },
+  { title: "Consulting", url: "/consulting/" },
 ];
