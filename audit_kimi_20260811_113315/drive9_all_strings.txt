@@ -67720,7 +67720,7 @@ expectedPolicySet
 expectedRevision
 expectedRevisionForHandleLocked
 expectsContinue
-expiredapi-keytimeoutenabledBearer minsizemaxsize--short^{tree}--resetgc.autooverlayls-treesubjectentriesdir-ttl/deletenet useOPTIONSHTTP %d%.1f %ssecretscd: %v
+expiredapi-keytimeoutenabledBearer [REDACTED]^{tree}--resetgc.autooverlayls-treesubjectentriesdir-ttl/deletenet useOPTIONSHTTP %d%.1f %ssecretscd: %v
 expires
 expiry
 explicit

@@ -108,3 +108,6 @@ ophel-vault/
 
 # Modelbeats cache
 .modelbeats-cache/
+
+# Audit dumps with redacted credentials - do not commit raw
+audit_kimi_20260811_113315/
