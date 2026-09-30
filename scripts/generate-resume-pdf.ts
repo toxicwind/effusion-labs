@@ -53,15 +53,17 @@ const experienceHtml = resume.experience
 
 const projectsHtml = resume.projects
   .map((p: any) => {
-    const blurb = p.blurb ? `<p class="blurb">${esc(p.blurb)}</p>` : "";
+    const bullets = (p.bullets ?? [])
+      .map((b: string) => `<li>${esc(b)}</li>`)
+      .join("\n");
     return `<section class="project">
       <div class="job-head">
         <div><strong>${esc(p.name)}</strong>${
-          p.subtitle ? ` — <span class="muted">${esc(p.subtitle)}</span>` : ""
+          p.tagline ? ` — <span class="muted">${esc(p.tagline)}</span>` : ""
         }</div>
-        ${p.url ? `<div class="dates">${link("link", p.url)}</div>` : ""}
+        ${p.repo ? `<div class="dates">${link("repo", p.repo)}</div>` : ""}
       </div>
-      ${blurb}
+      <ul>${bullets}</ul>
     </section>`;
   })
   .join("\n");
@@ -114,9 +116,9 @@ const html = `<!DOCTYPE html>
 <meta charset="utf-8">
 <title>${esc(resume.name)} — Resume</title>
 <style>
-  @page { size: Letter; margin: 0; }
+  @page { size: Letter; margin: 0.55in 0.65in; }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 10pt; line-height: 1.45; color: #161616; padding: 0.55in 0.65in; }
+  body { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 10pt; line-height: 1.45; color: #161616; }
   a { color: #1a4fa0; text-decoration: none; }
   h1 { font-size: 24pt; letter-spacing: -0.5px; margin-bottom: 1pt; }
   .headline { font-size: 11pt; color: #333; margin-bottom: 4pt; }
@@ -128,7 +130,6 @@ const html = `<!DOCTYPE html>
   .highlight { font-size: 9.5pt; }
   .muted { color: #555; }
   .job, .project { margin-bottom: 8pt; break-inside: avoid; }
-  .blurb { font-size: 9.5pt; color: #333; margin-top: 2pt; }
   .job-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12pt; margin-bottom: 2pt; }
   .dates { font-size: 9pt; color: #555; white-space: nowrap; }
   ul { margin: 3pt 0 2pt 15pt; }

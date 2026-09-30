@@ -93,11 +93,10 @@ module.exports = function (eleventyConfig) {
   // TagList: { slug, label, items } per non-structural tag, biggest first.
   eleventyConfig.addCollection("tagList", (api) => {
     const { slugify } = require("./lib/filters");
-    const skip = new Set([
-      "projects", "concepts", "sparks", "meta", "work", "archives", "docs",
-      "flower-reports", "all", "nav", "post", "posts", "featured", "prototype",
-      "node", "nodes",
-    ]);
+    // Only skip tags that carry no topical meaning. Lane names (projects,
+    // concepts, sparks, meta, ...) stay linkable: meta-aside.njk links
+    // every tag, so every linked tag must have a page.
+    const skip = new Set(["all", "nav", "post", "posts", "node", "nodes"]);
     const map = new Map();
     for (const p of api.getAll()) {
       if (!p.url || p.data?.eleventyExcludeFromCollections) continue;

@@ -145,7 +145,6 @@ export default [
             'src/_data/**/*.{js,mjs,ts}',
             'src/**/*.11ty.{js,ts}',
             'src/**/*.11tydata.{js,ts}',
-            'eleventy.config.mjs'
         ],
         rules: {
             'import/no-unused-modules': 'off',

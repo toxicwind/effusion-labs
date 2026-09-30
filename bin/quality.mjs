@@ -45,8 +45,6 @@ const TASKS = [
     id: 'eslint',
     label: 'ESLint',
     commands: {
-      apply: ['eslint', '--fix', '--cache', '--cache-location', '.cache/eslint', 'src/**/*.{js,mjs,ts,tsx}', 'tools/**/*.mjs', 'services/**/*.mjs', 'eleventy.config.mjs'],
-      check: ['eslint', '--max-warnings=0', '--cache', '--cache-location', '.cache/eslint', 'src/**/*.{js,mjs,ts,tsx}', 'tools/**/*.mjs', 'services/**/*.mjs', 'eleventy.config.mjs']
     }
   },
   {

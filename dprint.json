@@ -39,7 +39,6 @@
     "*.json",
     "*.yml",
     "*.yaml",
-    "eleventy.config.mjs"
   ],
   "excludes": [
     "node_modules",

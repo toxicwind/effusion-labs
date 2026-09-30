@@ -1,7 +1,6 @@
 {
   "$schema": "https://unpkg.com/knip@latest/schema.json",
   "entry": [
-    "eleventy.config.mjs",
     "src/**/*.11ty.{js,ts}",
     "src/**/*.11tydata.{js,ts}",
     "src/_data/**/*.{js,ts}",
