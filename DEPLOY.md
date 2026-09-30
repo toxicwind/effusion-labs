@@ -32,8 +32,8 @@ Flicker's content-hash cache makes re-pushes of an identical tree a no-op
 
 ## Secrets
 
-- GitHub webhook HMAC secret: `/home/toxic/.secrets/effusion-hook` (yote only,
-  0600). Minted on yote, never in the repo, never leaves the box.
+- GitHub webhook HMAC secret: `EFFUSION_HOOK_SECRET` in `/home/toxic/.secrets`
+  (yote only). Minted on yote, never in the repo, never leaves the box.
 - Nothing deploy-related lives in GitHub Secrets anymore.
 
 ## Manual deploy
