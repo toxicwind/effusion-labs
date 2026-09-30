@@ -150,6 +150,8 @@ subject to constraint.
 
 Its guiding assumption is simple:
 
+> _Companion: [The Refusal Is Not the Reason: Safety Classifiers as Unreliable Narrators](/projects/safety-classifiers-unreliable-narrators/) — the operator's manual for Dandelion's friction boundaries._
+
 - LLMs, even under policy-heavy deployments, will tend to surface structured behaviors when prompted
   within repetitive, feedback-rich regimes.
 

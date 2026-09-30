@@ -1,6 +1,7 @@
 const register = require("./lib/eleventy/register");
 const { dirs } = require("./lib/config");
 const seeded = require("./lib/seeded");
+
 const registerArchiveCollections = require("./lib/eleventy/archive-collections");
 
 module.exports = function (eleventyConfig) {
@@ -78,6 +79,39 @@ module.exports = function (eleventyConfig) {
     items.sort((a, b) => b.date - a.date);
     items.take = (n) => items.slice(0, n);
     return items;
+  });
+
+  // Nodes: every addressable content item with a title, oldest-first (feed reverses).
+  eleventyConfig.addCollection("nodes", (api) => {
+    const items = api
+      .getAll()
+      .filter((p) => p.url && p.data?.title && !p.data?.eleventyExcludeFromCollections);
+    items.sort((a, b) => (a.date || 0) - (b.date || 0));
+    return items;
+  });
+
+  // TagList: { slug, label, items } per non-structural tag, biggest first.
+  eleventyConfig.addCollection("tagList", (api) => {
+    const { slugify } = require("./lib/filters");
+    const skip = new Set([
+      "projects", "concepts", "sparks", "meta", "work", "archives", "docs",
+      "flower-reports", "all", "nav", "post", "posts", "featured", "prototype",
+      "node", "nodes",
+    ]);
+    const map = new Map();
+    for (const p of api.getAll()) {
+      if (!p.url || p.data?.eleventyExcludeFromCollections) continue;
+      const tags = p.data?.tags || [];
+      for (const t of tags) {
+        const slug = slugify(String(t));
+        if (!slug || skip.has(slug)) continue;
+        if (!map.has(slug)) map.set(slug, { slug, label: String(t), items: [] });
+        map.get(slug).items.push(p);
+      }
+    }
+    return [...map.values()].sort(
+      (a, b) => b.items.length - a.items.length || a.slug.localeCompare(b.slug),
+    );
   });
 
   registerArchiveCollections(eleventyConfig);

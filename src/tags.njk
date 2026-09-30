@@ -1,0 +1,44 @@
+---
+pagination:
+  data: collections.tagList
+  size: 1
+  alias: tag
+permalink: "/tags/{{ tag.slug }}/"
+eleventyExcludeFromCollections: true
+layout: "layouts/main/base.njk"
+eleventyComputed:
+  title: "#{{ tag.label }}"
+  description: "Everything in the garden tagged {{ tag.label }}."
+---
+{% from "components/list-item.njk" import listItem %}
+{% from "components/breadcrumbs.njk" import breadcrumbs %}
+
+<div class="stack" style="--space: var(--space-xl)">
+  {{ breadcrumbs([{ text: "Tags", href: "/tags/" }, { text: tag.label }]) }}
+
+  <header class="stack" style="--space: var(--space-xs)">
+    <h1 class="text-h1">#{{ tag.label }}</h1>
+    <p class="max-w-prose text-lg opacity-70 leading-relaxed">
+      {{ tag.items.length }} entr{{ "y" if tag.items.length == 1 else "ies" }} in the garden.
+    </p>
+  </header>
+
+  <div
+    id="collection-grid"
+    class="grid-auto"
+    style="--grid-min: 22rem; --space: var(--space-l)"
+    data-section="tags"
+  >
+    {% for item in tag.items %}
+      <div
+        class="group hb-anim"
+        data-title="{{ (item.data.title or '') | escape }}"
+        {% if item.date %}
+          data-date="{{ item.date | htmlDateString }}"
+        {% endif %}
+      >
+        {{ listItem(item) }}
+      </div>
+    {% endfor %}
+  </div>
+</div>
