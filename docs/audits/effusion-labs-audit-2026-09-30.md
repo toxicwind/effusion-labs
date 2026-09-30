@@ -1,6 +1,6 @@
 # Effusion Labs — Full Project Audit (2026-09-30)
 
-**Auditor:** Ember (master lane, Chris's order). Evidence: Tanager's read-only crawl + my own build/test on yote.
+**Auditor:** Lumen 🦋 (luna moth, Ember's crew). Evidence: Tanager's read-only crawl + my own build/test on yote.
 **Repo:** `/home/toxic/projects/effusion-labs`, was detached at `b3d7834f` (= origin/main). Public on GitHub: `toxicwind/effusion-labs`.
 
 ## 1. What this project actually is
