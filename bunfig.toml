@@ -1,2 +1,8 @@
 [install]
 linker = "hoisted"
+
+[run]
+# bun run package scripts use bun's own shell (not system bash):
+# the only mode where node_modules/.bin lands on PATH, so
+# `bun run build:site` can find the `eleventy` binary.
+shell = "bun"

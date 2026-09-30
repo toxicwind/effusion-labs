@@ -10,9 +10,13 @@ RUN apt-get update && \
     apt-get install -y --no-install-recommends build-essential python3 ca-certificates git && \
     rm -rf /var/lib/apt/lists/*
 
+# Nightly-emergent toolchain: bun rides the canary (nightly) channel.
+# `bun upgrade --canary` is bun's documented nightly mechanism (canary
+# release tag, rebuilt on every main commit).
 RUN curl -fsSL https://bun.sh/install | bash && \
     ln -sf /root/.bun/bin/bun /usr/local/bin/bun && \
-    bun --version
+    bun upgrade --canary && \
+    bun --version && bun --revision
 
 ENV npm_config_fund=false \
     npm_config_audit=false \
