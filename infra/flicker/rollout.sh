@@ -25,7 +25,7 @@ rollback() {
   exit 1
 }
 
-EFFUSION_IMAGE="effusion-web:${SHA}" docker compose -p effusion up -d --force-recreate web
+EFFUSION_IMAGE="effusion-web:${SHA}" docker compose -p effusion up -d --force-recreate web || rollback
 
 for _ in $(seq 1 30); do
   if curl -sf --max-time 3 http://127.0.0.1:43000/ >/dev/null 2>&1; then
