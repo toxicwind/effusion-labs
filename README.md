@@ -5,7 +5,6 @@
 ![Eleventy](https://img.shields.io/badge/eleventy-3.1-3a4048.svg?style=for-the-badge)
 ![Vite](https://img.shields.io/badge/vite-6-646cff.svg?style=for-the-badge)
 ![MCP](https://img.shields.io/badge/MCP-tools-7c3aed.svg?style=for-the-badge)
-![Netlify](https://img.shields.io/badge/netlify-deployed-00c7b7.svg?style=for-the-badge)
 
 </div>
 
@@ -28,7 +27,7 @@ This is not a static site generator with plugins bolted on. Effusion Labs is a d
 - **⚡ Eleventy 3 + Vite** — static output with a modern client asset pipeline
 - **🎨 Tailwind CSS 4 + daisyUI** — design system ready
 - **🛡️ Consensus engine** — lenses reach agreement, not just opinions
-- **🚀 Netlify-native** — `npm run build` → `_site`, deploy in one push
+- **🚀 Deploy lanes** — prod via dedi Portainer stack → cloudflared, staging via flicker → `:43000` (see [Deploy](#deploy))
 
 ## How it sees
 
@@ -95,7 +94,7 @@ The full lens doctrine lives in [`docs/AGENTIC-LENS-FIRST.md`](docs/AGENTIC-LENS
 | MCP gateway | `bun run mcp:start` | `services/mcp-stack/gateway/server.mjs` |
 | Lens MCP server | `bun services/mcp-stack/lens-server/server.ts` | `@effusion/lens-server` 2.0.0, lenses as tools |
 | Client assets | [`vite.config.mjs`](vite.config.mjs) | `@11ty/eleventy-plugin-vite` |
-| Deploy | [`netlify.toml`](netlify.toml) | `npm run build` publishes `_site/` |
+| Deploy | [Deploy](#deploy) | prod: dedi Portainer → cloudflared; staging: flicker → `:43000` |
 
 ## Resume
 
@@ -113,6 +112,30 @@ src/pages/resume/resume.json                    # canonical source — edit THIS
 - **PDF:** [`scripts/generate-resume-pdf.ts`](scripts/generate-resume-pdf.ts) (Bun, added in `2a0e2151`) reads the JSON, renders a standalone print-optimized HTML document (inline CSS, no site-pipeline dependency), and prints it via headless Chromium. The committed PDF lives at `src/assets/static/` and is served at `/assets/Christopher_Ortega_Resume_2026.pdf` — passthrough configured in [`lib/eleventy/register.js`](lib/eleventy/register.js); the `downloadPdf` key in the JSON points the page's download button at it.
 
 **Update flow:** edit the JSON → `bun run build` (page) → `bun scripts/generate-resume-pdf.ts` (PDF) → commit both. The generator's header links back to this section.
+
+## Deploy
+
+Production and staging are **different lanes** — don't confuse them (corrected 2026-09-30).
+
+**Production — `effusionlabs.com`** is served from the dedi (`mildlyawesome.com`):
+
+```
+repo build (_site/) → copy to dedi → Portainer stack → Traefik → nginx:alpine
+  (bind-mounted _site) → cloudflared tunnel → Cloudflare → effusionlabs.com
+```
+
+- The prod image is defined by [`.portainer/Dockerfile`](.portainer/Dockerfile) (+ [`nginx.conf`](.portainer/nginx.conf)); the live stack serves a bind-mounted `_site`.
+- **Auto-deploy is dead:** `infra/flicker/hook.ts` (GitHub push → webhook on `:25242` → flicker build → rollout) has no runner — nothing supervises it, and the repo-side GitHub Actions deploy path was retired in `b3d7834f`. Deploys to prod are **manual** until the path is re-lit.
+
+**Staging — flicker → yote `:43000`:**
+
+```bash
+infra/flicker/build.sh && infra/flicker/rollout.sh   # → effusion-web:live container, health-gated with auto-rollback
+```
+
+Staging/preview only — it does **not** serve the public domain.
+
+**Netlify:** the `netlify.toml` at repo root is a 55-byte stub (`npm run build` → `_site`), added in a 2026-08-18 sync commit and never wired to an actual Netlify site. The old "Netlify-native"/"deployed" claims in this README were inaccurate and were removed 2026-09-30. (Related: the consulting contact form still carries a `data-netlify="true"` attribute — inert on the current non-Netlify prod; see `src/_includes/standalone/consulting/contact-form.njk`.)
 
 ## Dev & contributing
 
