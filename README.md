@@ -97,6 +97,23 @@ The full lens doctrine lives in [`docs/AGENTIC-LENS-FIRST.md`](docs/AGENTIC-LENS
 | Client assets | [`vite.config.mjs`](vite.config.mjs) | `@11ty/eleventy-plugin-vite` |
 | Deploy | [`netlify.toml`](netlify.toml) | `npm run build` publishes `_site/` |
 
+## Resume
+
+The resume is data-driven: one canonical JSON feeds both the web page and the downloadable PDF.
+
+```
+src/pages/resume/resume.json                    # canonical source — edit THIS
+  ├─→ src/pages/resume/index.njk                # /resume/ page (Eleventy + Nunjucks)
+  └─→ bun scripts/generate-resume-pdf.ts        # 2-page canonical PDF
+        └─→ src/assets/static/Christopher_Ortega_Resume_2026.pdf  # served at /assets/…
+```
+
+- **Canonical source:** [`src/pages/resume/resume.json`](src/pages/resume/resume.json) — title, summary, experience, skills, projects, education. Single source of truth since `d24ab059` (2026-09-30).
+- **Page:** [`src/pages/resume/index.njk`](src/pages/resume/index.njk) renders `/resume/` through the [`subdomains/resume` layout](src/_includes/layouts/subdomains/resume/page.njk).
+- **PDF:** [`scripts/generate-resume-pdf.ts`](scripts/generate-resume-pdf.ts) (Bun, added in `2a0e2151`) reads the JSON, renders a standalone print-optimized HTML document (inline CSS, no site-pipeline dependency), and prints it via headless Chromium. The committed PDF lives at `src/assets/static/` and is served at `/assets/Christopher_Ortega_Resume_2026.pdf` — passthrough configured in [`lib/eleventy/register.js`](lib/eleventy/register.js); the `downloadPdf` key in the JSON points the page's download button at it.
+
+**Update flow:** edit the JSON → `bun run build` (page) → `bun scripts/generate-resume-pdf.ts` (PDF) → commit both. The generator's header links back to this section.
+
 ## Dev & contributing
 
 ```bash

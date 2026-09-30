@@ -7,6 +7,7 @@
  * src/assets/static/Christopher_Ortega_Resume_2026.pdf via headless Chromium.
  *
  * Usage: bun scripts/generate-resume-pdf.ts
+ * Pipeline documented in README.md ("Resume" section).
  */
 import { readFileSync, writeFileSync } from "node:fs";
 import { join, dirname } from "node:path";
