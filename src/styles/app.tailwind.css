@@ -1,6 +1,7 @@
 /* src/styles/app.tailwind.css */
 @config "../../tailwind.config.mjs";
 @import "./tokens.css";
+@import "./liquid-glass.css";
 @import "tailwindcss";
 
 /* Bind Tailwind's `dark:` variant to the daisyUI dark theme ("sunset") */
@@ -11,13 +12,45 @@
 
 /* daisyUI v5 — enable themes with explicit defaults */
 @plugin "daisyui" {
-  themes: nord --default, sunset --prefersdark;
+  themes: nord --default, sunset --prefersdark, dim;
   /* logs: false;  // uncomment to silence plugin logs */
+}
+
+/* HYPEBRUT — custom daisyUI theme. Consumed ONLY by the consulting subdomain
+   shell (data-theme="hypebrut"); inert everywhere else. #0a0a0a brutalist
+   dark, neon #00ff00 primary, hard brutalist radii. */
+@plugin "daisyui/theme" {
+  name: "hypebrut";
+  color-scheme: "dark";
+  --color-base-100: #0a0a0a;
+  --color-base-200: #121212;
+  --color-base-300: #1c1c1c;
+  --color-base-content: #f2f2f2;
+  --color-primary: #00ff00;
+  --color-primary-content: #0a0a0a;
+  --color-secondary: #00cc66;
+  --color-secondary-content: #0a0a0a;
+  --color-accent: #a3ff00;
+  --color-accent-content: #0a0a0a;
+  --color-neutral: #1a1a1a;
+  --color-neutral-content: #f2f2f2;
+  --color-info: #00cfff;
+  --color-info-content: #0a0a0a;
+  --color-success: #00ff00;
+  --color-success-content: #0a0a0a;
+  --color-warning: #ffb300;
+  --color-warning-content: #0a0a0a;
+  --color-error: #ff3355;
+  --color-error-content: #0a0a0a;
+  --radius-selector: 0.25rem;
+  --radius-field: 0.25rem;
+  --radius-box: 0.25rem;
+  --border-btn: 1px;
 }
 
 /* Project CSS */
 @import "./home.css";
-@import "./mschf-overlay.css";
+@import "./design-system.css";
 
 @layer base {
   body { @apply font-body text-[var(--step-0)] leading-[1.5]; }

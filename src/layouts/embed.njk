@@ -33,9 +33,5 @@
     </main>
 
     {# Optional overlay CSS (if you ship it) #}
-    <link
-      rel="stylesheet"
-      href="css/mschf-overlay.css{% if build and (build.hash or build.commit or build.version) %}?v={{ build.hash or build.commit or build.version }}{% endif %}"
-    >
   </body>
 </html>

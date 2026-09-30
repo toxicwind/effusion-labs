@@ -1,0 +1,230 @@
+/* ============================================================================
+   HYPEBRUT design system — Every Layout primitives + hb-* vocab + space scale
+   ----------------------------------------------------------------------------
+   Every class in this file is referenced by templates that shipped with ZERO
+   definitions (resume/consulting subdomain shells, resume-entry component).
+   Nothing here is speculative: semantics were read off the actual markup.
+   Aesthetic: #0a0a0a brutalist dark, neon #00ff00, liquid-glass panels.
+   ========================================================================== */
+
+:root {
+  /* Space scale (t-shirt). Templates bind --space to these at any level. */
+  --space-3xs: 0.25rem;
+  --space-2xs: 0.5rem;
+  --space-xs: 0.75rem;
+  --space-s: 1rem;
+  --space-m: 1.5rem;
+  --space-l: 2.25rem;
+  --space-xl: 3.5rem;
+  --space-2xl: 5.5rem;
+  --space-3xl: 8rem;
+  --gutter: clamp(1rem, 4vw, 2.5rem);
+
+  /* HYPEBRUT ink */
+  --neon: #00ff00;
+  --void: #0a0a0a;
+  --hb-ink: #f2f2f2;
+}
+
+/* ---------------------------------------------------------------- Every Layout
+   https://every-layout.dev — primitives honor --space / --threshold / --side-w
+   at the point of use (templates set them inline). -------------------------- */
+@layer components {
+  .stack {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+  .stack > * { margin-block: 0; }
+  .stack > * + * { margin-block-start: var(--space, var(--space-m)); }
+
+  .cluster {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space, var(--space-s));
+    justify-content: var(--justify, flex-start);
+    align-items: var(--align, center);
+  }
+
+  .switcher {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space, var(--space-s));
+  }
+  .switcher > * {
+    flex-grow: 1;
+    flex-basis: calc((var(--threshold, 30rem) - 100%) * 999);
+  }
+
+  .sidebar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space, var(--space-s));
+  }
+  .sidebar > :first-child {
+    flex-basis: var(--side-w, 20rem);
+    flex-grow: 1;
+  }
+  .sidebar > :last-child {
+    flex-basis: 0;
+    flex-grow: 999;
+    min-inline-size: var(--content-min, 50%);
+  }
+
+  .grid-auto {
+    display: grid;
+    gap: var(--space, var(--space-m));
+    grid-template-columns: repeat(
+      auto-fit,
+      minmax(min(var(--grid-min, 16rem), 100%), 1fr)
+    );
+  }
+}
+
+/* ------------------------------------------------- hb-* vocab (liquid-glass) */
+@layer components {
+  .hb-ink { color: var(--hb-ink); }
+  .hb-ink-soft { color: color-mix(in srgb, var(--hb-ink) 62%, transparent); }
+
+  /* Neon hero panel (consulting header) */
+  .hb-neon {
+    background: linear-gradient(135deg, rgba(0, 255, 0, 0.13), rgba(0, 255, 0, 0.03));
+    border: 1px solid rgba(0, 255, 0, 0.35);
+    box-shadow:
+      0 0 32px rgba(0, 255, 0, 0.16),
+      inset 0 0 24px rgba(0, 255, 0, 0.05);
+  }
+  .hb-intensity-bold {
+    border-color: rgba(0, 255, 0, 0.6);
+    box-shadow:
+      0 0 48px rgba(0, 255, 0, 0.32),
+      inset 0 0 32px rgba(0, 255, 0, 0.09);
+  }
+
+  /* Brutalist card: hard edge, offset neon shadow */
+  .hb-brut-card {
+    background: var(--glass-surface, rgba(255, 255, 255, 0.05));
+    border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.12));
+    border-radius: 4px; /* brutalist edge, not a pill */
+    box-shadow: 6px 6px 0 rgba(0, 255, 0, 0.22);
+  }
+  .hb-shadow-brut { box-shadow: 5px 5px 0 var(--neon); }
+
+  /* Background blueprint grid (hero overlay, used at low opacity) */
+  .hb-grid {
+    background-image:
+      linear-gradient(rgba(0, 255, 0, 0.55) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0, 255, 0, 0.55) 1px, transparent 1px);
+    background-size: 44px 44px;
+  }
+
+  /* Outlined display numerals */
+  .hb-num-outline {
+    color: transparent;
+    -webkit-text-stroke: 1.5px var(--hb-ink);
+  }
+
+  /* Resume sheet: the paper */
+  .hb-sheet {
+    background: rgba(255, 255, 255, 0.028);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+  }
+
+  /* Experience / education rows */
+  .hb-row {
+    padding-block: var(--space-s);
+    border-block-start: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  .hb-row:first-child { border-block-start: 0; }
+
+  .hb-ex-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-2xs) var(--space-s);
+  }
+  .hb-ex-title { text-wrap: balance; }
+  .hb-ex-meta { letter-spacing: 0.01em; }
+
+  .hb-list { list-style: none; margin: 0; padding: 0; }
+  .hb-ex-bullets { list-style: none; margin: 0; padding: 0; }
+  .hb-ex-bullets > li,
+  .hb-minirow {
+    position: relative;
+    padding-inline-start: 1.15em;
+  }
+  .hb-ex-bullets > li::before,
+  .hb-minirow::before {
+    content: "▸";
+    position: absolute;
+    inset-inline-start: 0;
+    color: var(--neon);
+  }
+  .hb-minirow { font-size: 0.92em; }
+
+  /* Neon accent line for list items */
+  .hl-line {
+    border-inline-start: 3px solid var(--neon);
+    padding-inline-start: var(--space-s);
+  }
+
+  /* Skills table rows */
+  .hb-tabrow {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-2xs) var(--space-s);
+    padding-block: var(--space-2xs);
+    border-block-end: 1px dashed rgba(255, 255, 255, 0.12);
+  }
+  .hb-tablabel { font-weight: 600; }
+  .hb-tabvalue { text-align: end; }
+  .hb-tabsub { font-size: 0.85em; }
+
+  /* Neon glow for display headings */
+  .title-glow { text-shadow: 0 0 18px rgba(0, 255, 0, 0.45); }
+
+  /* Entrance motion (killed under reduced-motion) */
+  .hb-anim { animation: hb-rise 0.7s cubic-bezier(0.19, 1, 0.22, 1) both; }
+  @keyframes hb-rise {
+    from { opacity: 0; transform: translateY(14px); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hb-anim { animation: none; }
+  }
+}
+
+/* ------------------------------------------------------- space utilities
+   Templates use these as Tailwind-style utilities (p-space-m, px-gutter…).
+   Only the combinations actually referenced are defined. ------------------- */
+@layer utilities {
+  .p-space-s { padding: var(--space-s); }
+  .p-space-m { padding: var(--space-m); }
+  .p-space-l { padding: var(--space-l); }
+  .p-space-xl { padding: var(--space-xl); }
+  .px-gutter { padding-inline: var(--gutter); }
+  .px-space-s { padding-inline: var(--space-s); }
+  .px-space-m { padding-inline: var(--space-m); }
+  .py-space-xs { padding-block: var(--space-xs); }
+  .py-space-s { padding-block: var(--space-s); }
+  .py-space-xl { padding-block: var(--space-xl); }
+  .pt-space-xs { padding-block-start: var(--space-xs); }
+  .pt-space-m { padding-block-start: var(--space-m); }
+  .pb-space-m { padding-block-end: var(--space-m); }
+  .pb-space-l { padding-block-end: var(--space-l); }
+  .my-space-l { margin-block: var(--space-l); }
+  .mt-space-s { margin-block-start: var(--space-s); }
+  .mt-space-m { margin-block-start: var(--space-m); }
+  .mt-space-xl { margin-block-start: var(--space-xl); }
+  .mb-space-m { margin-block-end: var(--space-m); }
+}
+
+/* Print: resume print button + screen-only chrome stay off the paper */
+@media print {
+  .no-print { display: none !important; }
+  .hb-anim { animation: none; }
+  .hb-sheet { border: 0; background: transparent; }
+}
