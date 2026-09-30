@@ -5,12 +5,14 @@
 // Responds 200 immediately (GitHub's delivery timeout is ~10s); the pipeline
 // runs in the background and narrates to the fleet channel on completion.
 
-const FLICKER = "http://127.0.0.1:25241";
+const FLICKER = "http://127.0.0.1:25148";
 const REPO = "/home/toxic/projects/effusion-labs";
 const PORT = 25242;
 
-const SECRET = (await Bun.file("/home/toxic/.secrets/effusion-hook").text()).trim();
-if (!SECRET) throw new Error("empty webhook secret");
+const SECRETS = await Bun.file("/home/toxic/.secrets").text();
+const SECRET = (SECRETS.split("\n").find((l) => l.startsWith("EFFUSION_HOOK_SECRET=")) ?? "")
+  .slice("EFFUSION_HOOK_SECRET=".length).trim();
+if (!SECRET) throw new Error("EFFUSION_HOOK_SECRET missing from /home/toxic/.secrets");
 
 async function flickerJob(name: string, command: string): Promise<any> {
   const r = await fetch(`${FLICKER}/api/jobs`, {
@@ -42,7 +44,14 @@ async function waitFor(job: any, ceilingMs: number): Promise<boolean> {
 
 async function fleetSay(text: string) {
   try {
-    await Bun.$`SQUAWK_SENDER=burrow ~/workspace/bin/fleet-post --sender burrow --channel fleet --message ${text}`.quiet();
+    // yote-side fleet post: write the journal record the mirror flusher picks up
+    const uuid = [...crypto.getRandomValues(new Uint8Array(4))]
+      .map((b) => b.toString(16).padStart(2, "0")).join("");
+    const rec = JSON.stringify({
+      sender: "burrow", channel: "fleet", message: text,
+      ts: Date.now(), uuid,
+    });
+    await Bun.write(`/home/toxic/hatch/fleet-outbox/pending/${uuid}.json`, rec);
   } catch { /* narration must never break the deploy */ }
 }
 
