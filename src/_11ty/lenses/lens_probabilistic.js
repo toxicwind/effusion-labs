@@ -6,6 +6,8 @@
 
 class ProbabilisticLens {
   constructor(opts = {}) {
+    this.name = 'probabilistic';
+    this.description = 'Monte Carlo uncertainty quantification: perturbs inputs N times to estimate confidence intervals';
     this.iterations = opts.iterations || parseInt(process.env.PROB_ITERATIONS || '100', 10);
     this.perturbationRate = opts.perturbationRate || parseFloat(process.env.PROB_PERTURBATION || '0.05');
     this.confidenceLevel = opts.confidenceLevel || parseFloat(process.env.PROB_CONFIDENCE || '0.95');

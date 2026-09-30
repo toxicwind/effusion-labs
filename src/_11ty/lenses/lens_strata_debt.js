@@ -68,7 +68,10 @@ function countMatches(text, patterns) {
   let count = 0;
   const matches = [];
   for (const re of patterns) {
-    const found = [...text.matchAll(re)];
+    // matchAll throws on non-global regexes; pattern lists are authored
+    // with only /i, so guarantee /g here.
+    const globalRe = re.global ? re : new RegExp(re.source, re.flags + 'g');
+    const found = [...text.matchAll(globalRe)];
     count += found.length;
     if (found.length > 0) matches.push({ pattern: re.source, count: found.length });
   }
@@ -82,8 +85,7 @@ function detectBakFiles(text) {
 }
 
 function detectOrphanedConfig(text) {
-  const orphanRe = /([A-Z_]+)=\s*
-/g;
+  const orphanRe = /([A-Z_]+)=\s*$/gm;
   return [...text.matchAll(orphanRe)].map(m => m[1]);
 }
 

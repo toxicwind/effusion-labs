@@ -9,6 +9,8 @@ const path = require('path');
 
 class TemporalDriftLens {
   constructor(opts = {}) {
+    this.name = 'temporal_drift';
+    this.description = 'Temporal drift detection: compares content against snapshot history to surface semantic drift';
     this.historyDir = opts.historyDir || process.env.TEMPORAL_HISTORY_DIR || './.temporal-history';
     this.maxSnapshots = opts.maxSnapshots || parseInt(process.env.TEMPORAL_MAX_SNAPSHOTS || '50', 10);
     this.similarityThreshold = opts.similarityThreshold || parseFloat(process.env.TEMPORAL_SIM_THRESHOLD || '0.85');

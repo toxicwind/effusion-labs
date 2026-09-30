@@ -163,9 +163,10 @@
   },
   "scripts": {
     "build": "bun run build:site",
-    "build:ci": "bun bin/quality.mjs check --soft && NODE_ENV=production eleventy",
+    "build:ci": "bun bin/quality.mjs check --soft && NODE_ENV=production ./node_modules/.bin/eleventy",
     "build:offline": "bun tools/lv-images/pipeline.mjs build",
-    "build:site": "NODE_OPTIONS='--max-old-space-size=8192' NODE_ENV=production eleventy",
+    "lens:manifest": "bun tools/lens-manifest.mjs",
+    "build:site": "LENS_ENABLED=true bun run lens:manifest && NODE_OPTIONS='--max-old-space-size=8192' NODE_ENV=production LENS_ENABLED=true ./node_modules/.bin/eleventy",
     "check": "bun run doctor && bun run quality:check && bun run test",
     "clean": "del-cli _site",
     "crawl:full": "bun tools/lv-images/pipeline.mjs crawl-pages-images",

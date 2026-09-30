@@ -32,7 +32,10 @@ export default class {
           }))
         },
       },
-      permalink: data => data.entry.from,
+      // DISABLED 2026-09-30 (Lumen): /archives/product/ canonicals were never built;
+      // the stub was redirecting the live collectables product page to a 404.
+      // Re-enable when product detail templates exist at the canonical URLs.
+      permalink: false, // data => data.entry.from,
       sitemap: { ignore: true },
       eleventyExcludeFromCollections: true,
       eleventyComputed: {

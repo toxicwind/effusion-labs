@@ -52,12 +52,49 @@ module.exports = function (eleventyConfig) {
     console.log('[lens] Build pipeline active —', runMode, outputMode);
   });
 
-  eleventyConfig.addShortcode('lens', (lensName, content) => {
-    return `<lens-output data-lens="${lensName}" data-timestamp="${Date.now()}">${lensName}</lens-output>`;
+  // {% lens "semantic" %} — renders live build-time lens analysis for the
+  // current page from the lens manifest (tools/lens-manifest.mjs prebuild).
+  // Falls back to a pending marker when the manifest has no entry (organism dormant).
+  eleventyConfig.addShortcode('lens', function (lensName) {
+    const esc = (s) => String(s ?? '')
+      .replaceAll('&', '&amp;').replaceAll('<', '&lt;')
+      .replaceAll('>', '&gt;').replaceAll('"', '&quot;');
+    const norm = (p) => String(p || '').replace(/^\.\//, '');
+    let manifest = (this.ctx && this.ctx.lensManifest) || this.lensManifest;
+    if (!manifest) {
+      try {
+        const fsSync = require('fs');
+        const pathSync = require('path');
+        const raw = fsSync.readFileSync(
+          pathSync.join(__dirname, 'src', '_data', 'lensManifest.json'), 'utf8');
+        manifest = JSON.parse(raw);
+      } catch (_) { /* prebuild has not run; fall through to pending */ }
+    }
+    const inputPath = this.page && this.page.inputPath;
+    const items = (manifest && manifest.items) || [];
+    const item = items.find((i) =>
+      norm(i.path) === norm(inputPath) ||
+      norm(inputPath).endsWith(norm(i.path)) ||
+      norm(i.path).endsWith(norm(inputPath)));
+    const result = item && item.lens_results && item.lens_results[lensName];
+    if (!result) {
+      return `<lens-output data-lens="${esc(lensName)}" data-status="pending">` +
+        `lens &quot;${esc(lensName)}&quot; — analysis pending (run with LENS_ENABLED=true)</lens-output>`;
+    }
+    const rows = Object.entries(result)
+      .filter(([k]) => k !== '_meta')
+      .map(([k, v]) => {
+        const val = (v !== null && typeof v === 'object') ? JSON.stringify(v) : String(v);
+        return `<div class="lens-field"><dt>${esc(k)}</dt><dd>${esc(val)}</dd></div>`;
+      }).join('');
+    const conf = result.confidence !== undefined ? ` data-confidence="${esc(result.confidence)}"` : '';
+    return `<lens-output data-lens="${esc(lensName)}" data-status="live"${conf}>` +
+      `<dl class="lens-result">${rows}</dl></lens-output>`;
   });
 
   eleventyConfig.ignores.add('src/layouts/**');
-  eleventyConfig.ignores.add('src/content/docs/**');
+  eleventyConfig.ignores.add('src/content/docs/vendors/**');
+  eleventyConfig.ignores.add('src/content/docs/vendor/**');
   eleventyConfig.ignores.add('src/content/docs/**/*.html');
   eleventyConfig.ignores.add('src/content/docs/knowledge/**/*.html');
   eleventyConfig.ignores.add('src/content/docs/knowledge/**/*.html.raw');

@@ -111,3 +111,6 @@ ophel-vault/
 
 # Audit dumps with redacted credentials - do not commit raw
 audit_kimi_20260811_113315/
+
+# Lens pipeline: temporal drift snapshots (build artifact)
+.temporal-history/

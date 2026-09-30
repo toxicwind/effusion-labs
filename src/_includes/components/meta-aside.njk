@@ -45,11 +45,22 @@
           >
             <span class="text-[0.6rem] uppercase tracking-widest opacity-40 font-mono">Tags</span>
             <div class="cluster" style="--space: var(--space-3xs)">
+              {% set structuralTags = {"concepts": "/concepts/", "meta": "/meta/", "sparks": "/sparks/", "projects": "/projects/", "work": "/work/"} %}
               {% for tag in tags %}
+                {% set tagSlug = tag | slugify %}
+                {% if tagSlug in structuralTags %}
                 <a
                   class="btn btn-outline btn-xs lowercase font-mono opacity-80 hover:opacity-100 no-underline"
-                  href="{{ '/tags/' | url }}{{ tag | slugify }}/"
+                  href="{{ structuralTags[tagSlug] | url }}"
                 >#{{ tag }}</a>
+                {% elif tagSlug == "prototype" %}
+                <span class="btn btn-outline btn-xs lowercase font-mono opacity-40 no-underline">#{{ tag }}</span>
+                {% else %}
+                <a
+                  class="btn btn-outline btn-xs lowercase font-mono opacity-80 hover:opacity-100 no-underline"
+                  href="{{ '/tags/' | url }}{{ tagSlug }}/"
+                >#{{ tag }}</a>
+                {% endif %}
               {% endfor %}
             </div>
           </div>

@@ -6,6 +6,8 @@
 
 class QuantumLens {
   constructor(opts = {}) {
+    this.name = 'quantum_superposition';
+    this.description = 'Multi-dimensional superposition scoring: evaluates content across parallel interpretation axes';
     this.dimensions = opts.dimensions || parseInt(process.env.QUANTUM_DIMS || '8', 10);
     this.amplitudeBoost = opts.amplitudeBoost || parseFloat(process.env.QUANTUM_BOOST || '2.0');
     this.collapseThreshold = opts.collapseThreshold || parseFloat(process.env.QUANTUM_COLLAPSE || '0.7');
@@ -16,7 +18,7 @@ class QuantumLens {
     const states = this._generateSuperpositionStates(text);
     const amplitudes = states.map(s => this._computeAmplitude(s, text));
     const boosted = amplitudes.map(a => a * this.amplitudeBoost);
-    const collapsed = this._collapseStates(states, boosted);
+    const collapsed = this._collapseStates(states, boosted, text);
 
     const dominantState = collapsed.sort((a, b) => b.probability - a.probability)[0];
     const entropy = this._computeEntropy(collapsed);
@@ -60,7 +62,7 @@ class QuantumLens {
     return matches / state.keywords.length;
   }
 
-  _collapseStates(states, amplitudes) {
+  _collapseStates(states, amplitudes, text) {
     const total = amplitudes.reduce((s, a) => s + a, 0) || 1;
     return states.map((s, i) => ({
       label: s.label,
