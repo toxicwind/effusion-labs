@@ -243,7 +243,7 @@ bear. The bleeding edge is, by definition, a place where not everyone wants to l
 
 The final, and perhaps most critical, question is whether this vast architecture of choice
 represents genuine consumer empowerment or a sophisticated form of product theater. Does offering a
-hundred variations of a nicotine delivery product fundamentally improve a user's agency, or does it
+hundred variations of a nicotine delivery product fundamentally improve an architect's agency, or does it
 merely create an illusion of control while the core act of consumption remains unchanged? The system
 is designed to channel user desire into a continuous cycle of purchasing and experimentation,
 framing consumption as a hobbyist's pursuit of optimization.

@@ -94,7 +94,7 @@ While memory functions are now implemented in many production-grade LLMs, they r
 - **Opaque**: users lack reliable visibility into memory structure
 - **Contingent**: memory persistence varies with use-case and deployment
 
-From a user perspective, continuity is often _simulated rather than guaranteed_. Many coherence
+From an architect perspective, continuity is often _simulated rather than guaranteed_. Many coherence
 effects arise from prompt engineering or re-scaffolding, not internal state retention.
 
 > _Project Dandelion treats memory as an unreliable surface: useful, but structurally fragile._

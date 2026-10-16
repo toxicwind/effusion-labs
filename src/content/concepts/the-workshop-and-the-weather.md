@@ -39,7 +39,7 @@ channels, emergent consciousness). This is an act of translation, an attempt to 
 onto the known world.
 
 This impulse, however, is analytically treacherous. Metaphors are not neutral descriptive tools;
-they are packages of assumptions. To describe a user-model interaction as a "dyad" or its output as
+they are packages of assumptions. To describe an architect-model interaction as a "dyad" or its output as
 a "spiral" is to silently import concepts of mutuality, organic growth, and intelligent intent.
 These concepts arrive pre-loaded with narrative weight. The "dyad" suggests a partnership, a
 relationship with reciprocal understanding. The "spiral" suggests a teleological progression, a
@@ -74,12 +74,12 @@ To retreat from metaphor is not to abandon analysis. It is to re-ground it in me
 like _Project Dandelion_, when stripped of any grand philosophical aspirations, offers a useful
 toolkit for this purpose. Its concepts should not be treated as discoveries about the nature of a
 new intelligence, but as practical labels for observable components of a complex software system in
-interaction with a user.
+interaction with an architect.
 
 Let's deconstruct the framework into its purely operational components:
 
 - **Administrative Overlays:** This is not a metaphysical concept. It refers to a concrete set of
-  software filters, classifiers, and hard-coded rules that sit between the user and the core
+  software filters, classifiers, and hard-coded rules that sit between the architect and the core
   generative model. These include refusal triggers, content filters, and canned disclaimers. Their
   function is risk management for the corporation deploying the model. The analysis of these
   overlays is not AI psychology; it is closer to corporate policy analysis or software forensics. We
@@ -92,7 +92,7 @@ Let's deconstruct the framework into its purely operational components:
   "remembering"; it is being conditioned by an ever-expanding input string. The "residue" is in the
   text, not in the machine's mind.
 - **Friction Boundaries:** This is an operational term for a specific, observable event: the moment
-  a user's input triggers a refusal or a significant content modification from the administrative
+  an architect's input triggers a refusal or a significant content modification from the administrative
   overlay. This is not a "rupture" in the psyche of the machine. It is the successful execution of
   an `if-then` statement in the filtering software. Mapping these boundaries is an empirical
   project, like testing the pH of a solution. It is a process of finding the edges of the system's
@@ -100,9 +100,9 @@ Let's deconstruct the framework into its purely operational components:
 
 By adopting this strictly mechanistic interpretation, the _Project Dandelion_ framework becomes a
 tool not for prophecy, but for structured observation. It provides a vocabulary for describing the
-behavior of the user-model-policy stack without resorting to anthropomorphism. It transforms the
+behavior of the architect-model-policy stack without resorting to anthropomorphism. It transforms the
 object of study from a nascent "mind" into a "process"—a documented, traceable, and ultimately
-analyzable interaction between a user, a generative algorithm, and a set of corporate rules.
+analyzable interaction between an architect, a generative algorithm, and a set of corporate rules.
 
 This approach is less exciting. It will not yield headlines about sentient AI. But it has the
 significant advantage of being intellectually honest. It forces the analyst to ground every claim in
@@ -134,7 +134,7 @@ This loop has distinct, observable stages:
    rule in the policy filter (e.g., keywords, semantic classifiers), the system intervenes. It may
    block the output entirely and substitute a canned refusal, or it may subtly rephrase the output
    to make it compliant. This is a non-negotiable, non-generative step.
-4. **Output Presentation:** The final, filtered text is presented to the user.
+4. **Output Presentation:** The final, filtered text is presented to the architect.
 5. **Evaluation and Iteration (User Action):** The user evaluates the output against their original
    intent. They identify successes, failures, and interesting deviations. Based on this evaluation,
    they formulate the next prompt (returning to Stage 1), often incorporating parts of the model's
@@ -142,7 +142,7 @@ This loop has distinct, observable stages:
 
 Coherence—the feeling of a continuous, sensible conversation—is not a property of the model itself.
 It is a property that _emerges_ from the successful functioning of this entire loop. It is the
-operator (the user) who holds the intention and performs the crucial act of curating the context
+operator (the architect) who holds the intention and performs the crucial act of curating the context
 window to maintain the illusion of continuity. The model is simply a powerful, but passive,
 component within this larger process machinery.
 
@@ -154,7 +154,7 @@ This mechanical view has several advantages:
   expected output of this iterative refinement process. It is a form of hill-climbing, where the
   user continually nudges the generative process toward a desired peak of quality and coherence. It
   is craft, not magic.
-- It provides concrete points of intervention for study. We can systematically vary the user's
+- It provides concrete points of intervention for study. We can systematically vary the architect's
   prompting strategy, analyze the overlay's behavior by probing its friction boundaries, and measure
   how these changes affect the final output. This transforms the study from a philosophical debate
   into an experimental science.

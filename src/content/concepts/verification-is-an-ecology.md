@@ -140,7 +140,7 @@ Theories make for good panels. Habitats keep the lights on. If you want doubt to
 
 1. **Ban absolutes.** No more “lowest price.” Scope it: “best found in these sources, this region, this time,” plus receipts. The fence is part of the sentence.[^6][^4]
 2. **No source, no claim.** If the page won’t load, say so. If the data can’t be read, abstain. Refusal beats bluff every time.[^15][^16][^17]
-3. **Proxy parity.** If geography or login changes the numbers, match the user’s conditions or admit you can’t. A half-truth labeled as half-truth is honesty.
+3. **Proxy parity.** If geography or login changes the numbers, match the architect’s conditions or admit you can’t. A half-truth labeled as half-truth is honesty.
 4. **Shortlist precision first.** Better three solid options than fifty shaky ones. Top results set the tone; tune them hard.[^14]
 5. **Risk router.** Red/amber/green isn’t metaphor—it’s governance. Publish the tiers, move categories only after evidence.[^12][^13][^10]
 6. **Public numbers.** Once a month, show your work: shortlist precision and regret by category. Two stats, zero PhDs required.[^6][^4][^14]

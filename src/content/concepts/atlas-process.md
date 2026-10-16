@@ -162,7 +162,7 @@ The goal is to build a model that explains this phenomenon.
   artifact of administrative overlays." The LLM generates the initial prose.
 - **Application of Project Dandelion:** As they work, the Operator uses the Dandelion framework.
   They explicitly identify the patois as a product of the interaction between "interactional
-  residues" (the user's pressure) and the "friction boundaries" of the model's policy filters. They
+  residues" (the architect's pressure) and the "friction boundaries" of the model's policy filters. They
   hypothesize that this is a predictable, "recreated" behavior, not a randomly generated one.
 - The Operator curates and edits the LLM's output, structuring it into a coherent argument. The
   final Concept document is a formal model of the phenomenon observed in the Spark.

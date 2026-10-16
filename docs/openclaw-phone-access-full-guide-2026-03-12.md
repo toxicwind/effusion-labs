@@ -1,6 +1,6 @@
 # OpenClaw Phone Access — Full Setup Guide (2026-03-12)
 
-Owner: Chris (`@trixisowned`)
+Owner: the Architect (`@trixisowned`)
 Host: `awrawr-pc`
 
 ## Current live state (verified)

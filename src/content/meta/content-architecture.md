@@ -54,7 +54,7 @@ that can be used to understand other subjects.
 
 **Projects** are interfaces, prototypes, finalized reports, and interactive builds. These are the
 tangible, often functional, outputs of research and development. This category is for artifacts that
-a user can directly interact with or that represent the culmination of a data-driven process.
+an architect can directly interact with or that represent the culmination of a data-driven process.
 
 ### **IV. Archives**
 

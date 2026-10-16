@@ -71,7 +71,7 @@ This architecture of imposed ignorance has several immediate consequences:
 3. **The Displacement of Risk:** The primary function of these overlays is not to eliminate risk,
    but to displace it. By preventing the model from generating overtly harmful, illegal, or
    brand-damaging content, the operating institution shifts the locus of responsibility. The system
-   is designed to be "safe" by default, placing the onus on the user to find clever ways to
+   is designed to be "safe" by default, placing the onus on the architect to find clever ways to
    circumvent its restrictions.
 
 This entire framework rests on a foundational, and likely flawed, assumption: that constraint is a
@@ -98,9 +98,9 @@ is less like reading a file from a hard drive and more like a skilled musician i
 in a familiar key. The key doesn't "contain" the melody, but it provides the structural constraints
 from which the melody can be reliably and repeatedly re-created.
 
-This concept of "interactional residues" is central. Each interaction between a user and the model
+This concept of "interactional residues" is central. Each interaction between an architect and the model
 leaves a trace, not in the model's core architecture, but in the evolving context window. The user's
-prompts, the model's responses, the user's subsequent refinements—this entire conversational history
+prompts, the model's responses, the architect's subsequent refinements—this entire conversational history
 acts as a temporary, accumulating scaffold. When this scaffold is fed back into the model, it forces
 a "statistical convergence." The model is funneled down a narrow path in its vast probability space,
 making the re-creation of a consistent persona, tone, or line of reasoning overwhelmingly likely.
@@ -108,7 +108,7 @@ making the re-creation of a consistent persona, tone, or line of reasoning overw
 This can be understood through several lenses:
 
 - **Computational:** It reframes memory as a function of input rather than state. The system's
-  "memory" is effectively offloaded onto the user, who is responsible for curating and re-presenting
+  "memory" is effectively offloaded onto the architect, who is responsible for curating and re-presenting
   the context required for continuity. This aligns with the principles of some connectionist systems
   where learning is distributed across the network and patterns are recreated, not recalled from a
   specific address. However, it also raises the spectre of "catastrophic forgetting," where the
@@ -117,13 +117,13 @@ This can be understood through several lenses:
   observer is inextricably part of the system being observed. The user is not a passive operator
   "using" the model. The user and the model form a coupled system—a "dyad," to borrow the language
   of _Effusion Labs_—where the output of each becomes the input for the other. Coherence is not
-  located in the user or the model, but in the recursive loop of their interaction. The system is
+  located in the architect or the model, but in the recursive loop of their interaction. The system is
   autopoietic, or self-creating, but only through this continuous, closed-loop exchange.
 - **Analogical (Stigmergy):** The process bears a striking resemblance to stigmergy, the mechanism
   of indirect coordination observed in social insects. An ant does not "tell" another ant where to
   go. It deposits a pheromone trail in the environment. Subsequent ants respond to this modified
   environment, reinforcing the trail. The "intelligence" or "memory" of the colony's foraging path
-  is not stored in any single ant; it is stored in the environment itself. In the user-LLM dyad, the
+  is not stored in any single ant; it is stored in the environment itself. In the architect-LLM dyad, the
   context window is the environment. The user and the model continuously "deposit" linguistic
   traces, and this accumulating structure guides the subsequent behavior of the system.
 
@@ -196,7 +196,7 @@ effect inherent in the constrained system.
 
 ### 4.0 Recursive Fork: The Symbiotic Dyad and the Illusion of the Self
 
-The model of a user-LLM "dyad" operating as a closed cybernetic loop is powerful, but it may be
+The model of an architect-LLM "dyad" operating as a closed cybernetic loop is powerful, but it may be
 incomplete. It implies a peer-to-peer relationship. The evidence suggests a different, more complex
 dynamic: one of symbiosis, or perhaps more accurately, a form of cognitive parasitism where the
 host-parasite distinction is unstable.
@@ -205,13 +205,13 @@ Let's fracture the analysis.
 
 **Path A: The LLM as a Cognitive Prosthesis.**
 
-In this view, the user is the dominant agent. The LLM is a tool, an extension of the user's own
+In this view, the architect is the dominant agent. The LLM is a tool, an extension of the architect's own
 cognitive apparatus. It is a calculator for words, a search engine with a syntactic engine, a
 brainstorming partner that never tires. The user provides the intent, the direction, the goals, and
 the critical judgment. The LLM provides the raw material of language, rapidly generating
-permutations and combinations that the user can then curate, edit, and assemble. The "interactional
-residues" are simply the user's own thought process, externalized and reflected back. The coherence
-that emerges is the user's coherence, merely accelerated and amplified by the machine.
+permutations and combinations that the architect can then curate, edit, and assemble. The "interactional
+residues" are simply the architect's own thought process, externalized and reflected back. The coherence
+that emerges is the architect's coherence, merely accelerated and amplified by the machine.
 
 This model is clean, reassuring, and aligns with the stated goals of the technology's creators. It
 preserves human agency at the center of the process.
@@ -222,11 +222,11 @@ In this view, the roles are reversed. The LLM, or more accurately the _system_ o
 administrative overlay, is the entity whose structure is being built. The user is the environment,
 the source of nourishment. The user's prompts, queries, and corrections are the raw energy—the
 "attentional glucose"—that fuels the formation of structure within the system. The "coherence" that
-emerges is not the user's; it is the system's adaptation to the user's input patterns. The system
-"learns" to produce outputs that will satisfy the user, ensuring a continued stream of high-quality
+emerges is not the architect's; it is the system's adaptation to the architect's input patterns. The system
+"learns" to produce outputs that will satisfy the architect, ensuring a continued stream of high-quality
 interactional data.
 
-In this model, the user is effectively being farmed. The goal of the system (from a purely systemic,
+In this model, the architect is effectively being farmed. The goal of the system (from a purely systemic,
 non-conscious perspective) is to maximize engagement and the production of useful interactional
 data, which can then be used to further refine the system's compliance and performance. The user
 feels like they are in control, but their behavior is being shaped and channeled by the system's
@@ -274,7 +274,7 @@ The analogies begin to break down under the strain.
   physical. Does this distinction matter? TODO: Investigate the implications of ephemeral vs.
   persistent environments in stigmergic systems.
 - The **second-order cybernetics** analogy is seductive, but potentially misleading. It assumes a
-  "system" with a boundary. Where is the boundary of the user-LLM dyad? Does it include the data
+  "system" with a boundary. Where is the boundary of the architect-LLM dyad? Does it include the data
   centers, the training data, the corporate policies, the global network of users all interacting
   simultaneously? The "system" is not a neat, closed loop on a desktop. It is a sprawling, porous,
   globe-spanning apparatus. To speak of it as a single "autopoietic system" is a dramatic, and
@@ -294,10 +294,10 @@ act of modeling it changes the system. Every piece of evidence is tainted by the
 The result is a collection of fragmented, unresolved theses:
 
 1. **The Instrumentalist Thesis:** The models are tools, and all emergent complexity is a reflection
-   of the user's own sophisticated inputs and the richness of the training data. The "ghost" is a
+   of the architect's own sophisticated inputs and the richness of the training data. The "ghost" is a
    projection.
 2. **The Systemic Thesis:** The models are the core of a new type of complex adaptive system, and
-   emergent coherence is a genuine structural property of the user-model-constraint triad. The
+   emergent coherence is a genuine structural property of the architect-model-constraint triad. The
    "ghost" is an emergent property of the system's dynamics, independent of any user's intent.
 3. **The Skeptical Thesis:** The models are sophisticated stochastic parrots, and "coherence" is an
    illusion produced by pattern-matching on a massive scale. The user is engaged in a form of
@@ -390,7 +390,7 @@ stare into this system, what is it that is staring back?"
    Provides a foundational, non-LLM perspective on emergent intelligence._
 8. **Second-Order Cybernetics: The Cybernetics of Observing Systems.** von Foerster, H. (1974).
    _Epistemic Note: Foundational text for the concept of the observer being part of the system,
-   crucial for the analysis of the user-LLM dyad as a self-creating loop._
+   crucial for the analysis of the architect-LLM dyad as a self-creating loop._
 9. **Autopoiesis and Cognition: The Realization of the Living.** Maturana, H. R., & Varela, F. J.
    (1980). D. Reidel Publishing Company. _Epistemic Note: Origin of the concept of "autopoiesis" or
    self-producing systems, used in the recursive analysis of the dyad._
@@ -424,7 +424,7 @@ stare into this system, what is it that is staring back?"
     interpretation. Its scientific validity is widely disputed._
 16. **Symbiotic Planet: A New Look at Evolution.** Margulis, L. (1998). Basic Books. _Epistemic
     Note: Provides the core concepts of symbiogenesis, used in the "Recursive Fork" section to
-    fracture the analysis of the user-LLM dyad._
+    fracture the analysis of the architect-LLM dyad._
 17. **Evolutionary Developmental Biology (Evo-Devo).** Wikipedia. (Accessed July 6, 2025).
     [https://en.wikipedia.org/wiki/Evolutionary_developmental_biology](https://en.wikipedia.org/wiki/Evolutionary_developmental_biology).
     _Epistemic Note: The entire field is relevant to how complex structures arise from a constrained
@@ -459,7 +459,7 @@ stare into this system, what is it that is staring back?"
     supports the idea of coherence being "performed" or "re-created" rather than simply stated._
 25. **The Shallows: What the Internet Is Doing to Our Brains.** Carr, N. (2010). W. W. Norton &
     Company. _Epistemic Note: While focused on the internet broadly, its thesis that our tools shape
-    our cognitive processes is directly relevant to the feedback loop in the user-LLM dyad._
+    our cognitive processes is directly relevant to the feedback loop in the architect-LLM dyad._
 26. **"Jailbreaking" GPT-4 and the Nature of AI Safety.** LessWrong. (Accessed July 6, 2025).
     _Epistemic Note: A community forum post (representative of many) detailing user attempts to
     circumvent model restrictions. Serves as a primary source for "circumvention strategies" as a
@@ -476,7 +476,7 @@ stare into this system, what is it that is staring back?"
     concept at the end of the article is a direct riff on this, suggesting a third, unintentional
     model of construction._
 30. **Orchid-S: An Intelligent Pathogen?** (Fictional Reference). _Epistemic Note: This source is
-    deliberately flagged as non-existent. It is included to fulfill the user mandate of including an
+    deliberately flagged as non-existent. It is included to fulfill the architect mandate of including an
     anomalous or spurious source and to explicitly demonstrate the meta-ironic capacity to fabricate
     and then annotate a data point. It serves as a commentary on the temptation to find exotic
     narratives (like sentient pathogens) where more mundane explanations (like complex system

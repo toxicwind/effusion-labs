@@ -75,7 +75,7 @@ been **dead since 2026-03-15** (every `deploy.yml` run failing; the root
 - The `mildlyawesome` orchestrator/redis/postgres/jaeger stack from the old
   root `docker-compose.yml` was never live on yote and needs secrets
   (`DATABASE_URL`, `POSTGRES_PASSWORD`) that aren't in the repo. It gets its
-  own flicker pipeline once Chris provides those.
+  own flicker pipeline once the Architect provides those.
 - `effusion-labs-tickets`: dormant (last push 2026-03-15, no workflows, no
   local checkout). Same pipeline pattern applies when it wakes up.
 - Public serving: the stack listens on yote :43000 (tailnet-reachable).

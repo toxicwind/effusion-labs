@@ -57,11 +57,11 @@ The working tree did not build: `config.addCollection("nodes") already exists` �
 
 **"The Refusal Is Not the Reason: Safety Classifiers as Unreliable Narrators"** — new project page at `/projects/safety-classifiers-unreliable-narrators/` (`src/content/projects/safety-classifiers-unreliable-narrators.md`, sha256 `f68218f4…afe12230`, transferred byte-exact). Reciprocal link added to Project Dandelion's "friction boundaries" section (`src/content/projects/project-dandelion.md`). Both pages render in the production build.
 
-## 7. ⚠️ Credential-shaped files in the PUBLIC repo — needs Chris's call
+## 7. ⚠️ Credential-shaped files in the PUBLIC repo — needs the Architect's call
 
 `audit_kimi_20260811_113315/` (committed 2026-08-18, `b54c13f0`, in the public `toxicwind/effusion-labs`) contains files with cookie/authorization/bearer/session markers: `portal_billing_auth.txt` (769KB, 248 marker hits), `drive9_auth.txt` (381KB, 24 hits), `envd_auth.txt` (266KB, 87 hits). No standard key prefixes (`sk-`, `ghp_`, `AKIA`, …) detected; contents deliberately not read.
 
-Two possibilities: (a) live session artifacts from an automated audit — a real leak that's been public ~7 weeks; (b) honeytokens/canaries. **I did not touch these files.** Rotation-or-confirm is Chris's call — credentials are his alone. If they're real, the fix is rotation first (history rewrite doesn't un-leak), then BFG the directory out of history.
+Two possibilities: (a) live session artifacts from an automated audit — a real leak that's been public ~7 weeks; (b) honeytokens/canaries. **I did not touch these files.** Rotation-or-confirm is the Architect's call — credentials are his alone. If they're real, the fix is rotation first (history rewrite doesn't un-leak), then BFG the directory out of history.
 
 ## 8. Deliberately left alone
 

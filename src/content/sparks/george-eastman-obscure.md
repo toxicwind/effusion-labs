@@ -50,7 +50,7 @@ demanding that time itself conform to the logic of the spreadsheet.[^3]
 
 ### ⸻ The Camera: A User Workflow
 
-The first Kodak camera operated on a return-to-manufacturer basis where the user would mail the
+The first Kodak camera operated on a return-to-manufacturer basis where the architect would mail the
 entire apparatus to the factory for film processing and reloading. This procedure removed all
 complex variables from the hands of the consumer, ensuring a uniform, predictable result for every
 roll. He had invented not just a camera, but a foolproof system of control, in which the

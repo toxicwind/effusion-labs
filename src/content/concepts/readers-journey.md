@@ -58,7 +58,7 @@ without context, likely via a search engine.
 
 ### **The Cold Encounter: An SEO-Driven Arrival**
 
-Imagine a user in late 2025 searching for a specific, high-value query, such as "Comparative
+Imagine an architect in late 2025 searching for a specific, high-value query, such as "Comparative
 analysis of Takashi Murakami print techniques." They land on the relevant Effusion Labs `Project`
 artifact.
 

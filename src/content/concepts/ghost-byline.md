@@ -154,7 +154,7 @@ _Effusion Labs_.
 ### 4.0 The Reader as a System Component: Closing the Loop
 
 The previous article in this series described a **Constrained Iterative Feedback Loop** consisting
-of the User, the Model, and the Constraint System. That analysis, however, contained a critical
+of the Architect, the Model, and the Constraint System. That analysis, however, contained a critical
 omission. It described the process of _production_, but not the process of _reception_. The system
 is not complete until the text is read. The reader is the final, and perhaps most important,
 component in the system.

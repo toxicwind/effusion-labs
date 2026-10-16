@@ -110,7 +110,7 @@ affective dissonance—a breakfast that, like so many dreams, sours upon waking.
 
 This mirrors Swift’s _Modest Proposal_[^4]—an extreme metaphor for systemic disaffection. Of course,
 this isn’t satire on cannibalistic economics. But in miniature, it plays similarly: the system
-consumes the user’s request and returns emotional indigestion. The request is digested, but the
+consumes the architect’s request and returns emotional indigestion. The request is digested, but the
 customer is not nourished.
 
 In essence, the café experience mutates. What was a space of nourishment becomes a soft surveillance

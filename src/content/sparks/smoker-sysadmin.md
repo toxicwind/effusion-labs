@@ -42,7 +42,7 @@ preamble:
 ---
 
 The previous analyses examined the _what_ of Japan's nicotine market (its technology) and the _why_
-of its structure (its political economy). This final document addresses the _who_: the user
+of its structure (its political economy). This final document addresses the _who_: the architect
 reconstituted by this system. The modern Japanese nicotine consumer is no longer just a "smoker";
 they are a system administrator of their own consumption. They manage hardware, software (flavor
 sticks), battery life, and a complex personal database of sensory preferences. The transition from
@@ -54,9 +54,9 @@ This inquiry moves from patent archives and fiscal reports to the messier domain
 qualitative surveys, and brand ethnographies. It explores how the "gadgetization" of tobacco
 transforms the act of smoking from a simple vice into a complex, curated hobby. By offloading the
 moral and health anxieties onto a narrative of "harm reduction" and "technological progress," the
-system frees the user to focus on a new, demanding set of tasks: optimization, curation, and the
+system frees the architect to focus on a new, demanding set of tasks: optimization, curation, and the
 performance of a tech-savvy identity. This is an audit of the cognitive and social load imposed by a
-market that has successfully reframed addiction as a lifestyle choice managed through a user
+market that has successfully reframed addiction as a lifestyle choice managed through an architect
 interface.
 
 ---
@@ -89,9 +89,9 @@ A 2020 cross‑national survey of Japanese HTP adopters reported users describin
 
 ---
 
-## Is the User a Consumer or a Curator?
+## Is the Architect a Consumer or a Curator?
 
-The sheer density of SKUs in the Japanese market forces the user into the role of a curator. As
+The sheer density of SKUs in the Japanese market forces the architect into the role of a curator. As
 documented in consumer‑research focus groups, participants detailed in‑depth debates over “kick”
 (throat feel), flavor “fidelity,” and “aromatic profile” for IQOS sticks, demonstrating the
 emergence of a specialized, connoisseur‑style vocabulary[^2].
@@ -104,7 +104,7 @@ This curation has several effects:
    discontinuations. The "perfect" stick may be a limited edition, forcing them back into a cycle of
    experimentation.
 3. **Encourages Brand Tribalism:** The proprietary nature of HTP ecosystems (IQOS vs. Ploom vs. glo)
-   means that a user's initial hardware purchase locks them into a specific "platform."
+   means that an architect's initial hardware purchase locks them into a specific "platform."
 
 An ethnographic marketing study found that heated‑tobacco devices have become “fashionable
 accessories” among young Japanese urbanites, cementing device choice as a powerful lifestyle
@@ -119,7 +119,7 @@ cognitive dissonance. The smoker who knows the health risks of their habit exist
 conflict. The HTP system offers a powerful narrative to resolve this.
 
 The messaging, both from manufacturers and public health bodies in Japan, centers on "reduced risk"
-and "switching." This allows the user to reframe their continued nicotine use not as a failure of
+and "switching." This allows the architect to reframe their continued nicotine use not as a failure of
 willpower, but as a _rational, responsible choice_. They are not "giving in" to addiction; they are
 "upgrading" their habit to a safer, cleaner, more modern alternative.
 
@@ -146,7 +146,7 @@ a Ploom X device in a designated smoking area is a semiotic act. It signals memb
 tribe and an adherence to a modern set of norms. It implicitly passes judgment on those still using
 lighters and cigarettes.
 
-This performance, however, is a fragile one. It is contingent on the user's continued participation
+This performance, however, is a fragile one. It is contingent on the architect's continued participation
 in the cycle of consumption, upgrades, and curation. The "freedom of choice" offered by the market
 is the freedom to choose which administrative tasks to perform in the service of maintaining one's
 addiction. The user is the sysadmin, but the system's root permissions belong to the manufacturer
