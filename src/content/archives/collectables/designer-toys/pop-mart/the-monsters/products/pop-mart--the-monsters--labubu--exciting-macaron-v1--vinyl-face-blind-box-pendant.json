@@ -1,0 +1,141 @@
+{
+  "product": "Wacky Mart (China)",
+  "release_date": "2025-06-12",
+  "price": "CNY 199",
+  "sections": {
+    "identity_taxonomy": {
+      "brand": "POP MART.",
+      "line": "The Monsters.",
+      "character": "Labubu.",
+      "series": "Exciting Macaron (V1).",
+      "product_title": "THE MONSTERS – Exciting Macaron Vinyl Face Blind Box.",
+      "variant_name": "6 standard (Soymilk; Lychee Berry; Green Grape; Sea Salt Coconut; Toffee; Sesame Bean) + 1 secret (Chestnut Cocoa).",
+      "form": "Vinyl face blind-box pendant.",
+      "deterministic_product_id_components": "SKU 675 (US) / SKU 1789 (alternate)[^8_9][^8_10].",
+      "aliases_tokens_en_": "Macaron Labubu, 马卡龙系列.",
+      "parent_child_relations": "Predecessor to Have a Seat (V2) and Big Into Energy (V3)."
+    },
+    "physical_spec": {
+      "size": "6–7 cm pendant.",
+      "weight": "~30 g.",
+      "materials": "Shell: PVC; Stuffing: Polyester; Hardware: metal chain.",
+      "finish": "Flocked plush face.",
+      "articulation": "None.",
+      "accessories": "Keychain clip.",
+      "colorway_notes": "Pastel macaron tones matching flavor names."
+    },
+    "packaging_in_box_contents": {
+      "packaging_type": "Blind-box foil bag.",
+      "packaging_dimensions_weight": "~4×7 cm bag, 50 g.",
+      "contents": "1 pendant, QR authenticity code.",
+      "anti_counterfeit": "QR code on bag.",
+      "factory_qa_code": "Unspecified."
+    },
+    "edition_run_info": {
+      "edition_kind": "Blind-box series.",
+      "edition_size": "Unknown; global release.",
+      "chase_rarity": "1/72 chance for secret Chestnut Cocoa[^8_11].",
+      "perks": "None."
+    },
+    "credits": {
+      "designer_artist": "Kasing Lung (龙家升).",
+      "sculpt_model": "POP MART design team.",
+      "collaboration": "None.",
+      "licensing": "POP MART."
+    },
+    "release_distribution": {
+      "announced_date": "October 24, 2024.",
+      "release_date": "October 27, 2024[^8_12].",
+      "channels": "POP MART official online, physical stores.",
+      "purchase_limits": "None stated.",
+      "mechanics": "Free blind-box sale.",
+      "restocks": "Pop-up restocks in early 2025 (temporary).",
+      "sold_out": "Late 2024, intermittent restocks."
+    },
+    "regional_policy": {
+      "region_lock": "False.",
+      "regions": "Global.",
+      "differences": "Localized flavor names on packaging."
+    },
+    "market_listings": {
+      "us_blind_box": "USD 21.99; set of 6 for USD 131.94.",
+      "secondary_market": "USD 35–USD 50 per box.",
+      "purchase_limit": "None."
+    },
+    "blind_box_specifics": {
+      "series_size": "7 total; secret Chestnut Cocoa.",
+      "odds_table": "Standard 1:7; secret 1:72.",
+      "checklist": "Soymilk; Lychee Berry; Green Grape; Sea Salt Coconut; Toffee; Sesame Bean; Chestnut Cocoa (secret)."
+    },
+    "compliance_safety": {
+      "age_rating": "Not for <15.",
+      "warnings": "Choking hazard.",
+      "compliance_marks": "CE.",
+      "hs_category": "9503.00."
+    },
+    "commerce_logistics_adjuncts": {
+      "sku_model_code": "675 / 1789 (US).",
+      "barcode_ean": "6972708010675 (inferred).",
+      "shipping_box": "Carton of 6 blind boxes.",
+      "return_policy": "15-day returns.",
+      "warranty_support": "POP MART customer service."
+    },
+    "media_assets": {
+      "hero_image_s_": "Blind-box art showing macarons.",
+      "orthographic_angles": "Front of bag.",
+      "videos": "YouTube unboxings demonstrating set and odds[^8_12][^8_11].",
+      "image_rights_note": "POP MART assets.",
+      "asset_hashes": "None."
+    },
+    "provenance_research_trace": {
+      "primary": "POP MART US product page[^8_9].",
+      "secondary": "YouTube unboxings [^8_12][^8_11]; Reddit guide[^8_13]; TikTok odds explainer[^8_14].",
+      "retrieved_at": "2025-08-13.",
+      "deltas": "None.",
+      "query_ledger": "“Pop Mart Exciting Macaron set 131.94,” “Pop Mart Exciting Macaron odds,” “Pop Mart Exciting Macaron checklist.”"
+    },
+    "i_n_nomenclature": {
+      "_items": ["Localized:"],
+      "transliteration": "Macaron 马卡龙.",
+      "per_locale_notes": "Flavors localized."
+    },
+    "relations_graph_edges": {
+      "predecessor": "None.",
+      "successor": "Have a Seat (V2).",
+      "hub": "The Monsters blind-box series."
+    },
+    "market_intelligence": {
+      "price_history": "Launch USD 21.99; set USD 131.94.",
+      "secondary_market": "USD 35–USD 50 per box.",
+      "scarcity_signals": "Secret odds 1:72, intermittent restocks."
+    }
+  },
+  "Deltas": [],
+  "name": "Wacky Mart (China) — 2025-06-12 — CNY 199 — pop-up store exclusive",
+  "notes": [
+    {
+      "source": "PRIMARY TARGETS — Completed(1).txt",
+      "note": "# UPDATED CURRENT QUEUE  12. PRONOUNCE — Wings of Fantasy (plush) / Wings of Fortune (hanging card) — 2024-10-04; USD 119.99 / USD 43.99 13. Coca-Cola — 2025-01-24; 15.5×17 cm; set USD 239.94 / box USD 39.99 (blind box) 14. Exciting Macaron (v1) — 2024-10-27; set USD 131.94 / box USD 21.99 15. Have a Seat — 2024-07-12; 8×7×15 cm; set USD 131.94 / box USD 21.99 16. Big Into Energy (v3) — 2025-04-25; 17 cm; set USD 167.94 / box USD 27.99 17. I FOUND YOU (v1) — 2023-12-15; 30×25×58 cm; USD 179.99 18. ANGEL IN CLOUDS (v2) — 2024-10-25; 33×25×58 cm; USD 289.99 19. Close to Sweet (v1) — 2023-09-xx; plush vs pendant (split by form) 20. Fall into Spring — 2024-03-08; CNY 599 (plush) / CNY 159 (pendant) 21. Blue Diamond — 2024-06-18; CNY 159 (pendant) 22. Magic of Pumpkin (Halloween) — 2024-10-27; CNY 159 (pendant) 23. Twinkly Fairy Tale — 2024-11-28; CNY 159 (pendant) 24. Hide and Seek in Singapore — S\\$37.90; 10×10×17.5 cm; reg-sg expected 25. GOOD LUCKY TO YOU (Thailand) — THB 1,050; 2024-12-20; reg-th expected 26. Forest Fairy Tale (China) — 2025-05-26; member points; reg-cn expected 27. Wacky Mart (China) — 2025-06-12; CNY 199; reg-cn expected   # QUERY LOG (abridged)"
+    }
+  ],
+  "deltas": [],
+  "identity_taxonomy": "Multiple variants themed after snack/drink brands (e.g., soda can Labubu, instant noodle Labubu). Each variant resembles a popular convenience item.",
+  "packaging & inbox contents": "Launch: 12 June 2025 through 7 September 2025. Exclusive to China pop-up events in Shanghai, Beijing, Guangzhou, and Chengdu[^6_6].",
+  "edition_run_info": "Retail: CNY 199 per unit. Secondary-market premiums minimal (~20–50%) due to multi-city run.",
+  "regional_policy": "Convenience store-themed packaging resembling snack boxes; includes collectible receipt-style authentication card.",
+  "market listings per regionchannel": "THE MONSTERS IP with Wacky Mart event branding; partnership with local snack brands for thematic authenticity.",
+  "blindbox specifics if relevant": "Polyester plush with PVC face plates; ABS keychain hardware. Manufactured in China with event-specific molds.",
+  "compliance_safety": "Instagram announcement posts, TikTok event previews, local influencer pop-up visits documented[^6_6][^6_7][^6_8].",
+  "commerce & logistics adjuncts": "Strong foot-traffic turnout; positive reviews on interactive event setup; some queues reported due to limited daily supply.",
+  "releaseDate": "2025-06-12",
+  "msrp": "— CNY 199 — pop-up store exclusive",
+  "Name": "Wacky Mart (China) — 2025-06-12 — CNY 199 — pop-up store exclusive",
+  "Brand": "** Wacky Mart variants’ multi-format size details (pendant vs large plush) added to seed record.",
+  "Line": "** Forest Fairy Tale materials and redemption conditions standardized across card-series entries.",
+  "source": "PRIMARY TARGETS Completed(2)",
+  "__meta": {
+    "last_merged_at": "2025-08-19T07:31:56.443Z",
+    "last_golden_source": "src/content/archives/golden_record_20250819T062726Z.json"
+  },
+  "type": "product"
+}

@@ -1,0 +1,8 @@
+{# src/_includes/components/nav.njk #}
+{% from "components/nav-items.njk" import navItems %}
+
+{%- macro nav(nav, pageUrl, ulClass='', linkClass='link-underline') -%}
+  <ul class="menu {{ ulClass }}">
+    {{ navItems(nav, pageUrl, linkClass) }}
+  </ul>
+{%- endmacro -%}

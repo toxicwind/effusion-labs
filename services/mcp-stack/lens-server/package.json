@@ -1,0 +1,18 @@
+{
+  "name": "@effusion/lens-server",
+  "version": "2.0.0",
+  "description": "MCP server exposing effusion-labs lens profiles as first-class tools",
+  "type": "module",
+  "main": "server.ts",
+  "scripts": {
+    "start": "bun run server.ts",
+    "dev": "bun run --watch server.ts"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0"
+  },
+  "license": "ISC"
+}

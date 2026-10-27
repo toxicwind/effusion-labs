@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+. "$(cd "$(dirname "$0")" && pwd)/_lib.sh"
+retry_exec "$@" --   "$REPO_ROOT/node_modules/.bin/rgplain"   "$TOOLS_DIR/rgplain/rgplain"   rgplain
+echo "❌ rgplain not found." >&2
+exit 127

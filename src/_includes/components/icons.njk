@@ -1,0 +1,14 @@
+{% macro icon(name, attrs = {}) %}
+  {# If name has a prefix (mdi:, heroicons-outline:, etc.) use Iconify;
+     else assume lucide filter server-side. #}
+  {% if name and (":" in name) %}
+    <iconify-icon
+      icon="{{ name }}"
+      {% for k,v in attrs %}
+        {{ k }}="{{ v }}"
+      {% endfor %}
+    ></iconify-icon>
+  {% else %}
+    {{ name | lucide(attrs) | safe }}
+  {% endif %}
+{% endmacro %}

@@ -1,0 +1,42 @@
+---
+layout: "base.njk"
+title: "Cannabis Market Analysis"
+metaDescription: "Real-time pricing analysis and dispensary tracking for the Denver market."
+---
+
+{% from "components/icons.njk" import icon %}
+
+<div class="stack" style="--space: var(--space-2xl)">
+  
+  <header class="bg-gray-900 border-b border-gray-800 pt-20 pb-16">
+    <div class="max-w-screen-xl mx-auto px-gutter">
+      <div class="stack" style="--space: var(--space-s)">
+        <div class="cluster items-center text-emerald-500 font-mono text-xs uppercase tracking-widest">
+           <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+           <span>Live Market Data</span>
+        </div>
+        <h1 class="text-6xl font-black text-white tracking-tighter">
+          Cannabis <span class="text-emerald-500">Intelligence</span>
+        </h1>
+        <p class="text-xl text-gray-400 max-w-2xl leading-relaxed">
+          Automated reconnaissance of the Denver cannabis market.
+        </p>
+      </div>
+    </div>
+  </header>
+
+  <div class="max-w-screen-xl mx-auto px-gutter w-full stack" style="--space: var(--space-3xl)">
+    <p class="text-xl text-yellow-500">
+      Visualizations currently undergoing maintenance. Data is being collected.
+    </p>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {% for disp in cannabis.dispensaries %}
+        <div class="bg-gray-900 border border-gray-700 p-6 rounded-xl">
+            <h3 class="text-xl font-bold text-white">{{ disp.name }}</h3>
+            <p class="text-gray-500 text-sm">{{ disp.address }}</p>
+        </div>
+        {% endfor %}
+    </div>
+  </div>
+</div>

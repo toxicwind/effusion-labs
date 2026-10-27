@@ -1,0 +1,38 @@
+---
+layout: layouts/subdomains/resume/shell.njk
+showTitle: false
+---
+{% from "components/icons.njk" import icon %}
+
+<article class="stack" style="--space: var(--space-2xl)">
+  <header
+    class="switcher items-end border-b-4 border-base-content/10 pb-space-l"
+    style="--threshold: 60rem; --space: var(--space-xl)"
+  >
+    <div class="stack" style="--space: var(--space-xs)">
+      <h1 class="text-[clamp(3.5rem,8vw,5.5rem)] font-black leading-[0.85] tracking-tighter uppercase hb-ink">
+        Resume<span class="text-primary">.</span>
+      </h1>
+      <p class="text-xl font-bold opacity-70 tracking-tight">
+        {{ resume.title if resume and resume.title else "Technical Architecture & Agentic Systems Design" }}
+      </p>
+    </div>
+
+    <div class="stack" style="--space: var(--space-2xs)">
+      <div class="cluster justify-end" style="--space: var(--space-xs)">
+        <a
+          href="mailto:{{ resume.email if resume and resume.email else metadata.author.email }}"
+          class="btn btn-sm btn-ghost lowercase font-mono opacity-80 decoration-primary/30 underline-offset-4 hover:underline"
+        >
+          {{ icon('mail', { class: 'w-3 h-3' }) }} {{ resume.email if resume and resume.email else "effusion.labs@proton.me" }}
+        </a>
+      </div>
+      <div class="cluster justify-end" style="--space: var(--space-xs)">
+        <span class="text-xs uppercase tracking-widest font-black opacity-30">Location: {{ resume.location if resume and resume.location else "Denver, CO [Remote]" }}</span>
+      </div>
+    </div>
+  </header>
+
+  {{ content | safe }}
+
+</article>

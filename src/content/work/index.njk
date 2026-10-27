@@ -1,0 +1,16 @@
+---
+layout: "base.njk"
+title: "All Work"
+pagination:
+  data: collections.work
+  size: 20
+  alias: workItem
+permalink: "/work/{{ pagination.pageNumber + 1 }}/index.html"
+eleventyExcludeFromCollections: true
+---
+
+{% from "components/feed-entry.njk" import feedEntry %}
+<section class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+  {% for item in pagination.items %}{{ feedEntry(item) }}{% endfor %}
+</section>
+{% include "components/pagination.njk" %}

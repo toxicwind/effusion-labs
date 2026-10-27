@@ -1,0 +1,51 @@
+name,brand,size_label,price,weight_g,price_per_oz,report_category,is_bundle,aud_suspect,suspect_reason
+MED Herbal Cure Black Ice,,1 g,2.0,1.0,56.0,Flower,False,False,
+MED Herbal Cure Farmer's Daughter,,1 g,2.0,1.0,56.0,Flower,False,False,
+MED Herbal Cure Rainbow Zangria,,1 g,2.0,1.0,56.0,Flower,False,False,
+MED Herbal Cure Slurms MacKenzie,,1 g,2.0,1.0,56.0,Flower,False,False,
+MED Herbal Cure Zmuckers,,1 g,2.0,1.0,56.0,Flower,False,False,
+MED Herbal Cure Free Mac,,1 oz,60.0,28.0,60.0,Flower,False,True,"abs<91,stem_outlier"
+MED Herbal Cure Rainbow Wizard,,1 oz,60.0,28.0,60.0,Flower,False,True,"abs<91,stem_outlier"
+MED Herbal Cure Orange Fizz,,1 oz,60.0,28.0,60.0,Flower,False,True,"abs<91,stem_outlier"
+MED Herbal Cure Rizz Patrol,,1 oz,60.0,28.0,60.0,Flower,False,True,"abs<91,stem_outlier"
+MED Herbal Cure Tropical Fusion,,1 oz,60.0,28.0,60.0,Flower,False,True,"abs<91,stem_outlier"
+MED Herbal Cure Orange Fizz,,1/2 oz,45.0,14.0,90.0,Flower,False,False,
+MED Herbal Cure Rainbow Wizard,,1/2 oz,45.0,14.0,90.0,Flower,False,False,
+MED Herbal Cure Dulce De Pledge,,1/2 oz,45.0,14.0,90.0,Flower,False,False,
+MED Herbal Cure Free Mac,,1/2 oz,45.0,14.0,90.0,Flower,False,False,
+MED Herbal Cure Tropical Fusion,,1/2 oz,45.0,14.0,90.0,Flower,False,False,
+MED Herbal Cure Rizz Patrol,,1/2 oz,45.0,14.0,90.0,Flower,False,False,
+MED Herbal Cure GMO x ICC,,1 oz,90.0,28.0,90.0,Flower,False,True,"abs<91,stem_outlier"
+MED Herbal Cure Bellz N' Whistlez,,1 oz,90.0,28.0,90.0,Flower,False,True,"abs<91,stem_outlier"
+MED Herbal Cure Spritzer,,1 oz,90.0,28.0,90.0,Flower,False,True,"abs<91,stem_outlier"
+MED Herbal Cure Yerb Breath 2.0,,1 oz,90.0,28.0,90.0,Flower,False,True,"abs<91,stem_outlier"
+MED Herbal Cure Tropical Fusion,,1/4 oz,26.0,7.0,104.0,Flower,False,False,
+MED Herbal Cure Rainbow Wizard,,1/8 oz,13.0,3.5,104.0,Flower,False,False,
+MED Herbal Cure Rainbow Wizard,,1/4 oz,26.0,7.0,104.0,Flower,False,False,
+MED Herbal Cure Orange Fizz,,1/4 oz,26.0,7.0,104.0,Flower,False,False,
+MED Herbal Cure Tropical Fusion,,1/8 oz,13.0,3.5,104.0,Flower,False,False,
+MED Herbal Cure Rizz Patrol,,1/8 oz,13.0,3.5,104.0,Flower,False,False,
+MED Herbal Cure Rizz Patrol,,1/4 oz,26.0,7.0,104.0,Flower,False,False,
+MED Herbal Cure Free Mac,,1/4 oz,26.0,7.0,104.0,Flower,False,False,
+MED Herbal Cure Free Mac,,1/8 oz,13.0,3.5,104.0,Flower,False,False,
+MED Herbal Cure Dulce De Pledge,,1/8 oz,13.0,3.5,104.0,Flower,False,False,
+MED Herbal Cure Orange Fizz,,1/8 oz,13.0,3.5,104.0,Flower,False,False,
+MED Herbal Cure Dulce De Pledge,,1/4 oz,26.0,7.0,104.0,Flower,False,False,
+MED Herbal Cure Bellz N' Whistlez,,1/2 oz,65.0,14.0,130.0,Flower,False,False,
+MED Herbal Cure Yerb Breath 2.0,,1/2 oz,65.0,14.0,130.0,Flower,False,False,
+MED Herbal Cure GMO x ICC,,1/2 oz,65.0,14.0,130.0,Flower,False,False,
+MED Herbal Cure Spritzer,,1/2 oz,65.0,14.0,130.0,Flower,False,False,
+MED Billo Caps Frozen Lemons,,1 oz,150.0,28.0,150.0,Flower,False,True,stem_outlier
+MED Billo Lilac Diesel,,1 oz,150.0,28.0,150.0,Flower,False,True,stem_outlier
+MED Billo Sour Sage,,1 oz,150.0,28.0,150.0,Flower,False,True,stem_outlier
+MED Herbal Cure Free Mac,,1 g,5.5,1.0,154.0,Flower,False,False,
+MED Herbal Cure Tropical Fusion,,1 g,5.5,1.0,154.0,Flower,False,False,
+MED Herbal Cure Rizz Patrol,,1 g,5.5,1.0,154.0,Flower,False,False,
+MED Herbal Cure Rainbow Wizard,,1 g,5.5,1.0,154.0,Flower,False,False,
+MED Herbal Cure Orange Fizz,,1 g,5.5,1.0,154.0,Flower,False,False,
+MED Herbal Cure Dulce De Pledge,,1 g,5.5,1.0,154.0,Flower,False,False,
+MED Herbal Cure GMO x ICC,,1/8 oz,20.0,3.5,160.0,Flower,False,False,
+MED Herbal Cure Bellz N' Whistlez,,1/8 oz,20.0,3.5,160.0,Flower,False,False,
+MED Herbal Cure Spritzer,,1/8 oz,20.0,3.5,160.0,Flower,False,False,
+MED Herbal Cure GMO x ICC,,1/4 oz,40.0,7.0,160.0,Flower,False,False,
+MED Herbal Cure Yerb Breath 2.0,,1/8 oz,20.0,3.5,160.0,Flower,False,False,

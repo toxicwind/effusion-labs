@@ -1,0 +1,35 @@
+{
+  "contexts": [
+    {
+      "name": "4uw5ya1",
+      "current": false,
+      "type": "owner",
+      "server": "http://10.213.5.144",
+      "mode": "Anonymous",
+      "tenant_id": "5f700b1e-c6dc-43dc-aed7-f1e8d0ae6db8",
+      "expires_at": "0001-01-01T00:00:00Z",
+      "status": "active"
+    },
+    {
+      "name": "xy89row",
+      "current": false,
+      "type": "owner",
+      "server": "http://10.213.5.144",
+      "mode": "Anonymous",
+      "tenant_id": "0d5337bf-4b4e-40c2-a770-06bd6b6723b5",
+      "expires_at": "0001-01-01T00:00:00Z",
+      "status": "active"
+    },
+    {
+      "name": "z55fp3a",
+      "current": true,
+      "type": "owner",
+      "server": "http://10.213.5.144",
+      "mode": "Anonymous",
+      "tenant_id": "e03687b5-c01c-4f50-9f44-37115f905b09",
+      "expires_at": "0001-01-01T00:00:00Z",
+      "status": "active"
+    }
+  ],
+  "current_context": "z55fp3a"
+}

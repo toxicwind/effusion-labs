@@ -1,0 +1,47 @@
+name,brand,size_label,price,weight_g,price_per_oz,report_category,is_bundle,aud_suspect,suspect_reason
+Bud - (Top Shelf) Canna Tsu 5.77% THC/8.83% CBD,,1 oz,80.0,28.0,80.0,Flower,False,True,"abs<104,stem_outlier"
+Bud - (Top Shelf) Canna Tsu 5.77% THC/8.83% CBD,,1/2 oz,45.0,14.0,90.0,Flower,False,False,
+Bud - (Top Shelf) East Coast Sour Diesel 20.14% THC,,1 oz,99.0,28.0,99.0,Flower,False,True,"abs<104,stem_outlier"
+Bud - (Top Shelf) G6 #3 22.59% THC,,1 oz,99.0,28.0,99.0,Flower,False,True,"abs<104,stem_outlier"
+Bud - (Top Shelf) Purple Dream 19.28% THC,,1 oz,99.0,28.0,99.0,Flower,False,True,"abs<104,stem_outlier"
+Bud - Blue Dream 6.32% THC,,1 oz,99.0,28.0,99.0,Flower,False,True,"abs<104,stem_outlier"
+Bud - (Top Shelf) G6 #3 22.59% THC,,1/2 oz,55.0,14.0,110.0,Flower,False,False,
+Bud - (Top Shelf) Purple Dream 19.28% THC,,1/2 oz,55.0,14.0,110.0,Flower,False,False,
+Bud - Blue Dream 6.32% THC,,1/2 oz,55.0,14.0,110.0,Flower,False,False,
+Bud - (Top Shelf) East Coast Sour Diesel 20.14% THC,,1/2 oz,55.0,14.0,110.0,Flower,False,False,
+Bud - (Top shelf) - Animal Cookies,,1/8 oz,15.0,3.5,120.0,Flower,False,False,
+Bud- (Top Shelf) - OJ Kush - Indica 70/30,,1/8 oz,15.0,3.5,120.0,Flower,False,False,
+Bud - (Top Shelf) Canna Tsu 5.77% THC/8.83% CBD,,1/4 oz,33.0,7.0,132.0,Flower,False,False,
+Bud (Private Stock) - Fruity Pebbles 21.6% THC,,1 oz,140.0,28.0,140.0,Flower,False,True,stem_outlier
+Bud (Private Stock) - Emerald OG 28.66% THC,,1 oz,140.0,28.0,140.0,Flower,False,False,
+Bud (Private Stock) - Girl Scout Cookies 17.48% THC,,1 oz,140.0,28.0,140.0,Flower,False,True,stem_outlier
+Bud (Private Stock) - Golden Goat 22.47% THC,,1 oz,140.0,28.0,140.0,Flower,False,True,stem_outlier
+Bud (Private Stock) - Golden Goat 22.47% THC,,1/2 oz,80.0,14.0,160.0,Flower,False,False,
+Bud (Private Stock) - Girl Scout Cookies 17.48% THC,,1/2 oz,80.0,14.0,160.0,Flower,False,False,
+Bud - Blue Dream 6.32% THC,,1/4 oz,40.0,7.0,160.0,Flower,False,False,
+Bud - (Top Shelf) Purple Dream 19.28% THC,,1/4 oz,40.0,7.0,160.0,Flower,False,False,
+Bud (Private Stock) - Fruity Pebbles 21.6% THC,,1/2 oz,80.0,14.0,160.0,Flower,False,False,
+Bud - (Top Shelf) G6 #3 22.59% THC,,1/4 oz,40.0,7.0,160.0,Flower,False,False,
+Bud (Private Stock) - Emerald OG 28.66% THC,,1/2 oz,80.0,14.0,160.0,Flower,False,False,
+Bud - (Top Shelf) East Coast Sour Diesel 20.14% THC,,1/4 oz,40.0,7.0,160.0,Flower,False,False,
+Bud - (Top Shelf) G6 #3 22.59% THC,,1/8 oz,22.0,3.5,176.0,Flower,False,False,
+Bud - (Top Shelf) Purple Dream 19.28% THC,,1/8 oz,22.0,3.5,176.0,Flower,False,False,
+Bud - (Top Shelf) East Coast Sour Diesel 20.14% THC,,1/8 oz,22.0,3.5,176.0,Flower,False,False,
+Bud - (Top Shelf) Canna Tsu 5.77% THC/8.83% CBD,,1/8 oz,22.0,3.5,176.0,Flower,False,False,
+Bud - Blue Dream 6.32% THC,,1/8 oz,22.0,3.5,176.0,Flower,False,False,
+Bud (Private Stock) - Fruity Pebbles 21.6% THC,,1/4 oz,55.0,7.0,220.0,Flower,False,False,
+Bud (Private Stock) - Girl Scout Cookies 17.48% THC,,1/4 oz,55.0,7.0,220.0,Flower,False,False,
+Bud (Private Stock) - Emerald OG 28.66% THC,,1/4 oz,55.0,7.0,220.0,Flower,False,False,
+Bud (Private Stock) - Golden Goat 22.47% THC,,1/4 oz,55.0,7.0,220.0,Flower,False,False,
+Bud (Private Stock) - Fruity Pebbles 21.6% THC,,1/8 oz,30.0,3.5,240.0,Flower,False,False,
+Bud (Private Stock) - Golden Goat 22.47% THC,,1/8 oz,30.0,3.5,240.0,Flower,False,False,
+Bud (Private Stock) - Emerald OG 28.66% THC,,1/8 oz,30.0,3.5,240.0,Flower,False,False,
+Bud (Private Stock) - Girl Scout Cookies 17.48% THC,,1/8 oz,30.0,3.5,240.0,Flower,False,False,
+Bud - (Top Shelf) Purple Dream 19.28% THC,,1 g,10.0,1.0,280.0,Flower,False,False,
+Bud - (Top Shelf) East Coast Sour Diesel 20.14% THC,,1 g,10.0,1.0,280.0,Flower,False,False,
+Bud - (Top Shelf) G6 #3 22.59% THC,,1 g,10.0,1.0,280.0,Flower,False,False,
+Bud - Blue Dream 6.32% THC,,1 g,10.0,1.0,280.0,Flower,False,False,
+Bud (Private Stock) - Fruity Pebbles 21.6% THC,,1 g,13.0,1.0,364.0,Flower,False,False,
+Bud (Private Stock) - Girl Scout Cookies 17.48% THC,,1 g,13.0,1.0,364.0,Flower,False,False,
+Bud (Private Stock) - Golden Goat 22.47% THC,,1 g,13.0,1.0,364.0,Flower,False,False,
+Bud - (Top Shelf) Canna Tsu 5.77% THC/8.83% CBD,,1 g,13.0,1.0,364.0,Flower,False,False,

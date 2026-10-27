@@ -1,0 +1,13 @@
+diff --git a/node_modules/rustywind/lib/download.js b/node_modules/rustywind/lib/download.js
+index 7947b52..e127d1e 100644
+--- a/node_modules/rustywind/lib/download.js
++++ b/node_modules/rustywind/lib/download.js
+@@ -81,7 +81,7 @@ async function download(_url, dest, opts) {
+   // Handle proxy setup
+   const proxy = proxy_from_env.getProxyForUrl(url.parse(_url));
+   if (proxy) {
+-    const HttpsProxyAgent = require("https-proxy-agent");
++    const { HttpsProxyAgent } = require("https-proxy-agent");
+     opts = {
+       ...opts,
+       agent: new HttpsProxyAgent(proxy),

@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+# curl shim — routes simple page fetches through markdown converter.
+set -Eeuo pipefail
+. "$(cd "$(dirname "$0")" && pwd)/_lib.sh"
+
+REAL_CURL="$(PATH="$(path_without_repo_bin)" command -v curl || true)"
+if [[ -z "${REAL_CURL:-}" ]]; then
+  echo "❌ curl not found; install curl to use this shim." >&2
+  exit 127
+fi
+
+export CURL_SHIM_REAL="$REAL_CURL"
+export CURL_SHIM_SAFE_PATH="$(path_without_repo_bin)"
+REPO_BASE="$(cd "$REPO_ROOT/.." && pwd)"
+
+exec node "$REPO_BASE/tools/shims/curl-to-markdown.mjs" "$@"

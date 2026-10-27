@@ -1,0 +1,15 @@
+# Effusion stack — flicker-native compose.
+# Images are built on yote by flicker jobs and stay local: no GHCR round-trip.
+# EFFUSION_IMAGE is set by rollout.sh (defaults to the last healthy :live).
+services:
+  web:
+    image: ${EFFUSION_IMAGE:-effusion-web:live}
+    container_name: effusion-web
+    restart: unless-stopped
+    ports:
+      - "43000:80"
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1/"]
+      interval: 15s
+      timeout: 5s
+      retries: 3

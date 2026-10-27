@@ -1,0 +1,14 @@
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = false
+	logallrefupdates = true
+[user]
+	email = toxicwind@users.noreply.github.com
+	name = toxicwind
+[remote "origin"]
+	url = https://github_pat_REDACTED_SEE_KEYRING@github.com/toxicwind/effusion-labs.git
+	fetch = +refs/heads/*:refs/remotes/origin/*
+[branch "main"]
+	remote = origin
+	merge = refs/heads/main

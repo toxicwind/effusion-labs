@@ -1,0 +1,120 @@
+---
+layout: base.njk
+title: Command Center
+permalink: /ops/command/
+eleventyNavigation:
+  key: Command Center
+  order: 99
+---
+
+<div class="container mx-auto px-4 py-8 h-screen-minus-header" x-data="commandCenter">
+  <div class="grid grid-cols-12 gap-4 h-full">
+      
+      <!-- Metrics Panel -->
+      <div class="col-span-12 lg:col-span-3 space-y-4">
+          <div class="hb-glass-card p-4 h-[150px] relative overflow-hidden">
+              <h3 class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-2">System Health</h3>
+              <div class="text-4xl font-black text-emerald-400" x-text="metrics.health + '%'">100%</div>
+              <div class="absolute bottom-0 left-0 w-full h-1 bg-gray-700">
+                  <div class="h-full bg-emerald-500 transition-all duration-500" :style="`width: ${metrics.health}%`"></div>
+              </div>
+          </div>
+          
+           <div class="hb-glass-card p-4 h-[150px]">
+              <h3 class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-2">Active Agents</h3>
+              <div class="text-4xl font-black text-blue-400" x-text="metrics.agents">12</div>
+              <div class="text-xs text-gray-400 mt-2">Scale: Auto</div>
+          </div>
+          
+           <div class="hb-glass-card p-4 flex-grow overflow-hidden">
+               <h3 class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-4">Service Status</h3>
+               <div class="space-y-3">
+                   <template x-for="svc in services" :key="svc.name">
+                       <div class="flex justify-between items-center text-sm">
+                           <span x-text="svc.name" class="text-gray-300"></span>
+                           <span :class="svc.status === 'up' ? 'text-emerald-400' : 'text-red-400'">●</span>
+                       </div>
+                   </template>
+               </div>
+           </div>
+      </div>
+      
+      <!-- Main Feed / Visualizer -->
+      <div class="col-span-12 lg:col-span-6 flex flex-col gap-4">
+          <div class="hb-glass-card flex-grow relative overflow-hidden p-0 border-emerald-500/20 shadow-[0_0_30px_-5px_rgba(16,185,129,0.1)]">
+              <!-- Placeholder for 3D Globe or Graph -->
+              <div class="absolute inset-0 flex items-center justify-center text-emerald-900/20 font-black text-9xl select-none">GRID</div>
+              <canvas id="ops-canvas" class="absolute inset-0 w-full h-full"></canvas>
+          </div>
+          
+          <div class="hb-glass-card h-[200px] p-4 font-mono text-xs overflow-y-auto custom-scrollbar bg-black/40">
+              <template x-for="log in logs" :key="log.id">
+                  <div class="mb-1 border-l-2 pl-2" :class="log.level === 'error' ? 'border-red-500 text-red-300' : 'border-emerald-500 text-emerald-300'">
+                      <span class="opacity-50" x-text="log.time"></span>
+                      <span x-text="log.msg"></span>
+                  </div>
+              </template>
+          </div>
+      </div>
+      
+      <!-- Control Panel -->
+      <div class="col-span-12 lg:col-span-3 space-y-4">
+          <div class="hb-glass-card p-4">
+              <h3 class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-4">Quick Actions</h3>
+              <div class="space-y-2">
+                  <button @click="triggerAction('deploy')" class="w-full text-left px-4 py-3 rounded bg-gray-800 hover:bg-emerald-900/30 border border-transparent hover:border-emerald-500/50 transition-all text-sm font-bold text-gray-300 hover:text-white">
+                      🚀 Trigger Deploy
+                  </button>
+                   <button @click="triggerAction('flush_redis')" class="w-full text-left px-4 py-3 rounded bg-gray-800 hover:bg-yellow-900/30 border border-transparent hover:border-yellow-500/50 transition-all text-sm font-bold text-gray-300 hover:text-white">
+                      🧹 Flush Cache
+                  </button>
+                   <button @click="triggerAction('emergency_stop')" class="w-full text-left px-4 py-3 rounded bg-gray-800 hover:bg-red-900/30 border border-transparent hover:border-red-500/50 transition-all text-sm font-bold text-gray-300 hover:text-white">
+                      🛑 Emergency Stop
+                  </button>
+              </div>
+          </div>
+          
+          <div class="hb-glass-card p-4 flex-grow">
+               <h3 class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-4">Active Tasks</h3>
+               <div class="space-y-4">
+                   <div class="bg-gray-800/50 p-3 rounded">
+                       <div class="flex justify-between text-xs mb-1">
+                           <span class="text-white">Popmart Scraper</span>
+                           <span class="text-emerald-400">Running</span>
+                       </div>
+                       <div class="w-full bg-gray-700 h-1 rounded overflow-hidden">
+                           <div class="bg-emerald-500 h-full w-[45%] animate-pulse"></div>
+                       </div>
+                   </div>
+               </div>
+          </div>
+      </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('alpine:init', () => {
+    Alpine.data('commandCenter', () => ({
+        metrics: { health: 98, agents: 12 },
+        services: [
+            {name: 'Orchestrator', status: 'up'},
+            {name: 'Redis', status: 'up'},
+            {name: 'Postgres', status: 'up'},
+            {name: 'Scraper-01', status: 'up'},
+        ],
+        logs: [
+            {id: 1, time: '10:42:01', level: 'info', msg: 'System check complete'},
+            {id: 0, time: '10:42:00', level: 'info', msg: 'Command Center initialized'}
+        ],
+        
+        triggerAction(action) {
+            this.logs.unshift({
+                id: Date.now(),
+                time: new Date().toLocaleTimeString(),
+                level: 'info',
+                msg: `Action triggered: ${action}`
+            });
+        }
+    }))
+})
+</script>

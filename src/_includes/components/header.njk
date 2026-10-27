@@ -1,0 +1,91 @@
+{# src/_includes/components/header.njk #}
+{% from "components/nav.njk" import nav as navMenu %}
+{% from "components/icons.njk" import icon %}
+
+{% macro header(nav, page, branding = {}) %}
+  {% set navLabel = 'Primary navigation' %}
+  {% set logoSrc = branding.logoSrc or '/images/logo.png' %}
+  {% set logoAlt = branding.logoAlt or 'Effusion Labs logo' %}
+  {% set logoSizes = branding.logoSizes or '(max-width: 640px) 96px, 128px' %}
+  {% set hasLogo = logoSrc is not none %}
+
+  <header
+    data-site-header
+    class="relative w-full bg-base-100 border-b border-base-content/10 z-nav"
+  >
+    <div class="cluster justify-between max-w-screen-xl mx-auto px-gutter py-2">
+      <!-- Brand Cluster -->
+      <div class="flex items-center">
+        <a
+          href="{{ '/' | url }}"
+          class="group cluster no-underline"
+          aria-label="Effusion Labs — home"
+          style="--space: var(--space-xs)"
+        >
+          <span class="hb-logo">
+            {% if hasLogo %}
+              <img
+                src="{{ logoSrc | url }}"
+                alt="{{ logoAlt }}"
+                width="64"
+                height="64"
+                sizes="{{ logoSizes }}"
+                decoding="async"
+                class="hb-logo-img"
+              >
+            {% else %}
+              <span class="hb-logo-core">EL</span>
+            {% endif %}
+          </span>
+          <span class="stack leading-tight text-base-content" style="--space: 0.1rem">
+            <span class="text-xs uppercase tracking-[0.28em] text-base-content/60 font-mono">
+              Effusion Labs
+            </span>
+            <span
+              class="cluster transition-opacity duration-300 group-hover:opacity-80"
+              style="--space: var(--space-xs)"
+            >
+              <span class="font-heading text-h3 font-black tracking-tight group-hover:text-primary">
+                Effusion
+                <span class="text-secondary/80">Labs</span>
+              </span>
+              <span class="hb-scanbar hidden w-16 opacity-90 sm:inline-flex"></span>
+            </span>
+          </span>
+        </a>
+      </div>
+
+      <!-- Actions Cluster (Desktop Nav + Theme) -->
+      <div class="cluster" style="--space: var(--space-m)">
+        <nav class="hidden lg:block" aria-label="{{ navLabel }}">
+          {{
+            navMenu(nav, page.url, 'cluster list-none p-0 m-0', 'text-sm font-semibold hover:text-primary transition-colors cursor-pointer')
+          }}
+        </nav>
+
+        <div class="cluster" style="--space: var(--space-xs)">
+          <!-- Theme Switching -->
+          <button
+            id="theme-toggle"
+            class="btn btn-ghost btn-circle btn-sm hb-anim"
+            type="button"
+            aria-label="Switch theme"
+          >
+            {{ icon('sun', { class: 'w-5 h-5 lucide-sun', 'aria-hidden': 'true' }) }}
+            {{ icon('moon', { class: 'w-5 h-5 lucide-moon hidden', 'aria-hidden': 'true' }) }}
+          </button>
+
+          <!-- Mobile trigger (DaisyUI Dropdown) -->
+          <div class="lg:hidden dropdown dropdown-end">
+            <label tabindex="0" class="btn btn-ghost btn-circle btn-sm" aria-label="Open menu">
+              {{ icon('menu', { class: 'w-5 h-5', 'aria-hidden': 'true' }) }}
+            </label>
+            {{
+              navMenu(nav, page.url, 'menu-sm dropdown-content mt-3 z-modal p-4 shadow-2xl bg-base-100 rounded-box w-64 border border-base-content/5 stack', 'py-2 block w-full')
+            }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+{% endmacro %}

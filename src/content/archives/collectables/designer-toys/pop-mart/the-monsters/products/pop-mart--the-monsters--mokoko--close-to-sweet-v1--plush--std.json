@@ -1,0 +1,34 @@
+{
+  "type": "product",
+  "product_id": "pop-mart--the-monsters--mokoko--close-to-sweet-v1--plush--std",
+  "brand": "pop-mart",
+  "line": "the-monsters",
+  "character": "mokoko",
+  "series": "close-to-sweet-v1",
+  "form": "plush",
+  "variant": "std",
+  "edition": {
+    "kind": "core"
+  },
+  "distribution": {
+    "region_lock": false,
+    "markets": [
+      "CN"
+    ]
+  },
+  "market_listings": [
+    {
+      "market": "CN",
+      "currency": "CNY",
+      "price": 599
+    }
+  ],
+  "availability": {
+    "limited": false,
+    "unit_count": null
+  },
+  "images": [],
+  "provenance_ref": "/content/archives/collectables/designer-toys/pop-mart/the-monsters/provenance/pop-mart--the-monsters--mokoko--close-to-sweet-v1--plush--std.jsonl",
+  "confidence": 0.45,
+  "notes": "Seeded from initial article; requires re-research."
+}

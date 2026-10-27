@@ -1,0 +1,22 @@
+version: "3.8"
+services:
+  mcp-gateway:
+    build: ./mcp-stack/gateway
+    environment:
+      - PROFILE=dev
+      - LOG_LEVEL=info
+      - HOST_ALLOWLIST=localhost,127.0.0.1
+      - FLARESOLVERR_URL=http://flaresolverr:8191
+    ports:
+      - "3000:3000"
+    depends_on:
+      - flaresolverr
+      - searxng
+  flaresolverr:
+    image: ghcr.io/flaresolverr/flaresolverr:latest
+    ports:
+      - "8191:8191"
+  searxng:
+    image: searxng/searxng:latest
+    ports:
+      - "8080:8080"

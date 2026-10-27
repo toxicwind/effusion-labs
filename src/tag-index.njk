@@ -1,0 +1,31 @@
+---
+permalink: "/tags/"
+eleventyExcludeFromCollections: true
+layout: "layouts/main/base.njk"
+title: "Tags"
+description: "Every tag in the garden, biggest first."
+---
+{% from "components/breadcrumbs.njk" import breadcrumbs %}
+
+<div class="stack" style="--space: var(--space-xl)">
+  {{ breadcrumbs([{ text: "Tags" }]) }}
+
+  <header class="stack" style="--space: var(--space-xs)">
+    <h1 class="text-h1">Tags</h1>
+    <p class="max-w-prose text-lg opacity-70 leading-relaxed">
+      {{ collections.tagList.length }} tags across the garden.
+    </p>
+  </header>
+
+  <div class="cluster flex-wrap" style="--space: var(--space-s)">
+    {% for t in collections.tagList %}
+      <a
+        href="{{ ('/tags/' + t.slug + '/') | url }}"
+        class="hb-brut-card no-underline px-space-s py-space-2xs text-sm group"
+      >
+        <span class="font-bold group-hover:text-primary">#{{ t.label }}</span>
+        <span class="opacity-50 font-mono text-xs ml-1">{{ t.items.length }}</span>
+      </a>
+    {% endfor %}
+  </div>
+</div>

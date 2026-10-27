@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["type", "brand", "line", "slug", "title"],
+  "properties": {
+    "type": { "const": "series" },
+    "brand": { "const": "pop-mart" },
+    "line": { "const": "the-monsters" },
+    "slug": { "type": "string" },
+    "title": { "type": "string" },
+    "character_slugs": { "type": "array", "items": { "type": "string" } },
+    "release_window": {
+      "type": "object",
+      "properties": {
+        "start": { "type": "string", "format": "date" },
+        "end": { "type": "string", "format": "date" }
+      },
+      "additionalProperties": false
+    },
+    "tags": { "type": "array", "items": { "type": "string" } },
+    "notes": { "type": "string" }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,49 @@
+{# components/products/MetaNotes.njk #}
+{% macro metaNotes(p) %}
+  {% if p and (p.notes or p.product_id) %}
+    <div
+      class="meta-notes rounded-md border border-base-content/15 bg-base-100/80 backdrop-blur p-4 mt-4"
+      data-testid="meta-notes"
+      role="note"
+    >
+      {% if p.notes %}<p class="text-base-content/90">{{ p.notes }}</p>{% endif %}
+
+      {% if p.product_id %}
+        <div class="mt-3 flex items-center gap-2">
+          <code class="kbd kbd-sm">{{ p.product_id }}</code>
+          <button
+            type="button"
+            class="btn btn-ghost btn-xs"
+            data-copy="{{ p.product_id }}"
+            aria-label="Copy product ID"
+          >
+            Copy
+          </button>
+          <span class="sr-only" aria-live="polite" data-copy-status></span>
+        </div>
+        <script>
+        ;(function() {
+    if (window.__copyBound) return
+    window.__copyBound = true
+    document.addEventListener('click', function(e) {
+      var btn = e.target.closest('[data-copy]')
+      if (!btn) return
+      var id = btn.getAttribute('data-copy')
+      try {
+        navigator.clipboard.writeText(id).then(function() {
+          var status = btn.parentElement && btn.parentElement.querySelector('[data-copy-status]')
+          if (status) {
+            status.textContent = 'Copied'
+            setTimeout(function() {
+              status.textContent = ''
+            }, 1600)
+          }
+        })
+      } catch (_) {}
+    }, false)
+  })()
+        </script>
+      {% endif %}
+    </div>
+  {% endif %}
+{% endmacro %}

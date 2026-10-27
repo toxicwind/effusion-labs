@@ -1,0 +1,1 @@
+Eleventy template error in src/archives/collectables/designer-toys/pop-mart/the-monsters/products.njk line 5 column 104: expected variable end.

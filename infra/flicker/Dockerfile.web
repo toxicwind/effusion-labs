@@ -1,0 +1,14 @@
+# Effusion Labs web — flicker-native build.
+# Stage 1 builds the static site with bun; stage 2 serves it with nginx.
+# No registry round-trip: built on yote, stays on yote.
+FROM oven/bun:1 AS build
+WORKDIR /src
+COPY package.json bun.lock bunfig.toml ./
+RUN bun install --frozen-lockfile
+COPY . .
+RUN NODE_OPTIONS='--max-old-space-size=8192' NODE_ENV=production bun run build:site
+
+FROM nginx:alpine
+COPY --from=build /src/_site /usr/share/nginx/html
+COPY infra/flicker/nginx.conf /etc/nginx/conf.d/default.conf
+EXPOSE 80

@@ -1,0 +1,47 @@
+=== PID 1 ===
+PATH=/command:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/root/.dotnet/tools
+
+=== PID 68 ===
+
+=== PID 71 ===
+
+=== PID 74 ===
+CUBE_CONTAINER_ID_MONITOR_SIDECAR=30327ccb0e6042c0bd3cb63b76160f8f
+CUBE_CONTAINER_ID_SANDBOX=018974aa56ba46cbabbfc5851f8a19cf
+DISPLAY=:99
+GPG_KEY=7169605F62C751356D054A26A821E680E5FA6305
+HOME=/root
+HOSTNAME=018974aa
+KERNEL_SERVER_WORKDIR=/tmp/kimi-project-kernel
+KIMI_PROJECT_PORTAL_CAPABILITY_ENABLED=true
+KIMI_PROJECT_PORTAL_CAPABILITY_ENV=prod
+KIMI_PROJECT_PORTAL_CAPABILITY_MOUNT=/mnt/portal-overlay
+KIMI_PROJECT_PORTAL_CAPABILITY_PROD_ADDR=https://kimi-api-sandbox.msh.team/apiv2
+LANG=C.UTF-8
+MOONBOX_BASE_IMAGE=msh-sandbox.tencentcloudcr.com/kimiclaw/moonbox-okc:project-20260805-1
+MOONBOX_PROJECT_TEMPLATE_VERSION=project-20260805-1
+NODE_PATH=/usr/lib/node_modules
+PATH=/command:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/root/.dotnet/tools
+PIP_CACHE_DIR=/home/kimi/.cache/pip
+PIP_INDEX_URL=http://pypi.mirrors.msh.team/simple/
+PIP_TRUSTED_HOST=pypi.mirrors.msh.team
+PROJECT_WORKSPACE_PATH=/mnt/agents
+PWD=/run/s6-rc:s6-rc-init:lCcDlD/servicedirs/envd
+PYTHONUNBUFFERED=1
+PYTHONUSERBASE=/home/kimi/.local
+PYTHON_SHA256=fb85a13414b028c49ba18bbd523c2d055a30b56b18b92ce454ea2c51edc656c4
+PYTHON_VERSION=3.12.12
+S6_LOGGING=0
+SCF_POD_ID=018974aa56ba46cbabbfc5851f8a19cf
+SCREEN_RESOLUTION=1920x1080
+SHLVL=0
+SSH_PASSWORD=sshpassword
+TZ=Asia/Shanghai
+USE_CDP=true
+VNC_PASSWORD=vncpassword
+XAUTHORITY=/root/.Xauthority
+
+=== PID 82 ===
+
+=== PID 1150 ===
+

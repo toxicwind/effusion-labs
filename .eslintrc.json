@@ -1,0 +1,15 @@
+// .eslintrc.json
+{
+  "root": true,
+  "ignorePatterns": [
+    "node_modules/**",
+    "_site/**",
+    "dist/**",
+    ".11ty-vite/**",
+    "artifacts/**",
+    "coverage/**",
+    "public/vite/**",
+    ".conda/**",
+    "src/content/docs/**"
+  ]
+}

@@ -1,0 +1,9 @@
+---
+title: "Sparks"
+layout: "collection.njk"
+section: "sparks"
+permalink: "/sparks/index.html" # <-- Add or modify this line for correct URL
+eleventyNavigation:
+  key: Sparks
+  parent: Showcase # Adjust parent as needed for your navigation
+---

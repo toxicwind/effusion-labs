@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+. "$(cd "$(dirname "$0")" && pwd)/_lib.sh"
+retry_exec "$@" --   "$REPO_ROOT/node_modules/.bin/yq"   "$TOOLS_DIR/yq/yq"   yq
+echo "❌ yq not found." >&2
+exit 127

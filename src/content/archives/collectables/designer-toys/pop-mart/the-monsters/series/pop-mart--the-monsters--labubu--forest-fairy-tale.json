@@ -1,0 +1,52 @@
+{
+  "product_id": "LAB025",
+  "brand": "POP MART",
+  "line": "The Monsters",
+  "character": "Labubu",
+  "series": "Forest Fairy Tale",
+  "product_title": "Forest Fairy Tale",
+  "variant_name": null,
+  "form": "Vinyl-Plush Hanging Card",
+  "sku": null,
+  "size": {
+    "height_cm": 22,
+    "dimensions_cm": "11 × 8 × 22 cm",
+    "weight_kg": null,
+    "pendant_height_cm": null,
+    "sitting_height_cm": null
+  },
+  "materials": {
+    "shell": "66% polyester, 25% PVC, 9% ABS",
+    "plush": null,
+    "stuffing": "95% polyester, 5% iron wire"
+  },
+  "packaging": {
+    "type": "Vinyl-plush hanging card format with integrated key-clip and backing card",
+    "dimensions_cm": null
+  },
+  "release_info": {
+    "release_date": "2025-05-26",
+    "edition_type": "Member points exclusive",
+    "edition_size": null
+  },
+  "pricing": {
+    "original_msrp": {
+      "points": 5000
+    },
+    "current_status": "Out of stock",
+    "secondary_market_range": {
+      "CNY": "600-1200",
+      "USD": "80-165"
+    },
+    "pendant_msrp": null
+  },
+  "availability": {
+    "regions": ["Mainland-China"],
+    "channels": ["POP MART China Points Mall"],
+    "stock_status": "Out of stock"
+  },
+  "designer": "Kasing Lung",
+  "accessories": ["Key-clip hardware and credit-card backing"],
+  "articulation": null,
+  "colorway": "White plush “duck” suit with orange beak visor"
+}

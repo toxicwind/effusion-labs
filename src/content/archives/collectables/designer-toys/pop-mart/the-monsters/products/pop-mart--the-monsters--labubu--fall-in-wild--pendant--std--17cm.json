@@ -1,0 +1,37 @@
+{
+  "type": "product",
+  "product_id": "pop-mart--the-monsters--labubu--fall-in-wild--pendant--std--17cm--20240712",
+  "brand": "pop-mart",
+  "line": "the-monsters",
+  "character": "labubu",
+  "series": "fall-in-wild",
+  "form": "pendant",
+  "variant": "std",
+  "edition": {
+    "kind": "core"
+  },
+  "distribution": {
+    "region_lock": false,
+    "markets": ["CN"]
+  },
+  "size": {
+    "unit": "cm",
+    "h": 17
+  },
+  "release_date": "2024-07-12",
+  "market_listings": [
+    {
+      "market": "CN",
+      "currency": "CNY",
+      "price": 159
+    }
+  ],
+  "availability": {
+    "limited": false,
+    "unit_count": null
+  },
+  "images": [],
+  "provenance_ref": "/content/archives/collectables/designer-toys/pop-mart/the-monsters/provenance/pop-mart--the-monsters--labubu--fall-in-wild--pendant--std--17cm--20240712.jsonl",
+  "confidence": 0.45,
+  "notes": "Seeded from initial article; requires re-research."
+}

@@ -1,0 +1,51 @@
+name,brand,size_label,price,weight_g,price_per_oz,report_category,is_bundle,aud_suspect,suspect_reason
+Animal Tsunami - CG,,56 g,87.04,56.0,43.52,Flower,False,False,
+Avalon - Pot Zero,,56 g,87.04,56.0,43.52,Flower,False,False,
+Reba #1,,56 g,87.04,56.0,43.52,Flower,False,False,
+Green Crack x Soma - CG,,56 g,87.04,56.0,43.52,Flower,False,False,
+Reba #1,,1 oz,45.81,28.0,45.81,Flower,False,True,"abs<96,stem_outlier"
+Green Crack x Soma - CG,,1 oz,45.81,28.0,45.81,Flower,False,True,"abs<96,stem_outlier"
+Avalon - Pot Zero,,1 oz,45.81,28.0,45.81,Flower,False,True,"abs<96,stem_outlier"
+Animal Tsunami - CG,,1 oz,45.81,28.0,45.81,Flower,False,True,"abs<96,stem_outlier"
+Dank Dough - Cherry,,112 g,274.85,112.0,68.7125,Flower,False,False,
+MAC - Cherry,,112 g,274.85,112.0,68.7125,Flower,False,False,
+Bernscotti - Cherry,,112 g,274.85,112.0,68.7125,Flower,False,False,
+Bernscotti - Cherry,,224 g,549.7,224.0,68.7125,Flower,False,False,
+Quicksand - Cherry,,112 g,274.85,112.0,68.7125,Flower,False,False,
+Rainbow Sherbert - Cherry,,112 g,274.85,112.0,68.7125,Flower,False,False,
+Nezquick - Cherry,,112 g,274.85,112.0,68.7125,Flower,False,False,
+Animal Tsunami - CG,,1/2 oz,34.93,14.0,69.86,Flower,False,False,
+Green Crack x Soma - CG,,1/2 oz,34.93,14.0,69.86,Flower,False,False,
+Avalon - Pot Zero,,1/2 oz,34.93,14.0,69.86,Flower,False,False,
+Reba #1,,1/2 oz,34.93,14.0,69.86,Flower,False,False,
+Cadillac Rainbow,,1/8 oz,9.16,3.5,73.28,Flower,False,False,
+Black Eyed Katy - Pot Zero,,1/8 oz,9.16,3.5,73.28,Flower,False,False,
+Reba #1,,1/4 oz,20.22,7.0,80.88,Flower,False,False,
+Avalon - Pot Zero,,1/4 oz,20.22,7.0,80.88,Flower,False,False,
+Axilla - Pot Zero,,1/4 oz,20.22,7.0,80.88,Flower,False,False,
+Green Crack x Soma - CG,,1/4 oz,20.22,7.0,80.88,Flower,False,False,
+Animal Tsunami - CG,,1/4 oz,20.22,7.0,80.88,Flower,False,False,
+Don Mega,,1 oz,82.45,28.0,82.45,Flower,False,True,"abs<96,stem_outlier"
+Obama Larry,,1 oz,82.45,28.0,82.45,Flower,False,True,"abs<96,stem_outlier"
+Icebox Pie (M),,1 oz,82.45,28.0,82.45,Flower,False,True,"abs<96,stem_outlier"
+Cherry Punch,,1 oz,82.45,28.0,82.45,Flower,False,True,"abs<96,stem_outlier"
+Marsh-Mellow - Pheonix Farms (M),,1 oz,82.45,28.0,82.45,Flower,False,True,"abs<96,stem_outlier"
+Hawaiian Goat - Phoenix Farms (M),,1 oz,82.45,28.0,82.45,Flower,False,True,"abs<96,stem_outlier"
+Icebox Pie (M),,1/2 oz,45.95,14.0,91.9,Flower,False,False,
+Hawaiian Goat - Phoenix Farms (M),,1/2 oz,45.95,14.0,91.9,Flower,False,False,
+Obama Larry,,1/2 oz,45.95,14.0,91.9,Flower,False,False,
+Marsh-Mellow - Pheonix Farms (M),,1/2 oz,45.95,14.0,91.9,Flower,False,False,
+Cherry Punch,,1/2 oz,45.95,14.0,91.9,Flower,False,False,
+Don Mega,,1/2 oz,45.95,14.0,91.9,Flower,False,False,
+Avalon - Pot Zero,,1/8 oz,12.87,3.5,102.96,Flower,False,False,
+Animal Tsunami - CG,,1/8 oz,12.87,3.5,102.96,Flower,False,False,
+Green Crack x Soma - CG,,1/8 oz,12.87,3.5,102.96,Flower,False,False,
+Reba #1,,1/8 oz,12.87,3.5,102.96,Flower,False,False,
+Axilla - Pot Zero,,1/8 oz,12.87,3.5,102.96,Flower,False,False,
+Icebox Pie (M),,1/4 oz,27.57,7.0,110.28,Flower,False,False,
+Cherry Punch,,1/4 oz,27.57,7.0,110.28,Flower,False,False,
+Obama Larry,,1/4 oz,27.57,7.0,110.28,Flower,False,False,
+Marsh-Mellow - Pheonix Farms (M),,1/4 oz,27.57,7.0,110.28,Flower,False,False,
+Hawaiian Goat - Phoenix Farms (M),,1/4 oz,27.57,7.0,110.28,Flower,False,False,
+Don Mega,,1/4 oz,27.57,7.0,110.28,Flower,False,False,
+Ghost Betty - The Great Ascent,,1 oz,114.52,28.0,114.52,Flower,False,True,stem_outlier

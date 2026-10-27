@@ -1,0 +1,32 @@
+# Synthesis Agent — Competitive intelligence and self-healing
+# Runs daily; monitors competitor repos, generates diff reports
+apiVersion: effusion.io/v1
+kind: Agent
+metadata:
+  name: synthesis-agent
+  namespace: effusion-labs
+spec:
+  schedule: "0 4 * * *"
+  lenses:
+    - osint
+  sources:
+    - type: github
+      repos:
+        - binyamin/eleventy-garden
+        - surjithctly/neat-starter
+        - mattwaler/tea-stack
+        - tannerdolby/eleventy-photo-gallery
+      metric: stars,last_push,issues
+  pipeline:
+    - step: fetch
+      tool: github_api
+      auth: GITHUB_TOKEN
+    - step: analyze
+      tool: lens_osint
+    - step: compare
+      tool: modelbeats_router
+    - step: publish
+      output: docs/competitive-intel/daily-synthesis.md
+  env:
+    - name: GITHUB_TOKEN
+      valueFrom: env

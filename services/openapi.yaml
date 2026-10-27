@@ -1,0 +1,187 @@
+openapi: 3.1.0
+info:
+  title: Effusion Labs Unified API
+  version: 2.1.0
+  description: |
+    Unified API Gateway orchestrating all Effusion Labs microservices.
+    
+    Architecture:
+    - BFF (Backend for Frontend) pattern
+    - Event-driven realtime updates via WebSockets
+    - Service mesh integration
+    - MCP gateway proxy
+    - Markdown conversion
+    - Popmart recon automation
+    - Cannabis price analysis
+    - Pipeline management
+  contact:
+    name: Effusion Labs
+    url: https://effusionlabs.com
+
+servers:
+  - url: http://localhost:8000
+    description: Local development
+  - url: http://localhost:18400
+    description: Docker prod
+
+tags:
+  - name: health
+    description: Health and monitoring endpoints
+  - name: mcp
+    description: MCP (Model Context Protocol) gateway integration
+  - name: markdown
+    description: URL to Markdown conversion
+  - name: popmart
+    description: Popmart recon automation
+  - name: cannabis
+    description: Medical flower price analysis
+  - name: pipeline
+    description: Background task pipeline manager
+  - name: websocket
+    description: Real-time WebSocket channels
+
+paths:
+  /:
+    get:
+      summary: API Root
+      description: Discovery endpoint listing all available API routes
+      tags: [health]
+      responses:
+        "200":
+          description: API metadata and endpoint discovery
+
+  /health:
+    get:
+      summary: Orchestrator Health Check
+      tags: [health]
+      responses:
+        "200":
+          description: Orchestrator is healthy
+
+  /services/health:
+    get:
+      summary: Aggregate Service Health
+      tags: [health]
+      responses:
+        "200":
+          description: List of service health statuses
+
+  # --- Cannabis Analysis ---
+  /cannabis/report/demo:
+    get:
+      summary: Get Demo Analysis Report
+      description: Generates a full HTML report using synthetic data
+      tags: [cannabis]
+      responses:
+        "200":
+          description: HTML report
+          content:
+            text/html:
+              schema:
+                type: string
+
+  /cannabis/data/synthetic:
+    get:
+      summary: Get Synthetic Data
+      description: Get raw JSON data for frontend visualization
+      tags: [cannabis]
+      responses:
+        "200":
+          description: Array of product data
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+
+  # --- Pipeline Manager ---
+  /pipeline/lv-images/run:
+    post:
+      summary: Run LV Images Pipeline
+      tags: [pipeline]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                command:
+                  type: string
+                  default: crawl
+                mode:
+                  type: string
+                label:
+                  type: string
+      responses:
+        "200":
+          description: Task started
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  task_id:
+                    type: string
+                  status:
+                    type: string
+
+  /pipeline/tasks:
+    get:
+      summary: List Pipeline Tasks
+      tags: [pipeline]
+      responses:
+        "200":
+          description: List of all tasks
+
+  /pipeline/tasks/{task_id}:
+    get:
+      summary: Get Task Details
+      tags: [pipeline]
+      parameters:
+        - name: task_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Task status and logs
+
+  # --- Existing Endpoints ---
+  /mcp/servers:
+    get:
+      tags: [mcp]
+      responses:
+        "200":
+          description: List of MCP servers
+  /mcp/send:
+    post:
+      tags: [mcp]
+      responses:
+        "200":
+          description: MCP response
+  /markdown/convert:
+    post:
+      tags: [markdown]
+      responses:
+        "200":
+          description: Markdown conversion successful
+  /popmart/recon:
+    post:
+      tags: [popmart]
+      responses:
+        "200":
+          description: Recon task queued
+  /ws/{channel}:
+    get:
+      tags: [websocket]
+      responses:
+        "101":
+          description: WebSocket connection established
+  /events/stream:
+    get:
+      tags: [websocket]
+      responses:
+        "200":
+          description: Event stream

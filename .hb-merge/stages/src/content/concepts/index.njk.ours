@@ -1,0 +1,9 @@
+---
+title: "Concepts"
+layout: "collection.njk"
+section: "concepts"
+permalink: "/concepts/index.html" # <-- Add or modify this line
+eleventyNavigation:
+  key: Concepts
+  parent: Showcase
+---
