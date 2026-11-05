@@ -1,0 +1,19 @@
+<h1>stabilize-ci-tests Ledger (1/1)</h1>
+<h2>Criteria &amp; Proofs</h2>
+<ul>
+<li>Root-only install: <code>npm ci</code> at repo root (<code>docs/knowledge/stabilize-ci-tests-install.log</code>, sha256:
+26b1ab0e...).</li>
+<li>Browser probe: capability unavailable; parked specs none
+(<code>docs/knowledge/stabilize-ci-tests-green.log</code>, sha256: a49cf4e5...).</li>
+<li>Exit code 0 for test run (<code>docs/knowledge/stabilize-ci-tests-green.log</code>).</li>
+</ul>
+<h2>Delta Queue</h2>
+<ol>
+<li>Add Playwright coverage for interactive components.</li>
+<li>Enable image transforms in targeted specs.</li>
+</ol>
+<h2>Rollback</h2>
+<ul>
+<li>Last safe SHA: 49d7f59</li>
+<li><code>git reset --hard 49d7f59</code></li>
+</ul>

@@ -1,0 +1,139 @@
+
+<!DOCTYPE html>
+<html lang="en" data-theme="dark" class="scroll-pt-16 dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Archives | Effusion Labs</title>
+
+  <meta name="color-scheme" content="dark light">
+  <script>(function(){
+  const storageKey = 'theme';
+  const doc = document.documentElement;
+  const stored = localStorage.getItem(storageKey);
+  const meta = document.querySelector('meta[name="color-scheme"]') || (function(){
+    const m = document.createElement('meta');
+    m.name = 'color-scheme';
+    document.head.appendChild(m);
+    return m;
+  })();
+  let theme = stored;
+  if (theme !== 'dark' && theme !== 'light') {
+    theme = 'dark';
+  }
+  doc.dataset.theme = theme;
+  doc.classList.toggle('dark', theme === 'dark');
+  meta.content = theme === 'light' ? 'light dark' : 'dark light';
+})();
+</script>
+
+  <link rel="stylesheet" href="/assets/css/app.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <script src="/assets/js/lucide.min.js"></script>
+</head>
+
+<body class="bg-background text-text font-body leading-relaxed text-[17px]">
+  <a href="#main" class="skip-link">Skip to main content</a>
+  <header class="sticky top-0 z-40 w-full bg-base-100/90 backdrop-blur shadow">
+  <div class="navbar mx-auto max-w-screen-2xl px-6">
+    <div class="flex-1">
+      <a href="/" class="flex items-center gap-2 font-heading text-3xl text-primary">
+        <i data-lucide="flask-conical" class="w-6 h-6"></i><span>Effusion Labs</span>
+      </a>
+    </div>
+    <div class="flex-none lg:hidden">
+      <div class="dropdown dropdown-end">
+        <label tabindex="0" class="btn btn-ghost btn-square">
+          <i data-lucide="menu" class="w-6 h-6"></i>
+        </label>
+        <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-40">
+          
+          <li><a href="/">Showcase</a></li>
+          
+          <li><a href="/sparks/">Sparks</a></li>
+          
+          <li><a href="/concepts/">Concepts</a></li>
+          
+          <li><a href="/projects/">Projects</a></li>
+          
+          <li><a href="/archives/">Archives</a></li>
+          
+          <li><a href="/meta/">Meta</a></li>
+          
+          <li><a href="/map/">Map</a></li>
+          
+          <li><a href="/consulting/">Consulting</a></li>
+          
+        </ul>
+      </div>
+    </div>
+    <div class="flex-none flex items-center gap-2">
+      <button id="theme-toggle" class="btn btn-ghost btn-square" aria-label="Switch to light theme" aria-pressed="true">
+        <span class="sr-only">Toggle theme</span>
+        <i data-lucide="sun" class="w-6 h-6 hidden"></i>
+        <i data-lucide="moon" class="w-6 h-6"></i>
+      </button>
+    </div>
+    <nav class="flex-none hidden lg:flex">
+      <ul class="menu menu-horizontal px-1">
+        
+        <li><a href="/" class="hover:text-primary">Showcase</a></li>
+        
+        <li><a href="/sparks/" class="hover:text-primary">Sparks</a></li>
+        
+        <li><a href="/concepts/" class="hover:text-primary">Concepts</a></li>
+        
+        <li><a href="/projects/" class="hover:text-primary">Projects</a></li>
+        
+        <li><a href="/archives/" class="hover:text-primary">Archives</a></li>
+        
+        <li><a href="/meta/" class="hover:text-primary">Meta</a></li>
+        
+        <li><a href="/map/" class="hover:text-primary">Map</a></li>
+        
+        <li><a href="/consulting/" class="hover:text-primary">Consulting</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</header>
+
+
+  <div class="mx-auto max-w-screen-2xl px-6">
+    
+    
+
+    <main id="main" class="
+      xl:grid xl:gap-10 xl:grid-cols-[1fr_16rem]
+       mt-12
+    ">
+      <article class="prose dark:prose-invert max-w-none m-0
+         xl:col-span-1 
+      ">
+        
+          <header class="mb-8">
+            <h1 class="font-heading text-primary text-4xl tracking-wider">Archives</h1>
+          </header>
+        
+        <h1 class="text-2xl font-bold mb-4">Archives</h1>
+<ul>
+  <li><a href="/archives/collectables/">Collectables</a></li>
+</ul>
+
+      </article>
+
+      
+    </main>
+
+    <footer class="mt-16 p-8 text-center text-sm text-text/60">
+      &copy; 2025 Effusion Labs. A space for creative synthesis.
+    </footer>
+  </div>
+
+  <script>lucide.createIcons();</script>
+  <script src="/assets/js/theme-toggle.js" defer=""></script>
+  <script src="/assets/js/footnote-nav.js" defer=""></script>
+</body>
+</html>

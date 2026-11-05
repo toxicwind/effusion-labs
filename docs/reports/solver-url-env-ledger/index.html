@@ -1,0 +1,40 @@
+<h1>Ledger — solver-url-env</h1>
+<h2>Criteria &amp; Proofs</h2>
+<ol>
+<li>Gateway reads <code>SOLVER_URL</code> from environment.
+<ul>
+<li>Proof: <code>test/unit/markdown-gateway-config.test.mjs</code></li>
+<li>Log: <code>docs/knowledge/solver-url-env-green.log</code></li>
+</ul>
+</li>
+<li>Gateway retains default solver address when env absent.
+<ul>
+<li>Proof: <code>test/unit/markdown-gateway-config.test.mjs</code></li>
+<li>Log: <code>docs/knowledge/solver-url-env-green.log</code></li>
+</ul>
+</li>
+</ol>
+<h2>Index</h2>
+<ul>
+<li>satisfied criteria: 2/2</li>
+</ul>
+<h2>Hashes</h2>
+<ul>
+<li><code>markdown_gateway/app.py</code> – ff7e62c0d736fd853b2c87d74d55b48b995d452e41548bc40f320a9286c5e2c7</li>
+<li><code>test/unit/markdown-gateway-config.test.mjs</code> –
+eb274d2378195c462115a37eb7db29ef3656e388b5df40a9d106f36cf625a90e</li>
+<li><code>README.md</code> – 78d61a92450e7504859518edd14486403e7e8ce7e0abf7109a846c6dc75cf18d</li>
+<li><code>docs/knowledge/solver-url-env-red.log</code> –
+91759e46712f5a23d9c2d357f7ba3c0b2736e5c9fd53cc898ad295f7437349de</li>
+<li><code>docs/knowledge/solver-url-env-green.log</code> –
+626e77808bc8dbda5ecacb14e5ab177e0c84b42b00678ad17dbb73f89d3997ba</li>
+<li><code>docs/knowledge/solver-url-env-refactor.log</code> –
+c40f51d03f3e892e396e7ae637aa54ffc8cd99680d21aaae9340efd9b7695b9c</li>
+<li><code>docs/knowledge/solver-url-env-docs.log</code> –
+f13671568040182d054b7dce248859d6174f9645b7896219305a2a1c76b4e3e3</li>
+</ul>
+<h2>Rollback</h2>
+<ul>
+<li>Last safe SHA: b155a3ab0060f0ab9f9f0e6228df764e6cd4daca</li>
+<li>Rollback command: <code>git reset --hard b155a3ab0060f0ab9f9f0e6228df764e6cd4daca</code></li>
+</ul>

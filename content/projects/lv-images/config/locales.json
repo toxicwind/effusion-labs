@@ -1,0 +1,15 @@
+{
+  "CANON_LOCALES": ["eng_US", "eng_E1"],
+  "USER_LOCALES": [
+    "fra_FR",
+    "ita_IT",
+    "jpn_JP",
+    "kor_KR",
+    "por_BR",
+    "eng_GB",
+    "eng_CA",
+    "zht_HK"
+  ],
+  "ALIASES": {
+  }
+}

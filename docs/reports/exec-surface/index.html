@@ -1,0 +1,71 @@
+<h1>Unguarded Execution Surface</h1>
+<h2>Environment</h2>
+<ul>
+<li><code>uname -a</code>: Linux 0bd838b31262 6.12.13 #1 SMP Thu Mar 13 11:34:50 UTC 2025 x86_64 x86_64 x86_64
+GNU/Linux</li>
+<li><code>SHELL</code>: /bin/bash</li>
+<li><code>bash --version</code>: GNU bash, version 5.2.21(1)-release (x86_64-pc-linux-gnu)</li>
+<li><code>set</code> flags: ehuB</li>
+<li><code>PID</code>: 4168</li>
+<li>FD1 type: /dev/pts/0</li>
+<li>FD2 type: /dev/pts/0</li>
+<li><code>tty</code>: not a tty</li>
+</ul>
+<h2>Stdout vs stderr merging</h2>
+<p>Console ordering showed stderr lines before stdout lines (<code>ERR1</code>, <code>ERR2</code>, <code>OUT1</code>, <code>OUT2</code>),
+indicating merged but unsynchronized streams.</p>
+<h2>Line-length ceiling</h2>
+<table>
+<thead>
+<tr>
+<th>size</th>
+<th>console_sample_len</th>
+<th>file_len</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1024</td>
+<td>201</td>
+<td>1025</td>
+</tr>
+<tr>
+<td>2048</td>
+<td>201</td>
+<td>2049</td>
+</tr>
+<tr>
+<td>3072</td>
+<td>201</td>
+<td>3073</td>
+</tr>
+<tr>
+<td>3500</td>
+<td>201</td>
+<td>3501</td>
+</tr>
+<tr>
+<td>3800</td>
+<td>201</td>
+<td>3801</td>
+</tr>
+<tr>
+<td>5000</td>
+<td>201</td>
+<td>5001</td>
+</tr>
+</tbody>
+</table>
+<p>Console samples were intentionally clipped to 200 bytes (plus newline). Full files recorded exact
+lengths; no truncation observed.</p>
+<h2>Redirection with <code>source</code></h2>
+<ul>
+<li>Case A: <code>AFTER_A_*</code> lines landed in <code>fd_demo_caseA.*</code> files alongside <code>INSIDE_DEMO_*</code>.</li>
+<li>Case B: <code>AFTER_B_*</code> lines remained on console, while <code>fd_demo_caseB.*</code> contained only
+<code>INSIDE_DEMO_*</code>.</li>
+</ul>
+<p>Redirection on the <code>source</code> line overrides descriptor changes inside the sourced file; FDs revert
+after the grouped command.</p>
+<h2>Subshell vs same shell</h2>
+<p><code>FOO=parent; bash -lc 'echo CHILD_FOO=${FOO:-unset}'</code> produced <code>CHILD_FOO=unset</code>, while the parent
+recorded <code>PARENT_FOO=parent</code>. Subshells do not inherit local variables by default.</p>

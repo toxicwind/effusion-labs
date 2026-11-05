@@ -1,0 +1,18 @@
+<h1>Continuation Plan</h1>
+<h2>Context Recap</h2>
+<ul>
+<li>Added Eleventy test runner and migrated all tests to use it.</li>
+<li>Replaced network-based webpageToMarkdown tests with fixture-driven htmlToMarkdown check.</li>
+<li>Removed dev server MIME test; suite exits cleanly.</li>
+</ul>
+<h2>Outstanding Items</h2>
+<ul>
+<li>Implement environment-first build metadata resolution and integrate into templates.</li>
+</ul>
+<h2>Execution Strategy</h2>
+<ul>
+<li>Create metadata utility reading COMMIT_SHA and CI vars with local git fallback.</li>
+<li>Wire utility into Eleventy build outputs.</li>
+</ul>
+<h2>Trigger Command</h2>
+<p><code>CI=true npm test</code></p>

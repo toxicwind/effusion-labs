@@ -1,0 +1,10 @@
+<h1>20250813-hero-image-perf</h1>
+<h2>Status</h2>
+<p>Accepted</p>
+<h2>Context</h2>
+<p>Hero logo used default lazy loading which delayed first paint.</p>
+<h2>Decision</h2>
+<p>Load logo eagerly with high fetch priority and explicit 112px dimensions; centralize values in
+branding data.</p>
+<h2>Consequences</h2>
+<p>Improves initial render performance; tests guard the attributes for future changes.</p>

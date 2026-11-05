@@ -1,0 +1,13 @@
+<h1>20250814-feed-build-metadata</h1>
+<h2>Status</h2>
+<p>Accepted</p>
+<h2>Context</h2>
+<p>The RSS feed lacked explicit provenance, limiting transparency and cache friendliness.</p>
+<h2>Decision</h2>
+<p>Expose commit hash and build timestamp via Eleventy global data and render them within the feed
+template.</p>
+<h2>Consequences</h2>
+<ul>
+<li>Reveals build origin for consumers and debuggers.</li>
+<li>Enables deterministic feed metadata for external caches.</li>
+</ul>

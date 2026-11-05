@@ -1,0 +1,125 @@
+{
+  "type": "product",
+  "product_id": "pop-mart--the-monsters--mokoko--twinkly-fairy-tale--pendant--std--17cm--20241128",
+  "brand": "pop-mart",
+  "line": "the-monsters",
+  "character": "mokoko",
+  "series": "twinkly-fairy-tale",
+  "form": "Keychain pendant",
+  "variant": "std",
+  "edition": {
+    "kind": "core"
+  },
+  "distribution": {
+    "region_lock": false,
+    "markets": ["CN"]
+  },
+  "size": {
+    "unit": "cm",
+    "h": 17
+  },
+  "release_date": "2024-11-28",
+  "market_listings": [
+    {
+      "market": "CN",
+      "currency": "CNY",
+      "price": 159
+    }
+  ],
+  "availability": {
+    "limited": false,
+    "unit_count": null
+  },
+  "images": [],
+  "provenance_ref": "/content/archives/collectables/designer-toys/pop-mart/the-monsters/provenance/pop-mart--the-monsters--mokoko--twinkly-fairy-tale--pendant--std--17cm--20241128.jsonl",
+  "confidence": 0.45,
+  "notes": "Seeded from initial article; requires re-research.",
+  "product_title": "Twinkly Fairy Tale",
+  "materials": {
+    "shell": "PVC",
+    "plush": "Polyester",
+    "stuffing": null
+  },
+  "packaging": {
+    "type": "Fairy tale themed",
+    "dimensions_cm": null
+  },
+  "release_info": {
+    "release_date": "2024-11-28",
+    "edition_type": "Series",
+    "edition_size": null
+  },
+  "pricing": {
+    "original_msrp": {
+      "CNY": 159
+    },
+    "current_status": "In stock",
+    "secondary_market_range": null,
+    "pendant_msrp": null
+  },
+  "designer": "Kasing Lung",
+  "accessories": ["Card holder feature"],
+  "colorway": "Twinkly fairy colorway",
+  "Deltas": [
+    {
+      "field": "product_id",
+      "from": "pop-mart--the-monsters--mokoko--twinkly-fairy-tale--pendant--std--17cm--20241128",
+      "to": "pop-mart--the-monsters--mokoko--twinkly-fairy-tale--pendant--std--17cm--20241128",
+      "reason": "kept-existing"
+    },
+    {
+      "field": "brand",
+      "from": "pop-mart",
+      "to": "pop-mart",
+      "reason": "kept-existing"
+    },
+    {
+      "field": "line",
+      "from": "the-monsters",
+      "to": "the-monsters",
+      "reason": "kept-existing"
+    },
+    {
+      "field": "character",
+      "from": "mokoko",
+      "to": "mokoko",
+      "reason": "kept-existing"
+    },
+    {
+      "field": "series",
+      "from": "twinkly-fairy-tale",
+      "to": "twinkly-fairy-tale",
+      "reason": "kept-existing"
+    },
+    {
+      "field": "form",
+      "from": "pendant",
+      "to": "Keychain pendant",
+      "reason": "specificity"
+    },
+    {
+      "field": "size",
+      "from": {
+        "unit": "cm",
+        "h": 17
+      },
+      "to": {
+        "unit": "cm",
+        "h": 17
+      },
+      "reason": "same"
+    },
+    {
+      "field": "availability",
+      "from": {
+        "limited": false,
+        "unit_count": null
+      },
+      "to": {
+        "limited": false,
+        "unit_count": null
+      },
+      "reason": "same"
+    }
+  ]
+}

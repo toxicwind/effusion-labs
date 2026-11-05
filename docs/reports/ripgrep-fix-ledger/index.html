@@ -1,0 +1,32 @@
+<h1>ripgrep-fix Ledger</h1>
+<h2>Criteria</h2>
+<ol>
+<li>
+<p>Remove <code>@vscode/ripgrep</code> dev dependency to avoid GitHub download failures.</p>
+</li>
+<li>
+<p><code>prepare-docs</code> script no longer auto-installs ripgrep.</p>
+</li>
+<li>
+<p>README reflects manual ripgrep requirement.</p>
+</li>
+<li>
+<p>Remove <code>ripgrep-bin</code> dev dependency to avoid build tool requirement.</p>
+</li>
+</ol>
+<h2>Proofs</h2>
+<ul>
+<li><code>test/unit/ripgrep.test.mjs</code> checks absence of <code>@vscode/ripgrep</code> and script content.</li>
+<li><code>docs/knowledge/ripgrep/test-success.log</code> shows passing tests.</li>
+<li><code>docs/knowledge/ripgrep/docs-validate.log</code> records successful docs validation.</li>
+<li>package.json and package-lock.json omit <code>ripgrep-bin</code>.</li>
+</ul>
+<h2>Index</h2>
+<p>4/4 criteria satisfied.</p>
+<h2>Delta Queue</h2>
+<ul>
+<li>none</li>
+</ul>
+<h2>Rollback</h2>
+<p>Last safe commit: <code>7cdbb005636873796df6d63c5d2040dd19ef6b75</code> Rollback command:
+<code>git reset --hard 7cdbb005636873796df6d63c5d2040dd19ef6b75</code></p>

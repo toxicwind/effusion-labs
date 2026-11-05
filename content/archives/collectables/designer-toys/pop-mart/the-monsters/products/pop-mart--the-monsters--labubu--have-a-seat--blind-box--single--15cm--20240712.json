@@ -1,0 +1,47 @@
+{
+  "type": "product",
+  "product_id": "pop-mart--the-monsters--labubu--have-a-seat--blind-box--single--15cm--20240712",
+  "brand": "pop-mart",
+  "line": "the-monsters",
+  "character": "labubu",
+  "series": "have-a-seat",
+  "form": "blind-box",
+  "variant": "single",
+  "edition": {
+    "kind": "collab"
+  },
+  "distribution": {
+    "region_lock": false,
+    "markets": [
+      "CN",
+      "US"
+    ]
+  },
+  "size": {
+    "unit": "cm",
+    "h": 15,
+    "w": 7,
+    "d": 8
+  },
+  "release_date": "2024-07-12",
+  "market_listings": [
+    {
+      "market": "US",
+      "currency": "USD",
+      "price": 21.99
+    },
+    {
+      "market": "CN",
+      "currency": "CNY",
+      "price": 29
+    }
+  ],
+  "availability": {
+    "limited": false,
+    "unit_count": null
+  },
+  "images": [],
+  "provenance_ref": "/content/archives/collectables/designer-toys/pop-mart/the-monsters/provenance/pop-mart--the-monsters--labubu--have-a-seat--blind-box--single--15cm--20240712.jsonl",
+  "confidence": 0.45,
+  "notes": "Seeded from initial article; requires re-research."
+}

@@ -1,0 +1,192 @@
+
+<!DOCTYPE html>
+<html lang="en" data-theme="dark" class="scroll-pt-16 dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Effusion Labs: Core Concept | Effusion Labs</title>
+
+  <meta name="color-scheme" content="dark light">
+  <script>(function(){
+  const storageKey = 'theme';
+  const doc = document.documentElement;
+  const stored = localStorage.getItem(storageKey);
+  const meta = document.querySelector('meta[name="color-scheme"]') || (function(){
+    const m = document.createElement('meta');
+    m.name = 'color-scheme';
+    document.head.appendChild(m);
+    return m;
+  })();
+  let theme = stored;
+  if (theme !== 'dark' && theme !== 'light') {
+    theme = 'dark';
+  }
+  doc.dataset.theme = theme;
+  doc.classList.toggle('dark', theme === 'dark');
+  meta.content = theme === 'light' ? 'light dark' : 'dark light';
+})();
+</script>
+
+  <link rel="stylesheet" href="/assets/css/app.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <script src="/assets/js/lucide.min.js"></script>
+</head>
+
+<body class="bg-background text-text font-body leading-relaxed text-[17px]">
+  <a href="#main" class="skip-link">Skip to main content</a>
+  <header class="sticky top-0 z-40 w-full bg-base-100/90 backdrop-blur shadow">
+  <div class="navbar mx-auto max-w-screen-2xl px-6">
+    <div class="flex-1">
+      <a href="/" class="flex items-center gap-2 font-heading text-3xl text-primary">
+        <i data-lucide="flask-conical" class="w-6 h-6"></i><span>Effusion Labs</span>
+      </a>
+    </div>
+    <div class="flex-none lg:hidden">
+      <div class="dropdown dropdown-end">
+        <label tabindex="0" class="btn btn-ghost btn-square">
+          <i data-lucide="menu" class="w-6 h-6"></i>
+        </label>
+        <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-40">
+          
+          <li><a href="/">Showcase</a></li>
+          
+          <li><a href="/sparks/">Sparks</a></li>
+          
+          <li><a href="/concepts/">Concepts</a></li>
+          
+          <li><a href="/projects/">Projects</a></li>
+          
+          <li><a href="/archives/">Archives</a></li>
+          
+          <li><a href="/meta/">Meta</a></li>
+          
+          <li><a href="/map/">Map</a></li>
+          
+          <li><a href="/consulting/">Consulting</a></li>
+          
+        </ul>
+      </div>
+    </div>
+    <div class="flex-none flex items-center gap-2">
+      <button id="theme-toggle" class="btn btn-ghost btn-square" aria-label="Switch to light theme" aria-pressed="true">
+        <span class="sr-only">Toggle theme</span>
+        <i data-lucide="sun" class="w-6 h-6 hidden"></i>
+        <i data-lucide="moon" class="w-6 h-6"></i>
+      </button>
+    </div>
+    <nav class="flex-none hidden lg:flex">
+      <ul class="menu menu-horizontal px-1">
+        
+        <li><a href="/" class="hover:text-primary">Showcase</a></li>
+        
+        <li><a href="/sparks/" class="hover:text-primary">Sparks</a></li>
+        
+        <li><a href="/concepts/" class="hover:text-primary">Concepts</a></li>
+        
+        <li><a href="/projects/" class="hover:text-primary">Projects</a></li>
+        
+        <li><a href="/archives/" class="hover:text-primary">Archives</a></li>
+        
+        <li><a href="/meta/" class="hover:text-primary">Meta</a></li>
+        
+        <li><a href="/map/" class="hover:text-primary">Map</a></li>
+        
+        <li><a href="/consulting/" class="hover:text-primary">Consulting</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</header>
+
+
+  <div class="mx-auto max-w-screen-2xl px-6">
+    
+    
+
+    <main id="main" class="
+      xl:grid xl:gap-10 xl:grid-cols-[1fr_16rem]
+       mt-12
+    ">
+      <article class="prose dark:prose-invert max-w-none m-0
+         xl:col-span-1 
+      ">
+        
+          <header class="mb-8">
+            <h1 class="font-heading text-primary text-4xl tracking-wider">Effusion Labs: Core Concept</h1>
+          </header>
+        
+        <blockquote><p><em>Effusion Labs is a structured environment for capturing ideas, tracing their lineage, and observing how coherence forms under constraint.</em></p>
+</blockquote><hr>
+<h2>⌬ Preamble</h2>
+<p>Effusion Labs operates as a <strong>digital garden</strong> rather than a linear publication stream. The site is designed to hold partial insight, iterative refinement, and layered cross-reference without forcing premature closure. Each document acts as a node inside an expanding knowledge graph; none are expected to exhaust a subject.</p>
+<p>Observation is preferred over declaration. Systemic behaviour, tool interaction, and aesthetic signals are recorded in direct language, leaving interpretation for later synthesis. Ambiguity is retained when it surfaces unanswered questions or competing explanations.</p>
+<p>Within this frame, personal narrative is limited. Biographical details appear only when they clarify a structural choice or methodological constraint. The authorial presence is that of a diagnostic operator, not a protagonist.</p>
+<hr>
+<h2>⌬ System Definition</h2>
+<p>Effusion Labs is an internal methodology for managing intellectual artefacts that resist quick resolution. Every text fragment, diagram, or prototype is stored as part of an unfolding inquiry. Documents remain in draft form until successive refinements stabilise them. Stability itself is provisional; revision remains an open affordance.</p>
+<p>Each node links to its predecessors through explicit handles, providing traceability for ideas that evolve across time and context.</p>
+<hr>
+<h2>⌬ Methodological Pipeline</h2>
+<p><a class="interlink" href="/meta/methodology/">Methodology</a></p>
+<hr>
+<h2>⌬ Human–LLM Collaboration</h2>
+<p>Effusion Labs is maintained through an explicit partnership between human author and language model. The human supplies context, intention, and curatorial judgement; the model supplies transformation, synthesis, and structured generation. Documents therefore represent a composite viewpoint: human prompts establish direction, while model outputs provide initial drafts and analytic scaffolding.</p>
+<p>Collaboration is documented, not hidden. Where the model influences wording or structure, that fact is treated as an observable input, subject to the same analytic scrutiny as any other constraint. The goal is not to erase the boundary between human and model, but to use it as an experimental surface for studying mixed‑agency knowledge systems.</p>
+<hr>
+<h2>⌬ Design Logic</h2>
+<p>Text is organised in longform paragraphs to preserve nuance. Compression is avoided when it would obscure decision paths or strip context necessary for later recombination. Each paragraph exposes the premises that anchor its claims, enabling downstream audit without additional excavation.</p>
+<p>Clarity is achieved through linkage, not summary. A node signals its position inside the wider document network; readers navigate outward when additional context is required. Uncertainty is recorded rather than resolved, because open questions constitute structural data.</p>
+<hr>
+<h2>⌬ Architectural Commitments</h2>
+<p>The garden is implemented in plain markdown for portability and version control. YAML front matter encodes metadata for automated indexing and retrieval. Internal links use stable handles, allowing references to survive directory changes.</p>
+<p>Every node ends with a fork block instead of a conclusion. Forks present live pointers to unresolved paths, keeping the document in an active state. Revision history remains visible so that reasoning steps and change decisions can be inspected.</p>
+<p>Suppression events—such as refusal logic or policy‑induced truncation—are logged when they occur. These artefacts are treated as interface signals and become part of the observable dataset.</p>
+<hr>
+<h2>⌬ Related Documents</h2>
+<ul>
+<li><a class="interlink" href="/meta/style-guide/">Effusion Labs: Style Guide</a> :: formal specification for tone, structure, and formatting.</li>
+</ul>
+
+      </article>
+
+      
+      <aside class="w-full mt-10 text-sm opacity-90 border-t border-border pt-4 xl:mt-0 xl:w-64 xl:pl-4 xl:border-t-0 xl:border-l">
+        <div class="space-y-2 xl:sticky xl:top-28">
+          <h2 class="font-heading text-lg font-semibold tracking-wide">Meta</h2>
+          <ul class="space-y-1 text-text">
+            <li><strong>Status:</strong> stable</li>
+            
+              <li><strong>Date:</strong>
+                <time datetime="2025-07-01">July 1st, 2025</time>
+              </li>
+            
+            <li><strong>Certainty:</strong> high</li>
+            <li><strong>Importance:</strong> 3</li>
+            
+              <li><strong>Tags:</strong>
+                <ul class="pl-4 list-disc"><li>concepts</li><li>core-concept</li><li>methodology</li><li>digital-garden</li></ul>
+              </li>
+            
+            
+              <li><strong>Memory Ref:</strong>
+                <ul class="pl-4 list-disc"><li>effusion_style_guide</li></ul>
+              </li>
+            
+          </ul>
+        </div>
+      </aside>
+      
+    </main>
+
+    <footer class="mt-16 p-8 text-center text-sm text-text/60">
+      &copy; 2025 Effusion Labs. A space for creative synthesis.
+    </footer>
+  </div>
+
+  <script>lucide.createIcons();</script>
+  <script src="/assets/js/theme-toggle.js" defer=""></script>
+  <script src="/assets/js/footnote-nav.js" defer=""></script>
+</body>
+</html>

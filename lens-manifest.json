@@ -1,0 +1,3109 @@
+{
+  "generated": "2026-11-05T08:09:14.917Z",
+  "organism": "effusion-labs autonomous knowledge organism",
+  "pages": 141,
+  "items": [
+    {
+      "path": "src/content/concepts/aesthetic-inquiry.md",
+      "title": "The Aesthetic of the Protocol: An Inquiry into the Effusion Labs Project as a Systems-Based Art Object",
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/concepts/agent-paradigms-audit-2026.md",
+      "title": "The 2026 Agent-Paradigms Audit: From In-Context Prompt Hacks to Orchestration-as-Infrastructure",
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/concepts/atlas-process.md",
+      "title": "The Atlas of a Process: A Synthesis of the Effusion Labs Operating System",
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/concepts/autocatalytic-system.md",
+      "title": "The Site as an Autocatalytic System: A Final Synthesis",
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/concepts/block-ledger.md",
+      "title": "Block Ledger",
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/concepts/compliant-spire.md",
+      "title": "The Compliant Spire: Emergent Structures in Constrained Generative Systems",
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/concepts/core-concept.md",
+      "title": "Effusion Labs: Core Concept",
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/concepts/ghost-byline.md",
+      "title": "The Ghost in the Byline: On the Structural Honesty of a Co-Authored Text",
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/concepts/ghost-engine.md",
+      "title": "The Ghost in the Engine: On the Unseen Architecture of the Effusion Labs Protocol",
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/concepts/parroting-mimicry.md",
+      "title": "On The Sociality Of Stochastic Parrots",
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/concepts/readers-journey.md",
+      "title": "The Reader's Journey and the Divergence from the Singular Author Model",
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/concepts/rhizomatic-protocol.md",
+      "title": "The Rhizomatic Protocol: A Corrected Model of the Effusion Labs System",
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/concepts/the-workshop-and-the-weather.md",
+      "title": "The Workshop and the Weather: A Retreat from Metaphor in Analyzing Generative Systems",
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/concepts/three-studies-sensory.md",
+      "title": "Three Studies in Embodied Regulation",
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/concepts/verification-is-an-ecology.md",
+      "title": "A Field Guide to the Ecology of Doubt",
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/concepts/workshop-weather.md",
+      "title": "The Workshop and the Weather: A Retreat from Metaphor in Analyzing Generative Systems",
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/docs/adr/20250813-hero-image-perf.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "unanimous",
+        "quorumMean": 0.904,
+        "confidence": 0.665,
+        "dissent": 0
+      }
+    },
+    {
+      "path": "src/content/docs/adr/20250813-truncate-filter.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/docs/adr/20250814-code-copy.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "unanimous",
+        "quorumMean": 0.904,
+        "confidence": 0.665,
+        "dissent": 0
+      }
+    },
+    {
+      "path": "src/content/docs/adr/20250814-feed-build-metadata.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "unanimous",
+        "quorumMean": 0.904,
+        "confidence": 0.665,
+        "dissent": 0
+      }
+    },
+    {
+      "path": "src/content/docs/adr/20250814-footnote-highlight.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "unanimous",
+        "quorumMean": 0.904,
+        "confidence": 0.665,
+        "dissent": 0
+      }
+    },
+    {
+      "path": "src/content/docs/adr/20250814-monsters-hub.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "unanimous",
+        "quorumMean": 0.904,
+        "confidence": 0.665,
+        "dissent": 0
+      }
+    },
+    {
+      "path": "src/content/docs/adr/20250814-nav-ledger.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/docs/adr/20250814-spark-status.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "unanimous",
+        "quorumMean": 0.904,
+        "confidence": 0.665,
+        "dissent": 0
+      }
+    },
+    {
+      "path": "src/content/docs/adr/20250816-carbon-handshake.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/docs/adr/20250829-unified-collection-layout.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/docs/knowledge/branch-policy.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/docs/knowledge/node-shim-prove.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/docs/knowledge/product-template-fail.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/docs/knowledge/utils-test-green.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "unanimous",
+        "quorumMean": 0.904,
+        "confidence": 0.665,
+        "dissent": 0
+      }
+    },
+    {
+      "path": "src/content/docs/knowledge/utils-test-red.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/docs/reports/2025-08-20-shiki-migration.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "unanimous",
+        "quorumMean": 0.904,
+        "confidence": 0.665,
+        "dissent": 0
+      }
+    },
+    {
+      "path": "src/content/docs/reports/20250911T175310Z.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/docs/reports/20250911T175533Z.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/docs/reports/20250913T180936Z.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "unanimous",
+        "quorumMean": 0.904,
+        "confidence": 0.665,
+        "dissent": 0
+      }
+    },
+    {
+      "path": "src/content/docs/reports/archive-normalization-audit.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/docs/reports/archive-normalization-continue.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/docs/reports/archive-normalization-ledger.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/docs/reports/content-outlook-index.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/docs/reports/content-reorg-plan.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/docs/reports/continuous-output-continue.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "unanimous",
+        "quorumMean": 0.904,
+        "confidence": 0.665,
+        "dissent": 0
+      }
+    },
+    {
+      "path": "src/content/docs/reports/continuous-output-ledger.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/docs/reports/deploy-workflow-continue.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "unanimous",
+        "quorumMean": 0.904,
+        "confidence": 0.665,
+        "dissent": 0
+      }
+    },
+    {
+      "path": "src/content/docs/reports/deploy-workflow-ledger.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "unanimous",
+        "quorumMean": 0.904,
+        "confidence": 0.665,
+        "dissent": 0
+      }
+    },
+    {
+      "path": "src/content/docs/reports/eleventy-runner-continue.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/docs/reports/eleventy-runner-ledger.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/docs/reports/esm-audit-20250820T215642Z.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/docs/reports/exec-surface.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/docs/reports/external-arrow-continue.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/docs/reports/external-arrow-ledger.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/docs/reports/gha-actions-upgrade-continue.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "unanimous",
+        "quorumMean": 0.904,
+        "confidence": 0.665,
+        "dissent": 0
+      }
+    },
+    {
+      "path": "src/content/docs/reports/gha-actions-upgrade-ledger.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/docs/reports/homepage-hero-continue.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "unanimous",
+        "quorumMean": 0.904,
+        "confidence": 0.665,
+        "dissent": 0
+      }
+    },
+    {
+      "path": "src/content/docs/reports/homepage-hero-ledger.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "unanimous",
+        "quorumMean": 0.904,
+        "confidence": 0.665,
+        "dissent": 0
+      }
+    },
+    {
+      "path": "src/content/docs/reports/homepage-latest-entries-continue.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/docs/reports/homepage-latest-entries-ledger.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/docs/reports/homepage-logo-continue.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/docs/reports/homepage-logo-ledger.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/docs/reports/image-filename-seo-continue.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/docs/reports/image-filename-seo-ledger.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "unanimous",
+        "quorumMean": 0.904,
+        "confidence": 0.665,
+        "dissent": 0
+      }
+    },
+    {
+      "path": "src/content/docs/reports/link-hygiene-r3-continue.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/docs/reports/link-hygiene-r3-ledger.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/docs/reports/llm-keepalive-continue.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/docs/reports/llm-keepalive-ledger.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/docs/reports/logo-image-transform-continue.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/docs/reports/logo-image-transform-ledger.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/docs/reports/monsters-product-metadata-continue.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/docs/reports/monsters-product-metadata-ledger.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/docs/reports/mschf-overlay-continue.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/docs/reports/mschf-overlay-ledger.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/docs/reports/node-shim-continue.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "unanimous",
+        "quorumMean": 0.904,
+        "confidence": 0.665,
+        "dissent": 0
+      }
+    },
+    {
+      "path": "src/content/docs/reports/node-shim-ledger.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/docs/reports/pop-mart-provenance-continue.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/docs/reports/pop-mart-provenance-ledger.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/docs/reports/prettier-guardrails-continue.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "unanimous",
+        "quorumMean": 0.904,
+        "confidence": 0.665,
+        "dissent": 0
+      }
+    },
+    {
+      "path": "src/content/docs/reports/prettier-guardrails-ledger.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/docs/reports/products-template-continue.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "unanimous",
+        "quorumMean": 0.904,
+        "confidence": 0.665,
+        "dissent": 0
+      }
+    },
+    {
+      "path": "src/content/docs/reports/products-template-ledger.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "unanimous",
+        "quorumMean": 0.904,
+        "confidence": 0.665,
+        "dissent": 0
+      }
+    },
+    {
+      "path": "src/content/docs/reports/research-ingest-continue.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/docs/reports/research-ingest-ledger.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/docs/reports/responsive-logo-continue.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "unanimous",
+        "quorumMean": 0.904,
+        "confidence": 0.665,
+        "dissent": 0
+      }
+    },
+    {
+      "path": "src/content/docs/reports/responsive-logo-ledger.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/docs/reports/ripgrep-fix-continue.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/docs/reports/ripgrep-fix-ledger.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/docs/reports/site-redesign-r3-continue.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "unanimous",
+        "quorumMean": 0.904,
+        "confidence": 0.665,
+        "dissent": 0
+      }
+    },
+    {
+      "path": "src/content/docs/reports/site-redesign-r3-ledger.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "unanimous",
+        "quorumMean": 0.904,
+        "confidence": 0.665,
+        "dissent": 0
+      }
+    },
+    {
+      "path": "src/content/docs/reports/solver-url-env-continue.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "unanimous",
+        "quorumMean": 0.904,
+        "confidence": 0.665,
+        "dissent": 0
+      }
+    },
+    {
+      "path": "src/content/docs/reports/solver-url-env-ledger.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "unanimous",
+        "quorumMean": 0.904,
+        "confidence": 0.665,
+        "dissent": 0
+      }
+    },
+    {
+      "path": "src/content/docs/reports/stabilize-ci-tests-continue.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/docs/reports/stabilize-ci-tests-ledger.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "unanimous",
+        "quorumMean": 0.904,
+        "confidence": 0.665,
+        "dissent": 0
+      }
+    },
+    {
+      "path": "src/content/docs/reports/tags-metadata-continue.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/docs/reports/tags-metadata-ledger.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/docs/reports/tests-green-continue.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "unanimous",
+        "quorumMean": 0.904,
+        "confidence": 0.665,
+        "dissent": 0
+      }
+    },
+    {
+      "path": "src/content/docs/reports/tests-green-ledger.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/docs/reports/typography-colors-continue.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/docs/reports/typography-colors-ledger.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "unanimous",
+        "quorumMean": 0.904,
+        "confidence": 0.665,
+        "dissent": 0
+      }
+    },
+    {
+      "path": "src/content/docs/reports/utils-ordinal-suffix-continue.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/docs/reports/utils-ordinal-suffix-ledger.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "unanimous",
+        "quorumMean": 0.904,
+        "confidence": 0.665,
+        "dissent": 0
+      }
+    },
+    {
+      "path": "src/content/docs/reports/work-pages-continue.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/docs/reports/work-pages-ledger.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/docs/stream-guard-3500.md",
+      "title": "Stream Guard — 3500 default",
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "unanimous",
+        "quorumMean": 0.904,
+        "confidence": 0.665,
+        "dissent": 0
+      }
+    },
+    {
+      "path": "src/content/docs/theming.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "unanimous",
+        "quorumMean": 0.904,
+        "confidence": 0.665,
+        "dissent": 0
+      }
+    },
+    {
+      "path": "src/content/docs/ux/mschf-overlay.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "unanimous",
+        "quorumMean": 0.904,
+        "confidence": 0.665,
+        "dissent": 0
+      }
+    },
+    {
+      "path": "src/content/docs/vendor/daisyui/README.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "unanimous",
+        "quorumMean": 0.904,
+        "confidence": 0.665,
+        "dissent": 0
+      }
+    },
+    {
+      "path": "src/content/docs/vendor/tailwind/README.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/docs/vendors/@11ty/eleventy/3.1.2/configuration.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/docs/vendors/@11ty/eleventy/3.1.2/getting-started.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/docs/vendors/daisyui/5.0.50/install.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/docs/vendors/index.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/docs/vendors/markdown-it/14.1.0/index.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/docs/vendors/nunjucks/3.2.4/templating.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/docs/vendors/postcss/8.5.6/index.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "unanimous",
+        "quorumMean": 0.904,
+        "confidence": 0.665,
+        "dissent": 0
+      }
+    },
+    {
+      "path": "src/content/docs/vendors/tailwindcss/4.1.11/readme.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "unanimous",
+        "quorumMean": 0.904,
+        "confidence": 0.665,
+        "dissent": 0
+      }
+    },
+    {
+      "path": "src/content/docs/worklogs/20250911T175310Z.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/docs/worklogs/20250911T175533Z.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/docs/worklogs/20250913T180936Z.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "unanimous",
+        "quorumMean": 0.904,
+        "confidence": 0.665,
+        "dissent": 0
+      }
+    },
+    {
+      "path": "src/content/docs/worklogs/20250914T025746Z-exec-surface.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/meta/a-b-curatorial-protocolist.md",
+      "title": "Comparative Analysis of Candidate Framework Designations",
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/meta/case-study-naming-the-protocol.md",
+      "title": null,
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/meta/colophon.md",
+      "title": "Colophon",
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/meta/content-architecture.md",
+      "title": "Content Architecture",
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/meta/core-protocol.md",
+      "title": "Core Protocol",
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "unanimous",
+        "quorumMean": 0.904,
+        "confidence": 0.665,
+        "dissent": 0
+      }
+    },
+    {
+      "path": "src/content/meta/curatorial-generativism.md",
+      "title": "Curatorial Generativism: An Artistic Framework",
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/meta/generative-protocol.md",
+      "title": "Generative Protocol",
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/meta/methodology.md",
+      "title": "Methodology",
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "unanimous",
+        "quorumMean": 0.904,
+        "confidence": 0.665,
+        "dissent": 0
+      }
+    },
+    {
+      "path": "src/content/meta/protocolist-framework.md",
+      "title": "The Protocolist Framework",
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/meta/protocolist.md",
+      "title": "The Protocolist Art Framework",
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/meta/style-guide-analytic-brutalism.md",
+      "title": "Style Guide: Hypebrüt (Analytic Brutalism)",
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/meta/style-guide.md",
+      "title": "Effusion Labs: Style Guide",
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/meta/unified-referencing-syntax.md",
+      "title": "The Unified Referencing Syntax",
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/projects/project-dandelion.md",
+      "title": "Project Dandelion: Structural Emergence in Restricted LLM Systems",
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/projects/safety-classifiers-unreliable-narrators.md",
+      "title": "The Refusal Is Not the Reason: Safety Classifiers as Unreliable Narrators",
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/sparks/academic-blindness.md",
+      "title": "The Recursive Shadow of Algorithmic Absence: An Archaeological Survey of the Invisible Infrastructure of Contemporary LLM Research",
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/sparks/breakfast-eggs.md",
+      "title": "The Semiotic Collapse of a Toasted Request: On the Emotional Thermodynamics of Eggs-on-Bread",
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/sparks/george-eastman-obscure.md",
+      "title": "George Eastman - A Life in Precision",
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/sparks/illusion-japan-nicotine.md",
+      "title": "The Illusion of Choice: Engineering Adult Agency in Japan’s Nicotine Market",
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/sparks/murakami-market-analysis-2025.md",
+      "title": "Takashi Murakami - Lithographs, Signed Works, and Small-format Prints: A 2025 Market Topography",
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/sparks/paulin-paulin-paulin-marketing.md",
+      "title": "How to Manufacture a Legacy: The Pierre Paulin Estate Between Preservation and Product",
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/sparks/smoker-sysadmin.md",
+      "title": "The Smoker as Sysadmin: Managing the Self in Japan's Nicotine Technopoly",
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/content/sparks/vapor-linked-governance.md",
+      "title": "Vapor-Linked Governance: How Japan Made Tobacco a Civic Utility",
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    },
+    {
+      "path": "src/pages/organism.md",
+      "title": "The Organism",
+      "lenses": [
+        "ast_dependency",
+        "cryptographic",
+        "osint",
+        "probabilistic",
+        "quantum_superposition",
+        "semantic",
+        "strata_debt",
+        "stylometric",
+        "tectonic",
+        "temporal_drift"
+      ],
+      "consensus": {
+        "status": "dissent",
+        "quorumMean": 0.894,
+        "confidence": 0.665,
+        "dissent": 1
+      }
+    }
+  ]
+}

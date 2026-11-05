@@ -1,0 +1,16 @@
+<h1>llm-keepalive Ledger</h1>
+<h2>Criteria</h2>
+<ol>
+<li>Keepalive module emits heartbeat to stderr.</li>
+<li>First SIGINT ignored; second exits with code 130.</li>
+</ol>
+<h2>Proof</h2>
+<ul>
+<li>test: <code>test/unit/llm-keepalive.test.mjs</code></li>
+<li>passing run: see chunk 606e9d</li>
+</ul>
+<h2>Rollback</h2>
+<ul>
+<li>last safe SHA: bbe538a</li>
+<li>rollback command: <code>git revert bbe538a</code></li>
+</ul>

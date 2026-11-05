@@ -1,0 +1,17 @@
+<p>The stream guard is enabled by sourcing <code>utils/scripts/setup/env-bootstrap.sh</code>.</p>
+<ul>
+<li>Default width: 3500 bytes (<code>HB_FILTER_W</code> overrides).</li>
+<li>Flush threshold: ~4× width (<code>HB_FILTER_FLUSH</code> overrides).</li>
+<li>Per-process sidecars: <code>.hb-logs/&lt;PID&gt;.stdout.log</code> and <code>.hb-logs/&lt;PID&gt;.stderr.log</code> capture the raw
+stream.</li>
+<li>Allowed control bytes: TAB, LF, CR, ESC, BS, VT, FF. Backspace is sanitized before windowing.</li>
+<li>Unsafe control bytes (NUL, DEL, and other disallowed C0) are dropped from console and summarized
+once per window as <code>[HBBIN suppressed N bytes]</code>. Sidecars retain raw bytes.</li>
+<li>Long lines are wrapped with markers <code>[HBWRAP i/n a..b] &lt;chunk&gt;</code>.</li>
+</ul>
+<p>Helpers exported when armed:</p>
+<ul>
+<li><code>hb_status</code>: prints guard status to stderr.</li>
+<li><code>hb_disarm</code>: restores FDs and cleans up.</li>
+<li><code>hb_run &lt;cmd&gt;</code>: runs a command under PTY or line-buffered where available to preserve streaming.</li>
+</ul>

@@ -1,0 +1,22 @@
+<h1>gha-actions-upgrade Ledger</h1>
+<h2>Criteria</h2>
+<ol>
+<li>GitHub workflows use actions/checkout@v4.</li>
+<li>Workflows use actions/setup-node@v4 in all jobs.</li>
+<li>Deploy workflow uses actions/upload-artifact@v4.</li>
+</ol>
+<h2>Proofs</h2>
+<ul>
+<li><code>test/unit/workflow-actions.test.mjs</code> checks for legacy action versions.</li>
+<li><code>docs/knowledge/gha-actions-upgrade/test-success.log</code> shows passing targeted tests.</li>
+<li><code>docs/knowledge/gha-actions-upgrade/docs-links.log</code> records successful docs link validation.</li>
+</ul>
+<h2>Index</h2>
+<p>3/3 criteria satisfied.</p>
+<h2>Delta Queue</h2>
+<ul>
+<li>none</li>
+</ul>
+<h2>Rollback</h2>
+<p>Last safe commit: <code>4aa4905d66b18635c624278daea324dac1c012ca</code> Rollback command:
+<code>git reset --hard 4aa4905d66b18635c624278daea324dac1c012ca</code></p>

@@ -1,0 +1,26 @@
+<h1>tags-metadata Ledger</h1>
+<h2>Criteria</h2>
+<ol>
+<li>Metadata fields <code>tags</code>, <code>analytic_lens</code>, <code>memory_ref</code> and <code>spark_type</code> merge into a unified
+<code>tags</code> array.</li>
+<li><code>spark_type</code> surfaces as <code>categories</code> via global computed data.</li>
+<li><code>@quasibit/eleventy-plugin-schema@1.11.1</code> installed and registered.</li>
+</ol>
+<h2>Proofs</h2>
+<ul>
+<li><code>test/unit/taxonomy.test.mjs</code> exercises tag and category computation.</li>
+<li><code>docs/knowledge/tags-metadata/test-green.log</code> shows passing tests.</li>
+<li><code>docs/knowledge/tags-metadata/docs-links.log</code> validates README links.</li>
+<li><code>package-lock.json</code> lists <code>@quasibit/eleventy-plugin-schema@1.11.1</code> with integrity
+<code>sha512-Ln5VGI40txKJCbDX/ndXJp9lJOUHH75IpHn2E15uUN4LBRVW4BS/rimOL1iBVpnqJwFoVr3c+OubtC7sEQK9+w==</code>
+(MIT, https://github.com/quasibit/eleventy-plugin-schema).</li>
+</ul>
+<h2>Index</h2>
+<p>3/3 criteria satisfied.</p>
+<h2>Delta Queue</h2>
+<ul>
+<li>none</li>
+</ul>
+<h2>Rollback</h2>
+<p>Last safe commit: <code>836a84f20c2ded905792fd2806545c28e2c3ee4a</code> Rollback command:
+<code>git reset --hard 836a84f20c2ded905792fd2806545c28e2c3ee4a</code></p>

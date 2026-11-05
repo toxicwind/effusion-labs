@@ -1,0 +1,142 @@
+{
+  "type": "product",
+  "product_id": "pop-mart--the-monsters--labubu--flip-with-me--plush--std--40cm--20240712",
+  "brand": "pop-mart",
+  "line": "the-monsters",
+  "character": "labubu",
+  "series": "flip-with-me",
+  "form": "Vinyl plush doll",
+  "variant": "std",
+  "edition": {
+    "kind": "core"
+  },
+  "distribution": {
+    "region_lock": false,
+    "markets": ["CN", "US"]
+  },
+  "size": {
+    "unit": "cm",
+    "h": 40,
+    "w": 20,
+    "d": 15
+  },
+  "release_date": "2024-07-12",
+  "market_listings": [
+    {
+      "market": "CN",
+      "currency": "CNY",
+      "price": 499
+    },
+    {
+      "market": "US",
+      "currency": "USD",
+      "price": 84.99
+    }
+  ],
+  "availability": {
+    "limited": false,
+    "unit_count": null
+  },
+  "images": [],
+  "provenance_ref": "/content/archives/collectables/designer-toys/pop-mart/the-monsters/provenance/pop-mart--the-monsters--labubu--flip-with-me--plush--std--40cm--20240712.jsonl",
+  "confidence": 0.45,
+  "notes": "Seeded from initial article; requires re-research.",
+  "product_title": "Flip with Me Vinyl Plush Doll",
+  "variant_name": "Blue and white striped button-down shirt, dark denim jeans, black and white sneakers, glasses",
+  "sku": "12401040004",
+  "materials": {
+    "shell": "40% Cotton, 17% PVC, 16% Polyester, 15% ABS, 12% TPR",
+    "plush": null,
+    "stuffing": "90% Polyester, 10% PE Particles"
+  },
+  "packaging": {
+    "type": "Color box with handle",
+    "dimensions_cm": "30×22×45"
+  },
+  "release_info": {
+    "release_date": "2024-07-12",
+    "edition_type": "Standard edition",
+    "edition_size": null
+  },
+  "pricing": {
+    "original_msrp": {
+      "USD": 84.99,
+      "CAD": 134.99,
+      "SGD": 109.9
+    },
+    "current_status": "Frequently sold out",
+    "secondary_market_range": {
+      "USD": "182-226"
+    }
+  },
+  "designer": "Kasing Lung (龙家升)",
+  "accessories": ["Removable glasses"],
+  "articulation": "Movable eyes with flip feature (spiral eyes), posable hands and head",
+  "colorway": "Cream-colored fur with blue striped shirt and denim pants",
+  "Deltas": [
+    {
+      "field": "product_id",
+      "from": "pop-mart--the-monsters--labubu--flip-with-me--plush--std--40cm--20240712",
+      "to": "pop-mart--the-monsters--labubu--flip-with-me--plush--std--40cm--20240712",
+      "reason": "kept-existing"
+    },
+    {
+      "field": "brand",
+      "from": "pop-mart",
+      "to": "pop-mart",
+      "reason": "kept-existing"
+    },
+    {
+      "field": "line",
+      "from": "the-monsters",
+      "to": "the-monsters",
+      "reason": "kept-existing"
+    },
+    {
+      "field": "character",
+      "from": "labubu",
+      "to": "labubu",
+      "reason": "kept-existing"
+    },
+    {
+      "field": "series",
+      "from": "flip-with-me",
+      "to": "flip-with-me",
+      "reason": "kept-existing"
+    },
+    {
+      "field": "form",
+      "from": "plush",
+      "to": "Vinyl plush doll",
+      "reason": "specificity"
+    },
+    {
+      "field": "size",
+      "from": {
+        "unit": "cm",
+        "h": 40,
+        "w": 20,
+        "d": 15
+      },
+      "to": {
+        "unit": "cm",
+        "h": 40,
+        "w": 20,
+        "d": 15
+      },
+      "reason": "same"
+    },
+    {
+      "field": "availability",
+      "from": {
+        "limited": false,
+        "unit_count": null
+      },
+      "to": {
+        "limited": false,
+        "unit_count": null
+      },
+      "reason": "same"
+    }
+  ]
+}

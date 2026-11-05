@@ -1,0 +1,654 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en" class="scroll-pt-16" data-theme="hypebrut">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="color-scheme" content="dark light">
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f7f5f3">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#16161a">
+    <meta name="msapplication-TileColor" content="#16161a">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <title>Popmart Analytics | Effusion Labs</title>
+    
+
+    
+      <link rel="canonical" href="/popmart/dashboard/" vite-ignore="">
+      <meta property="og:url" content="/popmart/dashboard/" vite-ignore="">
+    
+    <meta property="og:title" content="Popmart Analytics">
+    
+    <meta property="og:site_name" content="Effusion Labs">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Popmart Analytics">
+    
+
+    
+    
+
+    <script>
+      try {
+        const saved = localStorage.getItem('theme')
+        const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        document.documentElement.setAttribute('data-theme', saved || (prefersDark ? 'hypebrut' : 'silk'))
+      } catch (e) {}
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Manrope:wght@300..800&family=Plus+Jakarta+Sans:wght@400..800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="/assets/css/app.css">
+    <script type="module" src="/assets/js/app.js"></script>
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="icon" href="/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <meta name="apple-mobile-web-app-title" content="Effusion Labs">
+    <link rel="manifest" href="/site.webmanifest">
+  </head>
+  <body class="bg-base-100 text-base-content font-body antialiased">
+    
+      <div id="hud-layer" aria-hidden="true">
+        <div class="hud-scanner"></div>
+        <div class="hud-status">SYS.OP: NORMAL<br>LOC: EFFUSION_LABS</div>
+      </div>
+    
+
+    
+      <a href="#main" class="skiplink">Skip to content</a>
+      
+  
+  
+  
+  
+  
+
+  <header data-site-header="" class="relative w-full bg-base-100 border-b border-base-content/10 z-nav">
+    <div class="cluster justify-between max-w-screen-xl mx-auto px-gutter py-2">
+      <!-- Brand Cluster -->
+      <div class="flex items-center">
+        <a href="/" class="group cluster no-underline" aria-label="Effusion Labs — home" style="--space: var(--space-xs)">
+          <span class="hb-logo">
+            
+              <picture><source type="image/avif" srcset="/assets/images/LyPIi0QIAX-64.avif 64w" sizes="(max-width: 640px) 112px, 160px"><source type="image/webp" srcset="/assets/images/LyPIi0QIAX-64.webp 64w" sizes="(max-width: 640px) 112px, 160px"><img loading="lazy" decoding="async" src="/assets/images/LyPIi0QIAX-64.png" alt="Effusion Labs logo" width="64" height="64" class="hb-logo-img"></picture>
+            
+          </span>
+          <span class="stack leading-tight text-base-content" style="--space: 0.1rem">
+            <span class="text-xs uppercase tracking-[0.28em] text-base-content/60 font-mono">
+              Effusion Labs
+            </span>
+            <span class="cluster transition-opacity duration-300 group-hover:opacity-80" style="--space: var(--space-xs)">
+              <span class="font-heading text-h3 font-black tracking-tight group-hover:text-primary">
+                Effusion
+                <span class="text-secondary/80">Labs</span>
+              </span>
+              <span class="hb-scanbar hidden w-16 opacity-90 sm:inline-flex"></span>
+            </span>
+          </span>
+        </a>
+      </div>
+
+      <!-- Actions Cluster (Desktop Nav + Theme) -->
+      <div class="cluster" style="--space: var(--space-m)">
+        <nav class="hidden lg:block" aria-label="Primary navigation">
+          <ul class="menu cluster list-none p-0 m-0">
+    
+  
+    
+    
+    
+    
+    <li>
+      <a href="/" class="link link-hover rounded-sm px-1 py-0.5 text-sm font-semibold hover:text-primary transition-colors cursor-pointer ">
+        
+        <span>SHOWCASE</span>
+      </a>
+      
+    </li>
+  
+    
+    
+    
+    
+    <li>
+      <a href="/sparks/" class="link link-hover rounded-sm px-1 py-0.5 text-sm font-semibold hover:text-primary transition-colors cursor-pointer ">
+        
+        <span>SPARKS</span>
+      </a>
+      
+    </li>
+  
+    
+    
+    
+    
+    <li>
+      <a href="/concepts/" class="link link-hover rounded-sm px-1 py-0.5 text-sm font-semibold hover:text-primary transition-colors cursor-pointer ">
+        
+        <span>CONCEPTS</span>
+      </a>
+      
+    </li>
+  
+    
+    
+    
+    
+    <li>
+      <a href="/projects/" class="link link-hover rounded-sm px-1 py-0.5 text-sm font-semibold hover:text-primary transition-colors cursor-pointer ">
+        
+        <span>PROJECTS</span>
+      </a>
+      
+    </li>
+  
+    
+    
+    
+    
+    <li>
+      <a href="/archives/" class="link link-hover rounded-sm px-1 py-0.5 text-sm font-semibold hover:text-primary transition-colors cursor-pointer ">
+        
+        <span>ARCHIVES</span>
+      </a>
+      
+    </li>
+  
+    
+    
+    
+    
+    <li>
+      <a href="/meta/" class="link link-hover rounded-sm px-1 py-0.5 text-sm font-semibold hover:text-primary transition-colors cursor-pointer ">
+        
+        <span>META</span>
+      </a>
+      
+    </li>
+  
+    
+    
+    
+    
+    <li>
+      <a href="/map/" class="link link-hover rounded-sm px-1 py-0.5 text-sm font-semibold hover:text-primary transition-colors cursor-pointer ">
+        
+        <span>MAP</span>
+      </a>
+      
+    </li>
+  
+    
+    
+    
+    
+    <li>
+      <a href="/consulting/" class="link link-hover rounded-sm px-1 py-0.5 text-sm font-semibold hover:text-primary transition-colors cursor-pointer ">
+        
+        <span>CONSULTING</span>
+      </a>
+      
+    </li>
+  
+  </ul>
+        </nav>
+
+        <div class="cluster" style="--space: var(--space-xs)">
+          <!-- Theme Switching -->
+          <button id="theme-toggle" class="btn btn-ghost btn-circle btn-sm hb-anim" type="button" aria-label="Switch theme">
+            
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 lucide-sun" aria-hidden="true"></svg>
+  
+
+            
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 lucide-moon hidden" aria-hidden="true"></svg>
+  
+
+          </button>
+
+          <!-- Mobile trigger (DaisyUI Dropdown) -->
+          <div class="lg:hidden dropdown dropdown-end">
+            <label tabindex="0" class="btn btn-ghost btn-circle btn-sm" aria-label="Open menu">
+              
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5" aria-hidden="true"></svg>
+  
+
+            </label>
+            <ul class="menu menu-sm dropdown-content mt-3 z-modal p-4 shadow-2xl bg-base-100 rounded-box w-64 border border-base-content/5 stack">
+    
+  
+    
+    
+    
+    
+    <li>
+      <a href="/" class="link link-hover rounded-sm px-1 py-0.5 py-2 block w-full ">
+        
+        <span>SHOWCASE</span>
+      </a>
+      
+    </li>
+  
+    
+    
+    
+    
+    <li>
+      <a href="/sparks/" class="link link-hover rounded-sm px-1 py-0.5 py-2 block w-full ">
+        
+        <span>SPARKS</span>
+      </a>
+      
+    </li>
+  
+    
+    
+    
+    
+    <li>
+      <a href="/concepts/" class="link link-hover rounded-sm px-1 py-0.5 py-2 block w-full ">
+        
+        <span>CONCEPTS</span>
+      </a>
+      
+    </li>
+  
+    
+    
+    
+    
+    <li>
+      <a href="/projects/" class="link link-hover rounded-sm px-1 py-0.5 py-2 block w-full ">
+        
+        <span>PROJECTS</span>
+      </a>
+      
+    </li>
+  
+    
+    
+    
+    
+    <li>
+      <a href="/archives/" class="link link-hover rounded-sm px-1 py-0.5 py-2 block w-full ">
+        
+        <span>ARCHIVES</span>
+      </a>
+      
+    </li>
+  
+    
+    
+    
+    
+    <li>
+      <a href="/meta/" class="link link-hover rounded-sm px-1 py-0.5 py-2 block w-full ">
+        
+        <span>META</span>
+      </a>
+      
+    </li>
+  
+    
+    
+    
+    
+    <li>
+      <a href="/map/" class="link link-hover rounded-sm px-1 py-0.5 py-2 block w-full ">
+        
+        <span>MAP</span>
+      </a>
+      
+    </li>
+  
+    
+    
+    
+    
+    <li>
+      <a href="/consulting/" class="link link-hover rounded-sm px-1 py-0.5 py-2 block w-full ">
+        
+        <span>CONSULTING</span>
+      </a>
+      
+    </li>
+  
+  </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+    
+
+    
+    
+      
+    
+
+    <main id="main" class="min-h-[60vh] max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-10" tabindex="-1">
+      
+        <div class="xl:grid xl:grid-cols-[1fr_18rem] xl:gap-10" style="--space: var(--space-l)">
+          <article class="prose max-w-none m-0 xl:col-span-1">
+            
+              <header class="mb-6 lg:mb-8">
+                <h1 class="text-4xl sm:text-5xl md:text-6xl font-black tracking-tight leading-tight">Popmart Analytics</h1>
+                
+              </header>
+            
+            
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<div class="container mx-auto px-4 py-8" x-data="popmartDashboard">
+  <div class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
+    <div>
+        <h1 class="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-purple-500 hb-text-glow">Popmart Analytics</h1>
+        <p class="text-gray-400 mt-2">Global stock tracking & drop prediction</p>
+    </div>
+    
+    <button @click="triggerRecon" :disabled="scanning" class="px-6 py-2 bg-gradient-to-r from-pink-600 to-purple-600 rounded-lg font-bold hover:scale-105 transition-all flex items-center gap-2">
+        <span x-show="scanning" class="animate-spin text-xl">↻</span>
+        <span x-text="scanning ? 'Scanning...' : 'Trigger Recon'"></span>
+    </button>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+      <!-- Total tracked -->
+      <div class="hb-glass-card p-6 border-l-4 border-pink-500">
+          <h3 class="text-gray-400 text-sm uppercase tracking-wider">Tracked SKUs</h3>
+          <div class="text-4xl font-bold text-pink-400 mt-2">3,650</div>
+          <div class="text-xs text-green-400 mt-1">↑ 12 new today</div>
+      </div>
+      
+       <!-- Stock Out Rate -->
+      <div class="hb-glass-card p-6 border-l-4 border-purple-500">
+          <h3 class="text-gray-400 text-sm uppercase tracking-wider">Stock-Out Rate</h3>
+          <div class="text-4xl font-bold text-purple-400 mt-2">18.4%</div>
+          <div class="text-xs text-red-400 mt-1">↑ 2.1% vs yesterday</div>
+      </div>
+      
+       <!-- Next Drop -->
+      <div class="hb-glass-card p-6 border-l-4 border-blue-500">
+          <h3 class="text-gray-400 text-sm uppercase tracking-wider">Next Predicted Drop</h3>
+          <div class="text-2xl font-bold text-blue-400 mt-2">Friday, 10:00 AM</div>
+          <div class="text-xs text-blue-300 mt-1">"Skullpanda" Series</div>
+      </div>
+  </div>
+
+  <!-- Charts Row -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+      <div class="hb-glass-card p-6">
+          <h3 class="text-xl font-bold text-white mb-6">Stock Availability Trend</h3>
+          <canvas id="stockChart"></canvas>
+      </div>
+       <div class="hb-glass-card p-6">
+          <h3 class="text-xl font-bold text-white mb-6">Popular Series Heatmap</h3>
+          <canvas id="seriesChart"></canvas>
+      </div>
+  </div>
+  
+  <!-- Recon Log -->
+  <div class="hb-glass-card p-6">
+      <h3 class="text-xl font-bold text-white mb-4">Recon Activity Log</h3>
+      <div class="space-y-2 font-mono text-sm max-h-60 overflow-y-auto custom-scrollbar">
+          <template x-for="log in logs" :key="log.time">
+              <div class="flex gap-4 border-b border-white/5 py-2">
+                  <span class="text-gray-500" x-text="log.time"></span>
+                  <span :class="log.type === 'error' ? 'text-red-400' : 'text-emerald-400'" x-text="log.msg"></span>
+              </div>
+          </template>
+      </div>
+  </div>
+
+</div>
+
+<script type="module">
+  import { api } from '/assets/js/api-client.ts'
+  import Alpine from 'alpinejs'
+
+  document.addEventListener('alpine:init', () => {
+    Alpine.data('popmartDashboard', () => ({
+      scanning: false,
+      logs: [
+          {time: '10:00:01', msg: 'Scheduled scan completed'},
+          {time: '09:00:00', msg: 'System init'},
+      ],
+
+      async init() {
+          this.initCharts();
+      },
+      
+      async triggerRecon() {
+          this.scanning = true;
+          this.logs.unshift({time: new Date().toLocaleTimeString(), msg: 'Recon scan initiated...'});
+          try {
+              const res = await api.triggerPopmartRecon({id_start: 3600, id_end: 3620});
+              this.logs.unshift({time: new Date().toLocaleTimeString(), msg: `Task started: ${res.task_id}`});
+          } catch(e) {
+              this.logs.unshift({time: new Date().toLocaleTimeString(), msg: 'Scan failed', type: 'error'});
+          } finally {
+              setTimeout(() => this.scanning = false, 2000);
+          }
+      },
+
+      initCharts() {
+          const ctx1 = document.getElementById('stockChart');
+          new Chart(ctx1, {
+            type: 'line',
+            data: {
+              labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+              datasets: [{
+                label: 'In Stock Items',
+                data: [3200, 3180, 3150, 3100, 3300, 3250, 3200],
+                borderColor: '#c084fc',
+                tension: 0.4,
+                backgroundColor: 'rgba(192, 132, 252, 0.1)',
+                fill: true
+              }]
+            },
+            options: {
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: { grid: { color: 'rgba(255,255,255,0.05)' } },
+                    x: { grid: { color: 'rgba(255,255,255,0.05)' } }
+                }
+            }
+          });
+          
+          const ctx2 = document.getElementById('seriesChart');
+          new Chart(ctx2, {
+            type: 'doughnut',
+            data: {
+              labels: ['Molly', 'Dimoo', 'Skullpanda', 'Labubu', 'Crybaby'],
+              datasets: [{
+                data: [30, 20, 25, 15, 10],
+                backgroundColor: [
+                  '#ec4899', '#c084fc', '#3b82f6', '#10b981', '#f59e0b'
+                ],
+                borderWidth: 0
+              }]
+            },
+             options: {
+                plugins: { legend: { position: 'right', labels: { color: '#fff' } } }
+            }
+          });
+      }
+    }))
+  })
+</script>
+
+
+          </article>
+
+          
+            
+            <aside class="mt-8 xl:mt-0">
+  <aside class="w-full xl:min-w-[18rem] xl:max-w-[20rem]">
+    <div class="xl:sticky xl:top-24 stack" style="--space: var(--space-m)">
+      <div class="hb-accent p-space-s hb-inlay stack" style="--space: var(--space-s)">
+        <h2 class="text-xs uppercase tracking-[0.3em] font-bold opacity-50 flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+          Metadata
+        </h2>
+
+        <div class="stack" style="--space: var(--space-xs)">
+          
+
+          
+            <div class="stack" style="--space: var(--space-3xs)">
+              <span class="text-[0.6rem] uppercase tracking-widest opacity-40 font-mono">Published</span>
+              <time class="text-sm font-semibold hb-ink" datetime="2026-11-02">
+                November 2nd, 2026
+              </time>
+            </div>
+          
+
+          
+        </div>
+
+        
+      </div>
+
+      
+    </div>
+  </aside>
+
+  <script>
+  document.querySelectorAll('.certainty-bar[data-width]').forEach(el => {
+  el.style.width = el.dataset.width
+})
+  </script>
+</aside>
+          
+        </div>
+      
+    </main>
+
+    
+      
+  <footer class="mt-space-3xl border-t border-base-content/10 bg-base-100/40 backdrop-blur-md">
+    <div class="max-w-screen-xl mx-auto px-gutter py-space-xl">
+      <div class="switcher" style="--threshold: 40rem; --space: var(--space-xl)">
+        <!-- Brand / Build -->
+        <div class="stack" style="--space: var(--space-s)">
+          <div class="cluster items-center" style="--space: var(--space-xs)">
+            <span class="hb-logo !w-8 !h-8 !p-1 shadow-sm">
+              <span class="hb-logo-core !text-[0.6rem] !tracking-normal">EL</span>
+            </span>
+            <span class="font-heading font-black tracking-tight text-lg">Effusion Labs</span>
+          </div>
+          <p class="text-sm opacity-60 leading-relaxed max-w-sm">
+            Digital studio and knowledge base dedicated to the art of creative synthesis and
+            technical excellence.
+          </p>
+          <div class="stack" style="--space: var(--space-3xs)">
+            <span class="text-[0.6rem] uppercase tracking-widest opacity-40 font-mono">Current Build</span>
+            <time class="text-xs font-mono opacity-60" datetime=""></time>
+          </div>
+        </div>
+
+        <!-- Links Grid -->
+        <div class="grid-auto" style="--grid-min: 10rem; --space: var(--space-l)">
+          <div class="stack" style="--space: var(--space-xs)">
+            <h3 class="text-xs uppercase tracking-widest font-bold opacity-40">Network</h3>
+            <ul class="list-none p-0 m-0 stack" style="--space: var(--space-2xs)">
+              <li>
+                <a href="https://github.com/toxicwind/effusion-labs" class="text-sm hover:text-primary transition-colors inline-flex items-center gap-2">
+                  
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"></svg>
+  
+ GitHub
+                </a>
+              </li>
+              <li>
+                <a href="/feed.xml" class="text-sm hover:text-primary transition-colors inline-flex items-center gap-2">
+                  
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"></svg>
+  
+ RSS Feed
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div class="stack" style="--space: var(--space-xs)">
+            <h3 class="text-xs uppercase tracking-widest font-bold opacity-40">Internal</h3>
+            <ul class="list-none p-0 m-0 stack" style="--space: var(--space-2xs)">
+              <li>
+                <a href="/about/" class="text-sm hover:text-primary transition-colors">About</a>
+              </li>
+              <li>
+                <a href="/projects/" class="text-sm hover:text-primary transition-colors">Projects</a>
+              </li>
+              <li>
+                <a href="/sitemap.xml" class="text-sm hover:text-primary transition-colors">Sitemap</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-space-xl pt-space-m border-t border-base-content/5 cluster justify-between text-[0.65rem] uppercase tracking-[0.2em] opacity-40 font-mono">
+        <span>© 2025 Effusion Labs</span>
+        <span>Crafted with Eleventy & Vite</span>
+      </div>
+    </div>
+  </footer>
+
+    
+
+    
+      <div id="hero-background" class="fixed inset-0 z-0 pointer-events-none" aria-hidden="true"></div>
+      <div id="react-overlay" class="fixed inset-0 z-10 pointer-events-none" aria-hidden="true"></div>
+      <script type="module" src="/assets/js/hero-scene.js"></script>
+    
+
+    
+      <script type="module" src="/assets/js/hud.js"></script>
+    
+
+    
+      <script type="module">
+        import { initCursor } from '/assets/js/cursor.js'
+        const motionReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+        if (!motionReduced && window.matchMedia('(min-width: 768px)').matches) {
+          initCursor()
+        }
+      </script>
+    
+  </body>
+</html>

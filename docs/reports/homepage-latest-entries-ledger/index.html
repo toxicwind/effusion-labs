@@ -1,0 +1,16 @@
+<h1>Ledger: homepage-latest-entries</h1>
+<h2>Criteria</h2>
+<ul>
+<li>ensure homepage sections list latest entries (1-3 items)</li>
+</ul>
+<h2>Proof</h2>
+<ul>
+<li>test: <code>test/integration/homepage-latest.spec.mjs</code></li>
+<li>test: <code>test/unit/index-data.test.mjs</code></li>
+<li>failing log: <code>logs/homepage-latest-red.log</code></li>
+<li>passing log: <code>logs/homepage-latest-green.log</code></li>
+</ul>
+<h2>Rollback</h2>
+<ul>
+<li><code>git revert --no-edit be9d46c 8faaea7 0df3f83 6b14766 1d1b77f bc8cafb 7e4bb2b 8fa389a</code></li>
+</ul>

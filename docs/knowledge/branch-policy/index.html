@@ -1,0 +1,8 @@
+<h1>Branch Policy</h1>
+<ul>
+<li>Trunk: <code>main</code></li>
+<li>Namespaces: <code>work/</code>, <code>feat/</code>, <code>fix/</code>, <code>merge/</code>, <code>chore/</code>, <code>release/</code>, <code>hotfix/</code></li>
+<li>Flat branches equal to a namespace (e.g., <code>work</code>) are forbidden. Use <code>work/&lt;stamp&gt;-&lt;slug&gt;</code>.</li>
+<li>Local guard: <code>.githooks/pre-push</code> prevents pushing collisions.</li>
+<li>Helper: <code>scripts/git/new-branch</code> creates timestamped names safely.</li>
+</ul>

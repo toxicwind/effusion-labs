@@ -1,0 +1,24 @@
+<h1>ESM Audit 20250820T215642Z</h1>
+<h2>Summary</h2>
+<ul>
+<li>Scanned for <code>require(</code> usage in <code>lib/</code>, <code>src/</code>, <code>tools/</code>, and <code>scripts</code> – <strong>0 occurrences</strong> before
+and after.</li>
+<li>Verified all relative imports include explicit file extensions; no updates required.</li>
+<li>Removed legacy <code>tools/cjs-report.mjs</code> script.</li>
+<li>Ensured Eleventy register watches <code>tailwind.config.mjs</code> and <code>postcss.config.mjs</code>.</li>
+<li>Confirmed <code>lib/postcss.js</code> uses <code>postcssPlugins.mjs</code> and configs are <code>.mjs</code>.</li>
+<li><code>find . -name '*.cjs'</code> returned no results; no <code>cjs-report.*</code> artifacts remain.</li>
+<li>Build and test logs: <code>logs/build-20250820T215642Z.log</code>, <code>logs/test-20250820T215642Z.log</code> (both
+exit 0).</li>
+<li>CSS bundle produced at <code>src/assets/css/app.css</code> (337607 bytes).</li>
+</ul>
+<h2>Exceptions</h2>
+<ul>
+<li>None.</li>
+</ul>
+<h2>Evidence</h2>
+<ul>
+<li><code>rg -n &quot;require(&quot; lib src tools scripts</code> → no matches.</li>
+<li><code>find . -name '*.cjs'</code> → no files.</li>
+<li>Eleventy watch targets lines 165-169 in <code>lib/eleventy/register.mjs</code>.</li>
+</ul>

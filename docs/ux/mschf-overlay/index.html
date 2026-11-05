@@ -1,0 +1,68 @@
+<h1>MSCHF Overlay</h1>
+<p>The MSCHF overlay decorates pages with seeded decals and grid textures while keeping content
+accessible.</p>
+<h2>Controls</h2>
+<p>Attach attributes to the <code>#page-shell</code> wrapper:</p>
+<table>
+<thead>
+<tr>
+<th>Attribute</th>
+<th>Values</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>data-mschf</code></td>
+<td><code>on</code> | <code>off</code> | <code>auto</code></td>
+<td><code>auto</code></td>
+<td>Enable overlay or force disable.</td>
+</tr>
+<tr>
+<td><code>data-mschf-intensity</code></td>
+<td><code>lite</code> | <code>bold</code> | <code>loud</code> | <code>calm</code></td>
+<td>random</td>
+<td>Governs element counts and probabilities.</td>
+</tr>
+<tr>
+<td><code>data-mschf-seed-mode</code></td>
+<td><code>page</code> | <code>session</code></td>
+<td><code>page</code></td>
+<td>Ephemeral seed per load or stable for a tab session.</td>
+</tr>
+<tr>
+<td><code>data-mschf-style</code></td>
+<td><code>collage</code> | <code>structural</code> | <code>playful</code> | <code>auto</code></td>
+<td><code>auto</code></td>
+<td>Aesthetic strategy mix; <code>auto</code> picks a style randomly each load.</td>
+</tr>
+</tbody>
+</table>
+<p>Use <code>localStorage.setItem('mschf:off','1')</code> to opt out persistently.</p>
+<h2>Aesthetic Strategies</h2>
+<p><code>data-mschf-style=&quot;auto&quot;</code> (default) randomly selects an aesthetic strategy per page seed. If
+<code>data-mschf-intensity</code> is omitted, the overlay picks a random intensity so each visit feels fresh.
+<code>collage</code> fuses four groups: base scaffold, culture-coded ephemera, lab/blueprint motifs, and
+framing stickers. Other styles limit the mix:</p>
+<ul>
+<li><strong>structural</strong> – base + lab motifs only.</li>
+<li><strong>playful</strong> – base + culture-coded ephemera.</li>
+</ul>
+<h2>Modules</h2>
+<ul>
+<li><strong>Faint Grid</strong> – low-opacity radial grid, 35% chance when <code>loud</code>.</li>
+<li><strong>Crosshair</strong> – centered ring and axes; 50% chance (<code>lite</code>) or 60% (<code>loud</code>).</li>
+</ul>
+<h2>Seeds</h2>
+<p><code>?mschf-seed=&lt;n&gt;</code> freezes the composition. Without a forced seed, <code>page</code> mode generates a new value
+for each load; <code>session</code> mode stores the seed in <code>sessionStorage</code>.</p>
+<h2>Contracts</h2>
+<ul>
+<li>Overlay elements are <code>aria-hidden=&quot;true&quot;</code> and <code>pointer-events:none</code>.</li>
+<li>Respects <code>prefers-reduced-motion</code>; no animation yet.</li>
+<li>Overlay markup sits below interactive UI.</li>
+</ul>
+<h2>Adding Zones</h2>
+<p>Decorate sections by marking them with <code>data-mschf-zone</code>. Future modules can read these markers to
+inject decals near the zone.</p>

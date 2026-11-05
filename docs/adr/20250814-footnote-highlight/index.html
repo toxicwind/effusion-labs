@@ -1,0 +1,15 @@
+<h1>ADR: Move footnote highlight styling to Tailwind</h1>
+<h2>Context</h2>
+<p>Inline styles in <code>footnote-nav.js</code> duplicated Tailwind definitions and ignored reduced-motion
+preferences.</p>
+<h2>Decision</h2>
+<ul>
+<li>Remove style injection from script.</li>
+<li>Define <code>.footnote-highlight</code> in <code>app.tailwind.css</code> using primary color token.</li>
+<li>Add reduced-motion checks and shared highlight helper.</li>
+</ul>
+<h2>Consequences</h2>
+<ul>
+<li>Consistent theming and easier customization.</li>
+<li>Tests verify no inline styles and accessible scroll behavior.</li>
+</ul>

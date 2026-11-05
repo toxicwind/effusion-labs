@@ -1,0 +1,31 @@
+<h1>Theming</h1>
+<p>Effusion Labs now ships with DaisyUI's <code>dim</code> palette as the primary experience and promotes <code>silk</code>
+as the high-key fallback. Both modes are defined in <code>src/assets/css/app.css</code>, where CSS variables
+feed Tailwind's color tokens.</p>
+<h2>Tokens</h2>
+<pre class="language-css" tabindex="0"><code class="language-css"><span class="token selector">:root,
+html[data-theme="dim"]</span> <span class="token punctuation">{</span>
+  <span class="token property">color-scheme</span><span class="token punctuation">:</span> dark<span class="token punctuation">;</span>
+  <span class="token property">--color-bg</span><span class="token punctuation">:</span> 42 48 60<span class="token punctuation">;</span>
+  <span class="token property">--color-surface</span><span class="token punctuation">:</span> 36 41 51<span class="token punctuation">;</span>
+  <span class="token property">--color-text</span><span class="token punctuation">:</span> 178 204 214<span class="token punctuation">;</span>
+  <span class="token property">--color-primary</span><span class="token punctuation">:</span> 159 232 141<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token selector">html[data-theme="silk"]</span> <span class="token punctuation">{</span>
+  <span class="token property">color-scheme</span><span class="token punctuation">:</span> light<span class="token punctuation">;</span>
+  <span class="token property">--color-bg</span><span class="token punctuation">:</span> 247 245 243<span class="token punctuation">;</span>
+  <span class="token property">--color-surface</span><span class="token punctuation">:</span> 243 237 233<span class="token punctuation">;</span>
+  <span class="token property">--color-text</span><span class="token punctuation">:</span> 75 71 67<span class="token punctuation">;</span>
+  <span class="token property">--color-primary</span><span class="token punctuation">:</span> 28 28 41<span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Tailwind utilities such as <code>bg-background</code>, <code>bg-surface</code> and <code>text-text</code> resolve to these values, so
+the same markup adapts across modes without duplicates.</p>
+<h2>Toggle</h2>
+<p>The site boots with <code>dim</code> regardless of system settings. The header button invokes
+<code>ThemeUtils.toggleTheme()</code> to swap between <code>dim</code> and <code>silk</code>, persists the selection to
+<code>localStorage</code>, and refreshes <code>meta[color-scheme]</code> so browsers draw widgets with the right contrast.</p>
+<h2>Extending</h2>
+<p>Add new variables in <code>app.css</code>, update <code>tailwind.config.mjs</code> if you need additional semantic colors,
+and call <code>ThemeUtils.configure()</code> with a custom <code>allowed</code> array when introducing extra DaisyUI
+themes.</p>

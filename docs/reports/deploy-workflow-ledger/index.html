@@ -1,0 +1,18 @@
+<h1>deploy-workflow Ledger (1/1)</h1>
+<h2>Criteria &amp; Proofs</h2>
+<ul>
+<li>Failing check before removing pull_request trigger (<code>docs/knowledge/deploy-workflow-red.log</code>,
+sha256: c73465f226bf56ed7845a9c597016d4edc25980dcc3091442cd509e1c8ee9fa7).</li>
+<li>Passing check after restricting build to pushes (<code>docs/knowledge/deploy-workflow-green.log</code>,
+sha256: 3cdb44f2631295616ad1aa1123cb494c21ef078f96f95f6805e9b5b0380b1a01).</li>
+</ul>
+<h2>Delta Queue</h2>
+<ol>
+<li>Cover workflow_dispatch scenarios.</li>
+<li>Document manual deployment process.</li>
+</ol>
+<h2>Rollback</h2>
+<ul>
+<li>Last safe SHA: 3512aea</li>
+<li><code>git reset --hard 3512aea</code></li>
+</ul>
