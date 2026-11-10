@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-30T13:57:21.823Z",
+  "generated": "2026-11-05T08:09:21.030Z",
   "items": [
     {
       "path": "./src/content/docs/reports/2025-08-20-shiki-migration.md",
@@ -53,6 +53,11 @@
     },
     {
       "path": "./src/content/concepts/aesthetic-inquiry.md",
+      "annotations": [],
+      "topology": []
+    },
+    {
+      "path": "./src/content/concepts/agent-paradigms-audit-2026.md",
       "annotations": [],
       "topology": []
     },
@@ -152,16 +157,6 @@
       "topology": []
     },
     {
-      "path": "./src/content/projects/project-dandelion.md",
-      "annotations": [],
-      "topology": []
-    },
-    {
-      "path": "./src/content/projects/safety-classifiers-unreliable-narrators.md",
-      "annotations": [],
-      "topology": []
-    },
-    {
       "path": "./src/content/sparks/academic-blindness.md",
       "annotations": [],
       "topology": []
@@ -198,6 +193,16 @@
     },
     {
       "path": "./src/content/sparks/vapor-linked-governance.md",
+      "annotations": [],
+      "topology": []
+    },
+    {
+      "path": "./src/content/projects/project-dandelion.md",
+      "annotations": [],
+      "topology": []
+    },
+    {
+      "path": "./src/content/projects/safety-classifiers-unreliable-narrators.md",
       "annotations": [],
       "topology": []
     },
@@ -1997,6 +2002,36 @@
       "topology": []
     },
     {
+      "path": "./src/tags.njk",
+      "annotations": [],
+      "topology": []
+    },
+    {
+      "path": "./src/tags.njk",
+      "annotations": [],
+      "topology": []
+    },
+    {
+      "path": "./src/tags.njk",
+      "annotations": [],
+      "topology": []
+    },
+    {
+      "path": "./src/tags.njk",
+      "annotations": [],
+      "topology": []
+    },
+    {
+      "path": "./src/tags.njk",
+      "annotations": [],
+      "topology": []
+    },
+    {
+      "path": "./src/tags.njk",
+      "annotations": [],
+      "topology": []
+    },
+    {
       "path": "./src/lens-manifest.11ty.js",
       "annotations": [],
       "topology": []
@@ -2297,12 +2332,12 @@
       "topology": []
     },
     {
-      "path": "./src/content/projects/index.njk",
+      "path": "./src/content/sparks/index.njk",
       "annotations": [],
       "topology": []
     },
     {
-      "path": "./src/content/sparks/index.njk",
+      "path": "./src/content/projects/index.njk",
       "annotations": [],
       "topology": []
     },
