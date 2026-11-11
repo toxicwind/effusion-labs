@@ -114,3 +114,16 @@ audit_kimi_20260811_113315/
 
 # Lens pipeline: temporal drift snapshots (build artifact)
 .temporal-history/
+
+# Keys & secrets — never commit
+*.key
+*.pem
+*.p12
+*.pfx
+*.jks
+*.keystore
+*.keyring
+*.secret
+.env
+.env.*
+!*.example
