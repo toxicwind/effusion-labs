@@ -1,6 +1,0 @@
-fastapi
-uvicorn
-redis
-aioredis
-psycopg2-binary
-pydantic-settings
