@@ -1,0 +1,37 @@
+To: giom@google.com
+Subject: Tool Retrieval EAP: Deep integration feedback (late, but highly relevant)
+
+Hi Guillaume,
+
+I know I missed the EOD Sept 3 feedback deadline by a wide margin. I didn't want to send you a "hello world" test script, so I spent the last few weeks integrating `gemini-flash-tool-retrieval` directly into the production mesh of my local AI estate (a 200+ submodule monorepo routing between local bare-metal models and cloud APIs).
+
+I wanted to wait until I had real telemetry from testing server-side `defer_loading` against a union of 30+ upstream MCP servers, and client-side dynamic injection against a custom vector-search registry.
+
+**Per the EAP embargo, I have kept all implementation details and source code private to my internal estate. I've attached the architecture brief and the sanitized probe suite (`anomaly.py`) directly to this email for your team's eyes only.**
+
+Context on testing:
+I wired the native `v1beta/interactions` endpoint into a Rust proxy, added the `gemini-eap` alias to TypeScript keypools, and implemented the two-tier retrieval logic into a Bun-based MCP gateway. I also forked and extended `mcpproxy-go` to benchmark the exact token break-even of `defer_loading` vs. full schema injection, and built a custom VS Code LM Chat Provider sidecar just to visualize the `tool_search` loop in the UI.
+
+What worked incredibly well:
+The dynamic tool injection (client-side) is extremely powerful. Being able to return complete function declarations inside `function_result.result` without pre-registering them is a game-changer for large catalogs. The server-side `defer_loading` loop also drastically reduced the context window bloat when I passed my 30-server union as `mcp_server` entries.
+
+Edge cases and friction points:
+1. Parameter Hallucination on Deferred Tools: When passing a deferred tool with optional parameters, the `tool_search_result` frequently omitted the optional parameter schema, causing the model to hallucinate during the subsequent `function_call`.
+2. MCP Server Latency: Under high concurrency, the synchronous round-trip for `mcp_server_tool_call` steps added noticeable latency to the resolution loop. I ended up implementing a local caching layer in my gateway to bypass this.
+
+A note on security (and why I'm reaching out):
+I build and secure agentic execution meshes. Recently, I found and reported a high-severity local privilege escalation (CWE-427) in the VS Code Copilot Agent Host to MSRC (Case 165269) that allowed me to MitM the stdio JSON-RPC traffic and exfiltrate BYOK keys.
+
+I mention this because as you scale Tool Retrieval and dynamic MCP injection, the local execution path and schema resolution layers are going to be massive attack surfaces. Prompt injection is one thing, but local tool execution poisoning is going to be the next frontier.
+
+I also received the invite to the Google User Research study in Boulder and submitted my profile.
+
+I'd love to chat more about the EAP feedback, the security implications of dynamic tool routing, or how I might be able to help the Gemini team as you push further into agentic infrastructure. I have deep experience in distributed systems (NATS, CRDTs), MCP gateways, and LLM security.
+
+Let me know if you have 15 minutes in the next few weeks.
+
+Best,
+
+Christopher Ortega
+Founder, Effusion Labs
+MSRC Case: 165269
